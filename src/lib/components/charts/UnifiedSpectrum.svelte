@@ -5,6 +5,7 @@
     NATO_BANDS,
     ITU_BANDS,
     EM_BANDS,
+    CIVILIAN_BANDS,
     formatFrequencyRange,
     type FrequencyBand
   } from '$lib/data/bands';
@@ -19,11 +20,23 @@
 
   // Constants
   const SPECTRUM_MIN = 3;           // 3 Hz
+  const SPECTRUM_MAX_FULL = 3e21;   // 3 ZHz (Gamma rays)
+  const SPECTRUM_MAX_RF = 3e12;     // 3 THz (RF/Microwave only)
+
   // Speed of light - reactive to store
   let currentSpeedOfLight = $derived(speedOfLight.value);
 
-  // Spectrum max (RF mode: 3 THz)
-  const spectrumMax = 3e12;
+  // View mode: 'rf' shows only RF spectrum (3 Hz - 3 THz), 'full' shows entire EM spectrum
+  let viewMode = $state<'rf' | 'full'>('rf');
+
+  // Derived spectrum max based on view mode
+  let spectrumMax = $derived(viewMode === 'full' ? SPECTRUM_MAX_FULL : SPECTRUM_MAX_RF);
+
+  // Zoom state
+  let zoomLevel = $state(1);
+  let panOffset = $state(0);
+  const MIN_ZOOM = 1;
+  const MAX_ZOOM = 100;
 
   // Layout constants
   const rowHeight = 48;
@@ -35,7 +48,8 @@
     em: true,
     itu: true,
     ieee: true,
-    nato: true
+    nato: true,
+    civilian: false
   });
 
   type RowKey = keyof typeof visibleRows;
@@ -64,12 +78,95 @@
     Object.values(visibleRows).filter(Boolean).length
   );
 
-  // ONE shared D3 logarithmic scale
+  // Calculate zoomed domain
+  let zoomedDomain = $derived.by(() => {
+    const logMin = Math.log10(SPECTRUM_MIN);
+    const logMax = Math.log10(spectrumMax);
+    const logRange = logMax - logMin;
+
+    // Calculate visible range based on zoom level
+    const visibleLogRange = logRange / zoomLevel;
+
+    // Calculate pan limits
+    const maxPan = logRange - visibleLogRange;
+    const clampedPan = Math.max(0, Math.min(panOffset, maxPan));
+
+    const newLogMin = logMin + clampedPan;
+    const newLogMax = newLogMin + visibleLogRange;
+
+    return [Math.pow(10, newLogMin), Math.pow(10, newLogMax)] as [number, number];
+  });
+
+  // ONE shared D3 logarithmic scale with zoom support
   let xScale = $derived(
     d3.scaleLog()
-      .domain([SPECTRUM_MIN, spectrumMax])
+      .domain(zoomedDomain)
       .range([0, innerWidth])
   );
+
+  // Zoom control functions
+  function zoomIn() {
+    if (zoomLevel < MAX_ZOOM) {
+      const newZoom = Math.min(zoomLevel * 1.5, MAX_ZOOM);
+      // Adjust pan to keep center in view
+      const logMin = Math.log10(SPECTRUM_MIN);
+      const logMax = Math.log10(spectrumMax);
+      const logRange = logMax - logMin;
+      const oldVisibleRange = logRange / zoomLevel;
+      const newVisibleRange = logRange / newZoom;
+      const centerOffset = panOffset + oldVisibleRange / 2;
+      panOffset = Math.max(0, centerOffset - newVisibleRange / 2);
+      zoomLevel = newZoom;
+    }
+  }
+
+  function zoomOut() {
+    if (zoomLevel > MIN_ZOOM) {
+      const newZoom = Math.max(zoomLevel / 1.5, MIN_ZOOM);
+      const logMin = Math.log10(SPECTRUM_MIN);
+      const logMax = Math.log10(spectrumMax);
+      const logRange = logMax - logMin;
+      const oldVisibleRange = logRange / zoomLevel;
+      const newVisibleRange = logRange / newZoom;
+      const centerOffset = panOffset + oldVisibleRange / 2;
+      panOffset = Math.max(0, centerOffset - newVisibleRange / 2);
+      zoomLevel = newZoom;
+    }
+  }
+
+  function resetZoom() {
+    zoomLevel = 1;
+    panOffset = 0;
+  }
+
+  function panLeft() {
+    const logMin = Math.log10(SPECTRUM_MIN);
+    const logMax = Math.log10(spectrumMax);
+    const logRange = logMax - logMin;
+    const visibleLogRange = logRange / zoomLevel;
+    const panStep = visibleLogRange * 0.25;
+    panOffset = Math.max(0, panOffset - panStep);
+  }
+
+  function panRight() {
+    const logMin = Math.log10(SPECTRUM_MIN);
+    const logMax = Math.log10(spectrumMax);
+    const logRange = logMax - logMin;
+    const visibleLogRange = logRange / zoomLevel;
+    const maxPan = logRange - visibleLogRange;
+    const panStep = visibleLogRange * 0.25;
+    panOffset = Math.min(maxPan, panOffset + panStep);
+  }
+
+  // Handle mouse wheel zoom
+  function handleWheel(event: WheelEvent) {
+    event.preventDefault();
+    if (event.deltaY < 0) {
+      zoomIn();
+    } else {
+      zoomOut();
+    }
+  }
 
   // Helper function to calculate band rectangle
   function calcBandRect(band: { minHz: number; maxHz: number }) {
@@ -112,12 +209,24 @@
     }).filter(b => b.visible)
   );
 
-  // Single marker position for all rows
-  let markerX = $derived(
-    frequencyHz && frequencyHz >= SPECTRUM_MIN && frequencyHz <= spectrumMax
-      ? xScale(frequencyHz)
-      : null
+  let civilianBandRects = $derived(
+    CIVILIAN_BANDS.map(band => {
+      const rect = calcBandRect(band);
+      return { ...band, ...rect };
+    }).filter(b => b.visible)
   );
+
+  // Single marker position for all rows (check if in visible range)
+  let markerX = $derived.by(() => {
+    if (!frequencyHz || frequencyHz < SPECTRUM_MIN || frequencyHz > spectrumMax) {
+      return null;
+    }
+    const [domainMin, domainMax] = zoomedDomain;
+    if (frequencyHz < domainMin || frequencyHz > domainMax) {
+      return null; // Marker is outside visible range
+    }
+    return xScale(frequencyHz);
+  });
 
   // Format frequency for display
   function formatFrequency(hz: number): string {
@@ -138,22 +247,61 @@
     return `${(meters * 1e9).toFixed(0)} nm`;
   }
 
-  // Frequency axis ticks
-  const frequencyTicks = [10, 100, 1e3, 10e3, 100e3, 1e6, 10e6, 100e6, 1e9, 10e9, 100e9, 1e12];
+  // Frequency axis ticks - dynamically computed based on zoom domain
+  let frequencyTicks = $derived.by(() => {
+    const [domainMin, domainMax] = zoomedDomain;
+    const logMin = Math.floor(Math.log10(domainMin));
+    const logMax = Math.ceil(Math.log10(domainMax));
+    const ticks: number[] = [];
 
-  // Wavelength axis ticks (λ = c/f) - reactive to speed of light changes
-  let wavelengthTicks = $derived([
-    { freq: currentSpeedOfLight / 100e3, label: '100 km' },
-    { freq: currentSpeedOfLight / 10e3, label: '10 km' },
-    { freq: currentSpeedOfLight / 1e3, label: '1 km' },
-    { freq: currentSpeedOfLight / 100, label: '100 m' },
-    { freq: currentSpeedOfLight / 10, label: '10 m' },
-    { freq: currentSpeedOfLight / 1, label: '1 m' },
-    { freq: currentSpeedOfLight / 0.1, label: '10 cm' },
-    { freq: currentSpeedOfLight / 0.01, label: '1 cm' },
-    { freq: currentSpeedOfLight / 0.001, label: '1 mm' },
-    { freq: currentSpeedOfLight / 0.0001, label: '100 µm' }
-  ]);
+    for (let exp = logMin; exp <= logMax; exp++) {
+      const value = Math.pow(10, exp);
+      if (value >= domainMin && value <= domainMax) {
+        ticks.push(value);
+      }
+      // Add intermediate ticks for better resolution when zoomed
+      if (zoomLevel > 3) {
+        const midValue = value * 3;
+        if (midValue >= domainMin && midValue <= domainMax) {
+          ticks.push(midValue);
+        }
+      }
+    }
+
+    return ticks.sort((a, b) => a - b);
+  });
+
+  // Wavelength axis ticks (λ = c/f) - reactive to speed of light changes and zoom domain
+  let wavelengthTicks = $derived.by(() => {
+    const [domainMin, domainMax] = zoomedDomain;
+    const allTicks = [
+      { wavelength: 100e6, label: '100 Mm' },
+      { wavelength: 10e6, label: '10 Mm' },
+      { wavelength: 1e6, label: '1 Mm' },
+      { wavelength: 100e3, label: '100 km' },
+      { wavelength: 10e3, label: '10 km' },
+      { wavelength: 1e3, label: '1 km' },
+      { wavelength: 100, label: '100 m' },
+      { wavelength: 10, label: '10 m' },
+      { wavelength: 1, label: '1 m' },
+      { wavelength: 0.1, label: '10 cm' },
+      { wavelength: 0.01, label: '1 cm' },
+      { wavelength: 0.001, label: '1 mm' },
+      { wavelength: 0.0001, label: '100 µm' },
+      { wavelength: 0.00001, label: '10 µm' },
+      { wavelength: 0.000001, label: '1 µm' },
+      { wavelength: 1e-7, label: '100 nm' },
+      { wavelength: 1e-8, label: '10 nm' },
+      { wavelength: 1e-9, label: '1 nm' },
+      { wavelength: 1e-10, label: '100 pm' },
+      { wavelength: 1e-11, label: '10 pm' },
+      { wavelength: 1e-12, label: '1 pm' },
+    ];
+
+    return allTicks
+      .map(t => ({ freq: currentSpeedOfLight / t.wavelength, label: t.label }))
+      .filter(t => t.freq >= domainMin && t.freq <= domainMax);
+  });
 
   // Tooltip handlers
   function showTooltip(event: MouseEvent, band: FrequencyBand) {
@@ -191,7 +339,7 @@
   // Calculate row Y positions based on visibility
   function getRowY(rowIndex: number): number {
     let y = margin.top;
-    const rowOrder: RowKey[] = ['em', 'itu', 'ieee', 'nato'];
+    const rowOrder: RowKey[] = ['em', 'itu', 'ieee', 'nato', 'civilian'];
     for (let i = 0; i < rowIndex; i++) {
       if (visibleRows[rowOrder[i]]) {
         y += rowHeight + gap;
@@ -215,8 +363,29 @@
     { key: 'em', label: 'EM', bands: emBandRects },
     { key: 'itu', label: 'ITU', bands: ituBandRects },
     { key: 'ieee', label: 'IEEE', bands: ieeeBandRects },
-    { key: 'nato', label: 'NATO', bands: natoBandRects }
+    { key: 'nato', label: 'NATO', bands: natoBandRects },
+    { key: 'civilian', label: 'Zivil', bands: civilianBandRects }
   ]);
+
+  // Format zoom level for display
+  function formatZoom(level: number): string {
+    if (level >= 10) return `${Math.round(level)}x`;
+    return `${level.toFixed(1)}x`;
+  }
+
+  // Center view on marker frequency
+  function centerOnMarker() {
+    if (!frequencyHz || frequencyHz < SPECTRUM_MIN || frequencyHz > spectrumMax) return;
+
+    const logMin = Math.log10(SPECTRUM_MIN);
+    const logMax = Math.log10(spectrumMax);
+    const logRange = logMax - logMin;
+    const visibleLogRange = logRange / zoomLevel;
+    const markerLogPos = Math.log10(frequencyHz);
+
+    // Center the marker in the view
+    panOffset = Math.max(0, Math.min(logRange - visibleLogRange, markerLogPos - logMin - visibleLogRange / 2));
+  }
 </script>
 
 <div
@@ -225,8 +394,8 @@
   role="img"
   aria-label="Unified electromagnetic spectrum visualization"
 >
-  <!-- Control bar: Band row selector -->
-  <div class="flex flex-wrap gap-4 mb-4">
+  <!-- Control bar: Band row selector and zoom controls -->
+  <div class="flex flex-wrap gap-4 mb-4 items-center justify-between">
     <!-- Band row selector -->
     <div class="flex flex-wrap items-center gap-2">
       <span class="text-slate-400 text-sm mr-1">Baender:</span>
@@ -258,6 +427,98 @@
       >
         NATO
       </button>
+      <button
+        class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.civilian ? 'bg-green-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
+        onclick={() => toggleRow('civilian')}
+        aria-pressed={visibleRows.civilian}
+      >
+        Zivil
+      </button>
+    </div>
+
+    <!-- View mode toggle -->
+    <div class="flex items-center gap-2">
+      <span class="text-slate-400 text-sm">Ansicht:</span>
+      <button
+        class="px-3 py-1.5 text-sm rounded transition-colors {viewMode === 'rf' ? 'bg-amber-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
+        onclick={() => { viewMode = 'rf'; resetZoom(); }}
+      >
+        RF (3 Hz - 3 THz)
+      </button>
+      <button
+        class="px-3 py-1.5 text-sm rounded transition-colors {viewMode === 'full' ? 'bg-amber-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
+        onclick={() => { viewMode = 'full'; resetZoom(); }}
+      >
+        Gesamt (bis Gamma)
+      </button>
+    </div>
+
+    <!-- Zoom and pan controls -->
+    <div class="flex items-center gap-2">
+      <span class="text-slate-400 text-sm">Zoom:</span>
+      <button
+        class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        onclick={panLeft}
+        disabled={zoomLevel <= MIN_ZOOM}
+        aria-label="Nach links verschieben"
+        title="Nach links verschieben"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button
+        class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        onclick={zoomOut}
+        disabled={zoomLevel <= MIN_ZOOM}
+        aria-label="Herauszoomen"
+        title="Herauszoomen"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+        </svg>
+      </button>
+      <span class="text-slate-300 text-sm font-mono min-w-[3.5rem] text-center">{formatZoom(zoomLevel)}</span>
+      <button
+        class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        onclick={zoomIn}
+        disabled={zoomLevel >= MAX_ZOOM}
+        aria-label="Hineinzoomen"
+        title="Hineinzoomen"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+      <button
+        class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        onclick={panRight}
+        disabled={zoomLevel <= MIN_ZOOM}
+        aria-label="Nach rechts verschieben"
+        title="Nach rechts verschieben"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+      <button
+        class="px-2 py-1 text-sm bg-slate-700 text-slate-300 rounded hover:bg-slate-600"
+        onclick={resetZoom}
+        aria-label="Zoom zuruecksetzen"
+        title="Zoom zuruecksetzen"
+      >
+        Reset
+      </button>
+      {#if frequencyHz}
+        <button
+          class="px-2 py-1 text-sm bg-amber-700 text-amber-100 rounded hover:bg-amber-600"
+          onclick={centerOnMarker}
+          aria-label="Auf Marker zentrieren"
+          title="Auf Marker zentrieren"
+        >
+          Zentrieren
+        </button>
+      {/if}
     </div>
   </div>
 
@@ -271,7 +532,13 @@
     </div>
   {/if}
 
-  <svg width="100%" height={totalHeight}>
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <svg
+    width="100%"
+    height={totalHeight}
+    onwheel={handleWheel}
+    class="cursor-crosshair"
+  >
     <defs>
       <!-- Visible light gradient (horizontal for band display) -->
       <linearGradient id="visibleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -526,19 +793,42 @@
   <!-- Tooltip -->
   {#if tooltip.visible && tooltip.band}
     <div
-      class="absolute pointer-events-none bg-slate-800 border border-slate-600 rounded-lg shadow-xl px-3 py-2 z-50"
-      style="left: {Math.min(tooltip.x + 10, containerWidth - 200)}px; top: {tooltip.y - 70}px;"
+      class="absolute pointer-events-none bg-slate-800 border border-slate-600 rounded-lg shadow-xl px-4 py-3 z-50 min-w-[200px]"
+      style="left: {Math.min(tooltip.x + 10, containerWidth - 220)}px; top: {Math.max(10, tooltip.y - 100)}px;"
     >
-      <div class="text-white font-medium text-sm">{tooltip.band.name}</div>
+      <div class="flex items-center gap-2 mb-2">
+        <div
+          class="w-3 h-3 rounded"
+          style="background-color: {tooltip.band.color};"
+        ></div>
+        <div class="text-white font-medium">{tooltip.band.name}</div>
+      </div>
       {#if tooltip.band.nameDE && tooltip.band.nameDE !== tooltip.band.name}
-        <div class="text-slate-400 text-xs">{tooltip.band.nameDE}</div>
+        <div class="text-slate-400 text-sm mb-2">{tooltip.band.nameDE}</div>
       {/if}
-      <div class="text-slate-300 text-xs mt-1">
-        {formatFrequencyRange(tooltip.band.minHz, tooltip.band.maxHz)}
+      <div class="space-y-1 text-sm">
+        <div class="flex justify-between">
+          <span class="text-slate-500">Frequenz:</span>
+          <span class="text-slate-200 font-mono">{formatFrequencyRange(tooltip.band.minHz, tooltip.band.maxHz)}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Wellenlaenge:</span>
+          <span class="text-slate-200 font-mono">
+            {formatWavelength(currentSpeedOfLight / tooltip.band.maxHz)} - {formatWavelength(currentSpeedOfLight / tooltip.band.minHz)}
+          </span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Kategorie:</span>
+          <span class="text-slate-200 capitalize">{tooltip.band.category}</span>
+        </div>
       </div>
-      <div class="text-slate-400 text-xs mt-0.5">
-        λ: {formatWavelength(currentSpeedOfLight / tooltip.band.maxHz)} - {formatWavelength(currentSpeedOfLight / tooltip.band.minHz)}
-      </div>
+    </div>
+  {/if}
+
+  <!-- Zoom hint -->
+  {#if zoomLevel > 1}
+    <div class="absolute bottom-2 left-2 text-slate-500 text-xs">
+      Mausrad zum Zoomen, Pfeiltasten zum Verschieben
     </div>
   {/if}
 </div>

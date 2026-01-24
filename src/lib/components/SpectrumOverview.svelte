@@ -4,7 +4,6 @@
     IEEE_BANDS,
     NATO_BANDS,
     ITU_BANDS,
-    EM_BANDS,
     CIVILIAN_BANDS,
     formatFrequencyRange,
     type FrequencyBand
@@ -18,19 +17,35 @@
 
   let { frequencyHz, showLabels = true }: Props = $props();
 
-  // Constants
-  const SPECTRUM_MIN = 3;           // 3 Hz
-  const SPECTRUM_MAX_FULL = 3e21;   // 3 ZHz (Gamma rays)
-  const SPECTRUM_MAX_RF = 3e12;     // 3 THz (RF/Microwave only)
+  // Constants - Full EM Spectrum from ELF to Gamma rays
+  const SPECTRUM_MIN = 3;           // 3 Hz (ELF)
+  const SPECTRUM_MAX_GAMMA = 3e19;  // 30 EHz (Gamma rays)
+  const SPECTRUM_MAX_RF = 3e12;     // 3 THz (RF/Microwave/Far-IR)
+  const SPECTRUM_MAX_VISIBLE = 1e15; // 1 PHz (includes visible light)
+
+  // Visible light frequency range (380-780nm wavelength)
+  // c = 299792458 m/s
+  // f = c / lambda
+  // 780nm -> ~384 THz (red)
+  // 380nm -> ~789 THz (violet)
+  const VISIBLE_MIN_HZ = 384e12;  // ~780nm red
+  const VISIBLE_MAX_HZ = 789e12;  // ~380nm violet
 
   // Speed of light - reactive to store
   let currentSpeedOfLight = $derived(speedOfLight.value);
 
-  // View mode: 'rf' shows only RF spectrum (3 Hz - 3 THz), 'full' shows entire EM spectrum
-  let viewMode = $state<'rf' | 'full'>('rf');
+  // View mode presets
+  type ViewMode = 'rf' | 'visible' | 'full';
+  let viewMode = $state<ViewMode>('visible');
 
   // Derived spectrum max based on view mode
-  let spectrumMax = $derived(viewMode === 'full' ? SPECTRUM_MAX_FULL : SPECTRUM_MAX_RF);
+  let spectrumMax = $derived.by(() => {
+    switch (viewMode) {
+      case 'rf': return SPECTRUM_MAX_RF;
+      case 'visible': return SPECTRUM_MAX_VISIBLE;
+      case 'full': return SPECTRUM_MAX_GAMMA;
+    }
+  });
 
   // Zoom state
   let zoomLevel = $state(1);
@@ -40,7 +55,7 @@
 
   // Layout constants
   const rowHeight = 48;
-  const margin = { top: 60, right: 100, bottom: 60, left: 80 };
+  const margin = { top: 60, right: 20, bottom: 60, left: 80 };
   const gap = 8;
 
   // Row visibility state
@@ -104,11 +119,27 @@
       .range([0, innerWidth])
   );
 
+  // Extended EM Bands with optical and higher frequencies
+  const EXTENDED_EM_BANDS: FrequencyBand[] = [
+    { id: 'em-radio', name: 'Radio', nameDE: 'Radiowellen', minHz: 3, maxHz: 300e9, color: '#3b82f6', category: 'em' },
+    { id: 'em-microwave', name: 'Microwave', nameDE: 'Mikrowellen', minHz: 300e6, maxHz: 300e9, color: '#6366f1', category: 'em' },
+    { id: 'em-infrared-far', name: 'Far-IR', nameDE: 'Fernes Infrarot', minHz: 300e9, maxHz: 30e12, color: '#991b1b', category: 'em' },
+    { id: 'em-infrared-mid', name: 'Mid-IR', nameDE: 'Mittleres Infrarot', minHz: 30e12, maxHz: 120e12, color: '#b91c1c', category: 'em' },
+    { id: 'em-infrared-near', name: 'Near-IR', nameDE: 'Nahes Infrarot', minHz: 120e12, maxHz: VISIBLE_MIN_HZ, color: '#dc2626', category: 'em' },
+    { id: 'em-visible', name: 'Visible', nameDE: 'Sichtbares Licht', minHz: VISIBLE_MIN_HZ, maxHz: VISIBLE_MAX_HZ, color: 'visible', category: 'em' },
+    { id: 'em-uv-near', name: 'UV-A', nameDE: 'UV-A', minHz: VISIBLE_MAX_HZ, maxHz: 952e12, color: '#7c3aed', category: 'em' },
+    { id: 'em-uv-mid', name: 'UV-B', nameDE: 'UV-B', minHz: 952e12, maxHz: 1.07e15, color: '#6d28d9', category: 'em' },
+    { id: 'em-uv-far', name: 'UV-C', nameDE: 'UV-C', minHz: 1.07e15, maxHz: 3e15, color: '#5b21b6', category: 'em' },
+    { id: 'em-euv', name: 'EUV', nameDE: 'Extremes UV', minHz: 3e15, maxHz: 30e15, color: '#4c1d95', category: 'em' },
+    { id: 'em-xray-soft', name: 'Soft X-Ray', nameDE: 'Weiche Roentgenstrahlung', minHz: 30e15, maxHz: 3e17, color: '#0891b2', category: 'em' },
+    { id: 'em-xray-hard', name: 'Hard X-Ray', nameDE: 'Harte Roentgenstrahlung', minHz: 3e17, maxHz: 30e18, color: '#0e7490', category: 'em' },
+    { id: 'em-gamma', name: 'Gamma', nameDE: 'Gammastrahlung', minHz: 30e18, maxHz: 3e22, color: '#ec4899', category: 'em' },
+  ];
+
   // Zoom control functions
   function zoomIn() {
     if (zoomLevel < MAX_ZOOM) {
       const newZoom = Math.min(zoomLevel * 1.5, MAX_ZOOM);
-      // Adjust pan to keep center in view
       const logMin = Math.log10(SPECTRUM_MIN);
       const logMax = Math.log10(spectrumMax);
       const logRange = logMax - logMin;
@@ -158,21 +189,23 @@
     panOffset = Math.min(maxPan, panOffset + panStep);
   }
 
-  // Handle mouse wheel zoom
-  function handleWheel(event: WheelEvent) {
-    event.preventDefault();
-    if (event.deltaY < 0) {
-      zoomIn();
-    } else {
-      zoomOut();
-    }
-  }
+  // Mouse wheel zoom is DISABLED to avoid conflicts with page scrolling
+  // Navigation is only possible via the zoom/pan buttons above
+  // function handleWheel(event: WheelEvent) {
+  //   event.preventDefault();
+  //   if (event.deltaY < 0) {
+  //     zoomIn();
+  //   } else {
+  //     zoomOut();
+  //   }
+  // }
 
   // Helper function to calculate band rectangle
   function calcBandRect(band: { minHz: number; maxHz: number }) {
-    const clampedMin = Math.max(band.minHz, SPECTRUM_MIN);
-    const clampedMax = Math.min(band.maxHz, spectrumMax);
-    if (clampedMin >= spectrumMax || clampedMax <= SPECTRUM_MIN) {
+    const [domainMin, domainMax] = zoomedDomain;
+    const clampedMin = Math.max(band.minHz, domainMin);
+    const clampedMax = Math.min(band.maxHz, domainMax);
+    if (clampedMin >= domainMax || clampedMax <= domainMin) {
       return { x: 0, width: 0, visible: false };
     }
     const x = xScale(clampedMin);
@@ -180,9 +213,83 @@
     return { x, width, visible: width > 0 };
   }
 
+  // Function to get visible light color at a given frequency
+  function getVisibleLightColor(frequencyHz: number): string {
+    // Map frequency to wavelength in nm
+    const wavelengthNm = (currentSpeedOfLight / frequencyHz) * 1e9;
+
+    // Approximate wavelength to RGB
+    // Based on: https://www.physics.sfasu.edu/astro/color/spectra.html
+    let r = 0, g = 0, b = 0;
+
+    if (wavelengthNm >= 380 && wavelengthNm < 440) {
+      r = -(wavelengthNm - 440) / (440 - 380);
+      g = 0;
+      b = 1;
+    } else if (wavelengthNm >= 440 && wavelengthNm < 490) {
+      r = 0;
+      g = (wavelengthNm - 440) / (490 - 440);
+      b = 1;
+    } else if (wavelengthNm >= 490 && wavelengthNm < 510) {
+      r = 0;
+      g = 1;
+      b = -(wavelengthNm - 510) / (510 - 490);
+    } else if (wavelengthNm >= 510 && wavelengthNm < 580) {
+      r = (wavelengthNm - 510) / (580 - 510);
+      g = 1;
+      b = 0;
+    } else if (wavelengthNm >= 580 && wavelengthNm < 645) {
+      r = 1;
+      g = -(wavelengthNm - 645) / (645 - 580);
+      b = 0;
+    } else if (wavelengthNm >= 645 && wavelengthNm <= 780) {
+      r = 1;
+      g = 0;
+      b = 0;
+    }
+
+    // Intensity adjustment for edges
+    let factor = 1.0;
+    if (wavelengthNm >= 380 && wavelengthNm < 420) {
+      factor = 0.3 + 0.7 * (wavelengthNm - 380) / (420 - 380);
+    } else if (wavelengthNm >= 645 && wavelengthNm <= 780) {
+      factor = 0.3 + 0.7 * (780 - wavelengthNm) / (780 - 645);
+    }
+
+    r = Math.round(255 * Math.pow(r * factor, 0.8));
+    g = Math.round(255 * Math.pow(g * factor, 0.8));
+    b = Math.round(255 * Math.pow(b * factor, 0.8));
+
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  // Calculate visible light gradient stops based on current view
+  let visibleLightGradientStops = $derived.by(() => {
+    const [domainMin, domainMax] = zoomedDomain;
+    const visMin = Math.max(VISIBLE_MIN_HZ, domainMin);
+    const visMax = Math.min(VISIBLE_MAX_HZ, domainMax);
+
+    if (visMin >= visMax) return [];
+
+    const stops: { offset: string; color: string }[] = [];
+    const numStops = 20;
+
+    for (let i = 0; i <= numStops; i++) {
+      const t = i / numStops;
+      // Logarithmic interpolation
+      const logMin = Math.log10(visMin);
+      const logMax = Math.log10(visMax);
+      const freq = Math.pow(10, logMin + t * (logMax - logMin));
+      const color = getVisibleLightColor(freq);
+      stops.push({ offset: `${t * 100}%`, color });
+    }
+
+    return stops;
+  });
+
   // Calculate band rectangles for each row
   let emBandRects = $derived(
-    EM_BANDS.map(band => {
+    EXTENDED_EM_BANDS.map(band => {
       const rect = calcBandRect(band);
       return { ...band, ...rect };
     }).filter(b => b.visible)
@@ -223,13 +330,15 @@
     }
     const [domainMin, domainMax] = zoomedDomain;
     if (frequencyHz < domainMin || frequencyHz > domainMax) {
-      return null; // Marker is outside visible range
+      return null;
     }
     return xScale(frequencyHz);
   });
 
   // Format frequency for display
   function formatFrequency(hz: number): string {
+    if (hz >= 1e18) return `${(hz / 1e18).toFixed(1)} EHz`;
+    if (hz >= 1e15) return `${(hz / 1e15).toFixed(1)} PHz`;
     if (hz >= 1e12) return `${(hz / 1e12).toFixed(1)} THz`;
     if (hz >= 1e9) return `${(hz / 1e9).toFixed(1)} GHz`;
     if (hz >= 1e6) return `${(hz / 1e6).toFixed(1)} MHz`;
@@ -240,11 +349,13 @@
   // Format wavelength for display
   function formatWavelength(meters: number): string {
     if (meters >= 1000) return `${(meters / 1000).toFixed(0)} km`;
-    if (meters >= 1) return `${meters.toFixed(0)} m`;
-    if (meters >= 0.01) return `${(meters * 100).toFixed(0)} cm`;
-    if (meters >= 0.001) return `${(meters * 1000).toFixed(0)} mm`;
-    if (meters >= 1e-6) return `${(meters * 1e6).toFixed(meters >= 1e-5 ? 0 : 1)} µm`;
-    return `${(meters * 1e9).toFixed(0)} nm`;
+    if (meters >= 1) return `${meters.toFixed(meters >= 10 ? 0 : 1)} m`;
+    if (meters >= 0.01) return `${(meters * 100).toFixed(meters >= 0.1 ? 0 : 1)} cm`;
+    if (meters >= 0.001) return `${(meters * 1000).toFixed(meters >= 0.01 ? 0 : 1)} mm`;
+    if (meters >= 1e-6) return `${(meters * 1e6).toFixed(meters >= 1e-5 ? 0 : 1)} um`;
+    if (meters >= 1e-9) return `${(meters * 1e9).toFixed(meters >= 1e-8 ? 0 : 1)} nm`;
+    if (meters >= 1e-12) return `${(meters * 1e12).toFixed(meters >= 1e-11 ? 0 : 1)} pm`;
+    return `${(meters * 1e15).toFixed(0)} fm`;
   }
 
   // Frequency axis ticks - dynamically computed based on zoom domain
@@ -271,7 +382,7 @@
     return ticks.sort((a, b) => a - b);
   });
 
-  // Wavelength axis ticks (λ = c/f) - reactive to speed of light changes and zoom domain
+  // Wavelength axis ticks - reactive to zoom domain
   let wavelengthTicks = $derived.by(() => {
     const [domainMin, domainMax] = zoomedDomain;
     const allTicks = [
@@ -287,15 +398,17 @@
       { wavelength: 0.1, label: '10 cm' },
       { wavelength: 0.01, label: '1 cm' },
       { wavelength: 0.001, label: '1 mm' },
-      { wavelength: 0.0001, label: '100 µm' },
-      { wavelength: 0.00001, label: '10 µm' },
-      { wavelength: 0.000001, label: '1 µm' },
+      { wavelength: 0.0001, label: '100 um' },
+      { wavelength: 0.00001, label: '10 um' },
+      { wavelength: 0.000001, label: '1 um' },
       { wavelength: 1e-7, label: '100 nm' },
       { wavelength: 1e-8, label: '10 nm' },
       { wavelength: 1e-9, label: '1 nm' },
       { wavelength: 1e-10, label: '100 pm' },
       { wavelength: 1e-11, label: '10 pm' },
       { wavelength: 1e-12, label: '1 pm' },
+      { wavelength: 1e-13, label: '100 fm' },
+      { wavelength: 1e-14, label: '10 fm' },
     ];
 
     return allTicks
@@ -383,19 +496,34 @@
     const visibleLogRange = logRange / zoomLevel;
     const markerLogPos = Math.log10(frequencyHz);
 
-    // Center the marker in the view
     panOffset = Math.max(0, Math.min(logRange - visibleLogRange, markerLogPos - logMin - visibleLogRange / 2));
   }
+
+  // Jump to visible light spectrum
+  function jumpToVisibleLight() {
+    viewMode = 'visible';
+    const logMin = Math.log10(SPECTRUM_MIN);
+    const logMax = Math.log10(SPECTRUM_MAX_VISIBLE);
+    const logRange = logMax - logMin;
+
+    // Set zoom to show visible light region nicely
+    zoomLevel = 3;
+    const visibleLogRange = logRange / zoomLevel;
+    const visibleCenterLog = Math.log10(Math.sqrt(VISIBLE_MIN_HZ * VISIBLE_MAX_HZ));
+
+    panOffset = Math.max(0, Math.min(logRange - visibleLogRange, visibleCenterLog - logMin - visibleLogRange / 2));
+  }
+
 </script>
 
 <div
   bind:this={containerElement}
-  class="w-full min-h-[50vh] bg-slate-900 rounded-lg p-4 relative"
+  class="w-full bg-slate-900 rounded-lg p-4 relative"
   role="img"
-  aria-label="Unified electromagnetic spectrum visualization"
+  aria-label="Elektromagnetisches Spektrum - von ELF bis Gammastrahlung"
 >
-  <!-- Control bar: Band row selector and zoom controls -->
-  <div class="flex flex-wrap gap-4 mb-4 items-center justify-between">
+  <!-- Control bar: Band row selector, view mode, zoom controls, and frequency display -->
+  <div class="flex flex-wrap gap-4 mb-4 items-center">
     <!-- Band row selector -->
     <div class="flex flex-wrap items-center gap-2">
       <span class="text-slate-400 text-sm mr-1">Baender:</span>
@@ -446,6 +574,12 @@
         RF (3 Hz - 3 THz)
       </button>
       <button
+        class="px-3 py-1.5 text-sm rounded transition-colors {viewMode === 'visible' ? 'bg-amber-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
+        onclick={() => { viewMode = 'visible'; resetZoom(); }}
+      >
+        RF + Licht (bis 1 PHz)
+      </button>
+      <button
         class="px-3 py-1.5 text-sm rounded transition-colors {viewMode === 'full' ? 'bg-amber-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
         onclick={() => { viewMode = 'full'; resetZoom(); }}
       >
@@ -455,7 +589,15 @@
 
     <!-- Zoom and pan controls -->
     <div class="flex items-center gap-2">
-      <span class="text-slate-400 text-sm">Zoom:</span>
+      <button
+        class="px-2 py-1 text-sm bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 to-violet-500 text-white rounded hover:opacity-80"
+        onclick={jumpToVisibleLight}
+        aria-label="Sichtbares Licht anzeigen"
+        title="Sichtbares Licht anzeigen"
+      >
+        Sichtbar
+      </button>
+      <span class="text-slate-400 text-sm ml-2">Zoom:</span>
       <button
         class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
         onclick={panLeft}
@@ -520,44 +662,31 @@
         </button>
       {/if}
     </div>
+
+    <!-- Frequency marker display (integrated into control bar) -->
+    {#if frequencyHz}
+      <div class="ml-auto flex items-center bg-amber-500/20 border border-amber-500/50 rounded px-3 py-1.5">
+        <span class="text-amber-400 text-sm font-mono">{formatFrequency(frequencyHz)}</span>
+        <span class="text-amber-400/70 text-xs ml-2">
+          (lambda = {formatWavelength(currentSpeedOfLight / frequencyHz)})
+        </span>
+      </div>
+    {/if}
   </div>
 
-  <!-- Frequency marker display -->
-  {#if frequencyHz}
-    <div class="absolute top-4 right-4 bg-amber-500/20 border border-amber-500/50 rounded px-3 py-1.5">
-      <span class="text-amber-400 text-sm font-mono">{formatFrequency(frequencyHz)}</span>
-      <span class="text-amber-400/70 text-xs ml-2">
-        (λ = {formatWavelength(currentSpeedOfLight / frequencyHz)})
-      </span>
-    </div>
-  {/if}
-
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <svg
     width="100%"
     height={totalHeight}
-    onwheel={handleWheel}
     class="cursor-crosshair"
   >
     <defs>
-      <!-- Visible light gradient (horizontal for band display) -->
-      <linearGradient id="visibleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#ef4444" />
-        <stop offset="20%" stop-color="#f97316" />
-        <stop offset="40%" stop-color="#eab308" />
-        <stop offset="60%" stop-color="#22c55e" />
-        <stop offset="80%" stop-color="#3b82f6" />
-        <stop offset="100%" stop-color="#8b5cf6" />
+      <!-- Dynamic visible light gradient based on current view -->
+      <linearGradient id="visibleLightGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        {#each visibleLightGradientStops as stop (stop.offset)}
+          <stop offset={stop.offset} stop-color={stop.color} />
+        {/each}
       </linearGradient>
-      <!-- Visible light gradient (vertical for reference marker) -->
-      <linearGradient id="visibleGradientVertical" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#ef4444" />
-        <stop offset="20%" stop-color="#f97316" />
-        <stop offset="40%" stop-color="#eab308" />
-        <stop offset="60%" stop-color="#22c55e" />
-        <stop offset="80%" stop-color="#3b82f6" />
-        <stop offset="100%" stop-color="#8b5cf6" />
-      </linearGradient>
+
     </defs>
 
     <g transform="translate({margin.left}, 0)">
@@ -577,7 +706,7 @@
           text-anchor="end"
           class="fill-slate-400 text-xs"
         >
-          λ
+          wavelength
         </text>
         {#each wavelengthTicks as tick (tick.label)}
           {@const tickX = xScale(tick.freq)}
@@ -644,7 +773,7 @@
                   y="2"
                   width={Math.max(band.width, 2)}
                   height={rowHeight - 4}
-                  fill={band.id === 'em-visible' ? 'url(#visibleGradient)' : band.color}
+                  fill={band.color === 'visible' ? 'url(#visibleLightGradient)' : band.color}
                   opacity="0.9"
                   stroke="#0f172a"
                   stroke-width="0.5"
@@ -740,67 +869,27 @@
         {/each}
       </g>
 
-      <!-- Visible Light Reference Marker -->
-      {#if visibleRowCount > 0}
-        <g transform="translate({innerWidth + 20}, {margin.top})">
-          <!-- Rainbow stripe -->
-          <rect
-            x="0"
-            y="0"
-            width="12"
-            height={bandRowsHeight}
-            rx="3"
-            ry="3"
-            fill="url(#visibleGradientVertical)"
-            stroke="#475569"
-            stroke-width="1"
-          />
-
-          <!-- Arrow pointing right -->
-          <path
-            d="M -8 {bandRowsHeight / 2} L -3 {bandRowsHeight / 2 - 4} L -3 {bandRowsHeight / 2 + 4} Z"
-            fill="#94a3b8"
-          />
-
-          <!-- Label "Sichtbares Licht" (rotated) -->
-          <text
-            x="22"
-            y={bandRowsHeight / 2}
-            text-anchor="middle"
-            dominant-baseline="middle"
-            transform="rotate(90, 22, {bandRowsHeight / 2})"
-            class="fill-slate-300 font-medium"
-            style="font-size: 11px;"
-          >
-            Sichtbares Licht
-          </text>
-
-          <!-- Frequency range label at bottom -->
-          <text
-            x="6"
-            y={bandRowsHeight + 16}
-            text-anchor="middle"
-            class="fill-slate-500"
-            style="font-size: 9px;"
-          >
-            400-800 THz
-          </text>
-        </g>
-      {/if}
     </g>
   </svg>
 
   <!-- Tooltip -->
   {#if tooltip.visible && tooltip.band}
     <div
-      class="absolute pointer-events-none bg-slate-800 border border-slate-600 rounded-lg shadow-xl px-4 py-3 z-50 min-w-[200px]"
-      style="left: {Math.min(tooltip.x + 10, containerWidth - 220)}px; top: {Math.max(10, tooltip.y - 100)}px;"
+      class="absolute pointer-events-none bg-slate-800 border border-slate-600 rounded-lg shadow-xl px-4 py-3 z-50 min-w-[220px]"
+      style="left: {Math.min(tooltip.x + 10, containerWidth - 240)}px; top: {Math.max(10, tooltip.y - 120)}px;"
     >
       <div class="flex items-center gap-2 mb-2">
-        <div
-          class="w-3 h-3 rounded"
-          style="background-color: {tooltip.band.color};"
-        ></div>
+        {#if tooltip.band.color === 'visible'}
+          <div
+            class="w-4 h-4 rounded"
+            style="background: linear-gradient(to right, #dc2626, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6);"
+          ></div>
+        {:else}
+          <div
+            class="w-4 h-4 rounded"
+            style="background-color: {tooltip.band.color};"
+          ></div>
+        {/if}
         <div class="text-white font-medium">{tooltip.band.name}</div>
       </div>
       {#if tooltip.band.nameDE && tooltip.band.nameDE !== tooltip.band.name}
@@ -812,7 +901,7 @@
           <span class="text-slate-200 font-mono">{formatFrequencyRange(tooltip.band.minHz, tooltip.band.maxHz)}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-500">Wellenlaenge:</span>
+          <span class="text-slate-500">Wellenlänge:</span>
           <span class="text-slate-200 font-mono">
             {formatWavelength(currentSpeedOfLight / tooltip.band.maxHz)} - {formatWavelength(currentSpeedOfLight / tooltip.band.minHz)}
           </span>
@@ -825,10 +914,42 @@
     </div>
   {/if}
 
+  <!-- Legend for spectrum regions -->
+  <div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-400">
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded bg-blue-500"></div>
+      <span>Radio</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded bg-indigo-500"></div>
+      <span>Mikrowellen</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded bg-red-700"></div>
+      <span>Infrarot</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded" style="background: linear-gradient(to right, #dc2626, #eab308, #22c55e, #3b82f6, #8b5cf6);"></div>
+      <span>Sichtbar</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded bg-violet-700"></div>
+      <span>Ultraviolett</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded bg-cyan-600"></div>
+      <span>Roentgen</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <div class="w-3 h-3 rounded bg-pink-500"></div>
+      <span>Gamma</span>
+    </div>
+  </div>
+
   <!-- Zoom hint -->
   {#if zoomLevel > 1}
     <div class="absolute bottom-2 left-2 text-slate-500 text-xs">
-      Mausrad zum Zoomen, Pfeiltasten zum Verschieben
+      Nutzen Sie die Buttons oben zum Zoomen und Verschieben
     </div>
   {/if}
 </div>

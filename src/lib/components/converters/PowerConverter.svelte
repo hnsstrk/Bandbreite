@@ -74,7 +74,7 @@
   }
 </script>
 
-<div class="bg-slate-800 rounded-lg p-4 shadow-xl">
+<div class="bg-slate-800 rounded-xl p-4 shadow-lg">
   <div class="flex flex-wrap items-center gap-4">
     <!-- Watt Input -->
     <div class="flex items-center gap-2 flex-1 min-w-[180px]">

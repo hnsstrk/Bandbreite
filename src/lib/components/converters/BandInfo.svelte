@@ -36,14 +36,14 @@
   );
 </script>
 
-<div class="bg-slate-800 rounded-lg p-4 shadow-xl">
+<div class="bg-slate-800 rounded-xl p-4 shadow-lg">
   {#if !frequencyHz || frequencyHz <= 0}
-    <p class="text-slate-500 text-sm">Frequenz eingeben fuer Bandzuordnung</p>
+    <p class="text-slate-500 text-sm">Frequenz eingeben für Bandzuordnung</p>
   {:else if !hasBands}
-    <p class="text-slate-500 text-sm">Keine Standardbaender fuer diese Frequenz definiert</p>
+    <p class="text-slate-500 text-sm">Keine Standardbänder für diese Frequenz definiert</p>
   {:else}
     <div class="flex flex-col sm:flex-row sm:flex-wrap items-start gap-3 sm:gap-x-6 sm:gap-y-2">
-      <!-- IEEE Baender -->
+      <!-- IEEE Bänder -->
       {#if ieeeBands.length > 0}
         <div class="flex items-center gap-2">
           <span class="text-xs font-medium text-slate-500 uppercase tracking-wide w-12 sm:w-auto">IEEE</span>
@@ -66,7 +66,7 @@
         <div class="hidden sm:block w-px h-6 bg-slate-600 self-center"></div>
       {/if}
 
-      <!-- NATO Baender -->
+      <!-- NATO Bänder -->
       {#if natoBands.length > 0}
         <div class="flex items-center gap-2">
           <span class="text-xs font-medium text-slate-500 uppercase tracking-wide w-12 sm:w-auto">NATO</span>

@@ -18,6 +18,10 @@ npm run preview          # Preview production build
 npm run check            # Run svelte-check for type checking
 ```
 
+## Git Workflow
+
+Führe regelmäßig Commits und Pushes durch, um Fortschritte zu sichern. Committe nach Abschluss von logischen Arbeitseinheiten (z.B. nach Fertigstellung einer Komponente, Bugfix oder Feature).
+
 ## Technology Stack
 
 - **Framework**: SvelteKit (Svelte 5)

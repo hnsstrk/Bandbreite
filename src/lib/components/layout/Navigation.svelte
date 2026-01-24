@@ -6,11 +6,9 @@
     label: string;
   }
 
+  // Alle Funktionen sind jetzt auf der Startseite integriert
   const navItems: NavItem[] = [
-    { href: '/', label: 'Startseite' },
-    { href: '/konverter', label: 'Konverter' },
-    { href: '/spektrum', label: 'Spektrum' },
-    { href: '/daempfung', label: 'Daempfung' }
+    { href: '/', label: 'Startseite' }
   ];
 
   let mobileMenuOpen = $state(false);
@@ -53,7 +51,7 @@
         onclick={toggleMobileMenu}
         aria-expanded={mobileMenuOpen}
         aria-controls="mobile-menu"
-        aria-label={mobileMenuOpen ? 'Menue schliessen' : 'Menue oeffnen'}
+        aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
       >
         {#if mobileMenuOpen}
           <!-- Close Icon (X) -->

@@ -24,12 +24,12 @@
   // Collapsible formula section state
   let showFormula = $state(false);
 
-  // Quick frequency presets (in Hz)
+  // Quick frequency presets (in Hz) with typical use cases
   const quickFrequencies = [
-    { label: '2.4 GHz', hz: 2.4e9 },
-    { label: '5 GHz', hz: 5e9 },
-    { label: '28 GHz', hz: 28e9 },
-    { label: '77 GHz', hz: 77e9 },
+    { label: '2.4 GHz', desc: 'WLAN/Bluetooth', hz: 2.4e9 },
+    { label: '5 GHz', desc: 'WLAN 5', hz: 5e9 },
+    { label: '28 GHz', desc: '5G mmWave', hz: 28e9 },
+    { label: '77 GHz', desc: 'Kfz-Radar', hz: 77e9 },
   ];
 
   // Derived values for display - reactive to speed of light changes
@@ -98,7 +98,7 @@
   }
 </script>
 
-<div class="bg-slate-800 rounded-lg p-3 shadow-xl">
+<div class="bg-slate-800 rounded-xl p-4 shadow-lg">
   <!-- Main Input Row: Horizontal on desktop, vertical on mobile -->
   <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
     <!-- Frequency Input -->
@@ -134,7 +134,7 @@
     <!-- Wavelength Input -->
     <div class="flex items-center gap-1.5 flex-1 min-w-0">
       <label for="wavelength" class="text-xs font-medium text-slate-300 whitespace-nowrap w-16 md:w-auto">
-        Wellenlaenge
+        Wellenlänge
       </label>
       <input
         type="number"
@@ -143,7 +143,7 @@
         oninput={handleWavelengthInput}
         class="flex-1 min-w-0 bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm
                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        placeholder="Wellenlaenge"
+        placeholder="Wellenlänge"
         step="any"
       />
       <select
@@ -169,8 +169,10 @@
         class="px-2 py-0.5 text-xs rounded border border-slate-600 hover:border-blue-500
                bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400
                transition-colors"
+        title="{preset.label} - {preset.desc}"
       >
-        {preset.label}
+        <span class="font-medium">{preset.label}</span>
+        <span class="text-slate-500 ml-1">({preset.desc})</span>
       </button>
     {/each}
 

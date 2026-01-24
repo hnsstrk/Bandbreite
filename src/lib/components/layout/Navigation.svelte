@@ -7,7 +7,7 @@
   }
 
   const navItems: NavItem[] = [
-    { href: '/', label: 'Startseite' },
+    { href: '/', label: 'Spektrum & Konverter' },
     { href: '/link-budget', label: 'Link Budget' }
   ];
 

@@ -182,7 +182,7 @@
     if (m >= 1) return `${m.toFixed(2)} m`;
     if (m >= 0.01) return `${(m * 100).toFixed(2)} cm`;
     if (m >= 0.001) return `${(m * 1000).toFixed(2)} mm`;
-    return `${(m * 1e6).toFixed(2)} um`;
+    return `${(m * 1e6).toFixed(2)} \u03BCm`;
   }
 
   // Event handlers
@@ -333,7 +333,7 @@
 
     <!-- Wavelength -->
     <div class="bg-slate-900 rounded-lg p-4 text-center">
-      <div class="text-slate-400 text-sm mb-1">Wellenlaenge</div>
+      <div class="text-slate-400 text-sm mb-1">Wellenlänge</div>
       <div class="text-2xl font-bold text-green-400">
         {wavelengthM !== null ? formatWavelength(wavelengthM) : '—'}
       </div>
@@ -541,17 +541,6 @@
           </text>
         </g>
 
-        <!-- Chart title -->
-        <text
-          x={chartWidth / 2}
-          y="-15"
-          class="fill-slate-100"
-          text-anchor="middle"
-          font-size="15"
-          font-weight="600"
-        >
-          Free Space Path Loss vs. Distanz
-        </text>
       </g>
 
       <!-- Legend -->
@@ -580,7 +569,7 @@
   <!-- Additional Info -->
   <div class="mt-4 text-xs text-slate-500">
     <p>
-      Die Freiraumdaempfung (FSPL) beschreibt den Signalverlust einer elektromagnetischen Welle
+      Die Freiraumdämpfung (FSPL) beschreibt den Signalverlust einer elektromagnetischen Welle
       im freien Raum ohne Hindernisse. Sie steigt quadratisch mit Frequenz und Distanz an.
     </p>
   </div>

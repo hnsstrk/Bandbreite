@@ -365,7 +365,7 @@
             class="w-4 h-4 rounded bg-slate-700 border-slate-600 text-blue-500
                    focus:ring-blue-500 focus:ring-offset-slate-800"
           />
-          Atmosphaerische Daempfung einbeziehen
+          Atmosphärische Dämpfung einbeziehen
         </label>
 
         <!-- Path Loss Results -->
@@ -397,7 +397,7 @@
     <!-- RX Section -->
     <div class="space-y-4">
       <h4 class="text-sm font-semibold text-green-400 border-b border-slate-700 pb-2">
-        RX (Empfaenger)
+        RX (Empfänger)
       </h4>
 
       <div class="space-y-3">
@@ -487,7 +487,7 @@
         <div class="text-2xl font-bold {linkMarginDb >= 0 ? 'text-green-400' : 'text-red-400'}">
           {linkMarginDb >= 0 ? '+' : ''}{linkMarginDb.toFixed(1)} <span class="text-lg text-slate-400">dB</span>
         </div>
-        <div class="text-xs text-slate-500 mt-1">Pegel ueber Empfindlichkeit</div>
+        <div class="text-xs text-slate-500 mt-1">Pegel über Empfindlichkeit</div>
       </div>
 
       <!-- System Margin -->

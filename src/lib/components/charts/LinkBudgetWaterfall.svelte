@@ -473,7 +473,7 @@
     </svg>
   {:else}
     <div class="flex items-center justify-center h-64 bg-slate-900 rounded-lg">
-      <p class="text-slate-500">Keine Link Budget Daten verfuegbar</p>
+      <p class="text-slate-500">Keine Link Budget Daten verfügbar</p>
     </div>
   {/if}
 </div>

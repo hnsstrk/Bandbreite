@@ -80,7 +80,7 @@
     // Weather and Airport radar have offset to avoid overlap
     { name: 'Weather Radar', nameDE: 'Wetterradar', frequencyHz: 2.8e9, powerWatt: 750000, category: 'radar', labelOffset: { x: -40, y: 0 } },
     { name: 'Airport Radar', nameDE: 'Flughafenradar', frequencyHz: 2.8e9, powerWatt: 1300000, category: 'radar', labelOffset: { x: 40, y: 0 } },
-    { name: 'Military Radar', nameDE: 'Militaerradar', frequencyHz: 442e6, powerWatt: 32000000, category: 'radar' },
+    { name: 'Military Radar', nameDE: 'Militärradar', frequencyHz: 442e6, powerWatt: 32000000, category: 'radar' },
   ];
 
   // Satellite data points (researched values)
@@ -162,7 +162,7 @@
     if (m >= 1) return `${m.toFixed(0)} m`;
     if (m >= 1e-2) return `${(m * 100).toFixed(0)} cm`;
     if (m >= 1e-3) return `${(m * 1000).toFixed(1)} mm`;
-    return `${(m * 1e6).toFixed(0)} um`;
+    return `${(m * 1e6).toFixed(0)} \u03BCm`;
   }
 
   // Format power with SI prefixes
@@ -171,7 +171,7 @@
     if (watt >= 1e3) return `${(watt / 1e3).toFixed(0)} kW`;
     if (watt >= 1) return `${watt.toFixed(1)} W`;
     if (watt >= 1e-3) return `${(watt * 1000).toFixed(0)} mW`;
-    return `${(watt * 1e6).toFixed(0)} uW`;
+    return `${(watt * 1e6).toFixed(0)} \u03BCW`;
   }
 
   // Format dBm
@@ -272,7 +272,7 @@
   <div class="flex flex-wrap items-center gap-6 mb-4">
     <!-- Band Mode Toggle Switch with Show/Hide -->
     <div class="flex items-center gap-3">
-      <span class="text-sm text-slate-400">Frequenzbaender:</span>
+      <span class="text-sm text-slate-400">Frequenzbänder:</span>
       <!-- Show/Hide Bands Toggle -->
       <label class="flex items-center gap-1.5 cursor-pointer">
         <button
@@ -282,7 +282,7 @@
                  {showIEEEBands ? 'bg-indigo-500' : 'bg-slate-600'}"
           role="switch"
           aria-checked={showIEEEBands}
-          aria-label="Frequenzbaender anzeigen"
+          aria-label="Frequenzbänder anzeigen"
         >
           <span
             class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-md transition-transform duration-200
@@ -301,7 +301,7 @@
                  {bandMode === 'ieee' ? 'bg-purple-600' : 'bg-green-600'}"
           role="switch"
           aria-checked={bandMode === 'nato'}
-          aria-label="Zwischen IEEE und NATO Baendern wechseln"
+          aria-label="Zwischen IEEE und NATO Bändern wechseln"
         >
           <span
             class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-200
@@ -615,7 +615,7 @@
           class="fill-slate-400"
           font-size="12"
         >
-          Wellenlaenge (m)
+          Wellenlänge (m)
         </text>
       </g>
 
@@ -693,7 +693,7 @@
 
         <!-- Current band system indicator -->
         <rect x="480" y="-6" width="12" height="12" rx="1" fill={bandMode === 'ieee' ? '#6366f1' : '#22c55e'} opacity="0.5" />
-        <text x="498" y="4" class="fill-slate-400" font-size="11">{bandMode === 'ieee' ? 'IEEE' : 'NATO'}-Baender</text>
+        <text x="498" y="4" class="fill-slate-400" font-size="11">{bandMode === 'ieee' ? 'IEEE' : 'NATO'}-Bänder</text>
       </g>
     </g>
   </svg>

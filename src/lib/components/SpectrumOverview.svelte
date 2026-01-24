@@ -131,8 +131,8 @@
     { id: 'em-uv-mid', name: 'UV-B', nameDE: 'UV-B', minHz: 952e12, maxHz: 1.07e15, color: '#6d28d9', category: 'em' },
     { id: 'em-uv-far', name: 'UV-C', nameDE: 'UV-C', minHz: 1.07e15, maxHz: 3e15, color: '#5b21b6', category: 'em' },
     { id: 'em-euv', name: 'EUV', nameDE: 'Extremes UV', minHz: 3e15, maxHz: 30e15, color: '#4c1d95', category: 'em' },
-    { id: 'em-xray-soft', name: 'Soft X-Ray', nameDE: 'Weiche Roentgenstrahlung', minHz: 30e15, maxHz: 3e17, color: '#0891b2', category: 'em' },
-    { id: 'em-xray-hard', name: 'Hard X-Ray', nameDE: 'Harte Roentgenstrahlung', minHz: 3e17, maxHz: 30e18, color: '#0e7490', category: 'em' },
+    { id: 'em-xray-soft', name: 'Soft X-Ray', nameDE: 'Weiche Röntgenstrahlung', minHz: 30e15, maxHz: 3e17, color: '#0891b2', category: 'em' },
+    { id: 'em-xray-hard', name: 'Hard X-Ray', nameDE: 'Harte Röntgenstrahlung', minHz: 3e17, maxHz: 30e18, color: '#0e7490', category: 'em' },
     { id: 'em-gamma', name: 'Gamma', nameDE: 'Gammastrahlung', minHz: 30e18, maxHz: 3e22, color: '#ec4899', category: 'em' },
   ];
 
@@ -526,7 +526,7 @@
   <div class="flex flex-wrap gap-4 mb-4 items-center">
     <!-- Band row selector -->
     <div class="flex flex-wrap items-center gap-2">
-      <span class="text-slate-400 text-sm mr-1">Baender:</span>
+      <span class="text-slate-400 text-sm mr-1">Bänder:</span>
       <button
         class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.em ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
         onclick={() => toggleRow('em')}
@@ -646,8 +646,8 @@
       <button
         class="px-2 py-1 text-sm bg-slate-700 text-slate-300 rounded hover:bg-slate-600"
         onclick={resetZoom}
-        aria-label="Zoom zuruecksetzen"
-        title="Zoom zuruecksetzen"
+        aria-label="Zoom zurücksetzen"
+        title="Zoom zurücksetzen"
       >
         Reset
       </button>
@@ -938,7 +938,7 @@
     </div>
     <div class="flex items-center gap-1">
       <div class="w-3 h-3 rounded bg-cyan-600"></div>
-      <span>Roentgen</span>
+      <span>Röntgen</span>
     </div>
     <div class="flex items-center gap-1">
       <div class="w-3 h-3 rounded bg-pink-500"></div>

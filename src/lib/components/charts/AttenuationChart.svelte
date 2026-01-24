@@ -433,7 +433,7 @@
           font-size="14"
           font-weight="500"
         >
-          Spezifische Daempfung (dB/km)
+          Spezifische Dämpfung (dB/km)
         </text>
       </g>
 
@@ -543,7 +543,7 @@
         font-size="18"
         font-weight="600"
       >
-        Atmosphaerische Daempfung (ITU-R P.676 / P.838 / P.840)
+        Atmosphärische Dämpfung (ITU-R P.676 / P.838 / P.840)
       </text>
     </g>
 
@@ -551,7 +551,7 @@
     <g transform="translate({width - margin.right + 20}, {margin.top})">
       <!-- Current parameters -->
       <text class="fill-slate-300 font-medium" font-size="12" y="0">
-        Atmosphaere
+        Atmosphäre
       </text>
       <text class="fill-slate-400" font-size="10" y="16">
         T = {atmosphericParameters.temperatureCelsius.toFixed(1)} C

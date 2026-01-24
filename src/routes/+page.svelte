@@ -8,8 +8,45 @@
   import AtmosphericInputs from '$lib/components/converters/AtmosphericInputs.svelte';
   import AttenuationChart from '$lib/components/charts/AttenuationChart.svelte';
 
+  // Phase 3 Components
+  import FSPLCalculator from '$lib/components/calculators/FSPLCalculator.svelte';
+  import FrequencyRelationChart from '$lib/components/charts/FrequencyRelationChart.svelte';
+  import LinkBudgetCalculator from '$lib/components/calculators/LinkBudgetCalculator.svelte';
+  import LinkBudgetWaterfall from '$lib/components/charts/LinkBudgetWaterfall.svelte';
+
   let currentFrequencyHz = $state<number | null>(null);
   let currentPowerWatt = $state<number | null>(1);
+
+  // Link Budget Calculator reference and data
+  let linkBudgetRef: LinkBudgetCalculator | undefined = $state(undefined);
+
+  // Link budget data for waterfall chart
+  let linkBudgetData = $state<{
+    txPowerDbm: number;
+    txAntennaGainDbi: number;
+    txCableLossDb: number;
+    eirpDbm: number;
+    fsplDb: number;
+    atmosphericLossDb: number;
+    miscLossDb: number;
+    totalPathLossDb: number;
+    rxAntennaGainDbi: number;
+    rxCableLossDb: number;
+    receivedPowerDbm: number;
+    rxSensitivityDbm: number;
+    linkMarginDb: number;
+    fadingMarginDb: number;
+    systemMarginDb: number;
+    linkViable: boolean;
+  } | null>(null);
+
+  // Update link budget data periodically
+  $effect(() => {
+    if (linkBudgetRef) {
+      const data = linkBudgetRef.getLinkBudgetData();
+      linkBudgetData = data;
+    }
+  });
 </script>
 
 <svelte:head>
@@ -49,6 +86,46 @@
     <BandInfo frequencyHz={currentFrequencyHz} />
   </div>
 
+  <!-- ========== PHASE 3: FSPL Calculator ========== -->
+  <section id="fspl-calculator">
+    <FSPLCalculator frequencyHz={currentFrequencyHz} />
+  </section>
+
+  <!-- ========== PHASE 3: Frequency Relation Chart ========== -->
+  <section class="bg-slate-800 rounded-xl p-6 shadow-lg" id="frequency-relation">
+    <h2 class="text-xl font-semibold text-slate-100 mb-3">Frequenz-Wellenlaenge-Beziehung</h2>
+    <p class="text-sm text-slate-400 mb-4">
+      Interaktive Visualisierung der Beziehung zwischen Frequenz und Wellenlaenge ueber das gesamte RF-Spektrum.
+      Die ITU-Frequenzbaender sind als Hintergrund dargestellt.
+    </p>
+    <div class="w-full overflow-x-auto">
+      <FrequencyRelationChart frequencyHz={currentFrequencyHz} />
+    </div>
+  </section>
+
+  <!-- ========== PHASE 3: Link Budget Calculator + Waterfall ========== -->
+  <section id="link-budget">
+    <div class="grid grid-cols-1 gap-6">
+      <LinkBudgetCalculator
+        bind:this={linkBudgetRef}
+        frequencyHz={currentFrequencyHz}
+      />
+
+      <!-- Link Budget Waterfall Visualization -->
+      <div class="bg-slate-800 rounded-xl p-6 shadow-lg">
+        <h3 class="text-lg font-semibold text-slate-100 mb-3">Link Budget Waterfall</h3>
+        <p class="text-sm text-slate-400 mb-4">
+          Visuelle Darstellung des Signalpfads vom Sender zum Empfaenger.
+          Gruene Balken zeigen Gewinne, rote Balken zeigen Verluste.
+          Die orangefarbene Linie markiert die Empfaengerempfindlichkeit.
+        </p>
+        <div class="w-full overflow-x-auto">
+          <LinkBudgetWaterfall data={linkBudgetData} />
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Transmit Power vs Frequency Chart -->
   <section class="bg-slate-800 rounded-xl p-6 shadow-lg">
     <h2 class="text-xl font-semibold text-slate-100 mb-3">Sendeleistungen im Frequenzspektrum</h2>
@@ -87,6 +164,30 @@
       <p class="text-sm text-slate-400">
         Wobei c die Lichtgeschwindigkeit im Vakuum ist (= 299.792.458 m/s).
       </p>
+
+      <div class="border-t border-slate-700 pt-4 mt-4">
+        <p class="text-sm text-slate-400 mb-2">
+          Die Freiraumdaempfung (FSPL - Free Space Path Loss) ist:
+        </p>
+        <div class="bg-slate-900 p-4 rounded-lg font-mono text-center text-lg">
+          FSPL(dB) = 20·log₁₀(d) + 20·log₁₀(f) + 20·log₁₀(4π/c)
+        </div>
+        <p class="text-sm text-slate-400 mt-2">
+          Vereinfacht (mit d in Metern und f in Hz): FSPL ≈ 20·log₁₀(d) + 20·log₁₀(f) - 147,55 dB
+        </p>
+      </div>
+
+      <div class="border-t border-slate-700 pt-4 mt-4">
+        <p class="text-sm text-slate-400 mb-2">
+          Das Link Budget berechnet sich als:
+        </p>
+        <div class="bg-slate-900 p-4 rounded-lg font-mono text-center text-base">
+          P<sub>RX</sub> = P<sub>TX</sub> + G<sub>TX</sub> - L<sub>TX</sub> - L<sub>path</sub> + G<sub>RX</sub> - L<sub>RX</sub>
+        </div>
+        <p class="text-sm text-slate-400 mt-2">
+          Der Link Margin ergibt sich aus: M = P<sub>RX</sub> - S<sub>RX</sub> (Empfangsleistung minus Empfindlichkeit)
+        </p>
+      </div>
     </div>
   </section>
 </div>

@@ -7,11 +7,28 @@
   let { children } = $props();
 </script>
 
-<div class="min-h-screen flex flex-col bg-slate-900 text-slate-100">
+<div class="app-container">
   <Header />
   <Navigation />
-  <main class="flex-grow w-full px-2 py-8">
+  <main class="main-content">
     {@render children()}
   </main>
   <Footer />
 </div>
+
+<style>
+  .app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+  }
+
+  .main-content {
+    flex-grow: 1;
+    width: 100%;
+    padding: 2rem 0.5rem;
+  }
+</style>

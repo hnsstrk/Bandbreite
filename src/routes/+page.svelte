@@ -10,7 +10,6 @@
 
   // Phase 3 Components
   import FSPLCalculator from '$lib/components/calculators/FSPLCalculator.svelte';
-  import FrequencyRelationChart from '$lib/components/charts/FrequencyRelationChart.svelte';
   import LinkBudgetCalculator from '$lib/components/calculators/LinkBudgetCalculator.svelte';
   import LinkBudgetWaterfall from '$lib/components/charts/LinkBudgetWaterfall.svelte';
 
@@ -50,38 +49,38 @@
 </script>
 
 <svelte:head>
-  <title>Bandbreite – RF-Frequenzrechner</title>
+  <title>Bandbreite - RF-Frequenzrechner</title>
   <meta name="description" content="RF-Frequenzrechner für Ingenieure und Funktechnik-Enthusiasten" />
 </svelte:head>
 
-<div class="space-y-8">
+<div class="page-content">
   <!-- Page Header -->
-  <header>
-    <h1 class="text-3xl font-bold text-slate-100">Frequenz-Konverter</h1>
-    <p class="text-base text-slate-400 mt-2">
+  <header class="page-header">
+    <h1 class="text-heading-1">Frequenz-Konverter</h1>
+    <p class="header-description">
       Wandeln Sie Frequenzen in Wellenlängen um und umgekehrt. Die Berechnung erfolgt basierend
       auf der Lichtgeschwindigkeit im Vakuum (c = 299.792.458 m/s).
     </p>
   </header>
 
   <!-- EM-Spektrum Hauptvisualisierung (ELF bis Gamma) -->
-  <section class="bg-slate-800 rounded-xl p-6 shadow-lg">
-    <h2 class="text-xl font-semibold text-slate-100 mb-3">Elektromagnetisches Spektrum</h2>
-    <p class="text-sm text-slate-400 mb-4">
-      Vollstaendige Visualisierung des elektromagnetischen Spektrums von 3 Hz (ELF) bis 30 EHz (Gammastrahlung).
-      Inklusive sichtbarem Licht, Infrarot, UV, Roentgen- und Gammastrahlung.
+  <section class="card">
+    <h2 class="text-heading-2">Elektromagnetisches Spektrum</h2>
+    <p class="section-description">
+      Vollständige Visualisierung des elektromagnetischen Spektrums von 3 Hz (ELF) bis 30 EHz (Gammastrahlung).
+      Inklusive sichtbarem Licht, Infrarot, UV, Röntgen- und Gammastrahlung.
     </p>
     <SpectrumOverview frequencyHz={currentFrequencyHz ?? undefined} />
   </section>
 
   <!-- Row 1: Frequency Converter + Range Calculator -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid-row">
     <FrequencyConverter bind:frequencyHz={currentFrequencyHz} />
     <RangeCalculator frequencyHz={currentFrequencyHz} />
   </div>
 
   <!-- Row 2: Power Converter + Band Info -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid-row">
     <PowerConverter bind:powerWatt={currentPowerWatt} />
     <BandInfo frequencyHz={currentFrequencyHz} />
   </div>
@@ -91,35 +90,24 @@
     <FSPLCalculator frequencyHz={currentFrequencyHz} />
   </section>
 
-  <!-- ========== PHASE 3: Frequency Relation Chart ========== -->
-  <section class="bg-slate-800 rounded-xl p-6 shadow-lg" id="frequency-relation">
-    <h2 class="text-xl font-semibold text-slate-100 mb-3">Frequenz-Wellenlaenge-Beziehung</h2>
-    <p class="text-sm text-slate-400 mb-4">
-      Interaktive Visualisierung der Beziehung zwischen Frequenz und Wellenlaenge ueber das gesamte RF-Spektrum.
-      Die ITU-Frequenzbaender sind als Hintergrund dargestellt.
-    </p>
-    <div class="w-full overflow-x-auto">
-      <FrequencyRelationChart frequencyHz={currentFrequencyHz} />
-    </div>
-  </section>
 
   <!-- ========== PHASE 3: Link Budget Calculator + Waterfall ========== -->
   <section id="link-budget">
-    <div class="grid grid-cols-1 gap-6">
+    <div class="section-stack">
       <LinkBudgetCalculator
         bind:this={linkBudgetRef}
         frequencyHz={currentFrequencyHz}
       />
 
       <!-- Link Budget Waterfall Visualization -->
-      <div class="bg-slate-800 rounded-xl p-6 shadow-lg">
-        <h3 class="text-lg font-semibold text-slate-100 mb-3">Link Budget Waterfall</h3>
-        <p class="text-sm text-slate-400 mb-4">
-          Visuelle Darstellung des Signalpfads vom Sender zum Empfaenger.
-          Gruene Balken zeigen Gewinne, rote Balken zeigen Verluste.
-          Die orangefarbene Linie markiert die Empfaengerempfindlichkeit.
+      <div class="card">
+        <h3 class="text-heading-3">Link Budget Waterfall</h3>
+        <p class="section-description">
+          Visuelle Darstellung des Signalpfads vom Sender zum Empfänger.
+          Grüne Balken zeigen Gewinne, rote Balken zeigen Verluste.
+          Die orangefarbene Linie markiert die Empfängerempfindlichkeit.
         </p>
-        <div class="w-full overflow-x-auto">
+        <div class="chart-container">
           <LinkBudgetWaterfall data={linkBudgetData} />
         </div>
       </div>
@@ -127,67 +115,150 @@
   </section>
 
   <!-- Transmit Power vs Frequency Chart -->
-  <section class="bg-slate-800 rounded-xl p-6 shadow-lg">
-    <h2 class="text-xl font-semibold text-slate-100 mb-3">Sendeleistungen im Frequenzspektrum</h2>
-    <p class="text-sm text-slate-400 mb-4">
+  <section class="card">
+    <h2 class="text-heading-2">Sendeleistungen im Frequenzspektrum</h2>
+    <p class="section-description">
       Typische Sendeleistungen verschiedener Kommunikations-, Radar-, Satelliten- und IoT-Systeme.
-      X-Achse: Frequenz (unten) und Wellenlaenge (oben). Y-Achse: Leistung in Watt (links) und dBm (rechts).
+      X-Achse: Frequenz (unten) und Wellenlänge (oben). Y-Achse: Leistung in Watt (links) und dBm (rechts).
     </p>
-    <div class="w-full overflow-x-auto">
+    <div class="chart-container">
       <PowerDbChart />
     </div>
   </section>
 
   <!-- Atmospheric Attenuation Chart -->
-  <section class="bg-slate-800 rounded-xl p-6 shadow-lg">
-    <h2 class="text-xl font-semibold text-slate-100 mb-3">Atmosphaerische Daempfung</h2>
-    <p class="text-sm text-slate-400 mb-4">
-      Daempfung durch Sauerstoff und Wasserdampf nach ITU-R P.676.
-      Die Resonanzbereiche bei 22 GHz (H2O) und 60 GHz (O2) sind markiert.
+  <section class="card">
+    <h2 class="text-heading-2">Atmosphärische Dämpfung</h2>
+    <p class="section-description">
+      Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676.
+      Die Resonanzbereiche bei 22 GHz (H&#8322;O) und 60 GHz (O&#8322;) sind markiert.
     </p>
     <AtmosphericInputs />
-    <div class="w-full overflow-x-auto mt-4">
+    <div class="chart-container chart-margin-top">
       <AttenuationChart frequencyGHz={currentFrequencyHz ? currentFrequencyHz / 1e9 : undefined} />
     </div>
   </section>
 
   <!-- Formula Explanation -->
-  <section class="bg-slate-800 rounded-xl p-6 shadow-lg">
-    <h2 class="text-xl font-semibold text-slate-100 mb-3">Formel-Erklaerung</h2>
-    <div class="space-y-4 text-slate-300">
-      <p class="text-sm text-slate-400">
-        Die Beziehung zwischen Frequenz (f) und Wellenlaenge (λ) ist:
+  <section class="card">
+    <h2 class="text-heading-2">Formel-Erklärung</h2>
+    <div class="formula-content">
+      <p class="section-description">
+        Die Beziehung zwischen Frequenz (f) und Wellenlänge (&#955;) ist:
       </p>
-      <div class="bg-slate-900 p-4 rounded-lg font-mono text-center text-lg">
-        λ = c / f &nbsp;&nbsp;&nbsp;&nbsp; f = c / λ
+      <div class="formula-box">
+        &#955; = c / f &nbsp;&nbsp;&nbsp;&nbsp; f = c / &#955;
       </div>
-      <p class="text-sm text-slate-400">
+      <p class="section-description">
         Wobei c die Lichtgeschwindigkeit im Vakuum ist (= 299.792.458 m/s).
       </p>
 
-      <div class="border-t border-slate-700 pt-4 mt-4">
-        <p class="text-sm text-slate-400 mb-2">
-          Die Freiraumdaempfung (FSPL - Free Space Path Loss) ist:
+      <div class="formula-divider">
+        <p class="section-description">
+          Die Freiraumdämpfung (FSPL - Free Space Path Loss) ist:
         </p>
-        <div class="bg-slate-900 p-4 rounded-lg font-mono text-center text-lg">
-          FSPL(dB) = 20·log₁₀(d) + 20·log₁₀(f) + 20·log₁₀(4π/c)
+        <div class="formula-box">
+          FSPL(dB) = 20 log&#8321;&#8320;(d) + 20 log&#8321;&#8320;(f) + 20 log&#8321;&#8320;(4&#960;/c)
         </div>
-        <p class="text-sm text-slate-400 mt-2">
-          Vereinfacht (mit d in Metern und f in Hz): FSPL ≈ 20·log₁₀(d) + 20·log₁₀(f) - 147,55 dB
+        <p class="section-description">
+          Vereinfacht (mit d in Metern und f in Hz): FSPL &#8776; 20 log&#8321;&#8320;(d) + 20 log&#8321;&#8320;(f) - 147,55 dB
         </p>
       </div>
 
-      <div class="border-t border-slate-700 pt-4 mt-4">
-        <p class="text-sm text-slate-400 mb-2">
+      <div class="formula-divider">
+        <p class="section-description">
           Das Link Budget berechnet sich als:
         </p>
-        <div class="bg-slate-900 p-4 rounded-lg font-mono text-center text-base">
+        <div class="formula-box formula-small">
           P<sub>RX</sub> = P<sub>TX</sub> + G<sub>TX</sub> - L<sub>TX</sub> - L<sub>path</sub> + G<sub>RX</sub> - L<sub>RX</sub>
         </div>
-        <p class="text-sm text-slate-400 mt-2">
+        <p class="section-description">
           Der Link Margin ergibt sich aus: M = P<sub>RX</sub> - S<sub>RX</sub> (Empfangsleistung minus Empfindlichkeit)
         </p>
       </div>
     </div>
   </section>
 </div>
+
+<style>
+  .page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .page-header {
+    margin-bottom: 0;
+  }
+
+  .header-description {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin-top: 0.5rem;
+    line-height: var(--line-height-relaxed);
+  }
+
+  .grid-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .grid-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .section-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .section-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    margin: 0.75rem 0;
+    line-height: var(--line-height-normal);
+  }
+
+  .chart-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .chart-margin-top {
+    margin-top: 1rem;
+  }
+
+  .formula-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .formula-box {
+    background-color: var(--color-bg-code);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
+    text-align: center;
+    margin: 0.5rem 0;
+  }
+
+  .formula-small {
+    font-size: var(--font-size-base);
+  }
+
+  .formula-divider {
+    border-top: 1px solid var(--color-border-default);
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+</style>

@@ -98,12 +98,12 @@
   }
 </script>
 
-<div class="bg-slate-800 rounded-xl p-4 shadow-lg">
+<div class="card-compact">
   <!-- Main Input Row: Horizontal on desktop, vertical on mobile -->
-  <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
+  <div class="converter-row">
     <!-- Frequency Input -->
-    <div class="flex items-center gap-1.5 flex-1 min-w-0">
-      <label for="frequency" class="text-xs font-medium text-slate-300 whitespace-nowrap w-16 md:w-auto">
+    <div class="input-group">
+      <label for="frequency" class="input-label">
         Frequenz
       </label>
       <input
@@ -111,16 +111,14 @@
         id="frequency"
         value={frequencyDisplay !== null ? formatNumber(frequencyDisplay) : ''}
         oninput={handleFrequencyInput}
-        class="flex-1 min-w-0 bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm
-               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        class="input-field flex-1"
         placeholder="Frequenz"
         step="any"
       />
       <select
         value={frequencyUnit}
         onchange={handleFrequencyUnitChange}
-        class="bg-slate-700 border border-slate-600 rounded px-1.5 py-1 text-sm
-               focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="select-field"
       >
         {#each FREQUENCY_UNITS as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
@@ -129,11 +127,11 @@
     </div>
 
     <!-- Bidirectional Arrow -->
-    <span class="hidden md:block text-slate-400 text-base font-bold flex-shrink-0">↔</span>
+    <span class="arrow" aria-hidden="true">&#8596;</span>
 
     <!-- Wavelength Input -->
-    <div class="flex items-center gap-1.5 flex-1 min-w-0">
-      <label for="wavelength" class="text-xs font-medium text-slate-300 whitespace-nowrap w-16 md:w-auto">
+    <div class="input-group">
+      <label for="wavelength" class="input-label">
         Wellenlänge
       </label>
       <input
@@ -141,16 +139,14 @@
         id="wavelength"
         value={wavelengthDisplay !== null ? formatNumber(wavelengthDisplay) : ''}
         oninput={handleWavelengthInput}
-        class="flex-1 min-w-0 bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm
-               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        class="input-field flex-1"
         placeholder="Wellenlänge"
         step="any"
       />
       <select
         value={wavelengthUnit}
         onchange={handleWavelengthUnitChange}
-        class="bg-slate-700 border border-slate-600 rounded px-1.5 py-1 text-sm
-               focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="select-field"
       >
         {#each WAVELENGTH_UNITS as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
@@ -160,19 +156,17 @@
   </div>
 
   <!-- Quick Frequency Buttons -->
-  <div class="flex flex-wrap items-center gap-1.5 mt-2 pt-2 border-t border-slate-700">
-    <span class="text-xs text-slate-400 mr-1">Quick:</span>
+  <div class="quick-actions">
+    <span class="quick-label">Quick:</span>
     {#each quickFrequencies as preset (preset.label)}
       <button
         type="button"
         onclick={() => setQuickFrequency(preset.hz)}
-        class="px-2 py-0.5 text-xs rounded border border-slate-600 hover:border-blue-500
-               bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400
-               transition-colors"
+        class="btn-preset"
         title="{preset.label} - {preset.desc}"
       >
-        <span class="font-medium">{preset.label}</span>
-        <span class="text-slate-500 ml-1">({preset.desc})</span>
+        <span class="preset-value">{preset.label}</span>
+        <span class="preset-desc">({preset.desc})</span>
       </button>
     {/each}
 
@@ -180,39 +174,202 @@
     <button
       type="button"
       onclick={toggleFormula}
-      class="ml-auto flex items-center gap-1 px-2 py-0.5 text-xs rounded border border-slate-600
-             hover:border-slate-500 bg-slate-700/50 hover:bg-slate-700 text-slate-400
-             hover:text-slate-300 transition-colors"
+      class="btn-formula"
       aria-expanded={showFormula}
       aria-controls="formula-section"
     >
-      <span class="transform transition-transform {showFormula ? 'rotate-180' : ''}">&#9660;</span>
+      <span class="formula-arrow" class:rotated={showFormula}>&#9660;</span>
       <span>Formel</span>
     </button>
   </div>
 
   <!-- Collapsible Formula Section -->
   {#if showFormula}
-    <div
-      id="formula-section"
-      class="flex flex-wrap items-center gap-2 mt-2 pt-2 border-t border-slate-700 text-xs text-slate-400"
-    >
-      <span class="font-mono bg-slate-700/50 px-2 py-0.5 rounded">λ = c / f</span>
+    <div id="formula-section" class="formula-section">
+      <span class="formula-display">&#955; = c / f</span>
 
       <!-- Speed of Light Toggle -->
       <button
         type="button"
         onclick={handleSpeedOfLightToggle}
-        class="flex items-center gap-1 px-2 py-0.5 rounded border border-slate-600 hover:border-slate-500
-               bg-slate-700/50 hover:bg-slate-700 transition-colors"
+        class="speed-toggle"
         title={isExactMode ? 'Wechseln zu gerundeter Lichtgeschwindigkeit (3x10^8 m/s)' : 'Wechseln zu exakter Lichtgeschwindigkeit'}
       >
-        <span class={isExactMode ? 'text-blue-400 font-semibold' : 'text-slate-500'}>exakt</span>
-        <span class="text-slate-500">|</span>
-        <span class={!isExactMode ? 'text-green-400 font-semibold' : 'text-slate-500'}>~</span>
+        <span class:active={isExactMode}>exakt</span>
+        <span class="separator">|</span>
+        <span class:active={!isExactMode}>~</span>
       </button>
 
-      <span class="text-slate-500">(c = {speedOfLightDisplay} m/s)</span>
+      <span class="speed-value">(c = {speedOfLightDisplay} m/s)</span>
     </div>
   {/if}
 </div>
+
+<style>
+  .converter-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .converter-row {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.75rem;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .input-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    width: 4rem;
+  }
+
+  @media (min-width: 768px) {
+    .input-label {
+      width: auto;
+    }
+  }
+
+  .input-field {
+    min-width: 0;
+    padding: 0.5rem 0.5rem;
+  }
+
+  .select-field {
+    padding: 0.5rem 0.375rem;
+  }
+
+  .arrow {
+    display: none;
+    color: var(--color-text-tertiary);
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .arrow {
+      display: block;
+    }
+  }
+
+  .quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .quick-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    margin-right: 0.25rem;
+  }
+
+  .preset-value {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .preset-desc {
+    color: var(--color-text-disabled);
+    margin-left: 0.25rem;
+  }
+
+  .btn-formula {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: var(--font-size-xs);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-default);
+    background-color: var(--color-bg-elevated);
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-formula:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-secondary);
+  }
+
+  .formula-arrow {
+    display: inline-block;
+    transition: transform var(--transition-fast);
+  }
+
+  .formula-arrow.rotated {
+    transform: rotate(180deg);
+  }
+
+  .formula-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border-default);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+  }
+
+  .formula-display {
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    background-color: var(--color-bg-elevated);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .speed-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-default);
+    background-color: var(--color-bg-elevated);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .speed-toggle:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-bg-surface);
+  }
+
+  .speed-toggle span {
+    color: var(--color-text-disabled);
+  }
+
+  .speed-toggle span.active {
+    color: var(--color-accent-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .separator {
+    color: var(--color-text-disabled);
+  }
+
+  .speed-value {
+    color: var(--color-text-disabled);
+  }
+</style>

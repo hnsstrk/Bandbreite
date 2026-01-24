@@ -74,11 +74,11 @@
   }
 </script>
 
-<div class="bg-slate-800 rounded-xl p-4 shadow-lg">
-  <div class="flex flex-wrap items-center gap-4">
+<div class="card-compact">
+  <div class="converter-row">
     <!-- Watt Input -->
-    <div class="flex items-center gap-2 flex-1 min-w-[180px]">
-      <label for="power-watt" class="text-sm font-medium text-slate-300 whitespace-nowrap">
+    <div class="input-group">
+      <label for="power-watt" class="input-label">
         Leistung
       </label>
       <input
@@ -86,16 +86,14 @@
         id="power-watt"
         value={wattDisplay !== null ? formatNumber(wattDisplay) : ''}
         oninput={handleWattInput}
-        class="flex-1 min-w-[80px] bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-               focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        class="input-field flex-1"
         placeholder="Leistung"
         step="any"
       />
       <select
         value={wattUnit}
         onchange={handleWattUnitChange}
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1.5 text-sm
-               focus:outline-none focus:ring-2 focus:ring-green-500"
+        class="select-field"
       >
         {#each POWER_UNITS_WATT as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
@@ -104,25 +102,23 @@
     </div>
 
     <!-- Bidirectional Arrow -->
-    <span class="text-slate-400 text-lg font-bold">↔</span>
+    <span class="arrow" aria-hidden="true">&#8596;</span>
 
     <!-- dB Input -->
-    <div class="flex items-center gap-2 flex-1 min-w-[150px]">
+    <div class="input-group">
       <input
         type="number"
         id="power-db"
         value={dbDisplay !== null ? formatNumber(dbDisplay) : ''}
         oninput={handleDbInput}
-        class="flex-1 min-w-[80px] bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-               focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        class="input-field flex-1"
         placeholder="dB"
         step="any"
       />
       <select
         value={dbUnit}
         onchange={handleDbUnitChange}
-        class="bg-slate-700 border border-slate-600 rounded px-2 py-1.5 text-sm
-               focus:outline-none focus:ring-2 focus:ring-green-500"
+        class="select-field"
       >
         {#each POWER_UNITS_DB as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
@@ -131,8 +127,56 @@
     </div>
 
     <!-- Formula Display (compact) -->
-    <div class="flex items-center gap-2 text-slate-400 text-xs">
-      <span class="font-mono">P(dBm) = 10·log₁₀(P/1mW)</span>
+    <div class="formula-display">
+      <span>P(dBm) = 10 log&#8321;&#8320;(P/1mW)</span>
     </div>
   </div>
 </div>
+
+<style>
+  .converter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .input-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  .input-field {
+    min-width: 80px;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .select-field {
+    padding: 0.375rem 0.5rem;
+  }
+
+  .arrow {
+    color: var(--color-text-tertiary);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .formula-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  }
+</style>

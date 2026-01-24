@@ -52,66 +52,147 @@
   }
 </script>
 
-<div class="bg-slate-800 rounded-xl p-4 shadow-lg">
-  <div class="flex flex-wrap items-center gap-4">
+<div class="card-compact">
+  <div class="calculator-row">
     <!-- TX Power Input -->
-    <div class="flex items-center gap-2">
-      <label for="tx-power" class="text-sm font-medium text-slate-300 whitespace-nowrap">
-        TX
-      </label>
+    <div class="input-group">
+      <label for="tx-power" class="input-label">TX</label>
       <input
         type="number"
         id="tx-power"
         value={txPowerDbm}
         oninput={handleTxPowerInput}
-        class="w-20 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        class="input-field input-narrow"
         step="1"
+        aria-label="Sendeleistung in dBm"
       />
-      <span class="text-slate-400 text-sm font-mono">dBm</span>
+      <span class="unit-label">dBm</span>
     </div>
 
     <!-- RX Sensitivity Input -->
-    <div class="flex items-center gap-2">
-      <label for="rx-sensitivity" class="text-sm font-medium text-slate-300 whitespace-nowrap">
-        RX
-      </label>
+    <div class="input-group">
+      <label for="rx-sensitivity" class="input-label">RX</label>
       <input
         type="number"
         id="rx-sensitivity"
         value={rxSensitivityDbm}
         oninput={handleRxSensitivityInput}
-        class="w-20 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        class="input-field input-narrow"
         step="1"
+        aria-label="Empfängerempfindlichkeit in dBm"
       />
-      <span class="text-slate-400 text-sm font-mono">dBm</span>
+      <span class="unit-label">dBm</span>
     </div>
 
     <!-- Arrow -->
-    <span class="text-slate-400 text-lg font-bold">→</span>
+    <span class="arrow" aria-hidden="true">&#8594;</span>
 
     <!-- Result Display (inline) -->
-    <div class="flex items-center gap-3">
+    <div class="result-display">
       {#if frequencyHz !== null && frequencyHz > 0}
-        <span class="text-sm text-slate-400">Reichweite:</span>
-        <span class="text-lg font-bold text-blue-400">
+        <span class="result-label">Reichweite:</span>
+        <span class="result-value">
           {formattedRange.value}
-          <span class="text-sm text-slate-400">{formattedRange.unit}</span>
+          <span class="result-unit">{formattedRange.unit}</span>
         </span>
         {#if fsplAtRange !== null && isFinite(fsplAtRange)}
-          <span class="text-slate-500 text-sm">
+          <span class="fspl-info">
             (FSPL: {fsplAtRange.toFixed(1)} dB)
           </span>
         {/if}
       {:else}
-        <span class="text-sm text-slate-500">Frequenz eingeben</span>
+        <span class="placeholder">Frequenz eingeben</span>
       {/if}
     </div>
 
     <!-- Formula (compact) -->
-    <div class="flex items-center gap-2 text-slate-500 text-xs ml-auto">
-      <span class="font-mono">FSPL = 20·log₁₀(d) + 20·log₁₀(f) - 147,55</span>
+    <div class="formula-display">
+      <span>FSPL = 20 log&#8321;&#8320;(d) + 20 log&#8321;&#8320;(f) - 147,55</span>
     </div>
   </div>
 </div>
+
+<style>
+  .calculator-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .input-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  .input-field {
+    padding: 0.375rem 0.75rem;
+  }
+
+  .input-narrow {
+    width: 5rem;
+  }
+
+  .unit-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  }
+
+  .arrow {
+    color: var(--color-text-tertiary);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .result-display {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .result-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+  }
+
+  .result-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-accent-primary);
+  }
+
+  .result-unit {
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-text-tertiary);
+  }
+
+  .fspl-info {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-disabled);
+  }
+
+  .placeholder {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-disabled);
+  }
+
+  .formula-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-disabled);
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  }
+</style>

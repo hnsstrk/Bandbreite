@@ -157,7 +157,7 @@
   ];
 
   // Legend Y positions (computed to avoid @const issues)
-  let legendY = $derived(hasPrecipitation ? 140 : 75);
+  let legendY = $derived(hasPrecipitation ? 154 : 89);
   let peakLegendY = $derived(showPrecipitation ? legendY + 155 : legendY + 85);
   let refY = $derived(peakLegendY + 60);
 </script>
@@ -477,8 +477,10 @@
         />
 
         <!-- Tooltip with attenuation info -->
-        {@const tooltipWidth = hasPrecipitation ? 200 : 180}
-        {@const tooltipHeight = hasPrecipitation ? 150 : 90}
+        {@const distKm = atmosphericParameters.distanceKm}
+        {@const totalOverDistance = hasPrecipitation ? markerData.totalAll * distKm : markerData.total * distKm}
+        {@const tooltipWidth = hasPrecipitation ? 220 : 200}
+        {@const tooltipHeight = hasPrecipitation ? 170 : 110}
         {@const tooltipX = markerData.x > chartWidth / 2 ? markerData.x - tooltipWidth - 15 : markerData.x + 15}
         {@const tooltipY = markerData.yTotal > chartHeight / 2 ? markerData.yTotal - tooltipHeight - 10 : markerData.yTotal + 10}
         <g transform="translate({tooltipX}, {tooltipY})" filter="url(#attenuationTooltipShadow)">
@@ -495,11 +497,11 @@
             f = {markerData.frequency.toFixed(2)} GHz
           </text>
           <text x="12" y="38" font-size="11">
-            <tspan class="fill-blue-400">O2:</tspan>
+            <tspan class="fill-blue-400">O₂:</tspan>
             <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.oxygen)} dB/km</tspan>
           </text>
           <text x="12" y="54" font-size="11">
-            <tspan class="fill-green-400">H2O:</tspan>
+            <tspan class="fill-green-400">H₂O:</tspan>
             <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.waterVapor)} dB/km</tspan>
           </text>
           <text x="12" y="72" font-size="11">
@@ -525,25 +527,20 @@
                 <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.snow)} dB/km</tspan>
               </text>
             {/if}
-            <text x="12" y={tooltipHeight - 12} font-size="11">
-              <tspan class="fill-red-400">Gesamt:</tspan>
+            <text x="12" y={tooltipHeight - 30} font-size="11">
+              <tspan class="fill-red-400">Gesamt/km:</tspan>
               <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.totalAll)} dB/km</tspan>
             </text>
           {/if}
+          <!-- Total over distance -->
+          <line x1="8" y1={tooltipHeight - 22} x2={tooltipWidth - 8} y2={tooltipHeight - 22} style="stroke: var(--color-border-default)" stroke-width="1" />
+          <text x="12" y={tooltipHeight - 8} font-size="11" font-weight="500">
+            <tspan class="fill-amber-400">Über {distKm} km:</tspan>
+            <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(totalOverDistance)} dB</tspan>
+          </text>
         </g>
       {/if}
 
-      <!-- Chart title -->
-      <text
-        x={chartWidth / 2}
-        y="-25"
-        style="fill: var(--color-chart-text)"
-        text-anchor="middle"
-        font-size="18"
-        font-weight="600"
-      >
-        Atmosphärische Dämpfung (ITU-R P.676 / P.838 / P.840)
-      </text>
     </g>
 
     <!-- Legend on the right side -->
@@ -559,26 +556,29 @@
         P = {atmosphericParameters.pressureHpa.toFixed(1)} hPa
       </text>
       <text style="fill: var(--color-text-tertiary)" font-size="10" y="44">
-        rho = {atmosphericParameters.waterVaporDensity.toFixed(1)} g/m3
+        ρ = {atmosphericParameters.waterVaporDensity.toFixed(1)} g/m³
+      </text>
+      <text style="fill: var(--color-text-tertiary)" font-size="10" y="58">
+        d = {atmosphericParameters.distanceKm.toFixed(1)} km
       </text>
 
       <!-- Precipitation parameters if active -->
       {#if hasPrecipitation}
-        <text style="fill: var(--color-chart-text-secondary)" font-weight="500" font-size="12" y="68">
+        <text style="fill: var(--color-chart-text-secondary)" font-weight="500" font-size="12" y="82">
           Niederschlag
         </text>
         {#if atmosphericParameters.rainRateMmH > 0}
-          <text style="fill: var(--color-text-tertiary)" font-size="10" y="84">
+          <text style="fill: var(--color-text-tertiary)" font-size="10" y="98">
             Regen = {atmosphericParameters.rainRateMmH.toFixed(1)} mm/h
           </text>
         {/if}
         {#if atmosphericParameters.fogDensityGM3 > 0}
-          <text style="fill: var(--color-text-tertiary)" font-size="10" y={atmosphericParameters.rainRateMmH > 0 ? 98 : 84}>
-            Nebel = {atmosphericParameters.fogDensityGM3.toFixed(2)} g/m3
+          <text style="fill: var(--color-text-tertiary)" font-size="10" y={atmosphericParameters.rainRateMmH > 0 ? 112 : 98}>
+            Nebel = {atmosphericParameters.fogDensityGM3.toFixed(2)} g/m³
           </text>
         {/if}
         {#if atmosphericParameters.snowRateMmH > 0}
-          <text style="fill: var(--color-text-tertiary)" font-size="10" y={84 + (atmosphericParameters.rainRateMmH > 0 ? 14 : 0) + (atmosphericParameters.fogDensityGM3 > 0 ? 14 : 0)}>
+          <text style="fill: var(--color-text-tertiary)" font-size="10" y={98 + (atmosphericParameters.rainRateMmH > 0 ? 14 : 0) + (atmosphericParameters.fogDensityGM3 > 0 ? 14 : 0)}>
             Schnee = {atmosphericParameters.snowRateMmH.toFixed(1)} mm/h
           </text>
         {/if}

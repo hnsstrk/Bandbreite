@@ -87,30 +87,6 @@
       <p class="section-description">
         Wobei c die Lichtgeschwindigkeit im Vakuum ist (= 299.792.458 m/s).
       </p>
-
-      <div class="formula-divider">
-        <p class="section-description">
-          Die Freiraumdämpfung (FSPL - Free Space Path Loss) ist:
-        </p>
-        <div class="formula-box">
-          FSPL(dB) = 20 log&#8321;&#8320;(d) + 20 log&#8321;&#8320;(f) + 20 log&#8321;&#8320;(4&#960;/c)
-        </div>
-        <p class="section-description">
-          Vereinfacht (mit d in Metern und f in Hz): FSPL &#8776; 20 log&#8321;&#8320;(d) + 20 log&#8321;&#8320;(f) - 147,55 dB
-        </p>
-      </div>
-
-      <div class="formula-divider">
-        <p class="section-description">
-          Das Link Budget berechnet sich als:
-        </p>
-        <div class="formula-box formula-small">
-          P<sub>RX</sub> = P<sub>TX</sub> + G<sub>TX</sub> - L<sub>TX</sub> - L<sub>path</sub> + G<sub>RX</sub> - L<sub>RX</sub>
-        </div>
-        <p class="section-description">
-          Der Link Margin ergibt sich aus: M = P<sub>RX</sub> - S<sub>RX</sub> (Empfangsleistung minus Empfindlichkeit)
-        </p>
-      </div>
     </div>
   </section>
 </div>
@@ -177,15 +153,5 @@
     color: var(--color-text-primary);
     text-align: center;
     margin: 0.5rem 0;
-  }
-
-  .formula-small {
-    font-size: var(--font-size-base);
-  }
-
-  .formula-divider {
-    border-top: 1px solid var(--color-border-default);
-    padding-top: 1rem;
-    margin-top: 1rem;
   }
 </style>

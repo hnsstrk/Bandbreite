@@ -388,7 +388,7 @@
       </defs>
 
       <!-- Background -->
-      <rect x="0" y="0" width={width} height={height} class="fill-slate-900" />
+      <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
 
       <!-- Chart Area -->
       <g transform="translate({margin.left}, {margin.top})">
@@ -399,7 +399,7 @@
             y1="0"
             x2={xScale(tickVal)}
             y2={chartHeight}
-            class="stroke-slate-700"
+            style="stroke: var(--color-chart-grid)"
             stroke-dasharray="4,4"
             stroke-width="0.5"
           />
@@ -412,7 +412,7 @@
             y1={yScale(tickVal)}
             x2={chartWidth}
             y2={yScale(tickVal)}
-            class="stroke-slate-700"
+            style="stroke: var(--color-chart-grid)"
             stroke-dasharray="4,4"
             stroke-width="0.5"
           />
@@ -488,11 +488,10 @@
               width="70"
               height="32"
               rx="4"
-              class="fill-slate-800"
-              stroke="#475569"
+              style="fill: var(--color-chart-tooltip-bg); stroke: var(--color-chart-tooltip-border)"
               stroke-width="1"
             />
-            <text x="8" y="14" class="fill-slate-200" font-size="10">
+            <text x="8" y="14" style="fill: var(--color-chart-text)" font-size="10">
               {formatFrequency(currentFrequencyHz)}
             </text>
             <text x="8" y="26" class="fill-amber-400 font-bold" font-size="11">
@@ -503,27 +502,27 @@
 
         <!-- X-axis (Distance) -->
         <g transform="translate(0, {chartHeight})">
-          <line x1="0" y1="0" x2={chartWidth} y2="0" class="stroke-slate-500" stroke-width="1" />
+          <line x1="0" y1="0" x2={chartWidth} y2="0" style="stroke: var(--color-chart-axis)" stroke-width="1" />
           {#each xTickValues as tickVal (tickVal)}
             <g transform="translate({xScale(tickVal)}, 0)">
-              <line y2="8" class="stroke-slate-500" />
-              <text y="24" class="fill-slate-300" text-anchor="middle" font-size="11">
+              <line y2="8" style="stroke: var(--color-chart-axis)" />
+              <text y="24" style="fill: var(--color-chart-text-secondary)" text-anchor="middle" font-size="11">
                 {tickVal >= 1000 ? `${tickVal / 1000} km` : `${tickVal} m`}
               </text>
             </g>
           {/each}
-          <text x={chartWidth / 2} y="48" class="fill-slate-200" text-anchor="middle" font-size="13" font-weight="500">
+          <text x={chartWidth / 2} y="48" style="fill: var(--color-chart-text)" text-anchor="middle" font-size="13" font-weight="500">
             Distanz (log)
           </text>
         </g>
 
         <!-- Y-axis (FSPL) -->
         <g>
-          <line x1="0" y1="0" x2="0" y2={chartHeight} class="stroke-slate-500" stroke-width="1" />
+          <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" stroke-width="1" />
           {#each yTickValues as tickVal (tickVal)}
             <g transform="translate(0, {yScale(tickVal)})">
-              <line x2="-8" class="stroke-slate-500" />
-              <text x="-12" class="fill-slate-300" text-anchor="end" dominant-baseline="middle" font-size="11">
+              <line x2="-8" style="stroke: var(--color-chart-axis)" />
+              <text x="-12" style="fill: var(--color-chart-text-secondary)" text-anchor="end" dominant-baseline="middle" font-size="11">
                 {tickVal}
               </text>
             </g>
@@ -532,7 +531,7 @@
             transform="rotate(-90)"
             x={-chartHeight / 2}
             y="-50"
-            class="fill-slate-200"
+            style="fill: var(--color-chart-text)"
             text-anchor="middle"
             font-size="13"
             font-weight="500"
@@ -552,7 +551,7 @@
           {#each chartFrequencies as freq, i (freq.hz)}
             <g transform="translate(0, {15 + i * 18})">
               <line x1="0" y1="0" x2="20" y2="0" stroke={freq.color} stroke-width="2" />
-              <text x="26" y="4" class="fill-slate-400" font-size="10">{freq.label}</text>
+              <text x="26" y="4" style="fill: var(--color-text-tertiary)" font-size="10">{freq.label}</text>
             </g>
           {/each}
           {#if currentFreqLine}

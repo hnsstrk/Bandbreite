@@ -518,7 +518,8 @@
 
 <div
   bind:this={containerElement}
-  class="w-full bg-slate-900 rounded-lg p-4 relative"
+  class="w-full rounded-lg p-4 relative"
+  style="background-color: var(--color-chart-bg)"
   role="img"
   aria-label="Elektromagnetisches Spektrum - von ELF bis Gammastrahlung"
 >
@@ -697,14 +698,14 @@
           y1="0"
           x2={innerWidth}
           y2="0"
-          stroke="#475569"
+          style="stroke: var(--color-chart-axis)"
           stroke-width="1"
         />
         <text
           x="-10"
           y="5"
           text-anchor="end"
-          class="fill-slate-400 text-xs"
+          style="fill: var(--color-text-tertiary)" class="text-xs"
         >
           wavelength
         </text>
@@ -715,14 +716,13 @@
               <line
                 y1="-6"
                 y2="0"
-                stroke="#475569"
+                style="stroke: var(--color-chart-axis)"
                 stroke-width="1"
               />
               <text
                 y="-12"
                 text-anchor="middle"
-                class="fill-slate-400 text-xs"
-                style="font-size: 10px;"
+                style="fill: var(--color-text-tertiary); font-size: 10px;"
               >
                 {tick.label}
               </text>
@@ -742,7 +742,7 @@
               y={rowHeight / 2}
               text-anchor="end"
               dominant-baseline="middle"
-              class="fill-slate-400 text-sm font-medium"
+              style="fill: var(--color-text-tertiary)" class="text-sm font-medium"
             >
               {row.label}
             </text>
@@ -753,8 +753,7 @@
               y="0"
               width={innerWidth}
               height={rowHeight}
-              fill="#1e293b"
-              stroke="#334155"
+              style="fill: var(--color-bg-surface); stroke: var(--color-chart-grid)"
               stroke-width="1"
             />
 
@@ -835,14 +834,14 @@
           y1="0"
           x2={innerWidth}
           y2="0"
-          stroke="#475569"
+          style="stroke: var(--color-chart-axis)"
           stroke-width="1"
         />
         <text
           x="-10"
           y="5"
           text-anchor="end"
-          class="fill-slate-400 text-xs"
+          style="fill: var(--color-text-tertiary)" class="text-xs"
         >
           f
         </text>
@@ -853,14 +852,13 @@
               <line
                 y1="0"
                 y2="6"
-                stroke="#475569"
+                style="stroke: var(--color-chart-axis)"
                 stroke-width="1"
               />
               <text
                 y="20"
                 text-anchor="middle"
-                class="fill-slate-400 text-xs"
-                style="font-size: 10px;"
+                style="fill: var(--color-text-tertiary); font-size: 10px;"
               >
                 {formatFrequency(tick)}
               </text>
@@ -875,8 +873,8 @@
   <!-- Tooltip -->
   {#if tooltip.visible && tooltip.band}
     <div
-      class="absolute pointer-events-none bg-slate-800 border border-slate-600 rounded-lg shadow-xl px-4 py-3 z-50 min-w-[220px]"
-      style="left: {Math.min(tooltip.x + 10, containerWidth - 240)}px; top: {Math.max(10, tooltip.y - 120)}px;"
+      class="absolute pointer-events-none rounded-lg shadow-xl px-4 py-3 z-50 min-w-[220px]"
+      style="background-color: var(--color-chart-tooltip-bg); border: 1px solid var(--color-chart-tooltip-border); left: {Math.min(tooltip.x + 10, containerWidth - 240)}px; top: {Math.max(10, tooltip.y - 120)}px;"
     >
       <div class="flex items-center gap-2 mb-2">
         {#if tooltip.band.color === 'visible'}

@@ -244,7 +244,7 @@
       preserveAspectRatio="xMidYMid meet"
     >
       <!-- Background -->
-      <rect x="0" y="0" width={width} height={height} class="fill-slate-900" />
+      <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
 
       <!-- Chart area -->
       <g transform="translate({margin.left}, {margin.top})">
@@ -255,7 +255,7 @@
             y1={yScale(tick)}
             x2={chartWidth}
             y2={yScale(tick)}
-            class="stroke-slate-700"
+            style="stroke: var(--color-chart-grid)"
             stroke-dasharray="4,4"
             stroke-width="0.5"
           />
@@ -267,7 +267,7 @@
           y1={yScale(0)}
           x2={chartWidth}
           y2={yScale(0)}
-          class="stroke-slate-500"
+          style="stroke: var(--color-chart-axis)"
           stroke-width="1"
         />
 
@@ -338,7 +338,7 @@
                 y1={yScale(step.barEnd)}
                 x2={(xScale(i + 1) ?? 0)}
                 y2={yScale(step.barEnd)}
-                class="stroke-slate-500"
+                style="stroke: var(--color-chart-axis)"
                 stroke-width="1"
                 stroke-dasharray="2,2"
               />
@@ -369,7 +369,7 @@
             <text
               x={x}
               y="0"
-              class="fill-slate-300"
+              style="fill: var(--color-chart-text-secondary)"
               text-anchor="middle"
               font-size="9"
               transform="rotate(-45 {x} 0)"
@@ -381,11 +381,11 @@
 
         <!-- Y-axis -->
         <g>
-          <line x1="0" y1="0" x2="0" y2={chartHeight} class="stroke-slate-500" stroke-width="1" />
+          <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" stroke-width="1" />
           {#each yTicks as tick (tick)}
             <g transform="translate(0, {yScale(tick)})">
-              <line x2="-6" class="stroke-slate-500" />
-              <text x="-10" class="fill-slate-300" text-anchor="end" dominant-baseline="middle" font-size="10">
+              <line x2="-6" style="stroke: var(--color-chart-axis)" />
+              <text x="-10" style="fill: var(--color-chart-text-secondary)" text-anchor="end" dominant-baseline="middle" font-size="10">
                 {tick}
               </text>
             </g>
@@ -394,7 +394,7 @@
             transform="rotate(-90)"
             x={-chartHeight / 2}
             y="-45"
-            class="fill-slate-200"
+            style="fill: var(--color-chart-text)"
             text-anchor="middle"
             font-size="12"
           >
@@ -406,7 +406,7 @@
         <text
           x={chartWidth / 2}
           y="-15"
-          class="fill-slate-100"
+          style="fill: var(--color-chart-text)"
           text-anchor="middle"
           font-size="14"
           font-weight="600"
@@ -419,23 +419,23 @@
       <g transform="translate({width - 100}, {margin.top})">
         <g transform="translate(0, 0)">
           <rect x="0" y="-6" width="12" height="12" fill={colors.start} rx="2" />
-          <text x="16" y="3" class="fill-slate-400" font-size="9">Start</text>
+          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Start</text>
         </g>
         <g transform="translate(0, 18)">
           <rect x="0" y="-6" width="12" height="12" fill={colors.gain} rx="2" />
-          <text x="16" y="3" class="fill-slate-400" font-size="9">Gewinn</text>
+          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Gewinn</text>
         </g>
         <g transform="translate(0, 36)">
           <rect x="0" y="-6" width="12" height="12" fill={colors.loss} rx="2" />
-          <text x="16" y="3" class="fill-slate-400" font-size="9">Verlust</text>
+          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Verlust</text>
         </g>
         <g transform="translate(0, 54)">
           <rect x="0" y="-6" width="12" height="12" fill={colors.total} rx="2" />
-          <text x="16" y="3" class="fill-slate-400" font-size="9">Ergebnis</text>
+          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Ergebnis</text>
         </g>
         <g transform="translate(0, 72)">
           <line x1="0" y1="0" x2="12" y2="0" stroke="#f97316" stroke-width="2" stroke-dasharray="4,2" />
-          <text x="16" y="3" class="fill-slate-400" font-size="9">Sensit.</text>
+          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Sensit.</text>
         </g>
       </g>
 
@@ -450,20 +450,19 @@
             width="150"
             height="65"
             rx="4"
-            class="fill-slate-800"
-            stroke="#475569"
+            style="fill: var(--color-chart-tooltip-bg); stroke: var(--color-chart-tooltip-border)"
             stroke-width="1"
           />
-          <text x="8" y="18" class="fill-slate-200 font-medium" font-size="11">
+          <text x="8" y="18" style="fill: var(--color-chart-text)" font-weight="500" font-size="11">
             {tooltip.step.label}
           </text>
-          <text x="8" y="36" class="fill-slate-400" font-size="10">
+          <text x="8" y="36" style="fill: var(--color-text-tertiary)" font-size="10">
             Wert: <tspan fill={colors[tooltip.step.type]} class="font-mono">
               {tooltip.step.type === 'gain' ? '+' : tooltip.step.type === 'loss' ? '-' : ''}
               {tooltip.step.value.toFixed(1)} dB
             </tspan>
           </text>
-          <text x="8" y="52" class="fill-slate-400" font-size="10">
+          <text x="8" y="52" style="fill: var(--color-text-tertiary)" font-size="10">
             Kumulativ: <tspan class="fill-slate-200 font-mono">
               {tooltip.step.barEnd.toFixed(1)} dBm
             </tspan>
@@ -472,8 +471,8 @@
       {/if}
     </svg>
   {:else}
-    <div class="flex items-center justify-center h-64 bg-slate-900 rounded-lg">
-      <p class="text-slate-500">Keine Link Budget Daten verfügbar</p>
+    <div class="flex items-center justify-center h-64 rounded-lg" style="background: var(--color-chart-bg)">
+      <p style="color: var(--color-text-tertiary)">Keine Link Budget Daten verfuegbar</p>
     </div>
   {/if}
 </div>

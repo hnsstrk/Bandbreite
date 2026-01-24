@@ -64,7 +64,11 @@
   --color-chart-gray: #94a3b8;        /* slate-400 - Snow, disabled */
   --color-chart-grid: #e2e8f0;        /* slate-200 - Grid lines */
   --color-chart-axis: #64748b;        /* slate-500 - Axis lines */
-  --color-chart-bg: #ffffff;          /* white - Chart background */
+  --color-chart-bg: #f8fafc;          /* slate-50 - Chart background */
+  --color-chart-text: #0f172a;        /* slate-900 - Chart text */
+  --color-chart-text-secondary: #475569; /* slate-600 - Secondary chart text */
+  --color-chart-tooltip-bg: #ffffff;  /* white - Tooltip background */
+  --color-chart-tooltip-border: #e2e8f0; /* slate-200 - Tooltip border */
 
   /* Shadow Values */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -159,10 +163,14 @@
   --color-error-bg: #7f1d1d;          /* red-900 */
   --color-info-bg: #1e3a8a;           /* blue-900 */
 
-  /* Chart Colors (same as light, good contrast on dark) */
+  /* Chart Colors (adjusted for dark mode) */
   --color-chart-grid: #334155;        /* slate-700 - Grid lines */
   --color-chart-axis: #94a3b8;        /* slate-400 - Axis lines */
   --color-chart-bg: #0f172a;          /* slate-900 - Chart background */
+  --color-chart-text: #f1f5f9;        /* slate-100 - Chart text */
+  --color-chart-text-secondary: #cbd5e1; /* slate-300 - Secondary chart text */
+  --color-chart-tooltip-bg: #1e293b;  /* slate-800 - Tooltip background */
+  --color-chart-tooltip-border: #475569; /* slate-600 - Tooltip border */
 
   /* Shadow Values (darker for dark theme) */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);

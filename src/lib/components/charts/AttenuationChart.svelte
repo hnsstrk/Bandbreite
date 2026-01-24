@@ -190,7 +190,7 @@
       y="0"
       width={width}
       height={height}
-      class="fill-slate-900"
+      style="fill: var(--color-chart-bg)"
     />
 
     <!-- Chart area -->
@@ -244,7 +244,7 @@
           y1="0"
           x2={xScale(tickVal)}
           y2={chartHeight}
-          class="stroke-slate-700"
+          style="stroke: var(--color-chart-grid)"
           stroke-dasharray="4,4"
           stroke-width="0.5"
         />
@@ -257,7 +257,7 @@
           y1={yScale(tickVal)}
           x2={chartWidth}
           y2={yScale(tickVal)}
-          class="stroke-slate-700"
+          style="stroke: var(--color-chart-grid)"
           stroke-dasharray="4,4"
           stroke-width="0.5"
         />
@@ -370,15 +370,15 @@
           y1="0"
           x2={chartWidth}
           y2="0"
-          class="stroke-slate-500"
+          style="stroke: var(--color-chart-axis)"
           stroke-width="1"
         />
         {#each xTickValues as tickVal (tickVal)}
           <g transform="translate({xScale(tickVal)}, 0)">
-            <line y2="8" class="stroke-slate-500" />
+            <line y2="8" style="stroke: var(--color-chart-axis)" />
             <text
               y="24"
-              class="fill-slate-300"
+              style="fill: var(--color-chart-text-secondary)"
               text-anchor="middle"
               font-size="11"
             >
@@ -390,7 +390,7 @@
         <text
           x={chartWidth / 2}
           y="52"
-          class="fill-slate-200"
+          style="fill: var(--color-chart-text)"
           text-anchor="middle"
           font-size="14"
           font-weight="500"
@@ -406,15 +406,15 @@
           y1="0"
           x2="0"
           y2={chartHeight}
-          class="stroke-slate-500"
+          style="stroke: var(--color-chart-axis)"
           stroke-width="1"
         />
         {#each yTickValues as tickVal (tickVal)}
           <g transform="translate(0, {yScale(tickVal)})">
-            <line x2="-8" class="stroke-slate-500" />
+            <line x2="-8" style="stroke: var(--color-chart-axis)" />
             <text
               x="-12"
-              class="fill-slate-300"
+              style="fill: var(--color-chart-text-secondary)"
               text-anchor="end"
               dominant-baseline="middle"
               font-size="11"
@@ -428,7 +428,7 @@
           transform="rotate(-90)"
           x={-chartHeight / 2}
           y="-55"
-          class="fill-slate-200"
+          style="fill: var(--color-chart-text)"
           text-anchor="middle"
           font-size="14"
           font-weight="500"
@@ -488,47 +488,46 @@
             width={tooltipWidth}
             height={tooltipHeight}
             rx="6"
-            class="fill-slate-800"
-            stroke="#475569"
+            style="fill: var(--color-chart-tooltip-bg); stroke: var(--color-chart-tooltip-border)"
             stroke-width="1"
           />
-          <text x="12" y="20" class="fill-slate-200 font-medium" font-size="12">
+          <text x="12" y="20" style="fill: var(--color-chart-text)" font-weight="500" font-size="12">
             f = {markerData.frequency.toFixed(2)} GHz
           </text>
           <text x="12" y="38" font-size="11">
             <tspan class="fill-blue-400">O2:</tspan>
-            <tspan class="fill-slate-200"> {formatAttenuation(markerData.oxygen)} dB/km</tspan>
+            <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.oxygen)} dB/km</tspan>
           </text>
           <text x="12" y="54" font-size="11">
             <tspan class="fill-green-400">H2O:</tspan>
-            <tspan class="fill-slate-200"> {formatAttenuation(markerData.waterVapor)} dB/km</tspan>
+            <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.waterVapor)} dB/km</tspan>
           </text>
           <text x="12" y="72" font-size="11">
             <tspan class="fill-orange-400">Gas Total:</tspan>
-            <tspan class="fill-slate-200"> {formatAttenuation(markerData.total)} dB/km</tspan>
+            <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.total)} dB/km</tspan>
           </text>
           {#if hasPrecipitation}
             {#if atmosphericParameters.rainRateMmH > 0}
               <text x="12" y="90" font-size="11">
                 <tspan class="fill-cyan-400">Regen:</tspan>
-                <tspan class="fill-slate-200"> {formatAttenuation(markerData.rain)} dB/km</tspan>
+                <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.rain)} dB/km</tspan>
               </text>
             {/if}
             {#if atmosphericParameters.fogDensityGM3 > 0}
               <text x="12" y={atmosphericParameters.rainRateMmH > 0 ? 106 : 90} font-size="11">
                 <tspan class="fill-purple-400">Nebel:</tspan>
-                <tspan class="fill-slate-200"> {formatAttenuation(markerData.fog)} dB/km</tspan>
+                <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.fog)} dB/km</tspan>
               </text>
             {/if}
             {#if atmosphericParameters.snowRateMmH > 0}
               <text x="12" y={90 + (atmosphericParameters.rainRateMmH > 0 ? 16 : 0) + (atmosphericParameters.fogDensityGM3 > 0 ? 16 : 0)} font-size="11">
-                <tspan class="fill-slate-400">Schnee:</tspan>
-                <tspan class="fill-slate-200"> {formatAttenuation(markerData.snow)} dB/km</tspan>
+                <tspan style="fill: var(--color-text-tertiary)">Schnee:</tspan>
+                <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.snow)} dB/km</tspan>
               </text>
             {/if}
             <text x="12" y={tooltipHeight - 12} font-size="11">
               <tspan class="fill-red-400">Gesamt:</tspan>
-              <tspan class="fill-slate-200"> {formatAttenuation(markerData.totalAll)} dB/km</tspan>
+              <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.totalAll)} dB/km</tspan>
             </text>
           {/if}
         </g>
@@ -538,7 +537,7 @@
       <text
         x={chartWidth / 2}
         y="-25"
-        class="fill-slate-100"
+        style="fill: var(--color-chart-text)"
         text-anchor="middle"
         font-size="18"
         font-weight="600"
@@ -550,116 +549,116 @@
     <!-- Legend on the right side -->
     <g transform="translate({width - margin.right + 20}, {margin.top})">
       <!-- Current parameters -->
-      <text class="fill-slate-300 font-medium" font-size="12" y="0">
+      <text style="fill: var(--color-chart-text-secondary)" font-weight="500" font-size="12" y="0">
         Atmosphäre
       </text>
-      <text class="fill-slate-400" font-size="10" y="16">
+      <text style="fill: var(--color-text-tertiary)" font-size="10" y="16">
         T = {atmosphericParameters.temperatureCelsius.toFixed(1)} C
       </text>
-      <text class="fill-slate-400" font-size="10" y="30">
+      <text style="fill: var(--color-text-tertiary)" font-size="10" y="30">
         P = {atmosphericParameters.pressureHpa.toFixed(1)} hPa
       </text>
-      <text class="fill-slate-400" font-size="10" y="44">
+      <text style="fill: var(--color-text-tertiary)" font-size="10" y="44">
         rho = {atmosphericParameters.waterVaporDensity.toFixed(1)} g/m3
       </text>
 
       <!-- Precipitation parameters if active -->
       {#if hasPrecipitation}
-        <text class="fill-slate-300 font-medium" font-size="12" y="68">
+        <text style="fill: var(--color-chart-text-secondary)" font-weight="500" font-size="12" y="68">
           Niederschlag
         </text>
         {#if atmosphericParameters.rainRateMmH > 0}
-          <text class="fill-slate-400" font-size="10" y="84">
+          <text style="fill: var(--color-text-tertiary)" font-size="10" y="84">
             Regen = {atmosphericParameters.rainRateMmH.toFixed(1)} mm/h
           </text>
         {/if}
         {#if atmosphericParameters.fogDensityGM3 > 0}
-          <text class="fill-slate-400" font-size="10" y={atmosphericParameters.rainRateMmH > 0 ? 98 : 84}>
+          <text style="fill: var(--color-text-tertiary)" font-size="10" y={atmosphericParameters.rainRateMmH > 0 ? 98 : 84}>
             Nebel = {atmosphericParameters.fogDensityGM3.toFixed(2)} g/m3
           </text>
         {/if}
         {#if atmosphericParameters.snowRateMmH > 0}
-          <text class="fill-slate-400" font-size="10" y={84 + (atmosphericParameters.rainRateMmH > 0 ? 14 : 0) + (atmosphericParameters.fogDensityGM3 > 0 ? 14 : 0)}>
+          <text style="fill: var(--color-text-tertiary)" font-size="10" y={84 + (atmosphericParameters.rainRateMmH > 0 ? 14 : 0) + (atmosphericParameters.fogDensityGM3 > 0 ? 14 : 0)}>
             Schnee = {atmosphericParameters.snowRateMmH.toFixed(1)} mm/h
           </text>
         {/if}
       {/if}
 
       <!-- Line legend -->
-      <text class="fill-slate-300 font-medium" font-size="12" y={legendY}>
+      <text style="fill: var(--color-chart-text-secondary)" font-weight="500" font-size="12" y={legendY}>
         Kurven
       </text>
 
       <!-- Oxygen line -->
       <g transform="translate(0, {legendY + 15})">
         <line x1="0" y1="0" x2="24" y2="0" stroke="#3b82f6" stroke-width="2" />
-        <text x="32" y="4" class="fill-slate-400" font-size="10">O2 (Sauerstoff)</text>
+        <text x="32" y="4" style="fill: var(--color-text-tertiary)" font-size="10">O2 (Sauerstoff)</text>
       </g>
 
       <!-- Water vapor line -->
       <g transform="translate(0, {legendY + 33})">
         <line x1="0" y1="0" x2="24" y2="0" stroke="#22c55e" stroke-width="2" />
-        <text x="32" y="4" class="fill-slate-400" font-size="10">H2O (Wasserdampf)</text>
+        <text x="32" y="4" style="fill: var(--color-text-tertiary)" font-size="10">H2O (Wasserdampf)</text>
       </g>
 
       <!-- Total gas line -->
       <g transform="translate(0, {legendY + 51})">
         <line x1="0" y1="0" x2="24" y2="0" stroke="#f97316" stroke-width="2.5" />
-        <text x="32" y="4" class="fill-slate-400" font-size="10">Gas Total</text>
+        <text x="32" y="4" style="fill: var(--color-text-tertiary)" font-size="10">Gas Total</text>
       </g>
 
       {#if showPrecipitation}
         <!-- Rain line -->
         <g transform="translate(0, {legendY + 69})">
           <line x1="0" y1="0" x2="24" y2="0" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6,3" />
-          <text x="32" y="4" class="fill-slate-400" font-size="10">Regen (P.838)</text>
+          <text x="32" y="4" style="fill: var(--color-text-tertiary)" font-size="10">Regen (P.838)</text>
         </g>
 
         <!-- Fog line -->
         <g transform="translate(0, {legendY + 87})">
           <line x1="0" y1="0" x2="24" y2="0" stroke="#a855f7" stroke-width="2" stroke-dasharray="4,4" />
-          <text x="32" y="4" class="fill-slate-400" font-size="10">Nebel (P.840)</text>
+          <text x="32" y="4" style="fill: var(--color-text-tertiary)" font-size="10">Nebel (P.840)</text>
         </g>
 
         <!-- Snow line -->
         <g transform="translate(0, {legendY + 105})">
           <line x1="0" y1="0" x2="24" y2="0" stroke="#94a3b8" stroke-width="2" stroke-dasharray="2,4" />
-          <text x="32" y="4" class="fill-slate-400" font-size="10">Schnee</text>
+          <text x="32" y="4" style="fill: var(--color-text-tertiary)" font-size="10">Schnee</text>
         </g>
 
         <!-- Total all line -->
         <g transform="translate(0, {legendY + 123})">
           <line x1="0" y1="0" x2="24" y2="0" stroke="#ef4444" stroke-width="3" />
-          <text x="32" y="4" class="fill-slate-400" font-size="10">Gesamt</text>
+          <text x="32" y="4" style="fill: var(--color-text-tertiary)" font-size="10">Gesamt</text>
         </g>
       {/if}
 
       <!-- Absorption peak regions legend -->
-      <text class="fill-slate-300 font-medium" font-size="12" y={peakLegendY}>
+      <text style="fill: var(--color-chart-text-secondary)" font-weight="500" font-size="12" y={peakLegendY}>
         Absorptionspeaks
       </text>
 
       <g transform="translate(0, {peakLegendY + 15})">
         <rect x="0" y="-6" width="14" height="14" fill="#22c55e" opacity="0.3" rx="2" />
-        <text x="20" y="4" class="fill-slate-400" font-size="9">22/183 GHz (H2O)</text>
+        <text x="20" y="4" style="fill: var(--color-text-tertiary)" font-size="9">22/183 GHz (H2O)</text>
       </g>
 
       <g transform="translate(0, {peakLegendY + 33})">
         <rect x="0" y="-6" width="14" height="14" fill="#3b82f6" opacity="0.3" rx="2" />
-        <text x="20" y="4" class="fill-slate-400" font-size="9">60/119 GHz (O2)</text>
+        <text x="20" y="4" style="fill: var(--color-text-tertiary)" font-size="9">60/119 GHz (O2)</text>
       </g>
 
       <!-- ITU Reference -->
-      <text class="fill-slate-500" font-size="9" y={refY}>
+      <text style="fill: var(--color-text-disabled)" font-size="9" y={refY}>
         Referenzen:
       </text>
-      <text class="fill-slate-500" font-size="8" y={refY + 12}>
+      <text style="fill: var(--color-text-disabled)" font-size="8" y={refY + 12}>
         ITU-R P.676-13 (Gas)
       </text>
-      <text class="fill-slate-500" font-size="8" y={refY + 22}>
+      <text style="fill: var(--color-text-disabled)" font-size="8" y={refY + 22}>
         ITU-R P.838-3 (Regen)
       </text>
-      <text class="fill-slate-500" font-size="8" y={refY + 32}>
+      <text style="fill: var(--color-text-disabled)" font-size="8" y={refY + 32}>
         ITU-R P.840-9 (Nebel)
       </text>
     </g>

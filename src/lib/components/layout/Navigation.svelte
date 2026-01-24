@@ -6,9 +6,9 @@
     label: string;
   }
 
-  // Alle Funktionen sind jetzt auf der Startseite integriert
   const navItems: NavItem[] = [
-    { href: '/', label: 'Startseite' }
+    { href: '/', label: 'Startseite' },
+    { href: '/link-budget', label: 'Link Budget' }
   ];
 
   let mobileMenuOpen = $state(false);

@@ -8,44 +8,8 @@
   import AtmosphericInputs from '$lib/components/converters/AtmosphericInputs.svelte';
   import AttenuationChart from '$lib/components/charts/AttenuationChart.svelte';
 
-  // Phase 3 Components
-  import FSPLCalculator from '$lib/components/calculators/FSPLCalculator.svelte';
-  import LinkBudgetCalculator from '$lib/components/calculators/LinkBudgetCalculator.svelte';
-  import LinkBudgetWaterfall from '$lib/components/charts/LinkBudgetWaterfall.svelte';
-
   let currentFrequencyHz = $state<number | null>(null);
   let currentPowerWatt = $state<number | null>(1);
-
-  // Link Budget Calculator reference and data
-  let linkBudgetRef: LinkBudgetCalculator | undefined = $state(undefined);
-
-  // Link budget data for waterfall chart
-  let linkBudgetData = $state<{
-    txPowerDbm: number;
-    txAntennaGainDbi: number;
-    txCableLossDb: number;
-    eirpDbm: number;
-    fsplDb: number;
-    atmosphericLossDb: number;
-    miscLossDb: number;
-    totalPathLossDb: number;
-    rxAntennaGainDbi: number;
-    rxCableLossDb: number;
-    receivedPowerDbm: number;
-    rxSensitivityDbm: number;
-    linkMarginDb: number;
-    fadingMarginDb: number;
-    systemMarginDb: number;
-    linkViable: boolean;
-  } | null>(null);
-
-  // Update link budget data periodically
-  $effect(() => {
-    if (linkBudgetRef) {
-      const data = linkBudgetRef.getLinkBudgetData();
-      linkBudgetData = data;
-    }
-  });
 </script>
 
 <svelte:head>
@@ -84,35 +48,6 @@
     <PowerConverter bind:powerWatt={currentPowerWatt} />
     <BandInfo frequencyHz={currentFrequencyHz} />
   </div>
-
-  <!-- ========== PHASE 3: FSPL Calculator ========== -->
-  <section id="fspl-calculator">
-    <FSPLCalculator frequencyHz={currentFrequencyHz} />
-  </section>
-
-
-  <!-- ========== PHASE 3: Link Budget Calculator + Waterfall ========== -->
-  <section id="link-budget">
-    <div class="section-stack">
-      <LinkBudgetCalculator
-        bind:this={linkBudgetRef}
-        frequencyHz={currentFrequencyHz}
-      />
-
-      <!-- Link Budget Waterfall Visualization -->
-      <div class="card">
-        <h3 class="text-heading-3">Link Budget Waterfall</h3>
-        <p class="section-description">
-          Visuelle Darstellung des Signalpfads vom Sender zum Empfänger.
-          Grüne Balken zeigen Gewinne, rote Balken zeigen Verluste.
-          Die orangefarbene Linie markiert die Empfängerempfindlichkeit.
-        </p>
-        <div class="chart-container">
-          <LinkBudgetWaterfall data={linkBudgetData} />
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Transmit Power vs Frequency Chart -->
   <section class="card">
@@ -209,12 +144,6 @@
     .grid-row {
       grid-template-columns: 1fr 1fr;
     }
-  }
-
-  .section-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
   }
 
   .section-description {

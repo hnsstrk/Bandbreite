@@ -195,19 +195,17 @@
   }
 </script>
 
-<div class="bg-slate-800 rounded-xl p-6 shadow-lg">
-  <h3 class="text-lg font-semibold text-slate-100 mb-4">Link Budget Kalkulator</h3>
+<div class="card">
+  <h3 class="text-heading-3 mb-4">Link Budget Kalkulator</h3>
 
   <!-- Quick Presets -->
   <div class="flex flex-wrap gap-2 mb-6">
-    <span class="text-sm text-slate-400 self-center mr-2">Presets:</span>
+    <span class="text-sm text-secondary self-center mr-2">Presets:</span>
     {#each linkPresets as preset (preset.name)}
       <button
         type="button"
         onclick={() => applyPreset(preset)}
-        class="px-3 py-1 text-xs rounded border border-slate-600 hover:border-blue-500
-               bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400
-               transition-colors"
+        class="btn-chip"
       >
         {preset.name}
       </button>
@@ -217,25 +215,24 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- TX Section -->
     <div class="space-y-4">
-      <h4 class="text-sm font-semibold text-blue-400 border-b border-slate-700 pb-2">
+      <h4 class="text-sm font-semibold text-blue-600 dark:text-blue-400 border-b border-default pb-2">
         TX (Sender)
       </h4>
 
       <div class="space-y-3">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Sendeleistung</label>
+          <label class="text-label mb-1">Sendeleistung</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={txPowerDbm}
               oninput={handleNumberInput((v) => txPowerDbm = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="1"
             />
-            <span class="text-slate-400 text-sm w-12">dBm</span>
+            <span class="text-muted text-sm w-12">dBm</span>
           </div>
-          <div class="text-xs text-slate-500 mt-1">
+          <div class="text-xs text-muted mt-1">
             = {dbmToWatt(txPowerDbm) >= 1
               ? `${dbmToWatt(txPowerDbm).toFixed(2)} W`
               : `${(dbmToWatt(txPowerDbm) * 1000).toFixed(2)} mW`}
@@ -243,43 +240,41 @@
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Antennengewinn</label>
+          <label class="text-label mb-1">Antennengewinn</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={txAntennaGainDbi}
               oninput={handleNumberInput((v) => txAntennaGainDbi = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="0.5"
             />
-            <span class="text-slate-400 text-sm w-12">dBi</span>
+            <span class="text-muted text-sm w-12">dBi</span>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Kabelverlust</label>
+          <label class="text-label mb-1">Kabelverlust</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={txCableLossDb}
               oninput={handleNumberInput((v) => txCableLossDb = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="0.1"
               min="0"
             />
-            <span class="text-slate-400 text-sm w-12">dB</span>
+            <span class="text-muted text-sm w-12">dB</span>
           </div>
         </div>
 
         <!-- EIRP Result -->
-        <div class="bg-slate-900 rounded-lg p-3 mt-4">
-          <div class="text-xs text-slate-400 mb-1">EIRP</div>
-          <div class="text-xl font-bold text-blue-400">
-            {eirpDbm.toFixed(1)} <span class="text-sm text-slate-400">dBm</span>
+        <div class="result-box mt-4">
+          <div class="result-label">EIRP</div>
+          <div class="text-xl font-bold text-blue-600 dark:text-blue-400">
+            {eirpDbm.toFixed(1)} <span class="text-sm text-muted">dBm</span>
           </div>
-          <div class="text-xs text-slate-500">
+          <div class="text-xs text-muted">
             = {dbmToWatt(eirpDbm) >= 1
               ? `${dbmToWatt(eirpDbm).toFixed(2)} W`
               : `${(dbmToWatt(eirpDbm) * 1000).toFixed(2)} mW`}
@@ -290,27 +285,25 @@
 
     <!-- Path Section -->
     <div class="space-y-4">
-      <h4 class="text-sm font-semibold text-amber-400 border-b border-slate-700 pb-2">
+      <h4 class="text-sm font-semibold text-amber-600 dark:text-amber-400 border-b border-default pb-2">
         Pfad (Path)
       </h4>
 
       <div class="space-y-3">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Distanz</label>
+          <label class="text-label mb-1">Distanz</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={pathLengthM}
               oninput={handleNumberInput((v) => pathLengthM = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="any"
               min="0"
             />
             <select
               bind:value={pathLengthUnit}
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="select-field"
             >
               <option value="m">m</option>
               <option value="km">km</option>
@@ -320,21 +313,19 @@
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Frequenz</label>
+          <label class="text-label mb-1">Frequenz</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={pathFrequencyHz}
               oninput={handleNumberInput((v) => pathFrequencyHz = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="any"
               min="0"
             />
             <select
               bind:value={pathFrequencyUnit}
-              class="bg-slate-700 border border-slate-600 rounded px-2 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="select-field"
             >
               <option value="MHz">MHz</option>
               <option value="GHz">GHz</option>
@@ -343,52 +334,50 @@
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Sonstige Verluste</label>
+          <label class="text-label mb-1">Sonstige Verluste</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={miscLossDb}
               oninput={handleNumberInput((v) => miscLossDb = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="0.5"
               min="0"
             />
-            <span class="text-slate-400 text-sm w-12">dB</span>
+            <span class="text-muted text-sm w-12">dB</span>
           </div>
         </div>
 
-        <label class="flex items-center gap-2 text-sm text-slate-400 cursor-pointer mt-2">
+        <label class="flex items-center gap-2 text-sm text-secondary cursor-pointer mt-2">
           <input
             type="checkbox"
             bind:checked={includeAtmosphericLoss}
-            class="w-4 h-4 rounded bg-slate-700 border-slate-600 text-blue-500
-                   focus:ring-blue-500 focus:ring-offset-slate-800"
+            class="checkbox"
           />
           Atmosphärische Dämpfung einbeziehen
         </label>
 
         <!-- Path Loss Results -->
-        <div class="bg-slate-900 rounded-lg p-3 mt-4 space-y-2">
+        <div class="result-box mt-4 space-y-2 text-left">
           <div class="flex justify-between text-xs">
-            <span class="text-slate-400">FSPL:</span>
-            <span class="text-amber-400 font-mono">{fsplDb.toFixed(1)} dB</span>
+            <span class="text-muted">FSPL:</span>
+            <span class="text-amber-600 dark:text-amber-400 font-mono">{fsplDb.toFixed(1)} dB</span>
           </div>
           {#if includeAtmosphericLoss && atmosphericLossDb > 0}
             <div class="flex justify-between text-xs">
-              <span class="text-slate-400">Atmos. Verlust:</span>
-              <span class="text-amber-400 font-mono">{atmosphericLossDb.toFixed(1)} dB</span>
+              <span class="text-muted">Atmos. Verlust:</span>
+              <span class="text-amber-600 dark:text-amber-400 font-mono">{atmosphericLossDb.toFixed(1)} dB</span>
             </div>
           {/if}
           {#if miscLossDb > 0}
             <div class="flex justify-between text-xs">
-              <span class="text-slate-400">Sonstige:</span>
-              <span class="text-amber-400 font-mono">{miscLossDb.toFixed(1)} dB</span>
+              <span class="text-muted">Sonstige:</span>
+              <span class="text-amber-600 dark:text-amber-400 font-mono">{miscLossDb.toFixed(1)} dB</span>
             </div>
           {/if}
-          <div class="flex justify-between border-t border-slate-700 pt-2">
-            <span class="text-slate-300 text-sm">Gesamt:</span>
-            <span class="text-xl font-bold text-amber-400">{totalPathLossDb.toFixed(1)} dB</span>
+          <div class="flex justify-between border-t border-default pt-2">
+            <span class="text-primary text-sm">Gesamt:</span>
+            <span class="text-xl font-bold text-amber-600 dark:text-amber-400">{totalPathLossDb.toFixed(1)} dB</span>
           </div>
         </div>
       </div>
@@ -396,82 +385,78 @@
 
     <!-- RX Section -->
     <div class="space-y-4">
-      <h4 class="text-sm font-semibold text-green-400 border-b border-slate-700 pb-2">
+      <h4 class="text-sm font-semibold text-green-600 dark:text-green-400 border-b border-default pb-2">
         RX (Empfänger)
       </h4>
 
       <div class="space-y-3">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Antennengewinn</label>
+          <label class="text-label mb-1">Antennengewinn</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={rxAntennaGainDbi}
               oninput={handleNumberInput((v) => rxAntennaGainDbi = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="0.5"
             />
-            <span class="text-slate-400 text-sm w-12">dBi</span>
+            <span class="text-muted text-sm w-12">dBi</span>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Kabelverlust</label>
+          <label class="text-label mb-1">Kabelverlust</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={rxCableLossDb}
               oninput={handleNumberInput((v) => rxCableLossDb = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="0.1"
               min="0"
             />
-            <span class="text-slate-400 text-sm w-12">dB</span>
+            <span class="text-muted text-sm w-12">dB</span>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Empfindlichkeit</label>
+          <label class="text-label mb-1">Empfindlichkeit</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={rxSensitivityDbm}
               oninput={handleNumberInput((v) => rxSensitivityDbm = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="1"
             />
-            <span class="text-slate-400 text-sm w-12">dBm</span>
+            <span class="text-muted text-sm w-12">dBm</span>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Fading Margin</label>
+          <label class="text-label mb-1">Fading Margin</label>
           <div class="flex items-center gap-2">
             <input
               type="number"
               value={fadingMarginDb}
               oninput={handleNumberInput((v) => fadingMarginDb = v)}
-              class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-1.5 text-sm
-                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="input-field flex-1"
               step="1"
               min="0"
             />
-            <span class="text-slate-400 text-sm w-12">dB</span>
+            <span class="text-muted text-sm w-12">dB</span>
           </div>
         </div>
 
         <!-- RX Results -->
-        <div class="bg-slate-900 rounded-lg p-3 mt-4 space-y-2">
+        <div class="result-box mt-4 space-y-2 text-left">
           <div class="flex justify-between">
-            <span class="text-slate-400 text-sm">Empfangsleistung:</span>
-            <span class="text-lg font-bold text-green-400">{receivedPowerDbm.toFixed(1)} dBm</span>
+            <span class="text-muted text-sm">Empfangsleistung:</span>
+            <span class="text-lg font-bold text-green-600 dark:text-green-400">{receivedPowerDbm.toFixed(1)} dBm</span>
           </div>
           <div class="flex justify-between text-xs">
-            <span class="text-slate-400">Empfindlichkeit:</span>
-            <span class="text-slate-300 font-mono">{rxSensitivityDbm} dBm</span>
+            <span class="text-muted">Empfindlichkeit:</span>
+            <span class="text-primary font-mono">{rxSensitivityDbm} dBm</span>
           </div>
         </div>
       </div>
@@ -479,33 +464,33 @@
   </div>
 
   <!-- Final Results -->
-  <div class="mt-6 pt-6 border-t border-slate-700">
+  <div class="mt-6 pt-6 border-t border-default">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Link Margin -->
-      <div class="bg-slate-900 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1">Link Margin</div>
-        <div class="text-2xl font-bold {linkMarginDb >= 0 ? 'text-green-400' : 'text-red-400'}">
-          {linkMarginDb >= 0 ? '+' : ''}{linkMarginDb.toFixed(1)} <span class="text-lg text-slate-400">dB</span>
+      <div class="result-box">
+        <div class="result-label">Link Margin</div>
+        <div class="text-2xl font-bold {linkMarginDb >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+          {linkMarginDb >= 0 ? '+' : ''}{linkMarginDb.toFixed(1)} <span class="text-lg text-muted">dB</span>
         </div>
-        <div class="text-xs text-slate-500 mt-1">Pegel über Empfindlichkeit</div>
+        <div class="text-xs text-muted mt-1">Pegel über Empfindlichkeit</div>
       </div>
 
       <!-- System Margin -->
-      <div class="bg-slate-900 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1">System Margin</div>
-        <div class="text-2xl font-bold {systemMarginDb >= 0 ? 'text-green-400' : 'text-red-400'}">
-          {systemMarginDb >= 0 ? '+' : ''}{systemMarginDb.toFixed(1)} <span class="text-lg text-slate-400">dB</span>
+      <div class="result-box">
+        <div class="result-label">System Margin</div>
+        <div class="text-2xl font-bold {systemMarginDb >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+          {systemMarginDb >= 0 ? '+' : ''}{systemMarginDb.toFixed(1)} <span class="text-lg text-muted">dB</span>
         </div>
-        <div class="text-xs text-slate-500 mt-1">Nach Fading Margin ({fadingMarginDb} dB)</div>
+        <div class="text-xs text-muted mt-1">Nach Fading Margin ({fadingMarginDb} dB)</div>
       </div>
 
       <!-- Link Status -->
-      <div class="bg-slate-900 rounded-lg p-4 text-center">
-        <div class="text-slate-400 text-sm mb-1">Link Status</div>
-        <div class="text-xl font-bold {linkViable ? 'text-green-400' : 'text-red-400'}">
+      <div class="result-box">
+        <div class="result-label">Link Status</div>
+        <div class="text-xl font-bold {linkViable ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
           {linkViable ? 'VIABLE' : 'NICHT VIABLE'}
         </div>
-        <div class="text-xs {linkViable ? 'text-green-500' : 'text-red-500'} mt-1">
+        <div class="text-xs {linkViable ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500'} mt-1">
           {linkViable
             ? `Reserve: ${systemMarginDb.toFixed(1)} dB`
             : `Fehlt: ${Math.abs(systemMarginDb).toFixed(1)} dB`}
@@ -515,7 +500,7 @@
   </div>
 
   <!-- Formula Reference -->
-  <div class="mt-4 text-xs text-slate-500">
+  <div class="mt-4 text-xs text-muted">
     <p>
       <strong>Link Budget:</strong> P<sub>RX</sub> = P<sub>TX</sub> + G<sub>TX</sub> - L<sub>TX</sub> - L<sub>path</sub> + G<sub>RX</sub> - L<sub>RX</sub>
       &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -523,3 +508,9 @@
     </p>
   </div>
 </div>
+
+<style>
+  .border-default {
+    border-color: var(--color-border-default);
+  }
+</style>

@@ -284,7 +284,7 @@
         <text
           x={chartWidth + 5}
           y={yScale(data.rxSensitivityDbm)}
-          class="fill-orange-400"
+          fill="#f97316"
           font-size="10"
           dominant-baseline="middle"
         >
@@ -463,7 +463,7 @@
             </tspan>
           </text>
           <text x="8" y="52" style="fill: var(--color-text-tertiary)" font-size="10">
-            Kumulativ: <tspan class="fill-slate-200 font-mono">
+            Kumulativ: <tspan style="fill: var(--color-chart-text)" class="font-mono">
               {tooltip.step.barEnd.toFixed(1)} dBm
             </tspan>
           </text>

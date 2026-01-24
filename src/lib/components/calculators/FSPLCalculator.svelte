@@ -232,21 +232,20 @@
   });
 </script>
 
-<div class="bg-slate-800 rounded-xl p-6 shadow-lg">
-  <h3 class="text-lg font-semibold text-slate-100 mb-4">Free Space Path Loss (FSPL) Kalkulator</h3>
+<div class="card">
+  <h3 class="text-heading-3 mb-4">Free Space Path Loss (FSPL) Kalkulator</h3>
 
   <!-- Input Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <!-- Frequency Input -->
     <div class="space-y-2">
-      <label class="block text-sm font-medium text-slate-300">Frequenz</label>
+      <label class="text-label">Frequenz</label>
       <div class="flex items-center gap-2">
         <input
           type="number"
           value={inputFrequency}
           oninput={handleFrequencyInput}
-          class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          class="input-field flex-1"
           placeholder="Frequenz"
           step="any"
           min="0"
@@ -254,8 +253,7 @@
         <select
           value={inputFrequencyUnit}
           onchange={handleFrequencyUnitChange}
-          class="bg-slate-700 border border-slate-600 rounded px-2 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="select-field"
         >
           {#each FREQUENCY_UNITS as unit (unit.id)}
             <option value={unit.id}>{unit.symbol}</option>
@@ -268,9 +266,7 @@
           <button
             type="button"
             onclick={() => setPresetFrequency(preset.hz)}
-            class="px-2 py-0.5 text-xs rounded border border-slate-600 hover:border-blue-500
-                   bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400
-                   transition-colors"
+            class="btn-chip"
             title={preset.desc}
           >
             {preset.label}
@@ -281,14 +277,13 @@
 
     <!-- Distance Input -->
     <div class="space-y-2">
-      <label class="block text-sm font-medium text-slate-300">Distanz</label>
+      <label class="text-label">Distanz</label>
       <div class="flex items-center gap-2">
         <input
           type="number"
           value={inputDistance}
           oninput={handleDistanceInput}
-          class="flex-1 bg-slate-700 border border-slate-600 rounded px-3 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          class="input-field flex-1"
           placeholder="Distanz"
           step="any"
           min="0"
@@ -296,8 +291,7 @@
         <select
           value={inputDistanceUnit}
           onchange={handleDistanceUnitChange}
-          class="bg-slate-700 border border-slate-600 rounded px-2 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="select-field"
         >
           {#each DISTANCE_UNITS as unit (unit.id)}
             <option value={unit.id}>{unit.symbol}</option>
@@ -310,9 +304,7 @@
           <button
             type="button"
             onclick={() => { inputDistance = dist; inputDistanceUnit = 'm'; }}
-            class="px-2 py-0.5 text-xs rounded border border-slate-600 hover:border-blue-500
-                   bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400
-                   transition-colors"
+            class="btn-chip"
           >
             {dist >= 1000 ? `${dist/1000} km` : `${dist} m`}
           </button>
@@ -324,47 +316,46 @@
   <!-- Results Section -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
     <!-- FSPL Result -->
-    <div class="bg-slate-900 rounded-lg p-4 text-center">
-      <div class="text-slate-400 text-sm mb-1">FSPL</div>
-      <div class="text-2xl font-bold text-blue-400">
-        {fsplDb !== null ? fsplDb.toFixed(2) : '—'} <span class="text-lg text-slate-400">dB</span>
+    <div class="result-box">
+      <div class="result-label">FSPL</div>
+      <div class="text-2xl font-bold text-blue-500 dark:text-blue-400">
+        {fsplDb !== null ? fsplDb.toFixed(2) : '—'} <span class="text-lg result-label">dB</span>
       </div>
     </div>
 
     <!-- Wavelength -->
-    <div class="bg-slate-900 rounded-lg p-4 text-center">
-      <div class="text-slate-400 text-sm mb-1">Wellenlänge</div>
-      <div class="text-2xl font-bold text-green-400">
+    <div class="result-box">
+      <div class="result-label">Wellenlänge</div>
+      <div class="text-2xl font-bold text-green-600 dark:text-green-400">
         {wavelengthM !== null ? formatWavelength(wavelengthM) : '—'}
       </div>
     </div>
 
     <!-- Effective Distance -->
-    <div class="bg-slate-900 rounded-lg p-4 text-center">
-      <div class="text-slate-400 text-sm mb-1">Distanz</div>
-      <div class="text-2xl font-bold text-amber-400">
+    <div class="result-box">
+      <div class="result-label">Distanz</div>
+      <div class="text-2xl font-bold text-amber-600 dark:text-amber-400">
         {currentDistanceM > 0 ? formatDistance(currentDistanceM) : '—'}
       </div>
     </div>
   </div>
 
   <!-- Formula Display -->
-  <div class="bg-slate-900 rounded-lg p-3 mb-6">
-    <div class="text-xs text-slate-400 mb-1">Formel:</div>
-    <div class="font-mono text-sm text-slate-200 text-center">
+  <div class="formula-box">
+    <div class="text-xs text-muted mb-1">Formel:</div>
+    <div class="font-mono text-sm text-primary text-center">
       FSPL(dB) = 20·log<sub>10</sub>(d) + 20·log<sub>10</sub>(f) + 20·log<sub>10</sub>(4&#960;/c) = 20·log<sub>10</sub>(d) + 20·log<sub>10</sub>(f) - 147,55
     </div>
   </div>
 
   <!-- Chart Toggle -->
   <div class="flex items-center justify-between mb-4">
-    <h4 class="text-sm font-medium text-slate-300">FSPL vs. Distanz</h4>
-    <label class="flex items-center gap-2 text-sm text-slate-400 cursor-pointer">
+    <h4 class="text-label">FSPL vs. Distanz</h4>
+    <label class="flex items-center gap-2 text-sm text-secondary cursor-pointer">
       <input
         type="checkbox"
         bind:checked={showMultipleFrequencies}
-        class="w-4 h-4 rounded bg-slate-700 border-slate-600 text-blue-500
-               focus:ring-blue-500 focus:ring-offset-slate-800"
+        class="checkbox"
       />
       Vergleichskurven anzeigen
     </label>
@@ -545,19 +536,19 @@
       <!-- Legend -->
       {#if showMultipleFrequencies}
         <g transform="translate({width - margin.right + 10}, {margin.top})">
-          <text class="fill-slate-300 font-medium" font-size="11" y="0">
+          <text style="fill: var(--color-chart-text)" font-weight="500" font-size="11" y="0">
             Frequenzen
           </text>
           {#each chartFrequencies as freq, i (freq.hz)}
             <g transform="translate(0, {15 + i * 18})">
               <line x1="0" y1="0" x2="20" y2="0" stroke={freq.color} stroke-width="2" />
-              <text x="26" y="4" style="fill: var(--color-text-tertiary)" font-size="10">{freq.label}</text>
+              <text x="26" y="4" style="fill: var(--color-chart-text-secondary)" font-size="10">{freq.label}</text>
             </g>
           {/each}
           {#if currentFreqLine}
             <g transform="translate(0, {15 + chartFrequencies.length * 18})">
               <line x1="0" y1="0" x2="20" y2="0" stroke={currentFreqLine.color} stroke-width="3" />
-              <text x="26" y="4" class="fill-amber-400 font-medium" font-size="10">Aktuell</text>
+              <text x="26" y="4" fill="#fbbf24" font-weight="500" font-size="10">Aktuell</text>
             </g>
           {/if}
         </g>
@@ -566,7 +557,7 @@
   </div>
 
   <!-- Additional Info -->
-  <div class="mt-4 text-xs text-slate-500">
+  <div class="mt-4 text-xs text-muted">
     <p>
       Die Freiraumdämpfung (FSPL) beschreibt den Signalverlust einer elektromagnetischen Welle
       im freien Raum ohne Hindernisse. Sie steigt quadratisch mit Frequenz und Distanz an.

@@ -897,25 +897,25 @@
             style="background-color: {tooltip.band.color};"
           ></div>
         {/if}
-        <div class="text-slate-900 dark:text-white font-medium">{tooltip.band.name}</div>
+        <div class="font-medium" style="color: var(--color-chart-text)">{tooltip.band.name}</div>
       </div>
       {#if tooltip.band.nameDE && tooltip.band.nameDE !== tooltip.band.name}
-        <div class="text-slate-600 dark:text-slate-400 text-sm mb-2">{tooltip.band.nameDE}</div>
+        <div class="text-sm mb-2" style="color: var(--color-chart-text-secondary)">{tooltip.band.nameDE}</div>
       {/if}
       <div class="space-y-1 text-sm">
         <div class="flex justify-between">
-          <span class="text-slate-600 dark:text-slate-400">Frequenz:</span>
-          <span class="text-slate-800 dark:text-slate-200 font-mono">{formatFrequencyRange(tooltip.band.minHz, tooltip.band.maxHz)}</span>
+          <span style="color: var(--color-chart-text-secondary)">Frequenz:</span>
+          <span class="font-mono" style="color: var(--color-chart-text)">{formatFrequencyRange(tooltip.band.minHz, tooltip.band.maxHz)}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-600 dark:text-slate-400">Wellenlänge:</span>
-          <span class="text-slate-800 dark:text-slate-200 font-mono">
+          <span style="color: var(--color-chart-text-secondary)">Wellenlaenge:</span>
+          <span class="font-mono" style="color: var(--color-chart-text)">
             {formatWavelength(currentSpeedOfLight / tooltip.band.maxHz)} - {formatWavelength(currentSpeedOfLight / tooltip.band.minHz)}
           </span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-600 dark:text-slate-400">Kategorie:</span>
-          <span class="text-slate-800 dark:text-slate-200 capitalize">{tooltip.band.category}</span>
+          <span style="color: var(--color-chart-text-secondary)">Kategorie:</span>
+          <span class="capitalize" style="color: var(--color-chart-text)">{tooltip.band.category}</span>
         </div>
       </div>
     </div>

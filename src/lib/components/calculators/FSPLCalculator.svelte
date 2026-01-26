@@ -1,8 +1,15 @@
 <script lang="ts">
   import * as d3 from 'd3';
   import { calculateFSPL, calculateRange, frequencyToWavelength } from '$lib/utils/calculations';
-  import { convertToHz, convertFromHz, wattToDbm, dbmToWatt } from '$lib/utils/conversions';
-  import { FREQUENCY_UNITS } from '$lib/data/units';
+  import { convertToHz } from '$lib/utils/conversions';
+  import { FREQUENCY_UNITS, DISTANCE_UNITS } from '$lib/data/units';
+  import {
+    formatFrequency,
+    formatDistance,
+    formatWavelength,
+    formatPowerDb
+  } from '$lib/utils/formatting';
+  import { parseNumericInput, parseSelectValue } from '$lib/utils/handlers';
 
   interface Props {
     frequencyHz?: number | null;
@@ -22,13 +29,12 @@
   let inputDistanceUnit = $state('m');
   let showMultipleFrequencies = $state(true);
 
-  // Distance unit factors
-  const DISTANCE_UNITS = [
-    { id: 'm', symbol: 'm', factor: 1 },
-    { id: 'km', symbol: 'km', factor: 1000 },
-    { id: 'mi', symbol: 'mi', factor: 1609.344 },
-    { id: 'ft', symbol: 'ft', factor: 0.3048 },
-  ];
+  // Use centralized DISTANCE_UNITS from units.ts (imported above)
+  // Helper to get factor from DISTANCE_UNITS
+  function getDistanceFactor(unitId: string): number {
+    const unit = DISTANCE_UNITS.find(u => u.id === unitId);
+    return unit?.factor ?? 1;
+  }
 
   // Quick frequency presets
   const frequencyPresets = [
@@ -60,7 +66,7 @@
 
   // Derived distance in meters
   let currentDistanceM = $derived(
-    inputDistance * (DISTANCE_UNITS.find(u => u.id === inputDistanceUnit)?.factor ?? 1)
+    inputDistance * getDistanceFactor(inputDistanceUnit)
   );
 
   // Calculated FSPL
@@ -163,47 +169,23 @@
   // Y-axis ticks
   const yTickValues = [20, 40, 60, 80, 100, 120, 140, 160, 180];
 
-  // Format frequency for display
-  function formatFrequency(hz: number): string {
-    if (hz >= 1e9) return `${(hz / 1e9).toFixed(1)} GHz`;
-    if (hz >= 1e6) return `${(hz / 1e6).toFixed(1)} MHz`;
-    if (hz >= 1e3) return `${(hz / 1e3).toFixed(1)} kHz`;
-    return `${hz.toFixed(0)} Hz`;
-  }
+  // Note: formatFrequency, formatDistance, formatWavelength are imported from $lib/utils/formatting
 
-  // Format distance for display
-  function formatDistance(m: number): string {
-    if (m >= 1000) return `${(m / 1000).toFixed(1)} km`;
-    return `${m.toFixed(0)} m`;
-  }
-
-  // Format wavelength
-  function formatWavelength(m: number): string {
-    if (m >= 1) return `${m.toFixed(2)} m`;
-    if (m >= 0.01) return `${(m * 100).toFixed(2)} cm`;
-    if (m >= 0.001) return `${(m * 1000).toFixed(2)} mm`;
-    return `${(m * 1e6).toFixed(2)} \u03BCm`;
-  }
-
-  // Event handlers
+  // Event handlers using centralized utilities
   function handleFrequencyInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    inputFrequency = target.value ? parseFloat(target.value) : 0;
+    inputFrequency = parseNumericInput(e, 0);
   }
 
   function handleFrequencyUnitChange(e: Event) {
-    const target = e.target as HTMLSelectElement;
-    inputFrequencyUnit = target.value;
+    inputFrequencyUnit = parseSelectValue(e);
   }
 
   function handleDistanceInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    inputDistance = target.value ? parseFloat(target.value) : 0;
+    inputDistance = parseNumericInput(e, 0);
   }
 
   function handleDistanceUnitChange(e: Event) {
-    const target = e.target as HTMLSelectElement;
-    inputDistanceUnit = target.value;
+    inputDistanceUnit = parseSelectValue(e);
   }
 
   function setPresetFrequency(hz: number) {

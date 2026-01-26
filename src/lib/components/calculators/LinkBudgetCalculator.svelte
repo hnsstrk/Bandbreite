@@ -1,8 +1,10 @@
 <script lang="ts">
   import { calculateFSPL } from '$lib/utils/calculations';
-  import { convertToHz, wattToDbm, dbmToWatt } from '$lib/utils/conversions';
+  import { dbmToWatt } from '$lib/utils/conversions';
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import { calculateExtendedPathAttenuation } from '$lib/utils/atmosphericAttenuation';
+  import { parseNumericInput } from '$lib/utils/handlers';
+  import { formatPowerWatts } from '$lib/utils/formatting';
 
   interface Props {
     frequencyHz?: number | null;
@@ -187,11 +189,10 @@
     };
   }
 
-  // Event handlers
+  // Event handlers using centralized utility
   function handleNumberInput(setter: (val: number) => void) {
     return (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      setter(target.value ? parseFloat(target.value) : 0);
+      setter(parseNumericInput(e, 0));
     };
   }
 </script>
@@ -235,9 +236,7 @@
             <span class="text-muted text-sm w-12">dBm</span>
           </div>
           <div class="text-xs text-muted mt-1">
-            = {dbmToWatt(txPowerDbm) >= 1
-              ? `${dbmToWatt(txPowerDbm).toFixed(2)} W`
-              : `${(dbmToWatt(txPowerDbm) * 1000).toFixed(2)} mW`}
+            = {formatPowerWatts(dbmToWatt(txPowerDbm))}
           </div>
         </div>
 

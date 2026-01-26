@@ -500,6 +500,6 @@
 
 <style>
   .btn-chip-active {
-    @apply ring-2 ring-offset-2 ring-blue-500;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #3b82f6;
   }
 </style>

@@ -550,6 +550,8 @@
 
 <style>
   .result-box-inline {
-    @apply p-3 bg-surface-tertiary rounded-lg;
+    padding: 0.75rem;
+    background-color: var(--color-bg-elevated);
+    border-radius: var(--radius-lg);
   }
 </style>

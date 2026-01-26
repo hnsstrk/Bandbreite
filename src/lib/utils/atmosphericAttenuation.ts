@@ -46,6 +46,11 @@ export function calculateOxygenAttenuation(
   pressureHpa: number,
   temperatureK: number
 ): number {
+  // Input validation: guard against division by zero and invalid inputs
+  if (!Number.isFinite(frequencyGHz) || frequencyGHz <= 0) return 0;
+  if (!Number.isFinite(pressureHpa) || pressureHpa <= 0) return 0;
+  if (!Number.isFinite(temperatureK) || temperatureK <= 0) return 0;
+
   const f = frequencyGHz;
   const p = pressureHpa / 1013.25; // Pressure ratio
   const t = 288 / temperatureK; // Temperature ratio
@@ -97,7 +102,11 @@ export function calculateWaterVaporAttenuation(
   waterVaporDensity: number,
   temperatureK: number
 ): number {
-  if (waterVaporDensity <= 0) return 0;
+  // Input validation: guard against division by zero and invalid inputs
+  if (!Number.isFinite(waterVaporDensity) || waterVaporDensity <= 0) return 0;
+  if (!Number.isFinite(frequencyGHz) || frequencyGHz <= 0) return 0;
+  if (!Number.isFinite(pressureHpa) || pressureHpa <= 0) return 0;
+  if (!Number.isFinite(temperatureK) || temperatureK <= 0) return 0;
 
   const f = frequencyGHz;
   const p = pressureHpa / 1013.25;
@@ -263,6 +272,10 @@ export function calculateFogCoefficient(
   frequencyGHz: number,
   temperatureK: number
 ): number {
+  // Input validation
+  if (!Number.isFinite(frequencyGHz) || frequencyGHz <= 0) return 0;
+  if (!Number.isFinite(temperatureK) || temperatureK <= 0) return 0;
+
   const f = frequencyGHz;
   const theta = 300 / temperatureK;
 
@@ -271,6 +284,8 @@ export function calculateFogCoefficient(
   const epsilon2 = 3.52;
 
   const fp = 20.20 - 146.4 * (theta - 1) + 316 * Math.pow(theta - 1, 2);
+  // Guard against division by zero
+  if (fp <= 0) return 0;
   const fs = 39.8 * fp;
 
   const epsilonPrimeReal =
@@ -282,10 +297,16 @@ export function calculateFogCoefficient(
     ((epsilon0 - epsilon1) * (f / fp)) / (1 + Math.pow(f / fp, 2)) +
     ((epsilon1 - epsilon2) * (f / fs)) / (1 + Math.pow(f / fs, 2));
 
-  const eta = (2 + epsilonPrimeReal) / epsilonPrimeImag;
-  const Kl = (0.819 * f) / (epsilonPrimeImag * (1 + eta * eta));
+  // Guard against division by zero
+  if (epsilonPrimeImag === 0) return 0;
 
-  return Kl;
+  const eta = (2 + epsilonPrimeReal) / epsilonPrimeImag;
+  const denominator = epsilonPrimeImag * (1 + eta * eta);
+  if (denominator === 0) return 0;
+
+  const Kl = (0.819 * f) / denominator;
+
+  return Number.isFinite(Kl) ? Kl : 0;
 }
 
 /**

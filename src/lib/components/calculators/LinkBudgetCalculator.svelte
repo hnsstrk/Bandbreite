@@ -222,9 +222,10 @@
 
       <div class="space-y-3">
         <div>
-          <label class="text-label mb-1">Sendeleistung</label>
+          <label for="lb-tx-power" class="text-label mb-1">Sendeleistung</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-tx-power"
               type="number"
               value={txPowerDbm}
               oninput={handleNumberInput((v) => txPowerDbm = v)}
@@ -241,9 +242,10 @@
         </div>
 
         <div>
-          <label class="text-label mb-1">Antennengewinn</label>
+          <label for="lb-tx-antenna" class="text-label mb-1">Antennengewinn</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-tx-antenna"
               type="number"
               value={txAntennaGainDbi}
               oninput={handleNumberInput((v) => txAntennaGainDbi = v)}
@@ -255,9 +257,10 @@
         </div>
 
         <div>
-          <label class="text-label mb-1">Kabelverlust</label>
+          <label for="lb-tx-cable" class="text-label mb-1">Kabelverlust</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-tx-cable"
               type="number"
               value={txCableLossDb}
               oninput={handleNumberInput((v) => txCableLossDb = v)}
@@ -292,9 +295,10 @@
 
       <div class="space-y-3">
         <div>
-          <label class="text-label mb-1">Distanz</label>
+          <label for="lb-distance" class="text-label mb-1">Distanz</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-distance"
               type="number"
               value={pathLengthM}
               oninput={handleNumberInput((v) => pathLengthM = v)}
@@ -303,8 +307,10 @@
               min="0"
             />
             <select
+              id="lb-distance-unit"
               bind:value={pathLengthUnit}
               class="select-field"
+              aria-label="Distanzeinheit"
             >
               <option value="m">m</option>
               <option value="km">km</option>
@@ -314,9 +320,10 @@
         </div>
 
         <div>
-          <label class="text-label mb-1">Frequenz</label>
+          <label for="lb-frequency" class="text-label mb-1">Frequenz</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-frequency"
               type="number"
               value={pathFrequencyHz}
               oninput={handleNumberInput((v) => pathFrequencyHz = v)}
@@ -325,8 +332,10 @@
               min="0"
             />
             <select
+              id="lb-frequency-unit"
               bind:value={pathFrequencyUnit}
               class="select-field"
+              aria-label="Frequenzeinheit"
             >
               <option value="MHz">MHz</option>
               <option value="GHz">GHz</option>
@@ -335,9 +344,10 @@
         </div>
 
         <div>
-          <label class="text-label mb-1">Sonstige Verluste</label>
+          <label for="lb-misc-loss" class="text-label mb-1">Sonstige Verluste</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-misc-loss"
               type="number"
               value={miscLossDb}
               oninput={handleNumberInput((v) => miscLossDb = v)}
@@ -392,9 +402,10 @@
 
       <div class="space-y-3">
         <div>
-          <label class="text-label mb-1">Antennengewinn</label>
+          <label for="lb-rx-antenna" class="text-label mb-1">Antennengewinn</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-rx-antenna"
               type="number"
               value={rxAntennaGainDbi}
               oninput={handleNumberInput((v) => rxAntennaGainDbi = v)}
@@ -406,9 +417,10 @@
         </div>
 
         <div>
-          <label class="text-label mb-1">Kabelverlust</label>
+          <label for="lb-rx-cable" class="text-label mb-1">Kabelverlust</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-rx-cable"
               type="number"
               value={rxCableLossDb}
               oninput={handleNumberInput((v) => rxCableLossDb = v)}
@@ -421,9 +433,10 @@
         </div>
 
         <div>
-          <label class="text-label mb-1">Empfindlichkeit</label>
+          <label for="lb-rx-sensitivity" class="text-label mb-1">Empfindlichkeit</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-rx-sensitivity"
               type="number"
               value={rxSensitivityDbm}
               oninput={handleNumberInput((v) => rxSensitivityDbm = v)}
@@ -435,9 +448,10 @@
         </div>
 
         <div>
-          <label class="text-label mb-1">Fading Margin</label>
+          <label for="lb-fading-margin" class="text-label mb-1">Fading Margin</label>
           <div class="flex items-center gap-2">
             <input
+              id="lb-fading-margin"
               type="number"
               value={fadingMarginDb}
               oninput={handleNumberInput((v) => fadingMarginDb = v)}

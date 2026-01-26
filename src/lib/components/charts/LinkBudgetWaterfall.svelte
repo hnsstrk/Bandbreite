@@ -242,6 +242,8 @@
       viewBox="0 0 {width} {height}"
       class="w-full h-auto"
       preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Link Budget Waterfall Diagramm: Zeigt den Signalpegel in dBm von der Sendeleistung bis zur Empfangsleistung mit allen Gewinnen und Verlusten"
     >
       <!-- Background -->
       <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
@@ -315,9 +317,14 @@
 
           <g
             class="cursor-pointer"
+            role="button"
+            tabindex="0"
+            aria-label="{step.label}: {step.type === 'gain' ? '+' : step.type === 'loss' ? '-' : ''}{step.value.toFixed(1)} dB"
             onmouseenter={(e) => showTooltip(e, step)}
             onmouseleave={hideTooltip}
             onmousemove={(e) => showTooltip(e, step)}
+            onfocus={(e) => showTooltip(e as unknown as MouseEvent, step)}
+            onblur={hideTooltip}
           >
             <!-- Bar -->
             <rect

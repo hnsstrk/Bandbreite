@@ -239,9 +239,10 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <!-- Frequency Input -->
     <div class="space-y-2">
-      <label class="text-label">Frequenz</label>
+      <label for="fspl-frequency-input" class="text-label">Frequenz</label>
       <div class="flex items-center gap-2">
         <input
+          id="fspl-frequency-input"
           type="number"
           value={inputFrequency}
           oninput={handleFrequencyInput}
@@ -249,17 +250,21 @@
           placeholder="Frequenz"
           step="any"
           min="0"
+          aria-describedby="fspl-frequency-desc"
         />
         <select
+          id="fspl-frequency-unit"
           value={inputFrequencyUnit}
           onchange={handleFrequencyUnitChange}
           class="select-field"
+          aria-label="Frequenzeinheit"
         >
           {#each FREQUENCY_UNITS as unit (unit.id)}
             <option value={unit.id}>{unit.symbol}</option>
           {/each}
         </select>
       </div>
+      <span id="fspl-frequency-desc" class="sr-only">Geben Sie die Frequenz ein und waehlen Sie die Einheit</span>
       <!-- Quick Presets -->
       <div class="flex flex-wrap gap-1 mt-2">
         {#each frequencyPresets as preset (preset.label)}
@@ -277,9 +282,10 @@
 
     <!-- Distance Input -->
     <div class="space-y-2">
-      <label class="text-label">Distanz</label>
+      <label for="fspl-distance-input" class="text-label">Distanz</label>
       <div class="flex items-center gap-2">
         <input
+          id="fspl-distance-input"
           type="number"
           value={inputDistance}
           oninput={handleDistanceInput}
@@ -289,9 +295,11 @@
           min="0"
         />
         <select
+          id="fspl-distance-unit"
           value={inputDistanceUnit}
           onchange={handleDistanceUnitChange}
           class="select-field"
+          aria-label="Distanzeinheit"
         >
           {#each DISTANCE_UNITS as unit (unit.id)}
             <option value={unit.id}>{unit.symbol}</option>
@@ -367,6 +375,8 @@
       viewBox="0 0 {width} {height}"
       class="w-full h-auto"
       preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="FSPL Diagramm: Zeigt die Freiraumdaempfung in dB ueber der Distanz fuer verschiedene Frequenzen"
     >
       <defs>
         <filter id="fsplMarkerGlow" x="-50%" y="-50%" width="200%" height="200%">

@@ -92,12 +92,20 @@
 
 <div class="card-compact">
   <!-- Tab Navigation -->
-  <div class="tab-navigation">
-    <button
-      type="button"
+  <div class="tab-navigation" role="tablist">
+    <span
+      role="tab"
+      tabindex={activeTab === 'atmospheric' ? 0 : -1}
       class="tab-button"
       class:active={activeTab === 'atmospheric'}
+      aria-selected={activeTab === 'atmospheric'}
       onclick={() => (activeTab = 'atmospheric')}
+      onkeydown={(e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activeTab = 'atmospheric';
+        }
+      }}
     >
       Atmosphärisch (P.676)
       <InfoTooltip
@@ -105,12 +113,20 @@
         short={atmosphericExplanations.general.short}
         detailed={atmosphericExplanations.general.detailed}
       />
-    </button>
-    <button
-      type="button"
+    </span>
+    <span
+      role="tab"
+      tabindex={activeTab === 'precipitation' ? 0 : -1}
       class="tab-button"
       class:active={activeTab === 'precipitation'}
+      aria-selected={activeTab === 'precipitation'}
       onclick={() => (activeTab = 'precipitation')}
+      onkeydown={(e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activeTab = 'precipitation';
+        }
+      }}
     >
       Niederschlag (P.838/P.840)
       <InfoTooltip
@@ -118,7 +134,7 @@
         short={atmosphericExplanations.rain.short}
         detailed={atmosphericExplanations.rain.detailed}
       />
-    </button>
+    </span>
   </div>
 
   <!-- Atmospheric Parameters Tab -->
@@ -431,6 +447,11 @@
 
   .tab-button:hover {
     color: var(--color-text-secondary);
+  }
+
+  .tab-button:focus {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
   }
 
   .tab-button.active {

@@ -9,6 +9,8 @@
     type FrequencyBand
   } from '$lib/data/bands';
   import { speedOfLight } from '$lib/stores/speedOfLight.svelte';
+  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import { spectrumExplanations } from '$lib/data/explanations';
 
   interface Props {
     frequencyHz?: number;
@@ -527,7 +529,14 @@
   <div class="flex flex-wrap gap-4 mb-4 items-center">
     <!-- Band row selector -->
     <div class="flex flex-wrap items-center gap-2">
-      <span class="text-slate-400 text-sm mr-1">Bänder:</span>
+      <span class="text-slate-400 text-sm mr-1">
+        Baender:
+        <InfoTooltip
+          title={spectrumExplanations.emSpectrum.title}
+          short={spectrumExplanations.emSpectrum.short}
+          detailed={spectrumExplanations.emSpectrum.detailed}
+        />
+      </span>
       <button
         class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.em ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
         onclick={() => toggleRow('em')}

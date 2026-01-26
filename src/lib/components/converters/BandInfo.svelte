@@ -6,6 +6,8 @@
     formatFrequencyRange,
     type FrequencyBand
   } from '$lib/data/bands';
+  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import { bandExplanations } from '$lib/data/explanations';
 
   interface Props {
     frequencyHz?: number | null;
@@ -43,10 +45,17 @@
     <p class="placeholder">Keine Standardbänder für diese Frequenz definiert</p>
   {:else}
     <div class="band-container">
-      <!-- IEEE Bänder -->
+      <!-- IEEE Baender -->
       {#if ieeeBands.length > 0}
         <div class="band-group">
-          <span class="band-label">IEEE</span>
+          <span class="band-label">
+            IEEE
+            <InfoTooltip
+              title={bandExplanations.ieee.title}
+              short={bandExplanations.ieee.short}
+              detailed={bandExplanations.ieee.detailed}
+            />
+          </span>
           <div class="band-tags">
             {#each ieeeBands as band (band.id)}
               <span
@@ -66,10 +75,17 @@
         <div class="separator"></div>
       {/if}
 
-      <!-- NATO Bänder -->
+      <!-- NATO Baender -->
       {#if natoBands.length > 0}
         <div class="band-group">
-          <span class="band-label">NATO</span>
+          <span class="band-label">
+            NATO
+            <InfoTooltip
+              title={bandExplanations.nato.title}
+              short={bandExplanations.nato.short}
+              detailed={bandExplanations.nato.detailed}
+            />
+          </span>
           <div class="band-tags">
             {#each natoBands as band (band.id)}
               <span

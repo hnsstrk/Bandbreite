@@ -14,6 +14,8 @@
     SNOW_RATE_HEAVY,
     type Polarization
   } from '$lib/stores/atmosphericParameters.svelte';
+  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import { atmosphericExplanations } from '$lib/data/explanations';
 
   // Tab state for different parameter groups
   let activeTab: 'atmospheric' | 'precipitation' = $state('atmospheric');
@@ -97,7 +99,12 @@
       class:active={activeTab === 'atmospheric'}
       onclick={() => (activeTab = 'atmospheric')}
     >
-      Atmosphärisch (P.676)
+      Atmosphaerisch (P.676)
+      <InfoTooltip
+        title={atmosphericExplanations.general.title}
+        short={atmosphericExplanations.general.short}
+        detailed={atmosphericExplanations.general.detailed}
+      />
     </button>
     <button
       type="button"
@@ -106,6 +113,11 @@
       onclick={() => (activeTab = 'precipitation')}
     >
       Niederschlag (P.838/P.840)
+      <InfoTooltip
+        title={atmosphericExplanations.rain.title}
+        short={atmosphericExplanations.rain.short}
+        detailed={atmosphericExplanations.rain.detailed}
+      />
     </button>
   </div>
 

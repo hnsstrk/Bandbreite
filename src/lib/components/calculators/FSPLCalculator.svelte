@@ -10,6 +10,8 @@
     formatPowerDb
   } from '$lib/utils/formatting';
   import { parseNumericInput, parseSelectValue } from '$lib/utils/handlers';
+  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import { fsplExplanations } from '$lib/data/explanations';
 
   interface Props {
     frequencyHz?: number | null;
@@ -221,7 +223,14 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <!-- Frequency Input -->
     <div class="space-y-2">
-      <label for="fspl-frequency-input" class="text-label">Frequenz</label>
+      <label for="fspl-frequency-input" class="text-label">
+        Frequenz
+        <InfoTooltip
+          title={fsplExplanations.frequency.title}
+          short={fsplExplanations.frequency.short}
+          detailed={fsplExplanations.frequency.detailed}
+        />
+      </label>
       <div class="flex items-center gap-2">
         <input
           id="fspl-frequency-input"
@@ -264,7 +273,14 @@
 
     <!-- Distance Input -->
     <div class="space-y-2">
-      <label for="fspl-distance-input" class="text-label">Distanz</label>
+      <label for="fspl-distance-input" class="text-label">
+        Distanz
+        <InfoTooltip
+          title={fsplExplanations.distance.title}
+          short={fsplExplanations.distance.short}
+          detailed={fsplExplanations.distance.detailed}
+        />
+      </label>
       <div class="flex items-center gap-2">
         <input
           id="fspl-distance-input"
@@ -307,7 +323,14 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
     <!-- FSPL Result -->
     <div class="result-box">
-      <div class="result-label">FSPL</div>
+      <div class="result-label">
+        FSPL
+        <InfoTooltip
+          title={fsplExplanations.fspl.title}
+          short={fsplExplanations.fspl.short}
+          detailed={fsplExplanations.fspl.detailed}
+        />
+      </div>
       <div class="text-2xl font-bold text-blue-500 dark:text-blue-400">
         {fsplDb !== null ? fsplDb.toFixed(2) : '—'} <span class="text-lg result-label">dB</span>
       </div>
@@ -315,7 +338,14 @@
 
     <!-- Wavelength -->
     <div class="result-box">
-      <div class="result-label">Wellenlänge</div>
+      <div class="result-label">
+        Wellenlaenge
+        <InfoTooltip
+          title={fsplExplanations.wavelength.title}
+          short={fsplExplanations.wavelength.short}
+          detailed={fsplExplanations.wavelength.detailed}
+        />
+      </div>
       <div class="text-2xl font-bold text-green-600 dark:text-green-400">
         {wavelengthM !== null ? formatWavelength(wavelengthM) : '—'}
       </div>
@@ -548,11 +578,4 @@
     </svg>
   </div>
 
-  <!-- Additional Info -->
-  <div class="mt-4 text-xs text-muted">
-    <p>
-      Die Freiraumdämpfung (FSPL) beschreibt den Signalverlust einer elektromagnetischen Welle
-      im freien Raum ohne Hindernisse. Sie steigt quadratisch mit Frequenz und Distanz an.
-    </p>
-  </div>
 </div>

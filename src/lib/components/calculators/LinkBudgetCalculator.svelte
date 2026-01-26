@@ -5,6 +5,8 @@
   import { calculateExtendedPathAttenuation } from '$lib/utils/atmosphericAttenuation';
   import { parseNumericInput } from '$lib/utils/handlers';
   import { formatPowerWatts } from '$lib/utils/formatting';
+  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import { linkBudgetExplanations, fsplExplanations } from '$lib/data/explanations';
 
   interface Props {
     frequencyHz?: number | null;
@@ -223,7 +225,14 @@
 
       <div class="space-y-3">
         <div>
-          <label for="lb-tx-power" class="text-label mb-1">Sendeleistung</label>
+          <label for="lb-tx-power" class="text-label mb-1">
+            Sendeleistung
+            <InfoTooltip
+              title={linkBudgetExplanations.txPower.title}
+              short={linkBudgetExplanations.txPower.short}
+              detailed={linkBudgetExplanations.txPower.detailed}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-tx-power"
@@ -241,7 +250,14 @@
         </div>
 
         <div>
-          <label for="lb-tx-antenna" class="text-label mb-1">Antennengewinn</label>
+          <label for="lb-tx-antenna" class="text-label mb-1">
+            Antennengewinn
+            <InfoTooltip
+              title={linkBudgetExplanations.txAntennaGain.title}
+              short={linkBudgetExplanations.txAntennaGain.short}
+              detailed={linkBudgetExplanations.txAntennaGain.detailed}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-tx-antenna"
@@ -256,7 +272,14 @@
         </div>
 
         <div>
-          <label for="lb-tx-cable" class="text-label mb-1">Kabelverlust</label>
+          <label for="lb-tx-cable" class="text-label mb-1">
+            Kabelverlust
+            <InfoTooltip
+              title={linkBudgetExplanations.txCableLoss.title}
+              short={linkBudgetExplanations.txCableLoss.short}
+              detailed={linkBudgetExplanations.txCableLoss.detailed}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-tx-cable"
@@ -273,7 +296,14 @@
 
         <!-- EIRP Result -->
         <div class="result-box mt-4">
-          <div class="result-label">EIRP</div>
+          <div class="result-label">
+            EIRP
+            <InfoTooltip
+              title={linkBudgetExplanations.eirp.title}
+              short={linkBudgetExplanations.eirp.short}
+              detailed={linkBudgetExplanations.eirp.detailed}
+            />
+          </div>
           <div class="text-xl font-bold text-blue-600 dark:text-blue-400">
             {eirpDbm.toFixed(1)} <span class="text-sm text-muted">dBm</span>
           </div>
@@ -294,7 +324,13 @@
 
       <div class="space-y-3">
         <div>
-          <label for="lb-distance" class="text-label mb-1">Distanz</label>
+          <label for="lb-distance" class="text-label mb-1">
+            Distanz
+            <InfoTooltip
+              title={fsplExplanations.distance.title}
+              short={fsplExplanations.distance.short}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-distance"
@@ -319,7 +355,13 @@
         </div>
 
         <div>
-          <label for="lb-frequency" class="text-label mb-1">Frequenz</label>
+          <label for="lb-frequency" class="text-label mb-1">
+            Frequenz
+            <InfoTooltip
+              title={fsplExplanations.frequency.title}
+              short={fsplExplanations.frequency.short}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-frequency"
@@ -401,7 +443,14 @@
 
       <div class="space-y-3">
         <div>
-          <label for="lb-rx-antenna" class="text-label mb-1">Antennengewinn</label>
+          <label for="lb-rx-antenna" class="text-label mb-1">
+            Antennengewinn
+            <InfoTooltip
+              title={linkBudgetExplanations.rxAntennaGain.title}
+              short={linkBudgetExplanations.rxAntennaGain.short}
+              detailed={linkBudgetExplanations.rxAntennaGain.detailed}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-rx-antenna"
@@ -416,7 +465,14 @@
         </div>
 
         <div>
-          <label for="lb-rx-cable" class="text-label mb-1">Kabelverlust</label>
+          <label for="lb-rx-cable" class="text-label mb-1">
+            Kabelverlust
+            <InfoTooltip
+              title={linkBudgetExplanations.rxCableLoss.title}
+              short={linkBudgetExplanations.rxCableLoss.short}
+              detailed={linkBudgetExplanations.rxCableLoss.detailed}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-rx-cable"
@@ -432,7 +488,14 @@
         </div>
 
         <div>
-          <label for="lb-rx-sensitivity" class="text-label mb-1">Empfindlichkeit</label>
+          <label for="lb-rx-sensitivity" class="text-label mb-1">
+            Empfindlichkeit
+            <InfoTooltip
+              title={linkBudgetExplanations.rxSensitivity.title}
+              short={linkBudgetExplanations.rxSensitivity.short}
+              detailed={linkBudgetExplanations.rxSensitivity.detailed}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-rx-sensitivity"
@@ -447,7 +510,14 @@
         </div>
 
         <div>
-          <label for="lb-fading-margin" class="text-label mb-1">Fading Margin</label>
+          <label for="lb-fading-margin" class="text-label mb-1">
+            Fading Margin
+            <InfoTooltip
+              title={linkBudgetExplanations.fadingMargin.title}
+              short={linkBudgetExplanations.fadingMargin.short}
+              detailed={linkBudgetExplanations.fadingMargin.detailed}
+            />
+          </label>
           <div class="flex items-center gap-2">
             <input
               id="lb-fading-margin"
@@ -482,7 +552,14 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Link Margin -->
       <div class="result-box">
-        <div class="result-label">Link Margin</div>
+        <div class="result-label">
+          Link Margin
+          <InfoTooltip
+            title={linkBudgetExplanations.linkMargin.title}
+            short={linkBudgetExplanations.linkMargin.short}
+            detailed={linkBudgetExplanations.linkMargin.detailed}
+          />
+        </div>
         <div class="text-2xl font-bold {linkMarginDb >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
           {linkMarginDb >= 0 ? '+' : ''}{linkMarginDb.toFixed(1)} <span class="text-lg text-muted">dB</span>
         </div>
@@ -491,7 +568,14 @@
 
       <!-- System Margin -->
       <div class="result-box">
-        <div class="result-label">System Margin</div>
+        <div class="result-label">
+          System Margin
+          <InfoTooltip
+            title={linkBudgetExplanations.systemGain.title}
+            short={linkBudgetExplanations.systemGain.short}
+            detailed={linkBudgetExplanations.systemGain.detailed}
+          />
+        </div>
         <div class="text-2xl font-bold {systemMarginDb >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
           {systemMarginDb >= 0 ? '+' : ''}{systemMarginDb.toFixed(1)} <span class="text-lg text-muted">dB</span>
         </div>
@@ -513,14 +597,6 @@
     </div>
   </div>
 
-  <!-- Formula Reference -->
-  <div class="mt-4 text-xs text-muted">
-    <p>
-      <strong>Link Budget:</strong> P<sub>RX</sub> = P<sub>TX</sub> + G<sub>TX</sub> - L<sub>TX</sub> - L<sub>path</sub> + G<sub>RX</sub> - L<sub>RX</sub>
-      &nbsp;&nbsp;|&nbsp;&nbsp;
-      <strong>Margin:</strong> M = P<sub>RX</sub> - S<sub>RX</sub> - M<sub>fade</sub>
-    </p>
-  </div>
 </div>
 
 <style>

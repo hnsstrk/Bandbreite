@@ -12,7 +12,6 @@
 export const DEFAULT_TEMPERATURE_K = 288.15; // 15°C
 export const DEFAULT_PRESSURE_HPA = 1013.25; // Sea level
 export const DEFAULT_WATER_VAPOR_DENSITY = 7.5; // g/m³ (moderate humidity)
-export const DEFAULT_DISTANCE_KM = 1; // 1 km
 
 // Rain rate defaults
 export const DEFAULT_RAIN_RATE = 0; // mm/h (no rain)
@@ -45,7 +44,6 @@ export interface AtmosphericConditions {
   temperatureK: number;
   pressureHpa: number;
   waterVaporDensity: number;
-  distanceKm: number;
 }
 
 export interface PrecipitationConditions {
@@ -67,7 +65,6 @@ function createAtmosphericParametersStore() {
   let temperatureK = $state(DEFAULT_TEMPERATURE_K);
   let pressureHpa = $state(DEFAULT_PRESSURE_HPA);
   let waterVaporDensity = $state(DEFAULT_WATER_VAPOR_DENSITY);
-  let distanceKm = $state(DEFAULT_DISTANCE_KM);
 
   // Precipitation parameters (ITU-R P.838, P.840)
   let rainRateMmH = $state(DEFAULT_RAIN_RATE);
@@ -97,11 +94,6 @@ function createAtmosphericParametersStore() {
     /** Water vapor density in g/m³ */
     get waterVaporDensity() {
       return waterVaporDensity;
-    },
-
-    /** Path distance in km */
-    get distanceKm() {
-      return distanceKm;
     },
 
     // ========== Precipitation Parameters (P.838, P.840) ==========
@@ -138,8 +130,7 @@ function createAtmosphericParametersStore() {
       return {
         temperatureK,
         pressureHpa,
-        waterVaporDensity,
-        distanceKm
+        waterVaporDensity
       };
     },
 
@@ -160,7 +151,6 @@ function createAtmosphericParametersStore() {
         temperatureK,
         pressureHpa,
         waterVaporDensity,
-        distanceKm,
         rainRateMmH,
         fogDensityGM3,
         snowRateMmH,
@@ -197,13 +187,6 @@ function createAtmosphericParametersStore() {
     setWaterVaporDensity(value: number) {
       if (value >= 0) {
         waterVaporDensity = value;
-      }
-    },
-
-    /** Set path distance in km */
-    setDistanceKm(value: number) {
-      if (value > 0) {
-        distanceKm = value;
       }
     },
 
@@ -249,7 +232,6 @@ function createAtmosphericParametersStore() {
       temperatureK = DEFAULT_TEMPERATURE_K;
       pressureHpa = DEFAULT_PRESSURE_HPA;
       waterVaporDensity = DEFAULT_WATER_VAPOR_DENSITY;
-      distanceKm = DEFAULT_DISTANCE_KM;
       rainRateMmH = DEFAULT_RAIN_RATE;
       fogDensityGM3 = DEFAULT_FOG_DENSITY;
       snowRateMmH = DEFAULT_SNOW_RATE;
@@ -262,7 +244,6 @@ function createAtmosphericParametersStore() {
       temperatureK = DEFAULT_TEMPERATURE_K;
       pressureHpa = DEFAULT_PRESSURE_HPA;
       waterVaporDensity = DEFAULT_WATER_VAPOR_DENSITY;
-      distanceKm = DEFAULT_DISTANCE_KM;
     },
 
     /** Reset only precipitation parameters */

@@ -89,10 +89,11 @@
     const freqGHz = effectiveFrequencyHz / 1e9;
     const distKm = effectiveDistanceM / 1000;
 
-    const result = calculateExtendedPathAttenuation(freqGHz, {
-      ...atmosphericParameters.allConditions,
-      distanceKm: distKm
-    });
+    const result = calculateExtendedPathAttenuation(
+      freqGHz,
+      atmosphericParameters.allConditions,
+      distKm
+    );
 
     return result.totalAllDb;
   });

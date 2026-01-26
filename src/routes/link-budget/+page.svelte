@@ -50,11 +50,6 @@
     </p>
   </header>
 
-  <!-- FSPL Calculator -->
-  <section id="fspl-calculator">
-    <FSPLCalculator />
-  </section>
-
   <!-- Link Budget Calculator + Waterfall -->
   <section id="link-budget">
     <div class="section-stack">
@@ -73,6 +68,11 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- FSPL Calculator -->
+  <section id="fspl-calculator">
+    <FSPLCalculator />
   </section>
 
   <!-- Formula Reference -->

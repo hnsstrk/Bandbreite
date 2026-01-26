@@ -37,12 +37,6 @@
     atmosphericParameters.setWaterVaporDensity(value);
   }
 
-  function handleDistanceInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : 0;
-    atmosphericParameters.setDistanceKm(value);
-  }
-
   // Precipitation parameter handlers
   function handleRainRateInput(e: Event) {
     const target = e.target as HTMLInputElement;
@@ -164,22 +158,6 @@
           max="30"
         />
         <span class="unit-label">g/m&#179;</span>
-      </div>
-
-      <!-- Distance Input -->
-      <div class="input-group">
-        <label for="distance" class="input-label">Distanz</label>
-        <input
-          type="number"
-          id="distance"
-          value={atmosphericParameters.distanceKm}
-          oninput={handleDistanceInput}
-          class="input-field input-narrow"
-          step="0.1"
-          min="0.1"
-          max="100"
-        />
-        <span class="unit-label">km</span>
       </div>
 
       <!-- Reset Button -->

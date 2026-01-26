@@ -3,7 +3,7 @@
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import {
     generateExtendedAttenuationCurve,
-    calculateExtendedPathAttenuation,
+    calculateAllAttenuation,
     type ExtendedCurveDataPoint
   } from '$lib/utils/atmosphericAttenuation';
 
@@ -108,35 +108,35 @@
   let markerData = $derived.by(() => {
     if (!frequencyGHz || frequencyGHz < MIN_FREQ || frequencyGHz > MAX_FREQ) return null;
 
-    const pathAttenuation = calculateExtendedPathAttenuation(
+    const attenuation = calculateAllAttenuation(
       frequencyGHz,
       atmosphericParameters.allConditions
     );
 
     return {
       x: xScale(frequencyGHz),
-      yOxygen: yScale(Math.max(MIN_ATTENUATION, pathAttenuation.oxygenPerKm)),
-      yWaterVapor: yScale(Math.max(MIN_ATTENUATION, pathAttenuation.waterVaporPerKm)),
-      yTotal: yScale(Math.max(MIN_ATTENUATION, pathAttenuation.totalPerKm)),
-      yRain: yScale(Math.max(MIN_ATTENUATION, pathAttenuation.rainPerKm || MIN_ATTENUATION)),
-      yFog: yScale(Math.max(MIN_ATTENUATION, pathAttenuation.fogPerKm || MIN_ATTENUATION)),
-      ySnow: yScale(Math.max(MIN_ATTENUATION, pathAttenuation.snowPerKm || MIN_ATTENUATION)),
-      yTotalAll: yScale(Math.max(MIN_ATTENUATION, pathAttenuation.totalAllPerKm)),
+      yOxygen: yScale(Math.max(MIN_ATTENUATION, attenuation.oxygen)),
+      yWaterVapor: yScale(Math.max(MIN_ATTENUATION, attenuation.waterVapor)),
+      yTotal: yScale(Math.max(MIN_ATTENUATION, attenuation.total)),
+      yRain: yScale(Math.max(MIN_ATTENUATION, attenuation.rain || MIN_ATTENUATION)),
+      yFog: yScale(Math.max(MIN_ATTENUATION, attenuation.fog || MIN_ATTENUATION)),
+      ySnow: yScale(Math.max(MIN_ATTENUATION, attenuation.snow || MIN_ATTENUATION)),
+      yTotalAll: yScale(Math.max(MIN_ATTENUATION, attenuation.totalAll)),
       frequency: frequencyGHz,
-      oxygen: pathAttenuation.oxygenPerKm,
-      waterVapor: pathAttenuation.waterVaporPerKm,
-      total: pathAttenuation.totalPerKm,
-      rain: pathAttenuation.rainPerKm,
-      fog: pathAttenuation.fogPerKm,
-      snow: pathAttenuation.snowPerKm,
-      totalAll: pathAttenuation.totalAllPerKm
+      oxygen: attenuation.oxygen,
+      waterVapor: attenuation.waterVapor,
+      total: attenuation.total,
+      rain: attenuation.rain,
+      fog: attenuation.fog,
+      snow: attenuation.snow,
+      totalAll: attenuation.totalAll
     };
   });
 
   // X-axis tick values (frequency)
   const xTickValues = [1, 2, 5, 10, 20, 50, 100, 200];
 
-  // Y-axis tick values (attenuation)
+  // Y-axis tick values (attenuation) - fixed dB/km
   const yTickValues = [0.001, 0.01, 0.1, 1, 10, 100];
 
   // Format attenuation value
@@ -477,10 +477,8 @@
         />
 
         <!-- Tooltip with attenuation info -->
-        {@const distKm = atmosphericParameters.distanceKm}
-        {@const totalOverDistance = hasPrecipitation ? markerData.totalAll * distKm : markerData.total * distKm}
         {@const tooltipWidth = hasPrecipitation ? 220 : 200}
-        {@const tooltipHeight = hasPrecipitation ? 170 : 110}
+        {@const tooltipHeight = hasPrecipitation ? 150 : 90}
         {@const tooltipX = markerData.x > chartWidth / 2 ? markerData.x - tooltipWidth - 15 : markerData.x + 15}
         {@const tooltipY = markerData.yTotal > chartHeight / 2 ? markerData.yTotal - tooltipHeight - 10 : markerData.yTotal + 10}
         <g transform="translate({tooltipX}, {tooltipY})" filter="url(#attenuationTooltipShadow)">
@@ -532,12 +530,6 @@
               <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(markerData.totalAll)} dB/km</tspan>
             </text>
           {/if}
-          <!-- Total over distance -->
-          <line x1="8" y1={tooltipHeight - 22} x2={tooltipWidth - 8} y2={tooltipHeight - 22} style="stroke: var(--color-border-default)" stroke-width="1" />
-          <text x="12" y={tooltipHeight - 8} font-size="11" font-weight="500">
-            <tspan class="fill-amber-400">Über {distKm} km:</tspan>
-            <tspan style="fill: var(--color-chart-text)"> {formatAttenuation(totalOverDistance)} dB</tspan>
-          </text>
         </g>
       {/if}
 
@@ -557,9 +549,6 @@
       </text>
       <text style="fill: var(--color-text-tertiary)" font-size="10" y="44">
         ρ = {atmosphericParameters.waterVaporDensity.toFixed(1)} g/m³
-      </text>
-      <text style="fill: var(--color-text-tertiary)" font-size="10" y="58">
-        d = {atmosphericParameters.distanceKm.toFixed(1)} km
       </text>
 
       <!-- Precipitation parameters if active -->

@@ -1,5 +1,8 @@
 <script lang="ts">
   import { calculateFSPL, calculateRange } from '$lib/utils/calculations';
+  import { parseNumericInput } from '$lib/utils/handlers';
+  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import { TX_POWER, RX_SENSITIVITY, FSPL } from '$lib/data/explanations';
 
   interface Props {
     frequencyHz: number | null;
@@ -42,13 +45,11 @@
   let formattedRange = $derived(formatRange(rangeMeters));
 
   function handleTxPowerInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    txPowerDbm = target.value ? parseFloat(target.value) : 0;
+    txPowerDbm = parseNumericInput(e);
   }
 
   function handleRxSensitivityInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    rxSensitivityDbm = target.value ? parseFloat(target.value) : 0;
+    rxSensitivityDbm = parseNumericInput(e);
   }
 </script>
 
@@ -56,7 +57,10 @@
   <div class="calculator-row">
     <!-- TX Power Input -->
     <div class="input-group">
-      <label for="tx-power" class="input-label">TX</label>
+      <label for="tx-power" class="input-label">
+        TX
+        <InfoTooltip title={TX_POWER.title} short={TX_POWER.short} detailed={TX_POWER.detailed} />
+      </label>
       <input
         type="number"
         id="tx-power"
@@ -71,7 +75,10 @@
 
     <!-- RX Sensitivity Input -->
     <div class="input-group">
-      <label for="rx-sensitivity" class="input-label">RX</label>
+      <label for="rx-sensitivity" class="input-label">
+        RX
+        <InfoTooltip title={RX_SENSITIVITY.title} short={RX_SENSITIVITY.short} detailed={RX_SENSITIVITY.detailed} />
+      </label>
       <input
         type="number"
         id="rx-sensitivity"
@@ -108,6 +115,7 @@
     <!-- Formula (compact) -->
     <div class="formula-display">
       <span>FSPL = 20 log&#8321;&#8320;(d) + 20 log&#8321;&#8320;(f) - 147,55</span>
+      <InfoTooltip title={FSPL.title} short={FSPL.short} detailed={FSPL.detailed} />
     </div>
   </div>
 </div>

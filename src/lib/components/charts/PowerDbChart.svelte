@@ -2,6 +2,9 @@
   import * as d3 from 'd3';
   import { wattToDbm } from '$lib/utils/conversions';
   import { IEEE_BANDS, NATO_BANDS } from '$lib/data/bands';
+  import { SPEED_OF_LIGHT } from '$lib/data/constants';
+  import { CHART_FREQUENCY_RANGES, CHART_POWER_RANGES } from '$lib/data/spectrum';
+  import { POWER_CHART_CATEGORY_COLORS, POWER_CHART_CATEGORY_LABELS } from '$lib/data/presets';
 
   interface Props {
     width?: number;
@@ -46,17 +49,8 @@
   let chartWidth = $derived(width - margin.left - margin.right);
   let chartHeight = $derived(height - margin.top - margin.bottom);
 
-  // Speed of light for wavelength calculation
-  const SPEED_OF_LIGHT = 299792458; // m/s
-
-  // Category colors
-  const categoryColors = {
-    communication: '#3b82f6', // Blue
-    radar: '#f97316',          // Orange
-    satellite: '#22c55e',      // Green
-    iot: '#8b5cf6',            // Purple
-    industrial: '#ec4899'      // Pink
-  };
+  // Category colors (imported from presets.ts)
+  const categoryColors = POWER_CHART_CATEGORY_COLORS;
 
   // Communication data points (researched values)
   const communicationPoints: DataPoint[] = [
@@ -121,13 +115,13 @@
     ...(showIndustrial ? industrialPoints : [])
   ]);
 
-  // Frequency range: 100 kHz to 100 GHz (logarithmic)
-  const MIN_FREQ = 100e3;   // 100 kHz
-  const MAX_FREQ = 100e9;   // 100 GHz
+  // Frequency range: 100 kHz to 100 GHz (logarithmic) - from spectrum.ts
+  const MIN_FREQ = CHART_FREQUENCY_RANGES.powerChart.minHz;
+  const MAX_FREQ = CHART_FREQUENCY_RANGES.powerChart.maxHz;
 
-  // Power range: 1 mW to 100 MW (logarithmic)
-  const MIN_POWER = 1e-3;   // 1 mW
-  const MAX_POWER = 1e8;    // 100 MW
+  // Power range: 1 mW to 100 MW (logarithmic) - from spectrum.ts
+  const MIN_POWER = CHART_POWER_RANGES.standard.minWatt;
+  const MAX_POWER = CHART_POWER_RANGES.standard.maxWatt;
 
   // Scales
   let xScale = $derived(
@@ -211,14 +205,8 @@
     bandMode = bandMode === 'ieee' ? 'nato' : 'ieee';
   }
 
-  // Category labels in German
-  const categoryLabels: Record<DataPoint['category'], string> = {
-    communication: 'Kommunikation',
-    radar: 'RADAR',
-    satellite: 'Satellit',
-    iot: 'IoT/RFID',
-    industrial: 'Industrie'
-  };
+  // Category labels in German (imported from presets.ts)
+  const categoryLabels = POWER_CHART_CATEGORY_LABELS;
 
   // Tooltip event handlers
   function handleMouseEnter(event: MouseEvent, point: DataPoint) {

@@ -1,6 +1,8 @@
 <script lang="ts">
   import * as d3 from 'd3';
   import { IEEE_BANDS, NATO_BANDS, CIVILIAN_BANDS, type FrequencyBand } from '$lib/data/bands';
+  import { EM_BANDS, CHART_FREQUENCY_RANGES } from '$lib/data/spectrum';
+  import { formatFrequency } from '$lib/utils/formatting';
 
   interface Props {
     frequencyHz?: number;
@@ -9,25 +11,17 @@
 
   let { frequencyHz, showLabels = true }: Props = $props();
 
-  // EM spectrum bands with their frequency ranges (in Hz) and colors
-  const emBands = [
-    { name: 'Radio', minHz: 3e3, maxHz: 3e8, color: '#3b82f6' },
-    { name: 'Microwave', minHz: 3e8, maxHz: 3e11, color: '#22c55e' },
-    { name: 'Infrared', minHz: 3e11, maxHz: 4e14, color: '#f97316' },
-    { name: 'Visible', minHz: 4e14, maxHz: 8e14, color: 'url(#visibleGradient)' },
-    { name: 'Ultraviolet', minHz: 8e14, maxHz: 3e16, color: '#a855f7' },
-    { name: 'X-Ray', minHz: 3e16, maxHz: 3e19, color: '#ec4899' },
-    { name: 'Gamma', minHz: 3e19, maxHz: 3e21, color: '#ef4444' }
-  ];
+  // EM spectrum bands (imported from spectrum.ts)
+  const emBands = EM_BANDS;
 
   // Band display mode
   type BandMode = 'ieee' | 'nato' | 'civilian';
   let bandMode = $state<BandMode>('ieee');
 
-  // Get bands based on mode - filter to visible range
+  // Get bands based on mode - filter to visible range (using constants from spectrum.ts)
   let activeBands = $derived.by(() => {
-    const minVisible = 3e3;
-    const maxVisible = 3e12; // Show up to 3 THz for technical bands
+    const minVisible = CHART_FREQUENCY_RANGES.technical.minHz;
+    const maxVisible = CHART_FREQUENCY_RANGES.technical.maxHz;
 
     const filterBands = (bands: FrequencyBand[]) =>
       bands.filter(b => b.maxHz >= minVisible && b.minHz <= maxVisible);
@@ -39,13 +33,13 @@
     }
   });
 
-  // Spectrum range
-  const minFrequency = 3e3;  // 3 kHz
-  const maxFrequency = 3e21; // 3 ZHz (beyond gamma)
+  // Spectrum range (from spectrum.ts)
+  const minFrequency = CHART_FREQUENCY_RANGES.technical.minHz;
+  const maxFrequency = CHART_FREQUENCY_RANGES.full.maxHz;
 
-  // Technical bands range (for lower bar)
-  const techMinFreq = 3e3;   // 3 kHz
-  const techMaxFreq = 3e12;  // 3 THz
+  // Technical bands range (for lower bar, from spectrum.ts)
+  const techMinFreq = CHART_FREQUENCY_RANGES.technical.minHz;
+  const techMaxFreq = CHART_FREQUENCY_RANGES.technical.maxHz;
 
   // Dimensions
   const margin = { top: 8, right: 16, bottom: 24, left: 16 };
@@ -106,16 +100,7 @@
       : null
   );
 
-  // Format frequency for display
-  function formatFrequency(hz: number): string {
-    if (hz >= 1e18) return `${(hz / 1e18).toFixed(1)} EHz`;
-    if (hz >= 1e15) return `${(hz / 1e15).toFixed(1)} PHz`;
-    if (hz >= 1e12) return `${(hz / 1e12).toFixed(1)} THz`;
-    if (hz >= 1e9) return `${(hz / 1e9).toFixed(1)} GHz`;
-    if (hz >= 1e6) return `${(hz / 1e6).toFixed(1)} MHz`;
-    if (hz >= 1e3) return `${(hz / 1e3).toFixed(1)} kHz`;
-    return `${hz.toFixed(0)} Hz`;
-  }
+  // formatFrequency is imported from $lib/utils/formatting
 
   // ResizeObserver for responsive width
   $effect(() => {

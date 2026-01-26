@@ -1450,69 +1450,6 @@
   ],
   "navigation": [
     {
-      "id": "nav-dcf77",
-      "name": "DCF77 Time Signal",
-      "nameDE": "DCF77 Zeitzeichen",
-      "minHz": 77500,
-      "maxHz": 77500,
-      "category": "navigation",
-      "description": "German time signal transmitter",
-      "descriptionDE": "Deutsches Zeitzeichensignal",
-      "region": "europe",
-      "notes": "Standort Mainflingen, Reichweite ca. 2000 km",
-      "power": {
-        "typical": {
-          "value": 50,
-          "unit": "kW",
-          "type": "ERP",
-          "context": "Dauerbetrieb"
-        },
-        "notes": "Langwellensender der PTB, sehr stabile Frequenz"
-      }
-    },
-    {
-      "id": "nav-msf",
-      "name": "MSF Time Signal (UK)",
-      "nameDE": "MSF Zeitzeichen (UK)",
-      "minHz": 60000,
-      "maxHz": 60000,
-      "category": "navigation",
-      "description": "UK time signal transmitter",
-      "descriptionDE": "Britisches Zeitzeichensignal",
-      "region": "europe",
-      "notes": "Standort Anthorn, ähnlich DCF77",
-      "power": {
-        "typical": {
-          "value": 15,
-          "unit": "kW",
-          "type": "ERP",
-          "context": "Dauerbetrieb"
-        },
-        "notes": "Betrieben von NPL (National Physical Laboratory)"
-      }
-    },
-    {
-      "id": "nav-wwvb",
-      "name": "WWVB Time Signal (USA)",
-      "nameDE": "WWVB Zeitzeichen (USA)",
-      "minHz": 60000,
-      "maxHz": 60000,
-      "category": "navigation",
-      "description": "US time signal transmitter",
-      "descriptionDE": "US-amerikanisches Zeitzeichensignal",
-      "region": "usa",
-      "notes": "Fort Collins, Colorado",
-      "power": {
-        "typical": {
-          "value": 70,
-          "unit": "kW",
-          "type": "ERP",
-          "context": "Dauerbetrieb"
-        },
-        "notes": "Betrieben von NIST, Reichweite gesamte USA"
-      }
-    },
-    {
       "id": "nav-ndb",
       "name": "NDB (Non-Directional Beacon)",
       "nameDE": "NDB (Ungerichtetes Funkfeuer)",

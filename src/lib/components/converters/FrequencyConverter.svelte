@@ -3,6 +3,7 @@
   import { convertToHz, convertFromHz, convertToMeters, convertFromMeters } from '$lib/utils/conversions';
   import { FREQUENCY_UNITS, WAVELENGTH_UNITS, DEFAULT_FREQUENCY_UNIT, DEFAULT_WAVELENGTH_UNIT } from '$lib/data/units';
   import { speedOfLight } from '$lib/stores/speedOfLight.svelte';
+  import { FREQUENCY_CONVERTER_PRESETS, type FrequencyPreset } from '$lib/data/presets';
 
   interface Props {
     frequencyHz?: number | null;
@@ -24,13 +25,8 @@
   // Collapsible formula section state
   let showFormula = $state(false);
 
-  // Quick frequency presets (in Hz) with typical use cases
-  const quickFrequencies = [
-    { label: '2.4 GHz', desc: 'WLAN/Bluetooth', hz: 2.4e9 },
-    { label: '5 GHz', desc: 'WLAN 5', hz: 5e9 },
-    { label: '28 GHz', desc: '5G mmWave', hz: 28e9 },
-    { label: '77 GHz', desc: 'Kfz-Radar', hz: 77e9 },
-  ];
+  // Quick frequency presets - imported from presets.ts
+  const quickFrequencies = FREQUENCY_CONVERTER_PRESETS;
 
   // Derived values for display - reactive to speed of light changes
   let frequencyDisplay = $derived(
@@ -163,10 +159,10 @@
         type="button"
         onclick={() => setQuickFrequency(preset.hz)}
         class="btn-preset"
-        title="{preset.label} - {preset.desc}"
+        title="{preset.label} - {preset.descriptionDE ?? preset.description}"
       >
         <span class="preset-value">{preset.label}</span>
-        <span class="preset-desc">({preset.desc})</span>
+        <span class="preset-desc">({preset.descriptionDE ?? preset.description})</span>
       </button>
     {/each}
 

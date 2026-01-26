@@ -11,6 +11,13 @@
   import { speedOfLight } from '$lib/stores/speedOfLight.svelte';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
   import { spectrumExplanations } from '$lib/data/explanations';
+  import {
+    SPECTRUM_MIN_HZ,
+    SPECTRUM_MAX_RF_HZ,
+    SPECTRUM_MAX_VISIBLE_HZ,
+    SPECTRUM_MAX_GAMMA_HZ,
+    VISIBLE_LIGHT
+  } from '$lib/data/spectrum';
 
   interface Props {
     frequencyHz?: number;
@@ -19,19 +26,15 @@
 
   let { frequencyHz, showLabels = true }: Props = $props();
 
-  // Constants - Full EM Spectrum from ELF to Gamma rays
-  const SPECTRUM_MIN = 3;           // 3 Hz (ELF)
-  const SPECTRUM_MAX_GAMMA = 3e19;  // 30 EHz (Gamma rays)
-  const SPECTRUM_MAX_RF = 3e12;     // 3 THz (RF/Microwave/Far-IR)
-  const SPECTRUM_MAX_VISIBLE = 1e15; // 1 PHz (includes visible light)
+  // Constants - imported from spectrum.ts
+  const SPECTRUM_MIN = SPECTRUM_MIN_HZ;
+  const SPECTRUM_MAX_GAMMA = SPECTRUM_MAX_GAMMA_HZ;
+  const SPECTRUM_MAX_RF = SPECTRUM_MAX_RF_HZ;
+  const SPECTRUM_MAX_VISIBLE = SPECTRUM_MAX_VISIBLE_HZ;
 
-  // Visible light frequency range (380-780nm wavelength)
-  // c = 299792458 m/s
-  // f = c / lambda
-  // 780nm -> ~384 THz (red)
-  // 380nm -> ~789 THz (violet)
-  const VISIBLE_MIN_HZ = 384e12;  // ~780nm red
-  const VISIBLE_MAX_HZ = 789e12;  // ~380nm violet
+  // Visible light frequency range - imported from spectrum.ts
+  const VISIBLE_MIN_HZ = VISIBLE_LIGHT.minHz;
+  const VISIBLE_MAX_HZ = VISIBLE_LIGHT.maxHz;
 
   // Speed of light - reactive to store
   let currentSpeedOfLight = $derived(speedOfLight.value);

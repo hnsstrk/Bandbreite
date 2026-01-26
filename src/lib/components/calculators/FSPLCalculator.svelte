@@ -12,6 +12,14 @@
   import { parseNumericInput, parseSelectValue } from '$lib/utils/handlers';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
   import { fsplExplanations } from '$lib/data/explanations';
+  import {
+    FSPL_FREQUENCY_PRESETS,
+    FSPL_CHART_FREQUENCIES,
+    DISTANCE_PRESETS_METERS,
+    type FrequencyPreset,
+    type ChartFrequency
+  } from '$lib/data/presets';
+  import { CHART_DISTANCE_RANGES, CHART_FSPL_RANGES } from '$lib/data/spectrum';
 
   interface Props {
     frequencyHz?: number | null;
@@ -38,28 +46,11 @@
     return unit?.factor ?? 1;
   }
 
-  // Quick frequency presets
-  const frequencyPresets = [
-    { label: '433 MHz', hz: 433e6, desc: 'ISM/LoRa' },
-    { label: '868 MHz', hz: 868e6, desc: 'LoRa EU' },
-    { label: '915 MHz', hz: 915e6, desc: 'LoRa US' },
-    { label: '2.4 GHz', hz: 2.4e9, desc: 'WLAN/BT' },
-    { label: '5 GHz', hz: 5e9, desc: 'WLAN 5' },
-    { label: '5.8 GHz', hz: 5.8e9, desc: 'FPV/ISM' },
-    { label: '28 GHz', hz: 28e9, desc: '5G mmWave' },
-    { label: '60 GHz', hz: 60e9, desc: 'WiGig' },
-    { label: '77 GHz', hz: 77e9, desc: 'Kfz-Radar' },
-  ];
+  // Quick frequency presets - imported from presets.ts
+  const frequencyPresets = FSPL_FREQUENCY_PRESETS;
 
-  // Reference frequencies for multi-line chart
-  const chartFrequencies = [
-    { hz: 433e6, label: '433 MHz', color: '#22c55e' },
-    { hz: 868e6, label: '868 MHz', color: '#84cc16' },
-    { hz: 2.4e9, label: '2.4 GHz', color: '#3b82f6' },
-    { hz: 5e9, label: '5 GHz', color: '#8b5cf6' },
-    { hz: 28e9, label: '28 GHz', color: '#f97316' },
-    { hz: 60e9, label: '60 GHz', color: '#ef4444' },
-  ];
+  // Reference frequencies for multi-line chart - imported from presets.ts
+  const chartFrequencies = FSPL_CHART_FREQUENCIES;
 
   // Derived frequency in Hz
   let currentFrequencyHz = $derived(
@@ -87,13 +78,13 @@
   let chartWidth = $derived(width - margin.left - margin.right);
   let chartHeight = $derived(height - margin.top - margin.bottom);
 
-  // Distance range for chart (logarithmic: 1m to 100km)
-  const MIN_DISTANCE = 1;
-  const MAX_DISTANCE = 100000;
+  // Distance range for chart (logarithmic: 1m to 100km) - from spectrum.ts
+  const MIN_DISTANCE = CHART_DISTANCE_RANGES.fspl.minM;
+  const MAX_DISTANCE = CHART_DISTANCE_RANGES.fspl.maxM;
 
-  // FSPL range for chart
-  const MIN_FSPL = 20;
-  const MAX_FSPL = 180;
+  // FSPL range for chart - from spectrum.ts
+  const MIN_FSPL = CHART_FSPL_RANGES.standard.minDb;
+  const MAX_FSPL = CHART_FSPL_RANGES.standard.maxDb;
 
   // D3 scales
   let xScale = $derived(
@@ -263,7 +254,7 @@
             type="button"
             onclick={() => setPresetFrequency(preset.hz)}
             class="btn-chip"
-            title={preset.desc}
+            title={preset.descriptionDE ?? preset.description}
           >
             {preset.label}
           </button>
@@ -304,9 +295,9 @@
           {/each}
         </select>
       </div>
-      <!-- Quick Distance Presets -->
+      <!-- Quick Distance Presets - from presets.ts -->
       <div class="flex flex-wrap gap-1 mt-2">
-        {#each [10, 50, 100, 500, 1000, 5000, 10000] as dist (dist)}
+        {#each DISTANCE_PRESETS_METERS as dist (dist)}
           <button
             type="button"
             onclick={() => { inputDistance = dist; inputDistanceUnit = 'm'; }}

@@ -57,27 +57,63 @@ src/
 
 ## Datenstruktur
 
-Die Anwendung verwendet zwei getrennte Datensätze für Frequenzinformationen:
+Die Anwendung verwendet mehrere getrennte Datensätze, die unterschiedliche Abstraktionsebenen abbilden:
 
 ### Senderdatenbank (`transmitters.json`)
-Enthält **konkrete Sender** mit:
-- Standort (Name, Land, Koordinaten)
-- Sendeleistung
-- Betreiber
-- Status (aktiv/inaktiv)
 
-Beispiele: DCF77 (Zeitzeichen), BBC Radio 4 LW, Amateur-Relais
+Enthält **physische Einzelsender** an konkreten Standorten:
+
+| Feld | Beschreibung |
+|------|--------------|
+| `id` | Eindeutige ID (z.B. "dcf77") |
+| `frequencyHz` | Exakte Sendefrequenz in Hz |
+| `location` | Standort mit Koordinaten |
+| `powerWatts` | Sendeleistung |
+| `operator` | Betreiber |
+| `status` | aktiv/inaktiv |
+
+**Beispiele:** DCF77 (77.5 kHz, Mainflingen), MSF (60 kHz, Anthorn), WWVB (60 kHz, Fort Collins)
+
+**Wichtig:** Zeitzeichensender wie DCF77, MSF und WWVB sind ausschließlich hier definiert, da sie Einzelsender mit festem Standort sind - keine Frequenzbänder.
 
 ### Anwendungsdatenbank (`applications.json`)
-Enthält **Frequenzbänder** für Anwendungskategorien mit:
-- Frequenzbereich (min/max Hz)
-- Kategorie (Rundfunk, Mobilfunk, WLAN, etc.)
-- Standard (z.B. IEEE 802.11, 3GPP)
-- Region (weltweit, Europa, USA, Asien)
 
-Beispiele: WiFi 2.4 GHz, LTE Band 20, GPS L1
+Enthält **Frequenzbänder und -zuweisungen** für verschiedene Dienste:
 
-**Hinweis:** Diese Datensätze sind bewusst getrennt, da sie unterschiedliche Informationsebenen abbilden (konkrete Sender vs. Frequenzzuweisungen).
+| Feld | Beschreibung |
+|------|--------------|
+| `id` | Eindeutige ID (z.B. "wifi-2.4ghz") |
+| `minHz` / `maxHz` | Frequenzbereich |
+| `category` | Dienst-Kategorie |
+| `region` | Gültigkeitsregion |
+| `standard` | Technischer Standard (optional) |
+
+**Beispiele:** WiFi 2.4 GHz Band (2400-2483.5 MHz), LTE Band 20, GPS L1 Band
+
+**Wichtig:** Hier werden nur echte Frequenzbänder mit `minHz !== maxHz` definiert. Einzelfrequenzen gehören in transmitters.json.
+
+### Abgrenzung
+
+```
+transmitters.json         applications.json
+─────────────────         ──────────────────
+Physischer Sender    vs.  Frequenzzuweisung
+Einzelfrequenz       vs.  Frequenzbereich
+Konkreter Standort   vs.  Regionale Allokation
+Betreiber bekannt    vs.  Nutzungsart definiert
+```
+
+### Zentrale Konstanten (`/lib/data/`)
+
+Die Anwendung verwendet zentralisierte Konstanten-Dateien:
+
+| Datei | Inhalt |
+|-------|--------|
+| `constants.ts` | Physikalische Konstanten (Lichtgeschwindigkeit, etc.) |
+| `spectrum.ts` | EM-Spektrum-Bereiche, Bandgrenzen |
+| `presets.ts` | Frequenz-/Link-Budget-Presets für Rechner |
+| `units.ts` | Einheitendefinitionen und Umrechnungsfaktoren |
+| `bands.ts` | IEEE, NATO, ITU Bandbezeichnungen |
 
 ## Lizenz
 

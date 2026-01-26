@@ -7,6 +7,8 @@
   import { formatPowerWatts } from '$lib/utils/formatting';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
   import { linkBudgetExplanations, fsplExplanations } from '$lib/data/explanations';
+  import { DISTANCE_UNITS, FREQUENCY_UNITS } from '$lib/data/units';
+  import { LINK_BUDGET_PRESETS, type LinkBudgetPreset } from '$lib/data/presets';
 
   interface Props {
     frequencyHz?: number | null;
@@ -36,13 +38,13 @@
   let fadingMarginDb = $state(10); // 10 dB for fading
   let miscLossDb = $state(0); // Additional losses
 
-  // Unit conversion factors
-  const DISTANCE_FACTORS: Record<string, number> = {
-    'm': 1,
-    'km': 1000,
-    'mi': 1609.344,
-  };
+  // Unit conversion factors - using centralized DISTANCE_UNITS from units.ts
+  function getDistanceFactor(unitId: string): number {
+    const unit = DISTANCE_UNITS.find(u => u.id === unitId);
+    return unit?.factor ?? 1;
+  }
 
+  // Frequency conversion factors
   const FREQUENCY_FACTORS: Record<string, number> = {
     'MHz': 1e6,
     'GHz': 1e9,
@@ -72,7 +74,7 @@
 
   // Effective distance in meters
   let effectiveDistanceM = $derived(
-    pathLengthM * (DISTANCE_FACTORS[pathLengthUnit] ?? 1)
+    pathLengthM * getDistanceFactor(pathLengthUnit)
   );
 
   // EIRP (Effective Isotropic Radiated Power)
@@ -119,43 +121,10 @@
   // Link viability
   let linkViable = $derived(systemMarginDb >= 0);
 
-  // Quick presets
-  const linkPresets = [
-    {
-      name: 'WLAN Indoor',
-      txPower: 20, txGain: 2, txLoss: 0.5,
-      distance: 30, distUnit: 'm',
-      freq: 2.4, freqUnit: 'GHz',
-      rxGain: 2, rxLoss: 0.5, rxSens: -80,
-      fade: 10
-    },
-    {
-      name: 'LoRa Outdoor',
-      txPower: 14, txGain: 3, txLoss: 1,
-      distance: 5, distUnit: 'km',
-      freq: 868, freqUnit: 'MHz',
-      rxGain: 3, rxLoss: 1, rxSens: -137,
-      fade: 15
-    },
-    {
-      name: 'Point-to-Point 5G',
-      txPower: 20, txGain: 15, txLoss: 2,
-      distance: 500, distUnit: 'm',
-      freq: 28, freqUnit: 'GHz',
-      rxGain: 15, rxLoss: 2, rxSens: -85,
-      fade: 20
-    },
-    {
-      name: 'Satellitenlink',
-      txPower: 30, txGain: 35, txLoss: 3,
-      distance: 36000, distUnit: 'km',
-      freq: 12, freqUnit: 'GHz',
-      rxGain: 40, rxLoss: 1, rxSens: -110,
-      fade: 5
-    },
-  ];
+  // Quick presets - imported from presets.ts
+  const linkPresets = LINK_BUDGET_PRESETS;
 
-  function applyPreset(preset: typeof linkPresets[0]) {
+  function applyPreset(preset: LinkBudgetPreset) {
     txPowerDbm = preset.txPower;
     txAntennaGainDbi = preset.txGain;
     txCableLossDb = preset.txLoss;

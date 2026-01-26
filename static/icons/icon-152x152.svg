@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Wave pattern (radio waves) -->
+  <g stroke="#ffffff" stroke-width="12" fill="none" opacity="0.3">
+    <circle cx="128" cy="256" r="60"/>
+    <circle cx="128" cy="256" r="100"/>
+    <circle cx="128" cy="256" r="140"/>
+    <circle cx="128" cy="256" r="180"/>
+  </g>
+  <!-- Frequency spectrum bars -->
+  <g fill="#ffffff">
+    <rect x="200" y="180" width="32" height="152" rx="8"/>
+    <rect x="252" y="140" width="32" height="232" rx="8"/>
+    <rect x="304" y="200" width="32" height="112" rx="8"/>
+    <rect x="356" y="120" width="32" height="272" rx="8"/>
+    <rect x="408" y="160" width="32" height="192" rx="8"/>
+  </g>
+  <!-- B letter accent -->
+  <text x="256" y="440" font-family="system-ui, sans-serif" font-size="64" font-weight="bold" fill="#ffffff" text-anchor="middle" opacity="0.6">B</text>
+</svg>

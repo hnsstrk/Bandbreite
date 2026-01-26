@@ -3,6 +3,15 @@
  * Used throughout the app for band visualization and frequency lookup.
  */
 
+/**
+ * Propagation mode for radio waves
+ * - groundWave: Surface wave following Earth's curvature (VLF-MF)
+ * - skyWave: Ionospheric reflection (HF)
+ * - lineOfSight: Direct path, limited by horizon (VHF+)
+ * - mixed: Combination of propagation modes
+ */
+export type PropagationMode = 'groundWave' | 'skyWave' | 'lineOfSight' | 'mixed';
+
 export interface FrequencyBand {
   id: string;
   name: string;
@@ -11,6 +20,16 @@ export interface FrequencyBand {
   maxHz: number;
   color: string;
   category: 'ieee' | 'nato' | 'civilian' | 'de-alt' | 'us-alt' | 'eu-nato' | 'itu' | 'em';
+}
+
+/**
+ * Extended ITU band interface with propagation and application data
+ */
+export interface ITUBand extends FrequencyBand {
+  category: 'itu';
+  propagation: PropagationMode;
+  applications: string[];
+  notes?: string;
 }
 
 /**
@@ -136,20 +155,155 @@ export const CIVILIAN_BANDS: FrequencyBand[] = [
 /**
  * ITU Radio Band designations
  * International Telecommunication Union frequency band classification
+ * Extended with propagation characteristics and typical applications
+ *
+ * Source: ITU Radio Regulations, Article 2
  */
-export const ITU_BANDS: FrequencyBand[] = [
-  { id: 'itu-elf', name: 'ELF', nameDE: 'ELF (Extremely Low Frequency)', minHz: 3, maxHz: 30, color: '#1e3a5f', category: 'itu' },
-  { id: 'itu-slf', name: 'SLF', nameDE: 'SLF (Super Low Frequency)', minHz: 30, maxHz: 300, color: '#1e4d7b', category: 'itu' },
-  { id: 'itu-ulf', name: 'ULF', nameDE: 'ULF (Ultra Low Frequency)', minHz: 300, maxHz: 3e3, color: '#1e6091', category: 'itu' },
-  { id: 'itu-vlf', name: 'VLF', nameDE: 'VLF (Very Low Frequency)', minHz: 3e3, maxHz: 30e3, color: '#2374ab', category: 'itu' },
-  { id: 'itu-lf', name: 'LF', nameDE: 'LF (Low Frequency)', minHz: 30e3, maxHz: 300e3, color: '#2e86c1', category: 'itu' },
-  { id: 'itu-mf', name: 'MF', nameDE: 'MF (Medium Frequency)', minHz: 300e3, maxHz: 3e6, color: '#5499c7', category: 'itu' },
-  { id: 'itu-hf', name: 'HF', nameDE: 'HF (High Frequency)', minHz: 3e6, maxHz: 30e6, color: '#7fb3d5', category: 'itu' },
-  { id: 'itu-vhf', name: 'VHF', nameDE: 'VHF (Very High Frequency)', minHz: 30e6, maxHz: 300e6, color: '#a9cce3', category: 'itu' },
-  { id: 'itu-uhf', name: 'UHF', nameDE: 'UHF (Ultra High Frequency)', minHz: 300e6, maxHz: 3e9, color: '#d4e6f1', category: 'itu' },
-  { id: 'itu-shf', name: 'SHF', nameDE: 'SHF (Super High Frequency)', minHz: 3e9, maxHz: 30e9, color: '#85c1e9', category: 'itu' },
-  { id: 'itu-ehf', name: 'EHF', nameDE: 'EHF (Extremely High Frequency)', minHz: 30e9, maxHz: 300e9, color: '#3498db', category: 'itu' },
-  { id: 'itu-thf', name: 'THF', nameDE: 'THF (Tremendously High Frequency)', minHz: 300e9, maxHz: 3e12, color: '#2980b9', category: 'itu' },
+export const ITU_BANDS: ITUBand[] = [
+  {
+    id: 'itu-elf',
+    name: 'ELF',
+    nameDE: 'ELF (Extremely Low Frequency)',
+    minHz: 3,
+    maxHz: 30,
+    color: '#1e3a5f',
+    category: 'itu',
+    propagation: 'groundWave',
+    applications: ['U-Boot-Kommunikation', 'Erdbebenforschung'],
+    notes: 'Durchdringt Seewasser bis ca. 200m. Extrem geringe Datenrate.'
+  },
+  {
+    id: 'itu-slf',
+    name: 'SLF',
+    nameDE: 'SLF (Super Low Frequency)',
+    minHz: 30,
+    maxHz: 300,
+    color: '#1e4d7b',
+    category: 'itu',
+    propagation: 'groundWave',
+    applications: ['U-Boot-Kommunikation', 'Bergbau-Kommunikation'],
+    notes: 'Durchdringt Seewasser bis ca. 40m. Sehr grosse Antennen erforderlich.'
+  },
+  {
+    id: 'itu-ulf',
+    name: 'ULF',
+    nameDE: 'ULF (Ultra Low Frequency)',
+    minHz: 300,
+    maxHz: 3e3,
+    color: '#1e6091',
+    category: 'itu',
+    propagation: 'groundWave',
+    applications: ['U-Boot-Kommunikation', 'Geophysikalische Messungen'],
+    notes: 'Durchdringt Seewasser bis ca. 20m.'
+  },
+  {
+    id: 'itu-vlf',
+    name: 'VLF',
+    nameDE: 'VLF (Very Low Frequency)',
+    minHz: 3e3,
+    maxHz: 30e3,
+    color: '#2374ab',
+    category: 'itu',
+    propagation: 'groundWave',
+    applications: ['Zeitzeichensender (DCF77)', 'Navigation (Omega, LORAN)', 'U-Boot-Kommunikation'],
+    notes: 'Sehr stabile Ausbreitung. Wellenlaenge 10-100 km.'
+  },
+  {
+    id: 'itu-lf',
+    name: 'LF',
+    nameDE: 'LF (Low Frequency)',
+    minHz: 30e3,
+    maxHz: 300e3,
+    color: '#2e86c1',
+    category: 'itu',
+    propagation: 'groundWave',
+    applications: ['Langwellen-Rundfunk', 'Navigation (NDB)', 'LORAN-C', 'RFID (134 kHz)'],
+    notes: 'Bodenwelle reicht mehrere 100 km. Nachts Raumwelle moeglich.'
+  },
+  {
+    id: 'itu-mf',
+    name: 'MF',
+    nameDE: 'MF (Medium Frequency)',
+    minHz: 300e3,
+    maxHz: 3e6,
+    color: '#5499c7',
+    category: 'itu',
+    propagation: 'mixed',
+    applications: ['AM-Rundfunk (MW)', 'Seefunk (500 kHz Not)', 'NDB Navigation', 'Amateurfunk (160m)'],
+    notes: 'Tagsueber Bodenwelle, nachts Raumwelle durch D-Schicht-Abbau.'
+  },
+  {
+    id: 'itu-hf',
+    name: 'HF',
+    nameDE: 'HF (High Frequency)',
+    minHz: 3e6,
+    maxHz: 30e6,
+    color: '#7fb3d5',
+    category: 'itu',
+    propagation: 'skyWave',
+    applications: ['Kurzwellen-Rundfunk', 'Amateurfunk (80m-10m)', 'Seefunk', 'Flugfunk (HF)', 'OTH-Radar'],
+    notes: 'Weltweite Reichweite durch Ionosphaerenreflexion. Stark von Sonnenaktivitaet abhaengig.'
+  },
+  {
+    id: 'itu-vhf',
+    name: 'VHF',
+    nameDE: 'VHF (Very High Frequency)',
+    minHz: 30e6,
+    maxHz: 300e6,
+    color: '#a9cce3',
+    category: 'itu',
+    propagation: 'lineOfSight',
+    applications: ['FM-Rundfunk', 'DAB+', 'Flugfunk', 'BOS-Funk', 'Amateurfunk (2m/70cm)', 'Marine VHF'],
+    notes: 'Primaer Sichtlinienausbreitung. Troposphaerische Ueberreichweiten moeglich.'
+  },
+  {
+    id: 'itu-uhf',
+    name: 'UHF',
+    nameDE: 'UHF (Ultra High Frequency)',
+    minHz: 300e6,
+    maxHz: 3e9,
+    color: '#d4e6f1',
+    category: 'itu',
+    propagation: 'lineOfSight',
+    applications: ['DVB-T/T2', 'Mobilfunk (GSM, UMTS, LTE)', 'GPS', 'WLAN 2.4 GHz', 'Bluetooth', 'LoRa', 'PMR446'],
+    notes: 'Gute Gebaeudedurchdringung. Hauptbereich fuer mobile Kommunikation.'
+  },
+  {
+    id: 'itu-shf',
+    name: 'SHF',
+    nameDE: 'SHF (Super High Frequency)',
+    minHz: 3e9,
+    maxHz: 30e9,
+    color: '#85c1e9',
+    category: 'itu',
+    propagation: 'lineOfSight',
+    applications: ['WLAN 5 GHz/6 GHz', '5G (n78, n79)', 'Satellit (C, Ku, K-Band)', 'Radar', 'Richtfunk'],
+    notes: 'Hohe Bandbreiten. Regendaempfung ab ca. 10 GHz relevant.'
+  },
+  {
+    id: 'itu-ehf',
+    name: 'EHF',
+    nameDE: 'EHF (Extremely High Frequency)',
+    minHz: 30e9,
+    maxHz: 300e9,
+    color: '#3498db',
+    category: 'itu',
+    propagation: 'lineOfSight',
+    applications: ['5G mmWave (FR2)', 'WiGig (60 GHz)', 'Automotive Radar (77 GHz)', 'Satellit (Ka, V-Band)', 'Radioastronomie'],
+    notes: 'Millimeterwellen. Starke atmosphaerische Absorption bei 60 GHz (O2) und 183 GHz (H2O).'
+  },
+  {
+    id: 'itu-thf',
+    name: 'THF',
+    nameDE: 'THF (Tremendously High Frequency)',
+    minHz: 300e9,
+    maxHz: 3e12,
+    color: '#2980b9',
+    category: 'itu',
+    propagation: 'lineOfSight',
+    applications: ['Terahertz-Imaging', 'Sicherheitsscanner', 'Spektroskopie', '6G Forschung'],
+    notes: 'Uebergang zu Infrarot. Starke Absorption durch Wasserdampf. Noch experimentell.'
+  },
 ];
 
 /**

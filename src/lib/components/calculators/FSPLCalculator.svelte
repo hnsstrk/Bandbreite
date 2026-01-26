@@ -339,7 +339,7 @@
     <!-- Wavelength -->
     <div class="result-box">
       <div class="result-label">
-        Wellenlaenge
+        Wellenlänge
         <InfoTooltip
           title={fsplExplanations.wavelength.title}
           short={fsplExplanations.wavelength.short}
@@ -388,7 +388,7 @@
       class="w-full h-auto"
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="FSPL Diagramm: Zeigt die Freiraumdaempfung in dB ueber der Distanz fuer verschiedene Frequenzen"
+      aria-label="FSPL Diagramm: Zeigt die Freiraumdämpfung in dB über der Distanz für verschiedene Frequenzen"
     >
       <defs>
         <filter id="fsplMarkerGlow" x="-50%" y="-50%" width="200%" height="200%">

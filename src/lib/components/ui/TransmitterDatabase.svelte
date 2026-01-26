@@ -216,7 +216,7 @@
           </div>
           {#if selectedTransmitter.frequencyHzSecondary}
             <div class="text-sm text-muted mt-1">
-              Sekundaer: {formatFrequency(selectedTransmitter.frequencyHzSecondary)}
+              Sekundär: {formatFrequency(selectedTransmitter.frequencyHzSecondary)}
             </div>
           {/if}
           {#if onSelectFrequency}
@@ -225,7 +225,7 @@
               onclick={() => handleFrequencySelect(selectedTransmitter!.frequencyHz)}
               class="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
             >
-              Frequenz uebernehmen
+              Frequenz übernehmen
             </button>
           {/if}
         </div>
@@ -306,7 +306,7 @@
   <!-- Info -->
   <div class="mt-4 text-xs text-muted">
     <strong>Hinweis:</strong> Diese Datenbank dient Bildungszwecken.
-    Aktuelle Frequenzen und Parameter koennen abweichen.
+    Aktuelle Frequenzen und Parameter können abweichen.
     Datenbank enthaelt {ALL_TRANSMITTERS.length} Sender.
   </div>
 </div>

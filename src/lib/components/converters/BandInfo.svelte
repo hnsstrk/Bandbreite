@@ -45,7 +45,7 @@
     <p class="placeholder">Keine Standardbänder für diese Frequenz definiert</p>
   {:else}
     <div class="band-container">
-      <!-- IEEE Baender -->
+      <!-- IEEE Bänder -->
       {#if ieeeBands.length > 0}
         <div class="band-group">
           <span class="band-label">
@@ -75,7 +75,7 @@
         <div class="separator"></div>
       {/if}
 
-      <!-- NATO Baender -->
+      <!-- NATO Bänder -->
       {#if natoBands.length > 0}
         <div class="band-group">
           <span class="band-label">

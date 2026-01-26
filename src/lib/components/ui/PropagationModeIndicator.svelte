@@ -38,7 +38,7 @@
       bgColor: 'bg-blue-100 dark:bg-blue-900/30',
       icon: 'M3 18l6-6 4 4 8-8M21 6v4h-4',
       description: 'Radio waves reflect off ionosphere. Enables worldwide communication.',
-      descriptionDE: 'Radiowellen werden an der Ionosphaere reflektiert. Weltweite Kommunikation moeglich.'
+      descriptionDE: 'Radiowellen werden an der Ionosphäre reflektiert. Weltweite Kommunikation möglich.'
     },
     lineOfSight: {
       label: 'Line of Sight',
@@ -47,7 +47,7 @@
       bgColor: 'bg-amber-100 dark:bg-amber-900/30',
       icon: 'M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4',
       description: 'Direct path between transmitter and receiver. Limited by horizon.',
-      descriptionDE: 'Direkter Pfad zwischen Sender und Empfaenger. Durch Horizont begrenzt.'
+      descriptionDE: 'Direkter Pfad zwischen Sender und Empfänger. Durch Horizont begrenzt.'
     },
     mixed: {
       label: 'Mixed',
@@ -148,7 +148,7 @@
   <div
     class="inline-flex items-center {sizeClasses.gap} {sizeClasses.container} bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-500 dark:text-gray-400"
     role="status"
-    aria-label="Keine Ausbreitungsinformation verfuegbar"
+    aria-label="Keine Ausbreitungsinformation verfügbar"
   >
     <svg
       class="{sizeClasses.icon}"

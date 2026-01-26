@@ -115,7 +115,7 @@
 </script>
 
 <div class="card">
-  <h3 class="text-heading-3 mb-4">Ionosphaerische Ausbreitung</h3>
+  <h3 class="text-heading-3 mb-4">Ionosphärische Ausbreitung</h3>
 
   <!-- Input Section -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -125,8 +125,8 @@
         Frequenz (HF)
         <InfoTooltip
           title="HF-Frequenz"
-          short="Kurzwellenfrequenz fuer Ionosphaerenreflexion"
-          detailed="Der HF-Bereich (3-30 MHz) wird von der Ionosphaere reflektiert und ermoeglicht weltweite Kommunikation."
+          short="Kurzwellenfrequenz für Ionosphärenreflexion"
+          detailed="Der HF-Bereich (3-30 MHz) wird von der Ionosphäre reflektiert und ermöglicht weltweite Kommunikation."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -162,7 +162,7 @@
         Solar Flux Index (SFI)
         <InfoTooltip
           title="Solar Flux Index"
-          short="Mass fuer Sonnenaktivitaet (10.7 cm Flux)"
+          short="Mass für Sonnenaktivitaet (10.7 cm Flux)"
           detailed="Niedriger SFI (65-80): Sonnenminimum. Hoher SFI (150-300): Sonnenmaximum. Beeinflusst die MUF stark."
         />
       </label>
@@ -237,7 +237,7 @@
     <div class="result-box">
       <div class="result-label">Ausbreitung</div>
       <div class="text-xl font-bold {canPropagate ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">
-        {canPropagate ? 'Moeglich' : 'Nicht moeglich'}
+        {canPropagate ? 'Möglich' : 'Nicht möglich'}
       </div>
     </div>
   </div>
@@ -249,7 +249,7 @@
       class="w-full h-auto"
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Ionosphaeren-Diagramm: Zeigt D-, E-, F1- und F2-Schichten mit Reflexionspfaden"
+      aria-label="Ionosphären-Diagramm: Zeigt D-, E-, F1- und F2-Schichten mit Reflexionspfaden"
     >
       <defs>
         <!-- Gradient for sky background -->
@@ -417,7 +417,7 @@
             font-weight="500"
             text-anchor="middle"
           >
-            {frequencyMHz < lufMHz ? 'Frequenz unter LUF - zu starke D-Schicht Absorption' : 'Frequenz ueber MUF - keine Reflexion'}
+            {frequencyMHz < lufMHz ? 'Frequenz unter LUF - zu starke D-Schicht Absorption' : 'Frequenz über MUF - keine Reflexion'}
           </text>
         {/if}
 
@@ -431,14 +431,14 @@
           font-weight="500"
           text-anchor="middle"
         >
-          Hoehe (km)
+          Höhe (km)
         </text>
       </g>
 
       <!-- Legend -->
       <g transform="translate({width - margin.right + 20}, {margin.top})">
         <text fill="var(--color-chart-text)" font-weight="500" font-size="12" y="0">
-          Ionosphaerenschichten
+          Ionosphärenschichten
         </text>
 
         {#each IONOSPHERIC_LAYERS as layer, i (layer.id)}
@@ -480,8 +480,8 @@
   <!-- Explanation -->
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
-      <strong>MUF (Maximum Usable Frequency):</strong> Hoechste Frequenz, die noch von der Ionosphaere
-      reflektiert wird. Hoeher bei hoher Sonnenaktivitaet.
+      <strong>MUF (Maximum Usable Frequency):</strong> Höchste Frequenz, die noch von der Ionosphäre
+      reflektiert wird. Höher bei hoher Sonnenaktivitaet.
     </p>
     <p class="mb-2">
       <strong>LUF (Lowest Usable Frequency):</strong> Niedrigste nutzbare Frequenz. Tiefere Frequenzen
@@ -489,7 +489,7 @@
     </p>
     <p>
       <strong>Kritische Frequenz (foF2):</strong> Frequenz, die bei senkrechtem Einfall gerade noch
-      reflektiert wird. Die MUF bei schraegem Einfall ist ca. 3x hoeher.
+      reflektiert wird. Die MUF bei schraegem Einfall ist ca. 3x höher.
     </p>
   </div>
 </div>

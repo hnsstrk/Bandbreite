@@ -206,7 +206,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'groundWave',
     applications: ['Zeitzeichensender (DCF77)', 'Navigation (Omega, LORAN)', 'U-Boot-Kommunikation'],
-    notes: 'Sehr stabile Ausbreitung. Wellenlaenge 10-100 km.'
+    notes: 'Sehr stabile Ausbreitung. Wellenlänge 10-100 km.'
   },
   {
     id: 'itu-lf',
@@ -218,7 +218,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'groundWave',
     applications: ['Langwellen-Rundfunk', 'Navigation (NDB)', 'LORAN-C', 'RFID (134 kHz)'],
-    notes: 'Bodenwelle reicht mehrere 100 km. Nachts Raumwelle moeglich.'
+    notes: 'Bodenwelle reicht mehrere 100 km. Nachts Raumwelle möglich.'
   },
   {
     id: 'itu-mf',
@@ -230,7 +230,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'mixed',
     applications: ['AM-Rundfunk (MW)', 'Seefunk (500 kHz Not)', 'NDB Navigation', 'Amateurfunk (160m)'],
-    notes: 'Tagsueber Bodenwelle, nachts Raumwelle durch D-Schicht-Abbau.'
+    notes: 'Tagsüber Bodenwelle, nachts Raumwelle durch D-Schicht-Abbau.'
   },
   {
     id: 'itu-hf',
@@ -242,7 +242,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'skyWave',
     applications: ['Kurzwellen-Rundfunk', 'Amateurfunk (80m-10m)', 'Seefunk', 'Flugfunk (HF)', 'OTH-Radar'],
-    notes: 'Weltweite Reichweite durch Ionosphaerenreflexion. Stark von Sonnenaktivitaet abhaengig.'
+    notes: 'Weltweite Reichweite durch Ionosphärenreflexion. Stark von Sonnenaktivitaet abhängig.'
   },
   {
     id: 'itu-vhf',
@@ -254,7 +254,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'lineOfSight',
     applications: ['FM-Rundfunk', 'DAB+', 'Flugfunk', 'BOS-Funk', 'Amateurfunk (2m/70cm)', 'Marine VHF'],
-    notes: 'Primaer Sichtlinienausbreitung. Troposphaerische Ueberreichweiten moeglich.'
+    notes: 'Primär Sichtlinienausbreitung. Troposphärische Überreichweiten möglich.'
   },
   {
     id: 'itu-uhf',
@@ -266,7 +266,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'lineOfSight',
     applications: ['DVB-T/T2', 'Mobilfunk (GSM, UMTS, LTE)', 'GPS', 'WLAN 2.4 GHz', 'Bluetooth', 'LoRa', 'PMR446'],
-    notes: 'Gute Gebaeudedurchdringung. Hauptbereich fuer mobile Kommunikation.'
+    notes: 'Gute Gebäudedurchdringung. Hauptbereich für mobile Kommunikation.'
   },
   {
     id: 'itu-shf',
@@ -278,7 +278,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'lineOfSight',
     applications: ['WLAN 5 GHz/6 GHz', '5G (n78, n79)', 'Satellit (C, Ku, K-Band)', 'Radar', 'Richtfunk'],
-    notes: 'Hohe Bandbreiten. Regendaempfung ab ca. 10 GHz relevant.'
+    notes: 'Hohe Bandbreiten. Regendämpfung ab ca. 10 GHz relevant.'
   },
   {
     id: 'itu-ehf',
@@ -290,7 +290,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'lineOfSight',
     applications: ['5G mmWave (FR2)', 'WiGig (60 GHz)', 'Automotive Radar (77 GHz)', 'Satellit (Ka, V-Band)', 'Radioastronomie'],
-    notes: 'Millimeterwellen. Starke atmosphaerische Absorption bei 60 GHz (O2) und 183 GHz (H2O).'
+    notes: 'Millimeterwellen. Starke atmosphärische Absorption bei 60 GHz (O2) und 183 GHz (H2O).'
   },
   {
     id: 'itu-thf',
@@ -302,7 +302,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'lineOfSight',
     applications: ['Terahertz-Imaging', 'Sicherheitsscanner', 'Spektroskopie', '6G Forschung'],
-    notes: 'Uebergang zu Infrarot. Starke Absorption durch Wasserdampf. Noch experimentell.'
+    notes: 'Übergang zu Infrarot. Starke Absorption durch Wasserdampf. Noch experimentell.'
   },
 ];
 

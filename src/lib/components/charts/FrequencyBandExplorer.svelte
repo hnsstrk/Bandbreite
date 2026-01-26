@@ -101,9 +101,9 @@
 
   // Category labels
   const categoryLabels: Record<BandCategory, { name: string; nameDE: string }> = {
-    itu: { name: 'ITU Radio Bands', nameDE: 'ITU-Funkbaender' },
-    ieee: { name: 'IEEE Radar Bands', nameDE: 'IEEE-Radarbaender' },
-    nato: { name: 'NATO Bands', nameDE: 'NATO-Baender' },
+    itu: { name: 'ITU Radio Bands', nameDE: 'ITU-Funkbänder' },
+    ieee: { name: 'IEEE Radar Bands', nameDE: 'IEEE-Radarbänder' },
+    nato: { name: 'NATO Bands', nameDE: 'NATO-Bänder' },
     civilian: { name: 'Civilian/Commercial', nameDE: 'Zivil/Kommerziell' }
   };
 
@@ -364,13 +364,13 @@
   <div class="mt-4 text-xs text-muted">
     <strong>Hinweis:</strong> Die Darstellung ist logarithmisch skaliert.
     {#if selectedCategory === 'itu'}
-      ITU-Baender zeigen die internationale Klassifikation von ELF (3 Hz) bis THF (3 THz).
+      ITU-Bänder zeigen die internationale Klassifikation von ELF (3 Hz) bis THF (3 THz).
     {:else if selectedCategory === 'ieee'}
-      IEEE-Baender sind in der Radar- und Mikrowellentechnik gaengig.
+      IEEE-Bänder sind in der Radar- und Mikrowellentechnik gängig.
     {:else if selectedCategory === 'nato'}
-      NATO-Baender (A-O) werden in militaerischen Anwendungen verwendet.
+      NATO-Bänder (A-O) werden in militärischen Anwendungen verwendet.
     {:else}
-      Zivile Baender zeigen gaengige kommerzielle Anwendungen.
+      Zivile Bänder zeigen gängige kommerzielle Anwendungen.
     {/if}
   </div>
 </div>

@@ -30,35 +30,35 @@ export const FSPL: Explanation = {
 
 export const FREQUENCY: Explanation = {
   title: 'Frequenz',
-  short: 'Anzahl der Schwingungen pro Sekunde. Hoehere Frequenzen haben kuerzere Wellenlaengen.',
+  short: 'Anzahl der Schwingungen pro Sekunde. Höhere Frequenzen haben kuerzere Wellenlängen.',
   detailed: `
     <p><strong>Einheit:</strong> Hertz (Hz) = 1/s</p>
-    <p><strong>Zusammenhang mit Wellenlaenge:</strong><br/>
+    <p><strong>Zusammenhang mit Wellenlänge:</strong><br/>
     <code>lambda = c / f</code> (c = Lichtgeschwindigkeit)</p>
-    <p><strong>Auswirkung:</strong> Hoehere Frequenzen ermoeglichen mehr Bandbreite, haben aber hoehere Freiraumdaempfung und schlechtere Durchdringung.</p>
+    <p><strong>Auswirkung:</strong> Höhere Frequenzen ermöglichen mehr Bandbreite, haben aber höhere Freiraumdämpfung und schlechtere Durchdringung.</p>
   `
 };
 
 export const DISTANCE: Explanation = {
   title: 'Distanz',
-  short: 'Entfernung zwischen Sender und Empfaenger. Quadratischer Einfluss auf Signalstaerke.',
+  short: 'Entfernung zwischen Sender und Empfänger. Quadratischer Einfluss auf Signalstärke.',
   detailed: `
-    <p>Die Signalstaerke nimmt mit dem Quadrat der Entfernung ab (inverse square law).</p>
-    <p><strong>Verdopplung der Distanz:</strong> -6 dB Signalstaerke</p>
-    <p><strong>10-fache Distanz:</strong> -20 dB Signalstaerke</p>
+    <p>Die Signalstärke nimmt mit dem Quadrat der Entfernung ab (inverse square law).</p>
+    <p><strong>Verdopplung der Distanz:</strong> -6 dB Signalstärke</p>
+    <p><strong>10-fache Distanz:</strong> -20 dB Signalstärke</p>
   `
 };
 
 export const WAVELENGTH: Explanation = {
-  title: 'Wellenlaenge',
-  short: 'Raeumliche Ausdehnung einer Schwingung. Bestimmt Antennengroesse und Ausbreitungsverhalten.',
+  title: 'Wellenlänge',
+  short: 'Raeumliche Ausdehnung einer Schwingung. Bestimmt Antennengröße und Ausbreitungsverhalten.',
   detailed: `
     <p><strong>Formel:</strong> <code>lambda = c / f</code></p>
     <p><strong>Beispiele:</strong></p>
     <p>- 2,4 GHz: 12,5 cm<br/>
     - 868 MHz: 34,5 cm<br/>
     - 433 MHz: 69,2 cm</p>
-    <p>Antennenlaenge ist oft lambda/4 oder lambda/2.</p>
+    <p>Antennenlänge ist oft lambda/4 oder lambda/2.</p>
   `
 };
 
@@ -72,8 +72,8 @@ export const EIRP: Explanation = {
   detailed: `
     <p><strong>Formel:</strong><br/>
     <code>EIRP = P_TX + G_TX - L_kabel</code></p>
-    <p><strong>Bedeutung:</strong> Aequivalente Leistung, die ein isotroper Strahler (Kugelstrahler) abgeben muesste, um dieselbe Feldstaerke in Hauptstrahlrichtung zu erzeugen.</p>
-    <p><strong>Regulierung:</strong> In der EU oft auf 20 dBm (100 mW) begrenzt fuer ISM-Baender.</p>
+    <p><strong>Bedeutung:</strong> Aequivalente Leistung, die ein isotroper Strahler (Kugelstrahler) abgeben muesste, um dieselbe Feldstärke in Hauptstrahlrichtung zu erzeugen.</p>
+    <p><strong>Regulierung:</strong> In der EU oft auf 20 dBm (100 mW) begrenzt für ISM-Bänder.</p>
   `
 };
 
@@ -93,7 +93,7 @@ export const TX_POWER: Explanation = {
 
 export const TX_ANTENNA_GAIN: Explanation = {
   title: 'Antennengewinn (TX)',
-  short: 'Verstaerkung gegenueber isotropem Strahler. Konzentriert Energie in bestimmte Richtungen.',
+  short: 'Verstärkung gegenüber isotropem Strahler. Konzentriert Energie in bestimmte Richtungen.',
   detailed: `
     <p><strong>Einheit:</strong> dBi (Dezibel bezogen auf isotropen Strahler)</p>
     <p><strong>Wichtig:</strong> Der Gewinn erhoeht nicht die Gesamtleistung, sondern konzentriert die Abstrahlung.</p>
@@ -107,7 +107,7 @@ export const TX_ANTENNA_GAIN: Explanation = {
 
 export const TX_CABLE_LOSS: Explanation = {
   title: 'Kabelverlust (TX)',
-  short: 'Daempfung im Kabel zwischen Sender und Antenne.',
+  short: 'Dämpfung im Kabel zwischen Sender und Antenne.',
   detailed: `
     <p>Kabelverluste entstehen durch:</p>
     <p>- Ohmsche Verluste im Leiter<br/>
@@ -121,12 +121,12 @@ export const TX_CABLE_LOSS: Explanation = {
 };
 
 export const RX_SENSITIVITY: Explanation = {
-  title: 'Empfaengerempfindlichkeit (RX Sensitivity)',
-  short: 'Minimale Signalstaerke fuer zuverlaessige Dekodierung. Abhaengig von Modulation und Datenrate.',
+  title: 'Empfängerempfindlichkeit (RX Sensitivity)',
+  short: 'Minimale Signalstärke für zuverlässige Dekodierung. Abhängig von Modulation und Datenrate.',
   detailed: `
     <p><strong>Einheit:</strong> dBm (typisch negativ, z.B. -90 dBm)</p>
     <p><strong>Einflussfaktoren:</strong></p>
-    <p>- Bandbreite (hoehere BW = schlechtere Sensitivity)<br/>
+    <p>- Bandbreite (höhere BW = schlechtere Sensitivity)<br/>
     - Modulation (BPSK besser als 64-QAM)<br/>
     - Fehlerkorrektur (mehr FEC = besser)</p>
     <p><strong>Typische Werte:</strong></p>
@@ -138,28 +138,28 @@ export const RX_SENSITIVITY: Explanation = {
 
 export const RX_ANTENNA_GAIN: Explanation = {
   title: 'Antennengewinn (RX)',
-  short: 'Empfangsverstaerkung durch Richtwirkung der Empfangsantenne.',
+  short: 'Empfangsverstärkung durch Richtwirkung der Empfangsantenne.',
   detailed: `
     <p>Der Empfangsgewinn wirkt wie der Sendegewinn - er sammelt mehr Energie aus einer bestimmten Richtung.</p>
     <p><strong>Reziprozitaet:</strong> Eine Antenne hat beim Senden und Empfangen denselben Gewinn.</p>
-    <p>Hochgewinn-Antennen erfordern praezise Ausrichtung.</p>
+    <p>Hochgewinn-Antennen erfordern präzise Ausrichtung.</p>
   `
 };
 
 export const RX_CABLE_LOSS: Explanation = {
   title: 'Kabelverlust (RX)',
-  short: 'Daempfung im Kabel zwischen Empfangsantenne und Empfaenger.',
+  short: 'Dämpfung im Kabel zwischen Empfangsantenne und Empfänger.',
   detailed: `
     <p>Besonders kritisch, da das Signal bereits schwach ist.</p>
-    <p><strong>Empfehlung:</strong> Kabel so kurz wie moeglich halten oder LNA (Low Noise Amplifier) direkt an der Antenne einsetzen.</p>
+    <p><strong>Empfehlung:</strong> Kabel so kurz wie möglich halten oder LNA (Low Noise Amplifier) direkt an der Antenne einsetzen.</p>
   `
 };
 
 export const FADING_MARGIN: Explanation = {
   title: 'Fading Margin',
-  short: 'Reserve fuer Signalschwankungen durch Mehrwegausbreitung, Wetter oder Bewegung.',
+  short: 'Reserve für Signalschwankungen durch Mehrwegausbreitung, Wetter oder Bewegung.',
   detailed: `
-    <p><strong>Ursachen fuer Fading:</strong></p>
+    <p><strong>Ursachen für Fading:</strong></p>
     <p>- Mehrwegausbreitung (Reflexionen)<br/>
     - Regen/Schnee bei hohen Frequenzen<br/>
     - Bewegung (Doppler-Effekt)<br/>
@@ -179,13 +179,13 @@ export const SYSTEM_GAIN: Explanation = {
     <p><code>P_RX = P_TX + G_TX - L_TX - FSPL + G_RX - L_RX</code></p>
     <p><strong>System Margin:</strong></p>
     <p><code>Margin = P_RX - Sensitivity - Fading</code></p>
-    <p>Ein positiver Margin bedeutet zuverlaessige Verbindung.</p>
+    <p>Ein positiver Margin bedeutet zuverlässige Verbindung.</p>
   `
 };
 
 export const LINK_MARGIN: Explanation = {
   title: 'Link Margin',
-  short: 'Differenz zwischen Empfangsleistung und Empfaengerempfindlichkeit (ohne Fading Margin).',
+  short: 'Differenz zwischen Empfangsleistung und Empfängerempfindlichkeit (ohne Fading Margin).',
   detailed: `
     <p><strong>Formel:</strong> <code>Link Margin = P_RX - Sensitivity</code></p>
     <p>Zeigt den rohen Spielraum vor Abzug von Sicherheitsreserven.</p>
@@ -197,11 +197,11 @@ export const LINK_MARGIN: Explanation = {
 // ============================================================================
 
 export const BAND_IEEE: Explanation = {
-  title: 'IEEE Frequenzbaender',
+  title: 'IEEE Frequenzbänder',
   short: 'Radar-Bandeinteilung (L, S, C, X, Ku, K, Ka). Standard in Luft- und Raumfahrt.',
   detailed: `
-    <p><strong>Herkunft:</strong> Entwickelt im WWII fuer Radarsysteme.</p>
-    <p><strong>Wichtige Baender:</strong></p>
+    <p><strong>Herkunft:</strong> Entwickelt im WWII für Radarsysteme.</p>
+    <p><strong>Wichtige Bänder:</strong></p>
     <p>- L-Band (1-2 GHz): GPS, ATC-Radar<br/>
     - S-Band (2-4 GHz): WLAN, Wetterradar<br/>
     - C-Band (4-8 GHz): Satellit, Radar<br/>
@@ -213,23 +213,23 @@ export const BAND_IEEE: Explanation = {
 };
 
 export const BAND_NATO: Explanation = {
-  title: 'NATO Frequenzbaender',
-  short: 'Militaerische Bezeichnung (A-M Baender). Historisch, aber noch in Gebrauch.',
+  title: 'NATO Frequenzbänder',
+  short: 'Militärische Bezeichnung (A-M Bänder). Historisch, aber noch in Gebrauch.',
   detailed: `
-    <p><strong>Aufbau:</strong> Buchstaben A-M fuer steigende Frequenzen.</p>
-    <p><strong>Wichtige Baender:</strong></p>
+    <p><strong>Aufbau:</strong> Buchstaben A-M für steigende Frequenzen.</p>
+    <p><strong>Wichtige Bänder:</strong></p>
     <p>- D-Band: 1-2 GHz (entspricht IEEE L)<br/>
     - E/F-Band: 2-4 GHz (entspricht IEEE S)<br/>
     - G-Band: 4-6 GHz<br/>
     - I-Band: 8-10 GHz<br/>
     - J-Band: 10-20 GHz</p>
-    <p>Wird hauptsaechlich im militaerischen Kontext verwendet.</p>
+    <p>Wird hauptsächlich im militärischen Kontext verwendet.</p>
   `
 };
 
 export const BAND_ITU: Explanation = {
-  title: 'ITU Frequenzbaender',
-  short: 'Internationale Funkfrequenzeinteilung (ELF bis THF). Basis fuer weltweite Regulierung.',
+  title: 'ITU Frequenzbänder',
+  short: 'Internationale Funkfrequenzeinteilung (ELF bis THF). Basis für weltweite Regulierung.',
   detailed: `
     <p><strong>Organisation:</strong> International Telecommunication Union</p>
     <p><strong>Einteilung nach Dekaden:</strong></p>
@@ -250,10 +250,10 @@ export const BAND_ITU: Explanation = {
 // ============================================================================
 
 export const ATMOSPHERIC_GENERAL: Explanation = {
-  title: 'Atmosphaerische Daempfung',
-  short: 'Zusaetzlicher Signalverlust durch Absorption in Gasen (O2, H2O). Frequenzabhaengig.',
+  title: 'Atmosphärische Dämpfung',
+  short: 'Zusaetzlicher Signalverlust durch Absorption in Gasen (O2, H2O). Frequenzabhängig.',
   detailed: `
-    <p>Neben der Freiraumdaempfung absorbieren Gasmolekuele in der Atmosphaere Funkwellen bei bestimmten Resonanzfrequenzen.</p>
+    <p>Neben der Freiraumdämpfung absorbieren Gasmolekuele in der Atmosphäre Funkwellen bei bestimmten Resonanzfrequenzen.</p>
     <p><strong>Hauptverursacher:</strong></p>
     <p>- Sauerstoff (O2): Peak bei 60 GHz<br/>
     - Wasserdampf (H2O): Peak bei 22 GHz</p>
@@ -265,8 +265,8 @@ export const ATMOSPHERIC_22GHZ: Explanation = {
   title: '22 GHz Wasserdampf-Resonanz',
   short: 'Wassermolekuele absorbieren bei 22 GHz. Etwa 0,2 dB/km bei normaler Luftfeuchte.',
   detailed: `
-    <p><strong>Ursache:</strong> Rotationsuebergang der H2O-Molekuele bei 22,235 GHz.</p>
-    <p><strong>Typische Daempfung:</strong> 0,1-0,2 dB/km</p>
+    <p><strong>Ursache:</strong> RotationsÜbergang der H2O-Molekuele bei 22,235 GHz.</p>
+    <p><strong>Typische Dämpfung:</strong> 0,1-0,2 dB/km</p>
     <p><strong>Einfluss der Luftfeuchte:</strong> Steigt mit Wasserdampfdichte (g/m^3).</p>
     <p>Bei Regen kommen zusaetzliche Verluste hinzu.</p>
   `
@@ -274,10 +274,10 @@ export const ATMOSPHERIC_22GHZ: Explanation = {
 
 export const ATMOSPHERIC_60GHZ: Explanation = {
   title: '60 GHz Sauerstoff-Resonanz',
-  short: 'Sauerstoff absorbiert stark bei 60 GHz (~15 dB/km). Ideal fuer kurze, abhoersichere Links.',
+  short: 'Sauerstoff absorbiert stark bei 60 GHz (~15 dB/km). Ideal für kurze, abhoersichere Links.',
   detailed: `
     <p><strong>Ursache:</strong> Magnetische Spin-Resonanz von O2 bei 60 GHz.</p>
-    <p><strong>Typische Daempfung:</strong> 10-15 dB/km (bei Meereshoehe)</p>
+    <p><strong>Typische Dämpfung:</strong> 10-15 dB/km (bei Meereshöhe)</p>
     <p><strong>Anwendungen:</strong></p>
     <p>- WiGig (802.11ad/ay): Kurzstrecken-WLAN<br/>
     - Wireless Backhaul: 100-500m<br/>
@@ -287,15 +287,15 @@ export const ATMOSPHERIC_60GHZ: Explanation = {
 };
 
 export const RAIN_ATTENUATION: Explanation = {
-  title: 'Regendaempfung',
-  short: 'Regen daempft Funkwellen ab ca. 10 GHz. Starker Einfluss bei mmWave (5G, Satellit).',
+  title: 'Regendämpfung',
+  short: 'Regen dämpft Funkwellen ab ca. 10 GHz. Starker Einfluss bei mmWave (5G, Satellit).',
   detailed: `
     <p><strong>Mechanismus:</strong> Regentropfen streuen und absorbieren Radiowellen.</p>
     <p><strong>Typische Werte bei 28 GHz:</strong></p>
     <p>- Leichter Regen (4 mm/h): 1-2 dB/km<br/>
     - Starkregen (25 mm/h): 5-10 dB/km<br/>
     - Wolkenbruch (100 mm/h): 20+ dB/km</p>
-    <p>Bei Satellitenlinks ist Regendaempfung ein kritischer Planungsfaktor.</p>
+    <p>Bei Satellitenlinks ist Regendämpfung ein kritischer Planungsfaktor.</p>
   `
 };
 
@@ -320,13 +320,13 @@ export const EM_SPECTRUM: Explanation = {
 
 export const SPECTRUM_USAGE: Explanation = {
   title: 'Spektrumsnutzung',
-  short: 'Verschiedene Dienste teilen sich das Spektrum. Reguliert durch nationale/internationale Behoerden.',
+  short: 'Verschiedene Dienste teilen sich das Spektrum. Reguliert durch nationale/internationale Behörden.',
   detailed: `
     <p><strong>Zuteilungsarten:</strong></p>
-    <p>- Lizenziert: Exklusiv fuer Betreiber<br/>
+    <p>- Lizenziert: Exklusiv für Betreiber<br/>
     - Unlizenziert (ISM): Frei nutzbar<br/>
     - Geteilt: Dynamischer Zugriff</p>
-    <p><strong>Wichtige ISM-Baender:</strong></p>
+    <p><strong>Wichtige ISM-Bänder:</strong></p>
     <p>- 433 MHz: LoRa, Fernbedienungen<br/>
     - 868/915 MHz: LoRa, Smart Metering<br/>
     - 2,4 GHz: WLAN, Bluetooth, Mikrowelle<br/>

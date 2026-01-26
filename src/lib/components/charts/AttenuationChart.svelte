@@ -168,7 +168,7 @@
     class="w-full h-auto"
     preserveAspectRatio="xMidYMid meet"
     role="img"
-    aria-label="Atmosphaerische Daempfung Diagramm: Zeigt die spezifische Daempfung in dB/km ueber der Frequenz von 1 bis 350 GHz fuer Sauerstoff, Wasserdampf und Niederschlag"
+    aria-label="Atmosphärische Dämpfung Diagramm: Zeigt die spezifische Dämpfung in dB/km über der Frequenz von 1 bis 350 GHz für Sauerstoff, Wasserdampf und Niederschlag"
   >
     <defs>
       <!-- Glow filter for marker -->

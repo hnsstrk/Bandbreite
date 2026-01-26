@@ -4,7 +4,7 @@
 
 <svelte:head>
   <title>Senderdatenbank - Bandbreite</title>
-  <meta name="description" content="Datenbank fuer Rundfunk- und Kommunikationssender" />
+  <meta name="description" content="Datenbank für Rundfunk- und Kommunikationssender" />
 </svelte:head>
 
 <div class="page-content">

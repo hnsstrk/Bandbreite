@@ -11,8 +11,8 @@
   <header class="page-header">
     <h1 class="text-heading-1">Anwendungen nach Frequenzband</h1>
     <p class="header-description">
-      Uebersicht der typischen Anwendungen und Dienste in verschiedenen Frequenzbaendern.
-      Von Rundfunk ueber Mobilfunk bis hin zu Radar- und Satellitenanwendungen.
+      Übersicht der typischen Anwendungen und Dienste in verschiedenen Frequenzbändern.
+      Von Rundfunk über Mobilfunk bis hin zu Radar- und Satellitenanwendungen.
     </p>
   </header>
 

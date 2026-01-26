@@ -530,7 +530,7 @@
     <!-- Band row selector -->
     <div class="flex flex-wrap items-center gap-2">
       <span class="text-slate-400 text-sm mr-1">
-        Baender:
+        Bänder:
         <InfoTooltip
           title={spectrumExplanations.emSpectrum.title}
           short={spectrumExplanations.emSpectrum.short}
@@ -908,7 +908,7 @@
           <span class="font-mono" style="color: var(--color-chart-text)">{formatFrequencyRange(tooltip.band.minHz, tooltip.band.maxHz)}</span>
         </div>
         <div class="flex justify-between">
-          <span style="color: var(--color-chart-text-secondary)">Wellenlaenge:</span>
+          <span style="color: var(--color-chart-text-secondary)">Wellenlänge:</span>
           <span class="font-mono" style="color: var(--color-chart-text)">
             {formatWavelength(currentSpeedOfLight / tooltip.band.maxHz)} - {formatWavelength(currentSpeedOfLight / tooltip.band.minHz)}
           </span>

@@ -1,0 +1,302 @@
+{
+  "timeSignal": [
+    {
+      "id": "dcf77",
+      "name": "DCF77",
+      "nameDE": "DCF77 Mainflingen",
+      "type": "time_signal",
+      "frequencyHz": 77500,
+      "powerWatts": 50000,
+      "location": {
+        "name": "Mainflingen",
+        "country": "Germany",
+        "latitude": 50.0152,
+        "longitude": 9.0054
+      },
+      "status": "active",
+      "description": "German time signal transmitter, primary source for radio-controlled clocks in Europe",
+      "descriptionDE": "Deutsches Zeitzeichensignal, Hauptquelle für Funkuhren in Europa",
+      "coverage": "ca. 2000 km",
+      "operator": "PTB / Media Broadcast",
+      "notes": "Sendet UTC+1 (MEZ) bzw. UTC+2 (MESZ). Amplitudenmodulation mit Phasenmodulation."
+    },
+    {
+      "id": "msf",
+      "name": "MSF",
+      "nameDE": "MSF Anthorn",
+      "type": "time_signal",
+      "frequencyHz": 60000,
+      "powerWatts": 17000,
+      "location": {
+        "name": "Anthorn",
+        "country": "United Kingdom",
+        "latitude": 54.9117,
+        "longitude": -3.2792
+      },
+      "status": "active",
+      "description": "UK time signal transmitter",
+      "descriptionDE": "Britisches Zeitzeichensignal",
+      "coverage": "ca. 1500 km",
+      "operator": "NPL",
+      "notes": "Ähnliches Format wie DCF77, sendet UTC."
+    },
+    {
+      "id": "wwvb",
+      "name": "WWVB",
+      "nameDE": "WWVB Fort Collins",
+      "type": "time_signal",
+      "frequencyHz": 60000,
+      "powerWatts": 70000,
+      "location": {
+        "name": "Fort Collins, Colorado",
+        "country": "USA",
+        "latitude": 40.6781,
+        "longitude": -105.0469
+      },
+      "status": "active",
+      "description": "US time signal transmitter",
+      "descriptionDE": "US-amerikanisches Zeitzeichensignal",
+      "coverage": "Nordamerika",
+      "operator": "NIST",
+      "notes": "Sendet UTC. Reichweite bis ca. 3000 km bei guten Bedingungen."
+    },
+    {
+      "id": "jjy-40",
+      "name": "JJY 40 kHz",
+      "nameDE": "JJY Fukushima",
+      "type": "time_signal",
+      "frequencyHz": 40000,
+      "powerWatts": 50000,
+      "location": {
+        "name": "Fukushima",
+        "country": "Japan",
+        "latitude": 37.3722,
+        "longitude": 140.8494
+      },
+      "status": "active",
+      "description": "Japanese time signal transmitter (40 kHz)",
+      "descriptionDE": "Japanisches Zeitzeichensignal (40 kHz)",
+      "coverage": "Japan, Ostasien",
+      "operator": "NICT"
+    },
+    {
+      "id": "jjy-60",
+      "name": "JJY 60 kHz",
+      "nameDE": "JJY Kyushu",
+      "type": "time_signal",
+      "frequencyHz": 60000,
+      "powerWatts": 50000,
+      "location": {
+        "name": "Saga Prefecture",
+        "country": "Japan",
+        "latitude": 33.4656,
+        "longitude": 130.1758
+      },
+      "status": "active",
+      "description": "Japanese time signal transmitter (60 kHz)",
+      "descriptionDE": "Japanisches Zeitzeichensignal (60 kHz)",
+      "coverage": "Japan, Südostasien",
+      "operator": "NICT"
+    },
+    {
+      "id": "bpc",
+      "name": "BPC",
+      "nameDE": "BPC Shangqiu",
+      "type": "time_signal",
+      "frequencyHz": 68500,
+      "powerWatts": 100000,
+      "location": {
+        "name": "Shangqiu, Henan",
+        "country": "China",
+        "latitude": 34.4333,
+        "longitude": 115.65
+      },
+      "status": "active",
+      "description": "Chinese time signal transmitter",
+      "descriptionDE": "Chinesisches Zeitzeichensignal",
+      "coverage": "China, Ostasien",
+      "operator": "NTSC"
+    }
+  ],
+  "broadcast": [
+    {
+      "id": "dlf-153",
+      "name": "Deutschlandfunk LW",
+      "nameDE": "Deutschlandfunk Langwelle",
+      "type": "broadcast_lw",
+      "frequencyHz": 153000,
+      "powerWatts": 500000,
+      "location": {
+        "name": "Donebach",
+        "country": "Germany",
+        "latitude": 49.57,
+        "longitude": 9.1917
+      },
+      "status": "inactive",
+      "description": "Former long wave broadcast, shut down 2014",
+      "descriptionDE": "Ehemaliger Langwellen-Rundfunk, 2014 abgeschaltet",
+      "operator": "Deutschlandradio",
+      "notes": "War einer der letzten LW-Sender in Deutschland."
+    },
+    {
+      "id": "rtl-234",
+      "name": "RTL Radio",
+      "nameDE": "RTL Radio Luxemburg",
+      "type": "broadcast_lw",
+      "frequencyHz": 234000,
+      "powerWatts": 2000000,
+      "location": {
+        "name": "Beidweiler",
+        "country": "Luxembourg",
+        "latitude": 49.7258,
+        "longitude": 6.3267
+      },
+      "status": "inactive",
+      "description": "Former RTL long wave broadcast, shut down 2022",
+      "descriptionDE": "Ehemaliger RTL Langwellen-Rundfunk, 2022 abgeschaltet",
+      "notes": "Sendete von 1933 bis 2022. Legendärer Sender."
+    },
+    {
+      "id": "europe1-183",
+      "name": "Europe 1",
+      "nameDE": "Europe 1",
+      "type": "broadcast_lw",
+      "frequencyHz": 183000,
+      "powerWatts": 2000000,
+      "location": {
+        "name": "Felsberg-Berus",
+        "country": "Germany",
+        "latitude": 49.2603,
+        "longitude": 6.7689
+      },
+      "status": "active",
+      "description": "French long wave broadcast from German border",
+      "descriptionDE": "Französischer Langwellen-Rundfunk von der deutschen Grenze",
+      "operator": "Europe 1",
+      "notes": "Einer der letzten verbliebenen starken LW-Sender."
+    },
+    {
+      "id": "bbc-radio4-198",
+      "name": "BBC Radio 4 LW",
+      "nameDE": "BBC Radio 4 Langwelle",
+      "type": "broadcast_lw",
+      "frequencyHz": 198000,
+      "powerWatts": 500000,
+      "location": {
+        "name": "Droitwich",
+        "country": "United Kingdom",
+        "latitude": 52.2969,
+        "longitude": -2.1089
+      },
+      "status": "active",
+      "description": "BBC Radio 4 long wave broadcast",
+      "descriptionDE": "BBC Radio 4 Langwellen-Rundfunk",
+      "operator": "BBC",
+      "notes": "Wichtig für UK Shipping Forecast."
+    }
+  ],
+  "navigation": [
+    {
+      "id": "ndb-fhd",
+      "name": "NDB FHD",
+      "nameDE": "NDB Friedrichshafen",
+      "type": "navigation",
+      "frequencyHz": 428000,
+      "location": {
+        "name": "Friedrichshafen",
+        "country": "Germany",
+        "latitude": 47.6714,
+        "longitude": 9.5106
+      },
+      "status": "unknown",
+      "description": "Non-directional beacon for aviation",
+      "descriptionDE": "Ungerichtetes Funkfeuer für Luftfahrt",
+      "notes": "NDBs werden sukzessive außer Betrieb genommen."
+    },
+    {
+      "id": "vor-dkb",
+      "name": "VOR DKB",
+      "nameDE": "VOR Dinkelsbühl",
+      "type": "navigation",
+      "frequencyHz": 117200000,
+      "location": {
+        "name": "Dinkelsbühl",
+        "country": "Germany",
+        "latitude": 49.0697,
+        "longitude": 10.3228
+      },
+      "status": "active",
+      "description": "VOR navigation beacon",
+      "descriptionDE": "VOR Drehfunkfeuer",
+      "notes": "Teil des deutschen VOR-Netzes."
+    }
+  ],
+  "amateur": [
+    {
+      "id": "db0fs",
+      "name": "DB0FS",
+      "nameDE": "DB0FS Feldberg",
+      "type": "amateur",
+      "frequencyHz": 439275000,
+      "frequencyHzSecondary": 431675000,
+      "location": {
+        "name": "Großer Feldberg",
+        "country": "Germany",
+        "latitude": 50.2217,
+        "longitude": 8.4461
+      },
+      "status": "active",
+      "description": "Amateur radio repeater on Großer Feldberg",
+      "descriptionDE": "Amateurfunk-Relais auf dem Großen Feldberg",
+      "coverage": "Rhein-Main-Gebiet",
+      "notes": "Output 439.275 MHz, Input 431.675 MHz, CTCSS 67.0 Hz"
+    },
+    {
+      "id": "db0wa",
+      "name": "DB0WA",
+      "nameDE": "DB0WA Wasserkuppe",
+      "type": "amateur",
+      "frequencyHz": 145700000,
+      "frequencyHzSecondary": 145100000,
+      "location": {
+        "name": "Wasserkuppe",
+        "country": "Germany",
+        "latitude": 50.4983,
+        "longitude": 9.9364
+      },
+      "status": "active",
+      "description": "2m amateur radio repeater",
+      "descriptionDE": "2m Amateurfunk-Relais",
+      "coverage": "Nordhessen, Thüringen",
+      "notes": "Output 145.700 MHz, Input 145.100 MHz"
+    },
+    {
+      "id": "db0zu",
+      "name": "DB0ZU",
+      "nameDE": "DB0ZU Zugspitze",
+      "type": "amateur",
+      "frequencyHz": 439075000,
+      "location": {
+        "name": "Zugspitze",
+        "country": "Germany",
+        "latitude": 47.4211,
+        "longitude": 10.9856
+      },
+      "status": "active",
+      "description": "Amateur radio repeater on Germany's highest peak",
+      "descriptionDE": "Amateurfunk-Relais auf Deutschlands höchstem Berg",
+      "coverage": "Südbayern, Österreich",
+      "notes": "Hervorragende Reichweite durch Standorthöhe."
+    }
+  ],
+  "typeNames": {
+    "time_signal": { "name": "Time Signal", "nameDE": "Zeitzeichen" },
+    "broadcast_lw": { "name": "Long Wave Broadcast", "nameDE": "LW-Rundfunk" },
+    "broadcast_mw": { "name": "Medium Wave Broadcast", "nameDE": "MW-Rundfunk" },
+    "broadcast_sw": { "name": "Short Wave Broadcast", "nameDE": "KW-Rundfunk" },
+    "broadcast_fm": { "name": "FM Broadcast", "nameDE": "UKW-Rundfunk" },
+    "navigation": { "name": "Navigation", "nameDE": "Navigation" },
+    "amateur": { "name": "Amateur Radio", "nameDE": "Amateurfunk" },
+    "utility": { "name": "Utility", "nameDE": "Utility" }
+  }
+}

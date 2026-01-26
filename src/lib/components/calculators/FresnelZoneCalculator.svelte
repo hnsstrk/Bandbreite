@@ -196,7 +196,7 @@
         <InfoTooltip
           title="Betriebsfrequenz"
           short="Frequenz des Richtfunklinks"
-          detailed="Hoehere Frequenzen haben kleinere Fresnel-Zonen und benoetigen weniger Freiheit."
+          detailed="Höhere Frequenzen haben kleinere Fresnel-Zonen und benoetigen weniger Freiheit."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -241,7 +241,7 @@
         <InfoTooltip
           title="Link-Distanz"
           short="Abstand zwischen TX und RX"
-          detailed="Die Fresnel-Zone ist am groessten in der Mitte der Strecke."
+          detailed="Die Fresnel-Zone ist am größten in der Mitte der Strecke."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -276,7 +276,7 @@
         <InfoTooltip
           title="Hindernis-Position"
           short="Position entlang der Strecke"
-          detailed="Position des zu pruefenden Hindernisses (Baum, Gebaeude, Huegel)."
+          detailed="Position des zu prüfenden Hindernisses (Baum, Gebäude, Huegel)."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -307,7 +307,7 @@
 
     <!-- Wavelength Display -->
     <div class="space-y-2">
-      <div class="text-label">Wellenlaenge</div>
+      <div class="text-label">Wellenlänge</div>
       <div class="result-box-inline">
         <span class="text-lg font-bold text-green-600 dark:text-green-400">
           {wavelengthM > 0 ? formatNumber(wavelengthM * 100, 2) : '—'} cm
@@ -340,7 +340,7 @@
         <InfoTooltip
           title="Mindestfreiheit"
           short="Empfohlene minimale Freiheit"
-          detailed="Fuer zuverlaessige Verbindungen sollten mindestens 60% der 1. Fresnel-Zone frei von Hindernissen sein."
+          detailed="Für zuverlässige Verbindungen sollten mindestens 60% der 1. Fresnel-Zone frei von Hindernissen sein."
         />
       </div>
       <div class="text-2xl font-bold text-green-600 dark:text-green-400">
@@ -536,14 +536,14 @@
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
       <strong>Fresnel-Zonen:</strong> Die erste Fresnel-Zone beschreibt den Bereich, in dem sich
-      das Signal konstruktiv verstaerkt. Hindernisse in diesem Bereich verursachen Signaldaempfung.
+      das Signal konstruktiv verstärkt. Hindernisse in diesem Bereich verursachen Signaldämpfung.
     </p>
     <p class="mb-2">
-      <strong>60% Regel:</strong> Fuer eine zuverlaessige Verbindung sollten mindestens 60% der
+      <strong>60% Regel:</strong> Für eine zuverlässige Verbindung sollten mindestens 60% der
       ersten Fresnel-Zone frei von Hindernissen sein. Bei 100% Freiheit: kein Verlust durch Fresnel-Effekte.
     </p>
     <p>
-      <strong>Praxistipp:</strong> Antennenhöhe = 60% des Fresnel-Radius + Hindernishoehe + Sicherheitsmarge.
+      <strong>Praxistipp:</strong> Antennenhöhe = 60% des Fresnel-Radius + Hindernishöhe + Sicherheitsmarge.
     </p>
   </div>
 </div>

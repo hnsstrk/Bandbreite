@@ -212,7 +212,7 @@
       class="w-full h-auto"
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Frequenznutzung Diagramm: Zeigt verschiedene Anwendungen ueber dem Frequenzspektrum"
+      aria-label="Frequenznutzung Diagramm: Zeigt verschiedene Anwendungen über dem Frequenzspektrum"
     >
       <!-- Background -->
       <rect
@@ -412,7 +412,7 @@
   {:else}
     <div class="p-4 bg-surface-secondary rounded-lg text-center text-muted">
       {filteredApplications.length > 0
-        ? `${filteredApplications.length} Anwendungen angezeigt. Klicken Sie auf eine Anwendung fuer Details.`
+        ? `${filteredApplications.length} Anwendungen angezeigt. Klicken Sie auf eine Anwendung für Details.`
         : 'Keine Anwendungen in den ausgewaehlten Kategorien.'}
     </div>
   {/if}
@@ -420,7 +420,7 @@
   <!-- Statistics -->
   <div class="mt-4 text-xs text-muted">
     <strong>Hinweis:</strong> Die Darstellung zeigt die Frequenzbelegung durch verschiedene Dienste.
-    Ueberlappungen sind moeglich (z.B. primaere/sekundaere Zuweisung oder regionale Unterschiede).
+    Überlappungen sind möglich (z.B. primäre/sekundäre Zuweisung oder regionale Unterschiede).
     Insgesamt {ALL_APPLICATIONS.length} Anwendungen in der Datenbank.
   </div>
 </div>

@@ -4,14 +4,14 @@
 
 <svelte:head>
   <title>Frequenzband-Explorer - Bandbreite</title>
-  <meta name="description" content="Interaktiver Explorer fuer Frequenzbaender" />
+  <meta name="description" content="Interaktiver Explorer für Frequenzbänder" />
 </svelte:head>
 
 <div class="page-content">
   <header class="page-header">
     <h1 class="text-heading-1">Frequenzband-Explorer</h1>
     <p class="header-description">
-      Erkunden Sie Frequenzbaender interaktiv. Vergleichen Sie ITU, IEEE und NATO Bandbezeichnungen
+      Erkunden Sie Frequenzbänder interaktiv. Vergleichen Sie ITU, IEEE und NATO Bandbezeichnungen
       und entdecken Sie typische Anwendungen in verschiedenen Frequenzbereichen.
     </p>
   </header>

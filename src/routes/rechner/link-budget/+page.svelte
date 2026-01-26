@@ -36,15 +36,15 @@
 
 <svelte:head>
   <title>Link Budget - Bandbreite</title>
-  <meta name="description" content="Link Budget Kalkulator fuer Funkstrecken" />
+  <meta name="description" content="Link Budget Kalkulator für Funkstrecken" />
 </svelte:head>
 
 <div class="page-content">
   <header class="page-header">
     <h1 class="text-heading-1">Link Budget</h1>
     <p class="header-description">
-      Berechnen Sie das Link Budget fuer Funkstrecken. Inklusive Free Space Path Loss (FSPL),
-      atmosphaerischer Daempfung und Systemmargen.
+      Berechnen Sie das Link Budget für Funkstrecken. Inklusive Free Space Path Loss (FSPL),
+      atmosphärischer Dämpfung und Systemmargen.
     </p>
   </header>
 
@@ -55,9 +55,9 @@
       <div class="card">
         <h3 class="text-heading-3">Link Budget Waterfall</h3>
         <p class="section-description">
-          Visuelle Darstellung des Signalpfads vom Sender zum Empfaenger.
-          Gruene Balken zeigen Gewinne, rote Balken zeigen Verluste.
-          Die orangefarbene Linie markiert die Empfaengerempfindlichkeit.
+          Visuelle Darstellung des Signalpfads vom Sender zum Empfänger.
+          Grüne Balken zeigen Gewinne, rote Balken zeigen Verluste.
+          Die orangefarbene Linie markiert die Empfängerempfindlichkeit.
         </p>
         <div class="chart-container">
           <LinkBudgetWaterfall data={linkBudgetData} />

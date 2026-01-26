@@ -12,7 +12,7 @@
     <h1 class="text-heading-1">Skin-Tiefe</h1>
     <p class="header-description">
       Berechnen Sie die Skin-Tiefe (Eindringtiefe) elektromagnetischer Wellen in leitenden Materialien.
-      Wichtig fuer HF-Design und Abschirmung.
+      Wichtig für HF-Design und Abschirmung.
     </p>
   </header>
 
@@ -20,21 +20,6 @@
     <SkinDepthCalculator />
   </section>
 
-  <section class="card">
-    <h2 class="text-heading-2">Formel-Referenz</h2>
-    <div class="formula-content">
-      <p class="section-description">
-        Die Skin-Tiefe (Eindringtiefe) berechnet sich als:
-      </p>
-      <div class="formula-box">
-        &#948; = &#8730;(2 / (&#969; &#956; &#963;)) = &#8730;(&#961; / (&#960; f &#956;))
-      </div>
-      <p class="section-description">
-        Wobei &#948; = Skin-Tiefe, &#969; = Kreisfrequenz, &#956; = magnetische Permeabilitaet,
-        &#963; = elektrische Leitfaehigkeit, &#961; = spezifischer Widerstand, f = Frequenz.
-      </p>
-    </div>
-  </section>
 </div>
 
 <style>
@@ -60,27 +45,4 @@
     width: 100%;
   }
 
-  .section-description {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-tertiary);
-    margin: 0.75rem 0;
-    line-height: var(--line-height-normal);
-  }
-
-  .formula-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .formula-box {
-    background-color: var(--color-bg-code);
-    padding: 1rem;
-    border-radius: var(--radius-lg);
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-    font-size: var(--font-size-lg);
-    color: var(--color-text-primary);
-    text-align: center;
-    margin: 0.5rem 0;
-  }
 </style>

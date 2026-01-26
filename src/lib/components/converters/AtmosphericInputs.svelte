@@ -99,7 +99,7 @@
       class:active={activeTab === 'atmospheric'}
       onclick={() => (activeTab = 'atmospheric')}
     >
-      Atmosphaerisch (P.676)
+      Atmosphärisch (P.676)
       <InfoTooltip
         title={atmosphericExplanations.general.title}
         short={atmosphericExplanations.general.short}

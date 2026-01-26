@@ -409,7 +409,7 @@
   {:else}
     <div class="p-4 bg-surface-secondary rounded-lg text-center text-muted">
       {filteredEvents.length > 0
-        ? `${filteredEvents.length} Ereignisse angezeigt. Klicken Sie auf ein Ereignis fuer Details.`
+        ? `${filteredEvents.length} Ereignisse angezeigt. Klicken Sie auf ein Ereignis für Details.`
         : 'Keine Ereignisse in den ausgewaehlten Kategorien.'}
     </div>
   {/if}

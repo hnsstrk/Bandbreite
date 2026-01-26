@@ -145,7 +145,7 @@
 >
   <!-- Band mode selector -->
   <div class="flex gap-2 mb-3 ml-2">
-    <span class="text-secondary text-sm">Baender:</span>
+    <span class="text-secondary text-sm">Bänder:</span>
     <button
       class="px-2 py-0.5 text-xs rounded transition-colors {bandMode === 'ieee' ? 'bg-blue-600 text-white' : 'bg-surface-tertiary text-secondary hover:bg-surface-hover'}"
       onclick={() => bandMode = 'ieee'}

@@ -12,7 +12,7 @@
     <h1 class="text-heading-1">Radar-Reichweite</h1>
     <p class="header-description">
       Berechnen Sie die maximale Reichweite eines Radarsystems basierend auf der Radargleichung.
-      Beruecksichtigt Sendeleistung, Antennengewinn, Radarquerschnitt und Empfaengerempfindlichkeit.
+      Berücksichtigt Sendeleistung, Antennengewinn, Radarquerschnitt und Empfängerempfindlichkeit.
     </p>
   </header>
 
@@ -20,21 +20,6 @@
     <RadarRangeCalculator />
   </section>
 
-  <section class="card">
-    <h2 class="text-heading-2">Formel-Referenz</h2>
-    <div class="formula-content">
-      <p class="section-description">
-        Die Radargleichung zur Berechnung der maximalen Reichweite:
-      </p>
-      <div class="formula-box">
-        R<sub>max</sub> = &#8308;&#8730;((P<sub>t</sub> G<sup>2</sup> &#955;<sup>2</sup> &#963;) / ((4&#960;)<sup>3</sup> P<sub>min</sub>))
-      </div>
-      <p class="section-description">
-        Wobei P<sub>t</sub> = Sendeleistung, G = Antennengewinn, &#955; = Wellenlaenge,
-        &#963; = Radarquerschnitt (RCS), P<sub>min</sub> = minimale detektierbare Leistung.
-      </p>
-    </div>
-  </section>
 </div>
 
 <style>
@@ -60,27 +45,4 @@
     width: 100%;
   }
 
-  .section-description {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-tertiary);
-    margin: 0.75rem 0;
-    line-height: var(--line-height-normal);
-  }
-
-  .formula-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .formula-box {
-    background-color: var(--color-bg-code);
-    padding: 1rem;
-    border-radius: var(--radius-lg);
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-    font-size: var(--font-size-lg);
-    color: var(--color-text-primary);
-    text-align: center;
-    margin: 0.5rem 0;
-  }
 </style>

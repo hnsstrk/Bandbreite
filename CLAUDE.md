@@ -76,17 +76,27 @@ static/                    # Static assets (icons, images)
 
 This is an RF engineering application. Key formulas to implement:
 
-> **HINWEIS / NOTE:** Die folgenden Formeln muessen vor Produktiveinsatz geprueft werden.
+> **HINWEIS / NOTE:** Die folgenden Formeln müssen vor Produktiveinsatz geprüft werden.
 > The following formulas need to be verified before production use.
 
-- **Wavelength**: λ = c / f (c ≈ 299,792,458 m/s) **[ZU UEBERPRUEFEN]**
-- **FSPL**: FSPL(dB) = 20·log₁₀(d) + 20·log₁₀(f) + 20·log₁₀(4π/c) **[ZU UEBERPRUEFEN]**
-- **Radar equation**: Pr = (Pt · G² · λ² · σ) / ((4π)³ · R⁴) **[ZU UEBERPRUEFEN]**
-- **Shannon-Hartley**: C = B · log₂(1 + SNR), where SNR_linear = 10^(SNR_dB / 10) **[ZU UEBERPRUEFEN]**
-- **Nyquist bandwidth**: Rs = 2 · B (max symbol rate without ISI) **[ZU UEBERPRUEFEN]**
-- **Spectral efficiency**: η = R / B (bit/s/Hz) **[ZU UEBERPRUEFEN]**
+- **Wavelength**: λ = c / f (c ≈ 299,792,458 m/s) **[ZU ÜBERPRÜFEN]**
+- **FSPL**: FSPL(dB) = 20·log₁₀(d) + 20·log₁₀(f) + 20·log₁₀(4π/c) **[ZU ÜBERPRÜFEN]**
+- **Radar equation**: Pr = (Pt · G² · λ² · σ) / ((4π)³ · R⁴) **[ZU ÜBERPRÜFEN]**
+- **Shannon-Hartley**: C = B · log₂(1 + SNR), where SNR_linear = 10^(SNR_dB / 10) **[ZU ÜBERPRÜFEN]**
+- **Nyquist bandwidth**: Rs = 2 · B (max symbol rate without ISI) **[ZU ÜBERPRÜFEN]**
+- **Spectral efficiency**: η = R / B (bit/s/Hz) **[ZU ÜBERPRÜFEN]**
 
 Frequency band standards used: ITU (ELF-THF), IEEE (L/S/C/X/Ku/K/Ka/V/W), and NATO (A-O).
+
+---
+
+## Sprachkonventionen
+
+**Deutsche Umlaute verwenden:** In allen deutschen Texten (UI, Kommentare, Dokumentation) immer echte Umlaute (ä, ö, ü, ß) verwenden, NICHT ae, oe, ue, ss.
+
+Beispiele:
+- ✅ `Dämpfung`, `für`, `über`, `größer`, `schließen`
+- ❌ `Daempfung`, `fuer`, `ueber`, `groesser`, `schliessen`
 
 ---
 

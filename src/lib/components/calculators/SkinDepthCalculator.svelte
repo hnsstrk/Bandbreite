@@ -176,7 +176,7 @@
         <InfoTooltip
           title="Frequenz"
           short="Frequenz des elektromagnetischen Signals"
-          detailed="Bei niedrigeren Frequenzen ist die Eindringtiefe groesser. ELF/VLF (3 Hz - 30 kHz) wird fuer U-Boot-Kommunikation genutzt."
+          detailed="Bei niedrigeren Frequenzen ist die Eindringtiefe größer. ELF/VLF (3 Hz - 30 kHz) wird für U-Boot-Kommunikation genutzt."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -211,10 +211,10 @@
     <!-- Medium Selection -->
     <div class="space-y-2">
       <label for="skin-conductivity" class="text-label">
-        Leitfaehigkeit (sigma)
+        Leitfähigkeit (sigma)
         <InfoTooltip
-          title="Elektrische Leitfaehigkeit"
-          short="Leitfaehigkeit des Mediums in S/m"
+          title="Elektrische Leitfähigkeit"
+          short="Leitfähigkeit des Mediums in S/m"
           detailed="Seewasser: 4 S/m, Suesswasser: 0.01 S/m, feuchte Erde: 0.1 S/m, trockene Erde: 0.001 S/m"
         />
       </label>
@@ -253,8 +253,8 @@
         Skin-Depth (delta)
         <InfoTooltip
           title="Skin-Depth"
-          short="Tiefe, bei der Amplitude auf 1/e (37%) abfaellt"
-          detailed="Die Eindringtiefe oder Skin-Depth ist die Tiefe, in der die Feldstaerke auf 37% des Oberflaechenwerts abgefallen ist."
+          short="Tiefe, bei der Amplitude auf 1/e (37%) abfällt"
+          detailed="Die Eindringtiefe oder Skin-Depth ist die Tiefe, in der die Feldstärke auf 37% des Oberflaechenwerts abgefallen ist."
         />
       </div>
       <div class="text-2xl font-bold text-blue-500 dark:text-blue-400">
@@ -268,8 +268,8 @@
         Praktische Kommunikationstiefe
         <InfoTooltip
           title="Praktische Tiefe"
-          short="Nutzbare Tiefe fuer Kommunikation (~2.5 delta)"
-          detailed="Die praktische Kommunikationstiefe entspricht etwa 2-3 Skin-Depths. Darunter ist das Signal zu stark gedaempft."
+          short="Nutzbare Tiefe für Kommunikation (~2.5 delta)"
+          detailed="Die praktische Kommunikationstiefe entspricht etwa 2-3 Skin-Depths. Darunter ist das Signal zu stark gedämpft."
         />
       </div>
       <div class="text-2xl font-bold text-green-600 dark:text-green-400">
@@ -317,7 +317,7 @@
       class="w-full h-auto"
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Skin-Depth Diagramm: Eindringtiefe ueber Frequenz fuer verschiedene Medien"
+      aria-label="Skin-Depth Diagramm: Eindringtiefe über Frequenz für verschiedene Medien"
     >
       <defs>
         <filter id="skinMarkerGlow" x="-50%" y="-50%" width="200%" height="200%">
@@ -487,13 +487,13 @@
   <!-- Explanation -->
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
-      <strong>U-Boot-Kommunikation:</strong> U-Boote koennen nur bei sehr niedrigen Frequenzen (ELF/VLF)
+      <strong>U-Boot-Kommunikation:</strong> U-Boote können nur bei sehr niedrigen Frequenzen (ELF/VLF)
       in getauchtem Zustand empfangen. Bei 76 Hz (US Navy ELF) betraegt die Skin-Depth in Seewasser
-      ca. 46 m, was eine praktische Empfangstiefe von ~100 m ermoeglicht.
+      ca. 46 m, was eine praktische Empfangstiefe von ~100 m ermöglicht.
     </p>
     <p>
       <strong>Nachteile:</strong> Die extrem niedrige Frequenz bedeutet auch extrem geringe Datenraten
-      (typisch &lt; 1 bit/min bei ELF). Daher werden diese Systeme nur fuer einfache Befehle verwendet.
+      (typisch &lt; 1 bit/min bei ELF). Daher werden diese Systeme nur für einfache Befehle verwendet.
     </p>
   </div>
 </div>

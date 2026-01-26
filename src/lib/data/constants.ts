@@ -181,7 +181,7 @@ export const IONOSPHERE_E_LAYER: IonosphericLayer = {
   altitudeMaxKm: 150,
   typicalPeakKm: 110,
   description: 'Reflects MF/lower HF, sporadic E allows VHF',
-  descriptionDE: 'Reflektiert MF/unteres HF, Sporadische E ermoeglicht VHF',
+  descriptionDE: 'Reflektiert MF/unteres HF, Sporadische E ermöglicht VHF',
   daytimePresent: true,
   nighttimePresent: false, // Weakens but may persist
   affectsHF: true,
@@ -217,7 +217,7 @@ export const IONOSPHERE_F2_LAYER: IonosphericLayer = {
   altitudeMaxKm: 400,
   typicalPeakKm: 300,
   description: 'Primary HF reflection layer, present day and night',
-  descriptionDE: 'Hauptreflexionsschicht fuer HF, tag und nacht vorhanden',
+  descriptionDE: 'Hauptreflexionsschicht für HF, tag und nacht vorhanden',
   daytimePresent: true,
   nighttimePresent: true,
   affectsHF: true,
@@ -282,7 +282,7 @@ export const ABSORPTION_WATER_22GHZ: AtmosphericAbsorptionPeak = {
   peakAttenuationDbKm: 0.18,
   bandwidthGHz: 4,
   description: 'Water vapor rotational transition',
-  descriptionDE: 'Wasserdampf-Rotationsuebergang',
+  descriptionDE: 'Wasserdampf-RotationsÜbergang',
   notes: 'Attenuation varies with humidity. Value for 7.5 g/m³ water vapor.'
 };
 

@@ -479,7 +479,7 @@
     </svg>
   {:else}
     <div class="flex items-center justify-center h-64 rounded-lg" style="background: var(--color-chart-bg)">
-      <p style="color: var(--color-text-tertiary)">Keine Link Budget Daten verfuegbar</p>
+      <p style="color: var(--color-text-tertiary)">Keine Link Budget Daten verfügbar</p>
     </div>
   {/if}
 </div>

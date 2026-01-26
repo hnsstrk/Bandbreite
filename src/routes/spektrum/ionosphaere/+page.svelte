@@ -3,16 +3,16 @@
 </script>
 
 <svelte:head>
-  <title>Ionosphaere - Bandbreite</title>
-  <meta name="description" content="Ionosphaerische Ausbreitung und Kurzwellenkommunikation" />
+  <title>Ionosphäre - Bandbreite</title>
+  <meta name="description" content="Ionosphärische Ausbreitung und Kurzwellenkommunikation" />
 </svelte:head>
 
 <div class="page-content">
   <header class="page-header">
-    <h1 class="text-heading-1">Ionosphaerische Ausbreitung</h1>
+    <h1 class="text-heading-1">Ionosphärische Ausbreitung</h1>
     <p class="header-description">
-      Visualisierung der ionosphaerischen Schichten und deren Einfluss auf die Funkwellenausbreitung.
-      Wichtig fuer Kurzwellenkommunikation und HF-Ausbreitung ueber grosse Entfernungen.
+      Visualisierung der ionosphärischen Schichten und deren Einfluss auf die Funkwellenausbreitung.
+      Wichtig für Kurzwellenkommunikation und HF-Ausbreitung über große Entfernungen.
     </p>
   </header>
 
@@ -21,16 +21,16 @@
   </section>
 
   <section class="card">
-    <h2 class="text-heading-2">Ionosphaerische Schichten</h2>
+    <h2 class="text-heading-2">Ionosphärische Schichten</h2>
     <div class="info-content">
       <p class="section-description">
-        Die Ionosphaere besteht aus mehreren Schichten, die Radiowellen reflektieren koennen:
+        Die Ionosphäre besteht aus mehreren Schichten, die Radiowellen reflektieren können:
       </p>
       <ul class="layer-list">
-        <li><strong>D-Schicht (60-90 km):</strong> Nur tagsueber vorhanden, daempft LF und MF Signale</li>
+        <li><strong>D-Schicht (60-90 km):</strong> Nur tagsüber vorhanden, dämpft LF und MF Signale</li>
         <li><strong>E-Schicht (90-150 km):</strong> Reflektiert MF und untere HF Frequenzen</li>
-        <li><strong>F1-Schicht (150-220 km):</strong> Nur tagsueber, verschmilzt nachts mit F2</li>
-        <li><strong>F2-Schicht (220-800 km):</strong> Wichtigste Schicht fuer HF-Langstreckenkommunikation</li>
+        <li><strong>F1-Schicht (150-220 km):</strong> Nur tagsüber, verschmilzt nachts mit F2</li>
+        <li><strong>F2-Schicht (220-800 km):</strong> Wichtigste Schicht für HF-Langstreckenkommunikation</li>
       </ul>
     </div>
   </section>

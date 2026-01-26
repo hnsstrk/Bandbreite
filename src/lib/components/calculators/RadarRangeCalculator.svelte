@@ -50,7 +50,7 @@
     { label: 'X-Band', hz: 9.4e9, desc: 'Marine/Wetter' },
     { label: 'Ku-Band', hz: 15e9, desc: 'Satellit' },
     { label: 'K-Band', hz: 24.125e9, desc: 'Geschwindigkeit' },
-    { label: 'Ka-Band', hz: 35e9, desc: 'Militaer' },
+    { label: 'Ka-Band', hz: 35e9, desc: 'Militär' },
     { label: '77 GHz', hz: 77e9, desc: 'Kfz-Radar' },
   ];
 
@@ -178,7 +178,7 @@
         <InfoTooltip
           title="Radarfrequenz"
           short="Betriebsfrequenz des Radarsystems"
-          detailed="Hoehere Frequenzen ermoeglichen bessere Aufloesung, aber geringere Reichweite. X-Band (9.4 GHz) ist typisch fuer Marine-Radar."
+          detailed="Höhere Frequenzen ermöglichen bessere Aufloesung, aber geringere Reichweite. X-Band (9.4 GHz) ist typisch für Marine-Radar."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -278,7 +278,7 @@
         <InfoTooltip
           title="Radar Cross Section"
           short="Effektive Reflexionsflaeche des Ziels"
-          detailed="Haengt von Groesse, Form und Material des Ziels ab. Stealth-Flugzeuge haben sehr geringe RCS (0.001-0.1 m2)."
+          detailed="Haengt von Größe, Form und Material des Ziels ab. Stealth-Flugzeuge haben sehr geringe RCS (0.001-0.1 m2)."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -312,9 +312,9 @@
       <label for="radar-sensitivity" class="text-label">
         Empfindlichkeit (min. Pr)
         <InfoTooltip
-          title="Empfaengerempfindlichkeit"
+          title="Empfängerempfindlichkeit"
           short="Minimale detektierbare Signalleistung"
-          detailed="Typische Werte: -90 bis -110 dBm. Bestimmt durch Rauschzahl und Bandbreite des Empfaengers."
+          detailed="Typische Werte: -90 bis -110 dBm. Bestimmt durch Rauschzahl und Bandbreite des Empfängers."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -333,7 +333,7 @@
 
     <!-- Wavelength Display -->
     <div class="space-y-2">
-      <div class="text-label">Wellenlaenge</div>
+      <div class="text-label">Wellenlänge</div>
       <div class="result-box-inline">
         <span class="text-lg font-bold text-green-600 dark:text-green-400">
           {wavelengthM > 0 ? formatNumber(wavelengthM * 1000, 2) : '—'} mm
@@ -412,7 +412,7 @@
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
       <strong>Hinweis:</strong> Die Radargleichung beschreibt die Beziehung zwischen Sendeleistung,
-      Antennengewinn, Ziel-RCS und Reichweite. Die R<sup>4</sup>-Abhaengigkeit bedeutet, dass eine
+      Antennengewinn, Ziel-RCS und Reichweite. Die R<sup>4</sup>-Abhängigkeit bedeutet, dass eine
       Verdoppelung der Reichweite eine 16-fache Erhoehung der Sendeleistung erfordert.
     </p>
     <p>

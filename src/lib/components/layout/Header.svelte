@@ -20,25 +20,25 @@
 
   const navItems: NavItem[] = [
     {
+      id: 'spektrum',
+      label: 'Spektrum',
+      items: [
+        { href: '/', label: 'Übersicht' },
+        { href: '/spektrum/explorer', label: 'Frequenzband-Explorer' },
+        { href: '/spektrum/ionosphäre', label: 'Ionosphäre' },
+        { href: '/spektrum/anwendungen', label: 'Anwendungen' }
+      ]
+    },
+    {
       id: 'rechner',
       label: 'Rechner',
       items: [
         { href: '/rechner/fspl', label: 'FSPL-Rechner' },
         { href: '/rechner/link-budget', label: 'Link Budget' },
         { href: '/rechner/radar', label: 'Radar-Reichweite' },
-        { href: '/rechner/kanalkapazitaet', label: 'Kanalkapazitaet' },
+        { href: '/rechner/kanalkapazität', label: 'Kanalkapazität' },
         { href: '/rechner/skin-tiefe', label: 'Skin-Tiefe' },
         { href: '/rechner/fresnel', label: 'Fresnel-Zone' }
-      ]
-    },
-    {
-      id: 'spektrum',
-      label: 'Spektrum',
-      items: [
-        { href: '/', label: 'Uebersicht' },
-        { href: '/spektrum/explorer', label: 'Frequenzband-Explorer' },
-        { href: '/spektrum/ionosphaere', label: 'Ionosphaere' },
-        { href: '/spektrum/anwendungen', label: 'Anwendungen' }
       ]
     },
     {
@@ -200,7 +200,7 @@
         type="button"
         class="mobile-menu-btn"
         onclick={toggleMobileMenu}
-        aria-label={mobileMenuOpen ? 'Menue schliessen' : 'Menue oeffnen'}
+        aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
         aria-expanded={mobileMenuOpen}
       >
         {#if mobileMenuOpen}

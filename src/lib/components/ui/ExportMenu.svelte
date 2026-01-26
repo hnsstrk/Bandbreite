@@ -27,7 +27,7 @@
    */
   async function exportPNG(): Promise<void> {
     if (!targetElement) {
-      exportError = 'Kein Export-Element verfuegbar';
+      exportError = 'Kein Export-Element verfügbar';
       return;
     }
 
@@ -174,7 +174,7 @@
    */
   async function copyToClipboard(): Promise<void> {
     if (!targetElement) {
-      exportError = 'Kein Export-Element verfuegbar';
+      exportError = 'Kein Export-Element verfügbar';
       return;
     }
 
@@ -227,7 +227,7 @@
     type="button"
     onclick={() => showMenu = !showMenu}
     class="btn-secondary flex items-center gap-2"
-    aria-label="Export-Menue oeffnen"
+    aria-label="Export-Menue öffnen"
     aria-expanded={showMenu}
   >
     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

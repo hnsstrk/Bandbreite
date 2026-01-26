@@ -142,7 +142,7 @@
 </script>
 
 <div class="card">
-  <h3 class="text-heading-3 mb-4">Kanalkapazitaet (Shannon-Hartley)</h3>
+  <h3 class="text-heading-3 mb-4">Kanalkapazität (Shannon-Hartley)</h3>
 
   <!-- Input Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -152,7 +152,7 @@
         Bandbreite (B)
         <InfoTooltip
           title="Kanalbandbreite"
-          short="Verfuegbare Bandbreite des Kanals"
+          short="Verfügbare Bandbreite des Kanals"
           detailed="Die Bandbreite bestimmt zusammen mit dem SNR die maximale theoretische Datenrate nach Shannon."
         />
       </label>
@@ -186,11 +186,11 @@
     <!-- SNR Input -->
     <div class="space-y-2">
       <label for="capacity-snr" class="text-label">
-        Signal-Rausch-Verhaeltnis (SNR)
+        Signal-Rausch-Verhältnis (SNR)
         <InfoTooltip
           title="SNR (Signal-to-Noise Ratio)"
-          short="Verhaeltnis von Signalleistung zu Rauschleistung"
-          detailed="Hoehere SNR-Werte ermoeglichen hoeherwertige Modulationen und damit hoehere Datenraten."
+          short="Verhältnis von Signalleistung zu Rauschleistung"
+          detailed="Höhere SNR-Werte ermöglichen höherwertige Modulationen und damit höhere Datenraten."
         />
       </label>
       <div class="flex items-center gap-2">
@@ -228,9 +228,9 @@
     <!-- Shannon Capacity -->
     <div class="result-box">
       <div class="result-label">
-        Shannon-Kapazitaet
+        Shannon-Kapazität
         <InfoTooltip
-          title="Theoretische Kanalkapazitaet"
+          title="Theoretische Kanalkapazität"
           short="Maximale fehlerfreie Datenrate nach Shannon"
           detailed="C = B * log2(1 + SNR). Dies ist die theoretische Obergrenze - praktische Systeme erreichen 60-80% davon."
         />
@@ -282,7 +282,7 @@
       class="w-full h-auto"
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Shannon-Kapazitaet Diagramm: Spektrale Effizienz ueber SNR"
+      aria-label="Shannon-Kapazität Diagramm: Spektrale Effizienz über SNR"
     >
       <defs>
         <filter id="capacityMarkerGlow" x="-50%" y="-50%" width="200%" height="200%">

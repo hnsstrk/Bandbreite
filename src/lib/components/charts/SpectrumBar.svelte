@@ -139,27 +139,27 @@
 
 <div
   bind:this={containerElement}
-  class="w-full bg-slate-800 rounded-lg p-2"
+  class="w-full bg-surface-secondary dark:bg-slate-800 rounded-lg p-2"
   role="img"
   aria-label="Electromagnetic spectrum visualization"
 >
   <!-- Band mode selector -->
   <div class="flex gap-2 mb-3 ml-2">
-    <span class="text-slate-400 text-sm">Bänder:</span>
+    <span class="text-secondary text-sm">Baender:</span>
     <button
-      class="px-2 py-0.5 text-xs rounded transition-colors {bandMode === 'ieee' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}"
+      class="px-2 py-0.5 text-xs rounded transition-colors {bandMode === 'ieee' ? 'bg-blue-600 text-white' : 'bg-surface-tertiary text-secondary hover:bg-surface-hover'}"
       onclick={() => bandMode = 'ieee'}
     >
       IEEE
     </button>
     <button
-      class="px-2 py-0.5 text-xs rounded transition-colors {bandMode === 'nato' ? 'bg-red-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}"
+      class="px-2 py-0.5 text-xs rounded transition-colors {bandMode === 'nato' ? 'bg-red-600 text-white' : 'bg-surface-tertiary text-secondary hover:bg-surface-hover'}"
       onclick={() => bandMode = 'nato'}
     >
       NATO
     </button>
     <button
-      class="px-2 py-0.5 text-xs rounded transition-colors {bandMode === 'civilian' ? 'bg-green-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}"
+      class="px-2 py-0.5 text-xs rounded transition-colors {bandMode === 'civilian' ? 'bg-green-600 text-white' : 'bg-surface-tertiary text-secondary hover:bg-surface-hover'}"
       onclick={() => bandMode = 'civilian'}
     >
       Zivil
@@ -185,7 +185,8 @@
         x="0"
         y={emHeight / 2}
         dominant-baseline="middle"
-        class="fill-slate-400 text-xs font-medium"
+        style="fill: var(--color-chart-text-secondary)"
+        class="text-xs font-medium"
       >
         EM
       </text>
@@ -247,7 +248,8 @@
           x="0"
           y={rowHeight / 2}
           dominant-baseline="middle"
-          class="fill-slate-400 text-xs font-medium"
+          style="fill: var(--color-chart-text-secondary)"
+          class="text-xs font-medium"
         >
           {bandMode === 'ieee' ? 'IEEE' : bandMode === 'nato' ? 'NATO' : 'Zivil'}
         </text>
@@ -320,15 +322,14 @@
               y1={rowHeight}
               x2={tickX}
               y2={rowHeight + 4}
-              stroke="#64748b"
+              style="stroke: var(--color-chart-axis)"
               stroke-width="1"
             />
             <text
               x={tickX}
               y={rowHeight + 14}
               text-anchor="middle"
-              class="fill-slate-500 text-xs"
-              style="font-size: 9px;"
+              style="fill: var(--color-chart-text-secondary); font-size: 9px;"
             >
               {formatFrequency(tick)}
             </text>

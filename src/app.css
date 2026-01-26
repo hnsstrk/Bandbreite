@@ -594,19 +594,263 @@ body {
    Responsive Adjustments
    ============================================ */
 
-@media (max-width: 768px) {
+/* Large screens (lg: 1024px+) - Default styles apply */
+
+/* Medium screens (md: 768px - 1023px) */
+@media (max-width: 1023px) {
+  :root {
+    --chart-min-width: 700px;
+  }
+}
+
+/* Small screens (sm: 640px - 767px) */
+@media (max-width: 767px) {
   :root {
     --chart-min-width: 600px;
+    --font-size-3xl: 1.5rem;      /* 24px instead of 30px */
+    --font-size-2xl: 1.25rem;     /* 20px instead of 24px */
+    --font-size-xl: 1.125rem;     /* 18px instead of 20px */
   }
 
   .card {
     padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Improve touch targets */
+  .btn,
+  .btn-preset,
+  .btn-chip {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .btn-chip {
+    padding: 0.5rem 0.75rem;
+    font-size: var(--font-size-sm);
+  }
+
+  .input-field,
+  .select-field {
+    min-height: 44px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+
+  .checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Stack result boxes vertically */
+  .result-box {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .result-value {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Improve table scrolling */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
-@media (max-width: 480px) {
+/* Extra small screens (xs: < 640px) */
+@media (max-width: 639px) {
   :root {
     --chart-min-width: 500px;
+    --spacing-lg: 1rem;
+    --spacing-xl: 1.5rem;
+  }
+
+  .card {
+    padding: var(--spacing-sm);
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    border-radius: 0;
+  }
+
+  .text-heading-1 {
+    font-size: 1.5rem;
+  }
+
+  .text-heading-2 {
+    font-size: 1.25rem;
+  }
+
+  .text-heading-3 {
+    font-size: 1.125rem;
+  }
+
+  /* Full-width buttons on mobile */
+  .btn-mobile-full {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Horizontal scroll indicator for charts */
+  .chart-container::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to right, transparent, var(--color-bg-surface));
+    pointer-events: none;
+  }
+
+  /* Improve preset button layout */
+  .preset-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+}
+
+/* ============================================
+   Touch-Friendly Utilities
+   ============================================ */
+
+/* Ensure minimum touch target size (44x44px as per Apple/Google guidelines) */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Disable hover effects on touch devices */
+@media (hover: none) {
+  .btn:hover,
+  .btn-preset:hover,
+  .btn-chip:hover,
+  .btn-secondary:hover,
+  .btn-ghost:hover {
+    background-color: inherit;
+    border-color: inherit;
+    color: inherit;
+  }
+
+  /* Add active state for touch feedback */
+  .btn:active,
+  .btn-preset:active,
+  .btn-chip:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+/* ============================================
+   Safe Area Insets (for notched devices)
+   ============================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* ============================================
+   Mobile Navigation Improvements
+   ============================================ */
+
+.mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border-default);
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0));
+  z-index: 50;
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.75rem;
+    min-width: 64px;
+    min-height: 44px;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .mobile-nav-item:hover,
+  .mobile-nav-item.active {
+    color: var(--color-accent-primary);
+    background-color: var(--color-bg-elevated);
+  }
+
+  .mobile-nav-item svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Add padding to main content to account for mobile nav */
+  .main-content-with-mobile-nav {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0));
+  }
+}
+
+/* ============================================
+   Table Mobile Optimization
+   ============================================ */
+
+@media (max-width: 767px) {
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive table {
+    min-width: 500px;
+  }
+
+  /* Alternatively: stack table rows on mobile */
+  .table-stack tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .table-stack td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .table-stack td::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+  }
+
+  .table-stack td:last-child {
+    border-bottom: none;
   }
 }
 

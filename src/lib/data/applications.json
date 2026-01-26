@@ -10,7 +10,22 @@
       "description": "Long wave AM broadcasting",
       "descriptionDE": "Langwellen-AM-Rundfunk (ITU Region 1)",
       "region": "europe",
-      "notes": "Stark rückläufig, viele Sender abgeschaltet"
+      "notes": "Stark rückläufig, viele Sender abgeschaltet",
+      "power": {
+        "typical": {
+          "value": 500,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Rundfunksender"
+        },
+        "max": {
+          "value": 2000,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Großsender (z.B. ehem. Droitwich)"
+        },
+        "notes": "Historisch hohe Leistungen wegen geringer Antennenwirkungsgrade"
+      }
     },
     {
       "id": "mw-broadcast",
@@ -23,7 +38,22 @@
       "descriptionDE": "AM-Rundfunk (Mittelwelle)",
       "region": "worldwide",
       "standard": "ITU RR Article 12",
-      "notes": "Kanalraster 9 kHz (Europa) bzw. 10 kHz (Amerika)"
+      "notes": "Kanalraster 9 kHz (Europa) bzw. 10 kHz (Amerika)",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Regionalsender"
+        },
+        "max": {
+          "value": 2000,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Internationale Sender (Clear Channel)"
+        },
+        "notes": "Europäische Sender typisch 10-300 kW"
+      }
     },
     {
       "id": "sw-broadcast",
@@ -35,7 +65,22 @@
       "description": "International shortwave broadcasting (multiple bands)",
       "descriptionDE": "Internationaler Kurzwellen-Rundfunk (verschiedene Bänder)",
       "region": "worldwide",
-      "notes": "Mehrere Teilbänder: 49m, 41m, 31m, 25m, 22m, 19m, 16m, 13m, 11m"
+      "notes": "Mehrere Teilbänder: 49m, 41m, 31m, 25m, 22m, 19m, 16m, 13m, 11m",
+      "power": {
+        "typical": {
+          "value": 250,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Internationale Rundfunksender"
+        },
+        "max": {
+          "value": 500,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Großsender (BBC, VOA)"
+        },
+        "notes": "Viele Sender nutzen Richtantennen mit hohem Gewinn"
+      }
     },
     {
       "id": "fm-broadcast",
@@ -48,7 +93,22 @@
       "descriptionDE": "UKW-FM-Rundfunk",
       "region": "worldwide",
       "standard": "ITU RR Appendix 10",
-      "notes": "Kanalraster 100 kHz, Stereo mit 19 kHz Pilotton"
+      "notes": "Kanalraster 100 kHz, Stereo mit 19 kHz Pilotton",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Regionalsender"
+        },
+        "max": {
+          "value": 100,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Großsender an Hochstandorten"
+        },
+        "notes": "Typisch 1-100 kW ERP je nach Versorgungsgebiet"
+      }
     },
     {
       "id": "dab-vhf",
@@ -61,7 +121,22 @@
       "descriptionDE": "Digitaler Rundfunk im VHF-Band III",
       "region": "europe",
       "standard": "ETSI EN 300 401",
-      "notes": "Bloecke 5A-13F, je 1,536 MHz Bandbreite"
+      "notes": "Bloecke 5A-13F, je 1,536 MHz Bandbreite",
+      "power": {
+        "typical": {
+          "value": 4,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "SFN-Sender"
+        },
+        "max": {
+          "value": 10,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Großsender"
+        },
+        "notes": "Typisch 1-10 kW ERP pro Standort im SFN"
+      }
     },
     {
       "id": "dab-l",
@@ -74,7 +149,22 @@
       "descriptionDE": "Digitaler Rundfunk im L-Band",
       "region": "europe",
       "standard": "ETSI EN 300 401",
-      "notes": "Bloecke LA-LW, in Deutschland nicht genutzt"
+      "notes": "Bloecke LA-LW, in Deutschland nicht genutzt",
+      "power": {
+        "typical": {
+          "value": 2,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Lokalsender"
+        },
+        "max": {
+          "value": 5,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Regionalsender"
+        },
+        "notes": "Geringere Leistungen als Band III wegen höherer Frequenz"
+      }
     },
     {
       "id": "dvb-t-uhf",
@@ -87,7 +177,22 @@
       "descriptionDE": "Digitales terrestrisches Fernsehen",
       "region": "europe",
       "standard": "ETSI EN 302 755",
-      "notes": "Kanaele 21-48, oberer Bereich (700 MHz) an Mobilfunk abgegeben"
+      "notes": "Kanaele 21-48, oberer Bereich (700 MHz) an Mobilfunk abgegeben",
+      "power": {
+        "typical": {
+          "value": 20,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Regionalsender"
+        },
+        "max": {
+          "value": 50,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Großsender (Hochstandorte)"
+        },
+        "notes": "Typisch 10-50 kW ERP, SFN ermöglicht geringere Einzelleistungen"
+      }
     }
   ],
   "mobile": [
@@ -102,7 +207,22 @@
       "descriptionDE": "2G-Mobilfunk (900 MHz Band)",
       "region": "europe",
       "standard": "ETSI TS 145 005",
-      "notes": "Uplink 880-915 MHz, Downlink 925-960 MHz. Wird für LTE umgenutzt."
+      "notes": "Uplink 880-915 MHz, Downlink 925-960 MHz. Wird für LTE umgenutzt.",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Mobilgerät (Class 4)"
+        },
+        "max": {
+          "value": 2,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Mobilgerät Maximum (33 dBm)"
+        },
+        "notes": "Basisstation typisch 20-40 W pro Sektor"
+      }
     },
     {
       "id": "gsm-1800",
@@ -115,7 +235,22 @@
       "descriptionDE": "2G-Mobilfunk (1800 MHz Band)",
       "region": "europe",
       "standard": "ETSI TS 145 005",
-      "notes": "Uplink 1710-1785 MHz, Downlink 1805-1880 MHz"
+      "notes": "Uplink 1710-1785 MHz, Downlink 1805-1880 MHz",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Mobilgerät (Class 1)"
+        },
+        "max": {
+          "value": 1,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Mobilgerät Maximum (30 dBm)"
+        },
+        "notes": "Basisstation typisch 20-40 W pro Sektor"
+      }
     },
     {
       "id": "umts-2100",
@@ -128,7 +263,22 @@
       "descriptionDE": "3G-Mobilfunk (UMTS)",
       "region": "worldwide",
       "standard": "3GPP TS 25.104",
-      "notes": "Uplink 1920-1980 MHz, Downlink 2110-2170 MHz. Band 1."
+      "notes": "Uplink 1920-1980 MHz, Downlink 2110-2170 MHz. Band 1.",
+      "power": {
+        "typical": {
+          "value": 125,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (21 dBm)"
+        },
+        "max": {
+          "value": 250,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 3 (24 dBm)"
+        },
+        "notes": "Basisstation typisch 20-40 W pro Sektor"
+      }
     },
     {
       "id": "lte-700",
@@ -141,7 +291,22 @@
       "descriptionDE": "4G LTE im 700 MHz Band (Digitale Dividende 2)",
       "region": "europe",
       "standard": "3GPP TS 36.104",
-      "notes": "Gute Gebäudedurchdringung, ehemalige TV-Frequenzen"
+      "notes": "Gute Gebäudedurchdringung, ehemalige TV-Frequenzen",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 3"
+        },
+        "notes": "Basisstation Makro: 20-40 W pro Port, typisch 2x2 oder 4x4 MIMO"
+      }
     },
     {
       "id": "lte-800",
@@ -154,7 +319,22 @@
       "descriptionDE": "4G LTE im 800 MHz Band (Digitale Dividende 1)",
       "region": "europe",
       "standard": "3GPP TS 36.104",
-      "notes": "Uplink 832-862 MHz, Downlink 791-821 MHz"
+      "notes": "Uplink 832-862 MHz, Downlink 791-821 MHz",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 3"
+        },
+        "notes": "Basisstation Makro: 20-40 W pro Port"
+      }
     },
     {
       "id": "lte-1800",
@@ -167,7 +347,22 @@
       "descriptionDE": "4G LTE im 1800 MHz Band",
       "region": "europe",
       "standard": "3GPP TS 36.104",
-      "notes": "Refarming von GSM-1800. Hohe Kapazität in Staedten."
+      "notes": "Refarming von GSM-1800. Hohe Kapazität in Staedten.",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 3"
+        },
+        "notes": "Basisstation Makro: 20-40 W pro Port"
+      }
     },
     {
       "id": "lte-2600",
@@ -180,7 +375,22 @@
       "descriptionDE": "4G LTE im 2600 MHz Band",
       "region": "worldwide",
       "standard": "3GPP TS 36.104",
-      "notes": "Hohe Kapazität, begrenzte Reichweite. FDD und TDD Bereiche."
+      "notes": "Hohe Kapazität, begrenzte Reichweite. FDD und TDD Bereiche.",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 3"
+        },
+        "notes": "Basisstation Makro: 20-40 W pro Port"
+      }
     },
     {
       "id": "5g-n78",
@@ -193,7 +403,22 @@
       "descriptionDE": "5G New Radio im C-Band (FR1)",
       "region": "worldwide",
       "standard": "3GPP TS 38.104",
-      "notes": "Primäres 5G-Band. TDD-Betrieb, bis 100 MHz Kanalbreite."
+      "notes": "Primäres 5G-Band. TDD-Betrieb, bis 100 MHz Kanalbreite.",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 400,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 2 (26 dBm)"
+        },
+        "notes": "Basisstation Massive MIMO: bis ~1,3 kW Gesamtleistung (64T64R)"
+      }
     },
     {
       "id": "5g-n79",
@@ -206,7 +431,22 @@
       "descriptionDE": "5G New Radio im 4,5 GHz Band",
       "region": "asia",
       "standard": "3GPP TS 38.104",
-      "notes": "Hauptsächlich in Asien genutzt (Japan, China)"
+      "notes": "Hauptsächlich in Asien genutzt (Japan, China)",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 400,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 2 (26 dBm)"
+        },
+        "notes": "Basisstation Massive MIMO: ähnlich n78"
+      }
     },
     {
       "id": "5g-n258",
@@ -219,7 +459,22 @@
       "descriptionDE": "5G Millimeterwellen (FR2)",
       "region": "worldwide",
       "standard": "3GPP TS 38.104",
-      "notes": "Sehr hohe Datenraten, sehr begrenzte Reichweite (<500m)"
+      "notes": "Sehr hohe Datenraten, sehr begrenzte Reichweite (<500m)",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 400,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 2 (26 dBm)"
+        },
+        "notes": "Basisstation: typisch 1-4 W mit Beamforming, effektiv höhere EIRP"
+      }
     },
     {
       "id": "5g-n260",
@@ -232,7 +487,22 @@
       "descriptionDE": "5G Millimeterwellen (FR2)",
       "region": "usa",
       "standard": "3GPP TS 38.104",
-      "notes": "Hauptsächlich in USA. Bis zu 800 MHz Kanalbreite."
+      "notes": "Hauptsächlich in USA. Bis zu 800 MHz Kanalbreite.",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät (23 dBm)"
+        },
+        "max": {
+          "value": 400,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mobilgerät Power Class 2 (26 dBm)"
+        },
+        "notes": "Basisstation: typisch 1-4 W mit Beamforming"
+      }
     }
   ],
   "wlan": [
@@ -247,7 +517,22 @@
       "descriptionDE": "WLAN im 2,4 GHz ISM-Band",
       "region": "worldwide",
       "standard": "IEEE 802.11b/g/n/ax",
-      "notes": "13 Kanaele in Europa (14 in Japan), nur 3 überlappungsfrei"
+      "notes": "13 Kanaele in Europa (14 in Japan), nur 3 überlappungsfrei",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Endgerät (Client)"
+        },
+        "max": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "ETSI-Limit Europa (20 dBm)"
+        },
+        "notes": "20 dBm EIRP für OFDM, 18 dBm für CCK. USA erlaubt bis 1 W."
+      }
     },
     {
       "id": "wifi-5g-low",
@@ -260,7 +545,22 @@
       "descriptionDE": "WLAN im 5 GHz Band (untere Kanaele)",
       "region": "worldwide",
       "standard": "IEEE 802.11a/n/ac/ax",
-      "notes": "UNII-2 erfordert DFS (Radar Detection) in Europa"
+      "notes": "UNII-2 erfordert DFS (Radar Detection) in Europa",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Access Point"
+        },
+        "max": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "ETSI-Limit Europa (23 dBm)"
+        },
+        "notes": "UNII-1 nur Indoor, UNII-2 mit DFS/TPC"
+      }
     },
     {
       "id": "wifi-5g-high",
@@ -273,7 +573,22 @@
       "descriptionDE": "WLAN im 5 GHz Band (obere Kanaele)",
       "region": "worldwide",
       "standard": "IEEE 802.11a/n/ac/ax",
-      "notes": "DFS erforderlich wegen Wetterradar"
+      "notes": "DFS erforderlich wegen Wetterradar",
+      "power": {
+        "typical": {
+          "value": 500,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Access Point mit TPC"
+        },
+        "max": {
+          "value": 1000,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "ETSI-Limit Europa mit TPC (30 dBm)"
+        },
+        "notes": "Höhere Leistung nur mit TPC (Transmit Power Control)"
+      }
     },
     {
       "id": "wifi-5g-ism",
@@ -286,7 +601,22 @@
       "descriptionDE": "WLAN im 5,8 GHz ISM-Band",
       "region": "worldwide",
       "standard": "IEEE 802.11a/n/ac/ax",
-      "notes": "Kein DFS erforderlich, aber höhere Leistungsgrenzen erlaubt"
+      "notes": "Kein DFS erforderlich, aber höhere Leistungsgrenzen erlaubt",
+      "power": {
+        "typical": {
+          "value": 25,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Endgerät"
+        },
+        "max": {
+          "value": 4000,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "ETSI-Limit Europa (Fixed Outdoor)"
+        },
+        "notes": "25 mW - 4 W EIRP je nach Anwendung und Region"
+      }
     },
     {
       "id": "wifi-6e",
@@ -299,7 +629,22 @@
       "descriptionDE": "WLAN 6E im 6 GHz Band",
       "region": "worldwide",
       "standard": "IEEE 802.11ax",
-      "notes": "1200 MHz neues Spektrum. LPI (Low Power Indoor) und VLP (Very Low Power)."
+      "notes": "1200 MHz neues Spektrum. LPI (Low Power Indoor) und VLP (Very Low Power).",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "LPI Indoor (23 dBm)"
+        },
+        "max": {
+          "value": 200,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "LPI Maximum Europa"
+        },
+        "notes": "VLP (Very Low Power): max 25 mW (14 dBm) EIRP für portable Geräte"
+      }
     },
     {
       "id": "wifi-60g",
@@ -312,7 +657,22 @@
       "descriptionDE": "WLAN im 60 GHz Band",
       "region": "worldwide",
       "standard": "IEEE 802.11ad/ay",
-      "notes": "Sehr hohe Datenraten (bis 100 Gbit/s), sehr kurze Reichweite (<10m)"
+      "notes": "Sehr hohe Datenraten (bis 100 Gbit/s), sehr kurze Reichweite (<10m)",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Endgerät"
+        },
+        "max": {
+          "value": 500,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Mit Beamforming"
+        },
+        "notes": "Hohe atmosphärische Dämpfung (O2-Absorption) begrenzt Reichweite"
+      }
     }
   ],
   "satellite": [
@@ -327,7 +687,16 @@
       "descriptionDE": "GPS L5-Signal (Safety of Life)",
       "region": "worldwide",
       "standard": "IS-GPS-705",
-      "notes": "Modernster GPS-Signal, hohe Störfestigkeit"
+      "notes": "Modernster GPS-Signal, hohe Störfestigkeit",
+      "power": {
+        "typical": {
+          "value": 1000,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "GPS-Satellit (30 dBW)"
+        },
+        "notes": "Empfangspegel auf Erdoberfläche: ca. -154 dBW"
+      }
     },
     {
       "id": "gps-l2",
@@ -340,7 +709,16 @@
       "descriptionDE": "GPS L2-Signal (Präzision)",
       "region": "worldwide",
       "standard": "IS-GPS-200",
-      "notes": "Für hochgenaue Vermessung (cm-Genauigkeit)"
+      "notes": "Für hochgenaue Vermessung (cm-Genauigkeit)",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "GPS-Satellit (20 dBW)"
+        },
+        "notes": "Empfangspegel auf Erdoberfläche: ca. -160 dBW"
+      }
     },
     {
       "id": "gps-l1",
@@ -353,7 +731,16 @@
       "descriptionDE": "GPS L1-Signal (primär zivil)",
       "region": "worldwide",
       "standard": "IS-GPS-200",
-      "notes": "Hauptsignal für zivile Empfänger (1575,42 MHz)"
+      "notes": "Hauptsignal für zivile Empfänger (1575,42 MHz)",
+      "power": {
+        "typical": {
+          "value": 500,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "GPS-Satellit (27 dBW)"
+        },
+        "notes": "Empfangspegel auf Erdoberfläche: ca. -158 dBW"
+      }
     },
     {
       "id": "galileo-e1",
@@ -366,7 +753,16 @@
       "descriptionDE": "Galileo E1-Signal (offener Dienst)",
       "region": "europe",
       "standard": "Galileo OS SIS ICD",
-      "notes": "Kompatibel mit GPS L1"
+      "notes": "Kompatibel mit GPS L1",
+      "power": {
+        "typical": {
+          "value": 450,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Galileo-Satellit"
+        },
+        "notes": "Ähnliche Leistung wie GPS L1"
+      }
     },
     {
       "id": "glonass-l1",
@@ -378,7 +774,16 @@
       "description": "GLONASS L1 signal",
       "descriptionDE": "GLONASS L1-Signal",
       "region": "worldwide",
-      "notes": "Russisches Navigationssystem, FDMA-Verfahren"
+      "notes": "Russisches Navigationssystem, FDMA-Verfahren",
+      "power": {
+        "typical": {
+          "value": 400,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "GLONASS-Satellit"
+        },
+        "notes": "FDMA nutzt unterschiedliche Frequenzen pro Satellit"
+      }
     },
     {
       "id": "sat-l-band",
@@ -390,7 +795,22 @@
       "description": "Mobile satellite services (Inmarsat, Iridium)",
       "descriptionDE": "Mobile Satellitendienste",
       "region": "worldwide",
-      "notes": "Inmarsat, Thuraya, etc. Downlink."
+      "notes": "Inmarsat, Thuraya, etc. Downlink.",
+      "power": {
+        "typical": {
+          "value": 2,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Handheld-Terminal (Iridium)"
+        },
+        "max": {
+          "value": 16,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Inmarsat Mini-M Terminal"
+        },
+        "notes": "Satellit: typisch 50-100 kW EIRP pro Spot-Beam"
+      }
     },
     {
       "id": "sat-c-band",
@@ -402,7 +822,16 @@
       "description": "Fixed satellite services (C-Band downlink)",
       "descriptionDE": "Feste Satellitendienste (C-Band Downlink)",
       "region": "worldwide",
-      "notes": "Geringe Regendämpfung, grosse Antennen erforderlich"
+      "notes": "Geringe Regendämpfung, grosse Antennen erforderlich",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Transponder pro Carrier"
+        },
+        "notes": "Satellit: typisch 30-50 W pro Transponder, EIRP mit Antenne: 30-40 dBW"
+      }
     },
     {
       "id": "sat-ku-downlink",
@@ -414,7 +843,16 @@
       "description": "Satellite TV and data (Ku-Band downlink)",
       "descriptionDE": "Satelliten-TV und Daten (Ku-Band Downlink)",
       "region": "worldwide",
-      "notes": "Standard für Satelliten-TV (Astra, Eutelsat)"
+      "notes": "Standard für Satelliten-TV (Astra, Eutelsat)",
+      "power": {
+        "typical": {
+          "value": 150,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Transponder"
+        },
+        "notes": "Satellit EIRP: typisch 50-55 dBW pro Transponder"
+      }
     },
     {
       "id": "sat-ku-uplink",
@@ -426,7 +864,22 @@
       "description": "Satellite uplink (Ku-Band)",
       "descriptionDE": "Satelliten-Uplink (Ku-Band)",
       "region": "worldwide",
-      "notes": "Für VSAT-Terminals und Uplink-Stationen"
+      "notes": "Für VSAT-Terminals und Uplink-Stationen",
+      "power": {
+        "typical": {
+          "value": 2,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "VSAT-Terminal"
+        },
+        "max": {
+          "value": 400,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Uplink-Station (Teleport)"
+        },
+        "notes": "VSAT typisch 1-4 W, professionelle Uplinks bis mehrere 100 W"
+      }
     },
     {
       "id": "sat-ka-downlink",
@@ -438,7 +891,16 @@
       "description": "High-throughput satellite (Ka-Band downlink)",
       "descriptionDE": "Hochdurchsatz-Satellit (Ka-Band Downlink)",
       "region": "worldwide",
-      "notes": "Starlink, OneWeb, etc. Hohe Regendämpfung."
+      "notes": "Starlink, OneWeb, etc. Hohe Regendämpfung.",
+      "power": {
+        "typical": {
+          "value": 50,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "HTS Spot-Beam"
+        },
+        "notes": "Satellit EIRP pro Spot-Beam: 40-50 dBW"
+      }
     },
     {
       "id": "sat-ka-uplink",
@@ -450,7 +912,22 @@
       "description": "High-throughput satellite (Ka-Band uplink)",
       "descriptionDE": "Hochdurchsatz-Satellit (Ka-Band Uplink)",
       "region": "worldwide",
-      "notes": "Moderne HTS-Systeme nutzen dieses Band"
+      "notes": "Moderne HTS-Systeme nutzen dieses Band",
+      "power": {
+        "typical": {
+          "value": 2,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Consumer-Terminal (Starlink)"
+        },
+        "max": {
+          "value": 4,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Business-Terminal"
+        },
+        "notes": "Starlink-Terminal: typisch 1-2 W mit Phased-Array"
+      }
     }
   ],
   "radar": [
@@ -464,7 +941,22 @@
       "description": "Air traffic control primary surveillance radar",
       "descriptionDE": "Primärradar für Flugsicherung",
       "region": "worldwide",
-      "notes": "Grosse Reichweite (bis 400 km), Rotation alle 4-12s"
+      "notes": "Grosse Reichweite (bis 400 km), Rotation alle 4-12s",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "MW",
+          "type": "Peak",
+          "context": "En-Route Radar (ASR)"
+        },
+        "max": {
+          "value": 5,
+          "unit": "MW",
+          "type": "Peak",
+          "context": "Langstrecken-Überwachung"
+        },
+        "notes": "Mittlere Leistung: wenige kW wegen niedrigem Duty Cycle"
+      }
     },
     {
       "id": "radar-atc-s",
@@ -476,7 +968,22 @@
       "description": "Air traffic control radar (secondary)",
       "descriptionDE": "Sekundärradar für Flugsicherung",
       "region": "worldwide",
-      "notes": "Terminal Area Radar, mittlere Reichweite"
+      "notes": "Terminal Area Radar, mittlere Reichweite",
+      "power": {
+        "typical": {
+          "value": 500,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "Terminal Radar (ASR-11)"
+        },
+        "max": {
+          "value": 1,
+          "unit": "MW",
+          "type": "Peak",
+          "context": "Präzisionsradar"
+        },
+        "notes": "SSR (Secondary) arbeitet mit deutlich geringerer Leistung"
+      }
     },
     {
       "id": "radar-weather",
@@ -488,7 +995,22 @@
       "description": "Meteorological radar (C-Band)",
       "descriptionDE": "Meteorologisches Radar (C-Band)",
       "region": "worldwide",
-      "notes": "Doppler-Radar für Niederschlagsmessung"
+      "notes": "Doppler-Radar für Niederschlagsmessung",
+      "power": {
+        "typical": {
+          "value": 250,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "DWD-Wetterradar"
+        },
+        "max": {
+          "value": 750,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "NEXRAD (USA)"
+        },
+        "notes": "Mittlere Leistung: typisch 300-700 W"
+      }
     },
     {
       "id": "radar-marine",
@@ -500,7 +1022,22 @@
       "description": "Ship navigation radar",
       "descriptionDE": "Schiffsnavigationsradar",
       "region": "worldwide",
-      "notes": "Standard auf allen größeren Schiffen"
+      "notes": "Standard auf allen größeren Schiffen",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "Sportboot/Yacht"
+        },
+        "max": {
+          "value": 25,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "Handelsschiff"
+        },
+        "notes": "S-Band Marine-Radar: 30-60 kW Peak für große Schiffe"
+      }
     },
     {
       "id": "radar-police-k",
@@ -512,7 +1049,22 @@
       "description": "Police speed enforcement radar",
       "descriptionDE": "Polizei-Geschwindigkeitsmessung",
       "region": "europe",
-      "notes": "Typisch 24,125 GHz ISM-Band"
+      "notes": "Typisch 24,125 GHz ISM-Band",
+      "power": {
+        "typical": {
+          "value": 5,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Handmessgerät"
+        },
+        "max": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Stationäre Anlage"
+        },
+        "notes": "Sehr geringe Leistung, Doppler-CW-Radar"
+      }
     },
     {
       "id": "radar-police-ka",
@@ -524,7 +1076,22 @@
       "description": "Police speed enforcement radar (Ka-Band)",
       "descriptionDE": "Polizei-Geschwindigkeitsmessung (Ka-Band)",
       "region": "usa",
-      "notes": "Häufig in USA, schwer zu detektieren"
+      "notes": "Häufig in USA, schwer zu detektieren",
+      "power": {
+        "typical": {
+          "value": 5,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Handmessgerät"
+        },
+        "max": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Photo-Radar"
+        },
+        "notes": "Sehr geringe Leistung wegen Augensicherheit"
+      }
     },
     {
       "id": "radar-automotive-24",
@@ -536,7 +1103,22 @@
       "description": "Short range automotive radar",
       "descriptionDE": "Kurzstrecken-Kfz-Radar",
       "region": "worldwide",
-      "notes": "Wird durch 77 GHz ersetzt (Auslauf 2022)"
+      "notes": "Wird durch 77 GHz ersetzt (Auslauf 2022)",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "UWB-Radar"
+        },
+        "max": {
+          "value": 20,
+          "unit": "dBm",
+          "type": "EIRP",
+          "context": "ETSI-Limit"
+        },
+        "notes": "Schmalbandradar erlaubt höhere mittlere EIRP"
+      }
     },
     {
       "id": "radar-automotive-77",
@@ -549,7 +1131,22 @@
       "descriptionDE": "Lang- und Kurzstrecken-Kfz-Radar",
       "region": "worldwide",
       "standard": "ETSI EN 301 091",
-      "notes": "Standard für modernes ADAS, ACC, AEB"
+      "notes": "Standard für modernes ADAS, ACC, AEB",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Durchschnittliche Leistung"
+        },
+        "max": {
+          "value": 55,
+          "unit": "dBm",
+          "type": "EIRP",
+          "context": "Peak EIRP (ETSI)"
+        },
+        "notes": "Mittlere EIRP: typisch 3 dBm, Peak bis 55 dBm mit Chirp"
+      }
     }
   ],
   "amateur": [
@@ -563,7 +1160,22 @@
       "description": "Top band, night-time propagation",
       "descriptionDE": "Top-Band, nächtliche Ausbreitung",
       "region": "worldwide",
-      "notes": "Bodenwelle und Raumwelle, hauptsächlich nachts"
+      "notes": "Bodenwelle und Raumwelle, hauptsächlich nachts",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Leistungsbegrenzung frequenzabhängig, Antennenwirkungsgrad oft gering"
+      }
     },
     {
       "id": "ham-80m",
@@ -575,7 +1187,22 @@
       "description": "Regional communication",
       "descriptionDE": "Regionale Kommunikation",
       "region": "europe",
-      "notes": "Europa: 3,5-3,8 MHz. USA: 3,5-4,0 MHz"
+      "notes": "Europa: 3,5-3,8 MHz. USA: 3,5-4,0 MHz",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Klasse A erlaubt 750 W PEP an der Antenne"
+      }
     },
     {
       "id": "ham-40m",
@@ -587,7 +1214,22 @@
       "description": "Day and night band, continental",
       "descriptionDE": "Tag- und Nachtband, kontinental",
       "region": "europe",
-      "notes": "Gutes DX-Band nachts"
+      "notes": "Gutes DX-Band nachts",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "USA: bis 1500 W erlaubt"
+      }
     },
     {
       "id": "ham-20m",
@@ -599,7 +1241,22 @@
       "description": "Primary DX band, worldwide",
       "descriptionDE": "Primäres DX-Band, weltweit",
       "region": "worldwide",
-      "notes": "Bestes Band für weltweite Verbindungen"
+      "notes": "Bestes Band für weltweite Verbindungen",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "DX-Stationen oft mit Endstufen und Richtantennen"
+      }
     },
     {
       "id": "ham-15m",
@@ -611,7 +1268,22 @@
       "description": "DX band, solar cycle dependent",
       "descriptionDE": "DX-Band, sonnenzyklusabhängig",
       "region": "worldwide",
-      "notes": "Offen bei hoher Sonnenaktivitaet"
+      "notes": "Offen bei hoher Sonnenaktivitaet",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Klasse E darf auf diesem Band senden"
+      }
     },
     {
       "id": "ham-10m",
@@ -623,7 +1295,22 @@
       "description": "DX band, best at solar maximum",
       "descriptionDE": "DX-Band, optimal bei Sonnenmaximum",
       "region": "worldwide",
-      "notes": "Sporadische E-Schicht und F2-Ausbreitung"
+      "notes": "Sporadische E-Schicht und F2-Ausbreitung",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Einstiegsband für Klasse E"
+      }
     },
     {
       "id": "ham-6m",
@@ -635,7 +1322,22 @@
       "description": "Magic band, sporadic E propagation",
       "descriptionDE": "Magic Band, sporadische E-Ausbreitung",
       "region": "worldwide",
-      "notes": "Übergang HF/VHF, unvorhersagbare Ausbreitung"
+      "notes": "Übergang HF/VHF, unvorhersagbare Ausbreitung",
+      "power": {
+        "typical": {
+          "value": 25,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Klasse E: 25 W PEP, nur 50,08-51,0 MHz"
+      }
     },
     {
       "id": "ham-2m",
@@ -647,7 +1349,22 @@
       "description": "Primary VHF amateur band",
       "descriptionDE": "Primäres VHF-Amateurfunkband",
       "region": "europe",
-      "notes": "FM-Relais, SSB, digitale Betriebsarten"
+      "notes": "FM-Relais, SSB, digitale Betriebsarten",
+      "power": {
+        "typical": {
+          "value": 75,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Klasse E: 75 W PEP im gesamten Band"
+      }
     },
     {
       "id": "ham-70cm",
@@ -659,7 +1376,22 @@
       "description": "Primary UHF amateur band",
       "descriptionDE": "Primäres UHF-Amateurfunkband",
       "region": "europe",
-      "notes": "FM-Relais, ATV, Satelliten"
+      "notes": "FM-Relais, ATV, Satelliten",
+      "power": {
+        "typical": {
+          "value": 75,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Klasse E: 75 W PEP im gesamten Band"
+      }
     },
     {
       "id": "ham-23cm",
@@ -671,7 +1403,22 @@
       "description": "Microwave amateur band",
       "descriptionDE": "Mikrowellen-Amateurfunkband",
       "region": "europe",
-      "notes": "ATV, Richtfunk, EME (Earth-Moon-Earth)"
+      "notes": "ATV, Richtfunk, EME (Earth-Moon-Earth)",
+      "power": {
+        "typical": {
+          "value": 75,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse E (Deutschland)"
+        },
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Band teilweise durch Galileo eingeschränkt"
+      }
     },
     {
       "id": "ham-13cm",
@@ -683,7 +1430,22 @@
       "description": "Microwave amateur band",
       "descriptionDE": "Mikrowellen-Amateurfunkband",
       "region": "europe",
-      "notes": "Schmalband-Segment 2320-2322 MHz"
+      "notes": "Schmalband-Segment 2320-2322 MHz",
+      "power": {
+        "typical": {
+          "value": 5,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Schmalband-Segment"
+        },
+        "max": {
+          "value": 75,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        },
+        "notes": "Eingeschränkter Status, lokale Genehmigung erforderlich"
+      }
     }
   ],
   "navigation": [
@@ -697,7 +1459,16 @@
       "description": "German time signal transmitter",
       "descriptionDE": "Deutsches Zeitzeichensignal",
       "region": "europe",
-      "notes": "Standort Mainflingen, Reichweite ca. 2000 km"
+      "notes": "Standort Mainflingen, Reichweite ca. 2000 km",
+      "power": {
+        "typical": {
+          "value": 50,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Dauerbetrieb"
+        },
+        "notes": "Langwellensender der PTB, sehr stabile Frequenz"
+      }
     },
     {
       "id": "nav-msf",
@@ -709,7 +1480,16 @@
       "description": "UK time signal transmitter",
       "descriptionDE": "Britisches Zeitzeichensignal",
       "region": "europe",
-      "notes": "Standort Anthorn, ähnlich DCF77"
+      "notes": "Standort Anthorn, ähnlich DCF77",
+      "power": {
+        "typical": {
+          "value": 15,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Dauerbetrieb"
+        },
+        "notes": "Betrieben von NPL (National Physical Laboratory)"
+      }
     },
     {
       "id": "nav-wwvb",
@@ -721,7 +1501,16 @@
       "description": "US time signal transmitter",
       "descriptionDE": "US-amerikanisches Zeitzeichensignal",
       "region": "usa",
-      "notes": "Fort Collins, Colorado"
+      "notes": "Fort Collins, Colorado",
+      "power": {
+        "typical": {
+          "value": 70,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "Dauerbetrieb"
+        },
+        "notes": "Betrieben von NIST, Reichweite gesamte USA"
+      }
     },
     {
       "id": "nav-ndb",
@@ -733,7 +1522,22 @@
       "description": "Aviation navigation beacon",
       "descriptionDE": "Flugnavigations-Funkfeuer",
       "region": "worldwide",
-      "notes": "Wird sukzessive durch GNSS ersetzt"
+      "notes": "Wird sukzessive durch GNSS ersetzt",
+      "power": {
+        "typical": {
+          "value": 50,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Locator (Landebahn)"
+        },
+        "max": {
+          "value": 2,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "En-Route NDB"
+        },
+        "notes": "Leistung abhängig von Reichweitenanforderung (25-75 NM)"
+      }
     },
     {
       "id": "nav-vor",
@@ -745,7 +1549,22 @@
       "description": "VHF Omnidirectional Range",
       "descriptionDE": "UKW-Drehfunkfeuer",
       "region": "worldwide",
-      "notes": "Standard für Flugnavigation, oft mit DME kombiniert"
+      "notes": "Standard für Flugnavigation, oft mit DME kombiniert",
+      "power": {
+        "typical": {
+          "value": 50,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Terminal VOR (T-VOR)"
+        },
+        "max": {
+          "value": 200,
+          "unit": "W",
+          "type": "ERP",
+          "context": "High-Altitude VOR (H-VOR)"
+        },
+        "notes": "Reichweite: T-VOR 25 NM, L-VOR 40 NM, H-VOR 130 NM"
+      }
     },
     {
       "id": "nav-ils-loc",
@@ -757,7 +1576,22 @@
       "description": "Instrument Landing System localizer",
       "descriptionDE": "Instrumentenlandesystem Landekurssender",
       "region": "worldwide",
-      "notes": "Horizontale Führung bei Landeanflug"
+      "notes": "Horizontale Führung bei Landeanflug",
+      "power": {
+        "typical": {
+          "value": 20,
+          "unit": "W",
+          "type": "ERP",
+          "context": "CAT I Localizer"
+        },
+        "max": {
+          "value": 100,
+          "unit": "W",
+          "type": "ERP",
+          "context": "CAT III Localizer"
+        },
+        "notes": "Antennenarray erzeugt charakteristisches Strahlungsmuster"
+      }
     },
     {
       "id": "nav-ils-gs",
@@ -769,7 +1603,22 @@
       "description": "Instrument Landing System glide slope",
       "descriptionDE": "Instrumentenlandesystem Gleitwegsender",
       "region": "worldwide",
-      "notes": "Vertikale Führung bei Landeanflug"
+      "notes": "Vertikale Führung bei Landeanflug",
+      "power": {
+        "typical": {
+          "value": 5,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Gleitwegsender"
+        },
+        "max": {
+          "value": 15,
+          "unit": "W",
+          "type": "ERP",
+          "context": "CAT III GS"
+        },
+        "notes": "Niedrige Leistung wegen kurzer Reichweite (10-15 NM)"
+      }
     },
     {
       "id": "nav-dme",
@@ -781,7 +1630,22 @@
       "description": "Distance Measuring Equipment",
       "descriptionDE": "Entfernungsmessgerät",
       "region": "worldwide",
-      "notes": "Puls-Laufzeitmessung für Entfernung"
+      "notes": "Puls-Laufzeitmessung für Entfernung",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "W",
+          "type": "Peak",
+          "context": "DME Transponder"
+        },
+        "max": {
+          "value": 1,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "DME/N High Power"
+        },
+        "notes": "Flugzeug-Interrogator: typisch 1 kW Peak"
+      }
     },
     {
       "id": "nav-tacan",
@@ -793,7 +1657,22 @@
       "description": "Tactical Air Navigation",
       "descriptionDE": "Taktisches Flugnavigationssystem",
       "region": "worldwide",
-      "notes": "Militärversion von VOR/DME"
+      "notes": "Militärversion von VOR/DME",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "Boden-Station"
+        },
+        "max": {
+          "value": 3,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "VORTAC"
+        },
+        "notes": "Kombinierte VOR/TACAN-Anlage: VORTAC"
+      }
     },
     {
       "id": "nav-ads-b",
@@ -805,7 +1684,22 @@
       "description": "Automatic Dependent Surveillance Broadcast",
       "descriptionDE": "Automatische abhängige Überwachung",
       "region": "worldwide",
-      "notes": "Flugzeugposition per GPS, Pflicht seit 2020"
+      "notes": "Flugzeugposition per GPS, Pflicht seit 2020",
+      "power": {
+        "typical": {
+          "value": 125,
+          "unit": "W",
+          "type": "Peak",
+          "context": "ADS-B Out Transponder"
+        },
+        "max": {
+          "value": 500,
+          "unit": "W",
+          "type": "Peak",
+          "context": "Mode S Extended Squitter"
+        },
+        "notes": "Minimum: 70 W, typisch 125-500 W je nach Flugzeugklasse"
+      }
     }
   ],
   "military": [
@@ -819,7 +1713,22 @@
       "description": "One-way communication to submarines",
       "descriptionDE": "Einweg-Kommunikation zu U-Booten",
       "region": "worldwide",
-      "notes": "Durchdringt Seewasser bis ca. 20m bei 3 kHz"
+      "notes": "Durchdringt Seewasser bis ca. 20m bei 3 kHz",
+      "power": {
+        "typical": {
+          "value": 500,
+          "unit": "kW",
+          "type": "ERP",
+          "context": "VLF-Sender (z.B. DHO38)"
+        },
+        "max": {
+          "value": 2,
+          "unit": "MW",
+          "type": "ERP",
+          "context": "Großsender (USA NAA)"
+        },
+        "notes": "Sehr hohe Leistung wegen geringer Antennenwirkungsgrade (<5%)"
+      }
     },
     {
       "id": "mil-elf-sub",
@@ -831,7 +1740,16 @@
       "description": "Deep submarine communication",
       "descriptionDE": "Kommunikation zu getauchten U-Booten",
       "region": "worldwide",
-      "notes": "Durchdringt bis 200m, extrem geringe Datenrate"
+      "notes": "Durchdringt bis 200m, extrem geringe Datenrate",
+      "power": {
+        "typical": {
+          "value": 2,
+          "unit": "MW",
+          "type": "Input",
+          "context": "ELF-Sender (ehem. Clam Lake)"
+        },
+        "notes": "Antennenwirkungsgrad <0,1%, effektive Abstrahlung minimal"
+      }
     },
     {
       "id": "mil-hf-atr",
@@ -843,7 +1761,22 @@
       "description": "Military high frequency communications",
       "descriptionDE": "Militärische Kurzwellen-Kommunikation",
       "region": "worldwide",
-      "notes": "ALE (Automatic Link Establishment), STANAG 4538"
+      "notes": "ALE (Automatic Link Establishment), STANAG 4538",
+      "power": {
+        "typical": {
+          "value": 400,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Fahrzeug-Funkgerät"
+        },
+        "max": {
+          "value": 1,
+          "unit": "kW",
+          "type": "PEP",
+          "context": "Basisstation"
+        },
+        "notes": "Moderne SDR-Systeme mit adaptiver Leistungsregelung"
+      }
     },
     {
       "id": "mil-uhf-satcom",
@@ -855,7 +1788,22 @@
       "description": "Military satellite communications",
       "descriptionDE": "Militärische Satellitenkommunikation",
       "region": "worldwide",
-      "notes": "UFO, MUOS Systeme"
+      "notes": "UFO, MUOS Systeme",
+      "power": {
+        "typical": {
+          "value": 20,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Manpack-Terminal"
+        },
+        "max": {
+          "value": 200,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Fahrzeug-Terminal"
+        },
+        "notes": "MUOS nutzt höhere Leistungen für breitbandige Dienste"
+      }
     },
     {
       "id": "mil-tacan",
@@ -867,7 +1815,22 @@
       "description": "Tactical navigation",
       "descriptionDE": "Taktische Navigation",
       "region": "worldwide",
-      "notes": "Kombiniert Richtung und Entfernung"
+      "notes": "Kombiniert Richtung und Entfernung",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "Mobile TACAN"
+        },
+        "max": {
+          "value": 3,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "Ortsfeste Anlage"
+        },
+        "notes": "Häufig als VORTAC kombiniert"
+      }
     },
     {
       "id": "mil-radar-l",
@@ -879,7 +1842,22 @@
       "description": "Long-range surveillance radar",
       "descriptionDE": "Weitreichendes Überwachungsradar",
       "region": "worldwide",
-      "notes": "AWACS, Fruechwarnradar"
+      "notes": "AWACS, Fruechwarnradar",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "MW",
+          "type": "Peak",
+          "context": "AWACS (E-3)"
+        },
+        "max": {
+          "value": 10,
+          "unit": "MW",
+          "type": "Peak",
+          "context": "Frühwarnradar (OTH)"
+        },
+        "notes": "OTH-Radar: sehr hohe Leistungen für Ionosphärenreflexion"
+      }
     },
     {
       "id": "mil-radar-s",
@@ -891,7 +1869,22 @@
       "description": "Medium-range surveillance and tracking",
       "descriptionDE": "Mittlere Reichweite, Verfolgung",
       "region": "worldwide",
-      "notes": "Patriot, AEGIS Systeme"
+      "notes": "Patriot, AEGIS Systeme",
+      "power": {
+        "typical": {
+          "value": 4,
+          "unit": "MW",
+          "type": "Peak",
+          "context": "SPY-1 Radar (AEGIS)"
+        },
+        "max": {
+          "value": 6,
+          "unit": "MW",
+          "type": "Peak",
+          "context": "AN/SPY-6"
+        },
+        "notes": "Moderne Phased-Array-Systeme mit aktiven Elementen"
+      }
     },
     {
       "id": "mil-radar-x",
@@ -903,7 +1896,22 @@
       "description": "Fire control and tracking radar",
       "descriptionDE": "Feuerleit- und Verfolgungsradar",
       "region": "worldwide",
-      "notes": "Hohe Präzision, begrenzte Reichweite"
+      "notes": "Hohe Präzision, begrenzte Reichweite",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "Feuerleitradar"
+        },
+        "max": {
+          "value": 500,
+          "unit": "kW",
+          "type": "Peak",
+          "context": "THAAD-Radar (AN/TPY-2)"
+        },
+        "notes": "Tracking-Radar benötigt hohe Genauigkeit, nicht maximale Reichweite"
+      }
     }
   ],
   "ism": [
@@ -918,7 +1926,22 @@
       "descriptionDE": "RFID, NFC, kontaktlose Karten",
       "region": "worldwide",
       "standard": "ISO 14443, ISO 15693",
-      "notes": "NFC-Reichweite bis ca. 10 cm"
+      "notes": "NFC-Reichweite bis ca. 10 cm",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "NFC-Reader"
+        },
+        "max": {
+          "value": 4,
+          "unit": "W",
+          "type": "ERP",
+          "context": "RFID-Industrieleser"
+        },
+        "notes": "Feldstärke-Limit: 42 dBuA/m bei 10 m (Europa)"
+      }
     },
     {
       "id": "ism-27m",
@@ -930,7 +1953,22 @@
       "description": "RC toys, CB radio",
       "descriptionDE": "RC-Spielzeug, CB-Funk",
       "region": "worldwide",
-      "notes": "Hohe Störungsanfälligkeit"
+      "notes": "Hohe Störungsanfälligkeit",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "RC-Spielzeug"
+        },
+        "max": {
+          "value": 4,
+          "unit": "W",
+          "type": "ERP",
+          "context": "CB-Funk (AM/FM)"
+        },
+        "notes": "CB-Funk: 4 W AM, 12 W SSB (USA)"
+      }
     },
     {
       "id": "ism-40m",
@@ -942,7 +1980,22 @@
       "description": "Medical telemetry, RC",
       "descriptionDE": "Medizin-Telemetrie, RC",
       "region": "worldwide",
-      "notes": "Begrenzte Bandbreite"
+      "notes": "Begrenzte Bandbreite",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "RC-Modelle"
+        },
+        "max": {
+          "value": 25,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "Europa-Limit"
+        },
+        "notes": "Sehr schmale Bandbreite (40 kHz)"
+      }
     },
     {
       "id": "ism-433",
@@ -954,7 +2007,22 @@
       "description": "LoRa, remote controls, sensors",
       "descriptionDE": "LoRa, Fernbedienungen, Sensoren",
       "region": "europe",
-      "notes": "SRD Band, 10 mW / 25 mW ERP"
+      "notes": "SRD Band, 10 mW / 25 mW ERP",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "Fernbedienung"
+        },
+        "max": {
+          "value": 25,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "ETSI-Limit (SRD)"
+        },
+        "notes": "LoRa: bis 25 mW ERP mit Duty-Cycle-Limit"
+      }
     },
     {
       "id": "ism-868",
@@ -967,7 +2035,22 @@
       "descriptionDE": "LoRa, Smart Metering, IoT",
       "region": "europe",
       "standard": "ETSI EN 300 220",
-      "notes": "Verschiedene Subbander mit unterschiedlichen Duty Cycles"
+      "notes": "Verschiedene Subbander mit unterschiedlichen Duty Cycles",
+      "power": {
+        "typical": {
+          "value": 14,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "LoRa-Modul"
+        },
+        "max": {
+          "value": 25,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "ETSI-Limit (SRD)"
+        },
+        "notes": "Subband g1 (868,0-868,6): 25 mW, 1% DC"
+      }
     },
     {
       "id": "ism-915",
@@ -979,7 +2062,22 @@
       "description": "LoRa, RFID UHF, IoT",
       "descriptionDE": "LoRa, RFID UHF, IoT",
       "region": "usa",
-      "notes": "In Europa nicht verfügbar (GSM-Bereich)"
+      "notes": "In Europa nicht verfügbar (GSM-Bereich)",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "LoRa-Modul"
+        },
+        "max": {
+          "value": 1,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "FCC Part 15"
+        },
+        "notes": "FHSS erlaubt bis 1 W, digitale Modulation bis 1 W mit Spreizung"
+      }
     },
     {
       "id": "ism-2400",
@@ -991,7 +2089,22 @@
       "description": "WiFi, Bluetooth, Zigbee, Microwave ovens",
       "descriptionDE": "WLAN, Bluetooth, Zigbee, Mikrowellenherde",
       "region": "worldwide",
-      "notes": "Sehr stark genutzt, hohes Störpotenzial"
+      "notes": "Sehr stark genutzt, hohes Störpotenzial",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "WLAN/Bluetooth"
+        },
+        "max": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "ETSI-Limit Europa (20 dBm)"
+        },
+        "notes": "Mikrowellenherd: ~1000 W, aber abgeschirmt"
+      }
     },
     {
       "id": "ism-5800",
@@ -1003,7 +2116,22 @@
       "description": "WiFi, FPV drones, radar detectors",
       "descriptionDE": "WLAN, FPV-Drohnen, Radarwarner",
       "region": "worldwide",
-      "notes": "Weniger überlastet als 2,4 GHz"
+      "notes": "Weniger überlastet als 2,4 GHz",
+      "power": {
+        "typical": {
+          "value": 25,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Indoor-Geräte"
+        },
+        "max": {
+          "value": 4,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Fixed Outdoor (ETSI)"
+        },
+        "notes": "FPV-Drohnen: typisch 25 mW (EU) bis 600 mW (USA)"
+      }
     },
     {
       "id": "ism-24g",
@@ -1015,7 +2143,22 @@
       "description": "Short range radar, motion sensors",
       "descriptionDE": "Kurzstreckenradar, Bewegungsmelder",
       "region": "worldwide",
-      "notes": "Industrielle Bewegungssensoren"
+      "notes": "Industrielle Bewegungssensoren",
+      "power": {
+        "typical": {
+          "value": 5,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Bewegungsmelder"
+        },
+        "max": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "ETSI-Limit (20 dBm)"
+        },
+        "notes": "Doppler-Radar für Türöffner, Alarmanlagen"
+      }
     },
     {
       "id": "ism-60g",
@@ -1027,7 +2170,22 @@
       "description": "WiGig, short range high speed",
       "descriptionDE": "WiGig, Kurzstrecken-Hochgeschwindigkeit",
       "region": "worldwide",
-      "notes": "Starke O2-Absorption, sehr kurze Reichweite"
+      "notes": "Starke O2-Absorption, sehr kurze Reichweite",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Consumer-Geräte"
+        },
+        "max": {
+          "value": 40,
+          "unit": "dBm",
+          "type": "EIRP",
+          "context": "ETSI-Limit (10 W)"
+        },
+        "notes": "Hohe EIRP erlaubt wegen starker atmosphärischer Dämpfung"
+      }
     }
   ],
   "pmr": [
@@ -1042,7 +2200,22 @@
       "descriptionDE": "Lizenzfreie Handfunkgeräte",
       "region": "europe",
       "standard": "ETSI EN 303 406",
-      "notes": "16 analoge Kanaele, 500 mW ERP"
+      "notes": "16 analoge Kanaele, 500 mW ERP",
+      "power": {
+        "typical": {
+          "value": 500,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "Handfunkgerät"
+        },
+        "max": {
+          "value": 500,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "ETSI-Limit"
+        },
+        "notes": "Nur integrierte Antenne erlaubt, keine Außenantennen"
+      }
     },
     {
       "id": "pmr-dpmr446",
@@ -1055,7 +2228,22 @@
       "descriptionDE": "Digitales PMR446",
       "region": "europe",
       "standard": "ETSI TS 102 658",
-      "notes": "32 digitale Kanaele"
+      "notes": "32 digitale Kanaele",
+      "power": {
+        "typical": {
+          "value": 500,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "Handfunkgerät"
+        },
+        "max": {
+          "value": 500,
+          "unit": "mW",
+          "type": "ERP",
+          "context": "ETSI-Limit"
+        },
+        "notes": "Gleiche Leistung wie analog, bessere Sprachqualität"
+      }
     },
     {
       "id": "freenet",
@@ -1067,7 +2255,22 @@
       "description": "German license-free VHF",
       "descriptionDE": "Deutsches lizenzfreies VHF",
       "region": "europe",
-      "notes": "6 Kanaele, nur Deutschland"
+      "notes": "6 Kanaele, nur Deutschland",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Handfunkgerät"
+        },
+        "max": {
+          "value": 1,
+          "unit": "W",
+          "type": "ERP",
+          "context": "BNetzA-Limit"
+        },
+        "notes": "Höhere Leistung als PMR446, bessere Reichweite"
+      }
     },
     {
       "id": "bos-4m",
@@ -1079,7 +2282,22 @@
       "description": "German emergency services (analog)",
       "descriptionDE": "Behörden und Organisationen mit Sicherheitsaufgaben",
       "region": "europe",
-      "notes": "Wird durch TETRA ersetzt"
+      "notes": "Wird durch TETRA ersetzt",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Handfunkgerät"
+        },
+        "max": {
+          "value": 25,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Fahrzeugfunk"
+        },
+        "notes": "Analoger BOS-Funk, weitgehend abgelöst"
+      }
     },
     {
       "id": "tetra-380",
@@ -1092,7 +2310,22 @@
       "descriptionDE": "Europäischer BOS-Digitalfunk",
       "region": "europe",
       "standard": "ETSI EN 300 392",
-      "notes": "BDBOS-Netz in Deutschland"
+      "notes": "BDBOS-Netz in Deutschland",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Handfunkgerät"
+        },
+        "max": {
+          "value": 3,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Handfunk Class 3"
+        },
+        "notes": "Basisstation: bis 25 W, Fahrzeug: bis 10 W"
+      }
     },
     {
       "id": "tetra-410",
@@ -1105,7 +2338,22 @@
       "descriptionDE": "Kommerzieller TETRA-Funk",
       "region": "europe",
       "standard": "ETSI EN 300 392",
-      "notes": "Für Industrie und Transport"
+      "notes": "Für Industrie und Transport",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Handfunkgerät"
+        },
+        "max": {
+          "value": 3,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Handfunk Class 3"
+        },
+        "notes": "Gleiche Leistungsklassen wie TETRA 380"
+      }
     }
   ],
   "maritime": [
@@ -1119,7 +2367,22 @@
       "description": "Medium frequency marine radio",
       "descriptionDE": "Mittelfrequenz-Seefunk",
       "region": "worldwide",
-      "notes": "2182 kHz Notfrequenz (historisch)"
+      "notes": "2182 kHz Notfrequenz (historisch)",
+      "power": {
+        "typical": {
+          "value": 150,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Seefunk-MF-Anlage"
+        },
+        "max": {
+          "value": 400,
+          "unit": "W",
+          "type": "PEP",
+          "context": "SOLAS-Schiffe"
+        },
+        "notes": "DSC-Ruf auf 2187,5 kHz"
+      }
     },
     {
       "id": "marine-hf",
@@ -1131,7 +2394,22 @@
       "description": "High frequency marine radio",
       "descriptionDE": "Kurzwellen-Seefunk",
       "region": "worldwide",
-      "notes": "Langstrecken-Seefunk, DSC-Ruf"
+      "notes": "Langstrecken-Seefunk, DSC-Ruf",
+      "power": {
+        "typical": {
+          "value": 150,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Standard-HF-Anlage"
+        },
+        "max": {
+          "value": 1,
+          "unit": "kW",
+          "type": "PEP",
+          "context": "Hochseefähige Anlage"
+        },
+        "notes": "Frequenzen je nach Tageszeit und Entfernung"
+      }
     },
     {
       "id": "marine-vhf",
@@ -1143,7 +2421,22 @@
       "description": "VHF marine radio",
       "descriptionDE": "UKW-Seefunk",
       "region": "worldwide",
-      "notes": "Kanal 16 (156,8 MHz) Notruf, AIS auf 161,975/162,025 MHz"
+      "notes": "Kanal 16 (156,8 MHz) Notruf, AIS auf 161,975/162,025 MHz",
+      "power": {
+        "typical": {
+          "value": 1,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Handfunkgerät"
+        },
+        "max": {
+          "value": 25,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Fest eingebaut"
+        },
+        "notes": "Umschaltbar 1 W / 25 W, Kanal 16 Dauerwache"
+      }
     },
     {
       "id": "epirb",
@@ -1155,7 +2448,22 @@
       "description": "Emergency Position Indicating Radio Beacon",
       "descriptionDE": "Seenotfunkbake",
       "region": "worldwide",
-      "notes": "COSPAS-SARSAT Satellitensystem"
+      "notes": "COSPAS-SARSAT Satellitensystem",
+      "power": {
+        "typical": {
+          "value": 5,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "406 MHz Burst"
+        },
+        "max": {
+          "value": 5,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "COSPAS-SARSAT Spec"
+        },
+        "notes": "Zusätzlich 121,5 MHz Peilsender (25 mW)"
+      }
     }
   ],
   "aviation": [
@@ -1169,7 +2477,22 @@
       "description": "VHF air traffic communications",
       "descriptionDE": "VHF-Flugfunk",
       "region": "worldwide",
-      "notes": "AM-Modulation, 25/8,33 kHz Kanalraster"
+      "notes": "AM-Modulation, 25/8,33 kHz Kanalraster",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Flugzeug-Transceiver"
+        },
+        "max": {
+          "value": 25,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Airliner"
+        },
+        "notes": "Bodenstationen: bis 50 W für größere Reichweite"
+      }
     },
     {
       "id": "airband-hf",
@@ -1181,7 +2504,22 @@
       "description": "HF air traffic communications",
       "descriptionDE": "Kurzwellen-Flugfunk",
       "region": "worldwide",
-      "notes": "Für Langstrecken- und Ozeanflug"
+      "notes": "Für Langstrecken- und Ozeanflug",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Airliner HF-System"
+        },
+        "max": {
+          "value": 400,
+          "unit": "W",
+          "type": "PEP",
+          "context": "SELCAL-fähig"
+        },
+        "notes": "SSB-Betrieb für Ozeanüberquerungen"
+      }
     },
     {
       "id": "elt",
@@ -1193,7 +2531,22 @@
       "description": "Emergency Locator Transmitter",
       "descriptionDE": "Flugzeug-Notfunksender",
       "region": "worldwide",
-      "notes": "121,5 MHz (lokal) und 406 MHz (Satellit)"
+      "notes": "121,5 MHz (lokal) und 406 MHz (Satellit)",
+      "power": {
+        "typical": {
+          "value": 5,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "406 MHz Burst"
+        },
+        "max": {
+          "value": 5,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "COSPAS-SARSAT Spec"
+        },
+        "notes": "121,5 MHz Peilsender: 50-100 mW"
+      }
     },
     {
       "id": "acars",
@@ -1205,7 +2558,22 @@
       "description": "Aircraft Communications Addressing and Reporting System",
       "descriptionDE": "Flugzeug-Datenfunk",
       "region": "worldwide",
-      "notes": "Digitale Datenkommunikation Boden-Luft"
+      "notes": "Digitale Datenkommunikation Boden-Luft",
+      "power": {
+        "typical": {
+          "value": 10,
+          "unit": "W",
+          "type": "ERP",
+          "context": "VHF ACARS"
+        },
+        "max": {
+          "value": 25,
+          "unit": "W",
+          "type": "ERP",
+          "context": "VHF Datalink"
+        },
+        "notes": "Nutzt VHF-Flugfunk-Transceiver"
+      }
     },
     {
       "id": "tcas",
@@ -1217,19 +2585,49 @@
       "description": "Traffic Collision Avoidance System",
       "descriptionDE": "Kollisionsvermeidungssystem",
       "region": "worldwide",
-      "notes": "Abfrage 1030 MHz, Antwort 1090 MHz"
+      "notes": "Abfrage 1030 MHz, Antwort 1090 MHz",
+      "power": {
+        "typical": {
+          "value": 250,
+          "unit": "W",
+          "type": "Peak",
+          "context": "TCAS Interrogator"
+        },
+        "max": {
+          "value": 500,
+          "unit": "W",
+          "type": "Peak",
+          "context": "TCAS II"
+        },
+        "notes": "Transponder-Antwort: 125-500 W Peak"
+      }
     },
     {
       "id": "radar-altimeter",
       "name": "Radar Altimeter",
-      "nameDE": "Radarhöhenmeser",
+      "nameDE": "Radarhöhenmesser",
       "minHz": 4200000000,
       "maxHz": 4400000000,
       "category": "aviation",
       "description": "Aircraft radar altimeter",
-      "descriptionDE": "Flugzeug-Radarhöhenmeser",
+      "descriptionDE": "Flugzeug-Radarhöhenmesser",
       "region": "worldwide",
-      "notes": "Kritisch für Präzisionslandungen"
+      "notes": "Kritisch für Präzisionslandungen",
+      "power": {
+        "typical": {
+          "value": 200,
+          "unit": "mW",
+          "type": "Peak",
+          "context": "FMCW Altimeter"
+        },
+        "max": {
+          "value": 500,
+          "unit": "mW",
+          "type": "Peak",
+          "context": "Pulse Altimeter"
+        },
+        "notes": "Niedrige Leistung wegen kurzer Messdistanz"
+      }
     }
   ],
   "categoryNames": {

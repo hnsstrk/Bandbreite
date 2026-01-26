@@ -5,6 +5,7 @@
   // Navigation state
   let mobileMenuOpen = $state(false);
   let activeDropdown = $state<string | null>(null);
+  let headerElement: HTMLElement | null = $state(null);
 
   interface NavSubItem {
     href: string;
@@ -50,6 +51,27 @@
     }
   ];
 
+  // Click-outside handler for closing dropdowns
+  function handleClickOutside(event: MouseEvent) {
+    if (activeDropdown && headerElement && !headerElement.contains(event.target as Node)) {
+      activeDropdown = null;
+    }
+  }
+
+  // Setup and cleanup click-outside listener
+  $effect(() => {
+    if (activeDropdown) {
+      // Small delay to prevent immediate closing when clicking the trigger
+      const timeoutId = setTimeout(() => {
+        document.addEventListener('click', handleClickOutside);
+      }, 0);
+      return () => {
+        clearTimeout(timeoutId);
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }
+  });
+
   function toggleMobileMenu() {
     mobileMenuOpen = !mobileMenuOpen;
     if (!mobileMenuOpen) {
@@ -62,8 +84,14 @@
     activeDropdown = null;
   }
 
-  function toggleDropdown(id: string) {
+  function toggleDropdown(id: string, event?: MouseEvent) {
+    // Prevent event bubbling to avoid immediate close via click-outside
+    event?.stopPropagation();
     activeDropdown = activeDropdown === id ? null : id;
+  }
+
+  function closeDropdown() {
+    activeDropdown = null;
   }
 
   function handleDropdownKeydown(event: KeyboardEvent, id: string) {
@@ -72,15 +100,34 @@
       toggleDropdown(id);
     } else if (event.key === 'Escape') {
       activeDropdown = null;
+    } else if (event.key === 'ArrowDown' && activeDropdown === id) {
+      // Focus first item in dropdown
+      event.preventDefault();
+      const dropdown = document.querySelector(`[data-dropdown="${id}"]`);
+      const firstItem = dropdown?.querySelector('a');
+      firstItem?.focus();
     }
   }
 
-  function handleMouseEnter(id: string) {
-    activeDropdown = id;
-  }
-
-  function handleMouseLeave() {
-    activeDropdown = null;
+  function handleDropdownItemKeydown(event: KeyboardEvent, itemIndex: number, totalItems: number, dropdownId: string) {
+    if (event.key === 'Escape') {
+      activeDropdown = null;
+      // Return focus to trigger button
+      const trigger = document.querySelector(`[data-trigger="${dropdownId}"]`) as HTMLElement;
+      trigger?.focus();
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const dropdown = document.querySelector(`[data-dropdown="${dropdownId}"]`);
+      const items = dropdown?.querySelectorAll('a');
+      const nextIndex = (itemIndex + 1) % totalItems;
+      (items?.[nextIndex] as HTMLElement)?.focus();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const dropdown = document.querySelector(`[data-dropdown="${dropdownId}"]`);
+      const items = dropdown?.querySelectorAll('a');
+      const prevIndex = itemIndex === 0 ? totalItems - 1 : itemIndex - 1;
+      (items?.[prevIndex] as HTMLElement)?.focus();
+    }
   }
 
   function isActiveSection(item: NavItem): boolean {
@@ -88,7 +135,7 @@
   }
 </script>
 
-<header class="header safe-area-top">
+<header class="header safe-area-top" bind:this={headerElement}>
   <div class="header-content">
     <a href="/" class="logo" onclick={closeMobileMenu}>
       <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -102,19 +149,16 @@
     <!-- Desktop Navigation -->
     <nav class="desktop-nav" aria-label="Hauptnavigation">
       {#each navItems as item (item.id)}
-        <div
-          class="nav-dropdown"
-          role="navigation"
-          onmouseenter={() => handleMouseEnter(item.id)}
-          onmouseleave={handleMouseLeave}
-        >
+        <div class="nav-dropdown" role="navigation">
           <button
             type="button"
             class="nav-link dropdown-trigger"
             class:active={isActiveSection(item)}
+            class:open={activeDropdown === item.id}
             aria-expanded={activeDropdown === item.id}
             aria-haspopup="true"
-            onclick={() => toggleDropdown(item.id)}
+            data-trigger={item.id}
+            onclick={(e) => toggleDropdown(item.id, e)}
             onkeydown={(e) => handleDropdownKeydown(e, item.id)}
           >
             {item.label}
@@ -122,21 +166,27 @@
               <path d="M6 9l6 6 6-6"/>
             </svg>
           </button>
-          {#if activeDropdown === item.id}
-            <div class="dropdown-menu" role="menu">
-              {#each item.items as subItem (subItem.href)}
-                <a
-                  href={subItem.href}
-                  class="dropdown-item"
-                  class:active={page.url.pathname === subItem.href}
-                  role="menuitem"
-                  onclick={() => { activeDropdown = null; }}
-                >
-                  {subItem.label}
-                </a>
-              {/each}
-            </div>
-          {/if}
+          <div
+            class="dropdown-menu"
+            class:visible={activeDropdown === item.id}
+            role="menu"
+            data-dropdown={item.id}
+            aria-hidden={activeDropdown !== item.id}
+          >
+            {#each item.items as subItem, index (subItem.href)}
+              <a
+                href={subItem.href}
+                class="dropdown-item"
+                class:active={page.url.pathname === subItem.href}
+                role="menuitem"
+                tabindex={activeDropdown === item.id ? 0 : -1}
+                onclick={closeDropdown}
+                onkeydown={(e) => handleDropdownItemKeydown(e, index, item.items.length, item.id)}
+              >
+                {subItem.label}
+              </a>
+            {/each}
+          </div>
         </div>
       {/each}
     </nav>
@@ -308,6 +358,11 @@
     align-items: center;
   }
 
+  .dropdown-trigger.open {
+    background-color: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+  }
+
   .dropdown-icon {
     width: 1rem;
     height: 1rem;
@@ -330,6 +385,22 @@
     padding: 0.5rem;
     z-index: 50;
     margin-top: 0.25rem;
+    /* Animation properties */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out,
+      visibility 150ms ease-out;
+    pointer-events: none;
+  }
+
+  .dropdown-menu.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   .dropdown-item {

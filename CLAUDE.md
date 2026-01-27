@@ -98,6 +98,17 @@ Beispiele:
 - ✅ `Dämpfung`, `für`, `über`, `größer`, `schließen`
 - ❌ `Daempfung`, `fuer`, `ueber`, `groesser`, `schliessen`
 
+**AUSNAHME - Verzeichnis- und Dateinamen:** Keine Umlaute in Pfaden! Hier immer ae, oe, ue, ss verwenden.
+
+Beispiele:
+- ✅ `/rechner/kanalkapazitaet`, `/spektrum/ionosphaere`
+- ❌ `/rechner/kanalkapazität`, `/spektrum/ionosphäre`
+
+Dies gilt für:
+- Route-Verzeichnisse (`src/routes/...`)
+- Komponenten-Dateien
+- Alle anderen Datei- und Ordnernamen
+
 ---
 
 ## Coding Guidelines (Technische Schulden vermeiden)

@@ -25,7 +25,7 @@
       items: [
         { href: '/', label: 'Übersicht' },
         { href: '/spektrum/explorer', label: 'Frequenzband-Explorer' },
-        { href: '/spektrum/ionosphäre', label: 'Ionosphäre' },
+        { href: '/spektrum/ionosphaere', label: 'Ionosphäre' },
         { href: '/spektrum/anwendungen', label: 'Anwendungen' }
       ]
     },
@@ -36,7 +36,7 @@
         { href: '/rechner/fspl', label: 'FSPL-Rechner' },
         { href: '/rechner/link-budget', label: 'Link Budget' },
         { href: '/rechner/radar', label: 'Radar-Reichweite' },
-        { href: '/rechner/kanalkapazität', label: 'Kanalkapazität' },
+        { href: '/rechner/kanalkapazitaet', label: 'Kanalkapazität' },
         { href: '/rechner/skin-tiefe', label: 'Skin-Tiefe' },
         { href: '/rechner/fresnel', label: 'Fresnel-Zone' }
       ]

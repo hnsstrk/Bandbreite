@@ -42,6 +42,14 @@
       ]
     },
     {
+      id: 'wissen',
+      label: 'Wissen',
+      items: [
+        { href: '/wissen', label: 'Übersicht' },
+        { href: '/wissen/wellenausbreitung', label: 'Wellenausbreitung' }
+      ]
+    },
+    {
       id: 'datenbanken',
       label: 'Datenbanken',
       items: [

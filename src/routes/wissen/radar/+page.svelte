@@ -300,8 +300,7 @@
         <div class="main-equation smaller">
           R<sub>max</sub> =
           <span class="root-4">
-            <span class="root-symbol">4</span>
-            <span class="root-content"
+            <span class="root-index">4</span><span class="root-sign">√</span><span class="root-content"
               >(P<sub>t</sub> * G<sup>2</sup> * &lambda;<sup>2</sup> * &sigma;) / ((4&pi;)<sup
                 >3</sup
               >
@@ -871,22 +870,29 @@
   }
 
   .root-4 {
-    position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: flex-start;
   }
 
-  .root-symbol {
-    position: absolute;
-    top: -0.3em;
-    left: -0.8em;
+  .root-index {
     font-size: 0.6em;
-    color: var(--color-text-secondary);
+    vertical-align: super;
+    margin-right: -0.1em;
+    color: var(--color-accent-primary);
+  }
+
+  .root-sign {
+    font-size: 1.4em;
+    line-height: 1;
+    color: var(--color-accent-primary);
+    margin-right: 0.1em;
   }
 
   .root-content {
     border-top: 2px solid var(--color-accent-primary);
     padding-top: 0.2em;
-    margin-left: 0.5em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
   }
 
   /* Variables Grid */

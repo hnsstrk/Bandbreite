@@ -25,7 +25,7 @@
       description: 'Detaillierte Übersicht aller Frequenzbänder von ELF bis EHF mit Anwendungen und Eigenschaften.',
       href: '/wissen/frequenzbaender',
       icon: '📊',
-      status: 'coming-soon',
+      status: 'available',
       topics: ['ITU-Bänder', 'IEEE-Bänder', 'NATO-Bänder', 'Amateurfunkbänder', 'Rundfunkbänder']
     },
     {

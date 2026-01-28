@@ -34,8 +34,8 @@
       description: 'Wichtige Formeln der Hochfrequenztechnik mit Herleitung und praktischen Beispielen.',
       href: '/wissen/mathematik',
       icon: '🔢',
-      status: 'coming-soon',
-      topics: ['FSPL', 'Radargleichung', 'Shannon-Hartley', 'Nyquist', 'Dezibel-Rechnung']
+      status: 'available',
+      topics: ['FSPL', 'Radargleichung', 'Shannon-Hartley', 'Radiohorizont', 'Dezibel-Rechnung']
     },
     {
       id: 'radar',

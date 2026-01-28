@@ -43,7 +43,7 @@
       description: 'Funktionsprinzip von Radar, Reichweite, RCS und verschiedene Radar-Typen.',
       href: '/wissen/radar',
       icon: '🎯',
-      status: 'coming-soon',
+      status: 'available',
       topics: ['Pulsradar', 'Doppler-Radar', 'FMCW', 'Radargleichung', 'RCS']
     },
     {

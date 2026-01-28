@@ -46,7 +46,10 @@
       label: 'Wissen',
       items: [
         { href: '/wissen', label: 'Übersicht' },
-        { href: '/wissen/wellenausbreitung', label: 'Wellenausbreitung' }
+        { href: '/wissen/wellenausbreitung', label: 'Wellenausbreitung' },
+        { href: '/wissen/frequenzbaender', label: 'Frequenzbänder' },
+        { href: '/wissen/mathematik', label: 'RF-Mathematik' },
+        { href: '/wissen/radar', label: 'Radar-Grundlagen' }
       ]
     },
     {

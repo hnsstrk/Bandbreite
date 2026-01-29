@@ -23,7 +23,7 @@
       id: 'spektrum',
       label: 'Spektrum',
       items: [
-        { href: '/', label: 'Übersicht' },
+        { href: '/spektrum', label: 'Spektrum-Übersicht' },
         { href: '/spektrum/explorer', label: 'Frequenzband-Explorer' },
         { href: '/spektrum/ionosphaere', label: 'Ionosphäre' },
         { href: '/spektrum/anwendungen', label: 'Anwendungen' }
@@ -53,11 +53,11 @@
       ]
     },
     {
-      id: 'datenbanken',
-      label: 'Datenbanken',
+      id: 'referenz',
+      label: 'Referenz',
       items: [
         { href: '/datenbanken/sender', label: 'Senderdatenbank' },
-        { href: '/datenbanken/historie', label: 'Historie' }
+        { href: '/datenbanken/historie', label: 'Geschichte der Funktechnik' }
       ]
     }
   ];

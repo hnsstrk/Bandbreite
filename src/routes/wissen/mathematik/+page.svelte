@@ -870,47 +870,51 @@
   <!-- Related Links -->
   <section class="card">
     <h2 class="text-heading-2">Verwandte Werkzeuge</h2>
+    <p class="section-intro">
+      Die hier vorgestellten Formeln können Sie direkt in unseren interaktiven Rechnern anwenden
+      oder in den Wissensartikeln vertiefen.
+    </p>
     <div class="related-links">
       <a href="/rechner/fspl" class="related-link">
-        <span class="related-icon">*</span>
+        <span class="related-icon" aria-hidden="true">~</span>
         <div>
           <strong>FSPL-Rechner</strong>
-          <p>Detaillierter Rechner mit Diagramm</p>
-        </div>
-      </a>
-      <a href="/rechner/link-budget" class="related-link">
-        <span class="related-icon">*</span>
-        <div>
-          <strong>Link Budget</strong>
-          <p>Komplette Signalpfad-Analyse</p>
-        </div>
-      </a>
-      <a href="/rechner/kanalkapazitaet" class="related-link">
-        <span class="related-icon">*</span>
-        <div>
-          <strong>Kanalkapazität</strong>
-          <p>Shannon-Hartley mit Modulationen</p>
+          <p>Interaktive Berechnung der Freiraumdämpfung</p>
         </div>
       </a>
       <a href="/rechner/radar" class="related-link">
-        <span class="related-icon">*</span>
+        <span class="related-icon" aria-hidden="true">)</span>
         <div>
           <strong>Radar-Reichweite</strong>
-          <p>Radargleichung anwenden</p>
+          <p>Berechnung mit der Radargleichung</p>
         </div>
       </a>
-      <a href="/rechner/fresnel" class="related-link">
-        <span class="related-icon">*</span>
+      <a href="/rechner/kanalkapazitaet" class="related-link">
+        <span class="related-icon" aria-hidden="true">#</span>
         <div>
-          <strong>Fresnel-Zone</strong>
-          <p>Freiheit der ersten Fresnel-Zone</p>
+          <strong>Kanalkapazität</strong>
+          <p>Shannon-Hartley Theorem anwenden</p>
+        </div>
+      </a>
+      <a href="/rechner/link-budget" class="related-link">
+        <span class="related-icon" aria-hidden="true">+</span>
+        <div>
+          <strong>Link Budget</strong>
+          <p>Vollständige Signalpfad-Analyse</p>
+        </div>
+      </a>
+      <a href="/wissen/radar" class="related-link">
+        <span class="related-icon" aria-hidden="true">?</span>
+        <div>
+          <strong>Radar-Grundlagen</strong>
+          <p>Theorie hinter der Radargleichung</p>
         </div>
       </a>
       <a href="/wissen/wellenausbreitung" class="related-link">
-        <span class="related-icon">*</span>
+        <span class="related-icon" aria-hidden="true">^</span>
         <div>
           <strong>Wellenausbreitung</strong>
-          <p>Bodenwelle, Raumwelle, LOS</p>
+          <p>Ausbreitungsmodi und Radiohorizont</p>
         </div>
       </a>
     </div>
@@ -1326,6 +1330,13 @@
   }
 
   /* Related Links */
+  .section-intro {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0 0 1rem 0;
+    line-height: var(--line-height-relaxed);
+  }
+
   .related-links {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

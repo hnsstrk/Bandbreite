@@ -13,13 +13,13 @@ Diese Anleitung beschreibt das automatische Deployment von Bandbreite auf einen 
 
 ## Server-Konfiguration
 
-### 1. Deploy-Benutzer erstellen
+### 1. Benutzer erstellen
 
 ```bash
 # Auf dem Server als root
-sudo adduser deploy --disabled-password
+sudo adduser bandbreite --disabled-password
 sudo mkdir -p /var/www/bandbreite
-sudo chown deploy:deploy /var/www/bandbreite
+sudo chown bandbreite:bandbreite /var/www/bandbreite
 ```
 
 ### 2. SSH-Key für GitHub Actions
@@ -29,10 +29,10 @@ sudo chown deploy:deploy /var/www/bandbreite
 ssh-keygen -t ed25519 -C "github-actions-deploy" -f ~/.ssh/github-deploy-key
 
 # Public Key auf Server kopieren
-ssh-copy-id -i ~/.ssh/github-deploy-key.pub deploy@dein-server.de
+ssh-copy-id -i ~/.ssh/github-deploy-key.pub bandbreite@dein-server.de
 
 # Oder manuell:
-# cat ~/.ssh/github-deploy-key.pub | ssh deploy@dein-server.de "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+# cat ~/.ssh/github-deploy-key.pub | ssh bandbreite@dein-server.de "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
 ```
 
 ### 3. NGINX konfigurieren
@@ -111,7 +111,7 @@ Füge folgende Secrets hinzu:
 |--------|------|
 | `SSH_PRIVATE_KEY` | Inhalt von `~/.ssh/github-deploy-key` (der PRIVATE Key) |
 | `REMOTE_HOST` | `dein-server.de` |
-| `REMOTE_USER` | `deploy` |
+| `REMOTE_USER` | `bandbreite` |
 | `REMOTE_PORT` | `22` (oder dein SSH-Port) |
 | `REMOTE_TARGET` | `/var/www/bandbreite` |
 
@@ -162,7 +162,7 @@ npm run build
 
 1. Prüfe ob der SSH-Key korrekt in GitHub Secrets ist
 2. Prüfe ob der Public Key in `~/.ssh/authorized_keys` auf dem Server ist
-3. Teste manuell: `ssh -i ~/.ssh/github-deploy-key deploy@dein-server.de`
+3. Teste manuell: `ssh -i ~/.ssh/github-deploy-key bandbreite@dein-server.de`
 
 ### NGINX zeigt 404
 
@@ -173,6 +173,6 @@ npm run build
 ## Sicherheitshinweise
 
 - Der SSH Private Key sollte NUR in GitHub Secrets liegen
-- Der Deploy-User hat keine sudo-Rechte
-- Der Deploy-User kann nur in `/var/www/bandbreite` schreiben
+- Der `bandbreite`-User hat keine sudo-Rechte
+- Der `bandbreite`-User kann nur in `/var/www/bandbreite` schreiben
 - Aktiviere Fail2ban für SSH-Schutz

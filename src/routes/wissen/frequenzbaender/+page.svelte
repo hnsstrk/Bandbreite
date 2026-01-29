@@ -349,6 +349,36 @@
       {/each}
     </div>
   </section>
+
+  <!-- Verwandte Themen -->
+  <section class="card related-section">
+    <h2 class="text-heading-2">Verwandte Themen</h2>
+    <p class="related-intro">
+      Vertiefen Sie Ihr Wissen über Frequenzbänder mit diesen weiterführenden Themen und Werkzeugen.
+    </p>
+    <div class="related-grid">
+      <a href="/spektrum/explorer" class="related-card">
+        <h3>Frequenzband-Explorer</h3>
+        <p>Interaktive Visualisierung und Vergleich der Frequenzbänder</p>
+      </a>
+      <a href="/spektrum/anwendungen" class="related-card">
+        <h3>Anwendungen</h3>
+        <p>Typische Anwendungen in verschiedenen Frequenzbereichen</p>
+      </a>
+      <a href="/wissen/wellenausbreitung" class="related-card">
+        <h3>Wellenausbreitung</h3>
+        <p>Wie sich Funkwellen je nach Frequenz ausbreiten</p>
+      </a>
+      <a href="/rechner/fspl" class="related-card">
+        <h3>FSPL-Rechner</h3>
+        <p>Berechne die Freiraumdämpfung für verschiedene Frequenzen</p>
+      </a>
+      <a href="/rechner/link-budget" class="related-card">
+        <h3>Link Budget</h3>
+        <p>Vollständige Signalpfad-Analyse</p>
+      </a>
+    </div>
+  </section>
 </div>
 
 <style>
@@ -835,6 +865,63 @@
     color: var(--color-text-secondary);
   }
 
+  /* Related Topics */
+  .related-section {
+    padding: 1.5rem;
+  }
+
+  .related-section h2 {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .related-intro {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin: 0 0 1.25rem 0;
+    line-height: var(--line-height-relaxed);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .related-card {
+    display: block;
+    padding: 1.25rem;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .related-card:hover {
+    border-color: var(--color-accent-primary);
+    background: var(--color-bg-surface);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .related-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .related-card:hover h3 {
+    color: var(--color-accent-primary);
+  }
+
+  .related-card p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-normal);
+  }
+
   /* Responsive */
   @media (max-width: 768px) {
     .tab-nav {
@@ -865,6 +952,10 @@
 
     .input-with-unit {
       max-width: 100%;
+    }
+
+    .related-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

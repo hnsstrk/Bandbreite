@@ -315,34 +315,49 @@
   <!-- Related Links -->
   <section class="card">
     <h2 class="text-heading-2">Verwandte Themen</h2>
-    <div class="related-links">
-      <a href="/spektrum/ionosphaere" class="related-link">
-        <span class="related-icon">🌐</span>
-        <div>
-          <strong>Ionosphäre</strong>
-          <p>Detaillierte Darstellung der ionosphärischen Schichten</p>
+    <p class="section-description">
+      Entdecke weitere Inhalte, die mit der Wellenausbreitung zusammenhängen.
+    </p>
+    <div class="related-cards-grid">
+      <a href="/spektrum/ionosphaere" class="related-card">
+        <div class="related-card-icon">🌐</div>
+        <div class="related-card-content">
+          <h3>Ionosphärische Schichten</h3>
+          <p>Detaillierte Visualisierung der D-, E- und F-Schichten</p>
         </div>
+        <div class="related-card-arrow">→</div>
       </a>
-      <a href="/rechner/fspl" class="related-link">
-        <span class="related-icon">📉</span>
-        <div>
-          <strong>FSPL-Rechner</strong>
-          <p>Freiraumdämpfung für LOS-Verbindungen berechnen</p>
+      <a href="/rechner/fspl" class="related-card">
+        <div class="related-card-icon">📉</div>
+        <div class="related-card-content">
+          <h3>FSPL-Rechner</h3>
+          <p>Berechne die Freiraumdämpfung für deine Funkstrecke</p>
         </div>
+        <div class="related-card-arrow">→</div>
       </a>
-      <a href="/rechner/link-budget" class="related-link">
-        <span class="related-icon">📊</span>
-        <div>
-          <strong>Link Budget</strong>
-          <p>Komplette Signalpfad-Analyse</p>
+      <a href="/rechner/link-budget" class="related-card">
+        <div class="related-card-icon">📊</div>
+        <div class="related-card-content">
+          <h3>Link Budget</h3>
+          <p>Vollständige Signalpfad-Analyse mit atmosphärischen Effekten</p>
         </div>
+        <div class="related-card-arrow">→</div>
       </a>
-      <a href="/rechner/fresnel" class="related-link">
-        <span class="related-icon">📡</span>
-        <div>
-          <strong>Fresnel-Zone</strong>
-          <p>Fresnel-Zonen für Sichtverbindungen berechnen</p>
+      <a href="/rechner/fresnel" class="related-card">
+        <div class="related-card-icon">📡</div>
+        <div class="related-card-content">
+          <h3>Fresnel-Zone</h3>
+          <p>Berechne die erforderliche Hindernisfreiheit</p>
         </div>
+        <div class="related-card-arrow">→</div>
+      </a>
+      <a href="/wissen/frequenzbaender" class="related-card">
+        <div class="related-card-icon">📶</div>
+        <div class="related-card-content">
+          <h3>Frequenzbänder</h3>
+          <p>Übersicht aller Frequenzbänder und deren Eigenschaften</p>
+        </div>
+        <div class="related-card-arrow">→</div>
       </a>
     </div>
   </section>
@@ -614,44 +629,64 @@
     margin-bottom: 0.5rem;
   }
 
-  /* Related Links */
-  .related-links {
+  /* Related Cards Grid */
+  .related-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
   }
 
-  .related-link {
+  .related-card {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
     text-decoration: none;
     transition: all var(--transition-fast);
   }
 
-  .related-link:hover {
+  .related-card:hover {
     border-color: var(--color-accent-primary);
-    background: var(--color-bg-surface);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
   }
 
-  .related-icon {
-    font-size: 1.5rem;
+  .related-card-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
   }
 
-  .related-link strong {
-    display: block;
+  .related-card-content {
+    flex: 1;
+  }
+
+  .related-card-content h3 {
+    margin: 0 0 0.375rem 0;
+    font-size: var(--font-size-base);
+    font-weight: 600;
     color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
   }
 
-  .related-link p {
+  .related-card-content p {
     margin: 0;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .related-card-arrow {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    transition: transform var(--transition-fast);
+    align-self: center;
+  }
+
+  .related-card:hover .related-card-arrow {
+    transform: translateX(4px);
+    color: var(--color-accent-primary);
   }
 </style>

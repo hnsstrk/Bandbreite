@@ -12,17 +12,6 @@ const config = {
 			precompress: true,
 			strict: true
 		}),
-		prerender: {
-			handleHttpError: ({ path, referrer, message }) => {
-				// Ignore missing parent routes (index pages for sections)
-				if (path === '/datenbanken' || path === '/rechner' || path === '/konverter/frequenz') {
-					console.warn(`Warning: ${path} not found (linked from ${referrer})`);
-					return;
-				}
-				// Throw for other errors
-				throw new Error(message);
-			}
-		}
 	}
 };
 

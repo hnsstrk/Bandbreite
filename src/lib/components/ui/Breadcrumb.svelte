@@ -30,7 +30,10 @@
     mathematik: 'RF-Mathematik',
     // Datenbanken
     sender: 'Senderdatenbank',
-    historie: 'Geschichte'
+    historie: 'Geschichte',
+    // Konverter
+    konverter: 'Konverter',
+    frequenz: 'Frequenzkonverter'
   } as const;
 
   /** Erzeugt Breadcrumb-Items aus dem Pfad */

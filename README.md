@@ -1,6 +1,14 @@
 # Bandbreite
 
+[![Demo](https://img.shields.io/badge/Demo-Live-blue)](https://bandbreite.online-resources.de)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black)](https://github.com/hnsstrk/Bandbreite)
+
 Eine Web-Applikation zur Berechnung und Visualisierung von Hochfrequenz-Parametern. Entwickelt für Ingenieure, Techniker und Funkbegeisterte, die mit Frequenzband-Konvertierungen, FSPL-Berechnungen und Spektrum-Visualisierungen arbeiten.
+
+**[Live Demo](https://bandbreite.online-resources.de)** | **[GitHub Repository](https://github.com/hnsstrk/Bandbreite)**
+
+![Elektromagnetisches Spektrum](static/screenshot-spectrum.png)
+*Interaktive Visualisierung des elektromagnetischen Spektrums mit ITU, IEEE und NATO Bandbezeichnungen*
 
 ## Features
 

@@ -1,5 +1,12 @@
 <script lang="ts">
-  import SpectrumBar from '$lib/components/charts/SpectrumBar.svelte';
+  import SpectrumOverview from '$lib/components/SpectrumOverview.svelte';
+  import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
+  import PowerConverter from '$lib/components/converters/PowerConverter.svelte';
+  import RangeCalculator from '$lib/components/converters/RangeCalculator.svelte';
+  import BandInfo from '$lib/components/converters/BandInfo.svelte';
+  import PowerDbChart from '$lib/components/charts/PowerDbChart.svelte';
+  import AtmosphericInputs from '$lib/components/converters/AtmosphericInputs.svelte';
+  import AttenuationChart from '$lib/components/charts/AttenuationChart.svelte';
 
   interface SpectrumSection {
     id: string;
@@ -9,6 +16,9 @@
     icon: string;
     topics: string[];
   }
+
+  let currentFrequencyHz = $state<number | null>(null);
+  let currentPowerWatt = $state<number | null>(1);
 
   const sections: SpectrumSection[] = [
     {
@@ -44,6 +54,7 @@
 </svelte:head>
 
 <div class="page-content">
+  <!-- Page Header -->
   <header class="page-header">
     <h1 class="text-heading-1">Elektromagnetisches Spektrum</h1>
     <p class="header-description">
@@ -52,19 +63,25 @@
     </p>
   </header>
 
-  <!-- Spectrum Overview Visualization -->
+  <!-- EM-Spektrum Hauptvisualisierung -->
   <section class="card">
-    <h2 class="text-heading-2">Spektrum-Übersicht</h2>
-    <p class="section-intro">
-      Das elektromagnetische Spektrum umfasst alle Frequenzen elektromagnetischer Strahlung.
-      Die technisch genutzten Frequenzbänder reichen von wenigen Hertz bis zu mehreren Terahertz.
-    </p>
-    <div class="spectrum-container">
-      <SpectrumBar showLabels={true} />
-    </div>
+    <h2 class="text-heading-2">EM-Spektrum Übersicht</h2>
+    <SpectrumOverview frequencyHz={currentFrequencyHz ?? undefined} />
   </section>
 
-  <!-- Introduction -->
+  <!-- Row 1: Frequency Converter + Range Calculator -->
+  <div class="grid-row">
+    <FrequencyConverter bind:frequencyHz={currentFrequencyHz} />
+    <RangeCalculator frequencyHz={currentFrequencyHz} />
+  </div>
+
+  <!-- Row 2: Power Converter + Band Info -->
+  <div class="grid-row">
+    <PowerConverter bind:powerWatt={currentPowerWatt} />
+    <BandInfo frequencyHz={currentFrequencyHz} />
+  </div>
+
+  <!-- Grundlagen -->
   <section class="card">
     <h2 class="text-heading-2">Grundlagen</h2>
     <div class="intro-grid">
@@ -101,7 +118,32 @@
     </div>
   </section>
 
-  <!-- Section Cards -->
+  <!-- Transmit Power vs Frequency Chart -->
+  <section class="card">
+    <h2 class="text-heading-2">Sendeleistungen im Frequenzspektrum</h2>
+    <p class="section-description">
+      Typische Sendeleistungen verschiedener Kommunikations-, Radar-, Satelliten- und IoT-Systeme.
+      X-Achse: Frequenz (unten) und Wellenlänge (oben). Y-Achse: Leistung in Watt (links) und dBm (rechts).
+    </p>
+    <div class="chart-container">
+      <PowerDbChart />
+    </div>
+  </section>
+
+  <!-- Atmospheric Attenuation Chart -->
+  <section class="card">
+    <h2 class="text-heading-2">Atmosphärische Dämpfung</h2>
+    <p class="section-description">
+      Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676.
+      Die Resonanzbereiche bei 22 GHz (H&#8322;O) und 60 GHz (O&#8322;) sind markiert.
+    </p>
+    <AtmosphericInputs />
+    <div class="chart-container chart-margin-top">
+      <AttenuationChart frequencyGHz={currentFrequencyHz ? currentFrequencyHz / 1e9 : undefined} />
+    </div>
+  </section>
+
+  <!-- Sub-page Links -->
   <section class="sections-grid">
     {#each sections as section (section.id)}
       <a href={section.href} class="section-card">
@@ -118,87 +160,6 @@
         <div class="section-arrow">→</div>
       </a>
     {/each}
-  </section>
-
-  <!-- Quick Reference -->
-  <section class="card">
-    <h2 class="text-heading-2">Frequenzbereiche im Überblick</h2>
-    <div class="quick-ref-grid">
-      <div class="quick-ref-card">
-        <h4>ITU-Frequenzbänder</h4>
-        <table class="ref-table">
-          <tbody>
-            <tr><td>ELF</td><td>3–30 Hz</td></tr>
-            <tr><td>SLF</td><td>30–300 Hz</td></tr>
-            <tr><td>ULF</td><td>300 Hz – 3 kHz</td></tr>
-            <tr><td>VLF</td><td>3–30 kHz</td></tr>
-            <tr><td>LF</td><td>30–300 kHz</td></tr>
-            <tr><td>MF</td><td>300 kHz – 3 MHz</td></tr>
-            <tr><td>HF</td><td>3–30 MHz</td></tr>
-            <tr><td>VHF</td><td>30–300 MHz</td></tr>
-            <tr><td>UHF</td><td>300 MHz – 3 GHz</td></tr>
-            <tr><td>SHF</td><td>3–30 GHz</td></tr>
-            <tr><td>EHF</td><td>30–300 GHz</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="quick-ref-card">
-        <h4>IEEE-Radar-Bänder</h4>
-        <table class="ref-table">
-          <tbody>
-            <tr><td>L-Band</td><td>1–2 GHz</td></tr>
-            <tr><td>S-Band</td><td>2–4 GHz</td></tr>
-            <tr><td>C-Band</td><td>4–8 GHz</td></tr>
-            <tr><td>X-Band</td><td>8–12 GHz</td></tr>
-            <tr><td>Ku-Band</td><td>12–18 GHz</td></tr>
-            <tr><td>K-Band</td><td>18–27 GHz</td></tr>
-            <tr><td>Ka-Band</td><td>27–40 GHz</td></tr>
-            <tr><td>V-Band</td><td>40–75 GHz</td></tr>
-            <tr><td>W-Band</td><td>75–110 GHz</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="quick-ref-card">
-        <h4>Typische Anwendungen</h4>
-        <table class="ref-table">
-          <tbody>
-            <tr><td>AM-Rundfunk</td><td>530 kHz – 1,7 MHz</td></tr>
-            <tr><td>Kurzwelle</td><td>3–30 MHz</td></tr>
-            <tr><td>UKW-Radio</td><td>87,5–108 MHz</td></tr>
-            <tr><td>DVB-T</td><td>470–790 MHz</td></tr>
-            <tr><td>LTE</td><td>700 MHz – 2,6 GHz</td></tr>
-            <tr><td>WLAN 2,4 GHz</td><td>2,4–2,5 GHz</td></tr>
-            <tr><td>WLAN 5 GHz</td><td>5,15–5,85 GHz</td></tr>
-            <tr><td>5G mmWave</td><td>24–40 GHz</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Related Tools -->
-  <section class="card">
-    <h2 class="text-heading-2">Verwandte Werkzeuge</h2>
-    <div class="tools-grid">
-      <a href="/rechner/fspl" class="tool-link">
-        <strong>FSPL-Rechner</strong>
-        <span>Freiraumdämpfung berechnen</span>
-      </a>
-      <a href="/rechner/link-budget" class="tool-link">
-        <strong>Link Budget</strong>
-        <span>Signalpfad-Analyse</span>
-      </a>
-      <a href="/konverter/frequenz" class="tool-link">
-        <strong>Frequenzkonverter</strong>
-        <span>Frequenz und Wellenlänge</span>
-      </a>
-      <a href="/wissen/wellenausbreitung" class="tool-link">
-        <strong>Wellenausbreitung</strong>
-        <span>Ausbreitungsmodi verstehen</span>
-      </a>
-    </div>
   </section>
 </div>
 
@@ -222,18 +183,35 @@
     max-width: 65ch;
   }
 
-  .section-intro {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-tertiary);
-    margin-bottom: 1.5rem;
-    line-height: var(--line-height-relaxed);
+  .grid-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
-  .spectrum-container {
+  @media (min-width: 1024px) {
+    .grid-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .section-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    margin: 0.75rem 0;
+    line-height: var(--line-height-normal);
+  }
+
+  .chart-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .chart-margin-top {
     margin-top: 1rem;
   }
 
-  /* Introduction Grid */
+  /* Grundlagen Grid */
   .intro-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -339,80 +317,5 @@
   .section-card:hover .section-arrow {
     transform: translateX(4px);
     color: var(--color-accent-primary);
-  }
-
-  /* Quick Reference */
-  .quick-ref-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .quick-ref-card {
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-subtle);
-  }
-
-  .quick-ref-card h4 {
-    margin: 0 0 0.75rem 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
-  }
-
-  .ref-table {
-    width: 100%;
-    font-size: var(--font-size-xs);
-  }
-
-  .ref-table td {
-    padding: 0.25rem 0;
-    color: var(--color-text-secondary);
-  }
-
-  .ref-table td:first-child {
-    font-weight: 500;
-    color: var(--color-text-primary);
-  }
-
-  .ref-table td:last-child {
-    text-align: right;
-    font-family: var(--font-mono);
-  }
-
-  /* Tools Grid */
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .tool-link {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .tool-link:hover {
-    border-color: var(--color-accent-primary);
-    background: var(--color-bg-surface);
-  }
-
-  .tool-link strong {
-    color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  .tool-link span {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
   }
 </style>

@@ -8,6 +8,18 @@ Bandbreite is a SvelteKit web application for RF/microwave frequency calculation
 
 **Current Status**: Aktive Entwicklung. Kernfunktionalität implementiert.
 
+## Geschützte Kernelemente (NICHT ÄNDERN)
+
+Die folgenden fünf Komponenten auf der Startseite (`/`) bilden die Kernidee der Anwendung. Sie dürfen **niemals** entfernt, ersetzt oder in ihrer grundlegenden Funktion verändert werden, ohne **vorher explizit beim Benutzer nachzufragen**:
+
+1. `SpectrumOverview.svelte` — EM-Spektrum-Visualisierung (das Hauptdiagramm)
+2. `FrequencyConverter.svelte` — Frequenz ↔ Wellenlänge Konverter
+3. `PowerConverter.svelte` — Leistungskonverter (W ↔ dBm)
+4. `RangeCalculator.svelte` — Reichweitenrechner (TX/RX)
+5. `BandInfo.svelte` — Bandzuordnung für Frequenzen
+
+Spektrum oben, die vier Werkzeuge darunter — diese Kombination ist das Herzstück. Visuelle Verbesserungen und Erweiterungen sind erlaubt, aber die Kernfunktion und Anordnung bleibt erhalten.
+
 ## Build & Development Commands
 
 ```bash

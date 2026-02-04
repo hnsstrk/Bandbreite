@@ -4,9 +4,6 @@
   import PowerConverter from '$lib/components/converters/PowerConverter.svelte';
   import RangeCalculator from '$lib/components/converters/RangeCalculator.svelte';
   import BandDetailSidebar from '$lib/components/BandDetailSidebar.svelte';
-  import PowerDbChart from '$lib/components/charts/PowerDbChart.svelte';
-  import AtmosphericInputs from '$lib/components/converters/AtmosphericInputs.svelte';
-  import AttenuationChart from '$lib/components/charts/AttenuationChart.svelte';
   import type { FrequencyBand } from '$lib/data/bands';
 
   interface SpectrumSection {
@@ -45,6 +42,22 @@
       href: '/spektrum/anwendungen',
       icon: '📻',
       topics: ['Rundfunk', 'Mobilfunk', 'Radar', 'Satelliten', 'WLAN']
+    },
+    {
+      id: 'sendeleistungen',
+      title: 'Sendeleistungen im Frequenzspektrum',
+      description: 'Typische Sendeleistungen verschiedener Kommunikations-, Radar-, Satelliten- und IoT-Systeme im Frequenzspektrum.',
+      href: '/spektrum/sendeleistungen',
+      icon: '📡',
+      topics: ['Rundfunk', 'Radar', 'Mobilfunk', 'IoT', 'Satelliten']
+    },
+    {
+      id: 'daempfung',
+      title: 'Atmosphärische Dämpfung',
+      description: 'Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks und atmosphärische Fenster.',
+      href: '/spektrum/daempfung',
+      icon: '🌧️',
+      topics: ['O₂-Peak', 'H₂O-Peak', 'Atmosphärische Fenster', 'ITU-R P.676']
     }
   ];
 </script>
@@ -126,31 +139,6 @@
     </div>
   </div>
 
-  <!-- Transmit Power vs Frequency Chart -->
-  <section class="card">
-    <h2 class="text-heading-2">Sendeleistungen im Frequenzspektrum</h2>
-    <p class="section-description">
-      Typische Sendeleistungen verschiedener Kommunikations-, Radar-, Satelliten- und IoT-Systeme.
-      X-Achse: Frequenz (unten) und Wellenlänge (oben). Y-Achse: Leistung in Watt (links) und dBm (rechts).
-    </p>
-    <div class="chart-container">
-      <PowerDbChart />
-    </div>
-  </section>
-
-  <!-- Atmospheric Attenuation Chart -->
-  <section class="card">
-    <h2 class="text-heading-2">Atmosphärische Dämpfung</h2>
-    <p class="section-description">
-      Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676.
-      Die Resonanzbereiche bei 22 GHz (H&#8322;O) und 60 GHz (O&#8322;) sind markiert.
-    </p>
-    <AtmosphericInputs />
-    <div class="chart-container chart-margin-top">
-      <AttenuationChart frequencyGHz={currentFrequencyHz ? currentFrequencyHz / 1e9 : undefined} />
-    </div>
-  </section>
-
   <!-- Sub-page Links -->
   <section class="sections-grid">
     {#each sections as section (section.id)}
@@ -218,22 +206,6 @@
 
   .sidebar-column {
     min-width: 0;
-  }
-
-  .section-description {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-tertiary);
-    margin: 0.75rem 0;
-    line-height: var(--line-height-normal);
-  }
-
-  .chart-container {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  .chart-margin-top {
-    margin-top: 1rem;
   }
 
   /* Grundlagen Grid */

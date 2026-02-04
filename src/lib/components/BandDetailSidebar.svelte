@@ -214,6 +214,38 @@
       </div>
     {/if}
   {/if}
+
+  <!-- Grundlagen - always visible -->
+  <div class="basics-divider"></div>
+  <div class="basics-section">
+    <span class="section-label">Grundlagen</span>
+    <div class="basics-cards">
+      <div class="basics-card">
+        <span class="basics-card-title">Frequenz und Wellenlänge</span>
+        <p class="basics-card-text">
+          Elektromagnetische Wellen breiten sich mit Lichtgeschwindigkeit aus. Frequenz und Wellenlänge sind über die Beziehung <span class="formula">λ = c / f</span> verknüpft. Höhere Frequenzen bedeuten kürzere Wellenlängen.
+        </p>
+      </div>
+      <div class="basics-card">
+        <span class="basics-card-title">Ausbreitungseigenschaften</span>
+        <p class="basics-card-text">
+          Niedrige Frequenzen folgen der Erdkrümmung und durchdringen Hindernisse. Hohe Frequenzen breiten sich geradlinig aus, werden aber von Gebäuden und Vegetation stark gedämpft.
+        </p>
+      </div>
+      <div class="basics-card">
+        <span class="basics-card-title">Bandbreite und Datenrate</span>
+        <p class="basics-card-text">
+          Höhere Frequenzbänder bieten mehr Bandbreite für schnellere Datenübertragung. Nach Shannon-Hartley steigt die Kanalkapazität mit der verfügbaren Bandbreite.
+        </p>
+      </div>
+      <div class="basics-card">
+        <span class="basics-card-title">Atmosphärische Dämpfung</span>
+        <p class="basics-card-text">
+          Die Atmosphäre absorbiert bestimmte Frequenzen stark. Besonders bei 22 GHz (Wasserdampf) und 60 GHz (Sauerstoff) treten Absorptionspeaks auf.
+        </p>
+      </div>
+    </div>
+  </div>
 </aside>
 
 <style>
@@ -402,6 +434,51 @@
     color: var(--color-text-secondary);
     margin: 0;
     line-height: var(--line-height-relaxed);
+  }
+
+  .basics-divider {
+    border-top: 1px solid var(--color-border-subtle);
+    margin-top: 0.25rem;
+  }
+
+  .basics-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .basics-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .basics-card {
+    padding: 0.5rem 0.625rem;
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .basics-card-title {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .basics-card-text {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: var(--line-height-relaxed);
+  }
+
+  .formula {
+    font-family: var(--font-mono);
+    color: var(--color-accent, #3b82f6);
+    font-weight: var(--font-weight-semibold);
   }
 
   @media (max-width: 1023px) {

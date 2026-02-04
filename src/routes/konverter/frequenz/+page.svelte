@@ -34,8 +34,8 @@
   <section class="card">
     <h2 class="text-heading-2">Verwandte Werkzeuge</h2>
     <div class="tools-grid">
-      <a href="/spektrum/explorer" class="tool-link">
-        <strong>Frequenzband-Explorer</strong>
+      <a href="/spektrum" class="tool-link">
+        <strong>EM-Spektrum & Bänder</strong>
         <span>Interaktive Bandübersicht</span>
       </a>
       <a href="/rechner/fspl" class="tool-link">

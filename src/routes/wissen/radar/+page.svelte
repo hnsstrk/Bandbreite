@@ -722,7 +722,7 @@
         </div>
       </a>
 
-      <a href="/spektrum/explorer" class="related-card">
+      <a href="/spektrum" class="related-card">
         <div class="related-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />

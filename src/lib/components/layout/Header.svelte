@@ -23,8 +23,7 @@
       id: 'spektrum',
       label: 'Spektrum',
       items: [
-        { href: '/spektrum', label: 'Spektrum-Übersicht' },
-        { href: '/spektrum/explorer', label: 'Frequenzband-Explorer' },
+        { href: '/spektrum', label: 'EM-Spektrum & Bänder' },
         { href: '/spektrum/ionosphaere', label: 'Ionosphäre' },
         { href: '/spektrum/anwendungen', label: 'Anwendungen' }
       ]

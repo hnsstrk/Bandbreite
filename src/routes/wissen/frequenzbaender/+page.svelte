@@ -357,8 +357,8 @@
       Vertiefen Sie Ihr Wissen über Frequenzbänder mit diesen weiterführenden Themen und Werkzeugen.
     </p>
     <div class="related-grid">
-      <a href="/spektrum/explorer" class="related-card">
-        <h3>Frequenzband-Explorer</h3>
+      <a href="/spektrum" class="related-card">
+        <h3>EM-Spektrum & Bänder</h3>
         <p>Interaktive Visualisierung und Vergleich der Frequenzbänder</p>
       </a>
       <a href="/spektrum/anwendungen" class="related-card">

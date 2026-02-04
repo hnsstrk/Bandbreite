@@ -3,10 +3,11 @@
   import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
   import PowerConverter from '$lib/components/converters/PowerConverter.svelte';
   import RangeCalculator from '$lib/components/converters/RangeCalculator.svelte';
-  import BandInfo from '$lib/components/converters/BandInfo.svelte';
+  import BandDetailSidebar from '$lib/components/BandDetailSidebar.svelte';
   import PowerDbChart from '$lib/components/charts/PowerDbChart.svelte';
   import AtmosphericInputs from '$lib/components/converters/AtmosphericInputs.svelte';
   import AttenuationChart from '$lib/components/charts/AttenuationChart.svelte';
+  import type { FrequencyBand } from '$lib/data/bands';
 
   interface SpectrumSection {
     id: string;
@@ -19,16 +20,16 @@
 
   let currentFrequencyHz = $state<number | null>(null);
   let currentPowerWatt = $state<number | null>(1);
+  let selectedSpectrumBand = $state<FrequencyBand | null>(null);
+  let selectedBandId = $state<string | null>(null);
+
+  function handleBandClick(band: FrequencyBand) {
+    selectedSpectrumBand = band;
+    selectedBandId = band.id;
+    currentFrequencyHz = Math.sqrt(band.minHz * band.maxHz);
+  }
 
   const sections: SpectrumSection[] = [
-    {
-      id: 'explorer',
-      title: 'Frequenzband-Explorer',
-      description: 'Interaktive Übersicht aller Frequenzbänder. Vergleichen Sie ITU, IEEE und NATO Bandbezeichnungen und erkunden Sie typische Anwendungen.',
-      href: '/spektrum/explorer',
-      icon: '🔍',
-      topics: ['ITU-Bänder', 'IEEE-Bänder', 'NATO-Bänder', 'Frequenzbereiche']
-    },
     {
       id: 'ionosphaere',
       title: 'Ionosphärische Ausbreitung',
@@ -66,19 +67,27 @@
   <!-- EM-Spektrum Hauptvisualisierung -->
   <section class="card">
     <h2 class="text-heading-2">EM-Spektrum Übersicht</h2>
-    <SpectrumOverview frequencyHz={currentFrequencyHz ?? undefined} />
+    <p class="spectrum-hint">Klicken Sie auf ein Band für detaillierte Informationen</p>
+    <SpectrumOverview
+      frequencyHz={currentFrequencyHz ?? undefined}
+      onBandClick={handleBandClick}
+      {selectedBandId}
+    />
   </section>
 
-  <!-- Row 1: Frequency Converter + Range Calculator -->
-  <div class="grid-row">
-    <FrequencyConverter bind:frequencyHz={currentFrequencyHz} />
-    <RangeCalculator frequencyHz={currentFrequencyHz} />
-  </div>
-
-  <!-- Row 2: Power Converter + Band Info -->
-  <div class="grid-row">
-    <PowerConverter bind:powerWatt={currentPowerWatt} />
-    <BandInfo frequencyHz={currentFrequencyHz} />
+  <!-- Dashboard: Tools links, Banddetail rechts -->
+  <div class="dashboard-layout">
+    <div class="tools-column">
+      <FrequencyConverter bind:frequencyHz={currentFrequencyHz} />
+      <PowerConverter bind:powerWatt={currentPowerWatt} />
+      <RangeCalculator frequencyHz={currentFrequencyHz} />
+    </div>
+    <div class="sidebar-column">
+      <BandDetailSidebar
+        frequencyHz={currentFrequencyHz}
+        selectedBand={selectedSpectrumBand}
+      />
+    </div>
   </div>
 
   <!-- Grundlagen -->
@@ -183,16 +192,33 @@
     max-width: 65ch;
   }
 
-  .grid-row {
+  .spectrum-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .dashboard-layout {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
   @media (min-width: 1024px) {
-    .grid-row {
-      grid-template-columns: 1fr 1fr;
+    .dashboard-layout {
+      grid-template-columns: 55fr 45fr;
+      align-items: start;
     }
+  }
+
+  .tools-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar-column {
+    min-width: 0;
   }
 
   .section-description {

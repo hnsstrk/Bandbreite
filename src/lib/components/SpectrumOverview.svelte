@@ -22,9 +22,11 @@
   interface Props {
     frequencyHz?: number;
     showLabels?: boolean;
+    onBandClick?: (band: FrequencyBand) => void;
+    selectedBandId?: string | null;
   }
 
-  let { frequencyHz, showLabels = true }: Props = $props();
+  let { frequencyHz, showLabels = true, onBandClick, selectedBandId = null }: Props = $props();
 
   // Constants - imported from spectrum.ts
   const SPECTRUM_MIN = SPECTRUM_MIN_HZ;
@@ -771,12 +773,16 @@
 
             <!-- Band rectangles -->
             {#each row.bands as band (band.id)}
+              <!-- svelte-ignore a11y_no_noninteractive_element_interactions, a11y_no_noninteractive_tabindex -->
               <g
                 role="graphics-symbol"
                 aria-label="{band.name}: {formatFrequencyRange(band.minHz, band.maxHz)}"
                 onmouseenter={(e) => showTooltip(e, band)}
                 onmouseleave={hideTooltip}
                 onmousemove={(e) => showTooltip(e, band)}
+                onclick={() => onBandClick?.(band)}
+                onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') onBandClick?.(band); }}
+                tabindex="0"
                 class="cursor-pointer"
               >
                 <rect
@@ -785,9 +791,9 @@
                   width={Math.max(band.width, 2)}
                   height={rowHeight - 4}
                   fill={band.color === 'visible' ? 'url(#visibleLightGradient)' : band.color}
-                  opacity="0.9"
-                  stroke="#0f172a"
-                  stroke-width="0.5"
+                  opacity={selectedBandId === band.id ? 1 : 0.9}
+                  stroke={selectedBandId === band.id ? '#fbbf24' : '#0f172a'}
+                  stroke-width={selectedBandId === band.id ? 2.5 : 0.5}
                   class="transition-opacity hover:opacity-70"
                 />
                 {#if showLabels && band.width > 25}

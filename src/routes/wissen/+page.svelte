@@ -223,8 +223,8 @@
         <strong>Ionosphäre</strong>
         <span>Ionosphärische Schichten</span>
       </a>
-      <a href="/spektrum/explorer" class="tool-link">
-        <strong>Frequenzband-Explorer</strong>
+      <a href="/spektrum" class="tool-link">
+        <strong>EM-Spektrum & Bänder</strong>
         <span>Interaktive Bandübersicht</span>
       </a>
     </div>

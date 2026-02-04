@@ -90,43 +90,6 @@
     </div>
   </div>
 
-  <!-- Grundlagen -->
-  <section class="card">
-    <h2 class="text-heading-2">Grundlagen</h2>
-    <div class="intro-grid">
-      <div class="intro-card">
-        <h4>Frequenz und Wellenlänge</h4>
-        <p>
-          Elektromagnetische Wellen breiten sich mit Lichtgeschwindigkeit aus.
-          Frequenz und Wellenlänge sind über die Beziehung <span class="formula">λ = c / f</span> verknüpft.
-          Höhere Frequenzen bedeuten kürzere Wellenlängen.
-        </p>
-      </div>
-      <div class="intro-card">
-        <h4>Ausbreitungseigenschaften</h4>
-        <p>
-          Niedrige Frequenzen folgen der Erdkrümmung und durchdringen Hindernisse.
-          Hohe Frequenzen breiten sich geradlinig aus, werden aber von Gebäuden und
-          Vegetation stark gedämpft.
-        </p>
-      </div>
-      <div class="intro-card">
-        <h4>Bandbreite und Datenrate</h4>
-        <p>
-          Höhere Frequenzbänder bieten mehr Bandbreite für schnellere Datenübertragung.
-          Nach Shannon-Hartley steigt die Kanalkapazität mit der verfügbaren Bandbreite.
-        </p>
-      </div>
-      <div class="intro-card">
-        <h4>Atmosphärische Dämpfung</h4>
-        <p>
-          Die Atmosphäre absorbiert bestimmte Frequenzen stark. Besonders bei 22 GHz
-          (Wasserdampf) und 60 GHz (Sauerstoff) treten Absorptionspeaks auf.
-        </p>
-      </div>
-    </div>
-  </section>
-
   <!-- Transmit Power vs Frequency Chart -->
   <section class="card">
     <h2 class="text-heading-2">Sendeleistungen im Frequenzspektrum</h2>
@@ -235,42 +198,6 @@
 
   .chart-margin-top {
     margin-top: 1rem;
-  }
-
-  /* Grundlagen Grid */
-  .intro-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .intro-card {
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-subtle);
-  }
-
-  .intro-card h4 {
-    margin: 0 0 0.5rem 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
-  }
-
-  .intro-card p {
-    margin: 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-relaxed);
-  }
-
-  .formula {
-    font-family: var(--font-mono);
-    color: var(--color-accent-primary);
-    padding: 0.125rem 0.375rem;
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-sm);
   }
 
   /* Section Cards */

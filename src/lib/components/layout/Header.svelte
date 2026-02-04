@@ -25,7 +25,9 @@
       items: [
         { href: '/spektrum', label: 'EM-Spektrum & Bänder' },
         { href: '/spektrum/ionosphaere', label: 'Ionosphäre' },
-        { href: '/spektrum/anwendungen', label: 'Anwendungen' }
+        { href: '/spektrum/anwendungen', label: 'Anwendungen' },
+        { href: '/spektrum/sendeleistungen', label: 'Sendeleistungen' },
+        { href: '/spektrum/daempfung', label: 'Atmosphärische Dämpfung' }
       ]
     },
     {
@@ -37,7 +39,8 @@
         { href: '/rechner/radar', label: 'Radar-Reichweite' },
         { href: '/rechner/kanalkapazitaet', label: 'Kanalkapazität' },
         { href: '/rechner/skin-tiefe', label: 'Skin-Tiefe' },
-        { href: '/rechner/fresnel', label: 'Fresnel-Zone' }
+        { href: '/rechner/fresnel', label: 'Fresnel-Zone' },
+        { href: '/konverter/frequenz', label: 'Frequenzkonverter' }
       ]
     },
     {

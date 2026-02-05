@@ -71,7 +71,7 @@
     );
 
     // Only return if reasonably close
-    if (Math.abs(closest.frequencyHz - frequencyHz) / frequencyHz < 0.5) {
+    if (frequencyHz > 0 && Math.abs(closest.frequencyHz - frequencyHz) / frequencyHz < 0.5) {
       return closest;
     }
     return null;

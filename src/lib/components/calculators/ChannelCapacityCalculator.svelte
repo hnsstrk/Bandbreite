@@ -94,16 +94,16 @@
       .range([chartHeight, 0])
   );
 
-  // Shannon limit curve data
-  let shannonCurveData = $derived.by(() => {
+  // Shannon limit curve data (static - no reactive dependencies)
+  const shannonCurveData: { snr: number; capacity: number }[] = (() => {
     const points: { snr: number; capacity: number }[] = [];
     for (let snr = 0; snr <= 40; snr += 0.5) {
-      const snrLinear = Math.pow(10, snr / 10);
-      const capacity = Math.log2(1 + snrLinear);
+      const snrLin = Math.pow(10, snr / 10);
+      const capacity = Math.log2(1 + snrLin);
       points.push({ snr, capacity });
     }
     return points;
-  });
+  })();
 
   // Line generator
   let lineGenerator = $derived(

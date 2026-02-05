@@ -136,7 +136,7 @@
   let currentFreqLine = $derived.by(() => {
     if (!currentFrequencyHz || currentFrequencyHz <= 0) return null;
     // Check if current frequency is close to a preset
-    const isPreset = chartFrequencies.some(f =>
+    const isPreset = currentFrequencyHz > 0 && chartFrequencies.some(f =>
       Math.abs(f.hz - currentFrequencyHz) / currentFrequencyHz < 0.05
     );
     if (isPreset) return null;

@@ -125,29 +125,29 @@
   }
 
   .breadcrumb-separator {
-    color: var(--color-text-muted, #9ca3af);
+    color: var(--color-text-disabled);
     margin: 0 0.125rem;
   }
 
   .breadcrumb-link {
-    color: var(--color-text-muted, #6b7280);
+    color: var(--color-text-muted);
     text-decoration: none;
     transition: color 0.15s ease;
   }
 
   .breadcrumb-link:hover {
-    color: var(--color-text-accent, #3b82f6);
+    color: var(--color-text-accent);
     text-decoration: underline;
   }
 
   .breadcrumb-link:focus {
-    outline: 2px solid var(--color-focus, #3b82f6);
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
     border-radius: 0.125rem;
   }
 
   .breadcrumb-current {
-    color: var(--color-text-primary, #374151);
+    color: var(--color-text-primary);
     font-weight: 500;
   }
 

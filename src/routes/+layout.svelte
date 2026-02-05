@@ -36,8 +36,8 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0.75rem 1rem;
-    background-color: var(--color-bg-secondary, #f9fafb);
-    border-bottom: 1px solid var(--color-border, #e5e7eb);
+    background-color: var(--color-bg-elevated);
+    border-bottom: 1px solid var(--color-border-default);
   }
 
   .main-content {

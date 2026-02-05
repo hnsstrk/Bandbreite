@@ -75,6 +75,14 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
+  /* Convenience Aliases (used across components) */
+  --color-text-muted: var(--color-text-tertiary);
+  --color-text-accent: var(--color-accent-primary);
+  --color-focus: var(--color-border-focus);
+  --color-bg-muted: var(--color-bg-elevated);
+  --color-bg-hover: #e2e8f0;           /* slate-200 - Interactive hover */
+  --color-bg-subtle: var(--color-bg-base);
+
   /* ----------------------------------------
      Spacing System
      ---------------------------------------- */
@@ -171,6 +179,9 @@
   --color-chart-text-secondary: #cbd5e1; /* slate-300 - Secondary chart text */
   --color-chart-tooltip-bg: #1e293b;  /* slate-800 - Tooltip background */
   --color-chart-tooltip-border: #475569; /* slate-600 - Tooltip border */
+
+  /* Hover background (no alias target in dark, needs explicit value) */
+  --color-bg-hover: #475569;          /* slate-600 - Interactive hover */
 
   /* Shadow Values (darker for dark theme) */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);

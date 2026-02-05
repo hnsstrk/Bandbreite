@@ -16,51 +16,39 @@
   } from '$lib/stores/atmosphericParameters.svelte';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
   import { atmosphericExplanations } from '$lib/data/explanations';
+  import { parseNumericInput, parseSelectValue } from '$lib/utils/handlers';
 
   // Tab state for different parameter groups
   let activeTab: 'atmospheric' | 'precipitation' = $state('atmospheric');
 
   // Atmospheric parameter handlers
   function handleTemperatureInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : 0;
-    atmosphericParameters.setTemperatureCelsius(value);
+    atmosphericParameters.setTemperatureCelsius(parseNumericInput(e));
   }
 
   function handlePressureInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : 0;
-    atmosphericParameters.setPressureHpa(value);
+    atmosphericParameters.setPressureHpa(parseNumericInput(e));
   }
 
   function handleWaterVaporInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : 0;
-    atmosphericParameters.setWaterVaporDensity(value);
+    atmosphericParameters.setWaterVaporDensity(parseNumericInput(e));
   }
 
   // Precipitation parameter handlers
   function handleRainRateInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : 0;
-    atmosphericParameters.setRainRateMmH(value);
+    atmosphericParameters.setRainRateMmH(parseNumericInput(e));
   }
 
   function handleFogDensityInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : 0;
-    atmosphericParameters.setFogDensityGM3(value);
+    atmosphericParameters.setFogDensityGM3(parseNumericInput(e));
   }
 
   function handleSnowRateInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : 0;
-    atmosphericParameters.setSnowRateMmH(value);
+    atmosphericParameters.setSnowRateMmH(parseNumericInput(e));
   }
 
   function handlePolarizationChange(e: Event) {
-    const target = e.target as HTMLSelectElement;
-    atmosphericParameters.setPolarization(target.value as Polarization);
+    atmosphericParameters.setPolarization(parseSelectValue(e) as Polarization);
   }
 
   // Preset handlers

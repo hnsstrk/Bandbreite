@@ -7,6 +7,7 @@ import {
   formatNumber,
   formatNumberAuto,
   formatNumberLocale,
+  formatPrecisionNumber,
   formatFrequency,
   formatFrequencyGHz,
   formatWavelength,
@@ -271,5 +272,66 @@ describe('formatTemperatureKelvin', () => {
 describe('formatPressure', () => {
   it('should format pressure', () => {
     expect(formatPressure(1013.25)).toBe('1013.3 hPa');
+  });
+});
+
+// ============================================================================
+// formatPrecisionNumber
+// ============================================================================
+
+describe('formatPrecisionNumber', () => {
+  it('should return empty string for null', () => {
+    expect(formatPrecisionNumber(null)).toBe('');
+  });
+
+  it('should return empty string for undefined', () => {
+    expect(formatPrecisionNumber(undefined)).toBe('');
+  });
+
+  it('should return empty string for NaN', () => {
+    expect(formatPrecisionNumber(NaN)).toBe('');
+  });
+
+  it('should return empty string for Infinity', () => {
+    expect(formatPrecisionNumber(Infinity)).toBe('');
+  });
+
+  it('should return custom fallback for invalid values', () => {
+    expect(formatPrecisionNumber(null, 6, 1e6, 4, 'N/A')).toBe('N/A');
+  });
+
+  it('should return "0" for zero', () => {
+    expect(formatPrecisionNumber(0)).toBe('0');
+  });
+
+  it('should format normal values with precision', () => {
+    const result = formatPrecisionNumber(123.456, 6);
+    expect(result).toBe('123.456');
+  });
+
+  it('should strip trailing zeros', () => {
+    const result = formatPrecisionNumber(100, 6);
+    expect(result).toBe('100');
+  });
+
+  it('should use exponential for very small values', () => {
+    const result = formatPrecisionNumber(0.0001, 6, 1e6, 4);
+    expect(result).toMatch(/e/);
+  });
+
+  it('should use exponential for very large values', () => {
+    const result = formatPrecisionNumber(1e7, 6, 1e6, 4);
+    expect(result).toMatch(/e\+/);
+  });
+
+  it('should respect custom precision', () => {
+    const result = formatPrecisionNumber(3.14159, 4);
+    expect(result).toBe('3.142');
+  });
+
+  it('should respect custom expThreshold', () => {
+    // With threshold 1e3, 1500 should be in exponential
+    const result = formatPrecisionNumber(1500, 6, 1e3, 4);
+    expect(result).toMatch(/e\+/);
   });
 });

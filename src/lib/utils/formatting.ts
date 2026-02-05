@@ -56,6 +56,35 @@ export function formatNumberAuto(
 }
 
 /**
+ * Format a number using significant digits (toPrecision) with exponential notation
+ * for very small or large values. Strips trailing zeros.
+ * Useful for converter input fields where precision matters.
+ *
+ * @param value - The number to format
+ * @param precision - Number of significant digits (default: 6)
+ * @param expThreshold - Magnitude threshold for exponential notation (default: 1e6)
+ * @param expDigits - Digits in exponential notation (default: 4)
+ * @param fallback - Fallback string for null/invalid values (default: '')
+ * @returns Formatted string
+ */
+export function formatPrecisionNumber(
+  value: number | null | undefined,
+  precision: number = 6,
+  expThreshold: number = 1e6,
+  expDigits: number = 4,
+  fallback: string = ''
+): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) {
+    return fallback;
+  }
+  if (value === 0) return '0';
+  if (Math.abs(value) < 0.001 || Math.abs(value) >= expThreshold) {
+    return value.toExponential(expDigits);
+  }
+  return value.toPrecision(precision).replace(/\.?0+$/, '');
+}
+
+/**
  * Format a number with thousands separator (German style: 1.000.000).
  *
  * @param value - The number to format

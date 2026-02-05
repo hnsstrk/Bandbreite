@@ -31,6 +31,25 @@ export function parseNumericInput(
 }
 
 /**
+ * Parse a numeric value from an input event, returning null for empty input.
+ * Use this when an empty input field should represent "no value" rather than zero.
+ *
+ * @param event - The input event
+ * @returns Parsed number or null if input is empty/invalid
+ */
+export function parseNullableNumericInput(event: Event): number | null {
+  const target = event.target as HTMLInputElement;
+  const value = target.value.trim();
+
+  if (value === '' || value === '-') {
+    return null;
+  }
+
+  const parsed = parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+/**
  * Parse a positive numeric value from an input event.
  * Returns the parsed number if positive, otherwise a fallback.
  *

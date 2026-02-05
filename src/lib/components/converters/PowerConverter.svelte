@@ -1,6 +1,8 @@
 <script lang="ts">
   import { wattToDbm, dbmToWatt, wattToDbW, dbWToWatt, convertToWatt, convertFromWatt } from '$lib/utils/conversions';
   import { POWER_UNITS_WATT, POWER_UNITS_DB, DEFAULT_POWER_UNIT_WATT, DEFAULT_POWER_UNIT_DB } from '$lib/data/units';
+  import { parseNullableNumericInput, parseSelectValue } from '$lib/utils/handlers';
+  import { formatPrecisionNumber } from '$lib/utils/formatting';
 
   interface Props {
     powerWatt?: number | null;
@@ -35,14 +37,12 @@
   });
 
   function handleWattInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : null;
+    const value = parseNullableNumericInput(e);
     powerInWatt = value !== null && value > 0 ? convertToWatt(value, wattUnit) : null;
   }
 
   function handleDbInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : null;
+    const value = parseNullableNumericInput(e);
     if (value !== null) {
       if (dbUnit === 'dbm') {
         powerInWatt = dbmToWatt(value);
@@ -55,22 +55,15 @@
   }
 
   function handleWattUnitChange(e: Event) {
-    const target = e.target as HTMLSelectElement;
-    wattUnit = target.value;
+    wattUnit = parseSelectValue(e);
   }
 
   function handleDbUnitChange(e: Event) {
-    const target = e.target as HTMLSelectElement;
-    dbUnit = target.value;
+    dbUnit = parseSelectValue(e);
   }
 
   function formatNumber(num: number | null): string {
-    if (num === null) return '';
-    if (num === 0) return '0';
-    if (Math.abs(num) < 0.001 || Math.abs(num) >= 1e6) {
-      return num.toExponential(4);
-    }
-    return num.toPrecision(6).replace(/\.?0+$/, '');
+    return formatPrecisionNumber(num);
   }
 </script>
 

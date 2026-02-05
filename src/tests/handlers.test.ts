@@ -5,6 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import {
   parseNumericInput,
+  parseNullableNumericInput,
   parsePositiveInput,
   parseNonNegativeInput,
   parseSelectValue,
@@ -298,5 +299,45 @@ describe('debounce', () => {
     expect(fn).toHaveBeenCalledWith('arg1', 'arg2');
 
     vi.useRealTimers();
+  });
+});
+
+// ============================================================================
+// parseNullableNumericInput
+// ============================================================================
+
+describe('parseNullableNumericInput', () => {
+  it('should return null for empty input', () => {
+    expect(parseNullableNumericInput(createInputEvent(''))).toBeNull();
+  });
+
+  it('should return null for whitespace-only input', () => {
+    expect(parseNullableNumericInput(createInputEvent('   '))).toBeNull();
+  });
+
+  it('should return null for minus sign only', () => {
+    expect(parseNullableNumericInput(createInputEvent('-'))).toBeNull();
+  });
+
+  it('should parse valid numbers', () => {
+    expect(parseNullableNumericInput(createInputEvent('42'))).toBe(42);
+    expect(parseNullableNumericInput(createInputEvent('3.14'))).toBe(3.14);
+    expect(parseNullableNumericInput(createInputEvent('-7.5'))).toBe(-7.5);
+  });
+
+  it('should return null for non-numeric input', () => {
+    expect(parseNullableNumericInput(createInputEvent('abc'))).toBeNull();
+  });
+
+  it('should return 0 for zero input', () => {
+    expect(parseNullableNumericInput(createInputEvent('0'))).toBe(0);
+  });
+
+  it('should return null for NaN-producing input', () => {
+    expect(parseNullableNumericInput(createInputEvent('NaN'))).toBeNull();
+  });
+
+  it('should return null for Infinity', () => {
+    expect(parseNullableNumericInput(createInputEvent('Infinity'))).toBeNull();
   });
 });

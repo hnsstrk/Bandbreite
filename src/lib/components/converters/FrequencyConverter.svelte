@@ -4,6 +4,8 @@
   import { FREQUENCY_UNITS, WAVELENGTH_UNITS, DEFAULT_FREQUENCY_UNIT, DEFAULT_WAVELENGTH_UNIT } from '$lib/data/units';
   import { speedOfLight } from '$lib/stores/speedOfLight.svelte';
   import { FREQUENCY_CONVERTER_PRESETS, type FrequencyPreset } from '$lib/data/presets';
+  import { parseNullableNumericInput, parseSelectValue } from '$lib/utils/handlers';
+  import { formatPrecisionNumber } from '$lib/utils/formatting';
 
   interface Props {
     frequencyHz?: number | null;
@@ -44,14 +46,12 @@
   let isExactMode = $derived(speedOfLight.isExact);
 
   function handleFrequencyInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : null;
+    const value = parseNullableNumericInput(e);
     frequencyInHz = value !== null ? convertToHz(value, frequencyUnit) : null;
   }
 
   function handleWavelengthInput(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const value = target.value ? parseFloat(target.value) : null;
+    const value = parseNullableNumericInput(e);
     if (value !== null && value > 0) {
       const meters = convertToMeters(value, wavelengthUnit);
       frequencyInHz = wavelengthToFrequency(meters);
@@ -61,13 +61,11 @@
   }
 
   function handleFrequencyUnitChange(e: Event) {
-    const target = e.target as HTMLSelectElement;
-    frequencyUnit = target.value;
+    frequencyUnit = parseSelectValue(e);
   }
 
   function handleWavelengthUnitChange(e: Event) {
-    const target = e.target as HTMLSelectElement;
-    wavelengthUnit = target.value;
+    wavelengthUnit = parseSelectValue(e);
   }
 
   function setQuickFrequency(hz: number) {
@@ -81,12 +79,7 @@
   }
 
   function formatNumber(num: number | null): string {
-    if (num === null) return '';
-    if (num === 0) return '0';
-    if (Math.abs(num) < 0.001 || Math.abs(num) >= 1e9) {
-      return num.toExponential(6);
-    }
-    return num.toPrecision(8).replace(/\.?0+$/, '');
+    return formatPrecisionNumber(num, 8, 1e9, 6);
   }
 
   function handleSpeedOfLightToggle() {

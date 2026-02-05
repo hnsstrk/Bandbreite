@@ -1,13 +1,13 @@
 <script lang="ts">
   import { calculateFSPL } from '$lib/utils/calculations';
-  import { dbmToWatt } from '$lib/utils/conversions';
+  import { dbmToWatt, convertToHz } from '$lib/utils/conversions';
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import { calculateExtendedPathAttenuation } from '$lib/utils/atmosphericAttenuation';
   import { parseNumericInput } from '$lib/utils/handlers';
   import { formatPowerWatts } from '$lib/utils/formatting';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
   import { linkBudgetExplanations, fsplExplanations } from '$lib/data/explanations';
-  import { DISTANCE_UNITS, FREQUENCY_UNITS } from '$lib/data/units';
+  import { DISTANCE_UNITS, FREQUENCY_UNITS, getDistanceFactor } from '$lib/data/units';
   import { LINK_BUDGET_PRESETS, type LinkBudgetPreset } from '$lib/data/presets';
 
   interface Props {
@@ -38,17 +38,7 @@
   let fadingMarginDb = $state(10); // 10 dB for fading
   let miscLossDb = $state(0); // Additional losses
 
-  // Unit conversion factors - using centralized DISTANCE_UNITS from units.ts
-  function getDistanceFactor(unitId: string): number {
-    const unit = DISTANCE_UNITS.find(u => u.id === unitId);
-    return unit?.factor ?? 1;
-  }
-
-  // Frequency conversion factors
-  const FREQUENCY_FACTORS: Record<string, number> = {
-    'MHz': 1e6,
-    'GHz': 1e9,
-  };
+  // Unit conversion factors imported from centralized modules
 
   // Sync with external props
   $effect(() => {
@@ -69,7 +59,7 @@
 
   // Effective frequency in Hz
   let effectiveFrequencyHz = $derived(
-    pathFrequencyHz * (FREQUENCY_FACTORS[pathFrequencyUnit] ?? 1e9)
+    convertToHz(pathFrequencyHz, pathFrequencyUnit)
   );
 
   // Effective distance in meters

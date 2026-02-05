@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { page } from '$app/state';
-  import ThemeToggle from './ThemeToggle.svelte';
+  import { page } from "$app/state";
+  import ThemeToggle from "./ThemeToggle.svelte";
+  import MobileMenu from "./MobileMenu.svelte";
 
   // Navigation state
   let mobileMenuOpen = $state(false);
@@ -20,53 +21,57 @@
 
   const navItems: NavItem[] = [
     {
-      id: 'spektrum',
-      label: 'Spektrum',
+      id: "spektrum",
+      label: "Spektrum",
       items: [
-        { href: '/spektrum', label: 'EM-Spektrum & Bänder' },
-        { href: '/spektrum/ionosphaere', label: 'Ionosphäre' },
-        { href: '/spektrum/anwendungen', label: 'Anwendungen' },
-        { href: '/spektrum/sendeleistungen', label: 'Sendeleistungen' },
-        { href: '/spektrum/daempfung', label: 'Atmosphärische Dämpfung' }
-      ]
+        { href: "/spektrum", label: "EM-Spektrum & Bänder" },
+        { href: "/spektrum/ionosphaere", label: "Ionosphäre" },
+        { href: "/spektrum/anwendungen", label: "Anwendungen" },
+        { href: "/spektrum/sendeleistungen", label: "Sendeleistungen" },
+        { href: "/spektrum/daempfung", label: "Atmosphärische Dämpfung" },
+      ],
     },
     {
-      id: 'rechner',
-      label: 'Rechner',
+      id: "rechner",
+      label: "Rechner",
       items: [
-        { href: '/rechner/fspl', label: 'FSPL-Rechner' },
-        { href: '/rechner/link-budget', label: 'Link Budget' },
-        { href: '/rechner/radar', label: 'Radar-Reichweite' },
-        { href: '/rechner/kanalkapazitaet', label: 'Kanalkapazität' },
-        { href: '/rechner/skin-tiefe', label: 'Skin-Tiefe' },
-        { href: '/rechner/fresnel', label: 'Fresnel-Zone' },
-        { href: '/konverter/frequenz', label: 'Frequenzkonverter' }
-      ]
+        { href: "/rechner/fspl", label: "FSPL-Rechner" },
+        { href: "/rechner/link-budget", label: "Link Budget" },
+        { href: "/rechner/radar", label: "Radar-Reichweite" },
+        { href: "/rechner/kanalkapazitaet", label: "Kanalkapazität" },
+        { href: "/rechner/skin-tiefe", label: "Skin-Tiefe" },
+        { href: "/rechner/fresnel", label: "Fresnel-Zone" },
+        { href: "/konverter/frequenz", label: "Frequenzkonverter" },
+      ],
     },
     {
-      id: 'wissen',
-      label: 'Wissen',
+      id: "wissen",
+      label: "Wissen",
       items: [
-        { href: '/wissen', label: 'Übersicht' },
-        { href: '/wissen/wellenausbreitung', label: 'Wellenausbreitung' },
-        { href: '/wissen/frequenzbaender', label: 'Frequenzbänder' },
-        { href: '/wissen/mathematik', label: 'RF-Mathematik' },
-        { href: '/wissen/radar', label: 'Radar-Grundlagen' }
-      ]
+        { href: "/wissen", label: "Übersicht" },
+        { href: "/wissen/wellenausbreitung", label: "Wellenausbreitung" },
+        { href: "/wissen/frequenzbaender", label: "Frequenzbänder" },
+        { href: "/wissen/mathematik", label: "RF-Mathematik" },
+        { href: "/wissen/radar", label: "Radar-Grundlagen" },
+      ],
     },
     {
-      id: 'referenz',
-      label: 'Referenz',
+      id: "referenz",
+      label: "Referenz",
       items: [
-        { href: '/datenbanken/sender', label: 'Senderdatenbank' },
-        { href: '/datenbanken/historie', label: 'Geschichte der Funktechnik' }
-      ]
-    }
+        { href: "/datenbanken/sender", label: "Senderdatenbank" },
+        { href: "/datenbanken/historie", label: "Geschichte der Funktechnik" },
+      ],
+    },
   ];
 
   // Click-outside handler for closing dropdowns
   function handleClickOutside(event: MouseEvent) {
-    if (activeDropdown && headerElement && !headerElement.contains(event.target as Node)) {
+    if (
+      activeDropdown &&
+      headerElement &&
+      !headerElement.contains(event.target as Node)
+    ) {
       activeDropdown = null;
     }
   }
@@ -76,11 +81,11 @@
     if (activeDropdown) {
       // Small delay to prevent immediate closing when clicking the trigger
       const timeoutId = setTimeout(() => {
-        document.addEventListener('click', handleClickOutside);
+        document.addEventListener("click", handleClickOutside);
       }, 0);
       return () => {
         clearTimeout(timeoutId);
-        document.removeEventListener('click', handleClickOutside);
+        document.removeEventListener("click", handleClickOutside);
       };
     }
   });
@@ -108,53 +113,71 @@
   }
 
   function handleDropdownKeydown(event: KeyboardEvent, id: string) {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       toggleDropdown(id);
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       activeDropdown = null;
-    } else if (event.key === 'ArrowDown' && activeDropdown === id) {
+    } else if (event.key === "ArrowDown" && activeDropdown === id) {
       // Focus first item in dropdown
       event.preventDefault();
       const dropdown = document.querySelector(`[data-dropdown="${id}"]`);
-      const firstItem = dropdown?.querySelector('a');
+      const firstItem = dropdown?.querySelector("a");
       firstItem?.focus();
     }
   }
 
-  function handleDropdownItemKeydown(event: KeyboardEvent, itemIndex: number, totalItems: number, dropdownId: string) {
-    if (event.key === 'Escape') {
+  function handleDropdownItemKeydown(
+    event: KeyboardEvent,
+    itemIndex: number,
+    totalItems: number,
+    dropdownId: string,
+  ) {
+    if (event.key === "Escape") {
       activeDropdown = null;
       // Return focus to trigger button
-      const trigger = document.querySelector(`[data-trigger="${dropdownId}"]`) as HTMLElement;
+      const trigger = document.querySelector(
+        `[data-trigger="${dropdownId}"]`,
+      ) as HTMLElement;
       trigger?.focus();
-    } else if (event.key === 'ArrowDown') {
+    } else if (event.key === "ArrowDown") {
       event.preventDefault();
-      const dropdown = document.querySelector(`[data-dropdown="${dropdownId}"]`);
-      const items = dropdown?.querySelectorAll('a');
+      const dropdown = document.querySelector(
+        `[data-dropdown="${dropdownId}"]`,
+      );
+      const items = dropdown?.querySelectorAll("a");
       const nextIndex = (itemIndex + 1) % totalItems;
       (items?.[nextIndex] as HTMLElement)?.focus();
-    } else if (event.key === 'ArrowUp') {
+    } else if (event.key === "ArrowUp") {
       event.preventDefault();
-      const dropdown = document.querySelector(`[data-dropdown="${dropdownId}"]`);
-      const items = dropdown?.querySelectorAll('a');
+      const dropdown = document.querySelector(
+        `[data-dropdown="${dropdownId}"]`,
+      );
+      const items = dropdown?.querySelectorAll("a");
       const prevIndex = itemIndex === 0 ? totalItems - 1 : itemIndex - 1;
       (items?.[prevIndex] as HTMLElement)?.focus();
     }
   }
 
   function isActiveSection(item: NavItem): boolean {
-    return item.items.some(subItem => page.url.pathname === subItem.href);
+    return item.items.some((subItem) => page.url.pathname === subItem.href);
   }
 </script>
 
 <header class="header safe-area-top" bind:this={headerElement}>
   <div class="header-content">
     <a href="/" class="logo" onclick={closeMobileMenu}>
-      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path d="M2 12h2M6 12h2M10 12h2M14 12h2M18 12h2M22 12h2"/>
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 5v2M12 17v2"/>
+      <svg
+        class="logo-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path d="M2 12h2M6 12h2M10 12h2M14 12h2M18 12h2M22 12h2" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 5v2M12 17v2" />
       </svg>
       <span class="logo-text">Bandbreite</span>
     </a>
@@ -175,8 +198,16 @@
             onkeydown={(e) => handleDropdownKeydown(e, item.id)}
           >
             {item.label}
-            <svg class="dropdown-icon" class:open={activeDropdown === item.id} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M6 9l6 6 6-6"/>
+            <svg
+              class="dropdown-icon"
+              class:open={activeDropdown === item.id}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
           <div
@@ -194,7 +225,13 @@
                 role="menuitem"
                 tabindex={activeDropdown === item.id ? 0 : -1}
                 onclick={closeDropdown}
-                onkeydown={(e) => handleDropdownItemKeydown(e, index, item.items.length, item.id)}
+                onkeydown={(e) =>
+                  handleDropdownItemKeydown(
+                    e,
+                    index,
+                    item.items.length,
+                    item.id,
+                  )}
               >
                 {subItem.label}
               </a>
@@ -213,16 +250,30 @@
         type="button"
         class="mobile-menu-btn"
         onclick={toggleMobileMenu}
-        aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
+        aria-label={mobileMenuOpen ? "Menü schließen" : "Menü öffnen"}
         aria-expanded={mobileMenuOpen}
       >
         {#if mobileMenuOpen}
-          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12"/>
+          <svg
+            class="menu-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         {:else}
-          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M3 12h18M3 6h18M3 18h18"/>
+          <svg
+            class="menu-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M3 12h18M3 6h18M3 18h18" />
           </svg>
         {/if}
       </button>
@@ -231,38 +282,12 @@
 
   <!-- Mobile Navigation Menu -->
   {#if mobileMenuOpen}
-    <nav class="mobile-nav-menu" aria-label="Mobile Navigation">
-      {#each navItems as item (item.id)}
-        <div class="mobile-nav-section">
-          <button
-            type="button"
-            class="mobile-nav-header"
-            class:active={isActiveSection(item)}
-            onclick={() => toggleDropdown(item.id)}
-            aria-expanded={activeDropdown === item.id}
-          >
-            <span>{item.label}</span>
-            <svg class="dropdown-icon" class:open={activeDropdown === item.id} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M6 9l6 6 6-6"/>
-            </svg>
-          </button>
-          {#if activeDropdown === item.id}
-            <div class="mobile-nav-submenu">
-              {#each item.items as subItem (subItem.href)}
-                <a
-                  href={subItem.href}
-                  class="mobile-nav-link"
-                  class:active={page.url.pathname === subItem.href}
-                  onclick={closeMobileMenu}
-                >
-                  {subItem.label}
-                </a>
-              {/each}
-            </div>
-          {/if}
-        </div>
-      {/each}
-    </nav>
+    <MobileMenu
+      {navItems}
+      bind:activeDropdown
+      closeAction={closeMobileMenu}
+      toggleAction={toggleDropdown}
+    />
   {/if}
 </header>
 
@@ -273,7 +298,9 @@
     padding: 0.75rem 1rem;
     box-shadow: var(--shadow-md);
     border-bottom: 1px solid var(--color-border-default);
-    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+    transition:
+      background-color var(--transition-normal),
+      border-color var(--transition-normal);
     position: sticky;
     top: 0;
     z-index: 40;
@@ -350,7 +377,9 @@
     color: var(--color-text-secondary);
     text-decoration: none;
     border-radius: var(--radius-md);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
     min-height: 44px;
     display: flex;
     align-items: center;
@@ -423,7 +452,9 @@
     color: var(--color-text-secondary);
     text-decoration: none;
     border-radius: var(--radius-md);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
   }
 
   .dropdown-item:hover,
@@ -469,7 +500,9 @@
     border-radius: var(--radius-md);
     color: var(--color-text-secondary);
     cursor: pointer;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
   }
 
   .mobile-menu-btn:hover {
@@ -489,77 +522,4 @@
   }
 
   /* Mobile Navigation Menu */
-  .mobile-nav-menu {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 0;
-    border-top: 1px solid var(--color-border-default);
-    margin-top: 0.75rem;
-  }
-
-  @media (min-width: 768px) {
-    .mobile-nav-menu {
-      display: none;
-    }
-  }
-
-  .mobile-nav-section {
-    border-bottom: 1px solid var(--color-border-subtle);
-  }
-
-  .mobile-nav-section:last-child {
-    border-bottom: none;
-  }
-
-  .mobile-nav-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.875rem 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-  }
-
-  .mobile-nav-header:hover {
-    background-color: var(--color-bg-elevated);
-  }
-
-  .mobile-nav-header.active {
-    color: var(--color-accent-primary);
-  }
-
-  .mobile-nav-submenu {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 0.5rem;
-  }
-
-  .mobile-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem 0.75rem 1.5rem;
-    font-size: 0.9375rem;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-    min-height: 44px;
-  }
-
-  .mobile-nav-link:hover,
-  .mobile-nav-link:active {
-    color: var(--color-text-primary);
-    background-color: var(--color-bg-elevated);
-  }
-
-  .mobile-nav-link.active {
-    color: var(--color-accent-primary);
-    font-weight: 500;
-  }
 </style>

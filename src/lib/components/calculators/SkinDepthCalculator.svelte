@@ -1,14 +1,18 @@
 <script lang="ts">
-  import * as d3 from 'd3';
+  import * as d3 from "d3";
   import {
     calculateSkinDepth,
     SEAWATER_CONDUCTIVITY,
     SEAWATER_PENETRATION,
-    VACUUM_PERMEABILITY
-  } from '$lib/data/constants';
-  import { formatFrequency, formatNumber, formatDistance } from '$lib/utils/formatting';
-  import { parseNumericInput, clamp } from '$lib/utils/handlers';
-  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+    VACUUM_PERMEABILITY,
+  } from "$lib/data/constants";
+  import {
+    formatFrequency,
+    formatNumber,
+    formatDistance,
+  } from "$lib/utils/formatting";
+  import { parseNumericInput, clamp, safeDivide } from "$lib/utils/handlers";
+  import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
 
   interface Props {
     width?: number;
@@ -20,7 +24,7 @@
   // Input state
   let frequencyHz = $state(10000);
   let conductivity = $state<number>(SEAWATER_CONDUCTIVITY);
-  let selectedMedium = $state('seawater');
+  let selectedMedium = $state("seawater");
 
   // Chart margins
   const margin = { top: 40, right: 120, bottom: 60, left: 80 };
@@ -31,30 +35,66 @@
 
   // Medium presets
   const mediumPresets = [
-    { id: 'seawater', name: 'Seewasser', nameDE: 'Seewasser', conductivity: 4, color: '#3b82f6' },
-    { id: 'freshwater', name: 'Fresh Water', nameDE: 'Suesswasser', conductivity: 0.01, color: '#22c55e' },
-    { id: 'wet-earth', name: 'Wet Earth', nameDE: 'Feuchte Erde', conductivity: 0.1, color: '#8b5cf6' },
-    { id: 'dry-earth', name: 'Dry Earth', nameDE: 'Trockene Erde', conductivity: 0.001, color: '#f97316' },
-    { id: 'copper', name: 'Copper', nameDE: 'Kupfer', conductivity: 5.96e7, color: '#ef4444' },
-    { id: 'aluminum', name: 'Aluminum', nameDE: 'Aluminium', conductivity: 3.5e7, color: '#6b7280' },
+    {
+      id: "seawater",
+      name: "Seewasser",
+      nameDE: "Seewasser",
+      conductivity: 4,
+      color: "#3b82f6",
+    },
+    {
+      id: "freshwater",
+      name: "Fresh Water",
+      nameDE: "Suesswasser",
+      conductivity: 0.01,
+      color: "#22c55e",
+    },
+    {
+      id: "wet-earth",
+      name: "Wet Earth",
+      nameDE: "Feuchte Erde",
+      conductivity: 0.1,
+      color: "#8b5cf6",
+    },
+    {
+      id: "dry-earth",
+      name: "Dry Earth",
+      nameDE: "Trockene Erde",
+      conductivity: 0.001,
+      color: "#f97316",
+    },
+    {
+      id: "copper",
+      name: "Copper",
+      nameDE: "Kupfer",
+      conductivity: 5.96e7,
+      color: "#ef4444",
+    },
+    {
+      id: "aluminum",
+      name: "Aluminum",
+      nameDE: "Aluminium",
+      conductivity: 3.5e7,
+      color: "#6b7280",
+    },
   ];
 
   // Frequency presets for VLF/ELF
   const frequencyPresets = [
-    { label: '3 Hz', hz: 3, desc: 'ELF - U-Boot tief' },
-    { label: '30 Hz', hz: 30, desc: 'ELF - Sanguine' },
-    { label: '300 Hz', hz: 300, desc: 'ULF' },
-    { label: '3 kHz', hz: 3000, desc: 'VLF unten' },
-    { label: '10 kHz', hz: 10000, desc: 'VLF typisch' },
-    { label: '30 kHz', hz: 30000, desc: 'VLF oben' },
-    { label: '77.5 kHz', hz: 77500, desc: 'DCF77' },
+    { label: "3 Hz", hz: 3, desc: "ELF - U-Boot tief" },
+    { label: "30 Hz", hz: 30, desc: "ELF - Sanguine" },
+    { label: "300 Hz", hz: 300, desc: "ULF" },
+    { label: "3 kHz", hz: 3000, desc: "VLF unten" },
+    { label: "10 kHz", hz: 10000, desc: "VLF typisch" },
+    { label: "30 kHz", hz: 30000, desc: "VLF oben" },
+    { label: "77.5 kHz", hz: 77500, desc: "DCF77" },
   ];
 
   // Calculate skin depth
   let skinDepthM = $derived(
     frequencyHz > 0 && conductivity > 0
       ? calculateSkinDepth(frequencyHz, conductivity)
-      : 0
+      : 0,
   );
 
   // Practical communication depth (approx. 2-3 skin depths)
@@ -62,16 +102,21 @@
 
   // Find closest reference value from SEAWATER_PENETRATION
   let referenceData = $derived.by(() => {
-    if (selectedMedium !== 'seawater') return null;
+    if (selectedMedium !== "seawater") return null;
 
     const closest = SEAWATER_PENETRATION.reduce((prev, curr) =>
-      Math.abs(curr.frequencyHz - frequencyHz) < Math.abs(prev.frequencyHz - frequencyHz)
+      Math.abs(curr.frequencyHz - frequencyHz) <
+      Math.abs(prev.frequencyHz - frequencyHz)
         ? curr
-        : prev
+        : prev,
     );
 
     // Only return if reasonably close
-    if (frequencyHz > 0 && Math.abs(closest.frequencyHz - frequencyHz) / frequencyHz < 0.5) {
+    if (
+      frequencyHz > 0 &&
+      safeDivide(Math.abs(closest.frequencyHz - frequencyHz), frequencyHz, 1) <
+        0.5
+    ) {
       return closest;
     }
     return null;
@@ -79,9 +124,16 @@
 
   // Generate curve data for different media
   let curveData = $derived.by(() => {
-    const data: { frequency: number; depth: number; medium: string; color: string }[] = [];
+    const data: {
+      frequency: number;
+      depth: number;
+      medium: string;
+      color: string;
+    }[] = [];
 
-    for (const medium of mediumPresets.filter(m => m.id !== 'copper' && m.id !== 'aluminum')) {
+    for (const medium of mediumPresets.filter(
+      (m) => m.id !== "copper" && m.id !== "aluminum",
+    )) {
       for (let logF = 0; logF <= 5; logF += 0.1) {
         const freq = Math.pow(10, logF);
         const depth = calculateSkinDepth(freq, medium.conductivity);
@@ -90,7 +142,7 @@
             frequency: freq,
             depth,
             medium: medium.id,
-            color: medium.color
+            color: medium.color,
           });
         }
       }
@@ -106,35 +158,35 @@
       if (!grouped[point.medium]) {
         grouped[point.medium] = [];
       }
-      grouped[point.medium].push({ frequency: point.frequency, depth: point.depth });
+      grouped[point.medium].push({
+        frequency: point.frequency,
+        depth: point.depth,
+      });
     }
     return grouped;
   });
 
   // D3 scales
   let xScale = $derived(
-    d3.scaleLog()
-      .domain([1, 100000])
-      .range([0, chartWidth])
+    d3.scaleLog().domain([1, 100000]).range([0, chartWidth]),
   );
 
   let yScale = $derived(
-    d3.scaleLog()
-      .domain([0.1, 1000])
-      .range([chartHeight, 0])
+    d3.scaleLog().domain([0.1, 1000]).range([chartHeight, 0]),
   );
 
   // Line generator
   let lineGenerator = $derived(
-    d3.line<{ frequency: number; depth: number }>()
-      .x(d => xScale(d.frequency))
-      .y(d => yScale(Math.max(0.1, Math.min(1000, d.depth))))
+    d3
+      .line<{ frequency: number; depth: number }>()
+      .x((d) => xScale(d.frequency))
+      .y((d) => yScale(Math.max(0.1, Math.min(1000, d.depth)))),
   );
 
   // Current marker position
   let markerPos = $derived({
     x: xScale(clamp(frequencyHz, 1, 100000)),
-    y: yScale(clamp(skinDepthM, 0.1, 1000))
+    y: yScale(clamp(skinDepthM, 0.1, 1000)),
   });
 
   // X-axis ticks
@@ -151,10 +203,10 @@
   function handleConductivityInput(e: Event) {
     const newValue = clamp(parseNumericInput(e, 0.001), 1e-6, 1e8);
     conductivity = newValue;
-    selectedMedium = 'custom';
+    selectedMedium = "custom";
   }
 
-  function setMedium(medium: typeof mediumPresets[0]) {
+  function setMedium(medium: (typeof mediumPresets)[0]) {
     selectedMedium = medium.id;
     conductivity = medium.conductivity;
   }
@@ -235,8 +287,12 @@
           <button
             type="button"
             onclick={() => setMedium(medium)}
-            class="btn-chip {selectedMedium === medium.id ? 'btn-chip-active' : ''}"
-            style={selectedMedium === medium.id ? `background-color: ${medium.color}; color: white;` : ''}
+            class="btn-chip {selectedMedium === medium.id
+              ? 'btn-chip-active'
+              : ''}"
+            style={selectedMedium === medium.id
+              ? `background-color: ${medium.color}; color: white;`
+              : ""}
           >
             {medium.nameDE}
           </button>
@@ -258,7 +314,11 @@
         />
       </div>
       <div class="text-2xl font-bold text-blue-500 dark:text-blue-400">
-        {skinDepthM > 0 ? (skinDepthM >= 1 ? formatDistance(skinDepthM) : `${formatNumber(skinDepthM * 100, 2)} cm`) : '—'}
+        {skinDepthM > 0
+          ? skinDepthM >= 1
+            ? formatDistance(skinDepthM)
+            : `${formatNumber(skinDepthM * 100, 2)} cm`
+          : "—"}
       </div>
     </div>
 
@@ -273,7 +333,11 @@
         />
       </div>
       <div class="text-2xl font-bold text-green-600 dark:text-green-400">
-        {practicalDepthM > 0 ? (practicalDepthM >= 1 ? formatDistance(practicalDepthM) : `${formatNumber(practicalDepthM * 100, 2)} cm`) : '—'}
+        {practicalDepthM > 0
+          ? practicalDepthM >= 1
+            ? formatDistance(practicalDepthM)
+            : `${formatNumber(practicalDepthM * 100, 2)} cm`
+          : "—"}
       </div>
     </div>
 
@@ -292,15 +356,21 @@
   <!-- Reference Data (for seawater) -->
   {#if referenceData}
     <div class="p-4 bg-surface-secondary rounded-lg mb-6">
-      <div class="text-label mb-2">Referenzdaten ({formatFrequency(referenceData.frequencyHz)})</div>
+      <div class="text-label mb-2">
+        Referenzdaten ({formatFrequency(referenceData.frequencyHz)})
+      </div>
       <div class="grid grid-cols-3 gap-4 text-sm">
         <div>
           <span class="text-muted">Ref. Skin-Depth:</span>
-          <span class="font-medium ml-1">{formatNumber(referenceData.skinDepthM, 1)} m</span>
+          <span class="font-medium ml-1"
+            >{formatNumber(referenceData.skinDepthM, 1)} m</span
+          >
         </div>
         <div>
           <span class="text-muted">Ref. Prakt. Tiefe:</span>
-          <span class="font-medium ml-1">{formatNumber(referenceData.practicalDepthM, 0)} m</span>
+          <span class="font-medium ml-1"
+            >{formatNumber(referenceData.practicalDepthM, 0)} m</span
+          >
         </div>
         <div>
           <span class="text-muted">Hinweis:</span>
@@ -320,7 +390,13 @@
       aria-label="Skin-Depth Diagramm: Eindringtiefe über Frequenz für verschiedene Medien"
     >
       <defs>
-        <filter id="skinMarkerGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <filter
+          id="skinMarkerGlow"
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+        >
           <feGaussianBlur stdDeviation="4" result="coloredBlur" />
           <feMerge>
             <feMergeNode in="coloredBlur" />
@@ -330,7 +406,7 @@
       </defs>
 
       <!-- Background -->
-      <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
+      <rect x="0" y="0" {width} {height} style="fill: var(--color-chart-bg)" />
 
       <!-- Chart area -->
       <g transform="translate({margin.left}, {margin.top})">
@@ -359,7 +435,7 @@
         {/each}
 
         <!-- Medium curves -->
-        {#each mediumPresets.filter(m => m.id !== 'copper' && m.id !== 'aluminum') as medium (medium.id)}
+        {#each mediumPresets.filter((m) => m.id !== "copper" && m.id !== "aluminum") as medium (medium.id)}
           {#if curvesByMedium[medium.id]}
             <path
               d={lineGenerator(curvesByMedium[medium.id])}
@@ -410,11 +486,22 @@
 
         <!-- X-axis -->
         <g transform="translate(0, {chartHeight})">
-          <line x1="0" y1="0" x2={chartWidth} y2="0" style="stroke: var(--color-chart-axis)" />
+          <line
+            x1="0"
+            y1="0"
+            x2={chartWidth}
+            y2="0"
+            style="stroke: var(--color-chart-axis)"
+          />
           {#each xTickValues as tickVal (tickVal)}
             <g transform="translate({xScale(tickVal)}, 0)">
               <line y2="8" style="stroke: var(--color-chart-axis)" />
-              <text y="24" style="fill: var(--color-chart-text-secondary)" text-anchor="middle" font-size="10">
+              <text
+                y="24"
+                style="fill: var(--color-chart-text-secondary)"
+                text-anchor="middle"
+                font-size="10"
+              >
                 {formatFrequency(tickVal, 0)}
               </text>
             </g>
@@ -433,11 +520,23 @@
 
         <!-- Y-axis -->
         <g>
-          <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" />
+          <line
+            x1="0"
+            y1="0"
+            x2="0"
+            y2={chartHeight}
+            style="stroke: var(--color-chart-axis)"
+          />
           {#each yTickValues as tickVal (tickVal)}
             <g transform="translate(0, {yScale(tickVal)})">
               <line x2="-8" style="stroke: var(--color-chart-axis)" />
-              <text x="-12" style="fill: var(--color-chart-text-secondary)" text-anchor="end" dominant-baseline="middle" font-size="10">
+              <text
+                x="-12"
+                style="fill: var(--color-chart-text-secondary)"
+                text-anchor="end"
+                dominant-baseline="middle"
+                font-size="10"
+              >
                 {tickVal >= 1 ? tickVal : tickVal} m
               </text>
             </g>
@@ -458,13 +557,29 @@
 
       <!-- Legend -->
       <g transform="translate({width - margin.right + 10}, {margin.top})">
-        <text style="fill: var(--color-chart-text)" font-weight="500" font-size="11">
+        <text
+          style="fill: var(--color-chart-text)"
+          font-weight="500"
+          font-size="11"
+        >
           Medien
         </text>
-        {#each mediumPresets.filter(m => m.id !== 'copper' && m.id !== 'aluminum') as medium, i (medium.id)}
+        {#each mediumPresets.filter((m) => m.id !== "copper" && m.id !== "aluminum") as medium, i (medium.id)}
           <g transform="translate(0, {18 + i * 22})">
-            <line x1="0" y1="0" x2="20" y2="0" stroke={medium.color} stroke-width="2" />
-            <text x="26" y="4" style="fill: var(--color-chart-text-secondary)" font-size="10">
+            <line
+              x1="0"
+              y1="0"
+              x2="20"
+              y2="0"
+              stroke={medium.color}
+              stroke-width="2"
+            />
+            <text
+              x="26"
+              y="4"
+              style="fill: var(--color-chart-text-secondary)"
+              font-size="10"
+            >
               {medium.nameDE}
             </text>
           </g>
@@ -477,7 +592,8 @@
   <div class="formula-box mt-4">
     <div class="text-xs text-muted mb-1">Skin-Depth Formel:</div>
     <div class="font-mono text-sm text-primary text-center">
-      delta = sqrt(2 / (omega * mu * sigma)) = sqrt(2 / (2*pi*f * mu<sub>0</sub> * sigma))
+      delta = sqrt(2 / (omega * mu * sigma)) = sqrt(2 / (2*pi*f * mu<sub>0</sub>
+      * sigma))
     </div>
     <div class="text-xs text-muted mt-2 text-center">
       mit mu<sub>0</sub> = 4*pi*10<sup>-7</sup> H/m (Vakuumpermeabilitaet)
@@ -487,19 +603,23 @@
   <!-- Explanation -->
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
-      <strong>U-Boot-Kommunikation:</strong> U-Boote können nur bei sehr niedrigen Frequenzen (ELF/VLF)
-      in getauchtem Zustand empfangen. Bei 76 Hz (US Navy ELF) betraegt die Skin-Depth in Seewasser
-      ca. 46 m, was eine praktische Empfangstiefe von ~100 m ermöglicht.
+      <strong>U-Boot-Kommunikation:</strong> U-Boote können nur bei sehr niedrigen
+      Frequenzen (ELF/VLF) in getauchtem Zustand empfangen. Bei 76 Hz (US Navy ELF)
+      betraegt die Skin-Depth in Seewasser ca. 46 m, was eine praktische Empfangstiefe
+      von ~100 m ermöglicht.
     </p>
     <p>
-      <strong>Nachteile:</strong> Die extrem niedrige Frequenz bedeutet auch extrem geringe Datenraten
-      (typisch &lt; 1 bit/min bei ELF). Daher werden diese Systeme nur für einfache Befehle verwendet.
+      <strong>Nachteile:</strong> Die extrem niedrige Frequenz bedeutet auch extrem
+      geringe Datenraten (typisch &lt; 1 bit/min bei ELF). Daher werden diese Systeme
+      nur für einfache Befehle verwendet.
     </p>
   </div>
 </div>
 
 <style>
   .btn-chip-active {
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #3b82f6;
+    box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px #3b82f6;
   }
 </style>

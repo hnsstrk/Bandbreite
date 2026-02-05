@@ -1,8 +1,13 @@
 <script lang="ts">
-  import * as d3 from 'd3';
-  import { formatNumber } from '$lib/utils/formatting';
-  import { parseNumericInput, safeDivide, safeLog, clamp } from '$lib/utils/handlers';
-  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import * as d3 from "d3";
+  import { formatNumber } from "$lib/utils/formatting";
+  import {
+    parseNumericInput,
+    safeDivide,
+    safeLog,
+    clamp,
+  } from "$lib/utils/handlers";
+  import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
 
   interface Props {
     width?: number;
@@ -24,24 +29,34 @@
 
   // Modulation schemes with their theoretical spectral efficiency
   const modulationSchemes = [
-    { name: 'BPSK', bitsPerSymbol: 1, requiredSnrDb: 6.8, color: '#22c55e' },
-    { name: 'QPSK', bitsPerSymbol: 2, requiredSnrDb: 9.8, color: '#3b82f6' },
-    { name: '8-PSK', bitsPerSymbol: 3, requiredSnrDb: 14, color: '#8b5cf6' },
-    { name: '16-QAM', bitsPerSymbol: 4, requiredSnrDb: 16.5, color: '#f97316' },
-    { name: '64-QAM', bitsPerSymbol: 6, requiredSnrDb: 22.5, color: '#ef4444' },
-    { name: '256-QAM', bitsPerSymbol: 8, requiredSnrDb: 28.5, color: '#ec4899' },
-    { name: '1024-QAM', bitsPerSymbol: 10, requiredSnrDb: 34.5, color: '#6366f1' },
+    { name: "BPSK", bitsPerSymbol: 1, requiredSnrDb: 6.8, color: "#22c55e" },
+    { name: "QPSK", bitsPerSymbol: 2, requiredSnrDb: 9.8, color: "#3b82f6" },
+    { name: "8-PSK", bitsPerSymbol: 3, requiredSnrDb: 14, color: "#8b5cf6" },
+    { name: "16-QAM", bitsPerSymbol: 4, requiredSnrDb: 16.5, color: "#f97316" },
+    { name: "64-QAM", bitsPerSymbol: 6, requiredSnrDb: 22.5, color: "#ef4444" },
+    {
+      name: "256-QAM",
+      bitsPerSymbol: 8,
+      requiredSnrDb: 28.5,
+      color: "#ec4899",
+    },
+    {
+      name: "1024-QAM",
+      bitsPerSymbol: 10,
+      requiredSnrDb: 34.5,
+      color: "#6366f1",
+    },
   ];
 
   // Bandwidth presets
   const bandwidthPresets = [
-    { label: 'WiFi 20', mhz: 20, desc: '802.11n/ac' },
-    { label: 'WiFi 40', mhz: 40, desc: '802.11n/ac' },
-    { label: 'WiFi 80', mhz: 80, desc: '802.11ac' },
-    { label: 'WiFi 160', mhz: 160, desc: '802.11ax' },
-    { label: 'LTE 10', mhz: 10, desc: 'LTE Band' },
-    { label: 'LTE 20', mhz: 20, desc: 'LTE Band' },
-    { label: '5G 100', mhz: 100, desc: 'NR n78' },
+    { label: "WiFi 20", mhz: 20, desc: "802.11n/ac" },
+    { label: "WiFi 40", mhz: 40, desc: "802.11n/ac" },
+    { label: "WiFi 80", mhz: 80, desc: "802.11ac" },
+    { label: "WiFi 160", mhz: 160, desc: "802.11ax" },
+    { label: "LTE 10", mhz: 10, desc: "LTE Band" },
+    { label: "LTE 20", mhz: 20, desc: "LTE Band" },
+    { label: "5G 100", mhz: 100, desc: "NR n78" },
   ];
 
   // Convert SNR from dB to linear
@@ -57,7 +72,7 @@
 
   // Spectral efficiency in bits/s/Hz
   let spectralEfficiency = $derived(
-    bandwidthMHz > 0 ? channelCapacityBps / (bandwidthMHz * 1e6) : 0
+    safeDivide(channelCapacityBps, bandwidthMHz * 1e6, 0),
   );
 
   // Format data rate
@@ -70,7 +85,7 @@
 
   // Calculate achievable modulation
   let achievableModulation = $derived.by(() => {
-    const suitable = modulationSchemes.filter(m => snrDb >= m.requiredSnrDb);
+    const suitable = modulationSchemes.filter((m) => snrDb >= m.requiredSnrDb);
     return suitable.length > 0 ? suitable[suitable.length - 1] : null;
   });
 
@@ -83,15 +98,11 @@
 
   // D3 scales for chart
   let xScale = $derived(
-    d3.scaleLinear()
-      .domain([0, 40])
-      .range([0, chartWidth])
+    d3.scaleLinear().domain([0, 40]).range([0, chartWidth]),
   );
 
   let yScale = $derived(
-    d3.scaleLinear()
-      .domain([0, 15])
-      .range([chartHeight, 0])
+    d3.scaleLinear().domain([0, 15]).range([chartHeight, 0]),
   );
 
   // Shannon limit curve data (static - no reactive dependencies)
@@ -107,9 +118,10 @@
 
   // Line generator
   let lineGenerator = $derived(
-    d3.line<{ snr: number; capacity: number }>()
-      .x(d => xScale(d.snr))
-      .y(d => yScale(d.capacity))
+    d3
+      .line<{ snr: number; capacity: number }>()
+      .x((d) => xScale(d.snr))
+      .y((d) => yScale(d.capacity)),
   );
 
   // Shannon curve path
@@ -118,7 +130,7 @@
   // Marker position
   let markerPos = $derived({
     x: xScale(clamp(snrDb, 0, 40)),
-    y: yScale(clamp(spectralEfficiency, 0, 15))
+    y: yScale(clamp(spectralEfficiency, 0, 15)),
   });
 
   // X-axis ticks
@@ -251,12 +263,16 @@
     <!-- Achievable Modulation -->
     <div class="result-box">
       <div class="result-label">Empfohlene Modulation</div>
-      <div class="text-2xl font-bold" style="color: {achievableModulation?.color ?? '#6b7280'}">
-        {achievableModulation?.name ?? 'Kein Signal'}
+      <div
+        class="text-2xl font-bold"
+        style="color: {achievableModulation?.color ?? '#6b7280'}"
+      >
+        {achievableModulation?.name ?? "Kein Signal"}
       </div>
       {#if achievableModulation}
         <div class="text-xs text-muted mt-1">
-          {achievableModulation.bitsPerSymbol} bit/Symbol, min. {achievableModulation.requiredSnrDb} dB
+          {achievableModulation.bitsPerSymbol} bit/Symbol, min. {achievableModulation.requiredSnrDb}
+          dB
         </div>
       {/if}
     </div>
@@ -265,7 +281,9 @@
   <!-- Practical Data Rate -->
   {#if practicalDataRate > 0}
     <div class="p-4 bg-surface-secondary rounded-lg mb-6">
-      <div class="text-label mb-1">Praktische Datenrate (mit {achievableModulation?.name})</div>
+      <div class="text-label mb-1">
+        Praktische Datenrate (mit {achievableModulation?.name})
+      </div>
       <div class="text-xl font-bold text-amber-600 dark:text-amber-400">
         ~{formatDataRate(practicalDataRate)}
       </div>
@@ -285,7 +303,13 @@
       aria-label="Shannon-Kapazität Diagramm: Spektrale Effizienz über SNR"
     >
       <defs>
-        <filter id="capacityMarkerGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <filter
+          id="capacityMarkerGlow"
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+        >
           <feGaussianBlur stdDeviation="4" result="coloredBlur" />
           <feMerge>
             <feMergeNode in="coloredBlur" />
@@ -295,7 +319,7 @@
       </defs>
 
       <!-- Background -->
-      <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
+      <rect x="0" y="0" {width} {height} style="fill: var(--color-chart-bg)" />
 
       <!-- Chart area -->
       <g transform="translate({margin.left}, {margin.top})">
@@ -349,12 +373,7 @@
         {/each}
 
         <!-- Shannon limit curve -->
-        <path
-          d={shannonPath}
-          fill="none"
-          stroke="#3b82f6"
-          stroke-width="3"
-        />
+        <path d={shannonPath} fill="none" stroke="#3b82f6" stroke-width="3" />
 
         <!-- Current position marker -->
         <line
@@ -393,11 +412,22 @@
 
         <!-- X-axis -->
         <g transform="translate(0, {chartHeight})">
-          <line x1="0" y1="0" x2={chartWidth} y2="0" style="stroke: var(--color-chart-axis)" />
+          <line
+            x1="0"
+            y1="0"
+            x2={chartWidth}
+            y2="0"
+            style="stroke: var(--color-chart-axis)"
+          />
           {#each xTickValues as tickVal (tickVal)}
             <g transform="translate({xScale(tickVal)}, 0)">
               <line y2="8" style="stroke: var(--color-chart-axis)" />
-              <text y="24" style="fill: var(--color-chart-text-secondary)" text-anchor="middle" font-size="11">
+              <text
+                y="24"
+                style="fill: var(--color-chart-text-secondary)"
+                text-anchor="middle"
+                font-size="11"
+              >
                 {tickVal}
               </text>
             </g>
@@ -416,11 +446,23 @@
 
         <!-- Y-axis -->
         <g>
-          <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" />
+          <line
+            x1="0"
+            y1="0"
+            x2="0"
+            y2={chartHeight}
+            style="stroke: var(--color-chart-axis)"
+          />
           {#each yTickValues as tickVal (tickVal)}
             <g transform="translate(0, {yScale(tickVal)})">
               <line x2="-8" style="stroke: var(--color-chart-axis)" />
-              <text x="-12" style="fill: var(--color-chart-text-secondary)" text-anchor="end" dominant-baseline="middle" font-size="11">
+              <text
+                x="-12"
+                style="fill: var(--color-chart-text-secondary)"
+                text-anchor="end"
+                dominant-baseline="middle"
+                font-size="11"
+              >
                 {tickVal}
               </text>
             </g>
@@ -441,11 +483,27 @@
 
       <!-- Legend -->
       <g transform="translate({width - margin.right + 10}, {margin.top})">
-        <text style="fill: var(--color-chart-text)" font-weight="500" font-size="11">
+        <text
+          style="fill: var(--color-chart-text)"
+          font-weight="500"
+          font-size="11"
+        >
           Shannon-Limit
         </text>
-        <line x1="0" y1="15" x2="24" y2="15" stroke="#3b82f6" stroke-width="3" />
-        <text x="30" y="19" style="fill: var(--color-chart-text-secondary)" font-size="10">
+        <line
+          x1="0"
+          y1="15"
+          x2="24"
+          y2="15"
+          stroke="#3b82f6"
+          stroke-width="3"
+        />
+        <text
+          x="30"
+          y="19"
+          style="fill: var(--color-chart-text-secondary)"
+          font-size="10"
+        >
           C = log2(1+SNR)
         </text>
       </g>
@@ -473,15 +531,23 @@
             <th class="text-left py-2 px-2">Modulation</th>
             <th class="text-right py-2 px-2">bit/Symbol</th>
             <th class="text-right py-2 px-2">Min. SNR</th>
-            <th class="text-right py-2 px-2">Datenrate bei {bandwidthMHz} MHz</th>
+            <th class="text-right py-2 px-2"
+              >Datenrate bei {bandwidthMHz} MHz</th
+            >
           </tr>
         </thead>
         <tbody>
           {#each modulationSchemes as mod (mod.name)}
             {@const dataRate = bandwidthMHz * 1e6 * mod.bitsPerSymbol * 0.8}
             {@const isAchievable = snrDb >= mod.requiredSnrDb}
-            <tr class="border-b border-border/50 {isAchievable ? '' : 'opacity-40'}">
-              <td class="py-2 px-2 font-medium" style="color: {mod.color}">{mod.name}</td>
+            <tr
+              class="border-b border-border/50 {isAchievable
+                ? ''
+                : 'opacity-40'}"
+            >
+              <td class="py-2 px-2 font-medium" style="color: {mod.color}"
+                >{mod.name}</td
+              >
               <td class="text-right py-2 px-2">{mod.bitsPerSymbol}</td>
               <td class="text-right py-2 px-2">{mod.requiredSnrDb} dB</td>
               <td class="text-right py-2 px-2">{formatDataRate(dataRate)}</td>

@@ -1,17 +1,20 @@
 <script lang="ts">
-  import '../app.css';
-  import { page } from '$app/stores';
-  import Header from '$lib/components/layout/Header.svelte';
-  import Footer from '$lib/components/layout/Footer.svelte';
-  import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
+  import "../app.css";
+  import { page } from "$app/stores";
+  import Header from "$lib/components/layout/Header.svelte";
+  import Footer from "$lib/components/layout/Footer.svelte";
+  import Breadcrumb from "$lib/components/ui/Breadcrumb.svelte";
+  import Metadata from "$lib/components/ui/Metadata.svelte";
 
   let { children } = $props();
 </script>
 
+<Metadata />
+
 <div class="app-container">
   <a href="#main-content" class="skip-to-content">Zum Inhalt springen</a>
   <Header />
-  {#if $page.url.pathname !== '/'}
+  {#if $page.url.pathname !== "/"}
     <div class="breadcrumb-container">
       <Breadcrumb currentPath={$page.url.pathname} />
     </div>
@@ -29,7 +32,9 @@
     flex-direction: column;
     background-color: var(--color-bg-base);
     color: var(--color-text-primary);
-    transition: background-color var(--transition-normal), color var(--transition-normal);
+    transition:
+      background-color var(--transition-normal),
+      color var(--transition-normal);
   }
 
   .breadcrumb-container {

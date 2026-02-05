@@ -73,6 +73,12 @@
 <svelte:head>
   <title>RF-Wissen - Bandbreite</title>
   <meta name="description" content="Umfassendes Nachschlagewerk für Funk- und Hochfrequenztechnik: Wellenausbreitung, Frequenzbänder, RF-Mathematik und mehr." />
+  <meta property="og:title" content="RF-Wissen | Bandbreite" />
+  <meta property="og:description" content="Umfassendes Nachschlagewerk für Funk- und Hochfrequenztechnik: Wellenausbreitung, Frequenzbänder, RF-Mathematik und mehr." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="RF-Wissen | Bandbreite" />
+  <meta name="twitter:description" content="Umfassendes Nachschlagewerk für Funk- und Hochfrequenztechnik: Wellenausbreitung, Frequenzbänder, RF-Mathematik und mehr." />
 </svelte:head>
 
 <div class="page-content">

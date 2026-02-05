@@ -25,6 +25,12 @@
 <svelte:head>
   <title>Datenbanken - Bandbreite</title>
   <meta name="description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
+  <meta property="og:title" content="Datenbanken | Bandbreite" />
+  <meta property="og:description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Datenbanken | Bandbreite" />
+  <meta name="twitter:description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
 </svelte:head>
 
 <div class="page-content">

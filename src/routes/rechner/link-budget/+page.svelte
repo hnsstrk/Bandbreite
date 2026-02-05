@@ -37,6 +37,12 @@
 <svelte:head>
   <title>Link Budget - Bandbreite</title>
   <meta name="description" content="Link Budget Kalkulator für Funkstrecken" />
+  <meta property="og:title" content="Link Budget | Bandbreite" />
+  <meta property="og:description" content="Link Budget Kalkulator für Funkstrecken" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Link Budget | Bandbreite" />
+  <meta name="twitter:description" content="Link Budget Kalkulator für Funkstrecken" />
 </svelte:head>
 
 <div class="page-content">

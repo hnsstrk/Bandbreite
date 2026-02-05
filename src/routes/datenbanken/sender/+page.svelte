@@ -5,6 +5,12 @@
 <svelte:head>
   <title>Senderdatenbank - Bandbreite</title>
   <meta name="description" content="Datenbank für Rundfunk- und Kommunikationssender" />
+  <meta property="og:title" content="Senderdatenbank | Bandbreite" />
+  <meta property="og:description" content="Datenbank für Rundfunk- und Kommunikationssender" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Senderdatenbank | Bandbreite" />
+  <meta name="twitter:description" content="Datenbank für Rundfunk- und Kommunikationssender" />
 </svelte:head>
 
 <div class="page-content">

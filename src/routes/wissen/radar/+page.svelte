@@ -87,6 +87,12 @@
     name="description"
     content="Umfassendes Nachschlagewerk zu Radar-Grundlagen: Radargleichung, RCS, Doppler-Radar, FMCW und Radarbänder."
   />
+  <meta property="og:title" content="Radar-Grundlagen | Bandbreite" />
+  <meta property="og:description" content="Umfassendes Nachschlagewerk zu Radar-Grundlagen: Radargleichung, RCS, Doppler-Radar, FMCW und Radarbänder." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Radar-Grundlagen | Bandbreite" />
+  <meta name="twitter:description" content="Umfassendes Nachschlagewerk zu Radar-Grundlagen: Radargleichung, RCS, Doppler-Radar, FMCW und Radarbänder." />
 </svelte:head>
 
 <div class="page-content">

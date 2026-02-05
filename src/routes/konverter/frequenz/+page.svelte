@@ -5,6 +5,12 @@
 <svelte:head>
   <title>Frequenzkonverter - Bandbreite</title>
   <meta name="description" content="Umrechnung zwischen Frequenz und Wellenlänge für das gesamte elektromagnetische Spektrum." />
+  <meta property="og:title" content="Frequenzkonverter | Bandbreite" />
+  <meta property="og:description" content="Umrechnung zwischen Frequenz und Wellenlänge für das gesamte elektromagnetische Spektrum." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Frequenzkonverter | Bandbreite" />
+  <meta name="twitter:description" content="Umrechnung zwischen Frequenz und Wellenlänge für das gesamte elektromagnetische Spektrum." />
 </svelte:head>
 
 <div class="page-content">

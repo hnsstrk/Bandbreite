@@ -49,6 +49,12 @@
 <svelte:head>
   <title>RF-Rechner - Bandbreite</title>
   <meta name="description" content="RF-Berechnungstools: FSPL, Link Budget, Radar-Reichweite, Kanalkapazität, Skin-Tiefe und Fresnel-Zone." />
+  <meta property="og:title" content="RF-Rechner | Bandbreite" />
+  <meta property="og:description" content="RF-Berechnungstools: FSPL, Link Budget, Radar-Reichweite, Kanalkapazität, Skin-Tiefe und Fresnel-Zone." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="RF-Rechner | Bandbreite" />
+  <meta name="twitter:description" content="RF-Berechnungstools: FSPL, Link Budget, Radar-Reichweite, Kanalkapazität, Skin-Tiefe und Fresnel-Zone." />
 </svelte:head>
 
 <div class="page-content">

@@ -5,6 +5,12 @@
 <svelte:head>
   <title>FSPL-Rechner - Bandbreite</title>
   <meta name="description" content="Free Space Path Loss (FSPL) Rechner" />
+  <meta property="og:title" content="FSPL-Rechner | Bandbreite" />
+  <meta property="og:description" content="Free Space Path Loss (FSPL) Rechner" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="FSPL-Rechner | Bandbreite" />
+  <meta name="twitter:description" content="Free Space Path Loss (FSPL) Rechner" />
 </svelte:head>
 
 <div class="page-content">

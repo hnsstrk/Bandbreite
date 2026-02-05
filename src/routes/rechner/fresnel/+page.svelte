@@ -5,6 +5,12 @@
 <svelte:head>
   <title>Fresnel-Zone - Bandbreite</title>
   <meta name="description" content="Berechnung der Fresnel-Zone für Funkstrecken" />
+  <meta property="og:title" content="Fresnel-Zone | Bandbreite" />
+  <meta property="og:description" content="Berechnung der Fresnel-Zone für Funkstrecken" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Fresnel-Zone | Bandbreite" />
+  <meta name="twitter:description" content="Berechnung der Fresnel-Zone für Funkstrecken" />
 </svelte:head>
 
 <div class="page-content">

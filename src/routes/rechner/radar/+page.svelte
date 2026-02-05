@@ -5,6 +5,12 @@
 <svelte:head>
   <title>Radar-Reichweite - Bandbreite</title>
   <meta name="description" content="Berechnung der Radar-Reichweite basierend auf der Radargleichung" />
+  <meta property="og:title" content="Radar-Reichweite | Bandbreite" />
+  <meta property="og:description" content="Berechnung der Radar-Reichweite basierend auf der Radargleichung" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Radar-Reichweite | Bandbreite" />
+  <meta name="twitter:description" content="Berechnung der Radar-Reichweite basierend auf der Radargleichung" />
 </svelte:head>
 
 <div class="page-content">

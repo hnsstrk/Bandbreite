@@ -6,6 +6,12 @@
 <svelte:head>
   <title>Atmosphärische Dämpfung - Bandbreite</title>
   <meta name="description" content="Atmosphärische Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks bei 22 GHz und 60 GHz." />
+  <meta property="og:title" content="Atmosphärische Dämpfung | Bandbreite" />
+  <meta property="og:description" content="Atmosphärische Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks bei 22 GHz und 60 GHz." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Atmosphärische Dämpfung | Bandbreite" />
+  <meta name="twitter:description" content="Atmosphärische Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks bei 22 GHz und 60 GHz." />
 </svelte:head>
 
 <div class="page-content">

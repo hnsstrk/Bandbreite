@@ -19,6 +19,12 @@
 <svelte:head>
   <title>Konverter - Bandbreite</title>
   <meta name="description" content="Einheitenumrechner für die Funktechnik: Frequenz und Wellenlänge." />
+  <meta property="og:title" content="Konverter | Bandbreite" />
+  <meta property="og:description" content="Einheitenumrechner für die Funktechnik: Frequenz und Wellenlänge." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Konverter | Bandbreite" />
+  <meta name="twitter:description" content="Einheitenumrechner für die Funktechnik: Frequenz und Wellenlänge." />
 </svelte:head>
 
 <div class="page-content">

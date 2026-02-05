@@ -5,6 +5,12 @@
 <svelte:head>
   <title>Sendeleistungen im Frequenzspektrum - Bandbreite</title>
   <meta name="description" content="Übersicht typischer Sendeleistungen verschiedener Funksysteme über das elektromagnetische Spektrum: von IoT und WLAN bis Rundfunk und Radar." />
+  <meta property="og:title" content="Sendeleistungen im Frequenzspektrum | Bandbreite" />
+  <meta property="og:description" content="Übersicht typischer Sendeleistungen verschiedener Funksysteme über das elektromagnetische Spektrum: von IoT und WLAN bis Rundfunk und Radar." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Sendeleistungen im Frequenzspektrum | Bandbreite" />
+  <meta name="twitter:description" content="Übersicht typischer Sendeleistungen verschiedener Funksysteme über das elektromagnetische Spektrum: von IoT und WLAN bis Rundfunk und Radar." />
 </svelte:head>
 
 <div class="page-content">

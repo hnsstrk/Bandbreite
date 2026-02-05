@@ -6,6 +6,12 @@
 <svelte:head>
   <title>Wellenausbreitung - Bandbreite</title>
   <meta name="description" content="Umfassendes Nachschlagewerk zur Funkwellenausbreitung: Bodenwelle, Raumwelle, Sichtverbindung und ionosphärische Reflexion." />
+  <meta property="og:title" content="Wellenausbreitung | Bandbreite" />
+  <meta property="og:description" content="Umfassendes Nachschlagewerk zur Funkwellenausbreitung: Bodenwelle, Raumwelle, Sichtverbindung und ionosphärische Reflexion." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Wellenausbreitung | Bandbreite" />
+  <meta name="twitter:description" content="Umfassendes Nachschlagewerk zur Funkwellenausbreitung: Bodenwelle, Raumwelle, Sichtverbindung und ionosphärische Reflexion." />
 </svelte:head>
 
 <div class="page-content">

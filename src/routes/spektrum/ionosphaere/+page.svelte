@@ -5,6 +5,12 @@
 <svelte:head>
   <title>Ionosphäre - Bandbreite</title>
   <meta name="description" content="Ionosphärische Ausbreitung und Kurzwellenkommunikation: Schichten, MUF, LUF und deren Einfluss auf HF-Verbindungen." />
+  <meta property="og:title" content="Ionosphäre | Bandbreite" />
+  <meta property="og:description" content="Ionosphärische Ausbreitung und Kurzwellenkommunikation: Schichten, MUF, LUF und deren Einfluss auf HF-Verbindungen." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Ionosphäre | Bandbreite" />
+  <meta name="twitter:description" content="Ionosphärische Ausbreitung und Kurzwellenkommunikation: Schichten, MUF, LUF und deren Einfluss auf HF-Verbindungen." />
 </svelte:head>
 
 <div class="page-content">

@@ -105,6 +105,12 @@
     name="description"
     content="Detaillierte Übersicht aller Frequenzbänder: ITU, IEEE, NATO, Amateurfunk und Rundfunk. Mit Frequenzsuche und Banddetails."
   />
+  <meta property="og:title" content="Frequenzbänder | Bandbreite" />
+  <meta property="og:description" content="Detaillierte Übersicht aller Frequenzbänder: ITU, IEEE, NATO, Amateurfunk und Rundfunk. Mit Frequenzsuche und Banddetails." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Frequenzbänder | Bandbreite" />
+  <meta name="twitter:description" content="Detaillierte Übersicht aller Frequenzbänder: ITU, IEEE, NATO, Amateurfunk und Rundfunk. Mit Frequenzsuche und Banddetails." />
 </svelte:head>
 
 <div class="page-content">

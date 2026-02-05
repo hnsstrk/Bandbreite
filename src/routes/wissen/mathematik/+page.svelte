@@ -187,6 +187,12 @@
 <svelte:head>
   <title>RF-Mathematik - Bandbreite</title>
   <meta name="description" content="Wichtige Formeln der Hochfrequenztechnik mit Herleitungen und interaktiven Rechnern: Wellenlänge, FSPL, Radargleichung, Shannon-Hartley und Dezibel-Rechnung." />
+  <meta property="og:title" content="RF-Mathematik | Bandbreite" />
+  <meta property="og:description" content="Wichtige Formeln der Hochfrequenztechnik mit Herleitungen und interaktiven Rechnern: Wellenlänge, FSPL, Radargleichung, Shannon-Hartley und Dezibel-Rechnung." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="RF-Mathematik | Bandbreite" />
+  <meta name="twitter:description" content="Wichtige Formeln der Hochfrequenztechnik mit Herleitungen und interaktiven Rechnern: Wellenlänge, FSPL, Radargleichung, Shannon-Hartley und Dezibel-Rechnung." />
 </svelte:head>
 
 <div class="page-content">

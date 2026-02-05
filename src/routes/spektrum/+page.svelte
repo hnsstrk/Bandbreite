@@ -65,6 +65,12 @@
 <svelte:head>
   <title>Spektrum - Bandbreite</title>
   <meta name="description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
+  <meta property="og:title" content="Spektrum | Bandbreite" />
+  <meta property="og:description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spektrum | Bandbreite" />
+  <meta name="twitter:description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
 </svelte:head>
 
 <div class="page-content">

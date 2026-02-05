@@ -5,6 +5,12 @@
 <svelte:head>
   <title>Kanalkapazität - Bandbreite</title>
   <meta name="description" content="Shannon-Hartley Kanalkapazität Rechner" />
+  <meta property="og:title" content="Kanalkapazität | Bandbreite" />
+  <meta property="og:description" content="Shannon-Hartley Kanalkapazität Rechner" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Kanalkapazität | Bandbreite" />
+  <meta name="twitter:description" content="Shannon-Hartley Kanalkapazität Rechner" />
 </svelte:head>
 
 <div class="page-content">

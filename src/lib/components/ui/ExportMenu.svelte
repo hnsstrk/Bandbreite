@@ -230,7 +230,7 @@
     aria-label="Export-Menue öffnen"
     aria-expanded={showMenu}
   >
-    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
       <polyline points="7 10 12 15 17 10" />
       <line x1="12" y1="15" x2="12" y2="3" />
@@ -258,7 +258,7 @@
         class="w-full px-4 py-3 text-left text-sm text-primary hover:bg-surface-secondary transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
         role="menuitem"
       >
-        <svg class="w-4 h-4 text-green-600 dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="w-4 h-4 text-green-600 dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
           <circle cx="8.5" cy="8.5" r="1.5" />
           <polyline points="21 15 16 10 5 21" />
@@ -277,7 +277,7 @@
         class="w-full px-4 py-3 text-left text-sm text-primary hover:bg-surface-secondary transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed border-t border-default"
         role="menuitem"
       >
-        <svg class="w-4 h-4 text-red-600 dark:text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="w-4 h-4 text-red-600 dark:text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
           <line x1="16" y1="13" x2="8" y2="13" />
@@ -298,7 +298,7 @@
         class="w-full px-4 py-3 text-left text-sm text-primary hover:bg-surface-secondary transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed border-t border-default rounded-b-lg"
         role="menuitem"
       >
-        <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
         </svg>
@@ -312,7 +312,7 @@
       {#if isExporting}
         <div class="absolute inset-0 bg-surface-primary/80 flex items-center justify-center rounded-lg">
           <div class="flex items-center gap-2 text-sm text-secondary">
-            <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <circle cx="12" cy="12" r="10" stroke-dasharray="31.4 31.4" stroke-dashoffset="0" />
             </svg>
             Exportiere...

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { parseNumericInput } from '$lib/utils/handlers';
+  import { parseNumericInput, safeLog } from '$lib/utils/handlers';
   import { formatWavelength, formatNumber } from '$lib/utils/formatting';
   import { SPEED_OF_LIGHT, EARTH_RADIUS_MEAN, EFFECTIVE_EARTH_RADIUS_FACTOR } from '$lib/data/constants';
 
@@ -49,7 +49,7 @@
     if (fsplFrequencyHz <= 0 || fsplDistanceM <= 0) return 0;
     // FSPL = 20*log10(d) + 20*log10(f) + 20*log10(4*pi/c)
     // Simplified: FSPL = 20*log10(d) + 20*log10(f) - 147.55
-    return 20 * Math.log10(fsplDistanceM) + 20 * Math.log10(fsplFrequencyHz) - 147.55;
+    return 20 * safeLog(fsplDistanceM) + 20 * safeLog(fsplFrequencyHz) - 147.55;
   });
 
   function handleFsplFrequencyChange(e: Event) {
@@ -84,12 +84,12 @@
 
   const shannonCapacity = $derived.by(() => {
     if (shannonBandwidthHz <= 0 || shannonSnrLinear < 0) return 0;
-    return shannonBandwidthHz * Math.log2(1 + shannonSnrLinear);
+    return shannonBandwidthHz * safeLog(1 + shannonSnrLinear, 2);
   });
 
   const shannonSpectralEfficiency = $derived.by(() => {
     if (shannonSnrLinear < 0) return 0;
-    return Math.log2(1 + shannonSnrLinear);
+    return safeLog(1 + shannonSnrLinear, 2);
   });
 
   function handleShannonBandwidthChange(e: Event) {

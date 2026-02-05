@@ -87,6 +87,7 @@
         value={wattUnit}
         onchange={handleWattUnitChange}
         class="select-field"
+        aria-label="Leistungseinheit (Watt)"
       >
         {#each POWER_UNITS_WATT as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
@@ -107,11 +108,13 @@
         class="input-field flex-1"
         placeholder="dB"
         step="any"
+        aria-label="Leistung in dB"
       />
       <select
         value={dbUnit}
         onchange={handleDbUnitChange}
         class="select-field"
+        aria-label="Leistungseinheit (dB)"
       >
         {#each POWER_UNITS_DB as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>

@@ -5,7 +5,7 @@
     SKIP_ZONE_PARAMS
   } from '$lib/data/propagation';
   import { formatFrequency, formatNumber } from '$lib/utils/formatting';
-  import { parseNumericInput, clamp } from '$lib/utils/handlers';
+  import { parseNumericInput, clamp, safeLog } from '$lib/utils/handlers';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
 
   interface Props {
@@ -187,7 +187,7 @@
         <input
           id="freq-slider"
           type="range"
-          value={Math.log10(frequencyMHz)}
+          value={safeLog(frequencyMHz)}
           oninput={(e) => {
             const logVal = parseNumericInput(e, 1.15);
             frequencyMHz = Math.pow(10, logVal);

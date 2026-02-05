@@ -301,6 +301,7 @@
           min="0.01"
           max={totalDistanceKm - 0.01}
           step="0.01"
+          aria-label="Hindernis-Position entlang der Strecke in km"
         />
       </div>
     </div>

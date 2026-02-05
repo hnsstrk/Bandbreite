@@ -9,7 +9,7 @@
     formatPowerDbm,
     formatNumber
   } from '$lib/utils/formatting';
-  import { parseNumericInput, parseSelectValue, safeDivide, safePow } from '$lib/utils/handlers';
+  import { parseNumericInput, parseSelectValue, safeDivide, safePow, safeLog } from '$lib/utils/handlers';
   import { SPEED_OF_LIGHT } from '$lib/data/constants';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
 
@@ -68,7 +68,7 @@
   let antennaGainLinear = $derived(Math.pow(10, antennaGainDbi / 10));
 
   // Convert TX power to dBm for display
-  let txPowerDbm = $derived(10 * Math.log10(txPowerWatts * 1000));
+  let txPowerDbm = $derived(10 * safeLog(txPowerWatts * 1000));
 
   // Convert RX sensitivity to Watts
   let rxSensitivityWatts = $derived(Math.pow(10, (rxSensitivityDbm - 30) / 10));
@@ -104,7 +104,7 @@
     const rxPowerWatts = safeDivide(numerator, denominator, 0);
     if (rxPowerWatts <= 0) return -Infinity;
 
-    return 10 * Math.log10(rxPowerWatts * 1000); // Convert to dBm
+    return 10 * safeLog(rxPowerWatts * 1000); // Convert to dBm
   }
 
   // Power at various ranges for display

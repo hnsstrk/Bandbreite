@@ -52,7 +52,7 @@
   let channelCapacityBps = $derived.by(() => {
     if (bandwidthMHz <= 0 || snrLinear <= 0) return 0;
     const bandwidthHz = bandwidthMHz * 1e6;
-    return bandwidthHz * Math.log2(1 + snrLinear);
+    return bandwidthHz * safeLog(1 + snrLinear, 2);
   });
 
   // Spectral efficiency in bits/s/Hz

@@ -108,6 +108,7 @@
         value={frequencyUnit}
         onchange={handleFrequencyUnitChange}
         class="select-field"
+        aria-label="Frequenzeinheit"
       >
         {#each FREQUENCY_UNITS as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
@@ -136,6 +137,7 @@
         value={wavelengthUnit}
         onchange={handleWavelengthUnitChange}
         class="select-field"
+        aria-label="Wellenlängeneinheit"
       >
         {#each WAVELENGTH_UNITS as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>

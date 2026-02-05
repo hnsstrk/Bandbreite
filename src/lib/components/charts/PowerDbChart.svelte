@@ -401,7 +401,7 @@
     </div>
   </div>
 
-  <svg viewBox="0 0 {width} {height}" class="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 {width} {height}" class="w-full h-auto" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Sendeleistungen im Frequenzspektrum: Zeigt verschiedene Sender und ihre Leistungen über der Frequenz">
     <defs>
       <filter id="pointGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="2" result="coloredBlur" />

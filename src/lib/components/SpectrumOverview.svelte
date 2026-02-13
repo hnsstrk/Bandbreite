@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatFrequencyRange, type FrequencyBand } from "$lib/data/bands";
   import SpectrumControls from "./SpectrumControls.svelte";
+  import SpectrumCursor from "./SpectrumCursor.svelte";
   import SpectrumTooltip from "./SpectrumTooltip.svelte";
   import SpectrumLegend from "./SpectrumLegend.svelte";
   import {
@@ -30,6 +31,9 @@
 
   // Container element for resize observation and tooltip positioning
   let containerElement: HTMLDivElement | undefined = $state(undefined);
+
+  // SVG element reference for cursor coordinate calculation
+  let svgElement: SVGSVGElement | undefined = $state(undefined);
 
   // Derived marker position
   let markerX = $derived(spectrumState.getMarkerX(frequencyHz));
@@ -67,6 +71,18 @@
       spectrumState.centerOnFrequency(frequencyHz);
     }
   }
+
+  // Cursor mouse handlers
+  function handleSvgMouseMove(event: MouseEvent) {
+    if (!svgElement) return;
+    const svgRect = svgElement.getBoundingClientRect();
+    const localX = event.clientX - svgRect.left - MARGIN.left;
+    spectrumState.handleCursorMove(localX);
+  }
+
+  function handleSvgMouseLeave() {
+    spectrumState.handleCursorLeave();
+  }
 </script>
 
 <div
@@ -94,7 +110,15 @@
     onCenterOnMarker={handleCenterOnMarker}
   />
 
-  <svg width="100%" height={spectrumState.totalHeight} class="cursor-crosshair">
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <svg
+    bind:this={svgElement}
+    width="100%"
+    height={spectrumState.totalHeight}
+    class="cursor-crosshair"
+    onmousemove={handleSvgMouseMove}
+    onmouseleave={handleSvgMouseLeave}
+  >
     <defs>
       <linearGradient
         id="visibleLightGradient"
@@ -227,6 +251,18 @@
           </g>
         {/if}
       {/each}
+
+      <!-- Interactive cursor showing frequency ↔ wavelength -->
+      {#if spectrumState.cursorX !== null && spectrumState.cursorFrequencyHz !== null}
+        <SpectrumCursor
+          cursorX={spectrumState.cursorX}
+          frequencyLabel={spectrumState.cursorFrequencyLabel}
+          wavelengthLabel={spectrumState.cursorWavelengthLabel}
+          topY={MARGIN.top - 10}
+          bottomY={MARGIN.top + spectrumState.bandRowsHeight + 10}
+          innerWidth={spectrumState.innerWidth}
+        />
+      {/if}
 
       <!-- Single marker line spanning all visible rows -->
       {#if markerX !== null && spectrumState.visibleRowCount > 0}

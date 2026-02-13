@@ -76,6 +76,8 @@ export const ROW_HEIGHT = 48;
 export const MARGIN = { top: 60, right: 20, bottom: 60, left: 80 };
 export const GAP = 8;
 
+export const ROUNDED_SPEED_OF_LIGHT = 3e8; // 3 × 10⁸ m/s
+
 // =============================================================================
 // Extended EM Bands
 // =============================================================================
@@ -280,6 +282,25 @@ export function createSpectrumState() {
     d3.scaleLog()
       .domain(zoomedDomain)
       .range([0, innerWidth])
+  );
+
+  // Cursor state
+  let cursorFrequencyHz = $state<number | null>(null);
+
+  let cursorX = $derived(
+    cursorFrequencyHz !== null ? xScale(cursorFrequencyHz) : null
+  );
+
+  let cursorWavelengthLabel = $derived(
+    cursorFrequencyHz !== null && cursorFrequencyHz > 0
+      ? formatWavelengthLocal(ROUNDED_SPEED_OF_LIGHT / cursorFrequencyHz)
+      : ''
+  );
+
+  let cursorFrequencyLabel = $derived(
+    cursorFrequencyHz !== null && cursorFrequencyHz > 0
+      ? formatFrequencyLocal(cursorFrequencyHz)
+      : ''
   );
 
   // Helper: calculate band rectangle
@@ -519,6 +540,23 @@ export function createSpectrumState() {
     tooltip = { ...tooltip, visible: false, band: null };
   }
 
+  // Cursor handlers
+  function handleCursorMove(svgLocalX: number) {
+    if (svgLocalX < 0 || svgLocalX > innerWidth) {
+      cursorFrequencyHz = null;
+      return;
+    }
+    try {
+      cursorFrequencyHz = xScale.invert(svgLocalX);
+    } catch {
+      cursorFrequencyHz = null;
+    }
+  }
+
+  function handleCursorLeave() {
+    cursorFrequencyHz = null;
+  }
+
   // Safe wavelength formatting for display
   function safeFormatWavelength(frequencyHz: number): string {
     if (frequencyHz <= 0) return '---';
@@ -545,6 +583,10 @@ export function createSpectrumState() {
     get rowConfig() { return rowConfig; },
     get totalHeight() { return totalHeight; },
     get bandRowsHeight() { return bandRowsHeight; },
+    get cursorFrequencyHz() { return cursorFrequencyHz; },
+    get cursorX() { return cursorX; },
+    get cursorWavelengthLabel() { return cursorWavelengthLabel; },
+    get cursorFrequencyLabel() { return cursorFrequencyLabel; },
 
     toggleRow,
     getRowY,
@@ -560,5 +602,7 @@ export function createSpectrumState() {
     showTooltip,
     hideTooltip,
     safeFormatWavelength,
+    handleCursorMove,
+    handleCursorLeave,
   };
 }

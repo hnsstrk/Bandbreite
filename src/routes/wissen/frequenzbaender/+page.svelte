@@ -30,7 +30,7 @@
   ];
 
   // State
-  let activeTab = $state<FrequencyBandCategory>('itu');
+  let activeTab = $state<FrequencyBandCategory>('ieee');
   let searchFrequency = $state<number>(100);
   let searchUnit = $state<string>('MHz');
   let selectedBand = $state<FrequencyBandDetail | null>(null);

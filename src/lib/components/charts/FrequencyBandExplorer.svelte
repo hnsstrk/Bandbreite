@@ -23,7 +23,7 @@
 
   // State
   type BandCategory = 'itu' | 'ieee' | 'nato' | 'civilian';
-  let selectedCategory = $state<BandCategory>('itu');
+  let selectedCategory = $state<BandCategory>('ieee');
   let selectedBand = $state<FrequencyBand | null>(null);
   let hoveredBand = $state<FrequencyBand | null>(null);
 

@@ -76,8 +76,8 @@
   // Primary display band
   let primaryBand = $derived.by(() => {
     if (effectiveSelectedBand) return effectiveSelectedBand;
-    if (primaryItuBand) return primaryItuBand as FrequencyBand;
     if (ieeeBands.length > 0) return ieeeBands[0];
+    if (primaryItuBand) return primaryItuBand as FrequencyBand;
     if (natoBands.length > 0) return natoBands[0];
     if (civilianBands.length > 0) return civilianBands[0];
     return null;

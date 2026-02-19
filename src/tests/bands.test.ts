@@ -148,7 +148,7 @@ describe('CIVILIAN_BANDS', () => {
     expect(ids).toContain('wifi-2g');
     expect(ids).toContain('wifi-5g');
     expect(ids).toContain('fm-radio');
-    expect(ids).toContain('gps');
+    expect(ids).toContain('gnss-l1');
   });
 
   it('should have WiFi 2.4 GHz band in the 2.4 GHz range', () => {
@@ -432,10 +432,10 @@ describe('getCivilianBandsForFrequency', () => {
     expect(ids).toContain('wifi-2g');
   });
 
-  it('should return GPS band for 1.575 GHz', () => {
+  it('should return GNSS L1 band for 1.575 GHz', () => {
     const bands = getCivilianBandsForFrequency(1.575e9);
     const ids = bands.map(b => b.id);
-    expect(ids).toContain('gps');
+    expect(ids).toContain('gnss-l1');
   });
 
   it('should return empty array for 0 Hz', () => {

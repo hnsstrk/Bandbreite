@@ -133,22 +133,66 @@ export const NATO_BANDS: FrequencyBand[] = [
  * Common wireless and broadcasting applications
  */
 export const CIVILIAN_BANDS: FrequencyBand[] = [
+  // Historisch / Langwelle
+  { id: 'loran-c', name: 'LORAN-C', nameDE: 'LORAN-C', minHz: 90e3, maxHz: 110e3, color: '#94a3b8', category: 'civilian' },
+  // Navigation (NDB)
+  { id: 'ndb', name: 'NDB', nameDE: 'NDB (Funkfeuer)', minHz: 190e3, maxHz: 1750e3, color: '#78716c', category: 'civilian' },
+  // Rundfunk
   { id: 'am-radio', name: 'AM Radio', nameDE: 'AM-Rundfunk', minHz: 535e3, maxHz: 1.7e6, color: '#3b82f6', category: 'civilian' },
   { id: 'shortwave', name: 'Shortwave', nameDE: 'Kurzwelle', minHz: 3e6, maxHz: 30e6, color: '#06b6d4', category: 'civilian' },
+  // Navigation (Marker Beacon)
+  { id: 'marker-beacon', name: 'Marker Beacon', nameDE: 'Marker Beacon (ILS)', minHz: 74.9e6, maxHz: 75.1e6, color: '#a1a1aa', category: 'civilian' },
   { id: 'fm-radio', name: 'FM Radio', nameDE: 'FM-Rundfunk', minHz: 87.5e6, maxHz: 108e6, color: '#22c55e', category: 'civilian' },
+  // VOR und ILS Localizer
+  { id: 'vor', name: 'VOR/DVOR', nameDE: 'VOR/DVOR (Drehfunkfeuer)', minHz: 108e6, maxHz: 117.95e6, color: '#0d9488', category: 'civilian' },
+  { id: 'ils-loc', name: 'ILS Localizer', nameDE: 'ILS Landekurssender', minHz: 108.1e6, maxHz: 111.95e6, color: '#0f766e', category: 'civilian' },
   { id: 'dab', name: 'DAB+', nameDE: 'DAB+', minHz: 174e6, maxHz: 240e6, color: '#84cc16', category: 'civilian' },
+  // ILS Glide Slope
+  { id: 'ils-gs', name: 'ILS Glide Slope', nameDE: 'ILS Gleitwegsender', minHz: 329.15e6, maxHz: 335e6, color: '#115e59', category: 'civilian' },
+  // Notfrequenz
+  { id: 'cospas-sarsat', name: 'COSPAS-SARSAT', nameDE: 'COSPAS-SARSAT (Notsignal)', minHz: 406e6, maxHz: 406.1e6, color: '#dc2626', category: 'civilian' },
   { id: 'dvb-t', name: 'DVB-T', nameDE: 'DVB-T/T2', minHz: 470e6, maxHz: 790e6, color: '#eab308', category: 'civilian' },
   { id: 'lte-700', name: 'LTE 700', nameDE: 'LTE 700 MHz', minHz: 700e6, maxHz: 800e6, color: '#f97316', category: 'civilian' },
   { id: 'lte-800', name: 'LTE 800', nameDE: 'LTE 800 MHz', minHz: 800e6, maxHz: 900e6, color: '#ef4444', category: 'civilian' },
   { id: 'gsm-900', name: 'GSM 900', nameDE: 'GSM 900', minHz: 880e6, maxHz: 960e6, color: '#dc2626', category: 'civilian' },
-  { id: 'gps', name: 'GPS', nameDE: 'GPS', minHz: 1.164e9, maxHz: 1.61e9, color: '#059669', category: 'civilian' },
+  // DME/TACAN
+  { id: 'dme-tacan', name: 'DME/TACAN', nameDE: 'DME/TACAN (Entfernungsmessung)', minHz: 960e6, maxHz: 1215e6, color: '#0ea5e9', category: 'civilian' },
+  // SSR/TCAS Abfrage
+  { id: 'ssr-interrogation', name: 'SSR/TCAS TX', nameDE: 'SSR/TCAS Abfrage', minHz: 1029.5e6, maxHz: 1030.5e6, color: '#7c3aed', category: 'civilian' },
+  // ADS-B / SSR Antwort
+  { id: 'ads-b', name: 'ADS-B/SSR', nameDE: 'ADS-B / SSR Antwort', minHz: 1089.5e6, maxHz: 1090.5e6, color: '#6d28d9', category: 'civilian' },
+  // GNSS-Einzelsysteme (ersetzen den bisherigen GPS-Eintrag)
+  { id: 'gnss-l5', name: 'GNSS L5/E5', nameDE: 'GNSS L5/E5a (GPS, Galileo, BeiDou)', minHz: 1164e6, maxHz: 1189e6, color: '#059669', category: 'civilian' },
+  { id: 'gnss-e5b', name: 'GNSS E5b/B2b', nameDE: 'GNSS E5b/B2b (Galileo, BeiDou)', minHz: 1197e6, maxHz: 1212e6, color: '#047857', category: 'civilian' },
+  { id: 'gps-l2', name: 'GPS L2', nameDE: 'GPS L2', minHz: 1215e6, maxHz: 1240e6, color: '#059669', category: 'civilian' },
+  // Streckenradar (ARSR)
+  { id: 'arsr', name: 'ARSR (Streckenradar)', nameDE: 'Streckenradar (ARSR)', minHz: 1.215e9, maxHz: 1.4e9, color: '#ec4899', category: 'civilian' },
+  { id: 'glonass-l2', name: 'GLONASS L2', nameDE: 'GLONASS L2', minHz: 1240e6, maxHz: 1260e6, color: '#065f46', category: 'civilian' },
+  { id: 'gnss-e6', name: 'Galileo E6/BeiDou B3', nameDE: 'Galileo E6 / BeiDou B3', minHz: 1260e6, maxHz: 1300e6, color: '#064e3b', category: 'civilian' },
+  { id: 'gnss-l1', name: 'GNSS L1/E1/B1C', nameDE: 'GNSS L1 (GPS, Galileo, BeiDou)', minHz: 1559e6, maxHz: 1592e6, color: '#10b981', category: 'civilian' },
+  { id: 'glonass-l1', name: 'GLONASS L1', nameDE: 'GLONASS L1', minHz: 1598e6, maxHz: 1606e6, color: '#34d399', category: 'civilian' },
   { id: 'lte-1800', name: 'LTE 1800', nameDE: 'LTE 1800 MHz', minHz: 1.71e9, maxHz: 1.88e9, color: '#ec4899', category: 'civilian' },
   { id: 'umts', name: 'UMTS', nameDE: 'UMTS/3G', minHz: 1.92e9, maxHz: 2.17e9, color: '#a855f7', category: 'civilian' },
   { id: 'wifi-2g', name: 'WiFi 2.4 GHz', nameDE: 'WLAN 2,4 GHz', minHz: 2.4e9, maxHz: 2.5e9, color: '#6366f1', category: 'civilian' },
   { id: 'lte-2600', name: 'LTE 2600', nameDE: 'LTE 2600 MHz', minHz: 2.5e9, maxHz: 2.69e9, color: '#8b5cf6', category: 'civilian' },
+  // Flugsicherungsradar (ASR) und Wetterradar (S-Band)
+  { id: 'asr', name: 'ASR (Flugsicherung)', nameDE: 'Flugsicherungsradar (ASR)', minHz: 2.7e9, maxHz: 2.9e9, color: '#f472b6', category: 'civilian' },
+  { id: 'weather-s', name: 'Wetterradar S', nameDE: 'Wetterradar (S-Band)', minHz: 2.7e9, maxHz: 3.0e9, color: '#38bdf8', category: 'civilian' },
+  // Marine-Navigationsradar (S-Band)
+  { id: 'marine-s', name: 'Marine Radar S', nameDE: 'Marine-Navigationsradar (S-Band)', minHz: 2.9e9, maxHz: 3.1e9, color: '#2dd4bf', category: 'civilian' },
   { id: '5g-n78', name: '5G n78', nameDE: '5G n78', minHz: 3.3e9, maxHz: 3.8e9, color: '#0ea5e9', category: 'civilian' },
   { id: 'wifi-5g', name: 'WiFi 5 GHz', nameDE: 'WLAN 5 GHz', minHz: 5.15e9, maxHz: 5.85e9, color: '#14b8a6', category: 'civilian' },
+  // Wetterradar (C-Band)
+  { id: 'weather-c', name: 'Wetterradar C', nameDE: 'Wetterradar (C-Band)', minHz: 5.3e9, maxHz: 5.7e9, color: '#0284c7', category: 'civilian' },
   { id: 'wifi-6e', name: 'WiFi 6E', nameDE: 'WLAN 6 GHz', minHz: 5.925e9, maxHz: 7.125e9, color: '#22d3d1', category: 'civilian' },
+  // Marine-Navigationsradar (X-Band) und Wetterradar (X-Band)
+  { id: 'marine-x', name: 'Marine Radar X', nameDE: 'Marine-Navigationsradar (X-Band)', minHz: 9.2e9, maxHz: 9.5e9, color: '#14b8a6', category: 'civilian' },
+  { id: 'weather-x', name: 'Wetterradar X', nameDE: 'Wetterradar (X-Band)', minHz: 9.3e9, maxHz: 9.5e9, color: '#0369a1', category: 'civilian' },
+  // Geschwindigkeitsradar (K-Band)
+  { id: 'radar-k', name: 'Radar K-Band', nameDE: 'Geschwindigkeitsradar (K-Band)', minHz: 24.05e9, maxHz: 24.25e9, color: '#fbbf24', category: 'civilian' },
+  // Geschwindigkeitsradar (Ka-Band)
+  { id: 'radar-ka', name: 'Radar Ka-Band', nameDE: 'Geschwindigkeitsradar (Ka-Band)', minHz: 33.4e9, maxHz: 36.0e9, color: '#f59e0b', category: 'civilian' },
+  // Kfz-Radar (77 GHz)
   { id: 'radar-auto', name: 'Automotive Radar', nameDE: 'Kfz-Radar', minHz: 76e9, maxHz: 81e9, color: '#f59e0b', category: 'civilian' },
 ];
 

@@ -9,8 +9,11 @@
     MARGIN,
     ROW_HEIGHT,
     MIN_ZOOM,
+    ROUNDED_SPEED_OF_LIGHT,
     formatFrequencyLocal,
+    formatWavelengthLocal,
   } from "./spectrumState.svelte";
+  import { safeDivide } from "$lib/utils/handlers";
 
   interface Props {
     frequencyHz?: number;
@@ -170,7 +173,34 @@
               >
                 {tick.label}
               </text>
+              <!-- Duale Beschriftung: korrespondierende Frequenz -->
+              <text
+                y="-23"
+                text-anchor="middle"
+                style="fill: var(--color-text-tertiary); font-size: 8px; opacity: 0.7;"
+              >
+                ({formatFrequencyLocal(tick.freq)})
+              </text>
             </g>
+          {/if}
+        {/each}
+      </g>
+
+      <!-- Vertikale Gitterlinien von Wellenlängen-Ticks -->
+      <g aria-hidden="true">
+        {#each spectrumState.wavelengthTicks as tick (tick.label)}
+          {@const tickX = spectrumState.xScale(tick.freq)}
+          {#if tickX >= 0 && tickX <= spectrumState.innerWidth}
+            <line
+              x1={tickX}
+              y1={MARGIN.top - 10}
+              x2={tickX}
+              y2={MARGIN.top + spectrumState.bandRowsHeight + 10}
+              style="stroke: var(--color-chart-grid)"
+              stroke-width="0.5"
+              stroke-dasharray="4 3"
+              opacity="0.3"
+            />
           {/if}
         {/each}
       </g>
@@ -332,6 +362,14 @@
                 style="fill: var(--color-text-tertiary); font-size: 10px;"
               >
                 {formatFrequencyLocal(tick)}
+              </text>
+              <!-- Duale Beschriftung: korrespondierende Wellenlänge -->
+              <text
+                y="31"
+                text-anchor="middle"
+                style="fill: var(--color-text-tertiary); font-size: 8px; opacity: 0.7;"
+              >
+                ({formatWavelengthLocal(safeDivide(ROUNDED_SPEED_OF_LIGHT, tick, 0))})
               </text>
             </g>
           {/if}

@@ -8,6 +8,14 @@ Bandbreite is a SvelteKit web application for RF/microwave frequency calculation
 
 **Current Status**: Aktive Entwicklung. Kernfunktionalität implementiert.
 
+## Task Management
+
+Offene Tasks fuer dieses Projekt werden in **Taskwarrior** verwaltet (Projekt: `bandbreite`).
+
+```bash
+task project:bandbreite list    # Alle offenen Tasks
+```
+
 ## Geschützte Kernelemente (NICHT ÄNDERN)
 
 Die folgenden fünf Komponenten auf der Startseite (`/`) bilden die Kernidee der Anwendung. Sie dürfen **niemals** entfernt, ersetzt oder in ihrer grundlegenden Funktion verändert werden, ohne **vorher explizit beim Benutzer nachzufragen**:

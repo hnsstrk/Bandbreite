@@ -343,6 +343,10 @@ Vor dem Commit einer neuen Komponente prüfen:
 
 ---
 
+## Documentation
+
+Projektdokumentation: Siehe Obsidian Vault [[Bandbreite]]
+
 ## Bekannte zentrale Utilities
 
 ### Formatierung (`/lib/utils/formatting.ts`)

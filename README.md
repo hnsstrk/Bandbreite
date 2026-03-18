@@ -9,14 +9,17 @@ Eine Web-Applikation zur Berechnung und Visualisierung von Hochfrequenz-Paramete
 
 ## Features
 
+- **Spektrum-Übersicht** - Interaktive Darstellung des EM-Spektrums mit interaktivem Frequenz/Wellenlänge-Cursor
+- **FrequencyBandExplorer** - Seitenleiste mit Bandinformationen und Grundlagen-Sektion
 - **Frequenz-Konverter** - Umrechnung zwischen Frequenz und Wellenlänge
 - **Leistungs-Konverter** - Umrechnung zwischen Watt, mW, dBm und dBW
 - **FSPL-Rechner** - Freiraumdämpfung mit interaktivem Diagramm
 - **Link-Budget-Rechner** - Signalpfad-Berechnung mit Wasserfall-Visualisierung
 - **Reichweiten-Rechner** - Berechnung der Funkreichweite
-- **Spektrum-Übersicht** - Interaktive Darstellung des elektromagnetischen Spektrums
-- **Dämpfungskurven** - Multi-Frequenz-Vergleich mit atmosphärischer Absorption
+- **Atmosphärische Dämpfung** - Eigene Seite mit Dämpfungskurven und Multi-Frequenz-Vergleich
+- **Sendeleistungen** - Visualisierung von Sendeleistungspegeln im Spektrum
 - **Bandinfo-Anzeige** - IEEE, NATO und ITU Bandbezeichnungen
+- **Zivilband-Datenbank** - Navigation, Surveillance, GNSS und Radar-Systeme
 - **Dark/Light Mode** - Anpassbares Farbschema
 - **Info-Tooltips** - Erklärungen zu allen Berechnungen
 

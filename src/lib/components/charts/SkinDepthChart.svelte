@@ -2,7 +2,7 @@
   /** Skin-Tiefe über der Frequenz für die gängigen Ausbreitungsmedien. */
   import { line, scaleLog } from 'd3';
   import { clamp } from '$lib/utils/handlers';
-  import { formatDistance, formatFrequency } from '$lib/utils/formatting';
+  import { formatDistance, formatFrequency, formatLocaleNumber } from '$lib/utils/formatting';
   import {
     CHART_DEPTH_MAX_M,
     CHART_DEPTH_MIN_M,
@@ -163,7 +163,7 @@
           <g transform="translate(0, {yScale(tickVal)})">
             <line class="chart-axis-line" x2="-8" />
             <text class="chart-axis-text" x="-12" text-anchor="end" dominant-baseline="middle">
-              {tickVal}
+              {formatLocaleNumber(tickVal, { maxFrac: 3 })}
             </text>
           </g>
         {/each}

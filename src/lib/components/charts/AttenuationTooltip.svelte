@@ -1,6 +1,7 @@
 <script lang="ts">
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import { formatAttenuationValue, type MarkerData } from './attenuationChartData';
+  import { formatNumber } from '$lib/utils/formatting';
 
   interface Props {
     markerData: MarkerData;
@@ -36,7 +37,7 @@
     stroke-width="1"
   />
   <text x="12" y="20" class="chart-tooltip-text" font-weight="500" font-size="12">
-    f = {markerData.frequency.toFixed(2)} GHz
+    f = {formatNumber(markerData.frequency, 2)} GHz
   </text>
   <text x="12" y="38" font-size="11">
     <tspan style="fill: var(--color-series-1)">O&#x2082;:</tspan>

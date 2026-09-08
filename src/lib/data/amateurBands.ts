@@ -7,51 +7,130 @@
  * deutschen Amateurfunkverordnung (AFuV).
  *
  * Quellen:
- * - IARU Region 1 HF Band Plan (Stand nach der Generalkonferenz Novi Sad 2023)
+ * - AFuV Anlage 1 „Nutzungsbedingungen für die im Frequenzplan für den
+ *   Amateurfunkdienst … ausgewiesenen Frequenzbereiche“, Buchstabe A
+ *   (Tabellarische Übersicht) und Buchstabe B (Zusätzliche
+ *   Nutzungsbestimmungen), Fundstelle BGBl. 2024 I Nr. 175, S. 1–4,
+ *   in Kraft seit 24.06.2024 (Einführung der Klasse N).
+ *   https://www.gesetze-im-internet.de/afuv_2005/anlage_1.html — abgerufen 2026-09-08
+ * - IARU Region 1 HF Band Plan (Stand Generalkonferenz Novi Sad 2023)
  * - IARU Region 1 VHF/UHF/Microwave Band Plan (50 MHz – 250 GHz)
- * - Amateurfunkverordnung (AFuV), Anlage 1 — Nutzungsbedingungen der
- *   Frequenzbereiche, Fassung nach der Änderung vom 24.06.2024 (Einführung
- *   der Klasse N)
- * - VO Funk Art. 5 (Zuweisungsstatus primär/sekundär)
+ * - BNetzA-Allgemeinzuteilungen und Duldungsregelungen für 70 MHz (4 m)
  *
- * Annahme: Gesichert ist nur der Zugang der Klasse N zu 10 m, 2 m und 70 cm mit
- * 10 W EIRP (seit 24.06.2024). Alle übrigen Einträge im Feld `licenseClasses`
- * für die Klasse E sind Annahmen und vor Produktiveinsatz gegen AFuV Anlage 1
- * abzugleichen. Ebenso sind die Sonderregelungen im 160-m-Band (Zeit- und
- * Leistungsfenster oberhalb 1850 kHz) hier bewusst nicht modelliert.
+ * Status, Zeugnisklassen und Leistungsgrenzen stammen Zeile für Zeile aus der
+ * Tabelle unter Buchstabe A; `status` gibt deshalb den nationalen Status nach
+ * AFuV wieder (Spalte 3), der vom ITU-Status der Region 1 abweichen kann.
+ *
+ * Annahme: Nur zwei Angaben sind nicht aus der AFuV belegt — die Segmentgrenzen
+ * innerhalb der Bänder (IARU-Empfehlung, rechtlich nicht bindend) und der Stand
+ * der befristeten 4-m-Regelung (siehe `band-4m`).
+ *
+ * Nicht modelliert: die Frequenzbereiche oberhalb 24,25 GHz (47 GHz, 76–81 GHz,
+ * 122,25–123 GHz, 134–141 GHz, 241–250 GHz und > 275 GHz), die AFuV Anlage 1
+ * unter den lfd. Nrn. 35 bis 45 ebenfalls führt.
  */
 
 // ============================================================================
 // Konstanten (keine Magic Numbers)
 // ============================================================================
 
-/** Regelleistung Klasse A in Watt PEP (AFuV Anlage 1). */
+/** Regelleistung Klasse A in Watt PEP (AFuV Anlage 1, lfd. Nr. 3 bis 21). */
 export const POWER_CLASS_A_W = 750;
 
-/** Regelleistung Klasse E in Watt PEP (AFuV Anlage 1). */
+/**
+ * Leistungsgrenze Klasse A ab dem 13-cm-Band in Watt PEP
+ * (AFuV Anlage 1, lfd. Nr. 22 bis 44).
+ */
+export const POWER_MICROWAVE_CLASS_A_W = 75;
+
+/**
+ * Regelleistung Klasse E in Watt PEP auf den Kurzwellenbändern und auf 10 m
+ * (AFuV Anlage 1, lfd. Nrn. 3, 6, 12 und 14).
+ */
 export const POWER_CLASS_E_W = 100;
 
 /**
- * Leistungsgrenze Klasse N als äquivalente isotrope Strahlungsleistung in Watt.
- * 10 W EIRP entsprechen rund 6,1 W ERP (Bezug: Halbwellendipol, 2,15 dBi).
+ * Leistungsgrenze Klasse E auf 2 m, 70 cm und 23 cm in Watt PEP
+ * (AFuV Anlage 1, lfd. Nrn. 17 bis 21).
+ */
+export const POWER_CLASS_E_VHF_W = 75;
+
+/**
+ * Leistungsgrenze Klasse E ab dem 13-cm-Band in Watt PEP
+ * (AFuV Anlage 1, lfd. Nr. 22 bis 44).
+ */
+export const POWER_CLASS_E_SHF_W = 5;
+
+/**
+ * Leistungsgrenze Klasse N auf 2 m und 70 cm als effektive Strahlungsleistung
+ * in Watt (AFuV Anlage 1, lfd. Nrn. 17 und 18). 6,1 W ERP entsprechen den
+ * verbreitet genannten 10 W EIRP (Bezug: Halbwellendipol, 2,15 dBi).
+ */
+export const POWER_CLASS_N_ERP_VHF_W = 6.1;
+
+/**
+ * Leistungsgrenze Klasse N im 10-m-Band als effektive Strahlungsleistung in
+ * Watt (AFuV Anlage 1, lfd. Nr. 14). Auf 10 m gilt ein höherer Wert als auf
+ * 2 m und 70 cm.
+ */
+export const POWER_CLASS_N_ERP_10M_W = 10;
+
+/**
+ * Klassenkennwert der Klasse N in Watt EIRP, wie er in der Fachpresse und in
+ * der Prüfungsliteratur genannt wird. 10 W EIRP ≙ 6,1 W ERP; maßgeblich sind
+ * die ERP-Werte der AFuV.
  */
 export const POWER_CLASS_N_EIRP_W = 10;
 
-/** Sonderleistungsgrenze im 30-m-Band in Watt PEP. */
+/** Sonderleistungsgrenze im 30-m-Band in Watt PEP (AFuV Anlage 1, lfd. Nr. 9). */
 export const POWER_30M_W = 150;
 
-/** Sonderleistungsgrenze im 60-m-Band als EIRP in Watt. */
-export const POWER_60M_EIRP_W = 15;
-
-/** Sonderleistungsgrenze in den Bändern 2200 m und 630 m als EIRP in Watt. */
-export const POWER_LF_MF_EIRP_W = 1;
+/**
+ * Sonderleistungsgrenze im 60-m-Band als effektive Strahlungsleistung in Watt
+ * (AFuV Anlage 1, lfd. Nr. 7).
+ */
+export const POWER_60M_ERP_W = 9.14;
 
 /**
- * Leistungsgrenze der befristeten 4-m-Allgemeinzuteilung als ERP in Watt.
- * Annahme (Abschnitt C): Wert und Gültigkeit sind vor Produktiveinsatz gegen die
- * aktuelle Amtsblattverfügung der Bundesnetzagentur zu prüfen.
+ * Dieselbe Grenze als äquivalente isotrope Strahlungsleistung in Watt — der
+ * Wert, den WRC-15 und die IARU nennen. 9,14 W ERP ≙ 15 W EIRP.
+ */
+export const POWER_60M_EIRP_W = 15;
+
+/**
+ * Sonderleistungsgrenze in den Bändern 2200 m und 630 m als effektive
+ * Strahlungsleistung in Watt (AFuV Anlage 1, lfd. Nrn. 1 und 2).
+ */
+export const POWER_LF_MF_ERP_W = 1;
+
+/** Leistungsgrenze im 160-m-Teilbereich 1850–1890 kHz in Watt PEP. */
+export const POWER_160M_MID_W = 75;
+
+/** Leistungsgrenze im 160-m-Teilbereich 1890–2000 kHz in Watt PEP. */
+export const POWER_160M_TOP_W = 10;
+
+/** Leistungsgrenze im 6-m-Teilbereich 50,4–52 MHz in Watt PEP. */
+export const POWER_6M_UPPER_W = 25;
+
+/**
+ * Leistungsgrenze im 23-cm-Teilbereich 1247–1263 MHz als effektive
+ * Strahlungsleistung in Watt (Schutz des Satellitennavigationsdienstes,
+ * AFuV Anlage 1 Buchstabe A, Fußnote zur lfd. Nr. 19 bis 21).
+ */
+export const POWER_23CM_GNSS_ERP_W = 3.05;
+
+/**
+ * Leistungsgrenze der befristeten 4-m-Duldungsregelung als ERP in Watt
+ * (BNetzA-Amtsblattmitteilungen, zuletzt gültig bis 31.12.2025).
  */
 export const POWER_4M_ERP_W = 25;
+
+/**
+ * Höchstzulässige Strahlungsleistung fernbedienter oder automatisch
+ * arbeitender Amateurfunkstellen oberhalb 30 MHz in Watt ERP
+ * (AFuV Anlage 1, Vorbemerkung; Linkstrecken ausgenommen).
+ */
+export const POWER_AUTOMATIC_STATION_ERP_W = 50;
 
 // ============================================================================
 // Typen
@@ -59,6 +138,32 @@ export const POWER_4M_ERP_W = 25;
 
 /** Deutsche Amateurfunk-Zeugnisklassen. */
 export type LicenseClassDE = 'A' | 'E' | 'N';
+
+/** Bezugsgröße einer Leistungsangabe. */
+export type PowerLimitType = 'pep' | 'eirp' | 'erp';
+
+/** Eine Leistungsgrenze mit ihrer Bezugsgröße. */
+export interface AmateurPowerLimit {
+  /** Zahlenwert in Watt */
+  watt: number;
+  /** Bezugsgröße: Spitzenleistung, ERP oder EIRP */
+  type: PowerLimitType;
+}
+
+/** Leistungsgrenzen je Zeugnisklasse; fehlende Klasse = kein Zugang. */
+export type AmateurPowerLimits = Partial<Record<LicenseClassDE, AmateurPowerLimit>>;
+
+/** Abweichende Leistungsgrenzen in einem Teilbereich eines Bandes. */
+export interface AmateurPowerSubrange {
+  /** Untergrenze des Teilbereichs in Hz */
+  minHz: number;
+  /** Obergrenze des Teilbereichs in Hz */
+  maxHz: number;
+  /** Grenzen je Klasse innerhalb des Teilbereichs */
+  limits: AmateurPowerLimits;
+  /** Begründung in deutscher Sprache */
+  noteDE: string;
+}
 
 /** Betriebsartengruppe eines Bandsegments nach IARU-Bandplan. */
 export type BandSegmentMode =
@@ -94,23 +199,32 @@ export interface AmateurBand {
   minHz: number;
   /** Obergrenze in Hz (Region 1 / Deutschland) */
   maxHz: number;
-  /** Zuweisungsstatus in Region 1 */
-  status: 'primaer' | 'sekundaer' | 'gemischt' | 'duldung';
-  /** Klassen, die dieses Band nutzen dürfen */
-  licenseClasses: LicenseClassDE[];
-  /** Maximale Sendeleistung in Watt PEP für Klasse A, falls abweichend geregelt */
-  maxPowerClassAW: number;
   /**
-   * Falls die Leistung als Strahlungsleistung begrenzt ist (EIRP in Watt),
-   * steht der Wert hier und maxPowerClassAW ist derselbe Zahlenwert.
+   * Zuweisungsstatus nach AFuV Anlage 1 Buchstabe A, Spalte 3.
+   * `gemischt` steht für Bänder, die dort in mehreren Zeilen mit
+   * unterschiedlichem Status geführt werden.
    */
-  powerLimitType: 'pep' | 'eirp' | 'erp';
+  status: 'primaer' | 'sekundaer' | 'gemischt' | 'duldung';
+  /** Klassen, die dieses Band nutzen dürfen (Schlüssel von `powerLimits`) */
+  licenseClasses: LicenseClassDE[];
+  /** Maximale Sendeleistung in Watt für Klasse A (Kurzform von `powerLimits.A`) */
+  maxPowerClassAW: number;
+  /** Bezugsgröße von `maxPowerClassAW` (Kurzform von `powerLimits.A.type`) */
+  powerLimitType: PowerLimitType;
+  /** Leistungsgrenzen je Zeugnisklasse nach AFuV Anlage 1, Spalten 4 bis 6 */
+  powerLimits: AmateurPowerLimits;
+  /** Teilbereiche mit abweichenden Grenzen, falls vorhanden */
+  powerSubranges?: AmateurPowerSubrange[];
   /** Wichtigste Segmente nach IARU-Region-1-Bandplan */
   segments: AmateurBandSegment[];
   /** Eigenständig formulierte Anmerkung zu Ausbreitung und Nutzung */
   notesDE: string;
+  /** Hinweis zu Klassen-, Leistungs- und Nutzungsbestimmungen */
+  licenseNote?: string;
   /** Quellenangabe */
   source: string;
+  /** Genaue Fundstelle in der Primärquelle */
+  sourceRef?: string;
 }
 
 // ============================================================================
@@ -124,17 +238,24 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     minHz: 135.7e3,
     maxHz: 137.8e3,
     status: 'sekundaer',
-    licenseClasses: ['A', 'E'],
-    maxPowerClassAW: POWER_LF_MF_EIRP_W,
-    powerLimitType: 'eirp',
+    licenseClasses: ['A'],
+    maxPowerClassAW: POWER_LF_MF_ERP_W,
+    powerLimitType: 'erp',
+    powerLimits: { A: { watt: POWER_LF_MF_ERP_W, type: 'erp' } },
     segments: [
       { minHz: 135.7e3, maxHz: 137.8e3, mode: 'cw', labelDE: 'Telegrafie und sehr schmalbandige Digimodes' },
     ],
     notesDE:
       'Auf WRC-07 zugewiesen. Nur 2,1 kHz Bandbreite; wegen des extrem schlechten ' +
-      'Antennenwirkungsgrades wird die Leistung als EIRP begrenzt. Übliche Betriebsarten ' +
+      'Antennenwirkungsgrades begrenzt die AFuV die Strahlungsleistung (ERP), nicht die ' +
+      'Senderleistung. Übliche Betriebsarten ' +
       'sind QRSS-Telegrafie und WSPR.',
-    source: 'WRC-07; AFuV Anlage 1; IARU R1 LF/MF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich und auf 1 W ERP begrenzt; höchstens 800 Hz belegte ' +
+      'Bandbreite. Die Betriebsorte sind der Bundesnetzagentur anzuzeigen.',
+    source: 'WRC-07; AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 LF/MF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 1; Nutzungsbestimmungen 1, 2 und 10',
   },
   {
     id: 'band-630m',
@@ -142,9 +263,10 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     minHz: 472e3,
     maxHz: 479e3,
     status: 'sekundaer',
-    licenseClasses: ['A', 'E'],
-    maxPowerClassAW: POWER_LF_MF_EIRP_W,
-    powerLimitType: 'eirp',
+    licenseClasses: ['A'],
+    maxPowerClassAW: POWER_LF_MF_ERP_W,
+    powerLimitType: 'erp',
+    powerLimits: { A: { watt: POWER_LF_MF_ERP_W, type: 'erp' } },
     segments: [
       { minHz: 472e3, maxHz: 475e3, mode: 'cw', labelDE: 'Telegrafie' },
       { minHz: 475e3, maxHz: 479e3, mode: 'digital-schmal', labelDE: 'Digimodes (u. a. WSPR, FT8)' },
@@ -152,7 +274,11 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     notesDE:
       'Auf WRC-12 zugewiesen, direkt oberhalb des historischen Seenot-Rufbereichs. ' +
       'Schutz des Flugnavigationsfunkdienstes ist Bedingung der Zuweisung.',
-    source: 'WRC-12; AFuV Anlage 1; IARU R1 LF/MF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich, 1 W ERP, höchstens 800 Hz belegte Bandbreite.',
+    source: 'WRC-12; AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 LF/MF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 2; Nutzungsbestimmung 1',
   },
 
   // ==========================================================================
@@ -167,6 +293,34 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A', 'E'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_W, type: 'pep' },
+    },
+    powerSubranges: [
+      {
+        minHz: 1850e3,
+        maxHz: 1890e3,
+        limits: {
+          A: { watt: POWER_160M_MID_W, type: 'pep' },
+          E: { watt: POWER_160M_MID_W, type: 'pep' },
+        },
+        noteDE:
+          'Sekundärer Status; an Wochenenden gelten stattdessen 750 W PEP (Klasse A) ' +
+          'bzw. 100 W PEP (Klasse E).',
+      },
+      {
+        minHz: 1890e3,
+        maxHz: 2000e3,
+        limits: {
+          A: { watt: POWER_160M_TOP_W, type: 'pep' },
+          E: { watt: POWER_160M_TOP_W, type: 'pep' },
+        },
+        noteDE:
+          'Sekundärer Status; an Wochenenden gelten stattdessen 750 W PEP (Klasse A) ' +
+          'bzw. 100 W PEP (Klasse E).',
+      },
+    ],
     segments: [
       { minHz: 1810e3, maxHz: 1838e3, mode: 'cw', labelDE: 'Telegrafie (QRP-Anruf 1836 kHz)' },
       { minHz: 1838e3, maxHz: 1840e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes' },
@@ -178,17 +332,28 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'große Entfernungen gelingen fast nur in der Dunkelheit, weil die D-Schicht am Tag ' +
       'stark dämpft. In Deutschland gelten oberhalb 1850 kHz zeitliche und leistungsbezogene ' +
       'Sonderregelungen.',
+    licenseNote:
+      'Das Band steht in der AFuV in drei Zeilen: 1810–1850 kHz primär mit 750 W PEP ' +
+      '(Klasse A) und 100 W PEP (Klasse E), 1850–1890 kHz sekundär mit je 75 W PEP, ' +
+      '1890–2000 kHz sekundär mit je 10 W PEP. An Wochenenden gelten in beiden oberen ' +
+      'Teilbereichen wieder 750 W bzw. 100 W PEP.',
     source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 3 bis 5; Nutzungsbestimmungen 3, 10, 12 und 15',
   },
   {
     id: 'band-80m',
     nameDE: '80 m',
     minHz: 3500e3,
     maxHz: 3800e3,
-    status: 'gemischt',
+    status: 'primaer',
     licenseClasses: ['A', 'E'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_W, type: 'pep' },
+    },
     segments: [
       { minHz: 3500e3, maxHz: 3570e3, mode: 'cw', labelDE: 'Telegrafie (QRP-Anruf 3560 kHz)' },
       { minHz: 3570e3, maxHz: 3600e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 3573 kHz)' },
@@ -199,7 +364,9 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Klassisches Nacht- und Regionalband. Bei steilem Abstrahlwinkel entstehen ' +
       'Nahverbindungen über die Raumwelle (NVIS) bis rund 500 km. In Region 2 reicht das ' +
       'Band bis 4000 kHz, in Region 1 nur bis 3800 kHz.',
-    source: 'AFuV Anlage 1; IARU R1 HF-Bandplan',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 6; Nutzungsbestimmung 3',
   },
   {
     id: 'band-60m',
@@ -207,9 +374,10 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     minHz: 5351.5e3,
     maxHz: 5366.5e3,
     status: 'sekundaer',
-    licenseClasses: ['A', 'E'],
-    maxPowerClassAW: POWER_60M_EIRP_W,
-    powerLimitType: 'eirp',
+    licenseClasses: ['A'],
+    maxPowerClassAW: POWER_60M_ERP_W,
+    powerLimitType: 'erp',
+    powerLimits: { A: { watt: POWER_60M_ERP_W, type: 'erp' } },
     segments: [
       { minHz: 5351.5e3, maxHz: 5354e3, mode: 'cw', labelDE: 'Telegrafie' },
       { minHz: 5354e3, maxHz: 5366e3, mode: 'allmode', labelDE: 'Alle Betriebsarten (FT8 5357 kHz)' },
@@ -219,7 +387,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Auf WRC-15 als weltweite Sekundärzuweisung geschaffen; mit nur 15 kHz das schmalste ' +
       'HF-Band. Schließt die Ausbreitungslücke zwischen 80 m und 40 m und ist deshalb für ' +
       'den Notfunk interessant.',
-    source: 'WRC-15; AFuV Anlage 1; IARU R1 HF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich. Die AFuV nennt 9,14 W ERP; das entspricht den ' +
+      '15 W EIRP der WRC-15-Zuweisung.',
+    source: 'WRC-15; AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 7; Nutzungsbestimmung 3',
   },
   {
     id: 'band-40m',
@@ -227,9 +400,10 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     minHz: 7000e3,
     maxHz: 7200e3,
     status: 'primaer',
-    licenseClasses: ['A', 'E'],
+    licenseClasses: ['A'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: { A: { watt: POWER_CLASS_A_W, type: 'pep' } },
     segments: [
       { minHz: 7000e3, maxHz: 7040e3, mode: 'cw', labelDE: 'Telegrafie (QRP-Anruf 7030 kHz)' },
       { minHz: 7040e3, maxHz: 7050e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 7074 kHz liegt darüber)' },
@@ -240,7 +414,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Ganzjährig nutzbares Allrounder-Band: tagsüber regional, nachts weltweit. In ' +
       'Region 1 endet die Amateurzuweisung bei 7200 kHz, darüber beginnt das ' +
       '41-m-Rundfunkband.',
-    source: 'AFuV Anlage 1; IARU R1 HF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich — anders als 80 m und 15 m steht 40 m der Klasse E ' +
+      'nicht offen.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 8; Nutzungsbestimmungen 3 und 13',
   },
   {
     id: 'band-30m',
@@ -251,6 +430,7 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A'],
     maxPowerClassAW: POWER_30M_W,
     powerLimitType: 'pep',
+    powerLimits: { A: { watt: POWER_30M_W, type: 'pep' } },
     segments: [
       { minHz: 10100e3, maxHz: 10130e3, mode: 'cw', labelDE: 'Telegrafie' },
       { minHz: 10130e3, maxHz: 10150e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 10136 kHz)' },
@@ -259,7 +439,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Erstes der drei WARC-Bänder von 1979. Telefonie ist hier nicht zugelassen, ' +
       'Conteste sind nach IARU-Beschluss ausgeschlossen. Sekundärstatus gegenüber dem ' +
       'festen Funkdienst; deshalb Leistungsbegrenzung.',
-    source: 'WARC-79; AFuV Anlage 1; IARU R1 HF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich, 150 W PEP, höchstens 800 Hz belegte Bandbreite; ' +
+      'Telefonie ist deshalb ausgeschlossen.',
+    source: 'WARC-79; AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 9; Nutzungsbestimmungen 1, 10 und 12',
   },
   {
     id: 'band-20m',
@@ -270,6 +455,7 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: { A: { watt: POWER_CLASS_A_W, type: 'pep' } },
     segments: [
       { minHz: 14000e3, maxHz: 14070e3, mode: 'cw', labelDE: 'Telegrafie (QRP-Anruf 14060 kHz)' },
       { minHz: 14070e3, maxHz: 14099e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 14074 kHz)' },
@@ -280,7 +466,11 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Das wichtigste Weitverkehrsband: auch bei niedriger Sonnenaktivität am Tag meist ' +
       'offen. Enthält eine der 18 Stationen des weltweiten Bakennetzes, mit dem sich die ' +
       'Ausbreitungsbedingungen laufend beurteilen lassen.',
-    source: 'AFuV Anlage 1; IARU R1 HF-Bandplan; NCDXF/IARU Beacon Project',
+    licenseNote:
+      'Nur der Klasse A zugänglich.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan; NCDXF/IARU Beacon Project',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 10; Nutzungsbestimmungen 3 und 13',
   },
   {
     id: 'band-17m',
@@ -291,6 +481,7 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: { A: { watt: POWER_CLASS_A_W, type: 'pep' } },
     segments: [
       { minHz: 18068e3, maxHz: 18095e3, mode: 'cw', labelDE: 'Telegrafie' },
       { minHz: 18095e3, maxHz: 18109e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 18100 kHz)' },
@@ -300,7 +491,11 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     notesDE:
       'WARC-Band, contestfrei und dadurch auch an Wochenenden ruhig. Verhält sich ' +
       'ausbreitungstechnisch als Zwischenschritt zwischen 20 m und 15 m.',
-    source: 'WARC-79; AFuV Anlage 1; IARU R1 HF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich.',
+    source: 'WARC-79; AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 11; Nutzungsbestimmungen 3 und 13',
   },
   {
     id: 'band-15m',
@@ -311,6 +506,10 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A', 'E'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_W, type: 'pep' },
+    },
     segments: [
       { minHz: 21000e3, maxHz: 21070e3, mode: 'cw', labelDE: 'Telegrafie (QRP-Anruf 21060 kHz)' },
       { minHz: 21070e3, maxHz: 21110e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 21074 kHz)' },
@@ -320,7 +519,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     notesDE:
       'Tagesband, dessen Nutzbarkeit stark vom elfjährigen Sonnenfleckenzyklus abhängt. ' +
       'Im Maximum sind mit kleinen Leistungen interkontinentale Verbindungen möglich.',
-    source: 'AFuV Anlage 1; IARU R1 HF-Bandplan',
+    licenseNote:
+      'Neben 160 m, 80 m und 10 m eines der vier Kurzwellenbänder der Klasse E ' +
+      '(100 W PEP).',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 12; Nutzungsbestimmungen 3 und 13',
   },
   {
     id: 'band-12m',
@@ -331,6 +535,7 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: { A: { watt: POWER_CLASS_A_W, type: 'pep' } },
     segments: [
       { minHz: 24890e3, maxHz: 24915e3, mode: 'cw', labelDE: 'Telegrafie' },
       { minHz: 24915e3, maxHz: 24929e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 24915 kHz)' },
@@ -340,7 +545,11 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     notesDE:
       'Drittes WARC-Band. Öffnet nur bei mittlerer bis hoher Sonnenaktivität, ist dann ' +
       'aber sehr ergiebig und kaum belegt.',
-    source: 'WARC-79; AFuV Anlage 1; IARU R1 HF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich.',
+    source: 'WARC-79; AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 13; Nutzungsbestimmungen 3 und 13',
   },
   {
     id: 'band-10m',
@@ -351,6 +560,11 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A', 'E', 'N'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_W, type: 'pep' },
+      N: { watt: POWER_CLASS_N_ERP_10M_W, type: 'erp' },
+    },
     segments: [
       { minHz: 28000e3, maxHz: 28070e3, mode: 'cw', labelDE: 'Telegrafie (QRP-Anruf 28060 kHz)' },
       { minHz: 28070e3, maxHz: 28190e3, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 28074 kHz)' },
@@ -364,7 +578,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Mit 1,7 MHz das breiteste Kurzwellenband und das einzige, das auch der Klasse N ' +
       'offensteht. Im Sonnenfleckenmaximum weltweite Verbindungen mit wenigen Watt; im ' +
       'Minimum sind fast nur sporadische E-Öffnungen im Sommer nutzbar.',
-    source: 'AFuV Anlage 1 (Klasse N seit 24.06.2024); IARU R1 HF-Bandplan',
+    licenseNote:
+      'Einziges Kurzwellenband der Klasse N — dort gelten 10 W ERP, mehr als die ' +
+      '6,1 W ERP auf 2 m und 70 cm. Klasse E darf mit 100 W PEP senden.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024, Klasse N); IARU R1 HF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 14; Nutzungsbestimmungen 4 und 13',
   },
 
   // ==========================================================================
@@ -379,6 +598,15 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: { A: { watt: POWER_CLASS_A_W, type: 'pep' } },
+    powerSubranges: [
+      {
+        minHz: 50.4e6,
+        maxHz: 52e6,
+        limits: { A: { watt: POWER_6M_UPPER_W, type: 'pep' } },
+        noteDE: 'Oberhalb 50,4 MHz begrenzt die AFuV auf 25 W PEP.',
+      },
+    ],
     segments: [
       { minHz: 50e6, maxHz: 50.1e6, mode: 'bake', labelDE: 'Baken und Telegrafie' },
       { minHz: 50.1e6, maxHz: 50.5e6, mode: 'ssb', labelDE: 'SSB und CW (DX-Anruf 50,110 MHz, FT8 50,313 MHz)' },
@@ -390,26 +618,44 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Nahverkehr, aber im Frühsommer bringt sporadische E-Ausbreitung plötzlich ' +
       'Verbindungen über 1000 bis 2000 km. In Region 1 endet das Band bei 52 MHz, ' +
       'in den Regionen 2 und 3 bei 54 MHz.',
-    source: 'AFuV Anlage 1; IARU R1 VHF-Bandplan',
+    licenseNote:
+      'Nur der Klasse A zugänglich: Die Duldungsregelung, die der Klasse E den Betrieb ' +
+      'auf 50–52 MHz erlaubte, lief am 31.12.2025 aus und wurde nicht verlängert. ' +
+      'Oberhalb 50,4 MHz gelten 25 W PEP statt 750 W PEP.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 VHF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 15 und 16; BNetzA-Amtsblatt (Ende der ' +
+      'Duldung für die Klasse E zum 31.12.2025)',
   },
   {
     id: 'band-4m',
     nameDE: '4 m',
     minHz: 70.15e6,
-    maxHz: 70.2e6,
+    maxHz: 70.21e6,
     status: 'duldung',
     licenseClasses: ['A'],
     maxPowerClassAW: POWER_4M_ERP_W,
     powerLimitType: 'erp',
+    powerLimits: { A: { watt: POWER_4M_ERP_W, type: 'erp' } },
     segments: [
-      { minHz: 70.15e6, maxHz: 70.2e6, mode: 'allmode', labelDE: 'Alle Betriebsarten (SSB/CW-Anruf 70,200 MHz-Nähe)' },
+      { minHz: 70.15e6, maxHz: 70.21e6, mode: 'allmode', labelDE: 'Alle Betriebsarten (SSB-Anruf 70,200 MHz)' },
     ],
     notesDE:
-      'In Deutschland kein reguläres Amateurband, sondern jeweils befristete ' +
-      'Allgemeinzuteilungen für Inhaber der Klasse A. Grenzen und Gültigkeit haben sich ' +
-      'mehrfach geändert (u. a. 70,150–70,180 MHz und 70,150–70,210 MHz). ' +
-      'Vor Anzeige im Produkt aktuellen Stand bei der Bundesnetzagentur prüfen.',
-    source: 'BNetzA-Allgemeinzuteilung (befristet); IARU R1 VHF-Bandplan — Status prüfen',
+      'In Deutschland kein reguläres Amateurband, sondern eine jahrweise verlängerte ' +
+      'Duldungsregelung für Inhaber der Klasse A. Die Grenzen wanderten von ' +
+      '70,150–70,180 MHz über 70,150–70,200 MHz auf 70,150–70,210 MHz, womit ab 2022 ' +
+      'auch die internationale SSB-Anruffrequenz 70,200 MHz erreichbar war. Zum ' +
+      '31.12.2025 lief die Regelung aus, ohne verlängert zu werden.',
+    licenseNote:
+      'Kein Band der AFuV Anlage 1. Die jährlich verlängerte Duldungsregelung galt für ' +
+      'Inhaber der Klasse A auf 70,150–70,210 MHz mit 25 W ERP, horizontaler ' +
+      'Polarisation und höchstens 12 kHz Bandbreite; sie lief am 31.12.2025 aus. ' +
+      'Annahme: Bis zu einer neuen Verfügung besteht kein Sendebetrieb-Recht — ' +
+      'Stand der Prüfung 2026-09-08.',
+    source: 'BNetzA-Duldungsregelung 70 MHz (ausgelaufen 31.12.2025); IARU R1 VHF-Bandplan',
+    sourceRef:
+      'BNetzA-Amtsblattmitteilungen (Duldungsregelung 70 MHz, zuletzt bis 31.12.2025); ' +
+      'IARU R1 VHF-Bandplan',
   },
   {
     id: 'band-2m',
@@ -420,6 +666,11 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A', 'E', 'N'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_VHF_W, type: 'pep' },
+      N: { watt: POWER_CLASS_N_ERP_VHF_W, type: 'erp' },
+    },
     segments: [
       { minHz: 144e6, maxHz: 144.11e6, mode: 'cw', labelDE: 'Telegrafie und Erde-Mond-Erde' },
       { minHz: 144.11e6, maxHz: 144.15e6, mode: 'digital-schmal', labelDE: 'Schmalband-Digimodes (FT8 144,174 MHz liegt darüber)' },
@@ -435,17 +686,28 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Wichtigstes UKW-Band für den Alltagsbetrieb: dichtes Relaisnetz, APRS und ' +
       'Satellitenverkehr. Reichweite im Wesentlichen quasioptisch, mit Überreichweiten ' +
       'bei Inversionswetterlagen sowie über sporadische E im Sommer.',
-    source: 'AFuV Anlage 1; IARU R1 VHF-Bandplan',
+    licenseNote:
+      'Klasse E: 75 W PEP, nicht die Regelleistung von 100 W. Klasse N: 6,1 W ERP ' +
+      '(≙ 10 W EIRP). Fernbediente und automatisch arbeitende Stellen sind oberhalb ' +
+      '30 MHz auf 50 W ERP begrenzt.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 VHF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 17; Nutzungsbestimmungen 6 und 13',
   },
   {
     id: 'band-70cm',
     nameDE: '70 cm',
     minHz: 430e6,
     maxHz: 440e6,
-    status: 'sekundaer',
+    status: 'primaer',
     licenseClasses: ['A', 'E', 'N'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_VHF_W, type: 'pep' },
+      N: { watt: POWER_CLASS_N_ERP_VHF_W, type: 'erp' },
+    },
     segments: [
       { minHz: 430e6, maxHz: 431.975e6, mode: 'allmode', labelDE: 'Alle Betriebsarten, Relaiseingaben' },
       { minHz: 432e6, maxHz: 432.1e6, mode: 'cw', labelDE: 'Telegrafie und Erde-Mond-Erde' },
@@ -460,7 +722,13 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Sekundärnutzung neben Funkortung und ISM-Anwendungen; der Bereich um 433 MHz ' +
       'ist durch Funkfernsteuerungen und Sensoren stark belegt. Trotzdem das Band mit ' +
       'der größten Anwendungsvielfalt von FM über Digitalsprache bis Amateurfernsehen.',
-    source: 'AFuV Anlage 1; IARU R1 UHF-Bandplan',
+    licenseNote:
+      'Die AFuV führt 430–440 MHz als primären Frequenzbereich, obwohl der ' +
+      'Amateurfunkdienst in der VO Funk hier sekundär steht. Klasse E: 75 W PEP, ' +
+      'Klasse N: 6,1 W ERP (≙ 10 W EIRP).',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 UHF-Bandplan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 18; Nutzungsbestimmungen 7 und 13',
   },
 
   // ==========================================================================
@@ -475,6 +743,23 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     licenseClasses: ['A', 'E'],
     maxPowerClassAW: POWER_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_VHF_W, type: 'pep' },
+    },
+    powerSubranges: [
+      {
+        minHz: 1247e6,
+        maxHz: 1263e6,
+        limits: {
+          A: { watt: POWER_23CM_GNSS_ERP_W, type: 'erp' },
+          E: { watt: POWER_23CM_GNSS_ERP_W, type: 'erp' },
+        },
+        noteDE:
+          'Zum Schutz des Satellitennavigationsdienstes (Galileo E6) auf 3,05 W ERP ' +
+          'begrenzt.',
+      },
+    ],
     segments: [
       { minHz: 1240e6, maxHz: 1260e6, mode: 'atv', labelDE: 'Amateurfernsehen und Datenverbindungen' },
       { minHz: 1260e6, maxHz: 1270e6, mode: 'satellit', labelDE: 'Satelliten-Uplink' },
@@ -487,7 +772,13 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Erstes Mikrowellenband. Es überlappt die Satellitennavigation (Galileo E6, ' +
       'GLONASS L2), weshalb die WRC-23 zusätzliche Schutzbedingungen für den ' +
       'Amateurbetrieb festgelegt hat.',
-    source: 'AFuV Anlage 1; IARU R1 Microwave Band Plan; WRC-23 Res. 774',
+    licenseNote:
+      'Klasse E: 75 W PEP. Im Teilbereich 1247–1263 MHz begrenzt die AFuV auf 3,05 W ERP; ' +
+      '1260–1270 MHz dürfen nur in Richtung Erde–Weltraum genutzt werden.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 Microwave Band Plan; WRC-23 Res. 774',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 19 bis 21 und Fußnote; ' +
+      'Nutzungsbestimmungen 8, 11, 13 und 17',
   },
   {
     id: 'band-13cm',
@@ -496,8 +787,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     maxHz: 2450e6,
     status: 'sekundaer',
     licenseClasses: ['A', 'E'],
-    maxPowerClassAW: POWER_CLASS_A_W,
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' },
+    },
     segments: [
       { minHz: 2320e6, maxHz: 2320.15e6, mode: 'cw', labelDE: 'Telegrafie und Erde-Mond-Erde' },
       { minHz: 2320.15e6, maxHz: 2320.8e6, mode: 'ssb', labelDE: 'SSB (Anruf 2320,200 MHz)' },
@@ -508,7 +803,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Teilt sich das Spektrum mit dem ISM-Bereich 2,4 GHz und damit mit WLAN und ' +
       'Bluetooth. Über den geostationären Transponder QO-100 sind hier erstmals ' +
       'dauerhaft verfügbare Satellitenverbindungen für Funkamateure möglich.',
-    source: 'AFuV Anlage 1; IARU R1 Microwave Band Plan',
+    licenseNote:
+      'Ab 13 cm sinkt die Leistungsgrenze deutlich: 75 W PEP für die Klasse A, ' +
+      '5 W PEP für die Klasse E.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 Microwave Band Plan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 22 und 23; Nutzungsbestimmungen 9, 13 und 17',
   },
   {
     id: 'band-9cm',
@@ -516,9 +816,13 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     minHz: 3400e6,
     maxHz: 3475e6,
     status: 'sekundaer',
-    licenseClasses: ['A'],
-    maxPowerClassAW: POWER_CLASS_A_W,
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' },
+    },
     segments: [
       { minHz: 3400e6, maxHz: 3400.15e6, mode: 'cw', labelDE: 'Telegrafie und Erde-Mond-Erde' },
       { minHz: 3400.15e6, maxHz: 3400.8e6, mode: 'ssb', labelDE: 'SSB (Anruf 3400,200 MHz)' },
@@ -529,7 +833,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Steht durch die Vergabe des 3,6-GHz-Bereichs an den Mobilfunk unter Druck; ' +
       'der Amateurbetrieb ist strikt sekundär. In Deutschland weitgehend auf ' +
       'Schmalbandbetrieb im untersten Megahertz beschränkt.',
-    source: 'AFuV Anlage 1; IARU R1 Microwave Band Plan — Obergrenze prüfen (Abschnitt C)',
+    licenseNote:
+      'Die Obergrenze 3475 MHz steht so in der AFuV; der IARU-R1-Plan behandelt nur ' +
+      '3400–3410 MHz. 75 W PEP für die Klasse A, 5 W PEP für die Klasse E.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 Microwave Band Plan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nr. 24; Nutzungsbestimmungen 9 und 17',
   },
   {
     id: 'band-6cm',
@@ -537,9 +846,13 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     minHz: 5650e6,
     maxHz: 5850e6,
     status: 'sekundaer',
-    licenseClasses: ['A'],
-    maxPowerClassAW: POWER_CLASS_A_W,
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' },
+    },
     segments: [
       { minHz: 5650e6, maxHz: 5670e6, mode: 'satellit', labelDE: 'Satelliten-Uplink' },
       { minHz: 5760e6, maxHz: 5760.15e6, mode: 'cw', labelDE: 'Telegrafie und Erde-Mond-Erde' },
@@ -550,17 +863,26 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Liegt teilweise im WLAN-5-GHz-Bereich. Praktisch wird das Band für ' +
       'Schmalband-Weitverkehr über Berggipfel sowie für Hochgeschwindigkeits-' +
       'Datenverbindungen im Amateurfunknetz genutzt.',
-    source: 'AFuV Anlage 1; IARU R1 Microwave Band Plan',
+    licenseNote:
+      '75 W PEP für die Klasse A, 5 W PEP für die Klasse E. 5650–5670 MHz nur in ' +
+      'Richtung Erde–Weltraum, 5830–5850 MHz nur Weltraum–Erde.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 Microwave Band Plan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 25 bis 29; Nutzungsbestimmungen 9, 11, 13 und 17',
   },
   {
     id: 'band-3cm',
     nameDE: '3 cm',
     minHz: 10e9,
     maxHz: 10.5e9,
-    status: 'gemischt',
-    licenseClasses: ['A'],
-    maxPowerClassAW: POWER_CLASS_A_W,
+    status: 'sekundaer',
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' },
+    },
     segments: [
       { minHz: 10e9, maxHz: 10.15e9, mode: 'allmode', labelDE: 'Breitbandanwendungen, ATV' },
       { minHz: 10.368e9, maxHz: 10.36815e9, mode: 'cw', labelDE: 'Telegrafie und Erde-Mond-Erde' },
@@ -571,7 +893,11 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Klassisches Experimentierband für Selbstbau-Transverter und Parabolantennen. ' +
       'Regen dämpft hier bereits messbar, dafür genügen kleine Spiegel für hohe ' +
       'Antennengewinne.',
-    source: 'AFuV Anlage 1; IARU R1 Microwave Band Plan',
+    licenseNote:
+      '75 W PEP für die Klasse A, 5 W PEP für die Klasse E.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 Microwave Band Plan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 30 bis 32; Nutzungsbestimmungen 9, 13 und 17',
   },
   {
     id: 'band-1_2cm',
@@ -579,9 +905,13 @@ export const AMATEUR_BANDS: AmateurBand[] = [
     minHz: 24e9,
     maxHz: 24.25e9,
     status: 'gemischt',
-    licenseClasses: ['A'],
-    maxPowerClassAW: POWER_CLASS_A_W,
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
     powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' },
+    },
     segments: [
       { minHz: 24e9, maxHz: 24.048e9, mode: 'allmode', labelDE: 'Breitbandanwendungen' },
       { minHz: 24.048e9, maxHz: 24.04815e9, mode: 'cw', labelDE: 'Telegrafie und Erde-Mond-Erde' },
@@ -592,7 +922,12 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Oberhalb 24,05 GHz teilt sich der Amateurfunk das Spektrum mit ISM-Anwendungen ' +
       'wie Bewegungsmeldern und Verkehrsradar. Verbindungen über größere Strecken ' +
       'erfordern gute Sichtverbindung und trockenes Wetter.',
-    source: 'AFuV Anlage 1; IARU R1 Microwave Band Plan',
+    licenseNote:
+      '24–24,05 GHz ist primär, 24,05–24,25 GHz sekundär zugewiesen. 75 W PEP für die ' +
+      'Klasse A, 5 W PEP für die Klasse E.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 Microwave Band Plan',
+    sourceRef:
+      'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 33 und 34; Nutzungsbestimmungen 9, 13 und 17',
   },
 ];
 

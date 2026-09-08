@@ -7,6 +7,7 @@
  */
 
 import { line } from 'd3';
+import { formatExponential, formatFixed } from '$lib/utils/formatting';
 import type { ExtendedCurveDataPoint } from '$lib/utils/atmosphericAttenuation';
 
 // Frequency and attenuation ranges
@@ -158,11 +159,11 @@ export function createSeriesLine(
  */
 export function formatAttenuationValue(dBkm: number): string {
   if (!Number.isFinite(dBkm)) return '—';
-  if (dBkm >= 10) return dBkm.toFixed(1);
-  if (dBkm >= 1) return dBkm.toFixed(2);
-  if (dBkm >= 0.1) return dBkm.toFixed(3);
-  if (dBkm >= 0.01) return dBkm.toFixed(4);
-  return dBkm.toExponential(2);
+  if (dBkm >= 10) return formatFixed(dBkm, 1);
+  if (dBkm >= 1) return formatFixed(dBkm, 2);
+  if (dBkm >= 0.1) return formatFixed(dBkm, 3);
+  if (dBkm >= 0.01) return formatFixed(dBkm, 4);
+  return formatExponential(dBkm, 2);
 }
 
 /** Marker data computed from the current frequency and atmospheric conditions */

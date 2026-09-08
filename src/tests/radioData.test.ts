@@ -27,9 +27,16 @@ import {
 import {
   AMATEUR_BANDS,
   POWER_CLASS_A_W,
+  POWER_CLASS_E_W,
+  POWER_CLASS_E_VHF_W,
+  POWER_CLASS_E_SHF_W,
   POWER_CLASS_N_EIRP_W,
+  POWER_CLASS_N_ERP_10M_W,
+  POWER_CLASS_N_ERP_VHF_W,
+  POWER_MICROWAVE_CLASS_A_W,
   POWER_30M_W,
-  POWER_60M_EIRP_W,
+  POWER_60M_ERP_W,
+  POWER_LF_MF_ERP_W,
   getAmateurBandForFrequency,
   getAmateurSegmentForFrequency,
   getBandsForLicenseClass,
@@ -46,8 +53,10 @@ import {
   SHORTWAVE_BANDS,
   DAB_BLOCKS,
   DAB_BLOCK_BANDWIDTH_HZ,
+  DAB_BLOCKS_DE,
   DAB_BAND_III_MIN_HZ,
   DAB_BAND_III_MAX_HZ,
+  DAB_CHANNEL_13_MAX_HZ,
   DVBT2_CHANNELS,
   DVBT2_CHANNEL_BANDWIDTH_HZ,
   DVBT2_CHANNEL_OFFSET_HZ,
@@ -233,12 +242,14 @@ describe('AMATEUR_BANDS', () => {
     expect(b630!.maxHz).toBe(479e3);
   });
 
-  it('begrenzt das 60-m-Band auf 5351,5-5366,5 kHz mit 15 W EIRP', () => {
+  // AFuV Anlage 1, lfd. Nr. 7: 9,14 W ERP (≙ 15 W EIRP), nur Klasse A
+  it('begrenzt das 60-m-Band auf 5351,5-5366,5 kHz mit 9,14 W ERP', () => {
     const band = AMATEUR_BANDS.find((b) => b.id === 'band-60m');
     expect(band!.minHz).toBe(5351.5e3);
     expect(band!.maxHz).toBe(5366.5e3);
-    expect(band!.maxPowerClassAW).toBe(POWER_60M_EIRP_W);
-    expect(band!.powerLimitType).toBe('eirp');
+    expect(band!.maxPowerClassAW).toBe(POWER_60M_ERP_W);
+    expect(band!.powerLimitType).toBe('erp');
+    expect(band!.licenseClasses).toEqual(['A']);
   });
 
   it('begrenzt das 30-m-Band auf 150 W PEP (Sekundärstatus)', () => {
@@ -251,6 +262,86 @@ describe('AMATEUR_BANDS', () => {
     const ids = getBandsForLicenseClass('N').map((b) => b.id);
     expect(ids.sort()).toEqual(['band-10m', 'band-2m', 'band-70cm'].sort());
     expect(POWER_CLASS_N_EIRP_W).toBe(10);
+  });
+
+  // AFuV Anlage 1, lfd. Nrn. 14, 17 und 18
+  it('gibt der Klasse N 10 W ERP auf 10 m und 6,1 W ERP auf 2 m und 70 cm', () => {
+    const zehn = AMATEUR_BANDS.find((b) => b.id === 'band-10m')!;
+    expect(zehn.powerLimits.N).toEqual({ watt: POWER_CLASS_N_ERP_10M_W, type: 'erp' });
+    for (const id of ['band-2m', 'band-70cm']) {
+      const band = AMATEUR_BANDS.find((b) => b.id === id)!;
+      expect(band.powerLimits.N).toEqual({ watt: POWER_CLASS_N_ERP_VHF_W, type: 'erp' });
+    }
+  });
+
+  // AFuV Anlage 1: Kurzwelle nur 160 m, 80 m, 15 m und 10 m
+  it('gibt der Klasse E auf Kurzwelle nur 160 m, 80 m, 15 m und 10 m', () => {
+    const kurzwelle = getBandsForLicenseClass('E').filter((b) => b.maxHz <= 30e6);
+    expect(kurzwelle.map((b) => b.id).sort()).toEqual(
+      ['band-10m', 'band-15m', 'band-160m', 'band-80m'].sort()
+    );
+    for (const band of kurzwelle) {
+      expect(band.powerLimits.E).toEqual({ watt: POWER_CLASS_E_W, type: 'pep' });
+    }
+  });
+
+  // AFuV Anlage 1, lfd. Nrn. 17 bis 21 bzw. 22 bis 34
+  it('staffelt die Klasse E nach 75 W auf 2 m bis 23 cm und 5 W ab 13 cm', () => {
+    for (const id of ['band-2m', 'band-70cm', 'band-23cm']) {
+      expect(AMATEUR_BANDS.find((b) => b.id === id)!.powerLimits.E).toEqual({
+        watt: POWER_CLASS_E_VHF_W,
+        type: 'pep'
+      });
+    }
+    for (const id of ['band-13cm', 'band-9cm', 'band-6cm', 'band-3cm', 'band-1_2cm']) {
+      const band = AMATEUR_BANDS.find((b) => b.id === id)!;
+      expect(band.powerLimits.E).toEqual({ watt: POWER_CLASS_E_SHF_W, type: 'pep' });
+      expect(band.maxPowerClassAW).toBe(POWER_MICROWAVE_CLASS_A_W);
+    }
+  });
+
+  // AFuV Anlage 1, lfd. Nrn. 1 und 2: nur Klasse A, 1 W ERP
+  it('gibt 2200 m und 630 m nur der Klasse A mit 1 W ERP', () => {
+    for (const id of ['band-2200m', 'band-630m']) {
+      const band = AMATEUR_BANDS.find((b) => b.id === id)!;
+      expect(band.licenseClasses).toEqual(['A']);
+      expect(band.powerLimits.A).toEqual({ watt: POWER_LF_MF_ERP_W, type: 'erp' });
+    }
+  });
+
+  // AFuV Anlage 1, lfd. Nr. 24
+  it('führt das 9-cm-Band mit 3400-3475 MHz und 75 W PEP', () => {
+    const band = AMATEUR_BANDS.find((b) => b.id === 'band-9cm')!;
+    expect(band.minHz).toBe(3400e6);
+    expect(band.maxHz).toBe(3475e6);
+    expect(band.maxPowerClassAW).toBe(POWER_MICROWAVE_CLASS_A_W);
+  });
+
+  // AFuV Anlage 1, lfd. Nrn. 3 bis 5 bzw. 15 und 16
+  it('modelliert die Teilbereiche von 160 m und 6 m', () => {
+    const b160 = AMATEUR_BANDS.find((b) => b.id === 'band-160m')!;
+    expect(b160.powerSubranges?.map((r) => [r.minHz, r.maxHz])).toEqual([
+      [1850e3, 1890e3],
+      [1890e3, 2000e3]
+    ]);
+    expect(b160.powerSubranges?.[1].limits.A?.watt).toBe(10);
+    const b6 = AMATEUR_BANDS.find((b) => b.id === 'band-6m')!;
+    expect(b6.powerSubranges?.[0]).toMatchObject({ minHz: 50.4e6, maxHz: 52e6 });
+  });
+
+  it('hält licenseClasses und powerLimits deckungsgleich', () => {
+    for (const band of AMATEUR_BANDS) {
+      expect(Object.keys(band.powerLimits).sort()).toEqual([...band.licenseClasses].sort());
+      for (const limit of Object.values(band.powerLimits)) {
+        expect(limit.watt).toBeGreaterThan(0);
+        expect(['pep', 'erp', 'eirp']).toContain(limit.type);
+      }
+      expect(band.powerLimits.A).toEqual({
+        watt: band.maxPowerClassAW,
+        type: band.powerLimitType
+      });
+      expect(band.sourceRef).toBeTruthy();
+    }
   });
 
   it('nutzt für die Klasse A die Regelleistung von 750 W PEP', () => {
@@ -443,13 +534,59 @@ describe('DAB_BLOCKS', () => {
     }
   });
 
-  it('liegt vollständig im VHF-Band III (174-230 MHz)', () => {
+  it('hält die in Deutschland genutzten Blöcke im VHF-Band III (174-230 MHz)', () => {
     const half = DAB_BLOCK_BANDWIDTH_HZ / 2;
-    for (const block of DAB_BLOCKS) {
+    for (const block of DAB_BLOCKS_DE) {
       expect(block.centerHz - half).toBeGreaterThanOrEqual(DAB_BAND_III_MIN_HZ);
       expect(block.centerHz + half).toBeLessThanOrEqual(DAB_BAND_III_MAX_HZ);
     }
     expect(DAB_BAND_III_MAX_HZ).toBe(230e6);
+    expect(DAB_BLOCKS_DE).toHaveLength(32);
+    expect(DAB_BLOCKS_DE[0].block).toBe('5A');
+    expect(DAB_BLOCKS_DE[DAB_BLOCKS_DE.length - 1].block).toBe('12D');
+  });
+
+  // Referenzwerte: ETSI-Kanaltabelle Band III / EBU-Factsheet „Use of Band III“
+  it('führt die Blöcke 13A bis 13F im Kanal 13 (230-240 MHz) als national ungenutzt', () => {
+    const erwartet: Array<[string, number]> = [
+      ['13A', 230_784_000],
+      ['13B', 232_496_000],
+      ['13C', 234_208_000],
+      ['13D', 235_776_000],
+      ['13E', 237_488_000],
+      ['13F', 239_200_000]
+    ];
+    const half = DAB_BLOCK_BANDWIDTH_HZ / 2;
+    for (const [name, centerHz] of erwartet) {
+      const block = DAB_BLOCKS.find((b) => b.block === name);
+      expect(block, `Block ${name} fehlt`).toBeDefined();
+      expect(block!.centerHz).toBe(centerHz);
+      expect(block!.usedInGermany).toBe(false);
+      expect(block!.noteDE).toBeTruthy();
+      expect(block!.centerHz - half).toBeGreaterThanOrEqual(DAB_BAND_III_MAX_HZ);
+      expect(block!.centerHz + half).toBeLessThanOrEqual(DAB_CHANNEL_13_MAX_HZ);
+    }
+    expect(DAB_CHANNEL_13_MAX_HZ).toBe(240e6);
+  });
+
+  // Von CENELEC in die Schutzabstände gelegte Zwischenblöcke
+  it('führt die Zwischenblöcke 10N, 11N und 12N als national ungenutzt', () => {
+    const erwartet: Array<[string, number]> = [
+      ['10N', 210_096_000],
+      ['11N', 217_088_000],
+      ['12N', 224_096_000]
+    ];
+    for (const [name, centerHz] of erwartet) {
+      const block = DAB_BLOCKS.find((b) => b.block === name);
+      expect(block, `Block ${name} fehlt`).toBeDefined();
+      expect(block!.centerHz).toBe(centerHz);
+      expect(block!.usedInGermany).toBe(false);
+    }
+  });
+
+  it('umfasst 41 Blöcke, davon 32 in Deutschland genutzt', () => {
+    expect(DAB_BLOCKS).toHaveLength(41);
+    expect(DAB_BLOCKS.filter((b) => !b.usedInGermany)).toHaveLength(9);
   });
 
   // Referenzwert: T-DAB-Raster Region 1 (GE06)

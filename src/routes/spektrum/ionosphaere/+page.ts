@@ -1,4 +1,6 @@
-import { pageMeta } from '$lib/data/navigation';
+import { redirect } from '@sveltejs/kit';
 
-/** Titel und Beschreibung stammen aus der Navigations-Registry. */
-export const load = () => pageMeta('/spektrum/ionosphaere/');
+/** Das Kapitel steht jetzt unter Wissen › Wellenausbreitung. */
+export function load() {
+	redirect(308, '/wissen/wellenausbreitung/ionosphaere/');
+}

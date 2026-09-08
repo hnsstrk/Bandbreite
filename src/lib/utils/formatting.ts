@@ -1,8 +1,99 @@
 /**
- * Centralized formatting utilities for the Bandbreite application.
- * These functions provide consistent formatting for frequencies, wavelengths,
- * distances, power, and other values throughout the application.
+ * Zentrale Formatierung für die Bandbreite-Anwendung.
+ *
+ * **Alle angezeigten Zahlen stehen im deutschen Format** (Dezimalkomma,
+ * Tausenderpunkt): „220,352 MHz", „12,49 cm", „80,05 dB", „1.000 km".
+ * Grundlage ist ausschließlich {@link formatLocaleNumber} mit
+ * `Intl.NumberFormat('de-DE')` — keine Zeichenersetzung von Hand.
+ *
+ * Rechenwerte bleiben unberührt: Diese Funktionen erzeugen nur Anzeigetexte.
+ * Maschinenlesbare Werte (URL-Parameter, `<time>`, Datenattribute) behalten
+ * den Punkt als Dezimaltrenner.
  */
+
+// ============================================================================
+// Locale-Grundlagen
+// ============================================================================
+
+/** Anzeigesprache aller Zahlen. Tausendertrenner ist der Punkt (de-DE-Standard). */
+export const NUMBER_LOCALE = 'de-DE';
+
+export interface LocaleNumberOptions {
+  /** Mindestzahl der Nachkommastellen (Vorgabe: 0) */
+  minFrac?: number;
+  /** Höchstzahl der Nachkommastellen (Vorgabe: `minFrac`) */
+  maxFrac?: number;
+  /** Tausendertrenner setzen (Vorgabe: true; in Eingabefeldern false) */
+  grouping?: boolean;
+}
+
+/** `Intl.NumberFormat` ist teuer im Aufbau — je Stellenkombination einmal. */
+const FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
+
+function localeFormatter(minFrac: number, maxFrac: number, grouping: boolean): Intl.NumberFormat {
+  const key = `${minFrac}|${maxFrac}|${grouping}`;
+  const cached = FORMATTER_CACHE.get(key);
+  if (cached) return cached;
+  const created = new Intl.NumberFormat(NUMBER_LOCALE, {
+    minimumFractionDigits: minFrac,
+    maximumFractionDigits: maxFrac,
+    useGrouping: grouping
+  });
+  FORMATTER_CACHE.set(key, created);
+  return created;
+}
+
+/** Obergrenze von `Intl.NumberFormat` bzw. `toFixed` für Nachkommastellen. */
+const MAX_FRACTION_DIGITS = 20;
+
+/**
+ * Die eine Stelle, an der aus einer Zahl deutscher Anzeigetext wird.
+ *
+ * Ungültige Werte (null, NaN, ±Infinity) liefern einen leeren String; die
+ * aufrufenden Formatter setzen dort ihren eigenen Platzhalter („—").
+ * Ein auf null gerundetes Ergebnis erscheint nie als „-0".
+ *
+ * @example formatLocaleNumber(1234.5, { minFrac: 2 }) // „1.234,50"
+ */
+export function formatLocaleNumber(
+  value: number | null | undefined,
+  options: LocaleNumberOptions = {}
+): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) return '';
+
+  const minFrac = Math.min(Math.max(options.minFrac ?? 0, 0), MAX_FRACTION_DIGITS);
+  const maxFrac = Math.min(Math.max(options.maxFrac ?? minFrac, minFrac), MAX_FRACTION_DIGITS);
+  const grouping = options.grouping ?? true;
+
+  // „-0,00" ist kein sinnvoller Anzeigewert.
+  const rounded = Number(value.toFixed(maxFrac));
+  return localeFormatter(minFrac, maxFrac, grouping).format(rounded === 0 ? 0 : value);
+}
+
+/**
+ * Feste Nachkommastellen im deutschen Format — der Ersatz für `toFixed`.
+ *
+ * @example formatFixed(80.0512, 2) // „80,05"
+ */
+export function formatFixed(value: number, decimals: number = 2, grouping: boolean = true): string {
+  return formatLocaleNumber(value, { minFrac: decimals, maxFrac: decimals, grouping });
+}
+
+/**
+ * Exponentialschreibweise mit deutschem Dezimalkomma, z. B. „1,23e-4".
+ * Der Exponent bleibt maschinennah (`e-4`, `e+7`), nur die Mantisse wird
+ * lokalisiert.
+ */
+export function formatExponential(value: number, digits: number = 2): string {
+  if (!Number.isFinite(value)) return '';
+  const [mantissa, exponent] = value.toExponential(digits).split('e');
+  const head = formatLocaleNumber(Number(mantissa), {
+    minFrac: digits,
+    maxFrac: digits,
+    grouping: false
+  });
+  return `${head}e${exponent}`;
+}
 
 // ============================================================================
 // Number Formatting
@@ -25,7 +116,7 @@ export function formatNumber(
   if (value === null || value === undefined || !Number.isFinite(value)) {
     return fallback;
   }
-  return value.toFixed(decimals);
+  return formatFixed(value, decimals);
 }
 
 /**
@@ -46,19 +137,30 @@ export function formatNumberAuto(
 
   const absValue = Math.abs(value);
   if (absValue === 0) return '0';
-  if (absValue >= 1000) return value.toFixed(0);
-  if (absValue >= 100) return value.toFixed(1);
-  if (absValue >= 10) return value.toFixed(2);
-  if (absValue >= 1) return value.toFixed(3);
-  if (absValue >= 0.1) return value.toFixed(4);
-  if (absValue >= 0.01) return value.toFixed(5);
-  return value.toExponential(2);
+  if (absValue >= 1000) return formatFixed(value, 0);
+  if (absValue >= 100) return formatFixed(value, 1);
+  if (absValue >= 10) return formatFixed(value, 2);
+  if (absValue >= 1) return formatFixed(value, 3);
+  if (absValue >= 0.1) return formatFixed(value, 4);
+  if (absValue >= 0.01) return formatFixed(value, 5);
+  return formatExponential(value, 2);
 }
 
 /**
  * Format a number using significant digits (toPrecision) with exponential notation
  * for very small or large values. Strips trailing zeros.
  * Useful for converter input fields where precision matters.
+ *
+ * **Einzige Ausnahme vom deutschen Zahlenformat.** Das Ergebnis steht als
+ * `value` in den `<input type="number">`-Feldern der geschützten Konverter
+ * (`FrequencyConverter`, `PowerConverter`). Ein `type="number"`-Feld nimmt
+ * laut HTML-Spezifikation nur den Punkt an und leert sich bei einem Komma —
+ * die Zahl ist dort also maschinenlesbarer Feldwert, kein Anzeigetext (wie
+ * die Query-Parameter in `utils/urlState.svelte.ts`).
+ * Sobald diese Felder auf `type="text"` mit `inputmode="decimal"` umgestellt
+ * sind, wird hier auf {@link formatLocaleNumber} bzw.
+ * {@link formatExponential} umgestellt — genau wie in `formatFieldValue`
+ * von `ui/numberInput.svelte.ts`, das bereits deutsch formatiert.
  *
  * @param value - The number to format
  * @param precision - Number of significant digits (default: 6)
@@ -93,20 +195,22 @@ export function formatPrecisionNumber(
  * Uses area conversion factors: 1 km² = 10⁶ m², 1 m² = 10⁴ cm² = 10⁶ mm².
  *
  * @param rcsM2 - Radar cross section in m²
- * @returns Formatted string, e.g. "50.0 cm²", "10000 m²", "10.0 mm²"
+ * @returns Formatted string, e.g. "50,0 cm²", "10.000 m²", "10,0 mm²"
  */
 export function formatRcs(rcsM2: number | null | undefined): string {
   if (rcsM2 === null || rcsM2 === undefined || !Number.isFinite(rcsM2) || rcsM2 < 0) {
     return '—';
   }
-  if (rcsM2 >= 1e6) return `${(rcsM2 / 1e6).toFixed(2)} km²`;
-  if (rcsM2 >= 1) return `${rcsM2.toFixed(0)} m²`;
-  if (rcsM2 >= 1e-4) return `${(rcsM2 * 1e4).toFixed(1)} cm²`;
-  return `${(rcsM2 * 1e6).toFixed(1)} mm²`;
+  if (rcsM2 >= 1e6) return `${formatFixed(rcsM2 / 1e6, 2)} km²`;
+  if (rcsM2 >= 1) return `${formatFixed(rcsM2, 0)} m²`;
+  if (rcsM2 >= 1e-4) return `${formatFixed(rcsM2 * 1e4, 1)} cm²`;
+  return `${formatFixed(rcsM2 * 1e6, 1)} mm²`;
 }
 
 /**
  * Format a number with thousands separator (German style: 1.000.000).
+ *
+ * Dünner Wrapper um {@link formatLocaleNumber} mit „—" als Platzhalter.
  *
  * @param value - The number to format
  * @param decimals - Number of decimal places
@@ -119,10 +223,7 @@ export function formatNumberLocale(
   if (value === null || value === undefined || !Number.isFinite(value)) {
     return '—';
   }
-  return value.toLocaleString('de-DE', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  });
+  return formatFixed(value, decimals);
 }
 
 // ============================================================================
@@ -147,11 +248,11 @@ export function formatFrequency(
 
   if (hz === 0) return '0 Hz';
 
-  if (hz >= 1e12) return `${(hz / 1e12).toFixed(decimals)} THz`;
-  if (hz >= 1e9) return `${(hz / 1e9).toFixed(decimals)} GHz`;
-  if (hz >= 1e6) return `${(hz / 1e6).toFixed(decimals)} MHz`;
-  if (hz >= 1e3) return `${(hz / 1e3).toFixed(decimals)} kHz`;
-  return `${hz.toFixed(decimals)} Hz`;
+  if (hz >= 1e12) return `${formatFixed(hz / 1e12, decimals)} THz`;
+  if (hz >= 1e9) return `${formatFixed(hz / 1e9, decimals)} GHz`;
+  if (hz >= 1e6) return `${formatFixed(hz / 1e6, decimals)} MHz`;
+  if (hz >= 1e3) return `${formatFixed(hz / 1e3, decimals)} kHz`;
+  return `${formatFixed(hz, decimals)} Hz`;
 }
 
 /**
@@ -168,7 +269,7 @@ export function formatFrequencyGHz(
   if (ghz === null || ghz === undefined || !Number.isFinite(ghz)) {
     return '—';
   }
-  return `${ghz.toFixed(decimals)} GHz`;
+  return `${formatFixed(ghz, decimals)} GHz`;
 }
 
 // ============================================================================
@@ -191,12 +292,12 @@ export function formatWavelength(
     return '—';
   }
 
-  if (meters >= 1000) return `${(meters / 1000).toFixed(decimals)} km`;
-  if (meters >= 1) return `${meters.toFixed(decimals)} m`;
-  if (meters >= 0.01) return `${(meters * 100).toFixed(decimals)} cm`;
-  if (meters >= 0.001) return `${(meters * 1000).toFixed(decimals)} mm`;
-  if (meters >= 1e-6) return `${(meters * 1e6).toFixed(decimals)} \u03BCm`;
-  return `${(meters * 1e9).toFixed(decimals)} nm`;
+  if (meters >= 1000) return `${formatFixed(meters / 1000, decimals)} km`;
+  if (meters >= 1) return `${formatFixed(meters, decimals)} m`;
+  if (meters >= 0.01) return `${formatFixed(meters * 100, decimals)} cm`;
+  if (meters >= 0.001) return `${formatFixed(meters * 1000, decimals)} mm`;
+  if (meters >= 1e-6) return `${formatFixed(meters * 1e6, decimals)} μm`;
+  return `${formatFixed(meters * 1e9, decimals)} nm`;
 }
 
 // ============================================================================
@@ -220,8 +321,8 @@ export function formatDistance(
   }
 
   if (meters === 0) return '0 m';
-  if (meters >= 1000) return `${(meters / 1000).toFixed(decimals)} km`;
-  return `${meters.toFixed(decimals)} m`;
+  if (meters >= 1000) return `${formatFixed(meters / 1000, decimals)} km`;
+  return `${formatFixed(meters, decimals)} m`;
 }
 
 /**
@@ -240,7 +341,7 @@ export function formatDistanceWithUnit(
   if (value === null || value === undefined || !Number.isFinite(value)) {
     return '—';
   }
-  return `${value.toFixed(decimals)} ${unit}`;
+  return `${formatFixed(value, decimals)} ${unit}`;
 }
 
 // ============================================================================
@@ -261,7 +362,7 @@ export function formatPowerDbm(
   if (dbm === null || dbm === undefined || !Number.isFinite(dbm)) {
     return '—';
   }
-  return `${dbm.toFixed(decimals)} dBm`;
+  return `${formatFixed(dbm, decimals)} dBm`;
 }
 
 /**
@@ -281,7 +382,7 @@ export function formatPowerDb(
     return '—';
   }
   const sign = showSign && db > 0 ? '+' : '';
-  return `${sign}${db.toFixed(decimals)} dB`;
+  return `${sign}${formatFixed(db, decimals)} dB`;
 }
 
 /**
@@ -300,12 +401,12 @@ export function formatPowerWatts(
   }
 
   if (watts === 0) return '0 W';
-  if (watts >= 1e9) return `${(watts / 1e9).toFixed(decimals)} GW`;
-  if (watts >= 1e6) return `${(watts / 1e6).toFixed(decimals)} MW`;
-  if (watts >= 1000) return `${(watts / 1000).toFixed(decimals)} kW`;
-  if (watts >= 1) return `${watts.toFixed(decimals)} W`;
-  if (watts >= 0.001) return `${(watts * 1000).toFixed(decimals)} mW`;
-  return `${(watts * 1e6).toFixed(decimals)} \u03BCW`;
+  if (watts >= 1e9) return `${formatFixed(watts / 1e9, decimals)} GW`;
+  if (watts >= 1e6) return `${formatFixed(watts / 1e6, decimals)} MW`;
+  if (watts >= 1000) return `${formatFixed(watts / 1000, decimals)} kW`;
+  if (watts >= 1) return `${formatFixed(watts, decimals)} W`;
+  if (watts >= 0.001) return `${formatFixed(watts * 1000, decimals)} mW`;
+  return `${formatFixed(watts * 1e6, decimals)} μW`;
 }
 
 // ============================================================================
@@ -323,11 +424,11 @@ export function formatAttenuation(dbPerKm: number | null | undefined): string {
     return '—';
   }
 
-  if (dbPerKm >= 10) return `${dbPerKm.toFixed(1)} dB/km`;
-  if (dbPerKm >= 1) return `${dbPerKm.toFixed(2)} dB/km`;
-  if (dbPerKm >= 0.1) return `${dbPerKm.toFixed(3)} dB/km`;
-  if (dbPerKm >= 0.01) return `${dbPerKm.toFixed(4)} dB/km`;
-  return `${dbPerKm.toExponential(2)} dB/km`;
+  if (dbPerKm >= 10) return `${formatFixed(dbPerKm, 1)} dB/km`;
+  if (dbPerKm >= 1) return `${formatFixed(dbPerKm, 2)} dB/km`;
+  if (dbPerKm >= 0.1) return `${formatFixed(dbPerKm, 3)} dB/km`;
+  if (dbPerKm >= 0.01) return `${formatFixed(dbPerKm, 4)} dB/km`;
+  return `${formatExponential(dbPerKm, 2)} dB/km`;
 }
 
 /**
@@ -344,7 +445,7 @@ export function formatAttenuationTotal(
   if (db === null || db === undefined || !Number.isFinite(db)) {
     return '—';
   }
-  return `${db.toFixed(decimals)} dB`;
+  return `${formatFixed(db, decimals)} dB`;
 }
 
 // ============================================================================
@@ -355,19 +456,16 @@ export function formatAttenuationTotal(
  * Format a data rate in bit/s with automatic unit selection.
  * Selects bit/s, kbit/s, Mbit/s, Gbit/s or Tbit/s.
  *
+ * Die Schreibweise ist immer deutsch; die frühere Option `{ locale: true }`
+ * ist damit entfallen.
+ *
  * @param bitsPerSecond - Data rate in bit/s
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted string with unit
  */
-export interface DataRateOptions {
-  /** Deutsche Schreibweise mit Dezimalkomma und Tausenderpunkt */
-  locale?: boolean;
-}
-
 export function formatDataRate(
   bitsPerSecond: number | null | undefined,
-  decimals: number = 2,
-  options: DataRateOptions = {}
+  decimals: number = 2
 ): string {
   if (
     bitsPerSecond === null ||
@@ -386,14 +484,7 @@ export function formatDataRate(
     { factor: 1, symbol: 'bit/s' }
   ];
   const unit = units.find((candidate) => bitsPerSecond >= candidate.factor) ?? units[units.length - 1];
-  const value = bitsPerSecond / unit.factor;
-  const text = options.locale
-    ? value.toLocaleString('de-DE', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-      })
-    : value.toFixed(decimals);
-  return `${text} ${unit.symbol}`;
+  return `${formatFixed(bitsPerSecond / unit.factor, decimals)} ${unit.symbol}`;
 }
 
 // ============================================================================
@@ -417,7 +508,7 @@ export function formatPercentage(
     return '—';
   }
   const pct = isDecimal ? value * 100 : value;
-  return `${pct.toFixed(decimals)}%`;
+  return `${formatFixed(pct, decimals)}%`;
 }
 
 // ============================================================================
@@ -438,7 +529,7 @@ export function formatAngle(
   if (degrees === null || degrees === undefined || !Number.isFinite(degrees)) {
     return '—';
   }
-  return `${degrees.toFixed(decimals)}\u00B0`;
+  return `${formatFixed(degrees, decimals)}°`;
 }
 
 // ============================================================================
@@ -459,7 +550,7 @@ export function formatTemperatureCelsius(
   if (celsius === null || celsius === undefined || !Number.isFinite(celsius)) {
     return '—';
   }
-  return `${celsius.toFixed(decimals)} \u00B0C`;
+  return `${formatFixed(celsius, decimals)} °C`;
 }
 
 /**
@@ -476,7 +567,7 @@ export function formatTemperatureKelvin(
   if (kelvin === null || kelvin === undefined || !Number.isFinite(kelvin)) {
     return '—';
   }
-  return `${kelvin.toFixed(decimals)} K`;
+  return `${formatFixed(kelvin, decimals)} K`;
 }
 
 // ============================================================================
@@ -497,5 +588,5 @@ export function formatPressure(
   if (hpa === null || hpa === undefined || !Number.isFinite(hpa)) {
     return '—';
   }
-  return `${hpa.toFixed(decimals)} hPa`;
+  return `${formatFixed(hpa, decimals)} hPa`;
 }

@@ -6,6 +6,7 @@
 	 * (0 … SLIDER_RESOLUTION); die Abbildung auf den physikalischen Wert
 	 * liegt in `numberInput.svelte.ts` und ist dort getestet.
 	 */
+	import { formatLocaleNumber } from '$lib/utils/formatting';
 	import {
 		SLIDER_RESOLUTION,
 		positionToValue,
@@ -44,7 +45,7 @@
 		max,
 		step = 'any',
 		scale = 'linear',
-		format = (v: number) => String(Math.round(v * 1000) / 1000),
+		format = (v: number) => formatLocaleNumber(v, { maxFrac: 3 }),
 		ticks = [],
 		unitSymbol,
 		disabled = false,

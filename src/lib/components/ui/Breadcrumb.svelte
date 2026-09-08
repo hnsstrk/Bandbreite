@@ -8,11 +8,8 @@
 
   let { currentPath }: Props = $props();
 
-  /**
-   * Die Startseite ist ein 308-Redirect auf /spektrum/ — der Breadcrumb
-   * verlinkt deshalb direkt auf das Ziel und spart den Umweg.
-   */
-  const HOME_HREF = '/spektrum/';
+  /** Die Portalseite unter „/" ist der Anfang jeder Brotkrümelkette. */
+  const HOME_HREF = '/';
 
   const breadcrumbs = $derived(getBreadcrumbs(currentPath));
   const showHome = $derived(breadcrumbs[0]?.href !== HOME_HREF);

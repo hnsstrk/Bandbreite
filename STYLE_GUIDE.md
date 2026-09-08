@@ -15,9 +15,10 @@ automatisch Utilities erzeugt. Alle Komponenten halten sich daran.
 5. [Fokus und Accessibility](#fokus-und-accessibility)
 6. [Komponentenbibliothek](#komponentenbibliothek)
 7. [Chart-Standards](#chart-standards)
-8. [UTF-8 Richtlinien](#utf-8-richtlinien)
-9. [Do's and Don'ts](#dos-and-donts)
-10. [Checkliste für neue Komponenten](#checkliste-für-neue-komponenten)
+8. [Zahlenformat](#zahlenformat)
+9. [UTF-8 Richtlinien](#utf-8-richtlinien)
+10. [Do's and Don'ts](#dos-and-donts)
+11. [Checkliste für neue Komponenten](#checkliste-für-neue-komponenten)
 
 ---
 
@@ -596,6 +597,84 @@ const margin = { top: 40, right: 100, bottom: 60, left: 70 };
 
 `--chart-min-width` (800px, responsiv auf 500px reduziert),
 `--chart-height-sm|md|lg` (400/500/600px).
+
+---
+
+## Zahlenformat
+
+**Jede angezeigte Zahl steht im deutschen Format.** Dezimaltrenner ist das
+Komma, Tausendertrenner der **Punkt** — die Vorgabe von
+`Intl.NumberFormat('de-DE')`, ohne eigene Zeichenersetzung:
+
+| Wert | Anzeige |
+| --- | --- |
+| `220352000` Hz | `220,352 MHz` |
+| `0.1249` m | `12,49 cm` |
+| `80.0512` dB | `80,05 dB` |
+| `1000000` m | `1.000 km` |
+| `0.001234` dB/km | `1,23e-3 dB/km` |
+
+Ein **schmales geschütztes Leerzeichen** als Tausendertrenner wird bewusst
+nicht verwendet: Der Punkt ist der ICU-Standard für `de-DE`, kopierbar,
+suchbar und in jeder Schrift eindeutig.
+
+### Eine Quelle: `formatLocaleNumber`
+
+Alle Formatter in `src/lib/utils/formatting.ts` bauen auf derselben Funktion
+auf. `toFixed`, `toLocaleString` und Hand-Ersetzungen wie `.replace('.', ',')`
+sind in Anzeigetexten verboten.
+
+```typescript
+import { formatLocaleNumber, formatFixed, formatExponential } from '$lib/utils/formatting';
+
+formatLocaleNumber(1234.5, { minFrac: 2 });                  // „1.234,50"
+formatLocaleNumber(1234.5, { maxFrac: 2, grouping: false }); // „1234,5"
+formatFixed(80.0512, 2);                                     // „80,05"  (Ersatz für toFixed)
+formatExponential(0.001234, 2);                              // „1,23e-3"
+```
+
+`formatLocaleNumber` liefert für `null`, `NaN` und `±Infinity` einen leeren
+String; die Fach-Formatter (`formatFrequency`, `formatDistance`, …) setzen
+dort ihren eigenen Platzhalter „—". Ein auf null gerundeter Wert erscheint nie
+als „-0". Die Exponentialform lokalisiert nur die Mantisse, nicht den
+Exponenten (`1,23e-3`, nicht `1,23e−3`).
+
+### Eingaben: Komma **und** Punkt
+
+`parseLocaleNumber` in `src/lib/utils/handlers.ts` liest beide Schreibweisen;
+`parseNumericInput`, `parseFieldInput` (NumberInput) und `parseFrequencyQuery`
+(Suche) verwenden ausschließlich sie.
+
+| Eingabe | Ergebnis | Regel |
+| --- | --- | --- |
+| `12,49` / `12.49` | `12.49` | einzelner Trenner = Dezimaltrenner |
+| `1.000,5` / `1,000.5` | `1000.5` | beide vorhanden → der **hintere** trennt die Nachkommastellen |
+| `1.234.567` / `1,234,567` | `1234567` | mehrfach → Tausendertrenner |
+| `1.000` | `1` | **mehrdeutig**, bewusst als Dezimalpunkt gelesen |
+| `144 800`, `1'000` | `144800`, `1000` | Leerzeichen (auch geschützte) und Apostroph entfallen |
+| `2,4e9` | `2.4e9` | Exponentialschreibweise bleibt lesbar |
+
+Zahlenfelder sind deshalb `type="text"` mit `inputmode="decimal"` — ein
+`<input type="number">` verwirft laut HTML-Spezifikation jeden Komma-String
+und bliebe leer. Verwende `NumberInput`, das beides mitbringt.
+
+### Wo der Punkt bleibt
+
+Maschinenlesbare Werte behalten den Dezimalpunkt, weil sie wieder von
+`Number()` gelesen werden:
+
+- **Query-Parameter** aus `utils/urlState.svelte.ts` (`?f=2.4e9`)
+- **SVG-Koordinaten** in Pfaddaten (`M12.5,40.0 L…`)
+- **`value` von `<input type="number">`** — nur noch in den geschützten
+  Konvertern über `formatPrecisionNumber`; die Funktion ist deshalb die
+  einzige dokumentierte Ausnahme in `formatting.ts`
+
+### Diagramme
+
+Achsenbeschriftungen laufen über dieselben Formatter (`formatLocaleNumber`,
+`formatFrequency`, `formatDistance`), nicht über `d3.format` — eine
+d3-Locale-Definition ist damit überflüssig. Auch die `sr-only`-Datentabelle
+eines `ChartFrame` zeigt deutsche Zahlen.
 
 ---
 

@@ -6,6 +6,7 @@
  */
 
 import { calculateFSPL } from '$lib/utils/calculations';
+import { formatLocaleNumber } from '$lib/utils/formatting';
 import { CHART_DISTANCE_RANGES, CHART_FSPL_RANGES } from '$lib/data/spectrum';
 import { FSPL_CHART_FREQUENCIES } from '$lib/data/presets';
 
@@ -75,5 +76,7 @@ export function generateFsplCurve(frequencyHz: number): FsplPoint[] {
 
 /** Beschriftung eines Distanz-Ticks */
 export function formatDistanceTick(meters: number): string {
-  return meters >= 1000 ? `${meters / 1000} km` : `${meters} m`;
+  return meters >= 1000
+    ? `${formatLocaleNumber(meters / 1000, { maxFrac: 3 })} km`
+    : `${formatLocaleNumber(meters, { maxFrac: 3 })} m`;
 }

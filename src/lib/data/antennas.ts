@@ -72,6 +72,25 @@ export function parabolicGainDbi(
 }
 
 /**
+ * Umkehrung von {@link parabolicGainDbi}: nötiger Spiegeldurchmesser für
+ * einen geforderten Gewinn. D = (λ / π) · √(G_linear / η).
+ *
+ * @param gainDbi geforderter Gewinn in dBi
+ * @param wavelengthM Wellenlänge in Metern
+ * @param efficiency Flächenwirkungsgrad (0 bis 1)
+ * @returns Durchmesser in Metern (0 bei ungültigen Eingaben)
+ */
+export function parabolicDiameterM(
+  gainDbi: number,
+  wavelengthM: number,
+  efficiency: number = PARABOLIC_EFFICIENCY_TYPICAL
+): number {
+  if (!Number.isFinite(gainDbi) || wavelengthM <= 0 || efficiency <= 0) return 0;
+  const linear = Math.pow(10, gainDbi / 10);
+  return (wavelengthM / Math.PI) * Math.sqrt(linear / efficiency);
+}
+
+/**
  * Halbwertsöffnungswinkel einer Parabolantenne in Grad.
  *
  * @param diameterM Spiegeldurchmesser in Metern

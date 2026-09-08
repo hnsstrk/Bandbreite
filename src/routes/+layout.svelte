@@ -6,13 +6,13 @@
   import CommandPalette from '$lib/components/layout/CommandPalette.svelte';
   import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
   import Metadata from '$lib/components/ui/Metadata.svelte';
+  import { searchDialog } from '$lib/components/layout/searchDialog.svelte';
 
   let { children } = $props();
 
-  let searchOpen = $state(false);
-
   const title = $derived(page.data.title as string | undefined);
   const description = $derived(page.data.description as string | undefined);
+  // Portalseite und Spektrum-Dashboard tragen keine Brotkrümel.
   const showBreadcrumb = $derived(page.url.pathname !== '/' && page.url.pathname !== '/spektrum/');
 </script>
 
@@ -20,7 +20,7 @@
 
 <div class="app-container">
   <a href="#main-content" class="skip-to-content">Zum Inhalt springen</a>
-  <Header onsearch={() => (searchOpen = true)} />
+  <Header onsearch={() => searchDialog.show()} />
 
   {#if showBreadcrumb}
     <div class="breadcrumb-bar">
@@ -35,7 +35,7 @@
   <Footer />
 </div>
 
-<CommandPalette bind:open={searchOpen} />
+<CommandPalette bind:open={searchDialog.open} />
 
 <style>
   .app-container {

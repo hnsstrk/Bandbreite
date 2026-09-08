@@ -152,6 +152,13 @@ describe('applyFieldInput', () => {
 		expect(parseFieldInput('2.4', GHZ)).toBeCloseTo(2.4e9, 3);
 	});
 
+	it('erkennt Tausendertrenner in beiden Schreibweisen', () => {
+		expect(parseFieldInput('1.000,5', MHZ)).toBeCloseTo(1000.5e6, 3);
+		expect(parseFieldInput('1,000.5', MHZ)).toBeCloseTo(1000.5e6, 3);
+		expect(parseFieldInput('1.234.567', MHZ)).toBeCloseTo(1234567e6, 3);
+		expect(parseFieldInput('144 800', MHZ)).toBeCloseTo(144800e6, 3);
+	});
+
 	it('meldet Zwischenzustände als unlesbar', () => {
 		expect(parseFieldInput('', MHZ)).toBeNull();
 		expect(parseFieldInput('-', MHZ)).toBeNull();
@@ -217,9 +224,13 @@ describe('formatFieldValue', () => {
 		expect(formatFieldValue(0)).toBe('0');
 	});
 
-	it('kürzt überflüssige Nachkommastellen', () => {
-		expect(formatFieldValue(2.5)).toBe('2.5');
-		expect(formatFieldValue(1234.5678)).toBe('1234.57');
+	it('kürzt überflüssige Nachkommastellen und schreibt deutsch', () => {
+		expect(formatFieldValue(2.5)).toBe('2,5');
+		expect(formatFieldValue(1234.5678)).toBe('1234,57');
+	});
+
+	it('setzt im Eingabefeld bewusst keinen Tausendertrenner', () => {
+		expect(formatFieldValue(1234567)).toBe('1234567');
 	});
 
 	it('weicht bei extremen Größenordnungen auf die Exponentialform aus', () => {

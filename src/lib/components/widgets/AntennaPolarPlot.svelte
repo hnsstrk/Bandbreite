@@ -6,6 +6,7 @@
 	 * die Winkel laufen mathematisch positiv gegen den Uhrzeigersinn.
 	 */
 	import { DEG_PER_RAD, type PatternSample } from '$lib/utils/antennaMath';
+	import { formatNumber } from '$lib/utils/formatting';
 
 	interface Props {
 		samples: PatternSample[];
@@ -89,7 +90,7 @@
 	{#each rings as ring (ring)}
 		<circle cx={CENTER} cy={CENTER} r={ringRadius(ring)} class="ring" />
 		<text x={CENTER + 3} y={CENTER - ringRadius(ring) - 3} class="ring-label">
-			{scale === 'linear' ? ring.toFixed(2) : `${ring} dB`}
+			{scale === 'linear' ? formatNumber(ring, 2) : `${formatNumber(ring, 0)} dB`}
 		</text>
 	{/each}
 

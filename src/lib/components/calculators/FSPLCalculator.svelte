@@ -9,7 +9,7 @@
   import { browser } from '$app/environment';
   import { page } from '$app/state';
   import { calculateFSPL, frequencyToWavelength } from '$lib/utils/calculations';
-  import { formatDistance, formatFrequency, formatWavelength } from '$lib/utils/formatting';
+  import { formatDistance, formatFrequency, formatNumber, formatWavelength } from '$lib/utils/formatting';
   import {
     UrlStateSync,
     buildShareLink,
@@ -161,7 +161,7 @@
     <div class="fspl__results">
       <ResultCard
         label="Freiraumdämpfung"
-        value={fsplDb !== null ? fsplDb.toFixed(2) : '—'}
+        value={formatNumber(fsplDb, 2)}
         unit="dB"
         secondary={resultHint}
         emphasis="hero"

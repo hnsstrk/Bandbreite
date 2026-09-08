@@ -26,7 +26,7 @@ Diese Seite dokumentiert für jeden Datensatz und jedes Rechenmodell der Anwendu
 | Frequenzplan nach § 90 TKG | Bundesnetzagentur | Nationale Zuweisungen und Nutzungsbestimmungen |
 | Allgemeinzuteilungen (PMR446, Freenet, CB-Funk, SRD) | Bundesnetzagentur | Leistungsgrenzen und Kanäle des Jedermannfunks |
 | ECC-Beschlüsse, European Common Allocation Table | CEPT / ECC | Europaweit harmonisierte Nutzungen |
-| Amateurfunkgesetz und Amateurfunkverordnung (AFuV), Anlage 1, Fassung nach der Änderung vom 24.06.2024 | Bundesrepublik Deutschland | Zeugnisklassen, Bandgrenzen, Leistungsgrenzen |
+| Amateurfunkgesetz und Amateurfunkverordnung (AFuV), **Anlage 1, Fundstelle BGBl. 2024 I Nr. 175, S. 1–4**, in Kraft seit 24.06.2024 | Bundesrepublik Deutschland | Zeugnisklassen, Bandgrenzen, Leistungs- und Statusangaben je Band (verifiziert 2026-09-08) |
 | HF- und VHF/UHF/Mikrowellen-Bandpläne (Stand Generalkonferenz Novi Sad 2023) | IARU Region 1 | Betriebsartensegmente im Amateurfunk |
 | Genfer Wellenpläne GE75 (LW/MW), GE84 (UKW), GE06 (T-DAB, DVB-T) | ITU | Raster und Bereiche des Rundfunks |
 | SOLAS Kapitel IV, GMDSS-Regelwerk | IMO | Seenot- und Sicherheitsfunk, Seegebiete A1–A4 |
@@ -73,15 +73,21 @@ Die Lichtgeschwindigkeit ist seit der Neudefinition des Meters (1983) keine Mess
 - **Stand:** WRC-23.
 - **Unsicherheiten:** Die Frequenzbereiche sind bewusst **repräsentative Hauptbereiche**, keine vollständige Abbildung des Frequenznutzungsplans — ein Funkdienst hat in der VO Funk typischerweise mehrere Dutzend getrennte Zuweisungen. Der Normalfrequenz- und Zeitzeichendienst wurde gegenüber der ursprünglichen Vorlage korrigiert (Zuweisungen der Breite 0 durch die tatsächlichen ITU-Bänder ersetzt).
 
-### `data/amateurBands.ts` — Amateurfunk (22 Bänder, 86 Segmente)
+### `data/amateurBands.ts` — Amateurfunk (22 Bänder, 91 Segmente)
 
-- **Quelle:** IARU-R1-Bandpläne HF und VHF/UHF/Mikrowellen (Novi Sad 2023), AFuV Anlage 1 (Fassung 24.06.2024), VO Funk Art. 5 für den Zuweisungsstatus.
-- **Stand:** 2024 (Einführung der Klasse N).
-- **Unsicherheiten** — höchste Priorität vor einer praktischen Verwendung:
-  - **Zuordnung der Bänder zu den Zeugnisklassen:** Gesichert ist nur der Zugang der **Klasse N** zu 10 m, 2 m und 70 cm mit 10 W EIRP. Alle **Klasse-E-Zuordnungen** (u. a. 2200 m, 630 m, 60 m, 23 cm, 13 cm) sind **Annahmen** und gegen AFuV Anlage 1 zu prüfen.
-  - **160-m-Sonderregelungen** (Zeit- und Leistungsfenster oberhalb 1850 kHz) sind bewusst **nicht modelliert**, nur im Notiztext erwähnt.
-  - **4-m-Band:** kein reguläres Band, sondern befristete Allgemeinzuteilung; Grenzen schwankten historisch (70,150–70,180 vs. –70,210 MHz). Als `status: 'duldung'` markiert.
-  - **9-cm-Band-Obergrenze 3475 MHz:** angenommen; der IARU-R1-Plan behandelt nur 3400–3410 MHz.
+- **Quelle:** **AFuV Anlage 1, Buchstabe A (Tabellarische Übersicht) und B (Zusätzliche Nutzungsbestimmungen), Fundstelle BGBl. 2024 I Nr. 175, S. 1–4**, in Kraft seit 24.06.2024 — <https://www.gesetze-im-internet.de/afuv_2005/anlage_1.html>, abgerufen **2026-09-08**. Segmente aus den IARU-R1-Bandplänen HF und VHF/UHF/Mikrowellen (Novi Sad 2023); 4-m-Band aus den BNetzA-Amtsblattmitteilungen zur Duldungsregelung 70 MHz.
+- **Stand:** AFuV in der Fassung vom 24.06.2024; Duldungsregelungen mit Stand 2026-09-08.
+- **Verifiziert am 2026-09-08** (Primärquelle, gegengeprüft an der englischen BNetzA-Fassung von Anlage 1 sowie an 12db.de, alsor.de und dd1go.de):
+  - Zulässige Zeugnisklassen und Leistungsgrenzen **je Band und Klasse** (Felder `powerLimits`, `licenseClasses`), einschließlich der Staffelung der Klasse E (100 W PEP auf Kurzwelle, 75 W PEP auf 2 m bis 23 cm, 5 W PEP ab 13 cm) und der Klasse N (10 W ERP auf 10 m, 6,1 W ERP ≙ 10 W EIRP auf 2 m und 70 cm).
+  - Der **Status** (Spalte 3 der Anlage 1) für jedes Band. Er gibt die **nationale** Zuweisung wieder und kann vom ITU-Status abweichen — 430–440 MHz führt die AFuV als primär, die VO Funk weist dem Amateurfunkdienst dort sekundären Status zu.
+  - Die **160-m-Sonderregelungen** sind jetzt modelliert: 1810–1850 kHz 750/100 W PEP, 1850–1890 kHz je 75 W PEP, 1890–2000 kHz je 10 W PEP, an Wochenenden durchgehend 750/100 W PEP (Nutzungsbestimmung 15). Ebenso 6 m oberhalb 50,4 MHz (25 W PEP) und 1247–1263 MHz (3,05 W ERP, Schutz von Galileo E6).
+  - **9-cm-Obergrenze 3475 MHz:** belegt (lfd. Nr. 24), keine Annahme mehr. Der IARU-R1-Plan behandelt nur 3400–3410 MHz — das betrifft die Segmente, nicht die Bandgrenze.
+- **Unsicherheiten / bewusste Auslassungen:**
+  - **4-m-Band:** kein Band der AFuV, sondern eine jahrweise verlängerte Duldungsregelung (zuletzt 70,150–70,210 MHz, 25 W ERP, 12 kHz, horizontale Polarisation, nur Klasse A) — befristet bis **31.12.2025**. Eine Fortführung war am 2026-09-08 nicht veröffentlicht; im Datensatz als `Annahme:` gekennzeichnet, `status: 'duldung'`.
+  - **6-m-Band, Klasse E:** Die Duldungsregelung (BNetzA-Verfügung 105/2024, gültig bis 31.12.2025) wurde nicht verlängert; der Datensatz führt 6 m deshalb nur für die Klasse A.
+  - **Nicht aufgenommen:** die Frequenzbereiche oberhalb 24,25 GHz (lfd. Nrn. 35–45: 47–47,2 GHz, 76–81 GHz, 122,25–123 GHz, 134–141 GHz, 241–250 GHz, > 275 GHz). Der Dateikopf nennt die Lücke.
+  - **Nutzungsbestimmungen Buchstabe B:** Im Feld `sourceRef` stehen nur die Nummern, nicht der Wortlaut. Wer den Wortlaut braucht, liest ihn in der Primärquelle nach.
+  - **Segmentgrenzen** innerhalb der Bänder stammen aus den IARU-Bandplänen; sie sind eine Empfehlung und rechtlich nicht bindend.
 
 ### `data/mobileNetworks.ts` — Mobilfunk (6 Generationen, 13 Bänder)
 
@@ -89,11 +95,16 @@ Die Lichtgeschwindigkeit ist seit der Neudefinition des Meters (1983) keine Mess
 - **Stand:** 5G NR FR1/FR2; 6G nur als Ausblick nach IMT-2030-Rahmen.
 - **Unsicherheiten:** `typicalDownlinkBps` sind **Größenordnungen der Technikstufe**, keine garantierten oder gemessenen Werte einzelner Netze.
 
-### `data/broadcast.ts` — Rundfunk (3 Bereiche, 15 KW-Bänder, 32 DAB-Blöcke, 28 DVB-T2-Kanäle, 4 Sat-Bänder)
+### `data/broadcast.ts` — Rundfunk (3 Bereiche, 15 KW-Bänder, 41 DAB-Blöcke, 28 DVB-T2-Kanäle, 4 Sat-Bänder)
 
 - **Quelle:** VO Funk Art. 5, GE75, GE84, GE06, ETSI EN 300 401 (DAB), EN 302 755 (DVB-T2), HFCC-Saisonpläne.
-- **Stand:** DAB-Blöcke 5A–12D, DVB-T2-Kanäle 21–48.
-- **Unsicherheiten:** **DAB-Blöcke 13A–13F** (230–240 MHz) sowie die Zwischenblöcke 10N/11N/12N sind **bewusst nicht aufgenommen**, weil sie nicht zweifelsfrei belegt werden konnten. Wer sie braucht, ergänzt sie gegen GE06 bzw. die BNetzA-Blockliste.
+- **Quellen der Kanal-13- und Zwischenblöcke** (alle abgerufen **2026-09-08**):
+  - EBU Technology & Innovation, Factsheet *The use of Band III in Europe* — <https://tech.ebu.ch/docs/factsheets/ebu_fs_use_of_bandIII_v1.pdf>: Band III reicht von 174 bis 230 MHz; Kanal 13 umfasst zusätzlich 230–240 MHz und ist in sechs Blöcke 13A–13F geteilt, geplant nur von wenigen Ländern (u. a. Norwegen, Dänemark).
+  - Hoeg/Lauterbach, *Digital Audio Broadcasting*, Anhang A2: die Blöcke **10N, 11N, 12N** wurden von CENELEC nachgetragen und liegen in den breiteren Schutzabständen der Kanaltabelle.
+  - Übereinstimmende Sekundärquellen der Blockmitten: OpenDigitalRadio *Band 3 Channels*, Wikipedia *Band III* und *T-DAB-Frequenz*, wohnort.org sowie mehrere Empfängerhandbücher.
+- **Stand:** DAB-Blöcke 5A–13F (41 Einträge), davon **32 in Deutschland genutzt** (`DAB_BLOCKS_DE`, 5A–12D zwischen 174 und 230 MHz); DVB-T2-Kanäle 21–48.
+- **Kennzeichnung:** Jeder Block trägt `usedInGermany`; die neun national ungenutzten Blöcke tragen zusätzlich eine `noteDE`. Der Kanalumrechner markiert sie in der Auswahlliste mit „(nicht in DE)" und zeigt die Notiz an.
+- **Unsicherheiten:** Die Umkehrsuche `dabBlockForFrequency` durchsucht **nur** `DAB_BLOCKS_DE` — 10N/11N/12N überlappen ihre Nachbarblöcke, eine Zuordnung wäre sonst mehrdeutig. Welche Länder Kanal 13 aktuell tatsächlich belegen, ist nicht im Datensatz abgebildet.
 
 ### `data/emergencyFrequencies.ts` — Not- und Sicherheitsfrequenzen (27 Einträge)
 
@@ -176,3 +187,80 @@ Redaktionelle Strukturdaten ohne externe Quelle: Navigationsbaum (34 Knoten), Th
 3. Nicht gesicherte Angaben mit `Annahme:` kommentieren, hier unter „Unsicherheiten" und in `content/funktechnik/quellen.ts` ergänzen.
 4. Test in `src/tests/radioData.test.ts` (Struktur, Plausibilität, Überlappungsfreiheit) erweitern.
 5. Echte Umlaute in allen Klartextfeldern.
+
+---
+
+## Nachtrag: See-, Flug-, Behörden- und Satellitenfunk
+
+Ergänzt am 08.09.2026 zusammen mit den Kapiteln `/wissen/funktechnik/seefunk/`,
+`/wissen/funktechnik/flugfunk/`, `/wissen/funktechnik/bos/` und
+`/wissen/funktechnik/satellitenfunk/`.
+
+### `data/maritimeChannels.ts` — Seefunk (57 UKW-Kanäle, 21 MF/HF-Frequenzen, 4 Seegebiete)
+
+- **Quelle:** ITU Radio Regulations Appendix 18 (Rev. WRC-19) für die UKW-Kanaltabelle,
+  Appendix 15 für die Not- und Sicherheitsfrequenzen auf Grenz- und Kurzwelle;
+  SOLAS Kapitel IV und IMO Res. A.801(19) für die Seegebiete A1–A4;
+  ITU-R M.493/M.541 (DSC), ITU-R M.1371 (AIS); BSH-Veröffentlichungen;
+  RAINWAT (Basel 2000, Fassung Bukarest 2012) für die ATIS-Pflicht auf Binnenwasserstraßen.
+- **Modellierung:** Schiffs- und Küstensendefrequenz je Kanal, Duplexabstand fest 4,6 MHz,
+  Leistungsgrenze nur dort gesetzt, wo Appendix 18 sie abweichend festlegt (Kanäle 15, 17, 75, 76).
+- **Unsicherheiten:** Das Feld `usage` gibt **eine** Hauptnutzung an, während Appendix 18 mehrere
+  Spalten führt (Schiff–Schiff, Hafenfunk, Schiffsbewegungsdienst, öffentlicher Verkehr) und die
+  Belegung regional abweicht — bewusst vereinfacht (`Annahme:` im Dateikopf der Rohtabelle).
+  Die Küstenfrequenzen der Kanäle 27 und 28 sind seit WRC-15 dem Nachrichtendienst ASM 1/ASM 2
+  zugewiesen; das steht als Hinweistext am Kanal, die Kanäle bleiben in der Tabelle.
+  Die Reichweitenangaben der Seegebiete sind Richtwerte — maßgeblich ist die tatsächliche
+  Funkabdeckung, die jede Verwaltung selbst festlegt.
+
+### `data/aviationBands.ts` — Flugfunk (15 Bereiche, 11 HF-Segmente, 8,33-kHz-Kanalregel)
+
+- **Quelle:** ICAO Annex 10 Volume I (Funknavigation), Volume III (Kommunikation),
+  Volume IV (Überwachung) und Volume V (Frequenznutzung, Kanalbezeichnungstabelle);
+  VO Funk Artikel 5 und Appendix 27 (HF-Flugfunkbänder);
+  Durchführungsverordnung (EU) Nr. 1079/2012 (8,33 kHz im europäischen Luftraum);
+  RTCA DO-260 / EUROCAE ED-102 (ADS-B), ARINC 618/620 (ACARS).
+- **Modellierung:** Die Umrechnung Kanalbezeichnung ↔ Frequenz ist als Rechenregel abgebildet,
+  nicht als Tabelle: Rest des kHz-Anteils modulo 25 bestimmt den Platz im 25-kHz-Raster
+  (0 = 25-kHz-Kanal; 5/10/15 = die drei 8,33-kHz-Kanäle). Die Endungen 20, 45, 70 und 95 sind
+  ungültig und werden abgewiesen. Geprüft in `src/tests/funk-flugfunk.test.ts`.
+- **Unsicherheiten:** Die Bereichsgrenzen sind Nennwerte des Frequenzplans. Welche Frequenz an
+  einem Ort tatsächlich belegt ist, steht ausschließlich im Luftfahrthandbuch AIP.
+
+### `components/funk/BosTimelineModel.ts` — BOS-Funk (2 analoge Bänder, 8 Meilensteine, 8 Vergleichszeilen)
+
+- **Quelle:** BNetzA-Frequenzplan für die analogen Bereiche; BDBOS für Gründung (2. April 2007)
+  und Abschluss des Netzaufbaus (2016, letzter Netzabschnitt Schwaben Süd-West);
+  ETSI EN 300 392 (TETRA) und EN 300 396 (Direktbetrieb);
+  Verordnung (EU) 2015/758 und Durchführungsverordnung (EU) 2017/79 (eCall, Pflicht ab 31.03.2018);
+  Advanced Mobile Location im deutschen Notruf seit Oktober 2019.
+  Rechtslage zum Abhörverbot: § 5 und § 27 TDDDG (bis 05/2024 TTDSG, davor § 89 TKG).
+- **Modellierung:** 4-m-Band 74,215–77,475 / 84,015–87,255 MHz, Duplexabstand 9,8 MHz,
+  Kanäle 347–510; 2-m-Band 167,560–169,380 / 172,160–173,980 MHz, Duplexabstand 4,6 MHz,
+  Kanäle 201–292; Raster 20 kHz. Kanalfrequenz aus Bandanfang und Kanalnummer gerechnet.
+- **Unsicherheiten:** Das 4-m-Oberband endet bei 87,255 MHz und damit einen Rasterschritt vor dem
+  rechnerischen Wert, weil der Kanal 510 nur im Unterband vorgesehen ist (im Feld `noteDE`
+  festgehalten, im Test geprüft). Die Einträge „1950er", „1970er", „1980er" und „1990er" des
+  Zeitstrahls fassen schrittweise Entwicklungen zusammen und sind **keine Stichtage**
+  (`Annahme:` im Dateikopf). Rufgruppen-, Kanal- und Betriebsdaten der Behörden sind nicht
+  öffentlich und deshalb bewusst nicht Teil des Datensatzes.
+
+### `data/satelliteSystems.ts` und `utils/orbitMath.ts` — Satellitenfunk (4 Bahnklassen, 6 Bänder, 10 Systeme)
+
+- **Quelle:** VO Funk Artikel 5 und 22; IEEE Std 521-2019 (Bandbuchstaben);
+  ITU-R P.618-13 (Erde-Weltraum-Strecke), P.838-3 (Regen), P.840-8 (Wolken);
+  WGS 84 / IERS Conventions 2010 für µ = 3,986 004 418 · 10¹⁴ m³/s²;
+  ETSI EN 300 421 / EN 302 307 (DVB-S/S2); AMSAT-DL (QO-100); NOAA/NESDIS (APT).
+- **Modellierung:** Kreisbahn im Zweikörperproblem — Umlaufzeit T = 2π·√(r³/µ),
+  Bahngeschwindigkeit v = √(µ/r), Schrägentfernung über die Kosinusbeziehung,
+  Ausleuchtzone über den Zentriwinkel, Freiraumdämpfung aus `utils/calculations.ts` (P.525).
+  Prüfwerte im Test: GEO 35 786 km → 23 h 56 min und 239 ms Umlauflaufzeit im Zenit;
+  ISS 420 km → 93 min.
+- **Unsicherheiten:** Abplattung der Erde, Luftwiderstand und Störungen durch Sonne und Mond
+  bleiben unberücksichtigt. Die **Sichtbarkeitsdauer** gilt für einen zentralen Überflug durch den
+  Zenit ohne Erddrehung und ist damit ein Bestwert (`Annahme:` an der Funktion). Die
+  **Dopplerverschiebung** wird als obere Schranke aus der vollen Bahngeschwindigkeit gerechnet;
+  die tatsächliche radiale Geschwindigkeit ist kleiner. Die Satellitenzahlen der
+  Breitbandkonstellationen ändern sich laufend und sind deshalb mit `null` hinterlegt.
+  Das S-Band ist als dokumentierte Ausnahme von der Regel „Aufwärtsstrecke über Abwärtsstrecke"
+  gekennzeichnet (`uplinkAbove: false`).

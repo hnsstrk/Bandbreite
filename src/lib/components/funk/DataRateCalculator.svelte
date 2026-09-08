@@ -12,7 +12,7 @@
 	import ResultCard from '$lib/components/ui/ResultCard.svelte';
 	import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
 	import { FREQUENCY_UNITS } from '$lib/data/units';
-	import { formatDataRate, formatFrequency } from '$lib/utils/formatting';
+	import { formatDataRate, formatFrequency, formatLocaleNumber } from '$lib/utils/formatting';
 	import { EFFICIENCY_PRESETS, dataRateBps } from './mobileBands.svelte';
 
 	const BANDWIDTH_UNITS = FREQUENCY_UNITS.filter((unit) =>
@@ -32,7 +32,7 @@
 
 	const efficiencyChoices = EFFICIENCY_PRESETS.map((preset) => ({
 		value: preset.id,
-		label: `${preset.label} — ${preset.value.toLocaleString('de-DE')} bit/s je Hz`
+		label: `${preset.label} — ${formatLocaleNumber(preset.value, { maxFrac: 3 })} bit/s je Hz`
 	}));
 
 	const layerChoices = [1, 2, 4, 8].map((count) => ({
@@ -77,15 +77,15 @@
 	<div class="results">
 		<ResultCard
 			label="Theoretische Datenrate"
-			value={formatDataRate(rate, 1, { locale: true })}
+			value={formatDataRate(rate, 1)}
 			emphasis="hero"
-			secondary="{formatFrequency(bandwidth, 0)} · {efficiency.value.toLocaleString(
-				'de-DE'
-			)} bit/s je Hz · {layers} {layers === 1 ? 'Strom' : 'Ströme'}"
+			secondary="{formatFrequency(bandwidth, 0)} · {formatLocaleNumber(efficiency.value, {
+				maxFrac: 3
+			})} bit/s je Hz · {layers} {layers === 1 ? 'Strom' : 'Ströme'}"
 		/>
 		<ResultCard
 			label="Je Strom"
-			value={formatDataRate(singleLayerRate, 1, { locale: true })}
+			value={formatDataRate(singleLayerRate, 1)}
 			hint="Ohne MIMO-Gewinn"
 		/>
 	</div>

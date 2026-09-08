@@ -7,7 +7,8 @@
  * die Validierung.
  */
 
-import { clamp, safeDivide, safeLog } from '../../utils/handlers';
+import { formatExponential, formatLocaleNumber } from '../../utils/formatting';
+import { clamp, parseLocaleNumber, safeDivide, safeLog } from '../../utils/handlers';
 
 /** Abbildungsart zwischen Reglerposition und Wert. */
 export type ScaleMode = 'linear' | 'log';
@@ -139,11 +140,12 @@ export interface FieldInputResult {
 
 /**
  * Liest den Feldtext als Zahl in der Basiseinheit.
- * Deutsche Dezimalkommata sind erlaubt; Zwischenzustände wie „", „-" oder
- * „2," liefern `null`.
+ * Komma und Punkt gelten beide als Dezimaltrenner, Tausendertrenner werden
+ * erkannt ({@link parseLocaleNumber}); Zwischenzustände wie „", „-" oder
+ * „2," liefern `null` — „2," endet auf dem Trenner und ergibt 2.
  */
 export function parseFieldInput(raw: string, factor: number): number | null {
-	const parsed = Number.parseFloat(raw.replace(',', '.'));
+	const parsed = parseLocaleNumber(raw);
 	if (!Number.isFinite(parsed)) return null;
 	return toBaseValue(parsed, factor);
 }
@@ -197,18 +199,24 @@ export function validateValue(
 }
 
 /**
- * Formatiert einen Wert für das Zahlenfeld: ohne Exponentialschreibweise,
- * ohne überflüssige Nullen, mit höchstens `maxDecimals` Nachkommastellen.
+ * Formatiert einen Wert für das Zahlenfeld: deutsches Dezimalkomma, ohne
+ * überflüssige Nullen, mit höchstens `maxDecimals` Nachkommastellen.
+ *
+ * Bewusst **ohne** Tausendertrenner: Der Text steht in einem bearbeitbaren
+ * Feld, dort stören Gruppierungspunkte beim Weitertippen.
  */
 export function formatFieldValue(value: number, maxDecimals = 6): string {
 	if (!Number.isFinite(value)) return '';
 	if (value === 0) return '0';
 	const magnitude = Math.abs(value);
 	if (magnitude >= 1e15 || magnitude < 1e-9) {
-		return value.toExponential(3);
+		return formatExponential(value, 3);
 	}
 	const decimals = magnitude >= 100 ? 2 : magnitude >= 1 ? 3 : maxDecimals;
-	return String(Number(value.toFixed(Math.min(decimals, maxDecimals))));
+	return formatLocaleNumber(value, {
+		maxFrac: Math.min(decimals, maxDecimals),
+		grouping: false
+	});
 }
 
 /**

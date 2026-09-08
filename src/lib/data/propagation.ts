@@ -355,14 +355,62 @@ export function calculateRadioHorizon(
   heightMeters: number,
   withRefraction: boolean = true
 ): number {
-  if (heightMeters <= 0) return 0;
+  return horizonDistanceKm(heightMeters, withRefraction ? REFRACTION_FACTOR_K : 1);
+}
 
-  const k = withRefraction ? REFRACTION_FACTOR_K : 1;
-  const R = EARTH_RADIUS_KM;
+/**
+ * Grenzen des k-Faktors, die in der Praxis vorkommen.
+ * k < 1 (Subrefraktion) und k > 1,5 (Superrefraktion, Ducting) treten bei
+ * ungewöhnlichen Temperatur- und Feuchteschichtungen auf.
+ * Quelle: ITU-R P.834-9, ITU-R P.453
+ */
+export const K_FACTOR_MIN = 1;
+export const K_FACTOR_MAX = 1.5;
 
-  // d = √(2·k·R·h) mit h in km
-  const heightKm = heightMeters / 1000;
-  return Math.sqrt(2 * k * R * heightKm);
+/**
+ * Vorfaktor der Horizont-Faustformel d[km] = A·√(h[m]) für einen k-Faktor.
+ * A = √(2·k·R/1000): k = 4/3 ergibt 4,12, k = 1 ergibt 3,57.
+ *
+ * @param kFactor Radius-Faktor der effektiven Erde
+ * Quelle: ITU-R P.834
+ */
+export function horizonFactor(kFactor: number = REFRACTION_FACTOR_K): number {
+  if (kFactor <= 0) return 0;
+  return Math.sqrt((2 * kFactor * EARTH_RADIUS_KM) / 1000);
+}
+
+/**
+ * Horizontdistanz für einen frei wählbaren k-Faktor: d = √(2·k·R·h).
+ *
+ * @param heightMeters Antennenhöhe über Grund in Metern
+ * @param kFactor Radius-Faktor der effektiven Erde (1 = geometrisch, 4/3 = Standard)
+ * @returns Distanz zum Horizont in Kilometern
+ *
+ * Quelle: ITU-R P.834
+ */
+export function horizonDistanceKm(
+  heightMeters: number,
+  kFactor: number = REFRACTION_FACTOR_K
+): number {
+  if (heightMeters <= 0 || kFactor <= 0) return 0;
+  return horizonFactor(kFactor) * Math.sqrt(heightMeters);
+}
+
+/**
+ * Maximale Sichtverbindung zweier Antennen für einen k-Faktor:
+ * die Summe beider Horizontdistanzen.
+ *
+ * @param height1Meters Höhe der ersten Antenne in Metern
+ * @param height2Meters Höhe der zweiten Antenne in Metern
+ * @param kFactor Radius-Faktor der effektiven Erde
+ * @returns Distanz in Kilometern
+ */
+export function losDistanceKm(
+  height1Meters: number,
+  height2Meters: number,
+  kFactor: number = REFRACTION_FACTOR_K
+): number {
+  return horizonDistanceKm(height1Meters, kFactor) + horizonDistanceKm(height2Meters, kFactor);
 }
 
 /**

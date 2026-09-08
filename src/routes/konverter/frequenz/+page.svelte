@@ -6,6 +6,7 @@
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import PageHero from '$lib/components/ui/PageHero.svelte';
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
+  import BandInfo from '$lib/components/converters/BandInfo.svelte';
   import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
   import { SPECTRUM_MIN_HZ, SPECTRUM_MAX_GAMMA_HZ } from '$lib/data/spectrum';
 
@@ -27,11 +28,26 @@
     return value;
   }
 
+  function startFrequency(): number {
+    return browser ? frequencyFromSearch(page.url.search) : DEFAULT_FREQUENCY_HZ;
+  }
+
   // Der Schlüssel baut den Konverter neu auf, wenn dieselbe Route mit einer
   // anderen Frequenz angesteuert wird; er ändert sich sonst nie.
-  let startFrequencyHz = $derived(
-    browser ? frequencyFromSearch(page.url.search) : DEFAULT_FREQUENCY_HZ
-  );
+  let startFrequencyHz = $derived(startFrequency());
+
+  /**
+   * Gemeinsamer Wert von Konverter und Bandzuordnung: `BandInfo` zeigt die
+   * ITU-, IEEE- und NATO-Bänder zu genau der Frequenz, die im Konverter steht.
+   * Der Anfangswert entsteht schon beim Aufbau der Seite, damit der Konverter
+   * bei der Hydratation direkt mit der Frequenz aus der URL startet.
+   */
+  let frequencyHz = $state<number | null>(startFrequency());
+
+  // Vor dem Neuaufbau des Konverters (neue `?f=`) den Startwert übernehmen.
+  $effect.pre(() => {
+    frequencyHz = startFrequencyHz;
+  });
 </script>
 
 <div class="page-content">
@@ -43,11 +59,22 @@
     meta={[{ label: 'Konstante', value: 'c = 299.792.458 m/s' }]}
   />
 
-  <Card padding="md">
-    {#key startFrequencyHz}
-      <FrequencyConverter frequencyHz={startFrequencyHz} />
-    {/key}
-  </Card>
+  <div class="converter-grid">
+    <Card padding="md">
+      {#key startFrequencyHz}
+        <FrequencyConverter bind:frequencyHz />
+      {/key}
+    </Card>
+
+    <Card
+      title="Bandzuordnung"
+      subtitle="In welchen Bändern die eingestellte Frequenz liegt"
+      level={2}
+      padding="md"
+    >
+      <BandInfo {frequencyHz} />
+    </Card>
+  </div>
 
   <FormulaBlock
     formula="λ = c / f"
@@ -81,5 +108,19 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+  }
+
+  /* Auf schmalen Viewports untereinander, ab 1024 px nebeneinander. */
+  .converter-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .converter-grid {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
   }
 </style>

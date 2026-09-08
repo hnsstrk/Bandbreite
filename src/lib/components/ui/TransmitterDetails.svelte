@@ -1,7 +1,7 @@
 <script lang="ts">
   /** Detailtafel eines ausgewählten Senders. */
   import { TYPE_NAMES, type Transmitter } from '$lib/data/transmitters';
-  import { formatFrequency, formatPowerWatts } from '$lib/utils/formatting';
+  import { formatFrequency, formatNumber, formatPowerWatts } from '$lib/utils/formatting';
   import Badge from './Badge.svelte';
   import Button from './Button.svelte';
   import Card from './Card.svelte';
@@ -59,8 +59,8 @@
         {transmitter.location.name}, {transmitter.location.country}
         {#if transmitter.location.latitude !== undefined && transmitter.location.longitude !== undefined}
           <span class="details__secondary details__mono">
-            {transmitter.location.latitude.toFixed(4)}° N,
-            {transmitter.location.longitude.toFixed(4)}° E
+            {formatNumber(transmitter.location.latitude, 4)}° N,
+            {formatNumber(transmitter.location.longitude, 4)}° E
           </span>
         {/if}
       </dd>

@@ -46,7 +46,7 @@
 
 	const blockOptions = DAB_BLOCKS.map((entry) => ({
 		value: entry.block,
-		label: `Block ${entry.block}`
+		label: entry.usedInGermany ? `Block ${entry.block}` : `Block ${entry.block} (nicht in DE)`
 	}));
 
 	const channelOptions = DVBT2_CHANNELS.map((entry) => ({
@@ -82,20 +82,28 @@
 							label="Blockmitte {block?.label ?? ''}"
 							value={block ? formatFrequency(block.centerHz, 3) : '—'}
 							secondary={block ? formatFrequencyRange(block.minHz, block.maxHz) : undefined}
-							hint="Blockbreite 1,536 MHz"
+							hint={block && !block.usedInGermany
+								? 'Blockbreite 1,536 MHz · in Deutschland nicht genutzt'
+								: 'Blockbreite 1,536 MHz'}
 						/>
 						<ResultCard
 							label="Block bei {formatFrequency(dabFrequency, 3)}"
 							value={blockHit?.label ?? 'kein Block'}
 							secondary={blockHit
 								? formatFrequencyRange(blockHit.minHz, blockHit.maxHz)
-								: 'außerhalb der Blöcke 5A bis 12D'}
+								: 'außerhalb der in Deutschland genutzten Blöcke 5A bis 12D'}
 						/>
 					</div>
+					{#if block && !block.usedInGermany}
+						<p class="note note--warn" role="note">{block.noteDE}</p>
+					{/if}
 					<p class="note">
 						Ein DAB-Ensemble belegt immer einen ganzen Block und trägt darin mehrere Programme
 						im Zeitmultiplex. Alle Sender eines Gleichwellennetzes senden denselben Block mit
 						demselben Inhalt und synchronisiert — der Empfänger wertet die Echos als Gewinn.
+						Deutschland nutzt die Blöcke 5A bis 12D zwischen 174 und 230 MHz; die
+						Zwischenblöcke 10N, 11N und 12N sowie der Kanal 13 mit 13A bis 13F (230 bis
+						240 MHz) sind Teil der Kanaltabelle, hier aber nicht belegt.
 					</p>
 				</div>
 			{:else if id === 'dvbt2'}
@@ -192,6 +200,12 @@
 		font-size: var(--font-size-sm);
 		line-height: var(--line-height-relaxed);
 		color: var(--color-ink-muted);
+	}
+
+	.note--warn {
+		color: var(--color-ink);
+		border-left: 3px solid var(--color-warning);
+		padding-left: 0.75rem;
 	}
 
 	@media (min-width: 48rem) {

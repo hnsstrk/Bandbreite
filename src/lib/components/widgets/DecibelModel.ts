@@ -1,34 +1,43 @@
 /**
- * Logik des dB-Spielplatzes (W10): Umrechnung dB ↔ Faktor (Leistung/Spannung),
- * Merkregeln und eine Kettenrechnung (Mini-Link-Budget).
+ * Logik des dB-Spielplatzes (W10): Merkregeln, Reglerbereiche und die
+ * Standardkette (Mini-Link-Budget).
+ *
+ * Gerechnet wird nicht hier: Umrechnung dB ↔ Faktor, die Merkregel-Tabelle
+ * und die Kettensumme stehen in `$lib/utils/decibel` und werden von diesem
+ * Modul nur weitergereicht — derselbe Rechenkern trägt den Pegelrechner
+ * unter `/rechner/dezibel/`.
  */
-import { safeLog, safePow } from '$lib/utils/handlers';
+import {
+  accumulateChain,
+  buildDecibelTable,
+  chainTotalDbm,
+  dbToPowerRatio,
+  dbToVoltageRatio,
+  powerRatioToDb,
+  voltageRatioToDb,
+  DECIBEL_TABLE_STEPS,
+  type ChainPoint,
+  type ChainStage as BaseChainStage,
+  type DecibelTableRow
+} from '$lib/utils/decibel';
+
+export {
+  accumulateChain,
+  buildDecibelTable,
+  chainTotalDbm,
+  dbToPowerRatio,
+  dbToVoltageRatio,
+  powerRatioToDb,
+  voltageRatioToDb,
+  DECIBEL_TABLE_STEPS
+};
+export type { ChainPoint, DecibelTableRow };
 
 /** Typische Empfängerempfindlichkeit als Referenzlinie der Kettenrechnung in dBm */
 export const TYPICAL_RX_SENSITIVITY_DBM = -90;
 
 /** Reglerbereich in dB */
 export const DECIBEL_LIMITS = { min: -40, max: 40, default: 3 } as const;
-
-/** dB → Leistungsfaktor 10^(dB/10) */
-export function dbToPowerRatio(db: number): number {
-  return safePow(10, db / 10, 0);
-}
-
-/** dB → Spannungsfaktor 10^(dB/20) */
-export function dbToVoltageRatio(db: number): number {
-  return safePow(10, db / 20, 0);
-}
-
-/** Leistungsverhältnis → dB (10·log₁₀) */
-export function powerRatioToDb(ratio: number): number {
-  return 10 * safeLog(ratio, 10, -Infinity);
-}
-
-/** Spannungsverhältnis → dB (20·log₁₀) */
-export function voltageRatioToDb(ratio: number): number {
-  return 20 * safeLog(ratio, 10, -Infinity);
-}
 
 /** Merkregeln, die als Chips angeboten werden */
 export const DECIBEL_RULES = [
@@ -40,28 +49,8 @@ export const DECIBEL_RULES = [
   { db: -10, label: '−10 dB = ein Zehntel' }
 ] as const;
 
-/** Stützstellen der Umrechnungstabelle */
-export const DECIBEL_TABLE_STEPS = [0, 1, 2, 3, 6, 10, 20, 30, 40, -3, -6, -10, -20] as const;
-
-export interface DecibelTableRow {
-  db: number;
-  powerRatio: number;
-  voltageRatio: number;
-}
-
-export function buildDecibelTable(steps: readonly number[] = DECIBEL_TABLE_STEPS): DecibelTableRow[] {
-  return steps.map((db) => ({
-    db,
-    powerRatio: dbToPowerRatio(db),
-    voltageRatio: dbToVoltageRatio(db)
-  }));
-}
-
-export interface ChainStage {
-  id: string;
-  label: string;
-  /** Gewinn (+) oder Verlust (−) in dB; für die Sendeleistung der Absolutpegel in dBm */
-  db: number;
+/** Eine Stufe der Kette mit den Grenzen ihres Reglers. */
+export interface ChainStage extends BaseChainStage {
   min: number;
   max: number;
 }
@@ -74,23 +63,3 @@ export const DEFAULT_CHAIN: ChainStage[] = [
   { id: 'path', label: 'Freiraumdämpfung', db: -100, min: -160, max: -40 },
   { id: 'rxAntenna', label: 'Empfangsantenne', db: 12, min: 0, max: 40 }
 ];
-
-export interface ChainPoint {
-  stage: ChainStage;
-  /** Pegel nach dieser Stufe in dBm */
-  levelDbm: number;
-}
-
-/** Laufende Summe der Kette in dBm */
-export function accumulateChain(stages: readonly ChainStage[]): ChainPoint[] {
-  let level = 0;
-  return stages.map((stage) => {
-    level += stage.db;
-    return { stage, levelDbm: level };
-  });
-}
-
-/** Gesamtpegel am Ende der Kette in dBm */
-export function chainTotalDbm(stages: readonly ChainStage[]): number {
-  return stages.reduce((sum, stage) => sum + stage.db, 0);
-}

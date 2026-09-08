@@ -19,7 +19,7 @@ Die folgenden fünf Komponenten sind die **Kernidee der Anwendung**. Sie dürfen
 
 Diese Kombination — Spektrum oben, darunter die Werkzeuge — ist das Herzstück. Erweiterungen sind willkommen, aber der Kern bleibt unangetastet.
 
-> **Offener Punkt `[C-BANDINFO]`:** Die Komponente `converters/BandInfo.svelte` existiert unverändert, ist aber derzeit in **keiner** Route eingebunden. Ihre Rolle auf `[R-SPEK]` übernimmt faktisch `[C-BANDSIDE]` (`BandDetailSidebar.svelte`), das dieselbe Information beim Klick auf ein Band anzeigt. Die Datei wurde bewusst **nicht** gelöscht — die Entscheidung (wieder einbinden, durch `[C-BANDSIDE]` ersetzen, oder beides nebeneinander) liegt beim Besitzer.
+> **Entschieden `[C-BANDINFO]` (E0, 2026-09-08):** `converters/BandInfo.svelte` ist seit dem 08.09.2026 auf `[R-KONV-FREQ]` (`/konverter/frequenz/`) eingebunden — gekoppelt an dieselbe `frequencyHz` wie `[C-FREQCONV]`. Der Schutz der Komponente bleibt bestehen (unverändert einbinden, nicht ändern). Auf `[R-SPEK]` übernimmt weiterhin `[C-BANDSIDE]` (`BandDetailSidebar.svelte`) die Rolle beim Klick auf ein Band.
 
 ---
 
@@ -27,18 +27,18 @@ Diese Kombination — Spektrum oben, darunter die Werkzeuge — ist das Herzstü
 
 Quelle der Wahrheit ist `NAV_TREE` in `[D-NAV]` (`src/lib/data/navigation.ts`). Alle Routen enden auf `/` (`trailingSlash: 'always'`), alle Seiten sind prerendered (`adapter-static`).
 
-34 echte Seiten, dazu 3 Redirects.
+36 echte Seiten (inklusive Portalseite), dazu 4 Redirects.
 
 ```
 bandbreite.online-resources.de
 │
-├── /                              308 → /spektrum/                        [R-HOME]
+├── /                              Portalseite (Einstieg, Suche, Kacheln)  [R-HOME]
 │
 ├── /spektrum/                     Spektrum-Dashboard (Kernseite)          [R-SPEK]
 │   ├── /anwendungen/              Anwendungen im Spektrum                 [R-SPEK-APP]
 │   ├── /sendeleistungen/          Sendeleistungen über der Frequenz       [R-SPEK-POW]
-│   ├── /daempfung/                Atmosphärische Dämpfung                 [R-SPEK-DAEMPF]
-│   ├── /ionosphaere/              Ionosphärische Ausbreitung              [R-SPEK-ION]
+│   ├── /daempfung/                308 → /wissen/wellenausbreitung/…       [R-SPEK-DAEMPF]
+│   ├── /ionosphaere/              308 → /wissen/wellenausbreitung/…       [R-SPEK-ION]
 │   └── /explorer/                 308 → /spektrum/                        [R-SPEK-EXP]
 │
 ├── /rechner/                      Rechner-Hub                             [R-RECH]
@@ -54,6 +54,8 @@ bandbreite.online-resources.de
 │
 ├── /wissen/                       Wissens-Hub                             [R-WISS]
 │   ├── /wellenausbreitung/        Wellenausbreitung                       [R-WISS-WELL]
+│   │   ├── /ionosphaere/          Ionosphärische Ausbreitung              [R-WISS-WELL-ION]
+│   │   └── /daempfung/            Atmosphärische Dämpfung                 [R-WISS-WELL-DAEMPF]
 │   ├── /funktechnik/              Kapitel-Hub Funk & Fernmeldetechnik     [R-WISS-FUNK]
 │   │   ├── /funkdienste/          ITU-Funkdienste und Frequenzplan        [R-WISS-FUNK-DIENST]
 │   │   ├── /amateurfunk/          Bandplan, Klassen, Betriebsarten        [R-WISS-FUNK-AFU]
@@ -81,13 +83,16 @@ bandbreite.online-resources.de
 
 | alt | neu | Mechanismus |
 |---|---|---|
-| `/` | `/spektrum/` | `redirect(308)` in `src/routes/+page.ts` |
+| `/spektrum/ionosphaere/` | `/wissen/wellenausbreitung/ionosphaere/` | `redirect(308)` — Umzug unter Wellenausbreitung (E2) |
+| `/spektrum/daempfung/` | `/wissen/wellenausbreitung/daempfung/` | `redirect(308)` — Umzug unter Wellenausbreitung (E2) |
 | `/spektrum/explorer/` | `/spektrum/` | `redirect(308)` — der Explorer ist im Dashboard aufgegangen |
 | `/wissen/frequenzbaender/` | `/datenbanken/frequenzbaender/` | `redirect(308)` — Umzug in den Datenbank-Bereich |
 
 ### Was zeigen die Seiten?
 
 **`[R-SPEK]` Spektrum-Dashboard** — Kernseite: `[C-SPECTRUM]`, `[C-FREQCONV]`, `[C-POWCONV]`, `[C-RANGE]`, `[C-BANDSIDE]`, `[C-RELTOP]`. Klick auf ein Band setzt die Frequenz für die Werkzeuge.
+
+**`[R-HOME]` Portalseite** — Einstieg unter `/` (E1): `[C-HERO]`, Suchfeld (öffnet die Command-Palette über `layout/searchDialog.svelte.ts`), fünf Bereichskacheln aus `NAV_GROUPS`, „Interaktiv lernen" mit Sprungmarken in die Kapitel, Werkzeugkacheln aus `getHubChildren()` und ein Hinweis auf Quellen und Haftungsausschluss. Kein zweites Dashboard — `[R-SPEK]` bleibt unverändert.
 
 **Hub-Seiten** (`[R-RECH]`, `[R-KONV]`, `[R-WISS]`, `[R-DB]`, `[R-SERV]`, `[R-WISS-FUNK]`) — Kachelraster aus `getHubChildren()`; die Kacheln stammen also direkt aus `[D-NAV]` und laufen nie auseinander.
 
@@ -215,7 +220,7 @@ Unterkomponenten: `[C-LBTX]` `LinkBudgetTxSection`, `[C-LBPATH]` `LinkBudgetPath
   W ↔ mW ↔ dBm ↔ dBW. Props: `powerWatt?` (`$bindable`)
 - **`[C-RANGE]`** — `converters/RangeCalculator.svelte` (206 Z.) — **geschützt**
   TX-Leistung + RX-Empfindlichkeit → theoretische Reichweite. Props: `frequencyHz`
-- **`[C-BANDINFO]`** — `converters/BandInfo.svelte` (206 Z.) — **geschützt**, derzeit nicht eingebunden (siehe oben). Props: `frequencyHz?`
+- **`[C-BANDINFO]`** — `converters/BandInfo.svelte` (206 Z.) — **geschützt**, eingebunden auf `/konverter/frequenz/` seit 2026-09-08 (E0). Props: `frequencyHz?`
 - **`[C-ATMINPUT]`** — `converters/AtmosphericInputs.svelte` (28 Z.) · Logik `atmosphericInputs.svelte.ts`
   Reiter-Rahmen für die Atmosphärenparameter; schreibt `[S-ATMO]`.
 - **`[C-ATMTAB]`** — `converters/AtmosphericTab.svelte` — Temperatur, Druck, Wasserdampfdichte.

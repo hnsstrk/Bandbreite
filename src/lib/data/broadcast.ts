@@ -139,10 +139,23 @@ export const SHORTWAVE_BANDS: ShortwaveBand[] = [
 ];
 
 // ============================================================================
-// DAB+ — Band III, Blöcke 5A bis 12D
+// DAB+ — Band III, Blöcke 5A bis 13F
 // Blockmitten gemäß dem T-DAB-Frequenzraster der Region 1 (GE06).
 // Jeder Block belegt DAB_BLOCK_BANDWIDTH_HZ; die Bandgrenzen ergeben sich
 // aus centerHz ∓ DAB_BLOCK_BANDWIDTH_HZ / 2.
+//
+// In Deutschland werden nur die Blöcke 5A bis 12D genutzt; Band III endet hier
+// bei 230 MHz. Drei Zwischenblöcke (10N, 11N, 12N) und der Kanal 13 mit den
+// Blöcken 13A bis 13F (230 bis 240 MHz) sind Teil der Kanaltabelle, aber
+// national nicht belegt — sie tragen `usedInGermany: false`.
+//
+// Quellen (abgerufen 2026-09-08):
+// - EBU Technology & Innovation, Factsheet „The use of Band III in Europe“
+//   (Kanal 13 = 230–240 MHz, sechs Blöcke, nur von wenigen Ländern geplant)
+// - Hoeg/Lauterbach, „Digital Audio Broadcasting“, Anhang A2 (10N, 11N und 12N
+//   wurden von CENELEC in die breiteren Schutzabstände gelegt)
+// - OpenDigitalRadio Band-3-Kanaltabelle und Wikipedia „Band III“ /
+//   „T-DAB-Frequenz“ als übereinstimmende Sekundärquellen der Blockmitten
 // ============================================================================
 
 export interface DabBlock {
@@ -150,48 +163,136 @@ export interface DabBlock {
   block: string;
   /** Blockmittenfrequenz in Hz */
   centerHz: number;
+  /** Wird der Block in Deutschland für DAB+ genutzt? */
+  usedInGermany: boolean;
+  /** Erläuterung, falls der Block national nicht genutzt wird */
+  noteDE?: string;
 }
 
 export const DAB_BLOCKS: DabBlock[] = [
-  { block: '5A', centerHz: 174928000 },
-  { block: '5B', centerHz: 176640000 },
-  { block: '5C', centerHz: 178352000 },
-  { block: '5D', centerHz: 180064000 },
-  { block: '6A', centerHz: 181936000 },
-  { block: '6B', centerHz: 183648000 },
-  { block: '6C', centerHz: 185360000 },
-  { block: '6D', centerHz: 187072000 },
-  { block: '7A', centerHz: 188928000 },
-  { block: '7B', centerHz: 190640000 },
-  { block: '7C', centerHz: 192352000 },
-  { block: '7D', centerHz: 194064000 },
-  { block: '8A', centerHz: 195936000 },
-  { block: '8B', centerHz: 197648000 },
-  { block: '8C', centerHz: 199360000 },
-  { block: '8D', centerHz: 201072000 },
-  { block: '9A', centerHz: 202928000 },
-  { block: '9B', centerHz: 204640000 },
-  { block: '9C', centerHz: 206352000 },
-  { block: '9D', centerHz: 208064000 },
-  { block: '10A', centerHz: 209936000 },
-  { block: '10B', centerHz: 211648000 },
-  { block: '10C', centerHz: 213360000 },
-  { block: '10D', centerHz: 215072000 },
-  { block: '11A', centerHz: 216928000 },
-  { block: '11B', centerHz: 218640000 },
-  { block: '11C', centerHz: 220352000 },
-  { block: '11D', centerHz: 222064000 },
-  { block: '12A', centerHz: 223936000 },
-  { block: '12B', centerHz: 225648000 },
-  { block: '12C', centerHz: 227360000 },
-  { block: '12D', centerHz: 229072000 },
+  { block: '5A', centerHz: 174928000, usedInGermany: true },
+  { block: '5B', centerHz: 176640000, usedInGermany: true },
+  { block: '5C', centerHz: 178352000, usedInGermany: true },
+  { block: '5D', centerHz: 180064000, usedInGermany: true },
+  { block: '6A', centerHz: 181936000, usedInGermany: true },
+  { block: '6B', centerHz: 183648000, usedInGermany: true },
+  { block: '6C', centerHz: 185360000, usedInGermany: true },
+  { block: '6D', centerHz: 187072000, usedInGermany: true },
+  { block: '7A', centerHz: 188928000, usedInGermany: true },
+  { block: '7B', centerHz: 190640000, usedInGermany: true },
+  { block: '7C', centerHz: 192352000, usedInGermany: true },
+  { block: '7D', centerHz: 194064000, usedInGermany: true },
+  { block: '8A', centerHz: 195936000, usedInGermany: true },
+  { block: '8B', centerHz: 197648000, usedInGermany: true },
+  { block: '8C', centerHz: 199360000, usedInGermany: true },
+  { block: '8D', centerHz: 201072000, usedInGermany: true },
+  { block: '9A', centerHz: 202928000, usedInGermany: true },
+  { block: '9B', centerHz: 204640000, usedInGermany: true },
+  { block: '9C', centerHz: 206352000, usedInGermany: true },
+  { block: '9D', centerHz: 208064000, usedInGermany: true },
+  { block: '10A', centerHz: 209936000, usedInGermany: true },
+  {
+    block: '10N',
+    centerHz: 210096000,
+    usedInGermany: false,
+    noteDE:
+      'Zwischenblock in einem Schutzabstand der Kanaltabelle, von CENELEC ' +
+      'nachgetragen. Überlappt die benachbarten Blöcke und ist in Deutschland ' +
+      'nicht belegt.',
+  },
+  { block: '10B', centerHz: 211648000, usedInGermany: true },
+  { block: '10C', centerHz: 213360000, usedInGermany: true },
+  { block: '10D', centerHz: 215072000, usedInGermany: true },
+  { block: '11A', centerHz: 216928000, usedInGermany: true },
+  {
+    block: '11N',
+    centerHz: 217088000,
+    usedInGermany: false,
+    noteDE:
+      'Zwischenblock in einem Schutzabstand der Kanaltabelle, von CENELEC ' +
+      'nachgetragen. Überlappt die benachbarten Blöcke und ist in Deutschland ' +
+      'nicht belegt.',
+  },
+  { block: '11B', centerHz: 218640000, usedInGermany: true },
+  { block: '11C', centerHz: 220352000, usedInGermany: true },
+  { block: '11D', centerHz: 222064000, usedInGermany: true },
+  { block: '12A', centerHz: 223936000, usedInGermany: true },
+  {
+    block: '12N',
+    centerHz: 224096000,
+    usedInGermany: false,
+    noteDE:
+      'Zwischenblock in einem Schutzabstand der Kanaltabelle, von CENELEC ' +
+      'nachgetragen. Überlappt die benachbarten Blöcke und ist in Deutschland ' +
+      'nicht belegt.',
+  },
+  { block: '12B', centerHz: 225648000, usedInGermany: true },
+  { block: '12C', centerHz: 227360000, usedInGermany: true },
+  { block: '12D', centerHz: 229072000, usedInGermany: true },
+  {
+    block: '13A',
+    centerHz: 230784000,
+    usedInGermany: false,
+    noteDE:
+      'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
+      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+  },
+  {
+    block: '13B',
+    centerHz: 232496000,
+    usedInGermany: false,
+    noteDE:
+      'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
+      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+  },
+  {
+    block: '13C',
+    centerHz: 234208000,
+    usedInGermany: false,
+    noteDE:
+      'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
+      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+  },
+  {
+    block: '13D',
+    centerHz: 235776000,
+    usedInGermany: false,
+    noteDE:
+      'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
+      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+  },
+  {
+    block: '13E',
+    centerHz: 237488000,
+    usedInGermany: false,
+    noteDE:
+      'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
+      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+  },
+  {
+    block: '13F',
+    centerHz: 239200000,
+    usedInGermany: false,
+    noteDE:
+      'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
+      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+  },
 ];
 
 /** Untere Bandgrenze des für DAB+ genutzten VHF-Band III in Hz. */
 export const DAB_BAND_III_MIN_HZ = 174e6;
 
-/** Obere Bandgrenze des für DAB+ genutzten VHF-Band III in Hz. */
+/** Obere Bandgrenze des in Deutschland genutzten VHF-Band III in Hz. */
 export const DAB_BAND_III_MAX_HZ = 230e6;
+
+/**
+ * Obere Grenze des Kanals 13 in Hz. Die Blöcke 13A bis 13F liegen zwischen
+ * DAB_BAND_III_MAX_HZ und diesem Wert und werden in Deutschland nicht genutzt.
+ */
+export const DAB_CHANNEL_13_MAX_HZ = 240e6;
+
+/** Blöcke, die in Deutschland tatsächlich für DAB+ belegt werden. */
+export const DAB_BLOCKS_DE: DabBlock[] = DAB_BLOCKS.filter((b) => b.usedInGermany);
 
 /**
  * Liefert die Bandgrenzen eines DAB-Blocks.

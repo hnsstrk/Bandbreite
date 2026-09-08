@@ -35,13 +35,19 @@ describe('NAV_TREE Struktur', () => {
 
   it('leitet die ID aus dem Pfad ab', () => {
     for (const node of allNodes) {
+      // Die Portalseite „/" hat kein Pfadsegment und heißt deshalb 'start'.
+      if (node.href === '/') {
+        expect(node.id).toBe('start');
+        continue;
+      }
       const fromHref = node.href.split('/').filter(Boolean).join('.');
       expect(node.id).toBe(fromHref);
     }
   });
 
-  it('enthält die fünf Hauptbereiche', () => {
+  it('enthält die Portalseite und die fünf Hauptbereiche', () => {
     expect(NAV_TREE.map((n) => n.id)).toEqual([
+      'start',
       'spektrum',
       'rechner',
       'konverter',
@@ -49,6 +55,14 @@ describe('NAV_TREE Struktur', () => {
       'datenbanken',
       'service'
     ]);
+  });
+
+  it('führt die Portalseite als lebenden Knoten mit Beschreibung', () => {
+    const start = findNode('/');
+    expect(start?.label).toBe('Start');
+    expect(start?.status).toBe('live');
+    expect(start?.description?.length ?? 0).toBeGreaterThan(20);
+    expect(start?.children).toBeUndefined();
   });
 
   it('definiert eine kanonische Basis-URL ohne Trailing Slash', () => {
@@ -83,14 +97,17 @@ describe('findNode', () => {
 
 describe('getBreadcrumbs', () => {
   it('löst Labels aus dem Navigationsbaum auf', () => {
-    expect(getBreadcrumbs('/spektrum/daempfung/').map((b) => b.label)).toEqual([
-      'Spektrum',
+    expect(getBreadcrumbs('/wissen/wellenausbreitung/daempfung/').map((b) => b.label)).toEqual([
+      'Wissen',
+      'Wellenausbreitung',
       'Atmosphärische Dämpfung'
     ]);
   });
 
   it('erzeugt niemals das fehlerhafte Label „Daempfung"', () => {
-    expect(getBreadcrumbs('/spektrum/daempfung/').some((b) => b.label === 'Daempfung')).toBe(false);
+    expect(
+      getBreadcrumbs('/wissen/wellenausbreitung/daempfung/').some((b) => b.label === 'Daempfung')
+    ).toBe(false);
   });
 
   it('markiert den letzten Eintrag', () => {
@@ -111,19 +128,45 @@ describe('getBreadcrumbs', () => {
 
 describe('Hub- und Geschwisterabfragen', () => {
   it('liefert die Kinder eines Hubs', () => {
-    expect(getHubChildren('/rechner/')).toHaveLength(6);
+    // Die Zahl wächst mit neuen Rechnern — geprüft wird die Herkunft, nicht die Menge.
+    expect(getHubChildren('/rechner/')).toEqual(findNodeById('rechner')?.children);
+    expect(getHubChildren('/rechner/').length).toBeGreaterThanOrEqual(6);
     expect(getHubChildren('/rechner/fspl/')).toEqual([]);
   });
 
   it('liefert Geschwister ohne den Knoten selbst', () => {
     const siblings = getSiblings('/rechner/fspl/');
-    expect(siblings).toHaveLength(5);
+    expect(siblings).toHaveLength(getHubChildren('/rechner/').length - 1);
     expect(siblings.some((n) => n.id === 'rechner.fspl')).toBe(false);
   });
 
   it('findet den Elternknoten', () => {
     expect(getParent('/wissen/funktechnik/rundfunk/')?.id).toBe('wissen.funktechnik');
     expect(getParent('/spektrum/')).toBeUndefined();
+  });
+});
+
+describe('Umzug nach Wissen › Wellenausbreitung', () => {
+  it('führt Ionosphäre und Dämpfung als Kinder der Wellenausbreitung', () => {
+    const kinder = getHubChildren('/wissen/wellenausbreitung/').map((n) => n.href);
+    expect(kinder).toEqual([
+      '/wissen/wellenausbreitung/ionosphaere/',
+      '/wissen/wellenausbreitung/daempfung/'
+    ]);
+  });
+
+  it('kennt die alten Pfade nicht mehr als Knoten', () => {
+    expect(findNode('/spektrum/ionosphaere/')).toBeUndefined();
+    expect(findNode('/spektrum/daempfung/')).toBeUndefined();
+  });
+
+  it('zeigt die beiden Kapitel im Mega-Menü nur unter Wissen', () => {
+    const spalten = NAV_GROUPS.flatMap((group) => group.columns);
+    const treffer = spalten.filter((column) =>
+      column.itemIds.some((id) => id.endsWith('.ionosphaere') || id.endsWith('.daempfung'))
+    );
+    expect(treffer).toHaveLength(1);
+    expect(treffer[0].label).toBe('Wellenausbreitung');
   });
 });
 

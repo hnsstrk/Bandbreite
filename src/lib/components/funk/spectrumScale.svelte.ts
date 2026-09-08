@@ -5,6 +5,7 @@
  * Messung der Elementbreite gezeichnet werden können (SSR-tauglich).
  */
 
+import { formatLocaleNumber } from '$lib/utils/formatting';
 import { safeDivide, safeLog, clamp } from '$lib/utils/handlers';
 
 /** Prozentanteil in [0, 100] auf der logarithmischen Achse. */
@@ -70,7 +71,7 @@ export function decadeLabel(hz: number): string {
   const unit = DECADE_UNITS.find((candidate) => hz >= candidate.factor) ?? DECADE_UNITS[3];
   const value = safeDivide(hz, unit.factor, 0);
   const rounded = Number(value.toPrecision(3));
-  return `${rounded.toLocaleString('de-DE')} ${unit.symbol}`;
+  return `${formatLocaleNumber(rounded, { maxFrac: 3 })} ${unit.symbol}`;
 }
 
 /** Dekadenmarken zwischen zwei Frequenzen (10^n innerhalb der Grenzen). */

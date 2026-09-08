@@ -31,12 +31,10 @@
   const breadcrumbJsonLd = $derived.by(() => {
     const crumbs = getBreadcrumbs(path);
     if (crumbs.length === 0) return null;
-    // Die Startseite ist ein Redirect auf /spektrum/ — dort entfällt der
-    // zusätzliche „Start"-Eintrag, weil er auf dieselbe URL zeigen würde.
+    // Die Portalseite unter „/" ist der Anfang der Kette; auf ihr selbst ist
+    // `crumbs` leer, sodass gar keine BreadcrumbList entsteht.
     const items = crumbs.map((crumb) => ({ name: crumb.label, item: `${SITE_URL}${crumb.href}` }));
-    if (crumbs[0].href !== '/spektrum/') {
-      items.unshift({ name: 'Start', item: `${SITE_URL}/spektrum/` });
-    }
+    items.unshift({ name: 'Start', item: `${SITE_URL}/` });
     return JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',

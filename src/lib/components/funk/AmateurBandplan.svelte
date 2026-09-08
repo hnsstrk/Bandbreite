@@ -11,7 +11,7 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 	import ModeLegend from './ModeLegend.svelte';
-	import { formatFrequency, formatWavelength } from '$lib/utils/formatting';
+	import { formatFrequency, formatLocaleNumber, formatWavelength } from '$lib/utils/formatting';
 	import { formatFrequencyRange } from '$lib/data/bands';
 	import type { AmateurBand, LicenseClassDE } from '$lib/data/amateurBands';
 	import {
@@ -22,8 +22,12 @@
 		bandsForClass,
 		openingHint,
 		placeSegments,
-		powerLimitFor
+		powerLimitFor,
+		powerSubrangeTexts
 	} from './amateurBandplan.svelte';
+
+	/** Nachkommastellen der Leistungsanzeige (6,1 W ERP, 9,14 W ERP). */
+	const POWER_DECIMALS = 2;
 
 	let licenseClass = $state<LicenseClassDE | 'alle'>('alle');
 	let selected = $state<{ bandId: string; index: number } | null>(null);
@@ -41,10 +45,16 @@
 		return option === 'alle' ? 'Alle Klassen' : CLASS_LABELS[option];
 	}
 
+	const activeClass = $derived<LicenseClassDE>(licenseClass === 'alle' ? 'A' : licenseClass);
+
+	const selectedSubranges = $derived(
+		selectedBand ? powerSubrangeTexts(selectedBand, activeClass) : []
+	);
+
 	function powerText(band: AmateurBand): string {
-		const limit = powerLimitFor(band, licenseClass === 'alle' ? 'A' : licenseClass);
+		const limit = powerLimitFor(band, activeClass);
 		if (!limit) return '—';
-		return `${limit.value.toLocaleString('de-DE')} ${limit.unit}`;
+		return `${formatLocaleNumber(limit.value, { maxFrac: POWER_DECIMALS })} ${limit.unit}`;
 	}
 
 	function select(bandId: string, index: number) {
@@ -75,11 +85,14 @@
 
 	<p class="note">
 		{#if licenseClass === 'N'}
-			Klasse N: Einstiegsklasse seit Juni 2024 mit 10 W EIRP auf wenigen Bändern.
+			Klasse N: Einstiegsklasse seit Juni 2024 — 10 W ERP auf 10 m, 6,1 W ERP (≙ 10 W
+			EIRP) auf 2 m und 70 cm.
 		{:else if licenseClass === 'E'}
-			Klasse E: Regelleistung 100 W PEP, Sonderregelungen einzelner Bänder gehen vor.
+			Klasse E: 100 W PEP auf 160 m, 80 m, 15 m und 10 m, 75 W PEP auf 2 m bis 23 cm,
+			5 W PEP ab 13 cm.
 		{:else if licenseClass === 'A'}
-			Klasse A: Regelleistung 750 W PEP, in einzelnen Bändern abweichend begrenzt.
+			Klasse A: 750 W PEP bis 23 cm, 75 W PEP ab 13 cm, in einzelnen Bändern abweichend
+			begrenzt.
 		{:else}
 			Alle Bänder mit der Leistungsgrenze der Klasse A. Zum Vergleich eine Klasse wählen.
 		{/if}
@@ -135,10 +148,20 @@
 				{selectedSegment.labelDE}
 			</p>
 			<p class="detail__hint">{openingHint(selectedBand)}</p>
+			{#if selectedBand.licenseNote}
+				<p class="detail__hint">{selectedBand.licenseNote}</p>
+			{/if}
+			{#if selectedSubranges.length > 0}
+				<ul class="detail__list">
+					{#each selectedSubranges as text (text)}
+						<li>{text}</li>
+					{/each}
+				</ul>
+			{/if}
 			<p class="detail__source">
 				Bandmitte {formatFrequency(
 					(selectedBand.minHz + selectedBand.maxHz) / 2
-				)} · Quelle: {selectedBand.source}
+				)} · Quelle: {selectedBand.sourceRef ?? selectedBand.source}
 			</p>
 		{:else}
 			<p class="detail__hint">
@@ -158,6 +181,13 @@
 
 	.note {
 		margin: 0 0 1rem;
+		font-size: var(--font-size-sm);
+		color: var(--color-ink-muted);
+	}
+
+	.detail__list {
+		margin: 0.25rem 0 0;
+		padding-left: 1.1rem;
 		font-size: var(--font-size-sm);
 		color: var(--color-ink-muted);
 	}

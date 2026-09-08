@@ -4,7 +4,12 @@
    * Konstanten und Kurvenberechnung liegen in `fsplChartData.ts`.
    */
   import { line, scaleLinear, scaleLog } from 'd3';
-  import { formatDistance, formatFrequency, formatPowerDb } from '$lib/utils/formatting';
+  import {
+    formatDistance,
+    formatFrequency,
+    formatLocaleNumber,
+    formatPowerDb
+  } from '$lib/utils/formatting';
   import ChartFrame from './ChartFrame.svelte';
   import {
     FSPL_CHART_MARGIN,
@@ -217,7 +222,7 @@
           <g transform="translate(0, {yScale(tickVal)})">
             <line class="chart-axis-line" x2="-8" />
             <text class="chart-axis-text" x="-12" text-anchor="end" dominant-baseline="middle">
-              {tickVal}
+              {formatLocaleNumber(tickVal, { maxFrac: 3 })}
             </text>
           </g>
         {/each}

@@ -113,8 +113,9 @@ describe('Kapitel rendern', () => {
 
   it('HF-Mathematik: Radiohorizont-Tabelle ist berechnet (300 m → 61,8 km ohne Refraktion)', () => {
     const root = renderToDom(ArticleLayout, { article: mathematikArticle });
-    expect(root.textContent).toContain('61.8 km');
-    expect(root.textContent).toContain('71.4 km');
+    // Dezimaltrennzeichen bleibt offen: Punkt oder Komma, je nach Formatierung.
+    expect(root.textContent).toMatch(/61[.,]8 km/);
+    expect(root.textContent).toMatch(/71[.,]4 km/);
   });
 
   it('Wellenausbreitung: Skin-Tiefe bei 76 Hz ist 29 m (F-15)', () => {

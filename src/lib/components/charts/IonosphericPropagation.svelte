@@ -165,7 +165,7 @@
             <tr><th scope="row">Kritische Frequenz foF2</th><td>{formatNumber(foF2MHz, 1)} MHz</td></tr>
             <tr><th scope="row">MUF</th><td>{formatNumber(mufMHz, 1)} MHz</td></tr>
             <tr><th scope="row">LUF</th><td>{formatNumber(lufMHz, 1)} MHz</td></tr>
-            <tr><th scope="row">Reflexionshöhe</th><td>{reflection.altitude} km</td></tr>
+            <tr><th scope="row">Reflexionshöhe</th><td>{formatNumber(reflection.altitude, 0)} km</td></tr>
           </tbody>
         </table>
       {/snippet}

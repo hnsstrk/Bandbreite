@@ -1,6 +1,6 @@
 <script lang="ts">
   /** Textalternative des D\u00e4mpfungsdiagramms f\u00fcr Screenreader. */
-  import { formatAttenuation } from '$lib/utils/formatting';
+  import { formatAttenuation, formatLocaleNumber } from '$lib/utils/formatting';
 
   interface Row {
     frequency: number;
@@ -31,7 +31,7 @@
   <tbody>
     {#each rows as row (row.frequency)}
       <tr>
-        <th scope="row">{row.frequency} GHz</th>
+        <th scope="row">{formatLocaleNumber(row.frequency, { maxFrac: 3 })} GHz</th>
         <td>{formatAttenuation(row.oxygen)}</td>
         <td>{formatAttenuation(row.waterVapor)}</td>
         <td>{formatAttenuation(row.total)}</td>

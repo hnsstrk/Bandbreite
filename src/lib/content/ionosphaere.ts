@@ -1,5 +1,5 @@
 /**
- * Inhalt des Kapitels „Ionosphärische Ausbreitung" (/spektrum/ionosphaere/).
+ * Inhalt des Kapitels „Ionosphärische Ausbreitung" (/wissen/wellenausbreitung/ionosphaere/).
  * Schichtdaten aus IONOSPHERIC_LAYERS, MUF/Sprungdistanz aus $lib/data/propagation.
  */
 import type { KnowledgeArticle, CardItem } from './types';
@@ -55,7 +55,7 @@ const plasmaExample = formatFrequency(calculatePlasmaFrequency(PLASMA_EXAMPLE_DE
 const fof2Range = `${IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.low}–${IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.high} MHz`;
 
 export const ionosphaereArticle: KnowledgeArticle = {
-  href: '/spektrum/ionosphaere/',
+  href: '/wissen/wellenausbreitung/ionosphaere/',
   kicker: 'Spektrum · Ausbreitung',
   title: 'Ionosphärische Ausbreitung',
   icon: 'globe',

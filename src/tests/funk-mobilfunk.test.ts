@@ -110,14 +110,21 @@ describe('dataRateBps', () => {
 });
 
 describe('formatDataRate (deutsche Schreibweise)', () => {
+  // Die frühere Option `{ locale: true }` ist entfallen: Datenraten stehen
+  // immer im deutschen Format.
   it('wählt die passende Einheit', () => {
-    expect(formatDataRate(2e9, 1, { locale: true })).toBe('2,0 Gbit/s');
-    expect(formatDataRate(500e6, 1, { locale: true })).toBe('500,0 Mbit/s');
-    expect(formatDataRate(9600, 0, { locale: true })).toBe('10 kbit/s');
+    expect(formatDataRate(2e9, 1)).toBe('2,0 Gbit/s');
+    expect(formatDataRate(500e6, 1)).toBe('500,0 Mbit/s');
+    expect(formatDataRate(9600, 0)).toBe('10 kbit/s');
+  });
+
+  it('setzt den Tausenderpunkt', () => {
+    // Erst oberhalb der größten Einheit wird die Zahl vierstellig.
+    expect(formatDataRate(1234.5e12, 1)).toBe('1.234,5 Tbit/s');
   });
 
   it('meldet unbrauchbare Werte mit Gedankenstrich', () => {
-    expect(formatDataRate(0, 1, { locale: true })).toBe('—');
-    expect(formatDataRate(Number.NaN, 1, { locale: true })).toBe('—');
+    expect(formatDataRate(0, 1)).toBe('—');
+    expect(formatDataRate(Number.NaN, 1)).toBe('—');
   });
 });

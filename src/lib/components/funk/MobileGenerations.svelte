@@ -84,8 +84,8 @@
 						<td>
 							{gen.channelBandwidthsHz.map((hz) => formatFrequency(hz, 0)).join(', ')}
 						</td>
-						<td>{formatDataRate(gen.typicalDownlinkBps, 1, { locale: true })}</td>
-						<td>{formatDataRate(gen.peakDownlinkBps, 1, { locale: true })}</td>
+						<td>{formatDataRate(gen.typicalDownlinkBps, 1)}</td>
+						<td>{formatDataRate(gen.peakDownlinkBps, 1)}</td>
 						<td>{gen.latencyMs} ms</td>
 					</tr>
 				{/each}

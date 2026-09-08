@@ -5,6 +5,7 @@
    */
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import type { AttenuationSeries } from './attenuationChartData';
+  import { formatNumber, formatPressure, formatTemperatureCelsius } from '$lib/utils/formatting';
 
   interface Props {
     /** Nur die tatsächlich gezeichneten Kurven */
@@ -14,17 +15,17 @@
   let { series }: Props = $props();
 
   let conditions = $derived([
-    { label: 'T', value: `${atmosphericParameters.temperatureCelsius.toFixed(1)} °C` },
-    { label: 'P', value: `${atmosphericParameters.pressureHpa.toFixed(1)} hPa` },
-    { label: 'ρ', value: `${atmosphericParameters.waterVaporDensity.toFixed(1)} g/m³` },
+    { label: 'T', value: formatTemperatureCelsius(atmosphericParameters.temperatureCelsius) },
+    { label: 'P', value: formatPressure(atmosphericParameters.pressureHpa) },
+    { label: 'ρ', value: `${formatNumber(atmosphericParameters.waterVaporDensity, 1)} g/m³` },
     ...(atmosphericParameters.rainRateMmH > 0
-      ? [{ label: 'Regen', value: `${atmosphericParameters.rainRateMmH.toFixed(1)} mm/h` }]
+      ? [{ label: 'Regen', value: `${formatNumber(atmosphericParameters.rainRateMmH, 1)} mm/h` }]
       : []),
     ...(atmosphericParameters.fogDensityGM3 > 0
-      ? [{ label: 'Nebel', value: `${atmosphericParameters.fogDensityGM3.toFixed(2)} g/m³` }]
+      ? [{ label: 'Nebel', value: `${formatNumber(atmosphericParameters.fogDensityGM3, 2)} g/m³` }]
       : []),
     ...(atmosphericParameters.snowRateMmH > 0
-      ? [{ label: 'Schnee', value: `${atmosphericParameters.snowRateMmH.toFixed(1)} mm/h` }]
+      ? [{ label: 'Schnee', value: `${formatNumber(atmosphericParameters.snowRateMmH, 1)} mm/h` }]
       : [])
   ]);
 </script>

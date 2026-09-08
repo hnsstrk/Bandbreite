@@ -7,7 +7,7 @@
    */
   import { scaleBand, scaleLinear } from 'd3';
   import type { LinkBudgetData } from '$lib/components/calculators/linkBudget.svelte';
-  import { formatPowerDb, formatPowerDbm } from '$lib/utils/formatting';
+  import { formatLocaleNumber, formatPowerDb, formatPowerDbm } from '$lib/utils/formatting';
   import ChartFrame from './ChartFrame.svelte';
   import {
     SENSITIVITY_COLOR,
@@ -205,7 +205,7 @@
             <g transform="translate(0, {yScale(tick)})">
               <line class="chart-axis-line" x2="-6" />
               <text class="chart-axis-text" x="-10" text-anchor="end" dominant-baseline="middle">
-                {tick}
+                {formatLocaleNumber(tick, { maxFrac: 3 })}
               </text>
             </g>
           {/each}

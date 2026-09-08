@@ -60,6 +60,11 @@ export type ParamValues<S extends ParamSpecs> = {
  * Serialisiert eine Zahl möglichst kurz.
  * Große und sehr kleine Beträge werden exponentiell geschrieben (`2.4e9`),
  * alltägliche Werte bleiben lesbar (`1000`).
+ *
+ * Query-Parameter bleiben bewusst **maschinenlesbar mit Dezimalpunkt**
+ * (`?f=2.4e9`): Sie werden von `Number()` gelesen, geteilt und verlinkt.
+ * Das deutsche Zahlenformat gilt nur für Anzeigetexte
+ * (`utils/formatting.ts`).
  */
 export function serializeNumber(value: number): string {
 	if (!Number.isFinite(value)) return '';

@@ -17,6 +17,7 @@ import {
 } from '$lib/components/funk/broadcastChannels.svelte';
 import {
   DAB_BLOCKS,
+  DAB_BLOCKS_DE,
   DAB_BLOCK_BANDWIDTH_HZ,
   DVBT2_CHANNELS,
   DVBT2_CHANNEL_BANDWIDTH_HZ,
@@ -37,16 +38,44 @@ describe('DAB-Blöcke', () => {
     expect(dabBlock('13Z')).toBeUndefined();
   });
 
+  it('kennt die Blöcke des Kanals 13 und kennzeichnet sie als nicht in DE genutzt', () => {
+    const block = dabBlock('13a');
+    expect(block?.centerHz).toBe(230784000);
+    expect(block?.usedInGermany).toBe(false);
+    expect(block?.noteDE).toBeTruthy();
+    expect(dabBlock('11C')?.usedInGermany).toBe(true);
+    expect(dabBlock('11C')?.noteDE).toBeUndefined();
+  });
+
+  it('kennt die Zwischenblöcke 10N, 11N und 12N', () => {
+    expect(dabBlock('10N')?.centerHz).toBe(210096000);
+    expect(dabBlock('11N')?.centerHz).toBe(217088000);
+    expect(dabBlock('12N')?.centerHz).toBe(224096000);
+  });
+
   it('findet den Block zu einer Frequenz', () => {
     expect(dabBlockForFrequency(220352000)?.label).toBe('11C');
     expect(dabBlockForFrequency(220e6)?.label).toBe('11C');
     expect(dabBlockForFrequency(160e6)).toBeUndefined();
   });
 
+  it('sucht nur unter den in Deutschland genutzten Blöcken', () => {
+    // 10N überlappt 10A; die Suche darf trotzdem eindeutig 10A liefern.
+    expect(dabBlockForFrequency(210096000)?.label).toBe('10A');
+    // Kanal 13 wird national nicht genutzt und deshalb nicht getroffen.
+    expect(dabBlockForFrequency(230784000)).toBeUndefined();
+  });
+
   it('lässt zwischen den Blöcken Lücken', () => {
     // Die Blöcke sind 1,536 MHz breit, der Rasterabstand ist größer.
-    const zwischenraum = (DAB_BLOCKS[1].centerHz + DAB_BLOCKS[0].centerHz) / 2;
+    const zwischenraum = (DAB_BLOCKS_DE[1].centerHz + DAB_BLOCKS_DE[0].centerHz) / 2;
     expect(dabBlockForFrequency(zwischenraum)).toBeUndefined();
+  });
+
+  it('ist aufsteigend sortiert, auch mit Zwischen- und Kanal-13-Blöcken', () => {
+    for (let i = 0; i < DAB_BLOCKS.length - 1; i++) {
+      expect(DAB_BLOCKS[i].centerHz).toBeLessThan(DAB_BLOCKS[i + 1].centerHz);
+    }
   });
 });
 

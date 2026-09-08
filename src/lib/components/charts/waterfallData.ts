@@ -6,6 +6,7 @@
  */
 
 import type { LinkBudgetData } from '$lib/components/calculators/linkBudget.svelte';
+import { formatFixed } from '$lib/utils/formatting';
 
 /** Art einer Stufe im Wasserfall. */
 export type StepType = 'start' | 'gain' | 'loss' | 'total';
@@ -117,6 +118,6 @@ export function waterfallTicks([min, max]: [number, number]): number[] {
 
 /** Vorzeichenbehaftete Beschriftung einer Stufe. */
 export function stepLabel(step: WaterfallStep): string {
-  if (step.type === 'start' || step.type === 'total') return step.value.toFixed(1);
-  return `${step.type === 'gain' ? '+' : '−'}${step.value.toFixed(1)}`;
+  if (step.type === 'start' || step.type === 'total') return formatFixed(step.value, 1);
+  return `${step.type === 'gain' ? '+' : '−'}${formatFixed(step.value, 1)}`;
 }

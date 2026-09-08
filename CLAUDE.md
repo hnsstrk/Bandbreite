@@ -50,7 +50,7 @@ Die 5 Komponenten der Kernidee:
 4. `RangeCalculator.svelte` — Reichweitenrechner (TX/RX)
 5. `BandInfo.svelte` — Bandzuordnung für Frequenzen
 
-> **Entscheidung des Besitzers steht aus:** `BandInfo.svelte` ist derzeit in **keiner** Route eingebunden; die Rolle auf `/spektrum/` übernimmt faktisch `BandDetailSidebar.svelte`. Bewusst nicht gelöscht — weder eigenmächtig entfernen noch wieder einbinden.
+> **Entschieden (E0):** `BandInfo.svelte` ist **eingebunden auf `/konverter/frequenz/` seit 2026-09-08, Schutz bleibt** — die Komponente selbst wird nicht geändert. Auf `/spektrum/` übernimmt weiterhin `BandDetailSidebar.svelte` die Rolle beim Klick auf ein Band.
 
 ## Coding Guidelines
 
@@ -107,6 +107,7 @@ $effect(() => loop.attach());   // stoppt bei prefers-reduced-motion und verborg
 - Echte Umlaute in UI/Kommentaren/Docs: `ä ö ü ß` (NICHT ae, oe, ue, ss)
 - **Ausnahme**: Verzeichnis- und Dateinamen ohne Umlaute, weil sie in URLs landen
   - ✅ `/rechner/kanalkapazitaet` — ❌ `/rechner/kanalkapazität`
+- Zahlen im deutschen Format über `formatLocaleNumber` (Dezimalkomma, Tausenderpunkt: „220,352 MHz", „1.000 km"); Eingaben akzeptieren Komma und Punkt (`parseLocaleNumber`). Maschinenlesbares (URL-Parameter, SVG-Koordinaten) behält den Punkt — Details im STYLE_GUIDE, Abschnitt „Zahlenformat".
 
 ## Domain Knowledge (Quellen im Code angeben)
 

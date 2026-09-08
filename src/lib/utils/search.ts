@@ -6,6 +6,7 @@
  * normalisiert (`ä → ae`), angezeigt wird weiterhin der Originaltext.
  */
 
+import { parseLocaleNumber } from './handlers';
 import { normalizeForSearch } from './slug';
 import {
   LIVE_SEARCH_INDEX,
@@ -32,6 +33,22 @@ const TYPE_BONUS: Record<SearchEntryType, number> = {
   funkdienst: 5,
   sender: 4,
   glossar: 3
+};
+
+/**
+ * Gewicht des Treffers je Ergebnistyp.
+ *
+ * Der Zuschlag oben allein reicht nicht: ein Glossarbegriff, dessen Titel mit
+ * dem Suchwort beginnt, läge sonst vor der Seite, die den Begriff behandelt.
+ * Wer „fspl" sucht, will zuerst den Rechner — die Definition steht danach.
+ */
+const TYPE_WEIGHT: Record<SearchEntryType, number> = {
+  werkzeug: 1,
+  seite: 1,
+  band: 0.8,
+  funkdienst: 0.8,
+  sender: 0.8,
+  glossar: 0.6
 };
 
 /** Punktwert eines einzelnen Feldes für ein Suchwort. */
@@ -61,7 +78,7 @@ export function scoreEntry(entry: SearchEntry, tokens: string[]): number {
     if (best === 0) return 0; // jedes Suchwort muss irgendwo vorkommen
     total += best;
   }
-  return total + TYPE_BONUS[entry.type];
+  return total * TYPE_WEIGHT[entry.type] + TYPE_BONUS[entry.type];
 }
 
 /** Zerlegt eine Suchanfrage in normalisierte Suchwörter. */
@@ -144,37 +161,14 @@ export function parseFrequencyQuery(query: string): ParsedFrequency | null {
   const factor = FREQUENCY_UNIT_FACTORS[unitKey];
   if (!factor) return null;
 
-  const value = parseDecimal(raw);
-  if (value === null || !Number.isFinite(value) || value <= 0) return null;
+  const value = parseLocaleNumber(raw);
+  if (!Number.isFinite(value) || value <= 0) return null;
 
   return {
     hz: value * factor,
     unit: FREQUENCY_UNIT_LABELS[unitKey],
     assumedUnit: !match[2]
   };
-}
-
-/**
- * Wandelt eine Zahl in deutscher oder englischer Schreibweise in eine Zahl um.
- * Komma und Punkt gelten als Dezimaltrenner; mehrfach auftretende Punkte
- * bzw. Leerzeichen werden als Tausendertrenner behandelt.
- */
-function parseDecimal(raw: string): number | null {
-  const cleaned = raw.replace(/\s/g, '');
-  const hasComma = cleaned.includes(',');
-  const dotCount = (cleaned.match(/\./g) ?? []).length;
-
-  let normalized: string;
-  if (hasComma) {
-    normalized = cleaned.replace(/\./g, '').replace(',', '.');
-  } else if (dotCount > 1) {
-    normalized = cleaned.replace(/\./g, '');
-  } else {
-    normalized = cleaned;
-  }
-
-  const value = Number(normalized);
-  return Number.isFinite(value) ? value : null;
 }
 
 /** Indexeinträge, deren Frequenzbereich `hz` enthält. */

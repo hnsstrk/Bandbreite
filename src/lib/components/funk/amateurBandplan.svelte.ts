@@ -15,9 +15,12 @@ import {
   type AmateurBand,
   type AmateurBandSegment,
   type BandSegmentMode,
-  type LicenseClassDE
+  type LicenseClassDE,
+  type PowerLimitType
 } from '$lib/data/amateurBands';
+import { formatFrequencyRange } from '$lib/data/bands';
 import { frequencyToWavelength } from '$lib/utils/calculations';
+import { formatLocaleNumber } from '$lib/utils/formatting';
 import { clamp, safeDivide } from '$lib/utils/handlers';
 
 /** Anzeigetexte der Betriebsartengruppen. */
@@ -48,7 +51,11 @@ export const BAND_STATUS_LABELS: Record<AmateurBand['status'], string> = {
   duldung: 'befristete Allgemeinzuteilung'
 };
 
-/** Regelleistung je Klasse in Watt; die Bezugsgröße steht in `powerLimitType`. */
+/**
+ * Regelleistung je Klasse in Watt als Überblickswert. Maßgeblich ist immer die
+ * bandbezogene Grenze aus `powerLimits`; die Klasse E darf beispielsweise auf
+ * 2 m nur 75 W und ab 13 cm nur 5 W.
+ */
 export const CLASS_POWER_W: Record<LicenseClassDE, number> = {
   A: POWER_CLASS_A_W,
   E: POWER_CLASS_E_W,
@@ -56,33 +63,46 @@ export const CLASS_POWER_W: Record<LicenseClassDE, number> = {
 };
 
 /** Bezugsgröße der Leistungsangabe als Kurztext. */
-export function powerUnitLabel(type: AmateurBand['powerLimitType']): string {
+export function powerUnitLabel(type: PowerLimitType): string {
   if (type === 'eirp') return 'W EIRP';
   if (type === 'erp') return 'W ERP';
   return 'W PEP';
 }
 
 /**
- * Höchstzulässige Leistung eines Bandes für eine Klasse.
- * Für die Klassen E und N gilt zusätzlich die Klassengrenze; maßgeblich ist
- * jeweils der kleinere Wert. Bänder, die der Klasse nicht offenstehen, geben
- * `null` zurück.
+ * Höchstzulässige Leistung eines Bandes für eine Klasse nach AFuV Anlage 1.
+ * Die Werte stehen je Band und Klasse im Datensatz; es wird nichts abgeleitet.
+ * Bänder, die der Klasse nicht offenstehen, geben `null` zurück.
  */
 export function powerLimitFor(
   band: AmateurBand,
   licenseClass: LicenseClassDE
 ): { value: number; unit: string } | null {
-  if (!band.licenseClasses.includes(licenseClass)) return null;
-  if (licenseClass === 'A') {
-    return { value: band.maxPowerClassAW, unit: powerUnitLabel(band.powerLimitType) };
-  }
-  if (licenseClass === 'N') {
-    return { value: Math.min(band.maxPowerClassAW, POWER_CLASS_N_EIRP_W), unit: 'W EIRP' };
-  }
-  const value = Math.min(band.maxPowerClassAW, POWER_CLASS_E_W);
-  const unit =
-    band.powerLimitType === 'pep' ? 'W PEP' : powerUnitLabel(band.powerLimitType);
-  return { value, unit };
+  const limit = band.powerLimits[licenseClass];
+  if (!limit) return null;
+  return { value: limit.watt, unit: powerUnitLabel(limit.type) };
+}
+
+/** Nachkommastellen der Leistungsanzeige (6,1 W ERP, 9,14 W ERP). */
+const POWER_DECIMALS = 2;
+
+/**
+ * Abweichende Leistungsgrenzen eines Bandes für eine Klasse, aufbereitet als
+ * Text. Leeres Array, wenn das Band keine Teilbereiche kennt.
+ */
+export function powerSubrangeTexts(
+  band: AmateurBand,
+  licenseClass: LicenseClassDE
+): string[] {
+  return (band.powerSubranges ?? []).flatMap((range) => {
+    const limit = range.limits[licenseClass];
+    if (!limit) return [];
+    return [
+      `${formatFrequencyRange(range.minHz, range.maxHz)}: ` +
+        `${formatLocaleNumber(limit.watt, { maxFrac: POWER_DECIMALS })} ` +
+        `${powerUnitLabel(limit.type)} — ${range.noteDE}`
+    ];
+  });
 }
 
 /** Bänder, die einer Klasse offenstehen (`'alle'` liefert alle Bänder). */

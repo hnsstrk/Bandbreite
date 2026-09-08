@@ -9,13 +9,15 @@ Eine Web-Anwendung rund um das elektromagnetische Spektrum: interaktive Visualis
 
 ## Features
 
+### Portal
+
+- **Startseite `/`** — Einstieg mit Suchfeld, Kacheln für alle fünf Bereiche, sechs interaktiven Kapiteln und der Werkzeugliste
+
 ### Spektrum
 
 - **Spektrum-Dashboard** — das gesamte EM-Spektrum von ELF bis Gammastrahlung, logarithmisch, mit Zoom, Frequenz-/Wellenlängen-Cursor und Banddetail-Seitenleiste
 - **Anwendungen im Spektrum** — welcher Dienst nutzt welches Band: Rundfunk, Mobilfunk, Radar, Satellit, WLAN
 - **Sendeleistungen** — typische Sendeleistungen über der Frequenz aufgetragen
-- **Atmosphärische Dämpfung** — Sauerstoff- und Wasserdampflinien nach ITU-R P.676-13 (line-by-line), Regen (P.838-3), Nebel und Wolken (P.840), Schnee, mit einstellbaren Atmosphärenparametern
-- **Ionosphärische Ausbreitung** — D-, E- und F-Schichten, MUF/LUF, Skip-Zone
 
 ### Rechner und Konverter
 
@@ -34,6 +36,8 @@ Alle Rechner halten ihren Zustand in der URL (`?f=…&d=…`) und bieten „Link
 Kapitel mit Lernzielen, Inhaltsverzeichnis, Formeln und eingebetteten interaktiven Widgets:
 
 - **Wellenausbreitung** — Bodenwelle, Raumwelle, Sichtverbindung, Beugung
+  - **Ionosphärische Ausbreitung** — D-, E- und F-Schichten, MUF/LUF, Skip-Zone
+  - **Atmosphärische Dämpfung** — Sauerstoff- und Wasserdampflinien nach ITU-R P.676-13 (line-by-line), Regen (P.838-3), Nebel und Wolken (P.840), Schnee, mit einstellbaren Atmosphärenparametern
 - **Funk & Fernmeldetechnik** — ITU-Funkdienste und Frequenzplan, Amateurfunk (Bandplan-Visualisierer über 22 Bänder), Mobilfunk (1G bis 6G, Bandtabelle, Datenraten-Rechner), Rundfunk (LW bis DVB-T2, Kanalumrechner) sowie Not- und Sicherheitsfrequenzen
 - **Modulation** — AM/FM/PM und ASK/FSK/PSK/QAM mit Wellenform- und Spektrumanzeige, Konstellationsdiagramm mit Rauschen, Carson-Rechner
 - **Antennen** — Polardiagramm (Dipol, Gruppe, Yagi, Parabol), Parabolgewinn, SWR

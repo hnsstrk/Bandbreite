@@ -147,10 +147,10 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'ul',
         items: [
-          'Zuordnung der Amateurfunkbänder zu den Zeugnisklassen: Gesichert ist nur der Zugang der Klasse N zu 10 m, 2 m und 70 cm mit 10 W EIRP. Die Einträge für die Klasse E sind Annahmen.',
+          'Zuordnung der Amateurfunkbänder zu den Zeugnisklassen A, E und N: gegen AFuV Anlage 1 (BGBl. 2024 I Nr. 175) verifiziert. Unsicher bleiben nur der Status des 4-m-Bands und der Zugang der Klasse E zum 6-m-Band, deren Duldungen am 31.12.2025 ausgelaufen sind.',
           'Sonderregelungen im 160-m-Band mit Zeit- und Leistungsfenstern sind bewusst nicht modelliert.',
-          'Das 4-m-Band beruht auf einer befristeten Allgemeinzuteilung; Grenzen und Leistung haben sich mehrfach geändert.',
-          'DAB-Blöcke oberhalb 12D sowie Zwischenblöcke sind nicht aufgenommen, weil sie nicht zweifelsfrei belegt werden konnten.',
+          'Das 4-m-Band beruhte auf befristeten Duldungen (zuletzt 70,150 bis 70,210 MHz, ausgelaufen am 31.12.2025); eine Folgeregelung ist zu prüfen.',
+          'DAB-Blöcke 13A bis 13F und die Zwischenblöcke 10N, 11N und 12N sind nach EBU-Band-III-Raster aufgenommen, in Deutschland aber nicht in Nutzung und im Kanalumrechner entsprechend gekennzeichnet.',
           'Sendeleistungen einzelner Großsender sind Größenordnungen aus Sekundärquellen, keine Betreiberangaben.',
           'Spektrale Effizienzen, Antennengewinne und typische Datenraten sind konservative Praxiswerte, keine Normwerte.',
           'Koordinaten von Senderstandorten sind gerundete Näherungen und keine Vermessungsdaten.'

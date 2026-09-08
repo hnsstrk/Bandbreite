@@ -16,7 +16,9 @@ import { safeDivide, safeLog } from './handlers';
 import {
   GAIN_DIPOLE_DBI,
   PARABOLIC_EFFICIENCY_TYPICAL,
+  dbdToDbi,
   parabolicBeamwidthDeg,
+  parabolicDiameterM,
   parabolicGainDbi,
   arrayGainDbi
 } from '$lib/data/antennas';
@@ -386,4 +388,12 @@ export function reflectionFromImpedance(loadOhm: number, systemOhm: number): num
   return safeDivide(loadOhm - systemOhm, loadOhm + systemOhm, 0);
 }
 
-export { parabolicGainDbi, parabolicBeamwidthDeg, arrayGainDbi, PARABOLIC_EFFICIENCY_TYPICAL };
+export {
+  parabolicGainDbi,
+  parabolicBeamwidthDeg,
+  parabolicDiameterM,
+  arrayGainDbi,
+  dbdToDbi,
+  GAIN_DIPOLE_DBI,
+  PARABOLIC_EFFICIENCY_TYPICAL
+};

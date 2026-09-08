@@ -76,7 +76,7 @@
 
 <header class="header safe-area-top" bind:this={headerElement} onfocusout={handleFocusOut}>
   <div class="header-content">
-    <a href="/spektrum/" class="logo" onclick={closeMobileMenu}>
+    <a href="/" class="logo" onclick={closeMobileMenu}>
       <svg
         class="logo-icon"
         viewBox="0 0 24 24"

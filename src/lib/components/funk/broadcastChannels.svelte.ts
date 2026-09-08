@@ -8,6 +8,7 @@
 
 import {
   DAB_BLOCKS,
+  DAB_BLOCKS_DE,
   DAB_BLOCK_BANDWIDTH_HZ,
   DVBT2_CHANNELS,
   DVBT2_CHANNEL_BANDWIDTH_HZ,
@@ -29,6 +30,10 @@ export interface ChannelRange {
   minHz: number;
   maxHz: number;
   bandwidthHz: number;
+  /** Nur bei DAB-Blöcken gesetzt: wird der Block in Deutschland genutzt? */
+  usedInGermany?: boolean;
+  /** Nur bei DAB-Blöcken gesetzt: Hinweis zu national nicht genutzten Blöcken */
+  noteDE?: string;
 }
 
 /** DAB-Block nach Bezeichnung, z. B. „11C“. */
@@ -42,17 +47,25 @@ export function dabBlock(block: string): ChannelRange | undefined {
     centerHz: entry.centerHz,
     minHz: range.minHz,
     maxHz: range.maxHz,
-    bandwidthHz: DAB_BLOCK_BANDWIDTH_HZ
+    bandwidthHz: DAB_BLOCK_BANDWIDTH_HZ,
+    usedInGermany: entry.usedInGermany,
+    noteDE: entry.noteDE
   };
 }
 
-/** DAB-Block, der eine Frequenz enthält. */
+/**
+ * DAB-Block, der eine Frequenz enthält.
+ *
+ * Gesucht wird nur unter den in Deutschland genutzten Blöcken: Die
+ * Zwischenblöcke 10N, 11N und 12N liegen in den Schutzabständen und
+ * überlappen ihre Nachbarn, eine Zuordnung wäre sonst mehrdeutig.
+ */
 export function dabBlockForFrequency(frequencyHz: number): ChannelRange | undefined {
   if (!Number.isFinite(frequencyHz)) return undefined;
-  const entry = DAB_BLOCKS.find((b) => {
-    const half = DAB_BLOCK_BANDWIDTH_HZ / 2;
-    return frequencyHz >= b.centerHz - half && frequencyHz <= b.centerHz + half;
-  });
+  const half = DAB_BLOCK_BANDWIDTH_HZ / 2;
+  const entry = DAB_BLOCKS_DE.find(
+    (b) => frequencyHz >= b.centerHz - half && frequencyHz <= b.centerHz + half
+  );
   return entry ? dabBlock(entry.block) : undefined;
 }
 

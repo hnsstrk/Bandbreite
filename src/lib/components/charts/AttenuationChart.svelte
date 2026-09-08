@@ -1,6 +1,7 @@
 <script lang="ts">
   import { scaleLog } from 'd3';
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
+  import { formatLocaleNumber } from '$lib/utils/formatting';
   import {
     generateExtendedAttenuationCurve,
     calculateAllAttenuation
@@ -226,7 +227,9 @@
         {#each X_TICK_VALUES as tickVal (tickVal)}
           <g transform="translate({xScale(tickVal)}, 0)">
             <line class="chart-axis-line" y2="8" />
-            <text class="chart-axis-text" y="24" text-anchor="middle">{tickVal}</text>
+            <text class="chart-axis-text" y="24" text-anchor="middle"
+              >{formatLocaleNumber(tickVal, { maxFrac: 3 })}</text
+            >
           </g>
         {/each}
         <text class="chart-axis-label" x={chartWidth / 2} y="52" text-anchor="middle">
@@ -241,7 +244,7 @@
           <g transform="translate(0, {yScale(tickVal)})">
             <line class="chart-axis-line" x2="-8" />
             <text class="chart-axis-text" x="-12" text-anchor="end" dominant-baseline="middle">
-              {tickVal}
+              {formatLocaleNumber(tickVal, { maxFrac: 3 })}
             </text>
           </g>
         {/each}

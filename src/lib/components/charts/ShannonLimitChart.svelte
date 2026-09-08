@@ -5,7 +5,7 @@
    */
   import { line, scaleLinear } from 'd3';
   import { clamp } from '$lib/utils/handlers';
-  import { formatNumber } from '$lib/utils/formatting';
+  import { formatLocaleNumber, formatNumber } from '$lib/utils/formatting';
   import {
     CHART_EFFICIENCY_MAX,
     CHART_SNR_MAX_DB,
@@ -147,7 +147,9 @@
         {#each CHART_X_TICKS as tickVal (tickVal)}
           <g transform="translate({xScale(tickVal)}, 0)">
             <line class="chart-axis-line" y2="8" />
-            <text class="chart-axis-text" y="24" text-anchor="middle">{tickVal}</text>
+            <text class="chart-axis-text" y="24" text-anchor="middle"
+              >{formatLocaleNumber(tickVal, { maxFrac: 3 })}</text
+            >
           </g>
         {/each}
         <text class="chart-axis-label" x={chartWidth / 2} y="48" text-anchor="middle">
@@ -162,7 +164,7 @@
           <g transform="translate(0, {yScale(tickVal)})">
             <line class="chart-axis-line" x2="-8" />
             <text class="chart-axis-text" x="-12" text-anchor="end" dominant-baseline="middle">
-              {tickVal}
+              {formatLocaleNumber(tickVal, { maxFrac: 3 })}
             </text>
           </g>
         {/each}
@@ -190,7 +192,7 @@
         {#each CHART_X_TICKS as tick (tick)}
           {@const point = SHANNON_CURVE.find((p) => p.snr >= tick)}
           <tr>
-            <th scope="row">{tick} dB</th>
+            <th scope="row">{formatLocaleNumber(tick)} dB</th>
             <td>{point ? formatNumber(point.capacity, 2) : '—'} bit/s/Hz</td>
           </tr>
         {/each}

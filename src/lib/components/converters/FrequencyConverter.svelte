@@ -2,6 +2,7 @@
   import { frequencyToWavelength, wavelengthToFrequency } from '$lib/utils/calculations';
   import { convertToHz, convertFromHz, convertToMeters, convertFromMeters } from '$lib/utils/conversions';
   import { FREQUENCY_UNITS, WAVELENGTH_UNITS, DEFAULT_FREQUENCY_UNIT, DEFAULT_WAVELENGTH_UNIT } from '$lib/data/units';
+  import { pickBestUnit } from '$lib/components/ui/numberInput.svelte';
   import { speedOfLight } from '$lib/stores/speedOfLight.svelte';
   import { FREQUENCY_CONVERTER_PRESETS, type FrequencyPreset } from '$lib/data/presets';
   import { parseNullableNumericInput, parseSelectValue } from '$lib/utils/handlers';
@@ -14,15 +15,28 @@
   // Bindable prop to expose frequency in Hz to parent
   let { frequencyHz = $bindable(convertToHz(100, DEFAULT_FREQUENCY_UNIT)) }: Props = $props();
 
-  // Store the canonical value in Hz internally, synced with prop
-  let frequencyInHz = $state<number | null>(frequencyHz);
-
-  // Sync internal state with prop
-  $effect(() => {
-    frequencyHz = frequencyInHz;
-  });
   let frequencyUnit = $state(DEFAULT_FREQUENCY_UNIT);
   let wavelengthUnit = $state(DEFAULT_WAVELENGTH_UNIT);
+
+  // Das Prop ist die einzige Quelle des Werts (E3 / P0-1: keine interne Kopie).
+  // Kommt eine Änderung von außen – etwa ein Bandklick auf /spektrum/ –,
+  // wechseln beide Felder auf eine lesbare Einheit; eigene Schreibzugriffe
+  // merken sich den Wert und lassen die vom Nutzer gewählte Einheit in Ruhe.
+  let lastOwnHz = frequencyHz;
+  $effect(() => {
+    if (frequencyHz === lastOwnHz) return;
+    lastOwnHz = frequencyHz;
+    if (frequencyHz === null || frequencyHz <= 0) return;
+    const unit = pickBestUnit(frequencyHz, FREQUENCY_UNITS);
+    const lambdaUnit = pickBestUnit(frequencyToWavelength(frequencyHz), WAVELENGTH_UNITS);
+    if (unit) frequencyUnit = unit.id;
+    if (lambdaUnit) wavelengthUnit = lambdaUnit.id;
+  });
+
+  function setFrequencyHz(hz: number | null) {
+    lastOwnHz = hz;
+    frequencyHz = hz;
+  }
 
   // Collapsible formula section state
   let showFormula = $state(false);
@@ -32,12 +46,12 @@
 
   // Derived values for display - reactive to speed of light changes
   let frequencyDisplay = $derived(
-    frequencyInHz !== null ? convertFromHz(frequencyInHz, frequencyUnit) : null
+    frequencyHz !== null ? convertFromHz(frequencyHz, frequencyUnit) : null
   );
 
   let wavelengthDisplay = $derived(
-    frequencyInHz !== null && frequencyInHz > 0
-      ? convertFromMeters(frequencyToWavelength(frequencyInHz), wavelengthUnit)
+    frequencyHz !== null && frequencyHz > 0
+      ? convertFromMeters(frequencyToWavelength(frequencyHz), wavelengthUnit)
       : null
   );
 
@@ -47,16 +61,16 @@
 
   function handleFrequencyInput(e: Event) {
     const value = parseNullableNumericInput(e);
-    frequencyInHz = value !== null ? convertToHz(value, frequencyUnit) : null;
+    setFrequencyHz(value !== null ? convertToHz(value, frequencyUnit) : null);
   }
 
   function handleWavelengthInput(e: Event) {
     const value = parseNullableNumericInput(e);
     if (value !== null && value > 0) {
       const meters = convertToMeters(value, wavelengthUnit);
-      frequencyInHz = wavelengthToFrequency(meters);
+      setFrequencyHz(wavelengthToFrequency(meters));
     } else {
-      frequencyInHz = null;
+      setFrequencyHz(null);
     }
   }
 
@@ -69,7 +83,7 @@
   }
 
   function setQuickFrequency(hz: number) {
-    frequencyInHz = hz;
+    setFrequencyHz(hz);
     // Auto-select GHz unit for better display of these frequencies
     frequencyUnit = 'GHz';
   }

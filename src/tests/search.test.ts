@@ -95,6 +95,10 @@ describe('parseFrequencyQuery', () => {
     expect(parseFrequencyQuery('868MHz')?.hz).toBeCloseTo(868e6);
   });
 
+  it('liest Leerzeichen als Tausendertrenner (gemeinsamer Parser)', () => {
+    expect(parseFrequencyQuery('144 800 kHz')?.hz).toBeCloseTo(144_800e3);
+  });
+
   it('nimmt ohne Einheit MHz an', () => {
     const parsed = parseFrequencyQuery('433');
     expect(parsed?.hz).toBeCloseTo(433e6);

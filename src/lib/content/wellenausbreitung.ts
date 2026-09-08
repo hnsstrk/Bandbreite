@@ -160,7 +160,7 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
         { type: 'widget', id: 'propagation-sandbox' },
         {
           type: 'paragraph',
-          html: 'Die Schichten D, E, F1 und F2, ihr Tag-Nacht-Verhalten und die Sonnenaktivität sind im Kapitel <a href="/spektrum/ionosphaere/">Ionosphärische Ausbreitung</a> im Detail beschrieben.'
+          html: 'Die Schichten D, E, F1 und F2, ihr Tag-Nacht-Verhalten und die Sonnenaktivität sind im Kapitel <a href="/wissen/wellenausbreitung/ionosphaere/">Ionosphärische Ausbreitung</a> im Detail beschrieben.'
         }
       ]
     },
@@ -219,7 +219,7 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
         { type: 'widget', id: 'attenuation-windows' },
         {
           type: 'paragraph',
-          html: 'Regen, Nebel und Schnee kommen als eigene Beiträge dazu – siehe <a href="/spektrum/daempfung/">Atmosphärische Dämpfung</a>.'
+          html: 'Regen, Nebel und Schnee kommen als eigene Beiträge dazu – siehe <a href="/wissen/wellenausbreitung/daempfung/">Atmosphärische Dämpfung</a>.'
         }
       ]
     },

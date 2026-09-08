@@ -2,8 +2,9 @@
  * Textbausteine der Seite „Amateurfunk“.
  *
  * Regulatorische Angaben beziehen sich auf das Amateurfunkgesetz (AFuG), die
- * Amateurfunkverordnung (AFuV) und den Bandplan der IARU-Region 1. Wo der
- * Datensatz Annahmen enthält, sind sie im Text ausdrücklich benannt.
+ * Amateurfunkverordnung (AFuV) und den Bandplan der IARU-Region 1. Die Klassen-
+ * und Leistungsangaben sind gegen AFuV Anlage 1 in der Fassung vom 24.06.2024
+ * (BGBl. 2024 I Nr. 175) geprüft; verbliebene Unsicherheiten benennt der Text.
  */
 
 import type { ArticleSection } from './types';
@@ -53,33 +54,37 @@ export const SECTIONS: ArticleSection[] = [
         rows: [
           [
             'A',
-            '750 W PEP',
-            'alle für den Amateurfunkdienst zugewiesenen Bänder',
+            '750 W PEP bis 23 cm, 75 W PEP ab 13 cm',
+            'alle dem Amateurfunkdienst zugewiesenen Bänder',
             'Technik, Betrieb, Vorschriften im vollen Umfang'
           ],
           [
             'E',
-            '100 W PEP',
-            'ausgewählte Kurzwellenbänder sowie 2 m und 70 cm',
+            '100 W PEP auf Kurzwelle, 75 W PEP auf 2 m bis 23 cm, 5 W PEP ab 13 cm',
+            '160 m, 80 m, 15 m, 10 m sowie 2 m, 70 cm, 23 cm und die Bänder ab 13 cm',
             'reduzierter Technikteil'
           ],
           [
             'N',
-            '10 W EIRP',
+            '10 W ERP auf 10 m, 6,1 W ERP (≙ 10 W EIRP) auf 2 m und 70 cm',
             '10 m, 2 m und 70 cm',
             'Einstiegsprüfung mit stark reduziertem Umfang'
           ]
         ]
       },
       {
-        kind: 'callout',
-        tone: 'warning',
-        title: 'Annahmen im Datensatz',
-        text: 'Gesichert hinterlegt ist nur der Zugang der Klasse N zu 10 m, 2 m und 70 cm mit 10 W EIRP. Welche Bänder der Klasse E im Einzelnen offenstehen, ist im Datensatz dieser Anwendung als Annahme markiert und vor jeder praktischen Nutzung gegen Anlage 1 der Amateurfunkverordnung zu prüfen.'
+        kind: 'p',
+        text: 'Die Zuordnung von Bändern und Leistungen zu den Klassen steht Zeile für Zeile in Anlage 1 der Amateurfunkverordnung. Anders als oft angenommen sind 40 m, 20 m, 17 m, 12 m, 30 m, 60 m, 2200 m und 630 m allein der Klasse A vorbehalten; die Klasse E hat auf Kurzwelle nur 160 m, 80 m, 15 m und 10 m.'
       },
       {
         kind: 'p',
-        text: 'Einzelne Bänder haben eigene Leistungsgrenzen, die die Klassengrenze unterschreiten: 2200 m und 630 m sind auf 1 W EIRP begrenzt, das 60-m-Band auf 15 W EIRP, das 30-m-Band auf 150 W PEP. Der Bandplan-Visualisierer rechnet diese Sonderfälle mit.'
+        text: 'Einzelne Bänder haben eigene Leistungsgrenzen, die die Klassengrenze unterschreiten: 2200 m und 630 m sind auf 1 W ERP begrenzt, das 60-m-Band auf 9,14 W ERP (das entspricht den 15 W EIRP der WRC-15-Zuweisung), das 30-m-Band auf 150 W PEP. Im 160-m-Band gelten drei gestaffelte Grenzen — 750 W PEP bis 1850 kHz, 75 W PEP bis 1890 kHz, darüber 10 W PEP, an Wochenenden jedoch durchgehend 750 W PEP. Der Bandplan-Visualisierer rechnet diese Sonderfälle mit.'
+      },
+      {
+        kind: 'callout',
+        tone: 'warning',
+        title: 'Was offen bleibt',
+        text: 'Zwei Punkte sind zeitkritisch statt gesichert: Der 6-m-Zugang der Klasse E beruhte auf einer Duldungsregelung, die zum 31.12.2025 auslief und nicht verlängert wurde. Für das 4-m-Band (70,150 bis 70,210 MHz) gab es zuletzt eine bis 31.12.2025 befristete Duldung für die Klasse A; eine Nachfolgeregelung war zum Stand dieser Prüfung nicht veröffentlicht. Beide Angaben sind vor jeder praktischen Nutzung im Amtsblatt der Bundesnetzagentur zu prüfen.'
       }
     ]
   },

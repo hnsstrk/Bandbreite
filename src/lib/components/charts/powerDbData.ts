@@ -8,6 +8,7 @@
  */
 
 import { wattToDbm } from '$lib/utils/conversions';
+import { formatFixed } from '$lib/utils/formatting';
 import { CHART_FREQUENCY_RANGES, CHART_POWER_RANGES } from '$lib/data/spectrum';
 
 // ============================================================================
@@ -53,7 +54,7 @@ export const Y_TICK_VALUES = [1e-3, 1e-2, 1e-1, 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 
 export const Y_TICK_LABELS = ['1 mW', '10 mW', '100 mW', '1 W', '10 W', '100 W', '1 kW', '10 kW', '100 kW', '1 MW', '10 MW', '100 MW'] as const;
 
 /** dBm-Werte für rechte Achse (korrespondierend zu Leistungs-Ticks) */
-export const Y_DBM_LABELS = Y_TICK_VALUES.map(w => `${wattToDbm(w).toFixed(0)} dBm`);
+export const Y_DBM_LABELS = Y_TICK_VALUES.map((w) => `${formatFixed(wattToDbm(w), 0)} dBm`);
 
 // ============================================================================
 // Datenpunkte

@@ -4,6 +4,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import {
+  parseLocaleNumber,
   parseNumericInput,
   parseNullableNumericInput,
   parsePositiveInput,
@@ -48,11 +49,63 @@ function createCheckboxEvent(checked: boolean): Event {
   return event;
 }
 
+describe('parseLocaleNumber', () => {
+  it('liest deutsche und englische Dezimaltrenner', () => {
+    expect(parseLocaleNumber('12,49')).toBe(12.49);
+    expect(parseLocaleNumber('12.49')).toBe(12.49);
+    expect(parseLocaleNumber('220,352')).toBe(220.352);
+  });
+
+  it('nimmt bei beiden Trennzeichen das hintere als Dezimaltrenner', () => {
+    expect(parseLocaleNumber('1.000,5')).toBe(1000.5);
+    expect(parseLocaleNumber('1,000.5')).toBe(1000.5);
+    expect(parseLocaleNumber('1.234.567,89')).toBe(1234567.89);
+  });
+
+  it('liest mehrfach auftretende Trennzeichen als Tausendertrenner', () => {
+    expect(parseLocaleNumber('1.234.567')).toBe(1234567);
+    expect(parseLocaleNumber('1,234,567')).toBe(1234567);
+  });
+
+  it('deutet ein einzelnes Trennzeichen als Dezimaltrenner — auch „1.000"', () => {
+    // Dokumentierte Mehrdeutigkeit: „1.000" könnte tausend heißen, wird aber
+    // wie „1.5" als Dezimalpunkt gelesen. Wer tausend meint, schreibt
+    // „1.000,0" oder „1000".
+    expect(parseLocaleNumber('1.000')).toBe(1);
+    expect(parseLocaleNumber('1,000')).toBe(1);
+    expect(parseLocaleNumber('1.5')).toBe(1.5);
+    expect(parseLocaleNumber('1000')).toBe(1000);
+  });
+
+  it('entfernt Leerzeichen und Apostrophe als Tausendertrenner', () => {
+    expect(parseLocaleNumber('144 800')).toBe(144800);
+    expect(parseLocaleNumber('1\u00A0000,5')).toBe(1000.5);
+    expect(parseLocaleNumber("1'000")).toBe(1000);
+  });
+
+  it('behält Vorzeichen und Exponentialschreibweise', () => {
+    expect(parseLocaleNumber('-12,5')).toBe(-12.5);
+    expect(parseLocaleNumber('2,4e9')).toBe(2.4e9);
+    expect(parseLocaleNumber('2.4e9')).toBe(2.4e9);
+  });
+
+  it('liefert NaN für Zwischenzustände und Unlesbares', () => {
+    expect(parseLocaleNumber('')).toBeNaN();
+    expect(parseLocaleNumber('   ')).toBeNaN();
+    expect(parseLocaleNumber('-')).toBeNaN();
+    expect(parseLocaleNumber('abc')).toBeNaN();
+    expect(parseLocaleNumber(undefined as unknown as string)).toBeNaN();
+  });
+});
+
 describe('parseNumericInput', () => {
   it('should parse valid numbers', () => {
     expect(parseNumericInput(createInputEvent('123'))).toBe(123);
     expect(parseNumericInput(createInputEvent('123.45'))).toBe(123.45);
     expect(parseNumericInput(createInputEvent('-50'))).toBe(-50);
+    // Deutsches Komma ist gleichberechtigt
+    expect(parseNumericInput(createInputEvent('123,45'))).toBe(123.45);
+    expect(parseNumericInput(createInputEvent('1.234,5'))).toBe(1234.5);
   });
 
   it('should return fallback for empty string', () => {

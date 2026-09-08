@@ -19,6 +19,7 @@ import {
   spectrumExplanations,
   type Explanation
 } from './explanations';
+import { GLOSSARY, GLOSSARY_COVERED_TITLES, categoryLabel } from './glossary';
 import { formatFrequency } from '$lib/utils/formatting';
 import { formatFrequencyRange } from '$lib/data/bands';
 
@@ -131,7 +132,7 @@ const GLOSSARY_SOURCES: { entries: Record<string, Explanation>; href: string }[]
   { entries: fsplExplanations, href: '/rechner/fspl/' },
   { entries: linkBudgetExplanations, href: '/rechner/link-budget/' },
   { entries: bandExplanations, href: '/datenbanken/frequenzbaender/' },
-  { entries: atmosphericExplanations, href: '/spektrum/daempfung/' },
+  { entries: atmosphericExplanations, href: '/wissen/wellenausbreitung/daempfung/' },
   { entries: spectrumExplanations, href: '/spektrum/' }
 ];
 
@@ -140,6 +141,8 @@ function glossaryEntries(): SearchEntry[] {
   const result: SearchEntry[] = [];
   for (const source of GLOSSARY_SOURCES) {
     for (const [key, explanation] of Object.entries(source.entries)) {
+      // Begriffe, die das Glossar bereits führt, erscheinen nur einmal.
+      if (GLOSSARY_COVERED_TITLES.has(explanation.title)) continue;
       if (seen.has(explanation.title)) continue;
       seen.add(explanation.title);
       result.push({
@@ -156,12 +159,29 @@ function glossaryEntries(): SearchEntry[] {
   return result;
 }
 
+/**
+ * Glossarbegriffe der Glossarseite. Der Link setzt zugleich den Suchtext,
+ * damit der Eintrag auch nach dem Sprung sichtbar gefiltert ist.
+ */
+function glossaryTermEntries(): SearchEntry[] {
+  return GLOSSARY.map((entry) => ({
+    id: `begriff:${entry.id}`,
+    type: 'glossar' as const,
+    title: entry.term,
+    subtitle: `${categoryLabel(entry.category)} · ${entry.short}`,
+    href: `/wissen/glossar/?q=${encodeURIComponent(entry.term)}#${entry.id}`,
+    keywords: [entry.id, ...(entry.synonyms ?? []), entry.unit ?? ''].filter(Boolean),
+    status: 'live' as const
+  }));
+}
+
 /** Vollständiger Suchindex. */
 export const SEARCH_INDEX: SearchEntry[] = [
   ...flattenNav().map(navEntry),
   ...ALL_FREQUENCY_BANDS.map(bandEntry),
   ...ALL_APPLICATIONS.map(applicationEntry),
   ...ALL_TRANSMITTERS.map(transmitterEntry),
+  ...glossaryTermEntries(),
   ...glossaryEntries()
 ];
 

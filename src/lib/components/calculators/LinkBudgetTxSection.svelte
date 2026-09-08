@@ -1,7 +1,7 @@
 <script lang="ts">
   /** Sendeseite der Streckenbilanz: Leistung, Antennengewinn, Kabelverlust, EIRP. */
   import { dbmToWatt } from '$lib/utils/conversions';
-  import { formatPowerWatts } from '$lib/utils/formatting';
+  import { formatNumber, formatPowerWatts } from '$lib/utils/formatting';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
   import ResultCard from '$lib/components/ui/ResultCard.svelte';
   import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
@@ -66,7 +66,7 @@
 
   <ResultCard
     label="EIRP"
-    value={eirpDbm.toFixed(1)}
+    value={formatNumber(eirpDbm, 1)}
     unit="dBm"
     secondary={`= ${formatPowerWatts(dbmToWatt(eirpDbm))}`}
     hint="Äquivalente isotrope Strahlungsleistung"

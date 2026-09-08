@@ -46,6 +46,18 @@ export interface NavNode {
 
 export const NAV_TREE: NavNode[] = [
   {
+    // Portalseite unter „/" — der einzige Knoten ohne Pfadsegment; seine ID
+    // lautet deshalb 'start' statt eines aus dem Pfad abgeleiteten Namens.
+    id: 'start',
+    label: 'Start',
+    href: '/',
+    icon: 'spectrum',
+    status: 'live',
+    description:
+      'Portalseite: Einstieg in Spektrum, Werkzeuge, Wissen, Datenbanken und Service — mit Suche und interaktiven Kapiteln.',
+    keywords: ['Start', 'Startseite', 'Portal', 'Übersicht', 'Bandbreite', 'Einstieg']
+  },
+  {
     id: 'spektrum',
     label: 'Spektrum',
     href: '/spektrum/',
@@ -83,36 +95,6 @@ export const NAV_TREE: NavNode[] = [
         description:
           'Typische Sendeleistungen von Rundfunk-, Radar-, Mobilfunk- und Satellitensystemen über der Frequenz aufgetragen.',
         keywords: ['Leistung', 'Watt', 'dBm', 'EIRP', 'Sender']
-      },
-      {
-        id: 'spektrum.daempfung',
-        label: 'Atmosphärische Dämpfung',
-        href: '/spektrum/daempfung/',
-        icon: 'cloud',
-        status: 'live',
-        description:
-          'Dämpfung durch Sauerstoff, Wasserdampf und Niederschlag nach ITU-R P.676, P.838 und P.840.',
-        keywords: [
-          'Dämpfung',
-          'Absorption',
-          'Sauerstoff',
-          'Wasserdampf',
-          'Regen',
-          'Nebel',
-          '60 GHz',
-          '22 GHz',
-          'ITU-R P.676'
-        ]
-      },
-      {
-        id: 'spektrum.ionosphaere',
-        label: 'Ionosphärische Ausbreitung',
-        href: '/spektrum/ionosphaere/',
-        icon: 'globe',
-        status: 'live',
-        description:
-          'D-, E- und F-Schichten, MUF und LUF, Skip-Zone und Kurzwellenausbreitung über große Entfernungen.',
-        keywords: ['Ionosphäre', 'MUF', 'LUF', 'Skip-Zone', 'Raumwelle', 'Kurzwelle', 'F2']
       }
     ]
   },
@@ -185,6 +167,65 @@ export const NAV_TREE: NavNode[] = [
         description:
           'Radius der Fresnel-Zonen und die nötige Hindernisfreiheit einer Sichtverbindung.',
         keywords: ['Fresnel', 'Sichtverbindung', 'Line of Sight', 'Hindernisfreiheit', 'Clearance']
+      },
+      {
+        id: 'rechner.antennengewinn',
+        label: 'Antennengewinn',
+        href: '/rechner/antennengewinn/',
+        icon: 'antenna',
+        status: 'live',
+        description:
+          'Gewinn, Halbwertsbreite, Wirkfläche und Fernfeldabstand einer Parabolantenne — samt Umkehrung zum nötigen Durchmesser.',
+        keywords: [
+          'Antennengewinn',
+          'Parabolantenne',
+          'dBi',
+          'dBd',
+          'Öffnungswinkel',
+          'Wirkfläche',
+          'Fernfeld',
+          'Spiegel'
+        ]
+      },
+      {
+        id: 'rechner.radiohorizont',
+        label: 'Radiohorizont',
+        href: '/rechner/radiohorizont/',
+        icon: 'globe',
+        status: 'live',
+        description:
+          'Sichtweite über die gekrümmte Erde aus den Antennenhöhen, mit einstellbarem k-Faktor der Refraktion.',
+        keywords: [
+          'Radiohorizont',
+          'Sichtweite',
+          'Erdkrümmung',
+          'k-Faktor',
+          '4/3-Erde',
+          'Refraktion',
+          'Line of Sight',
+          'Antennenhöhe'
+        ]
+      },
+      {
+        id: 'rechner.dezibel',
+        label: 'Dezibel und Pegel',
+        href: '/rechner/dezibel/',
+        icon: 'sliders',
+        status: 'live',
+        description:
+          'Leistung, dBm, dBW, Spannung und dBµV ineinander umrechnen, dazu Merkregeln und eine Kettenrechnung.',
+        keywords: [
+          'Dezibel',
+          'dB',
+          'dBm',
+          'dBW',
+          'dBµV',
+          'Pegel',
+          'Leistung',
+          'Spannung',
+          'Kettenrechnung',
+          'Merkregel'
+        ]
       }
     ]
   },
@@ -236,6 +277,38 @@ export const NAV_TREE: NavNode[] = [
           'LUF',
           'Tote Zone',
           'Beugung'
+        ],
+        children: [
+          {
+            id: 'wissen.wellenausbreitung.ionosphaere',
+            label: 'Ionosphärische Ausbreitung',
+            href: '/wissen/wellenausbreitung/ionosphaere/',
+            icon: 'globe',
+            status: 'live',
+            description:
+              'D-, E- und F-Schichten, MUF und LUF, Skip-Zone und Kurzwellenausbreitung über große Entfernungen.',
+            keywords: ['Ionosphäre', 'MUF', 'LUF', 'Skip-Zone', 'Raumwelle', 'Kurzwelle', 'F2']
+          },
+          {
+            id: 'wissen.wellenausbreitung.daempfung',
+            label: 'Atmosphärische Dämpfung',
+            href: '/wissen/wellenausbreitung/daempfung/',
+            icon: 'cloud',
+            status: 'live',
+            description:
+              'Dämpfung durch Sauerstoff, Wasserdampf und Niederschlag nach ITU-R P.676, P.838 und P.840.',
+            keywords: [
+              'Dämpfung',
+              'Absorption',
+              'Sauerstoff',
+              'Wasserdampf',
+              'Regen',
+              'Nebel',
+              '60 GHz',
+              '22 GHz',
+              'ITU-R P.676'
+            ]
+          }
         ]
       },
       {
@@ -287,6 +360,100 @@ export const NAV_TREE: NavNode[] = [
             description:
               'Rundfunk von Langwelle bis DVB-T2: Kanalraster, Modulation und Gleichwellennetze.',
             keywords: ['Langwelle', 'Mittelwelle', 'Kurzwelle', 'UKW', 'FM', 'DAB+', 'DVB-T2', 'RDS']
+          },
+          {
+            id: 'wissen.funktechnik.seefunk',
+            label: 'Seefunk',
+            href: '/wissen/funktechnik/seefunk/',
+            icon: 'wave',
+            status: 'live',
+            description:
+              'GMDSS-Seegebiete, UKW-Kanäle nach Appendix 18, digitaler Selektivruf, NAVTEX, AIS und Seenotfunkbaken.',
+            keywords: [
+              'Seefunk',
+              'GMDSS',
+              'Kanal 16',
+              'Kanal 70',
+              'DSC',
+              'MMSI',
+              'NAVTEX',
+              'AIS',
+              'EPIRB',
+              'ATIS',
+              'Grenzwelle',
+              '2182 kHz'
+            ]
+          },
+          {
+            id: 'wissen.funktechnik.flugfunk',
+            label: 'Flugfunk',
+            href: '/wissen/funktechnik/flugfunk/',
+            icon: 'signal',
+            status: 'live',
+            description:
+              'Sprechfunk 118 bis 137 MHz mit 8,33-kHz-Raster, Notfrequenzen sowie NDB, VOR, ILS, DME, Transponder und ADS-B.',
+            keywords: [
+              'Flugfunk',
+              '8,33 kHz',
+              'Kanalbezeichnung',
+              '121,5 MHz',
+              'VOR',
+              'ILS',
+              'DME',
+              'NDB',
+              'Transponder',
+              'ADS-B',
+              'ACARS',
+              'ICAO Annex 10'
+            ]
+          },
+          {
+            id: 'wissen.funktechnik.bos',
+            label: 'BOS- und Behördenfunk',
+            href: '/wissen/funktechnik/bos/',
+            icon: 'radio',
+            status: 'live',
+            description:
+              'Vom analogen 4-m- und 2-m-Band zum TETRA-Digitalfunk der Behörden — und der Notruf 112 mit AML und eCall.',
+            keywords: [
+              'BOS',
+              'Behördenfunk',
+              'TETRA',
+              'Digitalfunk',
+              '4-m-Band',
+              '2-m-Band',
+              'POCSAG',
+              'TMO',
+              'DMO',
+              '112',
+              'AML',
+              'eCall'
+            ]
+          },
+          {
+            id: 'wissen.funktechnik.satellitenfunk',
+            label: 'Satellitenfunk',
+            href: '/wissen/funktechnik/satellitenfunk/',
+            icon: 'satellite',
+            status: 'live',
+            description:
+              'Bahnen von LEO bis GEO, Bandbuchstaben und Up-/Downlink, Transponder, EIRP und G/T sowie die wichtigsten Systeme.',
+            keywords: [
+              'Satellitenfunk',
+              'GEO',
+              'MEO',
+              'LEO',
+              'Transponder',
+              'EIRP',
+              'G/T',
+              'Ku-Band',
+              'Ka-Band',
+              'Inmarsat',
+              'Iridium',
+              'Starlink',
+              'QO-100',
+              'DVB-S'
+            ]
           },
           {
             id: 'wissen.funktechnik.notfrequenzen',
@@ -360,6 +527,26 @@ export const NAV_TREE: NavNode[] = [
         description:
           'Funktionsprinzip, Radargleichung, Rückstreuquerschnitt und die gängigen Radarverfahren.',
         keywords: ['Radar', 'Pulsradar', 'Doppler', 'FMCW', 'RCS', 'SAR', 'Sekundärradar']
+      },
+      {
+        id: 'wissen.glossar',
+        label: 'Glossar',
+        href: '/wissen/glossar/',
+        icon: 'book',
+        status: 'live',
+        description:
+          'Nachschlagewerk der Funktechnik: Kurzdefinitionen von dB bis Wellenlänge, durchsuchbar und nach Themen filterbar.',
+        keywords: [
+          'Glossar',
+          'Begriffe',
+          'Lexikon',
+          'Definition',
+          'Abkürzungen',
+          'dB',
+          'EIRP',
+          'SNR',
+          'Nachschlagen'
+        ]
       }
     ]
   },
@@ -488,12 +675,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: 'Visualisierungen',
         href: '/spektrum/',
-        itemIds: [
-          'spektrum.anwendungen',
-          'spektrum.sendeleistungen',
-          'spektrum.daempfung',
-          'spektrum.ionosphaere'
-        ]
+        itemIds: ['spektrum.anwendungen', 'spektrum.sendeleistungen']
       }
     ]
   },
@@ -511,7 +693,10 @@ export const NAV_GROUPS: NavGroup[] = [
           'rechner.radar',
           'rechner.kanalkapazitaet',
           'rechner.skin-tiefe',
-          'rechner.fresnel'
+          'rechner.fresnel',
+          'rechner.antennengewinn',
+          'rechner.radiohorizont',
+          'rechner.dezibel'
         ]
       },
       {
@@ -534,12 +719,21 @@ export const NAV_GROUPS: NavGroup[] = [
           'wissen.funktechnik.amateurfunk',
           'wissen.funktechnik.mobilfunk',
           'wissen.funktechnik.rundfunk',
+          'wissen.funktechnik.seefunk',
+          'wissen.funktechnik.flugfunk',
+          'wissen.funktechnik.bos',
+          'wissen.funktechnik.satellitenfunk',
           'wissen.funktechnik.notfrequenzen'
         ]
       },
       {
         label: 'Wellenausbreitung',
-        itemIds: ['wissen.wellenausbreitung', 'spektrum.ionosphaere', 'spektrum.daempfung']
+        href: '/wissen/wellenausbreitung/',
+        itemIds: [
+          'wissen.wellenausbreitung',
+          'wissen.wellenausbreitung.ionosphaere',
+          'wissen.wellenausbreitung.daempfung'
+        ]
       },
       {
         label: 'Technik & Verfahren',
@@ -548,7 +742,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: 'Grundlagen',
         href: '/wissen/',
-        itemIds: ['wissen.mathematik']
+        itemIds: ['wissen.mathematik', 'wissen.glossar']
       }
     ]
   },

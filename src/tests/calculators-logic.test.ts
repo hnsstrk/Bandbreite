@@ -358,9 +358,9 @@ describe('waterfallData', () => {
 
 	it('beschriftet Gewinne und Verluste mit Vorzeichen', () => {
 		const steps = buildWaterfallSteps(SAMPLE_BUDGET);
-		expect(stepLabel(steps[0])).toBe('20.0');
-		expect(stepLabel(steps[1])).toBe('+2.0');
-		expect(stepLabel(steps[2])).toBe('−1.0');
+		expect(stepLabel(steps[0])).toBe('20,0');
+		expect(stepLabel(steps[1])).toBe('+2,0');
+		expect(stepLabel(steps[2])).toBe('−1,0');
 	});
 
 	it('schließt die Empfindlichkeit in den Achsenbereich ein', () => {
@@ -433,11 +433,11 @@ describe('attenuationChartData', () => {
 	});
 
 	it('formatiert Dämpfungswerte mit passender Genauigkeit', () => {
-		expect(formatAttenuationValue(15)).toBe('15.0');
-		expect(formatAttenuationValue(1.5)).toBe('1.50');
-		expect(formatAttenuationValue(0.15)).toBe('0.150');
-		expect(formatAttenuationValue(0.015)).toBe('0.0150');
-		expect(formatAttenuationValue(0.0001)).toBe('1.00e-4');
+		expect(formatAttenuationValue(15)).toBe('15,0');
+		expect(formatAttenuationValue(1.5)).toBe('1,50');
+		expect(formatAttenuationValue(0.15)).toBe('0,150');
+		expect(formatAttenuationValue(0.015)).toBe('0,0150');
+		expect(formatAttenuationValue(0.0001)).toBe('1,00e-4');
 		expect(formatAttenuationValue(Number.NaN)).toBe('—');
 	});
 });

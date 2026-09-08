@@ -1,312 +1,212 @@
 <script lang="ts">
-  import {
-    ALL_TRANSMITTERS,
-    TYPE_NAMES,
-    searchTransmitters,
-    getTransmittersByType,
-    type Transmitter,
-    type TransmitterType,
-    type TransmitterStatus
-  } from '$lib/data/transmitters';
+  /**
+   * Durchsuchbare Senderdatenbank mit Filtern, Sortierung und Detailtafel.
+   *
+   * Filter- und Sortierlogik liegen in `transmitterDatabase.svelte.ts`,
+   * die Detailtafel in `TransmitterDetails.svelte`.
+   */
+  import { untrack } from 'svelte';
+  import { ALL_TRANSMITTERS, type Transmitter, type TransmitterSubtype } from '$lib/data/transmitters';
   import { formatFrequency, formatPowerWatts } from '$lib/utils/formatting';
-  import { formatFrequencyRange } from '$lib/data/bands';
+  import Badge from './Badge.svelte';
+  import Button from './Button.svelte';
+  import Card from './Card.svelte';
+  import TransmitterDetails from './TransmitterDetails.svelte';
+  import TransmitterFilters from './TransmitterFilters.svelte';
+  import {
+    STATUS_CONFIG,
+    TYPE_COLORS,
+    filterTransmitters,
+    type GroupFilter,
+    type SortKey
+  } from './transmitterDatabase.svelte';
 
   interface Props {
     onSelectFrequency?: (hz: number) => void;
+    /** Sender, dessen Detailtafel sofort offen sein soll (Deep-Link `?id=`) */
+    initialSelectedId?: string | null;
   }
 
-  let { onSelectFrequency }: Props = $props();
+  let { onSelectFrequency, initialSelectedId = null }: Props = $props();
 
-  // State
-  let searchQuery = $state('');
-  let selectedType = $state<TransmitterType | 'all'>('all');
-  let selectedTransmitter = $state<Transmitter | null>(null);
-  let showOnlyActive = $state(false);
+  let query = $state('');
+  let group = $state<GroupFilter>('all');
+  let subtype = $state<'all' | TransmitterSubtype>('all');
+  let sortKey = $state<SortKey>('frequency');
+  let ascending = $state(true);
+  let onlyActive = $state(false);
+  // `untrack`: einmaliger Startwert; ein neuer Deep-Link baut die Liste über
+  // `{#key}` in der Seite ohnehin neu auf.
+  let selectedId = $state<string | null>(untrack(() => initialSelectedId));
 
-  // Type colors
-  const typeColors: Record<TransmitterType, string> = {
-    time_signal: '#3b82f6',
-    broadcast_lw: '#ef4444',
-    broadcast_mw: '#f97316',
-    broadcast_sw: '#eab308',
-    broadcast_fm: '#22c55e',
-    navigation: '#06b6d4',
-    amateur: '#ec4899',
-    utility: '#6b7280'
-  };
+  let filtered = $derived(filterTransmitters({ query, group, subtype, onlyActive, sortKey, ascending }));
 
-  // Status colors and labels
-  const statusConfig: Record<TransmitterStatus, { color: string; label: string }> = {
-    active: { color: 'text-green-600 dark:text-green-400', label: 'Aktiv' },
-    inactive: { color: 'text-red-500 dark:text-red-400', label: 'Inaktiv' },
-    unknown: { color: 'text-gray-500 dark:text-gray-400', label: 'Unbekannt' }
-  };
+  let selected = $derived(filtered.find((t) => t.id === selectedId) ?? null);
 
-  // Filtered transmitters
-  let filteredTransmitters = $derived.by(() => {
-    let result = ALL_TRANSMITTERS;
-
-    // Filter by type
-    if (selectedType !== 'all') {
-      result = getTransmittersByType(selectedType);
-    }
-
-    // Filter by search query
-    if (searchQuery.trim()) {
-      result = searchTransmitters(searchQuery).filter(t =>
-        selectedType === 'all' || t.type === selectedType
-      );
-    }
-
-    // Filter by status
-    if (showOnlyActive) {
-      result = result.filter(t => t.status === 'active');
-    }
-
-    // Sort by frequency
-    return result.sort((a, b) => a.frequencyHz - b.frequencyHz);
-  });
-
-  // Get unique types for filter
-  let availableTypes = $derived(
-    [...new Set(ALL_TRANSMITTERS.map(t => t.type))] as TransmitterType[]
-  );
-
-  // Handle transmitter selection
-  function handleTransmitterClick(transmitter: Transmitter) {
-    selectedTransmitter = selectedTransmitter?.id === transmitter.id ? null : transmitter;
+  function handleRowClick(transmitter: Transmitter) {
+    selectedId = selectedId === transmitter.id ? null : transmitter.id;
   }
 
-  // Handle frequency selection callback
-  function handleFrequencySelect(hz: number) {
-    if (onSelectFrequency) {
-      onSelectFrequency(hz);
-    }
+  function handleResetClick() {
+    query = '';
+    group = 'all';
+    subtype = 'all';
+    sortKey = 'frequency';
+    ascending = true;
+    onlyActive = false;
+    selectedId = null;
   }
 </script>
 
-<div class="card">
-  <h3 class="text-heading-3 mb-4">Sender-Datenbank</h3>
+<Card title="Senderdatenbank" subtitle="{ALL_TRANSMITTERS.length} Einträge" icon="database">
+  {#snippet actions()}
+    <Button size="sm" variant="ghost" icon="reset" onclick={handleResetClick}>Filter zurücksetzen</Button>
+  {/snippet}
 
-  <!-- Search and Filters -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <!-- Search Input -->
-    <div class="space-y-2">
-      <label for="transmitter-search" class="text-label">Suche</label>
-      <input
-        id="transmitter-search"
-        type="text"
-        bind:value={searchQuery}
-        class="input-field w-full"
-        placeholder="Name, Standort, Land..."
-      />
-    </div>
+  <div class="txdb">
+    <TransmitterFilters
+      bind:query
+      bind:group
+      bind:subtype
+      bind:sortKey
+      bind:ascending
+      bind:onlyActive
+      visibleCount={filtered.length}
+    />
 
-    <!-- Type Filter -->
-    <div class="space-y-2">
-      <label for="transmitter-type" class="text-label">Typ</label>
-      <select
-        id="transmitter-type"
-        bind:value={selectedType}
-        class="select-field w-full"
-      >
-        <option value="all">Alle Typen ({ALL_TRANSMITTERS.length})</option>
-        {#each availableTypes as type (type)}
-          {@const count = ALL_TRANSMITTERS.filter(t => t.type === type).length}
-          <option value={type}>{TYPE_NAMES[type].nameDE} ({count})</option>
-        {/each}
-      </select>
-    </div>
+    <ul class="txdb__list">
+      {#each filtered as transmitter (transmitter.id)}
+        <li>
+          <button
+            type="button"
+            class="txdb__row"
+            class:is-selected={selectedId === transmitter.id}
+            aria-pressed={selectedId === transmitter.id}
+            onclick={() => handleRowClick(transmitter)}
+          >
+            <span class="txdb__dot" style="background-color: {TYPE_COLORS[transmitter.type]}" aria-hidden="true"></span>
+            <span class="txdb__identity">
+              <span class="txdb__name">{transmitter.nameDE}</span>
+              <span class="txdb__place">
+                {transmitter.location.name}, {transmitter.location.country}
+              </span>
+            </span>
+            <span class="txdb__numbers">
+              <span class="txdb__frequency">{formatFrequency(transmitter.frequencyHz)}</span>
+              {#if transmitter.powerWatts}
+                <span class="txdb__power">{formatPowerWatts(transmitter.powerWatts, 1)}</span>
+              {/if}
+            </span>
+            <Badge tone={STATUS_CONFIG[transmitter.status].tone} dot srPrefix="Status">
+              {STATUS_CONFIG[transmitter.status].label}
+            </Badge>
+          </button>
+        </li>
+      {/each}
 
-    <!-- Status Filter -->
-    <div class="space-y-2">
-      <div class="text-label">Status</div>
-      <label class="flex items-center gap-2 cursor-pointer mt-2">
-        <input
-          type="checkbox"
-          bind:checked={showOnlyActive}
-          class="checkbox"
-        />
-        <span class="text-secondary">Nur aktive Sender anzeigen</span>
-      </label>
-    </div>
-  </div>
-
-  <!-- Results Count -->
-  <div class="mb-4 text-sm text-muted">
-    {filteredTransmitters.length} Sender gefunden
-  </div>
-
-  <!-- Transmitter List -->
-  <div class="space-y-2 max-h-96 overflow-y-auto pr-2">
-    {#each filteredTransmitters as transmitter (transmitter.id)}
-      {@const isSelected = selectedTransmitter?.id === transmitter.id}
-      <button
-        type="button"
-        onclick={() => handleTransmitterClick(transmitter)}
-        class="w-full text-left p-3 rounded-lg transition-colors
-               {isSelected
-                 ? 'bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-500'
-                 : 'bg-surface-secondary hover:bg-surface-tertiary'}"
-      >
-        <div class="flex items-start justify-between">
-          <div class="flex items-center gap-2">
-            <span
-              class="w-3 h-3 rounded-full flex-shrink-0"
-              style="background-color: {typeColors[transmitter.type]}"
-            ></span>
-            <div>
-              <div class="font-medium text-primary">{transmitter.name}</div>
-              <div class="text-xs text-muted">{transmitter.location.name}, {transmitter.location.country}</div>
-            </div>
-          </div>
-          <div class="text-right">
-            <div class="font-mono text-sm text-secondary">
-              {formatFrequency(transmitter.frequencyHz)}
-            </div>
-            <div class="text-xs {statusConfig[transmitter.status].color}">
-              {statusConfig[transmitter.status].label}
-            </div>
-          </div>
-        </div>
-      </button>
-    {/each}
-
-    {#if filteredTransmitters.length === 0}
-      <div class="p-8 text-center text-muted">
-        Keine Sender gefunden
-      </div>
-    {/if}
-  </div>
-
-  <!-- Selected Transmitter Details -->
-  {#if selectedTransmitter}
-    <div class="mt-6 p-4 bg-surface-secondary rounded-lg">
-      <div class="flex items-start justify-between mb-4">
-        <div>
-          <h4 class="text-heading-4 flex items-center gap-2">
-            <span
-              class="w-4 h-4 rounded-full"
-              style="background-color: {typeColors[selectedTransmitter.type]}"
-            ></span>
-            {selectedTransmitter.nameDE}
-          </h4>
-          <p class="text-secondary text-sm mt-1">
-            {TYPE_NAMES[selectedTransmitter.type].nameDE}
-          </p>
-        </div>
-        <button
-          type="button"
-          onclick={() => { selectedTransmitter = null; }}
-          class="text-muted hover:text-primary"
-          aria-label="Auswahl aufheben"
-        >
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Frequency -->
-        <div>
-          <div class="text-label mb-1">Frequenz</div>
-          <div class="text-lg font-mono font-bold text-blue-500 dark:text-blue-400">
-            {formatFrequency(selectedTransmitter.frequencyHz)}
-          </div>
-          {#if selectedTransmitter.frequencyHzSecondary}
-            <div class="text-sm text-muted mt-1">
-              Sekundär: {formatFrequency(selectedTransmitter.frequencyHzSecondary)}
-            </div>
-          {/if}
-          {#if onSelectFrequency}
-            <button
-              type="button"
-              onclick={() => handleFrequencySelect(selectedTransmitter!.frequencyHz)}
-              class="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
-            >
-              Frequenz übernehmen
-            </button>
-          {/if}
-        </div>
-
-        <!-- Location -->
-        <div>
-          <div class="text-label mb-1">Standort</div>
-          <div class="text-primary font-medium">
-            {selectedTransmitter.location.name}
-          </div>
-          <div class="text-sm text-secondary">
-            {selectedTransmitter.location.country}
-          </div>
-          {#if selectedTransmitter.location.latitude && selectedTransmitter.location.longitude}
-            <div class="text-xs text-muted mt-1">
-              {selectedTransmitter.location.latitude.toFixed(4)}N,
-              {selectedTransmitter.location.longitude.toFixed(4)}E
-            </div>
-          {/if}
-        </div>
-
-        <!-- Power -->
-        {#if selectedTransmitter.powerWatts}
-          <div>
-            <div class="text-label mb-1">Sendeleistung</div>
-            <div class="text-primary font-medium">
-              {formatPowerWatts(selectedTransmitter.powerWatts)}
-            </div>
-          </div>
-        {/if}
-
-        <!-- Coverage -->
-        {#if selectedTransmitter.coverage}
-          <div>
-            <div class="text-label mb-1">Reichweite</div>
-            <div class="text-primary">
-              {selectedTransmitter.coverage}
-            </div>
-          </div>
-        {/if}
-
-        <!-- Operator -->
-        {#if selectedTransmitter.operator}
-          <div>
-            <div class="text-label mb-1">Betreiber</div>
-            <div class="text-primary">
-              {selectedTransmitter.operator}
-            </div>
-          </div>
-        {/if}
-
-        <!-- Status -->
-        <div>
-          <div class="text-label mb-1">Status</div>
-          <div class={statusConfig[selectedTransmitter.status].color}>
-            {statusConfig[selectedTransmitter.status].label}
-          </div>
-        </div>
-      </div>
-
-      <!-- Description -->
-      <div class="mt-4">
-        <div class="text-label mb-1">Beschreibung</div>
-        <p class="text-sm text-secondary">
-          {selectedTransmitter.descriptionDE}
-        </p>
-      </div>
-
-      <!-- Notes -->
-      {#if selectedTransmitter.notes}
-        <div class="mt-3 p-3 bg-surface-tertiary rounded text-sm text-muted">
-          <strong>Hinweis:</strong> {selectedTransmitter.notes}
-        </div>
+      {#if filtered.length === 0}
+        <li class="txdb__empty">Keine Sender gefunden. Filter zurücksetzen oder Suche ändern.</li>
       {/if}
-    </div>
-  {/if}
+    </ul>
 
-  <!-- Info -->
-  <div class="mt-4 text-xs text-muted">
-    <strong>Hinweis:</strong> Diese Datenbank dient Bildungszwecken.
-    Aktuelle Frequenzen und Parameter können abweichen.
-    Datenbank enthaelt {ALL_TRANSMITTERS.length} Sender.
+    {#if selected}
+      <TransmitterDetails transmitter={selected} onclose={() => (selectedId = null)} {onSelectFrequency} />
+    {/if}
+
+    <p class="txdb__footnote">
+      Diese Datenbank dient Bildungszwecken. Aktuelle Frequenzen und Parameter können abweichen; das Feld „Zuletzt
+      geprüft" nennt den Stand des jeweiligen Eintrags.
+    </p>
   </div>
-</div>
+</Card>
+
+<style>
+  .txdb {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .txdb__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-height: 28rem;
+    overflow-y: auto;
+  }
+
+  .txdb__row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+    background: var(--color-sunken);
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    cursor: pointer;
+  }
+
+  .txdb__row:hover {
+    background: var(--color-hover);
+  }
+
+  .txdb__row.is-selected {
+    background: var(--color-info-soft);
+    border-color: var(--color-brand);
+  }
+
+  .txdb__dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: var(--radius-pill);
+    flex: none;
+  }
+
+  .txdb__identity {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .txdb__name {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-ink);
+  }
+
+  .txdb__place {
+    font-size: var(--font-size-xs);
+    color: var(--color-ink-subtle);
+  }
+
+  .txdb__numbers {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .txdb__power {
+    font-size: var(--font-size-xs);
+    color: var(--color-ink-subtle);
+  }
+
+  .txdb__empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--color-ink-subtle);
+  }
+
+  .txdb__footnote {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-ink-subtle);
+  }
+</style>

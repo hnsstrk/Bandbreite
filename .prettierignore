@@ -1,0 +1,11 @@
+# Erzeugte und fremde Verzeichnisse
+build/
+.svelte-kit/
+node_modules/
+static/
+coverage/
+package-lock.json
+
+# Markdown bleibt unformatiert: Die Doku lebt von handgesetzten Tabellen
+# und Zeilenumbrüchen; Prettier würde sie durchgängig umbrechen.
+*.md

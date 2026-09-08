@@ -1,30 +1,42 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
+  import { page } from '$app/state';
+  import PageHero from '$lib/components/ui/PageHero.svelte';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import TransmitterDatabase from '$lib/components/ui/TransmitterDatabase.svelte';
+  import { ALL_TRANSMITTERS } from '$lib/data/transmitters';
+
+  /**
+   * `?id=<Sender>` aus der Befehlspalette öffnet die Detailtafel des
+   * Eintrags. Beim Prerendern sind Suchparameter gesperrt, deshalb der
+   * `browser`-Zweig; unbekannte IDs werden verworfen.
+   */
+  let deepLinkId = $derived.by(() => {
+    if (!browser) return null;
+    const raw = page.url.searchParams.get('id');
+    return raw && ALL_TRANSMITTERS.some((tx) => tx.id === raw) ? raw : null;
+  });
 </script>
 
-<svelte:head>
-  <title>Senderdatenbank - Bandbreite</title>
-  <meta name="description" content="Datenbank für Rundfunk- und Kommunikationssender" />
-  <meta property="og:title" content="Senderdatenbank | Bandbreite" />
-  <meta property="og:description" content="Datenbank für Rundfunk- und Kommunikationssender" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Senderdatenbank | Bandbreite" />
-  <meta name="twitter:description" content="Datenbank für Rundfunk- und Kommunikationssender" />
-</svelte:head>
-
 <div class="page-content">
-  <header class="page-header">
-    <h1 class="text-heading-1">Senderdatenbank</h1>
-    <p class="header-description">
-      Durchsuchen Sie die Datenbank bekannter Rundfunk- und Kommunikationssender.
-      Finden Sie Informationen zu Frequenzen, Standorten und Sendeleistungen.
-    </p>
-  </header>
+  <PageHero
+    kicker="Datenbanken"
+    title="Senderdatenbank"
+    icon="antenna"
+    lead="Zeitzeichensender, Rundfunk, Navigation, Amateurfunk-Relais und Forschungsanlagen — mit Frequenz, Standort, Leistung und Prüfstand."
+    meta={[
+      { label: 'Einträge', value: String(ALL_TRANSMITTERS.length) },
+      { label: 'Filter', value: 'Typ, Einordnung, Status' }
+    ]}
+  />
 
-  <section class="database-section">
-    <TransmitterDatabase />
-  </section>
+  <!-- Der Schlüssel setzt die Datenbank neu auf, wenn dieselbe Route mit
+       einem anderen Sender angesteuert wird. -->
+  {#key deepLinkId}
+    <TransmitterDatabase initialSelectedId={deepLinkId} />
+  {/key}
+
+  <RelatedTopics href="/datenbanken/sender/" />
 </div>
 
 <style>
@@ -32,21 +44,5 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 0 1rem;
-  }
-
-  .page-header {
-    margin-bottom: 0;
-  }
-
-  .header-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    margin-top: 0.5rem;
-    line-height: var(--line-height-relaxed);
-  }
-
-  .database-section {
-    width: 100%;
   }
 </style>

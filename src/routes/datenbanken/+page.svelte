@@ -1,58 +1,48 @@
 <script lang="ts">
-  interface Section {
-    title: string;
-    description: string;
-    href: string;
-    icon: string;
-  }
+  import { findNode, getHubChildren } from '$lib/data/navigation';
+  import Badge from '$lib/components/ui/Badge.svelte';
+  import Card from '$lib/components/ui/Card.svelte';
+  import PageHero from '$lib/components/ui/PageHero.svelte';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
+  import { isIconName } from '$lib/components/ui/icons';
 
-  const sections: Section[] = [
-    {
-      title: 'Geschichte der Funktechnik',
-      description: 'Von Marconis ersten Experimenten bis zur modernen Kommunikation - eine Zeitreise durch die Entwicklung der Funktechnik.',
-      href: '/datenbanken/historie',
-      icon: '📜'
-    },
-    {
-      title: 'Senderdatenbank',
-      description: 'Referenzdaten zu bekannten Funk- und Rundfunksendern weltweit.',
-      href: '/datenbanken/sender',
-      icon: '📡'
-    }
-  ];
+  const HUB_HREF = '/datenbanken/';
+
+  const hub = findNode(HUB_HREF);
+  const items = getHubChildren(HUB_HREF);
+
+  /** Nur Namen aus dem Katalog dürfen an `Icon` — sonst kein Icon. */
+  function iconFor(name: string | undefined) {
+    return name && isIconName(name) ? name : undefined;
+  }
 </script>
 
-<svelte:head>
-  <title>Datenbanken - Bandbreite</title>
-  <meta name="description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
-  <meta property="og:title" content="Datenbanken | Bandbreite" />
-  <meta property="og:description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Datenbanken | Bandbreite" />
-  <meta name="twitter:description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
-</svelte:head>
-
 <div class="page-content">
-  <header class="page-header">
-    <h1 class="text-heading-1">Datenbanken</h1>
-    <p class="header-description">
-      Nachschlagewerke und Referenzdaten zur Funktechnik.
-    </p>
-  </header>
+  <PageHero
+    kicker="Nachschlagen"
+    title={hub?.label ?? 'Datenbanken'}
+    icon="database"
+    lead={hub?.description ?? 'Frequenzbänder, Sender und Meilensteine der Funkgeschichte, durchsuchbar und filterbar.'}
+  />
 
-  <section class="sections-grid">
-    {#each sections as section (section.href)}
-      <a href={section.href} class="section-card">
-        <div class="section-icon">{section.icon}</div>
-        <div class="section-content">
-          <h2>{section.title}</h2>
-          <p>{section.description}</p>
-        </div>
-        <div class="section-arrow">→</div>
-      </a>
+  <ul class="hub-grid">
+    {#each items as item (item.id)}
+      <li class="hub-grid__cell">
+        {#if item.status === 'geplant'}
+          <Card title={item.label} level={2} icon={iconFor(item.icon)} muted class="hub-card">
+            {#snippet actions()}<Badge tone="neutral">geplant</Badge>{/snippet}
+            {item.description ?? ''}
+          </Card>
+        {:else}
+          <Card href={item.href} title={item.label} level={2} icon={iconFor(item.icon)} class="hub-card">
+            {item.description ?? ''}
+          </Card>
+        {/if}
+      </li>
     {/each}
-  </section>
+  </ul>
+
+  <RelatedTopics href={HUB_HREF} />
 </div>
 
 <style>
@@ -60,75 +50,24 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 0 1rem;
   }
 
-  .page-header {
-    margin-bottom: 0;
-  }
-
-  .header-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    margin-top: 0.5rem;
-    line-height: var(--line-height-relaxed);
-    max-width: 65ch;
-  }
-
-  .sections-grid {
-    display: flex;
-    flex-direction: column;
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    grid-auto-rows: 1fr;
     gap: 1rem;
-  }
-
-  .section-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .section-card:hover {
-    border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-  }
-
-  .section-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
-  }
-
-  .section-content {
-    flex: 1;
-  }
-
-  .section-content h2 {
-    margin: 0 0 0.5rem 0;
-    font-size: var(--font-size-lg);
-    color: var(--color-text-primary);
-  }
-
-  .section-content p {
+    list-style: none;
     margin: 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-relaxed);
+    padding: 0;
   }
 
-  .section-arrow {
-    font-size: 1.5rem;
-    color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
+  /* Gleich hohe Kacheln: die Karte füllt ihre Zelle vollständig aus. */
+  .hub-grid__cell {
+    display: flex;
   }
 
-  .section-card:hover .section-arrow {
-    transform: translateX(4px);
-    color: var(--color-accent-primary);
+  .hub-grid__cell :global(.hub-card) {
+    width: 100%;
   }
 </style>

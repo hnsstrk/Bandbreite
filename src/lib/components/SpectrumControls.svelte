@@ -1,15 +1,10 @@
 <script lang="ts">
-  import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
-  import { spectrumExplanations } from "$lib/data/explanations";
-  import {
-    type ViewMode,
-    type RowKey,
-    type VisibleRows,
-    MIN_ZOOM,
-    MAX_ZOOM,
-    formatFrequencyLocal,
-    formatZoom,
-  } from "./spectrumState.svelte";
+  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import { spectrumExplanations } from '$lib/data/explanations';
+  import type { ViewMode } from './spectrumState.svelte';
+  import { type RowKey, type VisibleRows } from './spectrumBands';
+  import { MIN_ZOOM, MAX_ZOOM } from './spectrumZoom';
+  import { formatFrequencyLocal, formatZoom } from './spectrumFormat';
 
   interface Props {
     visibleRows: VisibleRows;
@@ -42,14 +37,14 @@
     onPanLeft,
     onPanRight,
     onJumpToVisibleLight,
-    onCenterOnMarker,
+    onCenterOnMarker
   }: Props = $props();
 </script>
 
-<div class="flex flex-wrap gap-4 mb-4 items-center">
+<div class="mb-4 flex flex-wrap items-center gap-4">
   <!-- Band row selector -->
   <div class="flex flex-wrap items-center gap-2">
-    <span class="text-slate-400 text-sm mr-1">
+    <span class="text-ink-subtle mr-1 text-sm">
       Bänder:
       <InfoTooltip
         title={spectrumExplanations.emSpectrum.title}
@@ -58,46 +53,46 @@
       />
     </span>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.em
-        ? 'bg-blue-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onToggleRow("em")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.em
+        ? 'bg-series-1-solid text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onToggleRow('em')}
       aria-pressed={visibleRows.em}
     >
       EM-Spektrum
     </button>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.itu
-        ? 'bg-cyan-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onToggleRow("itu")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.itu
+        ? 'bg-series-5-solid text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onToggleRow('itu')}
       aria-pressed={visibleRows.itu}
     >
       ITU
     </button>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.ieee
-        ? 'bg-purple-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onToggleRow("ieee")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.ieee
+        ? 'bg-series-4-solid text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onToggleRow('ieee')}
       aria-pressed={visibleRows.ieee}
     >
       IEEE
     </button>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.nato
-        ? 'bg-red-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onToggleRow("nato")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.nato
+        ? 'bg-series-6-solid text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onToggleRow('nato')}
       aria-pressed={visibleRows.nato}
     >
       NATO
     </button>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {visibleRows.civilian
-        ? 'bg-green-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onToggleRow("civilian")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.civilian
+        ? 'bg-series-2-solid text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onToggleRow('civilian')}
       aria-pressed={visibleRows.civilian}
     >
       Zivil
@@ -106,29 +101,28 @@
 
   <!-- View mode toggle -->
   <div class="flex items-center gap-2">
-    <span class="text-slate-400 text-sm">Ansicht:</span>
+    <span class="text-ink-subtle text-sm">Ansicht:</span>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {viewMode === 'rf'
-        ? 'bg-amber-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onSetViewMode("rf")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {viewMode === 'rf'
+        ? 'bg-warning text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onSetViewMode('rf')}
     >
       RF (3 Hz - 3 THz)
     </button>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {viewMode ===
-      'visible'
-        ? 'bg-amber-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onSetViewMode("visible")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {viewMode === 'visible'
+        ? 'bg-warning text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onSetViewMode('visible')}
     >
       RF + Licht (bis 1 PHz)
     </button>
     <button
-      class="px-3 py-1.5 text-sm rounded transition-colors {viewMode === 'full'
-        ? 'bg-amber-600 text-white'
-        : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}"
-      onclick={() => onSetViewMode("full")}
+      class="rounded px-3 py-1.5 text-sm transition-colors {viewMode === 'full'
+        ? 'bg-warning text-on-solid'
+        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      onclick={() => onSetViewMode('full')}
     >
       Gesamt (bis Gamma)
     </button>
@@ -137,103 +131,61 @@
   <!-- Zoom and pan controls -->
   <div class="flex items-center gap-2">
     <button
-      class="px-2 py-1 text-sm bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 to-violet-500 text-white rounded hover:opacity-80"
+      class="from-series-6 via-series-7 via-series-2 to-series-4 text-on-solid rounded bg-gradient-to-r px-2 py-1 text-sm hover:opacity-80"
       onclick={onJumpToVisibleLight}
       aria-label="Sichtbares Licht anzeigen"
       title="Sichtbares Licht anzeigen"
     >
       Sichtbar
     </button>
-    <span class="text-slate-400 text-sm ml-2">Zoom:</span>
+    <span class="text-ink-subtle ml-2 text-sm">Zoom:</span>
     <button
-      class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onPanLeft}
       disabled={zoomLevel <= MIN_ZOOM}
       aria-label="Nach links verschieben"
       title="Nach links verschieben"
     >
-      <svg
-        class="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 19l-7-7 7-7"
-        />
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
     </button>
     <button
-      class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onZoomOut}
       disabled={zoomLevel <= MIN_ZOOM}
       aria-label="Herauszoomen"
       title="Herauszoomen"
     >
-      <svg
-        class="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M20 12H4"
-        />
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
       </svg>
     </button>
-    <span class="text-slate-300 text-sm font-mono min-w-[3.5rem] text-center"
-      >{formatZoom(zoomLevel)}</span
-    >
+    <span class="text-ink-muted min-w-[3.5rem] text-center font-mono text-sm">{formatZoom(zoomLevel)}</span>
     <button
-      class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onZoomIn}
       disabled={zoomLevel >= MAX_ZOOM}
       aria-label="Hineinzoomen"
       title="Hineinzoomen"
     >
-      <svg
-        class="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 4v16m8-8H4"
-        />
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
     </button>
     <button
-      class="w-8 h-8 flex items-center justify-center bg-slate-700 text-slate-300 rounded hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onPanRight}
       disabled={zoomLevel <= MIN_ZOOM}
       aria-label="Nach rechts verschieben"
       title="Nach rechts verschieben"
     >
-      <svg
-        class="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 5l7 7-7 7"
-        />
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>
     </button>
     <button
-      class="px-2 py-1 text-sm bg-slate-700 text-slate-300 rounded hover:bg-slate-600"
+      class="bg-elevated text-ink-muted hover:bg-hover rounded px-2 py-1 text-sm"
       onclick={onResetZoom}
       aria-label="Zoom zurücksetzen"
       title="Zoom zurücksetzen"
@@ -242,7 +194,7 @@
     </button>
     {#if frequencyHz}
       <button
-        class="px-2 py-1 text-sm bg-amber-700 text-amber-100 rounded hover:bg-amber-600"
+        class="bg-warning-ink text-warning-soft hover:bg-warning rounded px-2 py-1 text-sm"
         onclick={onCenterOnMarker}
         aria-label="Auf Marker zentrieren"
         title="Auf Marker zentrieren"
@@ -254,13 +206,9 @@
 
   <!-- Frequency marker display (integrated into control bar) -->
   {#if frequencyHz}
-    <div
-      class="ml-auto flex items-center bg-amber-500/20 border border-amber-500/50 rounded px-3 py-1.5"
-    >
-      <span class="text-amber-400 text-sm font-mono"
-        >{formatFrequencyLocal(frequencyHz)}</span
-      >
-      <span class="text-amber-400/70 text-xs ml-2">
+    <div class="bg-warning-soft border-warning ml-auto flex items-center rounded border px-3 py-1.5">
+      <span class="text-warning-ink font-mono text-sm">{formatFrequencyLocal(frequencyHz)}</span>
+      <span class="text-warning-ink/70 ml-2 text-xs">
         (lambda = {wavelengthDisplay})
       </span>
     </div>

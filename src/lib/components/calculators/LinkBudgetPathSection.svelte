@@ -1,175 +1,155 @@
 <script lang="ts">
-    import { parseNumericInput } from "$lib/utils/handlers";
-    import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
-    import { fsplExplanations } from "$lib/data/explanations";
+  /** Streckenabschnitt: Länge, Frequenz, Pfadtyp, atmosphärische Dämpfung. */
+  import { formatPowerDb } from '$lib/utils/formatting';
+  import Button from '$lib/components/ui/Button.svelte';
+  import NumberInput from '$lib/components/ui/NumberInput.svelte';
+  import ResultCard from '$lib/components/ui/ResultCard.svelte';
+  import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
+  import Select from '$lib/components/ui/Select.svelte';
+  import {
+    DISTANCE_UNIT_OPTIONS,
+    ELEVATION_MAX_DEG,
+    ELEVATION_MIN_DEG,
+    FREQUENCY_UNIT_OPTIONS,
+    LINK_FREQUENCY_MAX_HZ,
+    LINK_FREQUENCY_MIN_HZ,
+    MISC_LOSS_MAX_DB,
+    MISC_LOSS_MIN_DB,
+    PATH_LENGTH_MAX_M,
+    PATH_LENGTH_MIN_M,
+    PATH_TYPE_OPTIONS,
+    type PathType
+  } from './linkBudget.svelte';
 
-    interface Props {
-        pathLengthM: number;
-        pathLengthUnit: string;
-        pathFrequencyHz: number;
-        pathFrequencyUnit: string;
-        miscLossDb: number;
-        includeAtmosphericLoss: boolean;
-        fsplDb: number;
-        atmosphericLossDb: number;
-        totalPathLossDb: number;
-    }
+  interface Props {
+    pathLengthM: number;
+    pathLengthUnit: string;
+    pathFrequencyHz: number;
+    pathFrequencyUnit: string;
+    miscLossDb: number;
+    includeAtmosphericLoss: boolean;
+    pathType: PathType;
+    elevationAngleDeg: number;
+    fsplDb: number;
+    atmosphericLossDb: number;
+    totalPathLossDb: number;
+  }
 
-    let {
-        pathLengthM = $bindable(),
-        pathLengthUnit = $bindable(),
-        pathFrequencyHz = $bindable(),
-        pathFrequencyUnit = $bindable(),
-        miscLossDb = $bindable(),
-        includeAtmosphericLoss = $bindable(),
-        fsplDb,
-        atmosphericLossDb,
-        totalPathLossDb,
-    }: Props = $props();
+  let {
+    pathLengthM = $bindable(),
+    pathLengthUnit = $bindable(),
+    pathFrequencyHz = $bindable(),
+    pathFrequencyUnit = $bindable(),
+    miscLossDb = $bindable(),
+    includeAtmosphericLoss = $bindable(),
+    pathType = $bindable(),
+    elevationAngleDeg = $bindable(),
+    fsplDb,
+    atmosphericLossDb,
+    totalPathLossDb
+  }: Props = $props();
 
-    // Event handlers
-    function handleNumberInput(setter: (val: number) => void) {
-        return (e: Event) => {
-            setter(parseNumericInput(e, 0));
-        };
-    }
+  function handleAtmosphericClick() {
+    includeAtmosphericLoss = !includeAtmosphericLoss;
+  }
+
+  function handlePathTypeChange(value: string) {
+    pathType = value as PathType;
+  }
 </script>
 
-<div class="space-y-4">
-    <h4
-        class="text-sm font-semibold text-amber-600 dark:text-amber-400 border-b border-default pb-2"
+<div class="lb-section">
+  <SectionHeader title="Strecke" level={3} anchor={false} eyebrow="Pfad" />
+
+  <NumberInput
+    label="Distanz"
+    bind:value={pathLengthM}
+    bind:unit={pathLengthUnit}
+    units={DISTANCE_UNIT_OPTIONS}
+    min={PATH_LENGTH_MIN_M}
+    max={PATH_LENGTH_MAX_M}
+    slider
+    sliderScale="log"
+  />
+
+  <NumberInput
+    label="Frequenz"
+    bind:value={pathFrequencyHz}
+    bind:unit={pathFrequencyUnit}
+    units={FREQUENCY_UNIT_OPTIONS}
+    min={LINK_FREQUENCY_MIN_HZ}
+    max={LINK_FREQUENCY_MAX_HZ}
+    slider
+    sliderScale="log"
+  />
+
+  <NumberInput
+    label="Sonstige Verluste"
+    bind:value={miscLossDb}
+    units={[{ id: 'db', symbol: 'dB', factor: 1 }]}
+    min={MISC_LOSS_MIN_DB}
+    max={MISC_LOSS_MAX_DB}
+    step={0.5}
+    slider
+    hint="Polarisationsfehler, Zeigefehler, Bewuchs"
+  />
+
+  <div class="lb-section__toggle">
+    <Button
+      size="sm"
+      variant={includeAtmosphericLoss ? 'primary' : 'ghost'}
+      pressed={includeAtmosphericLoss}
+      icon="wave"
+      onclick={handleAtmosphericClick}
     >
-        Pfad (Path)
-    </h4>
+      Atmosphärische Dämpfung
+    </Button>
+  </div>
 
-    <div class="space-y-3">
-        <div>
-            <label for="lb-distance" class="text-label mb-1">
-                Distanz
-                <InfoTooltip
-                    title={fsplExplanations.distance.title}
-                    short={fsplExplanations.distance.short}
-                />
-            </label>
-            <div class="flex items-center gap-2">
-                <input
-                    id="lb-distance"
-                    type="number"
-                    value={pathLengthM}
-                    oninput={handleNumberInput((v) => (pathLengthM = v))}
-                    class="input-field flex-1"
-                    step="any"
-                    min="0"
-                />
-                <select
-                    id="lb-distance-unit"
-                    bind:value={pathLengthUnit}
-                    class="select-field"
-                    aria-label="Distanzeinheit"
-                >
-                    <option value="m">m</option>
-                    <option value="km">km</option>
-                    <option value="mi">mi</option>
-                </select>
-            </div>
-        </div>
+  {#if includeAtmosphericLoss}
+    <Select
+      label="Pfadtyp"
+      value={pathType}
+      options={PATH_TYPE_OPTIONS}
+      onchange={handlePathTypeChange}
+      hint="Erde–Raum dämpft nur im troposphärischen Anteil, nicht über die volle Distanz"
+    />
 
-        <div>
-            <label for="lb-frequency" class="text-label mb-1">
-                Frequenz
-                <InfoTooltip
-                    title={fsplExplanations.frequency.title}
-                    short={fsplExplanations.frequency.short}
-                />
-            </label>
-            <div class="flex items-center gap-2">
-                <input
-                    id="lb-frequency"
-                    type="number"
-                    value={pathFrequencyHz}
-                    oninput={handleNumberInput((v) => (pathFrequencyHz = v))}
-                    class="input-field flex-1"
-                    step="any"
-                    min="0"
-                />
-                <select
-                    id="lb-frequency-unit"
-                    bind:value={pathFrequencyUnit}
-                    class="select-field"
-                    aria-label="Frequenzeinheit"
-                >
-                    <option value="MHz">MHz</option>
-                    <option value="GHz">GHz</option>
-                </select>
-            </div>
-        </div>
+    {#if pathType === 'earth-space'}
+      <NumberInput
+        label="Elevationswinkel"
+        bind:value={elevationAngleDeg}
+        units={[{ id: 'deg', symbol: '°', factor: 1 }]}
+        min={ELEVATION_MIN_DEG}
+        max={ELEVATION_MAX_DEG}
+        step={1}
+        slider
+        hint="Flache Winkel verlängern den Weg durch die Troposphäre"
+      />
+    {/if}
+  {/if}
 
-        <div>
-            <label for="lb-misc-loss" class="text-label mb-1"
-                >Sonstige Verluste</label
-            >
-            <div class="flex items-center gap-2">
-                <input
-                    id="lb-misc-loss"
-                    type="number"
-                    value={miscLossDb}
-                    oninput={handleNumberInput((v) => (miscLossDb = v))}
-                    class="input-field flex-1"
-                    step="0.5"
-                    min="0"
-                />
-                <span class="text-muted text-sm w-12">dB</span>
-            </div>
-        </div>
+  <ResultCard label="Freiraumdämpfung" value={formatPowerDb(fsplDb)} hint="FSPL" />
 
-        <label
-            class="flex items-center gap-2 text-sm text-secondary cursor-pointer mt-2"
-        >
-            <input
-                type="checkbox"
-                bind:checked={includeAtmosphericLoss}
-                class="checkbox"
-            />
-            Atmosphärische Dämpfung einbeziehen
-        </label>
+  {#if includeAtmosphericLoss}
+    <ResultCard
+      label="Atmosphärische Dämpfung"
+      value={formatPowerDb(atmosphericLossDb)}
+      hint="Gase und Niederschlag nach ITU-R"
+    />
+  {/if}
 
-        <!-- Path Loss Results -->
-        <div class="result-box mt-4 space-y-2 text-left">
-            <div class="flex justify-between text-xs">
-                <span class="text-muted">FSPL:</span>
-                <span class="text-amber-600 dark:text-amber-400 font-mono"
-                    >{fsplDb.toFixed(1)} dB</span
-                >
-            </div>
-            {#if includeAtmosphericLoss && atmosphericLossDb > 0}
-                <div class="flex justify-between text-xs">
-                    <span class="text-muted">Atmos. Verlust:</span>
-                    <span class="text-amber-600 dark:text-amber-400 font-mono"
-                        >{atmosphericLossDb.toFixed(1)} dB</span
-                    >
-                </div>
-            {/if}
-            {#if miscLossDb > 0}
-                <div class="flex justify-between text-xs">
-                    <span class="text-muted">Sonstige:</span>
-                    <span class="text-amber-600 dark:text-amber-400 font-mono"
-                        >{miscLossDb.toFixed(1)} dB</span
-                    >
-                </div>
-            {/if}
-            <div class="flex justify-between border-t border-default pt-2">
-                <span class="text-primary text-sm">Gesamt:</span>
-                <span
-                    class="text-xl font-bold text-amber-600 dark:text-amber-400"
-                    >{totalPathLossDb.toFixed(1)} dB</span
-                >
-            </div>
-        </div>
-    </div>
+  <ResultCard label="Gesamte Streckendämpfung" value={formatPowerDb(totalPathLossDb)} tone="warning" />
 </div>
 
 <style>
-    .border-default {
-        border-color: var(--color-border-default);
-    }
+  .lb-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .lb-section__toggle {
+    display: flex;
+  }
 </style>

@@ -16,7 +16,8 @@ const rootDir = path.resolve(__dirname, '..');
 const content = fs.readFileSync(path.join(rootDir, 'src/lib/data/applications.ts'), 'utf-8');
 
 // Extract arrays using regex
-const arrayRegex = /export const (\w+_APPLICATIONS): RFApplication\[\] = (\[[\s\S]*?\]);(?=\n\n|$)/g;
+const arrayRegex =
+  /export const (\w+_APPLICATIONS): RFApplication\[\] = (\[[\s\S]*?\]);(?=\n\n|$)/g;
 let match;
 const data = {};
 
@@ -55,9 +56,7 @@ while ((match = arrayRegex.exec(content)) !== null) {
 // Extract CATEGORY_NAMES
 const categoryMatch = content.match(/export const CATEGORY_NAMES[^=]*=\s*({[\s\S]*?}) as const;/);
 if (categoryMatch) {
-  const cleaned = categoryMatch[1]
-    .replace(/,\s*}/g, '}')
-    .replace(/,\s*]/g, ']');
+  const cleaned = categoryMatch[1].replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
   try {
     data.categoryNames = new Function('return ' + cleaned)();
     console.log('Parsed CATEGORY_NAMES');
@@ -66,6 +65,9 @@ if (categoryMatch) {
   }
 }
 
-fs.writeFileSync(path.join(rootDir, 'src/lib/data/applications.json'), JSON.stringify(data, null, 2));
+fs.writeFileSync(
+  path.join(rootDir, 'src/lib/data/applications.json'),
+  JSON.stringify(data, null, 2)
+);
 console.log('\nWritten to applications.json');
-console.log(`Total categories: ${Object.keys(data).filter(k => k !== 'categoryNames').length}`);
+console.log(`Total categories: ${Object.keys(data).filter((k) => k !== 'categoryNames').length}`);

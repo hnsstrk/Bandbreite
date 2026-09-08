@@ -15,27 +15,15 @@
 
   let { frequencyHz = null }: Props = $props();
 
-  let ieeeBands = $derived(
-    frequencyHz !== null && frequencyHz > 0
-      ? getIEEEBandsForFrequency(frequencyHz)
-      : []
-  );
+  let ieeeBands = $derived(frequencyHz !== null && frequencyHz > 0 ? getIEEEBandsForFrequency(frequencyHz) : []);
 
-  let natoBands = $derived(
-    frequencyHz !== null && frequencyHz > 0
-      ? getNATOBandsForFrequency(frequencyHz)
-      : []
-  );
+  let natoBands = $derived(frequencyHz !== null && frequencyHz > 0 ? getNATOBandsForFrequency(frequencyHz) : []);
 
   let civilianBands = $derived(
-    frequencyHz !== null && frequencyHz > 0
-      ? getCivilianBandsForFrequency(frequencyHz)
-      : []
+    frequencyHz !== null && frequencyHz > 0 ? getCivilianBandsForFrequency(frequencyHz) : []
   );
 
-  let hasBands = $derived(
-    ieeeBands.length > 0 || natoBands.length > 0 || civilianBands.length > 0
-  );
+  let hasBands = $derived(ieeeBands.length > 0 || natoBands.length > 0 || civilianBands.length > 0);
 </script>
 
 <div class="card-compact">
@@ -114,7 +102,7 @@
               <span
                 class="band-tag"
                 style="background-color: {band.color};"
-                title="{formatFrequencyRange(band.minHz, band.maxHz)}"
+                title={formatFrequencyRange(band.minHz, band.maxHz)}
               >
                 {band.nameDE}
               </span>

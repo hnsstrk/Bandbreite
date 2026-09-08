@@ -1,31 +1,24 @@
 <script lang="ts">
+  import PageHero from '$lib/components/ui/PageHero.svelte';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import RadarRangeCalculator from '$lib/components/calculators/RadarRangeCalculator.svelte';
 </script>
 
-<svelte:head>
-  <title>Radar-Reichweite - Bandbreite</title>
-  <meta name="description" content="Berechnung der Radar-Reichweite basierend auf der Radargleichung" />
-  <meta property="og:title" content="Radar-Reichweite | Bandbreite" />
-  <meta property="og:description" content="Berechnung der Radar-Reichweite basierend auf der Radargleichung" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Radar-Reichweite | Bandbreite" />
-  <meta name="twitter:description" content="Berechnung der Radar-Reichweite basierend auf der Radargleichung" />
-</svelte:head>
-
 <div class="page-content">
-  <header class="page-header">
-    <h1 class="text-heading-1">Radar-Reichweite</h1>
-    <p class="header-description">
-      Berechnen Sie die maximale Reichweite eines Radarsystems basierend auf der Radargleichung.
-      Berücksichtigt Sendeleistung, Antennengewinn, Radarquerschnitt und Empfängerempfindlichkeit.
-    </p>
-  </header>
+  <PageHero
+    kicker="Rechner"
+    title="Radar-Reichweite"
+    icon="radio"
+    lead="Wie weit ein Radar ein Ziel erkennt — aus Sendeleistung, Antennengewinn, Radarquerschnitt und Empfängerempfindlichkeit."
+    meta={[
+      { label: 'Quelle', value: 'Skolnik, Radar Handbook' },
+      { label: 'Gültig', value: 'Freiraum ohne Clutter' }
+    ]}
+  />
 
-  <section class="calculator-section">
-    <RadarRangeCalculator />
-  </section>
+  <RadarRangeCalculator />
 
+  <RelatedTopics href="/rechner/radar/" />
 </div>
 
 <style>
@@ -33,22 +26,5 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 0 1rem;
   }
-
-  .page-header {
-    margin-bottom: 0;
-  }
-
-  .header-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    margin-top: 0.5rem;
-    line-height: var(--line-height-relaxed);
-  }
-
-  .calculator-section {
-    width: 100%;
-  }
-
 </style>

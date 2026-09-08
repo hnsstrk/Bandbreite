@@ -8,10 +8,16 @@
  * - ITU-R P.840-9: Attenuation due to clouds and fog
  */
 
-// Default values (ISA: International Standard Atmosphere at sea level)
-export const DEFAULT_TEMPERATURE_K = 288.15; // 15°C
-export const DEFAULT_PRESSURE_HPA = 1013.25; // Sea level
-export const DEFAULT_WATER_VAPOR_DENSITY = 7.5; // g/m³ (moderate humidity)
+import {
+  STANDARD_TEMPERATURE,
+  STANDARD_PRESSURE_HPA,
+  STANDARD_WATER_VAPOR_DENSITY
+} from '$lib/data/constants';
+
+// Default values (ISA: International Standard Atmosphere at sea level) – einzige Quelle: data/constants.ts
+export const DEFAULT_TEMPERATURE_K: number = STANDARD_TEMPERATURE; // 15°C
+export const DEFAULT_PRESSURE_HPA: number = STANDARD_PRESSURE_HPA; // Sea level (Gesamtdruck)
+export const DEFAULT_WATER_VAPOR_DENSITY: number = STANDARD_WATER_VAPOR_DENSITY; // g/m³ (moderate humidity)
 
 // Rain rate defaults
 export const DEFAULT_RAIN_RATE = 0; // mm/h (no rain)

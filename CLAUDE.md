@@ -1,142 +1,125 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code in this repository.
 
 ## Project Overview
 
-**Bandbreite** — SvelteKit-Webanwendung für HF/Mikrowellen-Frequenzberechnungen und Spektrum-Visualisierungen.
-
-**Status**: Aktive Entwicklung. Kernfunktionalität implementiert (Phasen 1-4 abgeschlossen).
+**Bandbreite** — SvelteKit-Webanwendung zum elektromagnetischen Spektrum: Visualisierungen, HF-Rechner, Wissenskapitel zur Funk- und Fernmeldetechnik, Frequenzdatenbanken.
+**Status**: Rework in sechs Wellen abgeschlossen (`docs/REWORK-2026-09.md`).
 
 ## Task Management
 
-```bash
-task project:bandbreite list
-```
+`task project:bandbreite list`
 
-## Build & Development Commands
+## Build, Test, Quality Gates
 
 ```bash
-npm install              # Abhängigkeiten installieren
-npm run dev -- --open    # Entwicklungsserver mit Browser
-npm run build            # Produktions-Build
-npm run preview          # Build-Vorschau
-npm run check            # TypeScript/Svelte-Prüfung
-npm run test             # Unit-Tests (Vitest)
-npm run test:watch       # Tests im Watch-Modus
+npm install · npm run dev -- --open · npm run build · npm run preview
+npm run format                                        # Prettier schreibt (2 Leerzeichen, ' , ; , 100/120)
+npm run lint && npm run check && npm run test:run && npm run build   # vor jedem Commit, alles grün
+npm run test:e2e                                      # Rauchtest über alle gebauten Seiten (Chromium nötig)
 ```
 
-## Quality Gates (vor jedem Commit)
-
-```bash
-npm run check && npm run test && npm run build   # 0 Fehler, alle Tests grün
-```
+`npm run lint` = ESLint (`eslint.config.js`) + `prettier --check`. Warnungen sind
+zugelassen und dokumentiert, **Fehler nicht**. Dieselben Schritte laufen in
+`.github/workflows/ci.yml` bei jedem Push und Pull Request.
 
 ## Technology Stack
 
-- **Framework**: SvelteKit + Svelte 5 Runes (`$state`, `$derived`, `$bindable`, `$effect`)
-- **Styling**: Tailwind CSS
-- **Visualisierungen**: D3.js (interaktiv) und Chart.js (statisch)
-- **Testing**: Vitest mit jsdom
-- **MCP**: Svelte MCP plugin für Dokumentation und Code-Validierung
+- **Framework**: SvelteKit + Svelte 5 Runes (`$state`, `$derived`, `$bindable`, `$effect`), `adapter-static` (`strict`)
+- **Styling**: Tailwind CSS 4, Tokens in `src/app.css`
+- **Visualisierungen**: `d3-scale` + `d3-shape` (kein `d3`-Metapaket) + eigenes SVG — **kein Chart.js**, kein jsPDF
+- **Testing**: Vitest + jsdom · **MCP**: Svelte MCP plugin
 
 ## Project Structure
 
 ```
-src/
-├── lib/
-│   ├── components/
-│   │   ├── calculators/   # FSPLCalculator, LinkBudgetCalculator, etc.
-│   │   ├── charts/        # AttenuationChart, LinkBudgetWaterfall, etc.
-│   │   ├── converters/    # FrequencyConverter, PowerConverter, etc.
-│   │   └── ui/            # Wiederverwendbare UI-Komponenten
-│   ├── data/              # Konstanten: bands.ts, units.ts, spectrum.ts, presets.ts
-│   ├── stores/            # Svelte Stores für geteilten State
-│   └── utils/
-│       ├── calculations.ts           # FSPL, Wellenlänge, Reichweite
-│       ├── conversions.ts            # Einheitsumrechnungen
-│       ├── formatting.ts             # formatFrequency, formatDistance, etc.
-│       ├── handlers.ts               # parseNumericInput, safeDivide, safeLog
-│       └── atmosphericAttenuation.ts # Atmosphärische Dämpfung
-├── routes/                # SvelteKit Seiten
-└── tests/                 # Unit-Tests (*.test.ts)
-static/                    # Statische Assets
+lib/components/  layout/ · ui/ · calculators/ · converters/ · charts/ · funk/
+                 knowledge/ (ArticleLayout, WidgetFrame, widgetRegistry, animationLoop)
+                 widgets/ (Widget + Rechenmodell *Model.ts) · portal/ · learning/
+                 Spectrum*.svelte + spectrum{State,Zoom,Bands,Cursor,Format}
+lib/content/     Kapiteltexte als Daten (+ funktechnik/, radar/, grundlagen/)
+lib/data/        navigation, relations, searchIndex, widgets, learningPaths, glossary,
+                 bands, frequencyBands + Funkdatensätze (amateurBands, broadcast,
+                 mobileNetworks, maritimeChannels, aviationBands, satelliteSystems)
+lib/stores/      speedOfLight, atmosphericParameters
+lib/utils/       calculations, conversions, formatting, handlers, decibel, fieldStrength,
+                 itu676, radar, orbitMath, fresnel-/modulation-/antennaMath, search,
+                 slug, urlState
+routes/          56 Seiten + 4 Redirects · tests/ · Elementreferenz: ARCHITEKTUR.md
 ```
 
 ## Geschützte Kernelemente (NICHT ÄNDERN ohne explizite Bestätigung)
 
-Die 5 Komponenten auf der Startseite (`/`) sind das Herzstück:
+Die fünf Komponenten der Kernidee: `SpectrumOverview` (EM-Spektrum), `FrequencyConverter` (f ↔ λ), `PowerConverter` (W ↔ dBm), `RangeCalculator` (TX/RX-Reichweite), `BandInfo` (Bandzuordnung — seit E0 auf `/konverter/frequenz/` eingebunden: einbinden ja, ändern nein; auf `/spektrum/` übernimmt `BandDetailSidebar`).
 
-1. `SpectrumOverview.svelte` — EM-Spektrum-Visualisierung
-2. `FrequencyConverter.svelte` — Frequenz ↔ Wellenlänge
-3. `PowerConverter.svelte` — Leistungskonverter (W ↔ dBm)
-4. `RangeCalculator.svelte` — Reichweitenrechner (TX/RX)
-5. `BandInfo.svelte` — Bandzuordnung für Frequenzen
+Geschützt sind **Verhalten und Erscheinungsbild**, nicht die Dateigrenze: `SpectrumOverview` und `FrequencyConverter` sind nach Freigabe intern aufgeteilt (pixelgleich). Sub-Komponenten zählen dazu: `Spectrum{WavelengthAxis,FrequencyAxis,Rows,Marker}`, `spectrum{Zoom,Bands,Cursor,Format}`, `Frequency{Presets,Formula}`.
+
+Der Bindable-Sync-Fehler (E3) ist behoben: beide Konverter arbeiten direkt auf dem `$bindable`-Prop (`pickBestUnit` nur bei fremden Änderungen); Tests: `components-*Converter.test.ts`.
 
 ## Coding Guidelines
 
 ### Zentrale Utilities immer importieren (nie duplizieren)
 
-```typescript
-import { formatFrequency, formatDistance, formatNumber } from '$lib/utils/formatting';
-import { parseNumericInput, safeDivide, safeLog } from '$lib/utils/handlers';
-import { FREQUENCY_FACTORS, DISTANCE_UNITS, POWER_FACTORS } from '$lib/data/units';
-```
+`units.ts` ist die einzige Quelle der Umrechnungsfaktoren (`conversions.ts` nutzt sie), λ = c/f nur in `calculations.ts`, Pegel nur in `decibel.ts`, Formatierer nur in `formatting.ts`. Immer `safeDivide(a, b, 0)` statt `a/b`, `safeLog(x, 10, -Infinity)` statt `Math.log`, `parseNumericInput(event)` statt `Number(…value)`.
 
-### Sichere Berechnungen
+### Neue Seite anlegen
 
-```typescript
-const ratio = safeDivide(a, b, 0);         // Nie a/b direkt
-const db = safeLog(power, 10, -Infinity);  // Nie Math.log direkt
-```
-
-### Input-Handler Pattern
-
-```typescript
-import { parseNumericInput } from '$lib/utils/handlers';
-function handleChange(e: Event) { value = parseNumericInput(e); }
-```
+1. Knoten in `NAV_TREE` (`data/navigation.ts`): `href` **mit** Trailing Slash, `description`, `icon`, `keywords`, `status`, ggf. `hidden`. Daraus ziehen Menü, Breadcrumb, Hub-Kacheln, Sitemap, Suche und Kapitelblättern; eine zweite Liste gibt es nicht.
+2. `RELATIONS` (`data/relations.ts`): 3–6 Ziele mit Begründung, eines bereichsfremd; auf der Seite nur `<RelatedTopics href="/…/" />`.
+3. `+page.ts` mit `pageMeta('/…/')` statt `<svelte:head>` — `ui/Metadata.svelte` macht daraus Titel, canonical, og/twitter, JSON-LD.
+4. **Trailing Slash**: jeder interne Link endet auf `/`, Anker dahinter (`…/grundlagen/#rcs`).
 
 ### Komponenten-Regeln
 
-- **Max. 300 Zeilen** pro Komponente — sonst aufteilen (Sub-Komponenten + `.svelte.ts` für Logik)
-- **Handler-Namen**: `handleXxxChange`, `handleXxxClick`, `setXxx`/`applyXxxPreset`
-- **State**: `$bindable()` für Two-Way-Binding
-- **Accessibility**: `role`, `aria-label`, `id`/`for` für alle interaktiven Elemente
-- **Keine Magic Numbers** — Konstanten in `/lib/data/`
-- **Tests** für jede neue Utility-Funktion
+- **Max. 300 Zeilen** — sonst aufteilen (Unterkomponenten + `.svelte.ts` für Logik)
+- **UI-Bibliothek statt eigenem Markup**: `Button`, `Card`, `NumberInput`, `Slider`, `Select`, `Tabs`, `Callout`, `FormulaBlock`, `ResultCard`, `PageHero`, `SectionHeader`, `Badge`
+- **Nur Tokens, keine Hex-Farben** (`var(--color-…)`); **`Icon.svelte` statt Emoji** (`ui/icons.ts`)
+- **Handler-Namen**: `handleXxxChange`, `handleXxxClick`, `setXxx`/`applyXxxPreset`; `$bindable()` für Two-Way-Binding
+- **Accessibility**: `role`, `aria-label`, `id`/`for` an jedem interaktiven Element
+- **Keine Magic Numbers** (Konstanten in `lib/data/`); **Test** für jede neue Utility
+
+### Content-Architektur (Wissen-Kapitel)
+
+Kapiteltexte sind **Daten** in `src/lib/content`, kein Markup: `KnowledgeArticle` (`content/types.ts`) aus `ArticleSection`s mit typisierten Blöcken (paragraph, list, formula, callout, table, definitions, cards, widget, question), gerendert von `ArticleLayout.svelte`. Mehrteilige Kapitel: Unterordner mit `index.ts` als Hub. Anker-IDs ohne Umlaute; Zahlen aus den Utilities berechnen, nie hartkodieren.
+
+### Chart- und Rechner-Muster
+
+Jedes Diagramm sitzt in `charts/ChartFrame.svelte`, misst seine Breite selbst (`bind:width`, Aufrufer geben `width` nicht vor) und liefert `description` + `dataTable` (sr-only); Daten in `<name>Data.ts`. Rechner halten ihren Zustand per `utils/urlState.svelte.ts` in der URL: `*_PARAMS` für Vorgaben und Grenzen, `UrlStateSync` entprellt, `CalculatorActions.svelte` für „Link kopieren"/„Zurücksetzen".
+
+### Widget-Muster
+
+`XyzModel.ts` = reine Rechenfunktionen ohne DOM (mit Test); `XyzWidget.svelte` = Regler + Bühne in `WidgetFrame.svelte` (braucht `description` und `sr-only`-Datentabelle). Animation über `knowledge/animationLoop.svelte.ts`: `const loop = new AnimationLoop();` plus `$effect(() => loop.attach());` — stoppt bei `prefers-reduced-motion` und verborgenem Tab.
+
+**Deep-Link `?w=<id>`:** `ArticleLayout` springt zum Widget und setzt den Fokus, `WidgetFrame` bietet „Link zum Widget kopieren". **Neues Widget = zwei Zeilen:** Komponente in `widgetRegistry.ts`, Metadaten in `data/widgets.ts` — dort **ohne** Komponentenimporte, sonst zieht der Suchindex alle Widgets ins Bündel.
+
+### Lernpfad-Muster
+
+Ein Pfad in `data/learningPaths.ts` ist eine Schrittliste mit `href`, Lernziel und optionalem `optional: true`. **Jeder Schritt muss ein lebender `NAV_TREE`-Knoten sein** (`resolvePathSteps()` blendet fehlende oder geplante aus, sonst bricht der Prerender ab). Fortschritt gerätelokal, Lesen erst im `$effect`.
 
 ### Sprachkonventionen
 
 - Echte Umlaute in UI/Kommentaren/Docs: `ä ö ü ß` (NICHT ae, oe, ue, ss)
-- **Ausnahme**: Verzeichnis- und Dateinamen immer ohne Umlaute (Route-URLs)
-  - ✅ `/rechner/kanalkapazitaet` — ❌ `/rechner/kanalkapazität`
+- **Ausnahme**: Verzeichnis- und Dateinamen ohne Umlaute (sie landen in URLs): ✅ `/rechner/kanalkapazitaet`
+- Anzeigezahlen de-DE über `formatLocaleNumber`/`formatFixed`; Eingaben nehmen Komma **und** Punkt, URL-Parameter bleiben mit Punkt
 
-### TypeScript
+## Domain Knowledge (Quellen im Code angeben)
 
-```typescript
-export function calculateFSPL(frequencyHz: number, distanceMeters: number): number { ... }
-export const UNITS = { ... } as const;
-```
+- **λ = c / f** (c = 299 792 458 m/s exakt) · **FSPL(dB) = 20·log₁₀(d) + 20·log₁₀(f) + 20·log₁₀(4π/c)**, ITU-R P.525
+- **Shannon-Hartley**: C = B · log₂(1 + SNR_lin)
+- ITU-R **P.676-13** (Gas) · **P.838-3** (Regen) · **P.840** (Wolken) · **P.526** (Beugung) · **P.530** (Schwund)
+- Radar **Skolnik** · **IEEE Std 521** · SSR **ICAO Annex 10 Vol. IV** · Amateurfunk **AFuV Anlage 1**
+- Bandstandards: ITU (ELF–THF), IEEE (L…W), NATO (A–O)
 
-## Domain Knowledge (Formeln — vor Produktiveinsatz prüfen)
+Keine erfundenen Zahlen: jede Angabe braucht eine Quelle; Annahmen im Code als `Annahme:` kennzeichnen und in `docs/DATENQUELLEN.md` bzw. `/service/quellen/` nennen.
 
-- **Wellenlänge**: λ = c / f (c ≈ 299,792,458 m/s)
-- **FSPL**: FSPL(dB) = 20·log₁₀(d) + 20·log₁₀(f) + 20·log₁₀(4π/c)
-- **Shannon-Hartley**: C = B · log₂(1 + SNR_linear), SNR_linear = 10^(SNR_dB/10)
+## Checkliste
 
-Frequenzband-Standards: ITU (ELF-THF), IEEE (L/S/C/X/Ku/K/Ka/V/W), NATO (A-O)
-
-## New Component Checklist
-
-- [ ] Zentrale Utilities verwendet (keine Duplikate)
-- [ ] Größe < 300 Zeilen
-- [ ] Tests für neue Utility-Funktionen
-- [ ] Accessibility: role, aria-label, id/for
-- [ ] safeDivide/safeLog verwendet
-- [ ] Keine Magic Numbers
-- [ ] Quality Gates bestanden
+- [ ] Zentrale Utilities, keine Magic Numbers, < 300 Zeilen, Logik in `.svelte.ts`
+- [ ] UI-Bibliothek, nur Tokens, Icon statt Emoji, role/aria-label/id/for
+- [ ] Tests für Utilities und Modelle; `ChartFrame` bzw. `WidgetFrame` + Registry + `data/widgets.ts`
+- [ ] Neue Seite: `navigation.ts`, `relations.ts`, `pageMeta()`; Quellen genannt; Gates grün
 
 ## Documentation
 
-Projektdokumentation: Siehe Obsidian Vault [[Bandbreite]]
+`ARCHITEKTUR.md` (IDs) · `STYLE_GUIDE.md` (Tokens, Props) · `docs/DATENQUELLEN.md` · `docs/REWORK-2026-09.md` (offene Punkte) · `docs/DEPLOYMENT.md` · Vault [[Bandbreite]]

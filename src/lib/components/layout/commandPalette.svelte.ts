@@ -1,0 +1,160 @@
+/**
+ * Logik der Command-Palette: Ergebnismodell, Frequenz-Aktionen und der
+ * „Zuletzt besucht"-Verlauf. Ausgelagert, damit die Komponente unter der
+ * 300-Zeilen-Grenze bleibt.
+ */
+
+import { browser } from '$app/environment';
+import { searchGrouped, parseFrequencyQuery, entriesForFrequency } from '$lib/utils/search';
+import type { SearchEntry } from '$lib/data/searchIndex';
+import { formatFrequency } from '$lib/utils/formatting';
+
+export interface PaletteItem {
+  id: string;
+  label: string;
+  sublabel?: string;
+  href: string;
+}
+
+export interface PaletteGroup {
+  label: string;
+  items: PaletteItem[];
+}
+
+export const RECENTS_KEY = 'bandbreite:zuletzt-besucht';
+export const MAX_RECENTS = 5;
+
+/** Kennung des Abschlusseintrags „Alle Ergebnisse zeigen". */
+export const ALL_RESULTS_ID = 'alle-ergebnisse';
+
+/** Pfad der Ergebnisseite für eine Suchanfrage. */
+export function allResultsHref(query: string): string {
+  return `/suche/?q=${encodeURIComponent(query.trim())}`;
+}
+
+/**
+ * Letzter Eintrag der Liste: führt auf `/suche/?q=…`, wo alle Treffer
+ * gruppiert und filterbar stehen. Auch die Eingabetaste landet dort, wenn
+ * kein Eintrag markiert ist.
+ */
+export function allResultsItem(query: string): PaletteItem {
+  return {
+    id: ALL_RESULTS_ID,
+    label: 'Alle Ergebnisse zeigen →',
+    sublabel: 'Suchseite mit Filtern je Ergebnistyp',
+    href: allResultsHref(query)
+  };
+}
+
+export function toPaletteItem(entry: SearchEntry): PaletteItem {
+  return {
+    id: entry.id,
+    label: entry.title,
+    sublabel: entry.subtitle,
+    href: entry.href
+  };
+}
+
+/**
+ * Aktionen des Frequenz-Modus für eine erkannte Frequenz.
+ *
+ * Jede Aktion trägt die Frequenz als `?f=<Hertz>` mit; alle vier Zielseiten
+ * lesen den Parameter und stellen sich darauf ein.
+ */
+export function frequencyActions(hz: number): PaletteItem[] {
+  const label = formatFrequency(hz, 3);
+  const f = Math.round(hz);
+  return [
+    {
+      id: 'freq:baender',
+      label: `Bänder für ${label} anzeigen`,
+      sublabel: 'Frequenzbänder-Datenbank',
+      href: `/datenbanken/frequenzbaender/?f=${f}`
+    },
+    {
+      id: 'freq:spektrum',
+      label: 'Im Spektrum öffnen',
+      sublabel: 'Spektrum-Dashboard',
+      href: `/spektrum/?f=${f}`
+    },
+    {
+      id: 'freq:wellenlaenge',
+      label: 'Wellenlänge berechnen',
+      sublabel: 'Frequenz ↔ Wellenlänge',
+      href: `/konverter/frequenz/?f=${f}`
+    },
+    {
+      id: 'freq:fspl',
+      label: 'FSPL-Rechner mit dieser Frequenz',
+      sublabel: 'Freiraumdämpfung berechnen',
+      href: `/rechner/fspl/?f=${f}`
+    }
+  ];
+}
+
+/** Vollständige, gruppierte Ergebnisliste für eine Eingabe. */
+export function buildGroups(query: string, recents: PaletteItem[]): PaletteGroup[] {
+  if (!query.trim()) {
+    return recents.length > 0 ? [{ label: 'Zuletzt besucht', items: recents }] : [];
+  }
+
+  const groups: PaletteGroup[] = [];
+  const frequency = parseFrequencyQuery(query);
+
+  if (frequency) {
+    const suffix = frequency.assumedUnit ? ' (MHz angenommen)' : '';
+    groups.push({
+      label: `Frequenz ${formatFrequency(frequency.hz, 3)}${suffix}`,
+      items: frequencyActions(frequency.hz)
+    });
+    const matches = entriesForFrequency(frequency.hz).map(toPaletteItem);
+    if (matches.length > 0) {
+      groups.push({ label: 'Passende Bänder und Dienste', items: matches });
+    }
+  }
+
+  for (const group of searchGrouped(query)) {
+    groups.push({ label: group.label, items: group.entries.map(toPaletteItem) });
+  }
+
+  // Ohne Treffer bleibt die Liste leer; die Palette zeigt dann ihren Hinweis,
+  // und die Eingabetaste führt trotzdem auf die Suchseite.
+  if (groups.length > 0) groups.push({ label: 'Suchseite', items: [allResultsItem(query)] });
+
+  return groups;
+}
+
+/** Verlauf aus dem localStorage lesen — nie werfend, SSR-sicher. */
+export function readRecents(): PaletteItem[] {
+  if (!browser) return [];
+  try {
+    const raw = localStorage.getItem(RECENTS_KEY);
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? (parsed as PaletteItem[]).slice(0, MAX_RECENTS) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Eintrag an den Anfang des Verlaufs setzen und den neuen Verlauf liefern. */
+export function rememberRecent(item: PaletteItem): PaletteItem[] {
+  if (!browser) return [];
+  const next = [item, ...readRecents().filter((entry) => entry.href !== item.href)].slice(
+    0,
+    MAX_RECENTS
+  );
+  try {
+    localStorage.setItem(RECENTS_KEY, JSON.stringify(next));
+  } catch {
+    /* localStorage nicht verfügbar — der Verlauf ist optional */
+  }
+  return next;
+}
+
+/** Steht der Fokus in einem Eingabefeld? */
+export function isTypingTarget(target: EventTarget | null): boolean {
+  const element = target as HTMLElement | null;
+  if (!element) return false;
+  const tag = element.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || element.isContentEditable;
+}

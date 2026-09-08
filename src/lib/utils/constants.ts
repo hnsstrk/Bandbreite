@@ -1,23 +1,20 @@
-/** Speed of light in vacuum - exact value (m/s) */
-export const SPEED_OF_LIGHT_EXACT = 299_792_458;
+/**
+ * Lichtgeschwindigkeit für den umschaltbaren c-Store ($lib/stores/speedOfLight.svelte.ts).
+ *
+ * Einzige Quelle des exakten Werts ist `SPEED_OF_LIGHT` in `$lib/data/constants.ts`
+ * (CODATA 2018). Diese Datei ergänzt nur den gerundeten Lehrbuchwert und die
+ * Anzeigestrings – keine weiteren Kopien der Konstante anlegen.
+ */
+import { SPEED_OF_LIGHT } from '$lib/data/constants';
 
-/** Speed of light - rounded value (m/s) */
+/** Lichtgeschwindigkeit im Vakuum – exakter Wert (m/s) */
+export const SPEED_OF_LIGHT_EXACT: number = SPEED_OF_LIGHT;
+
+/** Lichtgeschwindigkeit – gerundeter Wert 3·10⁸ m/s (didaktisch) */
 export const SPEED_OF_LIGHT_ROUNDED = 300_000_000;
 
-/** Speed of light display string - exact value */
+/** Anzeigestring – exakter Wert (deutsches Zahlenformat) */
 export const SPEED_OF_LIGHT_EXACT_DISPLAY = '299.792.458';
 
-/** Speed of light display string - rounded value */
+/** Anzeigestring – gerundeter Wert (deutsches Zahlenformat) */
 export const SPEED_OF_LIGHT_ROUNDED_DISPLAY = '300.000.000';
-
-/**
- * @deprecated Use speedOfLightStore instead for dynamic value
- * Legacy constant for backwards compatibility
- */
-export const SPEED_OF_LIGHT = SPEED_OF_LIGHT_EXACT;
-
-/**
- * @deprecated Use speedOfLightStore.display instead
- * Legacy display constant for backwards compatibility
- */
-export const SPEED_OF_LIGHT_DISPLAY = SPEED_OF_LIGHT_EXACT_DISPLAY;

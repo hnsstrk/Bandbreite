@@ -1,1 +1,1 @@
-<p>Weiterleitung...</p>
+<p>Weiterleitung zum <a href="/spektrum/">Spektrum</a> …</p>

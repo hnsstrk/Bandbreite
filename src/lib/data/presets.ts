@@ -77,7 +77,7 @@ export const FREQUENCY_CONVERTER_PRESETS: FrequencyPreset[] = [
   { label: '2.4 GHz', hz: 2.4e9, description: 'WLAN/Bluetooth', descriptionDE: 'WLAN/Bluetooth' },
   { label: '5 GHz', hz: 5e9, description: 'WiFi 5', descriptionDE: 'WLAN 5' },
   { label: '28 GHz', hz: 28e9, description: '5G mmWave', descriptionDE: '5G mmWave' },
-  { label: '77 GHz', hz: 77e9, description: 'Automotive Radar', descriptionDE: 'Kfz-Radar' },
+  { label: '77 GHz', hz: 77e9, description: 'Automotive Radar', descriptionDE: 'Kfz-Radar' }
 ];
 
 // ============================================================================
@@ -97,7 +97,7 @@ export const FSPL_FREQUENCY_PRESETS: FrequencyPreset[] = [
   { label: '5.8 GHz', hz: 5.8e9, description: 'FPV/ISM', descriptionDE: 'FPV/ISM' },
   { label: '28 GHz', hz: 28e9, description: '5G mmWave', descriptionDE: '5G mmWave' },
   { label: '60 GHz', hz: 60e9, description: 'WiGig', descriptionDE: 'WiGig' },
-  { label: '77 GHz', hz: 77e9, description: 'Automotive Radar', descriptionDE: 'Kfz-Radar' },
+  { label: '77 GHz', hz: 77e9, description: 'Automotive Radar', descriptionDE: 'Kfz-Radar' }
 ];
 
 /**
@@ -109,7 +109,7 @@ export const FSPL_CHART_FREQUENCIES: ChartFrequency[] = [
   { hz: 2.4e9, label: '2.4 GHz', color: '#3b82f6' },
   { hz: 5e9, label: '5 GHz', color: '#8b5cf6' },
   { hz: 28e9, label: '28 GHz', color: '#f97316' },
-  { hz: 60e9, label: '60 GHz', color: '#ef4444' },
+  { hz: 60e9, label: '60 GHz', color: '#ef4444' }
 ];
 
 // ============================================================================
@@ -141,7 +141,7 @@ export const LINK_BUDGET_PRESETS: LinkBudgetPreset[] = [
     rxGain: 2,
     rxLoss: 0.5,
     rxSens: -80,
-    fade: 10,
+    fade: 10
   },
   {
     name: 'LoRa Outdoor',
@@ -155,7 +155,7 @@ export const LINK_BUDGET_PRESETS: LinkBudgetPreset[] = [
     rxGain: 3,
     rxLoss: 1,
     rxSens: -137,
-    fade: 15,
+    fade: 15
   },
   {
     name: 'Point-to-Point 5G',
@@ -169,7 +169,7 @@ export const LINK_BUDGET_PRESETS: LinkBudgetPreset[] = [
     rxGain: 15,
     rxLoss: 2,
     rxSens: -85,
-    fade: 20,
+    fade: 20
   },
   {
     name: 'Satellitenlink',
@@ -183,7 +183,7 @@ export const LINK_BUDGET_PRESETS: LinkBudgetPreset[] = [
     rxGain: 40,
     rxLoss: 2,
     rxSens: -120,
-    fade: 6,
+    fade: 6
   },
   {
     name: 'Amateurfunk VHF',
@@ -197,7 +197,7 @@ export const LINK_BUDGET_PRESETS: LinkBudgetPreset[] = [
     rxGain: 6,
     rxLoss: 2,
     rxSens: -110,
-    fade: 12,
+    fade: 12
   },
   {
     name: 'Bluetooth Low Energy',
@@ -211,8 +211,8 @@ export const LINK_BUDGET_PRESETS: LinkBudgetPreset[] = [
     rxGain: 0,
     rxLoss: 0,
     rxSens: -97,
-    fade: 5,
-  },
+    fade: 5
+  }
 ];
 
 // ============================================================================
@@ -227,7 +227,7 @@ export const POWER_CHART_CATEGORY_COLORS = {
   radar: '#f97316',
   satellite: '#22c55e',
   iot: '#8b5cf6',
-  industrial: '#ec4899',
+  industrial: '#ec4899'
 } as const;
 
 /**
@@ -238,7 +238,7 @@ export const POWER_CHART_CATEGORY_LABELS = {
   radar: 'RADAR',
   satellite: 'Satellit',
   iot: 'IoT/RFID',
-  industrial: 'Industrie',
+  industrial: 'Industrie'
 } as const;
 
 // ============================================================================
@@ -248,11 +248,11 @@ export const POWER_CHART_CATEGORY_LABELS = {
 export const frequencyPresets = {
   converter: FREQUENCY_CONVERTER_PRESETS,
   fspl: FSPL_FREQUENCY_PRESETS,
-  fsplChart: FSPL_CHART_FREQUENCIES,
+  fsplChart: FSPL_CHART_FREQUENCIES
 };
 
 export const distancePresets = {
-  meters: DISTANCE_PRESETS_METERS,
+  meters: DISTANCE_PRESETS_METERS
 };
 
 export const linkBudgetPresets = LINK_BUDGET_PRESETS;

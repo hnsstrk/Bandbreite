@@ -1,164 +1,172 @@
 <script lang="ts">
-    import { page } from "$app/state";
+  import { browser } from '$app/environment';
+  import { NAV_GROUPS } from '$lib/data/navigation';
+  import MobileMenuGroup from './MobileMenuGroup.svelte';
 
-    interface NavSubItem {
-        href: string;
-        label: string;
+  interface Props {
+    open: boolean;
+    close: () => void;
+    onsearch: () => void;
+  }
+
+  let { open, close, onsearch }: Props = $props();
+
+  let drawer = $state<HTMLDivElement | null>(null);
+  let expanded = $state<Record<string, boolean>>({});
+  let lastFocused: HTMLElement | null = null;
+
+  function toggle(id: string) {
+    expanded = { ...expanded, [id]: !expanded[id] };
+  }
+
+  function focusables(): HTMLElement[] {
+    if (!drawer) return [];
+    return Array.from(drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
+      (element) => element.offsetParent !== null
+    );
+  }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      close();
+      return;
     }
-
-    interface NavItem {
-        id: string;
-        label: string;
-        items: NavSubItem[];
+    if (event.key !== 'Tab') return;
+    const items = focusables();
+    if (items.length === 0) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
     }
+  }
 
-    interface Props {
-        navItems: NavItem[];
-        activeDropdown: string | null;
-        closeAction: () => void;
-        toggleAction: (id: string) => void;
-    }
-
-    let {
-        navItems,
-        activeDropdown = $bindable(null),
-        closeAction,
-        toggleAction,
-    }: Props = $props();
-
-    function isActiveSection(item: NavItem): boolean {
-        return item.items.some((subItem) => page.url.pathname === subItem.href);
-    }
+  $effect(() => {
+    if (!browser || !open) return;
+    lastFocused = document.activeElement as HTMLElement | null;
+    document.body.style.overflow = 'hidden';
+    queueMicrotask(() => focusables()[0]?.focus());
+    return () => {
+      document.body.style.overflow = '';
+      lastFocused?.focus();
+    };
+  });
 </script>
 
-<nav class="mobile-nav-menu" aria-label="Mobile Navigation">
-    {#each navItems as item (item.id)}
-        <div class="mobile-nav-section">
-            <button
-                type="button"
-                class="mobile-nav-header"
-                class:active={isActiveSection(item)}
-                onclick={() => toggleAction(item.id)}
-                aria-expanded={activeDropdown === item.id}
-            >
-                <span>{item.label}</span>
-                <svg
-                    class="dropdown-icon"
-                    class:open={activeDropdown === item.id}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                >
-                    <path d="M6 9l6 6 6-6" />
-                </svg>
-            </button>
-            {#if activeDropdown === item.id}
-                <div class="mobile-nav-submenu">
-                    {#each item.items as subItem (subItem.href)}
-                        <a
-                            href={subItem.href}
-                            class="mobile-nav-link"
-                            class:active={page.url.pathname === subItem.href}
-                            onclick={closeAction}
-                        >
-                            {subItem.label}
-                        </a>
-                    {/each}
-                </div>
-            {/if}
-        </div>
-    {/each}
-</nav>
+{#if open}
+  <div class="drawer-backdrop" role="presentation" onclick={close}></div>
+  <div
+    class="drawer safe-area-top"
+    id="mobile-menu"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Navigation"
+    tabindex="-1"
+    bind:this={drawer}
+    onkeydown={handleKeydown}
+  >
+    <div class="drawer-head">
+      <button
+        type="button"
+        class="drawer-search"
+        onclick={() => {
+          close();
+          onsearch();
+        }}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+        Seite, Band oder Frequenz suchen
+      </button>
+      <button type="button" class="drawer-close" onclick={close} aria-label="Menü schließen"> ✕ </button>
+    </div>
+
+    <nav class="drawer-nav" aria-label="Mobile Navigation">
+      {#each NAV_GROUPS as group (group.id)}
+        <MobileMenuGroup {group} expanded={Boolean(expanded[group.id])} toggle={() => toggle(group.id)} {close} />
+      {/each}
+    </nav>
+  </div>
+{/if}
 
 <style>
-    /* Mobile Navigation Menu */
-    .mobile-nav-menu {
-        display: flex;
-        flex-direction: column;
-        padding: 1rem 0;
-        border-top: 1px solid var(--color-border-default);
-        margin-top: 0.75rem;
-    }
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgb(0 0 0 / 0.45);
+    z-index: 60;
+  }
 
-    @media (min-width: 768px) {
-        .mobile-nav-menu {
-            display: none;
-        }
-    }
+  .drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(22rem, 90vw);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    border-left: 1px solid var(--color-line);
+    z-index: 61;
+    overflow-y: auto;
+  }
 
-    .mobile-nav-section {
-        border-bottom: 1px solid var(--color-border-subtle);
-    }
+  .drawer-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .drawer-search svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
 
-    .mobile-nav-section:last-child {
-        border-bottom: none;
-    }
+  .drawer-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    font-size: var(--font-size-sm);
+    text-align: left;
+    color: var(--color-ink-subtle);
+    background-color: var(--color-elevated);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+  .drawer-close {
+    width: 44px;
+    height: 44px;
+    color: var(--color-ink-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
 
-    .mobile-nav-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 0.875rem 1rem;
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--color-text-primary);
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        transition:
-            color var(--transition-fast),
-            background-color var(--transition-fast);
-    }
+  .drawer-nav {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 2rem;
+  }
 
-    .mobile-nav-header:hover {
-        background-color: var(--color-bg-elevated);
+  /* Zuletzt, damit die Regel gegen `.drawer { display: flex }` gewinnt:
+     bei gleicher Spezifität entscheidet die Reihenfolge. */
+  @media (min-width: 1024px) {
+    .drawer-backdrop,
+    .drawer {
+      display: none;
     }
-
-    .mobile-nav-header.active {
-        color: var(--color-accent-primary);
-    }
-
-    .mobile-nav-submenu {
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 0.5rem;
-    }
-
-    .mobile-nav-link {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1rem 0.75rem 1.5rem;
-        font-size: 0.9375rem;
-        color: var(--color-text-secondary);
-        text-decoration: none;
-        transition:
-            color var(--transition-fast),
-            background-color var(--transition-fast);
-        min-height: 44px;
-    }
-
-    .mobile-nav-link:hover,
-    .mobile-nav-link:active {
-        color: var(--color-text-primary);
-        background-color: var(--color-bg-elevated);
-    }
-
-    .mobile-nav-link.active {
-        color: var(--color-accent-primary);
-        font-weight: 500;
-    }
-
-    .dropdown-icon {
-        width: 1rem;
-        height: 1rem;
-        transition: transform var(--transition-fast);
-    }
-
-    .dropdown-icon.open {
-        transform: rotate(180deg);
-    }
+  }
 </style>

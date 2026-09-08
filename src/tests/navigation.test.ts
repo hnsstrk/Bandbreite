@@ -1,0 +1,286 @@
+import { describe, it, expect } from 'vitest';
+import {
+  NAV_TREE,
+  NAV_GROUPS,
+  SITE_URL,
+  flattenNav,
+  findNode,
+  findNodeById,
+  getNodesByIds,
+  getBreadcrumbs,
+  getSiblings,
+  getHubChildren,
+  getLiveNodes,
+  getParent,
+  isActivePath,
+  normalizeHref,
+  resolveDynamicSegmentLabel
+} from '$lib/data/navigation';
+import { humanizeSegment } from '$lib/utils/slug';
+import { RELATIONS, getRelatedTopics } from '$lib/data/relations';
+// Der Import meldet nebenbei den Segment-Resolver der Lernpfade an.
+import { LEARNING_PATHS, learningPathHref } from '$lib/data/learningPaths';
+
+const allNodes = flattenNav();
+
+describe('NAV_TREE Struktur', () => {
+  it('nutzt für jeden href einen Trailing Slash', () => {
+    const violations = allNodes.filter((node) => !node.href.endsWith('/'));
+    expect(violations).toEqual([]);
+  });
+
+  it('vergibt eindeutige IDs und hrefs', () => {
+    expect(new Set(allNodes.map((n) => n.id)).size).toBe(allNodes.length);
+    expect(new Set(allNodes.map((n) => n.href)).size).toBe(allNodes.length);
+  });
+
+  it('setzt für jeden Knoten einen Status', () => {
+    expect(allNodes.every((node) => node.status === 'live' || node.status === 'geplant')).toBe(
+      true
+    );
+  });
+
+  it('leitet die ID aus dem Pfad ab', () => {
+    for (const node of allNodes) {
+      // Die Portalseite „/" hat kein Pfadsegment und heißt deshalb 'start'.
+      if (node.href === '/') {
+        expect(node.id).toBe('start');
+        continue;
+      }
+      const fromHref = node.href.split('/').filter(Boolean).join('.');
+      expect(node.id).toBe(fromHref);
+    }
+  });
+
+  it('enthält die Portalseite und die fünf Hauptbereiche', () => {
+    expect(NAV_TREE.map((n) => n.id)).toEqual([
+      'start',
+      'spektrum',
+      'rechner',
+      'konverter',
+      'wissen',
+      'datenbanken',
+      'service'
+    ]);
+  });
+
+  it('führt die Portalseite als lebenden Knoten mit Beschreibung', () => {
+    const start = findNode('/');
+    expect(start?.label).toBe('Start');
+    expect(start?.status).toBe('live');
+    expect(start?.description?.length ?? 0).toBeGreaterThan(20);
+    expect(start?.children).toBeUndefined();
+  });
+
+  it('definiert eine kanonische Basis-URL ohne Trailing Slash', () => {
+    expect(SITE_URL.startsWith('https://')).toBe(true);
+    expect(SITE_URL.endsWith('/')).toBe(false);
+  });
+});
+
+describe('normalizeHref', () => {
+  it('ergänzt fehlende Schrägstriche', () => {
+    expect(normalizeHref('/rechner')).toBe('/rechner/');
+    expect(normalizeHref('rechner')).toBe('/rechner/');
+    expect(normalizeHref('/rechner/')).toBe('/rechner/');
+    expect(normalizeHref('/rechner/fspl/?f=1')).toBe('/rechner/fspl/');
+  });
+});
+
+describe('findNode', () => {
+  it('findet Knoten mit und ohne Trailing Slash', () => {
+    expect(findNode('/rechner/fspl/')?.label).toBe('Freiraumdämpfung (FSPL)');
+    expect(findNode('/rechner/fspl')?.id).toBe('rechner.fspl');
+    expect(findNode('/gibt-es-nicht/')).toBeUndefined();
+  });
+
+  it('findet Knoten per ID', () => {
+    expect(findNodeById('wissen.funktechnik.mobilfunk')?.href).toBe(
+      '/wissen/funktechnik/mobilfunk/'
+    );
+    expect(getNodesByIds(['rechner.fspl', 'unbekannt']).map((n) => n.id)).toEqual(['rechner.fspl']);
+  });
+});
+
+describe('getBreadcrumbs', () => {
+  it('löst Labels aus dem Navigationsbaum auf', () => {
+    expect(getBreadcrumbs('/wissen/wellenausbreitung/daempfung/').map((b) => b.label)).toEqual([
+      'Wissen',
+      'Wellenausbreitung',
+      'Atmosphärische Dämpfung'
+    ]);
+  });
+
+  it('erzeugt niemals das fehlerhafte Label „Daempfung"', () => {
+    expect(
+      getBreadcrumbs('/wissen/wellenausbreitung/daempfung/').some((b) => b.label === 'Daempfung')
+    ).toBe(false);
+  });
+
+  it('markiert den letzten Eintrag', () => {
+    const crumbs = getBreadcrumbs('/wissen/funktechnik/mobilfunk/');
+    expect(crumbs).toHaveLength(3);
+    expect(crumbs.at(-1)?.isLast).toBe(true);
+    expect(crumbs[0].isLast).toBe(false);
+  });
+
+  it('formatiert unbekannte Segmente lesbar', () => {
+    expect(getBreadcrumbs('/spektrum/explorer/').at(-1)?.label).toBe('Explorer');
+  });
+
+  it('liefert für die Wurzel eine leere Liste', () => {
+    expect(getBreadcrumbs('/')).toEqual([]);
+  });
+
+  it('benennt dynamische Lernpfad-Segmente über den Resolver', () => {
+    for (const path of LEARNING_PATHS) {
+      const crumbs = getBreadcrumbs(learningPathHref(path.id));
+      expect(crumbs.map((b) => b.label)).toEqual(['Wissen', 'Lernpfade', path.title]);
+      expect(crumbs.at(-1)?.label).not.toBe(humanizeSegment(path.id));
+    }
+  });
+
+  it('meldet für unbekannte Segmente unterhalb der Lernpfade das humanisierte Label', () => {
+    expect(getBreadcrumbs('/wissen/lernpfade/gibt-es-nicht/').at(-1)?.label).toBe('Gibt Es Nicht');
+  });
+
+  it('registrierte Resolver gelten nur für ihren Elternpfad', () => {
+    expect(resolveDynamicSegmentLabel('/wissen/lernpfade/', LEARNING_PATHS[0].id)).toBe(
+      LEARNING_PATHS[0].title
+    );
+    expect(resolveDynamicSegmentLabel('/wissen/', LEARNING_PATHS[0].id)).toBeUndefined();
+  });
+});
+
+describe('Hub- und Geschwisterabfragen', () => {
+  it('liefert die Kinder eines Hubs', () => {
+    // Die Zahl wächst mit neuen Rechnern — geprüft wird die Herkunft, nicht die Menge.
+    expect(getHubChildren('/rechner/')).toEqual(findNodeById('rechner')?.children);
+    expect(getHubChildren('/rechner/').length).toBeGreaterThanOrEqual(6);
+    expect(getHubChildren('/rechner/fspl/')).toEqual([]);
+  });
+
+  it('liefert Geschwister ohne den Knoten selbst', () => {
+    const siblings = getSiblings('/rechner/fspl/');
+    expect(siblings).toHaveLength(getHubChildren('/rechner/').length - 1);
+    expect(siblings.some((n) => n.id === 'rechner.fspl')).toBe(false);
+  });
+
+  it('findet den Elternknoten', () => {
+    expect(getParent('/wissen/funktechnik/rundfunk/')?.id).toBe('wissen.funktechnik');
+    expect(getParent('/spektrum/')).toBeUndefined();
+  });
+});
+
+describe('Umzug nach Wissen › Wellenausbreitung', () => {
+  it('führt Ionosphäre und Dämpfung als Kinder der Wellenausbreitung', () => {
+    const kinder = getHubChildren('/wissen/wellenausbreitung/').map((n) => n.href);
+    expect(kinder).toEqual([
+      '/wissen/wellenausbreitung/ionosphaere/',
+      '/wissen/wellenausbreitung/daempfung/'
+    ]);
+  });
+
+  it('kennt die alten Pfade nicht mehr als Knoten', () => {
+    expect(findNode('/spektrum/ionosphaere/')).toBeUndefined();
+    expect(findNode('/spektrum/daempfung/')).toBeUndefined();
+  });
+
+  it('zeigt die beiden Kapitel im Mega-Menü nur unter Wissen', () => {
+    const spalten = NAV_GROUPS.flatMap((group) => group.columns);
+    const treffer = spalten.filter((column) =>
+      column.itemIds.some((id) => id.endsWith('.ionosphaere') || id.endsWith('.daempfung'))
+    );
+    expect(treffer).toHaveLength(1);
+    expect(treffer[0].label).toBe('Wellenausbreitung');
+  });
+});
+
+describe('isActivePath', () => {
+  it('erkennt aktive Zweige', () => {
+    expect(isActivePath('/wissen/', '/wissen/mathematik/')).toBe(true);
+    expect(isActivePath('/wissen/mathematik/', '/wissen/mathematik/')).toBe(true);
+    expect(isActivePath('/rechner/', '/wissen/mathematik/')).toBe(false);
+  });
+});
+
+describe('NAV_GROUPS', () => {
+  it('referenziert ausschließlich existierende Knoten-IDs', () => {
+    const ids = new Set(allNodes.map((n) => n.id));
+    for (const group of NAV_GROUPS) {
+      for (const column of group.columns) {
+        for (const itemId of column.itemIds) {
+          expect(ids.has(itemId)).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('verweist mit jeder Gruppe auf einen vorhandenen Hub', () => {
+    for (const group of NAV_GROUPS) {
+      if (group.href) expect(findNode(group.href)).toBeDefined();
+    }
+  });
+});
+
+describe('RELATIONS', () => {
+  it('verweist nur auf bekannte Knoten', () => {
+    const ids = new Set(allNodes.map((n) => n.id));
+    for (const [sourceId, refs] of Object.entries(RELATIONS)) {
+      expect(ids.has(sourceId)).toBe(true);
+      for (const ref of refs) {
+        expect(ids.has(ref.id)).toBe(true);
+        expect(ref.id).not.toBe(sourceId);
+      }
+    }
+  });
+
+  it('liefert für jede existierende Seite mindestens drei lebende Verweise', () => {
+    // Ausgeblendete Knoten (`hidden`) tragen keinen Themenblock — die
+    // Suchseite verweist über ihre Treffer, nicht über „Verwandte Themen".
+    for (const node of allNodes.filter((n) => n.status === 'live' && !n.hidden)) {
+      const topics = getRelatedTopics(node.href);
+      expect(topics.length).toBeGreaterThanOrEqual(3);
+      expect(topics.every((t) => t.node.status === 'live')).toBe(true);
+      expect(topics.every((t) => t.node.id !== node.id)).toBe(true);
+    }
+  });
+
+  it('begrenzt die Anzahl der Verweise', () => {
+    expect(getRelatedTopics('/wissen/wellenausbreitung/', { max: 3 })).toHaveLength(3);
+    expect(getRelatedTopics('/gibt-es-nicht/')).toEqual([]);
+  });
+});
+
+describe('Ausgeblendete Knoten (hidden)', () => {
+  const suche = findNode('/suche/');
+
+  it('führt die Suchseite als lebenden, aber ausgeblendeten Knoten', () => {
+    expect(suche?.id).toBe('suche');
+    expect(suche?.status).toBe('live');
+    expect(suche?.hidden).toBe(true);
+    expect(suche?.description?.length ?? 0).toBeGreaterThan(20);
+  });
+
+  it('hält sie aus Hub-Kacheln, Kapitelnavigation und Live-Liste heraus', () => {
+    expect(getHubChildren('/service/').some((n) => n.href === '/suche/')).toBe(false);
+    expect(getSiblings('/service/sitemap/').some((n) => n.href === '/suche/')).toBe(false);
+    expect(getLiveNodes().some((n) => n.href === '/suche/')).toBe(false);
+  });
+
+  it('zeigt die übrigen Service-Seiten weiterhin als Kacheln', () => {
+    expect(getHubChildren('/service/').map((n) => n.id)).toEqual([
+      'service.sitemap',
+      'service.quellen'
+    ]);
+  });
+
+  it('nennt sie im Mega-Menü nicht', () => {
+    const ids = NAV_GROUPS.flatMap((group) => group.columns.flatMap((column) => column.itemIds));
+    expect(ids).not.toContain('suche');
+  });
+
+  it('behält sie in der Sitemap, die den ganzen Baum rendert', () => {
+    expect(flattenNav().some((node) => node.href === '/suche/')).toBe(true);
+  });
+});

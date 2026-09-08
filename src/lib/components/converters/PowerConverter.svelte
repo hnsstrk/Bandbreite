@@ -1,6 +1,7 @@
 <script lang="ts">
   import { wattToDbm, dbmToWatt, wattToDbW, dbWToWatt, convertToWatt, convertFromWatt } from '$lib/utils/conversions';
   import { POWER_UNITS_WATT, POWER_UNITS_DB, DEFAULT_POWER_UNIT_WATT, DEFAULT_POWER_UNIT_DB } from '$lib/data/units';
+  import { pickBestUnit } from '$lib/components/ui/numberInput.svelte';
   import { parseNullableNumericInput, parseSelectValue } from '$lib/utils/handlers';
   import { formatPrecisionNumber } from '$lib/utils/formatting';
 
@@ -11,46 +12,53 @@
   // Bindable prop to expose power in Watt to parent
   let { powerWatt = $bindable(1) }: Props = $props();
 
-  // Store the canonical value in Watt internally
-  let powerInWatt = $state<number | null>(powerWatt);
-
-  // Sync internal state with prop
-  $effect(() => {
-    powerWatt = powerInWatt;
-  });
-
   let wattUnit = $state(DEFAULT_POWER_UNIT_WATT);
   let dbUnit = $state(DEFAULT_POWER_UNIT_DB);
 
+  // Das Prop ist die einzige Quelle des Werts (E3 / P0-1: keine interne Kopie).
+  // Eine Änderung von außen wechselt das Watt-Feld auf eine lesbare Einheit;
+  // eigene Schreibzugriffe lassen die vom Nutzer gewählte Einheit in Ruhe.
+  let lastOwnWatt = powerWatt;
+  $effect(() => {
+    if (powerWatt === lastOwnWatt) return;
+    lastOwnWatt = powerWatt;
+    if (powerWatt === null || powerWatt <= 0) return;
+    const unit = pickBestUnit(powerWatt, POWER_UNITS_WATT);
+    if (unit) wattUnit = unit.id;
+  });
+
+  function setPowerWatt(watt: number | null) {
+    lastOwnWatt = watt;
+    powerWatt = watt;
+  }
+
   // Derived values for display
-  let wattDisplay = $derived(
-    powerInWatt !== null ? convertFromWatt(powerInWatt, wattUnit) : null
-  );
+  let wattDisplay = $derived(powerWatt !== null ? convertFromWatt(powerWatt, wattUnit) : null);
 
   let dbDisplay = $derived.by(() => {
-    if (powerInWatt === null || powerInWatt <= 0) return null;
+    if (powerWatt === null || powerWatt <= 0) return null;
     if (dbUnit === 'dbm') {
-      return wattToDbm(powerInWatt);
+      return wattToDbm(powerWatt);
     } else {
-      return wattToDbW(powerInWatt);
+      return wattToDbW(powerWatt);
     }
   });
 
   function handleWattInput(e: Event) {
     const value = parseNullableNumericInput(e);
-    powerInWatt = value !== null && value > 0 ? convertToWatt(value, wattUnit) : null;
+    setPowerWatt(value !== null && value > 0 ? convertToWatt(value, wattUnit) : null);
   }
 
   function handleDbInput(e: Event) {
     const value = parseNullableNumericInput(e);
     if (value !== null) {
       if (dbUnit === 'dbm') {
-        powerInWatt = dbmToWatt(value);
+        setPowerWatt(dbmToWatt(value));
       } else {
-        powerInWatt = dbWToWatt(value);
+        setPowerWatt(dbWToWatt(value));
       }
     } else {
-      powerInWatt = null;
+      setPowerWatt(null);
     }
   }
 
@@ -62,22 +70,19 @@
     dbUnit = parseSelectValue(e);
   }
 
-  function formatNumber(num: number | null): string {
-    return formatPrecisionNumber(num);
-  }
+  // Feldwerte der `<input type="number">` bewusst mit Dezimalpunkt
+  // (`formatPrecisionNumber`); ein Komma-String würde vom Browser verworfen.
 </script>
 
 <div class="card-compact">
   <div class="converter-row">
     <!-- Watt Input -->
     <div class="input-group">
-      <label for="power-watt" class="input-label">
-        Leistung
-      </label>
+      <label for="power-watt" class="input-label"> Leistung </label>
       <input
         type="number"
         id="power-watt"
-        value={wattDisplay !== null ? formatNumber(wattDisplay) : ''}
+        value={formatPrecisionNumber(wattDisplay)}
         oninput={handleWattInput}
         class="input-field flex-1"
         placeholder="Leistung"
@@ -103,19 +108,14 @@
       <input
         type="number"
         id="power-db"
-        value={dbDisplay !== null ? formatNumber(dbDisplay) : ''}
+        value={formatPrecisionNumber(dbDisplay)}
         oninput={handleDbInput}
         class="input-field flex-1"
         placeholder="dB"
         step="any"
         aria-label="Leistung in dB"
       />
-      <select
-        value={dbUnit}
-        onchange={handleDbUnitChange}
-        class="select-field"
-        aria-label="Leistungseinheit (dB)"
-      >
+      <select value={dbUnit} onchange={handleDbUnitChange} class="select-field" aria-label="Leistungseinheit (dB)">
         {#each POWER_UNITS_DB as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
         {/each}

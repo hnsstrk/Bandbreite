@@ -3,6 +3,10 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
   plugins: [sveltekit()],
+  // Komponententests (@testing-library/svelte) brauchen die Client-Variante
+  // von `svelte`, sonst ist `mount()` nicht verfügbar. Gilt nur unter Vitest;
+  // die SSR-Render-Tests (`@vitest-environment node`) bleiben davon unberührt.
+  resolve: process.env.VITEST ? { conditions: ['browser'] } : undefined,
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}'],
     environment: 'jsdom',
@@ -14,10 +18,6 @@ export default defineConfig({
       include: ['src/lib/**/*.ts'],
       exclude: ['src/lib/**/*.svelte', 'src/lib/**/*.d.ts']
     }
-  },
-  resolve: {
-    alias: {
-      $lib: '/Users/hnsstrk/Repositories/bandbreite/src/lib'
-    }
   }
+  // Kein manueller $lib-Alias: das sveltekit()-Plugin liefert ihn maschinenunabhängig.
 });

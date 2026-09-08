@@ -20,8 +20,7 @@ import {
   getNATOBandsForFrequency,
   getCivilianBandsForFrequency,
   formatFrequencyRange,
-  type FrequencyBand,
-  type ITUBand,
+  type FrequencyBand
 } from '$lib/data/bands';
 
 // ============================================================================
@@ -68,7 +67,7 @@ function validateBandArray(bands: FrequencyBand[], expectedCategory: string) {
     });
 
     it('should have no duplicate IDs', () => {
-      const ids = bands.map(b => b.id);
+      const ids = bands.map((b) => b.id);
       const uniqueIds = new Set(ids);
       expect(uniqueIds.size).toBe(ids.length);
     });
@@ -90,7 +89,7 @@ describe('IEEE_BANDS', () => {
   validateBandArray(IEEE_BANDS, 'ieee');
 
   it('should contain known IEEE bands (HF, VHF, UHF, L, S, C, X, Ku, K, Ka, V, W)', () => {
-    const names = IEEE_BANDS.map(b => b.name);
+    const names = IEEE_BANDS.map((b) => b.name);
     expect(names).toContain('HF');
     expect(names).toContain('VHF');
     expect(names).toContain('UHF');
@@ -121,8 +120,24 @@ describe('NATO_BANDS', () => {
   validateBandArray(NATO_BANDS, 'nato');
 
   it('should contain bands A through O', () => {
-    const names = NATO_BANDS.map(b => b.name);
-    const expectedNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
+    const names = NATO_BANDS.map((b) => b.name);
+    const expectedNames = [
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+      'M',
+      'N',
+      'O'
+    ];
     for (const name of expectedNames) {
       expect(names).toContain(name);
     }
@@ -144,7 +159,7 @@ describe('CIVILIAN_BANDS', () => {
   validateBandArray(CIVILIAN_BANDS, 'civilian');
 
   it('should contain common civilian bands', () => {
-    const ids = CIVILIAN_BANDS.map(b => b.id);
+    const ids = CIVILIAN_BANDS.map((b) => b.id);
     expect(ids).toContain('wifi-2g');
     expect(ids).toContain('wifi-5g');
     expect(ids).toContain('fm-radio');
@@ -152,7 +167,7 @@ describe('CIVILIAN_BANDS', () => {
   });
 
   it('should have WiFi 2.4 GHz band in the 2.4 GHz range', () => {
-    const wifi = CIVILIAN_BANDS.find(b => b.id === 'wifi-2g');
+    const wifi = CIVILIAN_BANDS.find((b) => b.id === 'wifi-2g');
     expect(wifi).toBeDefined();
     expect(wifi!.minHz).toBe(2.4e9);
     expect(wifi!.maxHz).toBe(2.5e9);
@@ -167,7 +182,7 @@ describe('ITU_BANDS', () => {
   validateBandArray(ITU_BANDS as FrequencyBand[], 'itu');
 
   it('should contain all ITU designations from ELF to THF', () => {
-    const names = ITU_BANDS.map(b => b.name);
+    const names = ITU_BANDS.map((b) => b.name);
     expect(names).toContain('ELF');
     expect(names).toContain('SLF');
     expect(names).toContain('ULF');
@@ -240,7 +255,7 @@ describe('EM_BANDS', () => {
   });
 
   it('should contain major EM spectrum divisions', () => {
-    const names = EM_BANDS.map(b => b.name);
+    const names = EM_BANDS.map((b) => b.name);
     expect(names).toContain('Radio');
     expect(names).toContain('Microwave');
     expect(names).toContain('Infrared');
@@ -251,13 +266,13 @@ describe('EM_BANDS', () => {
   });
 
   it('should have Gamma band extending to Infinity', () => {
-    const gamma = EM_BANDS.find(b => b.id === 'em-gamma');
+    const gamma = EM_BANDS.find((b) => b.id === 'em-gamma');
     expect(gamma).toBeDefined();
     expect(gamma!.maxHz).toBe(Infinity);
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = EM_BANDS.map(b => b.id);
+    const ids = EM_BANDS.map((b) => b.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -331,7 +346,7 @@ describe('ALL_BANDS', () => {
   });
 
   it('should have no duplicate IDs across all band systems', () => {
-    const ids = ALL_BANDS.map(b => b.id);
+    const ids = ALL_BANDS.map((b) => b.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -346,7 +361,7 @@ describe('getBandsForFrequency', () => {
     const bands = getBandsForFrequency(2.4e9);
     expect(bands.length).toBeGreaterThan(0);
     // Should include IEEE S-band (2-4 GHz) and WiFi civilian band
-    const ids = bands.map(b => b.id);
+    const ids = bands.map((b) => b.id);
     expect(ids).toContain('s');
     expect(ids).toContain('wifi-2g');
   });
@@ -354,7 +369,7 @@ describe('getBandsForFrequency', () => {
   it('should return matching bands for 100 MHz (FM Radio range)', () => {
     const bands = getBandsForFrequency(100e6);
     expect(bands.length).toBeGreaterThan(0);
-    const ids = bands.map(b => b.id);
+    const ids = bands.map((b) => b.id);
     expect(ids).toContain('fm-radio');
   });
 
@@ -428,13 +443,13 @@ describe('getNATOBandsForFrequency', () => {
 describe('getCivilianBandsForFrequency', () => {
   it('should return WiFi 2.4 GHz band for 2.45 GHz', () => {
     const bands = getCivilianBandsForFrequency(2.45e9);
-    const ids = bands.map(b => b.id);
+    const ids = bands.map((b) => b.id);
     expect(ids).toContain('wifi-2g');
   });
 
   it('should return GNSS L1 band for 1.575 GHz', () => {
     const bands = getCivilianBandsForFrequency(1.575e9);
-    const ids = bands.map(b => b.id);
+    const ids = bands.map((b) => b.id);
     expect(ids).toContain('gnss-l1');
   });
 
@@ -454,29 +469,28 @@ describe('getCivilianBandsForFrequency', () => {
 describe('formatFrequencyRange', () => {
   it('should format same-unit range (GHz)', () => {
     const result = formatFrequencyRange(2e9, 4e9);
-    expect(result).toBe('2-4 GHz');
+    expect(result).toBe('2–4 GHz');
   });
 
   it('should format same-unit range (MHz)', () => {
     const result = formatFrequencyRange(30e6, 300e6);
-    expect(result).toBe('30-300 MHz');
+    expect(result).toBe('30–300 MHz');
   });
 
   it('should format different-unit ranges', () => {
     const result = formatFrequencyRange(300e6, 3e9);
-    // 300 MHz - 3 GHz (different units)
-    expect(result).toContain('MHz');
-    expect(result).toContain('GHz');
+    // 300 MHz – 3 GHz (different units, Gedankenstrich mit Leerzeichen)
+    expect(result).toBe('300 MHz – 3 GHz');
   });
 
   it('should handle Hz range', () => {
     const result = formatFrequencyRange(3, 30);
-    expect(result).toBe('3-30 Hz');
+    expect(result).toBe('3–30 Hz');
   });
 
   it('should handle kHz range', () => {
     const result = formatFrequencyRange(3e3, 30e3);
-    expect(result).toBe('3-30 kHz');
+    expect(result).toBe('3–30 kHz');
   });
 
   it('should handle THz range', () => {

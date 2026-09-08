@@ -3,7 +3,7 @@
  * Testing FSPL, range, and wavelength calculations
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 // Speed of light constant for calculations
 const SPEED_OF_LIGHT = 299792458;
@@ -230,5 +230,168 @@ describe('calculateRange', () => {
     // FSPL at calculated range should equal max allowable path loss
     const maxPathLoss = txPowerDbm - rxSensitivityDbm;
     expect(fspl).toBeCloseTo(maxPathLoss, 0);
+  });
+});
+
+// ============================================================================
+// Referenzwert-Tests (Bericht 03, Abschnitt 4.1 / 4.5)
+// ============================================================================
+
+import {
+  getFsplConstant,
+  calculateSkinDepth,
+  calculateLossTangent,
+  calculateSkinDepthWithValidity,
+  calculateFresnelRadius,
+  calculateShannonCapacity,
+  calculateSpectralEfficiency,
+  calculateThermalNoiseDbm,
+  snrDbToLinear,
+  FRESNEL_CLEARANCE_FRACTION
+} from '$lib/utils/calculations';
+
+describe('Wellenlänge – Referenzwerte', () => {
+  it('1 GHz → 0,299792458 m; 2,4 GHz → 0,12491352 m; 77 GHz → 3,8934 mm', () => {
+    expect(frequencyToWavelength(1e9)).toBeCloseTo(0.299792458, 9);
+    expect(frequencyToWavelength(2.4e9)).toBeCloseTo(0.12491352, 8);
+    expect(frequencyToWavelength(77e9)).toBeCloseTo(0.0038934, 6);
+  });
+  it('0 / −1 → 0; f = c/λ: 1 m → 299 792 458 Hz, 0,125 m → 2 398 339 664 Hz', () => {
+    expect(frequencyToWavelength(0)).toBe(0);
+    expect(frequencyToWavelength(-1)).toBe(0);
+    expect(wavelengthToFrequency(1)).toBeCloseTo(299792458, 0);
+    expect(wavelengthToFrequency(0.125)).toBeCloseTo(2398339664, 0);
+  });
+  it('explizites c wird verwendet (eine Implementierung von λ = c/f)', () => {
+    expect(frequencyToWavelength(100e6, 3e8)).toBeCloseTo(3, 12);
+    expect(wavelengthToFrequency(3, 3e8)).toBeCloseTo(100e6, 6);
+  });
+});
+
+describe('FSPL – Referenzwerte (±0,005 dB)', () => {
+  const cases: [number, number, number][] = [
+    [1000, 1e9, 92.448],
+    [100, 2.4e9, 80.052],
+    [1, 2.4e9, 40.052],
+    [100e3, 1e9, 132.448],
+    [100, 5e9, 86.427],
+    [100, 28e9, 101.391],
+    [100, 77e9, 110.178],
+    [36000e3, 12e9, 205.157],
+    [5000, 868e6, 105.198],
+    [1000, 100e6, 72.448]
+  ];
+  it.each(cases)('d = %s m, f = %s Hz → %s dB', (d, f, ref) => {
+    expect(Math.abs(calculateFSPL(d, f) - ref)).toBeLessThan(0.005);
+  });
+  it('FSPL-Konstante −147,5522 dB', () => {
+    expect(getFsplConstant()).toBeCloseTo(-147.5522, 4);
+  });
+});
+
+describe('Reichweite – Referenzwerte (±0,1 %)', () => {
+  const cases: [number, number, number, number][] = [
+    [2.4e9, 20, -90, 3143.4],
+    [2.4e9, 20, -80, 994.0],
+    [868e6, 14, -137, 975.2e3],
+    [100e6, 20, -90, 75.44e3],
+    [5e9, 20, -90, 1508.8]
+  ];
+  it.each(cases)('f = %s Hz, %s dBm, %s dBm → %s m', (f, tx, rx, ref) => {
+    expect(calculateRange(f, tx, rx) / ref).toBeCloseTo(1, 2);
+  });
+  it('FSPL = 0 dB → d = λ/(4π) ≈ 9,94 mm bei 2,4 GHz', () => {
+    // Hinweis: Bericht 03 nennt 3,94 mm – korrekt ist λ/(4π) = 0,1249 m / 12,566 = 9,94 mm
+    expect(calculateRange(2.4e9, -80, -80)).toBeCloseTo(0.00994, 4);
+  });
+});
+
+describe('calculateSkinDepth – Referenzwerte', () => {
+  const cases: [number, number, number, number][] = [
+    // f, σ, δ [m], Toleranz
+    [3, 4, 145.3, 0.1],
+    [30, 4, 45.94, 0.05],
+    [76, 4, 28.87, 0.05],
+    [10e3, 4, 2.516, 0.005],
+    [77.5e3, 4, 0.904, 0.005],
+    [1e9, 5.96e7, 2.062e-6, 5e-9],
+    [50, 5.96e7, 9.22e-3, 1e-5],
+    [10e9, 5.96e7, 0.652e-6, 2e-9],
+    [1e6, 3.5e7, 85.1e-6, 1e-7]
+  ];
+  it.each(cases)('f = %s Hz, σ = %s S/m → δ = %s m', (f, sigma, ref, tol) => {
+    expect(Math.abs(calculateSkinDepth(f, sigma) - ref)).toBeLessThan(tol);
+  });
+  it('Standard σ = Seewasser (4 S/m); 0 bei f ≤ 0 oder σ ≤ 0', () => {
+    expect(calculateSkinDepth(10e3)).toBeCloseTo(2.516, 2);
+    expect(calculateSkinDepth(0, 4)).toBe(0);
+    expect(calculateSkinDepth(100, 0)).toBe(0);
+  });
+});
+
+describe('Verlusttangens und Gültigkeit der Skin-Tiefe (F-16)', () => {
+  it('trockene Erde (σ = 10⁻³ S/m, εᵣ = 5): σ = ωε bei ≈ 3,6 MHz', () => {
+    expect(calculateLossTangent(3.6e6, 1e-3, 5)).toBeCloseTo(1, 1);
+    expect(calculateLossTangent(1e9, 1e-3, 5)).toBeCloseTo(0.0036, 3);
+  });
+  it('Kupfer bei 1 GHz ist guter Leiter, trockene Erde bei 1 GHz nicht', () => {
+    expect(calculateSkinDepthWithValidity(1e9, 5.96e7, 1).isGoodConductor).toBe(true);
+    expect(calculateSkinDepthWithValidity(1e9, 1e-3, 5).isGoodConductor).toBe(false);
+    expect(calculateSkinDepthWithValidity(10e3, 4, 81).isGoodConductor).toBe(true);
+  });
+  it('ungültige Eingaben → 0 / false', () => {
+    expect(calculateLossTangent(0, 4)).toBe(0);
+    expect(calculateSkinDepthWithValidity(0, 4).isGoodConductor).toBe(false);
+  });
+});
+
+describe('calculateFresnelRadius – Referenzwerte', () => {
+  const lambda = (fHz: number) => frequencyToWavelength(fHz);
+  it('5,8 GHz, 5/5 km → r₁ = 11,367 m, r₂ = 16,076 m, 60 % = 6,821 m', () => {
+    const r1 = calculateFresnelRadius(lambda(5.8e9), 5000, 5000, 1);
+    expect(r1).toBeCloseTo(11.3675, 3);
+    expect(calculateFresnelRadius(lambda(5.8e9), 5000, 5000, 2)).toBeCloseTo(r1 * Math.SQRT2, 9);
+    expect(calculateFresnelRadius(lambda(5.8e9), 5000, 5000, 2)).toBeCloseTo(16.076, 2);
+    expect(r1 * FRESNEL_CLEARANCE_FRACTION).toBeCloseTo(6.8205, 3);
+  });
+  it('5,8 GHz 2/8 km → 9,094 m; 2,4 GHz 1/1 km → 7,903 m; 900 MHz 10/10 km → 40,81 m', () => {
+    expect(calculateFresnelRadius(lambda(5.8e9), 2000, 8000)).toBeCloseTo(9.094, 2);
+    expect(calculateFresnelRadius(lambda(2.4e9), 1000, 1000)).toBeCloseTo(7.903, 2);
+    expect(calculateFresnelRadius(lambda(900e6), 10000, 10000)).toBeCloseTo(40.81, 2);
+  });
+  it('0 bei ungültigen Eingaben', () => {
+    expect(calculateFresnelRadius(0, 1, 1)).toBe(0);
+    expect(calculateFresnelRadius(0.1, 0, 1)).toBe(0);
+    expect(calculateFresnelRadius(0.1, 1, 1, 0)).toBe(0);
+  });
+});
+
+describe('Shannon-Hartley – Referenzwerte', () => {
+  it('20 MHz/20 dB → 133,16 Mbit/s; 40 MHz/25 dB → 332,38; 100 MHz/20 dB → 665,82', () => {
+    expect(calculateShannonCapacity(20e6, 20) / 1e6).toBeCloseTo(133.16, 1);
+    expect(calculateShannonCapacity(40e6, 25) / 1e6).toBeCloseTo(332.38, 1);
+    expect(calculateShannonCapacity(100e6, 20) / 1e6).toBeCloseTo(665.82, 1);
+  });
+  it('1 MHz/0 dB → exakt 1 Mbit/s; 20 MHz/−10 dB → 2,750 Mbit/s', () => {
+    expect(calculateShannonCapacity(1e6, 0)).toBeCloseTo(1e6, 6);
+    expect(calculateShannonCapacity(20e6, -10) / 1e6).toBeCloseTo(2.75, 2);
+  });
+  it('spektrale Effizienz 20 dB → 6,658; 30 dB → 9,967 bit/s/Hz', () => {
+    expect(calculateSpectralEfficiency(20)).toBeCloseTo(6.658, 3);
+    expect(calculateSpectralEfficiency(30)).toBeCloseTo(9.967, 3);
+    expect(snrDbToLinear(10)).toBeCloseTo(10, 9);
+  });
+  it('0 bei B ≤ 0', () => {
+    expect(calculateShannonCapacity(0, 20)).toBe(0);
+  });
+});
+
+describe('Thermisches Rauschen', () => {
+  it('290 K: 1 Hz → −173,98 dBm; 1 MHz → −113,98 dBm', () => {
+    expect(calculateThermalNoiseDbm(1)).toBeCloseTo(-173.98, 2);
+    expect(calculateThermalNoiseDbm(1e6)).toBeCloseTo(-113.98, 2);
+  });
+  it('−Infinity bei B ≤ 0', () => {
+    expect(calculateThermalNoiseDbm(0)).toBe(-Infinity);
   });
 });

@@ -1,21 +1,32 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
+  import { page } from '$app/state';
   import SpectrumOverview from '$lib/components/SpectrumOverview.svelte';
   import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
   import PowerConverter from '$lib/components/converters/PowerConverter.svelte';
   import RangeCalculator from '$lib/components/converters/RangeCalculator.svelte';
   import BandDetailSidebar from '$lib/components/BandDetailSidebar.svelte';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
+  import { getHubChildren } from '$lib/data/navigation';
+  import { SPECTRUM_MIN_HZ, SPECTRUM_MAX_GAMMA_HZ } from '$lib/data/spectrum';
   import type { FrequencyBand } from '$lib/data/bands';
 
-  interface SpectrumSection {
-    id: string;
-    title: string;
-    description: string;
-    href: string;
-    icon: string;
-    topics: string[];
+  /**
+   * Startfrequenz aus `?f=<Hertz>` — darauf zeigt „Im Spektrum öffnen" in der
+   * Befehlspalette und in den Datenbanken. Beim Prerendern ist `searchParams`
+   * gesperrt, deshalb der `browser`-Zweig; unplausible Werte werden verworfen.
+   */
+  function frequencyFromUrl(): number | null {
+    if (!browser) return null;
+    const raw = page.url.searchParams.get('f');
+    if (!raw) return null;
+    const value = parseFloat(raw);
+    if (!Number.isFinite(value)) return null;
+    if (value < SPECTRUM_MIN_HZ || value > SPECTRUM_MAX_GAMMA_HZ) return null;
+    return value;
   }
 
-  let currentFrequencyHz = $state<number | null>(null);
+  let currentFrequencyHz = $state<number | null>(frequencyFromUrl());
   let currentPowerWatt = $state<number | null>(1);
   let selectedSpectrumBand = $state<FrequencyBand | null>(null);
   let selectedBandId = $state<string | null>(null);
@@ -26,60 +37,17 @@
     currentFrequencyHz = Math.sqrt(band.minHz * band.maxHz);
   }
 
-  const sections: SpectrumSection[] = [
-    {
-      id: 'ionosphaere',
-      title: 'Ionosphärische Ausbreitung',
-      description: 'Ionosphärische Schichten und deren Einfluss auf die Funkwellenausbreitung. Wichtig für HF-Kommunikation über große Entfernungen.',
-      href: '/spektrum/ionosphaere',
-      icon: '🌐',
-      topics: ['D-Schicht', 'E-Schicht', 'F-Schicht', 'MUF/LUF', 'Raumwelle']
-    },
-    {
-      id: 'anwendungen',
-      title: 'Anwendungen nach Frequenzband',
-      description: 'Übersicht der typischen Anwendungen und Dienste in verschiedenen Frequenzbändern. Von Rundfunk bis Satellitenkommunikation.',
-      href: '/spektrum/anwendungen',
-      icon: '📻',
-      topics: ['Rundfunk', 'Mobilfunk', 'Radar', 'Satelliten', 'WLAN']
-    },
-    {
-      id: 'sendeleistungen',
-      title: 'Sendeleistungen im Frequenzspektrum',
-      description: 'Typische Sendeleistungen verschiedener Kommunikations-, Radar-, Satelliten- und IoT-Systeme im Frequenzspektrum.',
-      href: '/spektrum/sendeleistungen',
-      icon: '📡',
-      topics: ['Rundfunk', 'Radar', 'Mobilfunk', 'IoT', 'Satelliten']
-    },
-    {
-      id: 'daempfung',
-      title: 'Atmosphärische Dämpfung',
-      description: 'Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks und atmosphärische Fenster.',
-      href: '/spektrum/daempfung',
-      icon: '🌧️',
-      topics: ['O₂-Peak', 'H₂O-Peak', 'Atmosphärische Fenster', 'ITU-R P.676']
-    }
-  ];
+  // Unterseiten stammen aus der Navigations-Registry (Single Source of Truth).
+  const sections = getHubChildren('/spektrum/');
 </script>
-
-<svelte:head>
-  <title>Spektrum - Bandbreite</title>
-  <meta name="description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
-  <meta property="og:title" content="Spektrum | Bandbreite" />
-  <meta property="og:description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Spektrum | Bandbreite" />
-  <meta name="twitter:description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
-</svelte:head>
 
 <div class="page-content">
   <!-- Page Header -->
   <header class="page-header">
     <h1 class="text-heading-1">Elektromagnetisches Spektrum</h1>
     <p class="header-description">
-      Entdecken Sie das elektromagnetische Spektrum von Radiowellen bis Gammastrahlung.
-      Erkunden Sie Frequenzbänder, deren Eigenschaften und praktische Anwendungen in der Funktechnik.
+      Entdecken Sie das elektromagnetische Spektrum von Radiowellen bis Gammastrahlung. Erkunden Sie Frequenzbänder,
+      deren Eigenschaften und praktische Anwendungen in der Funktechnik.
     </p>
   </header>
 
@@ -87,11 +55,7 @@
   <section class="card">
     <h2 class="text-heading-2">EM-Spektrum Übersicht</h2>
     <p class="spectrum-hint">Klicken Sie auf ein Band für detaillierte Informationen</p>
-    <SpectrumOverview
-      frequencyHz={currentFrequencyHz ?? undefined}
-      onBandClick={handleBandClick}
-      {selectedBandId}
-    />
+    <SpectrumOverview frequencyHz={currentFrequencyHz ?? undefined} onBandClick={handleBandClick} {selectedBandId} />
   </section>
 
   <!-- Dashboard: Tools links, Banddetail rechts -->
@@ -107,41 +71,36 @@
           <div class="intro-card">
             <h4>Frequenz und Wellenlänge</h4>
             <p>
-              Elektromagnetische Wellen breiten sich mit Lichtgeschwindigkeit aus.
-              Frequenz und Wellenlänge sind über die Beziehung <span class="formula">λ = c / f</span> verknüpft.
-              Höhere Frequenzen bedeuten kürzere Wellenlängen.
+              Elektromagnetische Wellen breiten sich mit Lichtgeschwindigkeit aus. Frequenz und Wellenlänge sind über
+              die Beziehung <span class="formula">λ = c / f</span> verknüpft. Höhere Frequenzen bedeuten kürzere Wellenlängen.
             </p>
           </div>
           <div class="intro-card">
             <h4>Ausbreitungseigenschaften</h4>
             <p>
-              Niedrige Frequenzen folgen der Erdkrümmung und durchdringen Hindernisse.
-              Hohe Frequenzen breiten sich geradlinig aus, werden aber von Gebäuden und
-              Vegetation stark gedämpft.
+              Niedrige Frequenzen folgen der Erdkrümmung und durchdringen Hindernisse. Hohe Frequenzen breiten sich
+              geradlinig aus, werden aber von Gebäuden und Vegetation stark gedämpft.
             </p>
           </div>
           <div class="intro-card">
             <h4>Bandbreite und Datenrate</h4>
             <p>
-              Höhere Frequenzbänder bieten mehr Bandbreite für schnellere Datenübertragung.
-              Nach Shannon-Hartley steigt die Kanalkapazität mit der verfügbaren Bandbreite.
+              Höhere Frequenzbänder bieten mehr Bandbreite für schnellere Datenübertragung. Nach Shannon-Hartley steigt
+              die Kanalkapazität mit der verfügbaren Bandbreite.
             </p>
           </div>
           <div class="intro-card">
             <h4>Atmosphärische Dämpfung</h4>
             <p>
-              Die Atmosphäre absorbiert bestimmte Frequenzen stark. Besonders bei 22 GHz
-              (Wasserdampf) und 60 GHz (Sauerstoff) treten Absorptionspeaks auf.
+              Die Atmosphäre absorbiert bestimmte Frequenzen stark. Besonders bei 22 GHz (Wasserdampf) und 60 GHz
+              (Sauerstoff) treten Absorptionspeaks auf.
             </p>
           </div>
         </div>
       </section>
     </div>
     <div class="sidebar-column">
-      <BandDetailSidebar
-        frequencyHz={currentFrequencyHz}
-        selectedBand={selectedSpectrumBand}
-      />
+      <BandDetailSidebar frequencyHz={currentFrequencyHz} selectedBand={selectedSpectrumBand} />
     </div>
   </div>
 
@@ -149,12 +108,11 @@
   <section class="sections-grid">
     {#each sections as section (section.id)}
       <a href={section.href} class="section-card">
-        <div class="section-icon">{section.icon}</div>
         <div class="section-content">
-          <h2>{section.title}</h2>
+          <h2>{section.label}</h2>
           <p>{section.description}</p>
           <div class="topics">
-            {#each section.topics as topic (topic)}
+            {#each section.keywords ?? [] as topic (topic)}
               <span class="topic-tag">{topic}</span>
             {/each}
           </div>
@@ -163,6 +121,8 @@
       </a>
     {/each}
   </section>
+
+  <RelatedTopics href="/spektrum/" />
 </div>
 
 <style>
@@ -273,11 +233,6 @@
     border-color: var(--color-accent-primary);
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
-  }
-
-  .section-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
   }
 
   .section-content {

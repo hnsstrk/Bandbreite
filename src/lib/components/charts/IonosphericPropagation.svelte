@@ -1,495 +1,230 @@
 <script lang="ts">
+  /**
+   * Ionosphärische Ausbreitung: Schichten, kritische Frequenz, MUF und LUF
+   * sowie der Reflexionspfad der eingestellten Frequenz.
+   *
+   * Kennzahlen und Farben liegen in `ionosphericData.ts`, die Szene in
+   * `IonosphericScene.svelte`. Props (`width`, `height`) sind unverändert.
+   */
+  import { IONOSPHERIC_LAYERS } from '$lib/data/constants';
+  import { formatNumber } from '$lib/utils/formatting';
+  import Badge from '$lib/components/ui/Badge.svelte';
+  import Callout from '$lib/components/ui/Callout.svelte';
+  import Card from '$lib/components/ui/Card.svelte';
+  import NumberInput from '$lib/components/ui/NumberInput.svelte';
+  import ResultCard from '$lib/components/ui/ResultCard.svelte';
+  import Select from '$lib/components/ui/Select.svelte';
+  import ChartFrame from './ChartFrame.svelte';
+  import IonosphericScene from './IonosphericScene.svelte';
   import {
-    IONOSPHERIC_LAYERS,
-    IONOSPHERE_PARAMETERS,
-    type IonosphericLayer
-  } from '$lib/data/constants';
-  import { formatFrequency, formatNumber } from '$lib/utils/formatting';
-  import { parseNumericInput, clamp } from '$lib/utils/handlers';
-  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+    BAND_PRESETS,
+    FREQUENCY_MAX_MHZ,
+    FREQUENCY_MIN_MHZ,
+    LAYER_COLORS,
+    SOLAR_FLUX_MAX,
+    SOLAR_FLUX_MIN,
+    TIME_OPTIONS,
+    criticalFrequency,
+    lowestUsableFrequency,
+    maximumUsableFrequency,
+    reflectionFor,
+    visibleLayers
+  } from './ionosphericData';
 
   interface Props {
     width?: number;
     height?: number;
   }
 
-  let { width = 900, height = 500 }: Props = $props();
+  let { width = $bindable(900), height = 500 }: Props = $props();
 
-  // Input state
   let frequencyMHz = $state(14);
   let solarFluxIndex = $state(100);
   let isNighttime = $state(false);
 
-  // Chart margins
-  const margin = { top: 40, right: 200, bottom: 60, left: 80 };
+  let foF2MHz = $derived(criticalFrequency(solarFluxIndex, isNighttime));
+  let mufMHz = $derived(maximumUsableFrequency(foF2MHz));
+  let lufMHz = $derived(lowestUsableFrequency(mufMHz, isNighttime));
+  let canPropagate = $derived(frequencyMHz >= lufMHz && frequencyMHz <= mufMHz);
+  let belowLuf = $derived(frequencyMHz < lufMHz);
+  let reflection = $derived(reflectionFor(frequencyMHz, foF2MHz));
+  let layers = $derived(visibleLayers(isNighttime));
 
-  // Computed dimensions
-  let chartWidth = $derived(width - margin.left - margin.right);
-  let chartHeight = $derived(height - margin.top - margin.bottom);
-
-  // Maximum altitude to display (km)
-  const MAX_ALTITUDE_KM = 450;
-
-  // Y scale: altitude in km
-  function altitudeToY(altitudeKm: number): number {
-    return chartHeight - (altitudeKm / MAX_ALTITUDE_KM) * chartHeight;
+  function handleTimeChange(value: string) {
+    isNighttime = value === 'night';
   }
-
-  // Calculate critical frequency based on solar flux
-  // foF2 approximation: increases with solar activity
-  let criticalFrequencyMHz = $derived.by(() => {
-    const { typicalF2CriticalFrequencyMHz, solarFluxRange } = IONOSPHERE_PARAMETERS;
-    const normalizedFlux = (solarFluxIndex - solarFluxRange.min) /
-                           (solarFluxRange.max - solarFluxRange.min);
-    const foF2 = typicalF2CriticalFrequencyMHz.low +
-                 normalizedFlux * (typicalF2CriticalFrequencyMHz.high - typicalF2CriticalFrequencyMHz.low);
-    // Reduce at night
-    return isNighttime ? foF2 * 0.7 : foF2;
-  });
-
-  // Maximum Usable Frequency (MUF) for 3000 km skip
-  let mufMHz = $derived(criticalFrequencyMHz * IONOSPHERE_PARAMETERS.mufFactor3000km);
-
-  // Lowest Usable Frequency (LUF)
-  let lufMHz = $derived(mufMHz * IONOSPHERE_PARAMETERS.lufFactorTypical);
-
-  // Check if current frequency can propagate
-  let canPropagate = $derived(
-    frequencyMHz >= lufMHz && frequencyMHz <= mufMHz
-  );
-
-  // Visible layers based on day/night
-  let visibleLayers = $derived(
-    IONOSPHERIC_LAYERS.filter(layer =>
-      isNighttime ? layer.nighttimePresent : layer.daytimePresent
-    )
-  );
-
-  // Layer colors
-  const layerColors: Record<string, { fill: string; stroke: string }> = {
-    'd-layer': { fill: 'rgba(239, 68, 68, 0.2)', stroke: '#ef4444' },
-    'e-layer': { fill: 'rgba(249, 115, 22, 0.2)', stroke: '#f97316' },
-    'f1-layer': { fill: 'rgba(34, 197, 94, 0.2)', stroke: '#22c55e' },
-    'f2-layer': { fill: 'rgba(59, 130, 246, 0.3)', stroke: '#3b82f6' },
-  };
-
-  // Calculate reflection path for visualization
-  let reflectionPath = $derived.by(() => {
-    if (!canPropagate) return null;
-
-    // Determine which layer reflects (simplified)
-    let reflectionAltitude = 300; // F2 default
-
-    if (frequencyMHz < 4) {
-      reflectionAltitude = 110; // E layer for lower frequencies
-    } else if (frequencyMHz < 10) {
-      reflectionAltitude = 200; // F1 layer
-    }
-
-    // Skip distance calculation (simplified)
-    const skipDistanceKm = 1500 + (frequencyMHz / mufMHz) * 1500;
-
-    return {
-      altitude: reflectionAltitude,
-      skipDistance: skipDistanceKm
-    };
-  });
-
-  // Event handlers
-  function handleFrequencyInput(e: Event) {
-    frequencyMHz = clamp(parseNumericInput(e, 1), 1, 30);
-  }
-
-  function handleSolarFluxInput(e: Event) {
-    solarFluxIndex = clamp(parseNumericInput(e, 100), 65, 300);
-  }
-
-  // Frequency presets
-  const frequencyPresets = [
-    { label: '80m', mhz: 3.6, band: '3.5-3.8 MHz' },
-    { label: '40m', mhz: 7.1, band: '7-7.2 MHz' },
-    { label: '20m', mhz: 14.2, band: '14-14.35 MHz' },
-    { label: '15m', mhz: 21.2, band: '21-21.45 MHz' },
-    { label: '10m', mhz: 28.5, band: '28-29.7 MHz' },
-  ];
 </script>
 
-<div class="card">
-  <h3 class="text-heading-3 mb-4">Ionosphärische Ausbreitung</h3>
+<Card title="Ionosphärische Ausbreitung" subtitle="MUF, LUF und Sprungdistanz" icon="satellite">
+  <div class="iono">
+    <div class="iono__inputs">
+      <NumberInput
+        label="Frequenz"
+        bind:value={frequencyMHz}
+        units={[{ id: 'mhz', symbol: 'MHz', factor: 1 }]}
+        min={FREQUENCY_MIN_MHZ}
+        max={FREQUENCY_MAX_MHZ}
+        step={0.1}
+        slider
+        presets={BAND_PRESETS}
+        hint="Kurzwellenbereich 1 bis 30 MHz"
+      />
 
-  <!-- Input Section -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <!-- Frequency Input -->
-    <div class="space-y-2">
-      <label for="iono-frequency" class="text-label">
-        Frequenz (HF)
-        <InfoTooltip
-          title="HF-Frequenz"
-          short="Kurzwellenfrequenz für Ionosphärenreflexion"
-          detailed="Der HF-Bereich (3-30 MHz) wird von der Ionosphäre reflektiert und ermöglicht weltweite Kommunikation."
-        />
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="iono-frequency"
-          type="number"
-          value={frequencyMHz}
-          oninput={handleFrequencyInput}
-          class="input-field flex-1"
-          step="0.1"
-          min="1"
-          max="30"
-        />
-        <span class="text-secondary text-sm">MHz</span>
-      </div>
-      <div class="flex flex-wrap gap-1">
-        {#each frequencyPresets as preset (preset.mhz)}
-          <button
-            type="button"
-            onclick={() => { frequencyMHz = preset.mhz; }}
-            class="btn-chip"
-            title={preset.band}
-          >
-            {preset.label}
-          </button>
-        {/each}
-      </div>
+      <NumberInput
+        label="Solarer Fluss F10,7"
+        bind:value={solarFluxIndex}
+        units={[{ id: 'sfu', symbol: 'sfu', factor: 1 }]}
+        min={SOLAR_FLUX_MIN}
+        max={SOLAR_FLUX_MAX}
+        step={1}
+        slider
+        hint="65 im Minimum, über 200 im Maximum des Sonnenzyklus"
+      />
+
+      <Select
+        label="Tageszeit"
+        value={isNighttime ? 'night' : 'day'}
+        options={TIME_OPTIONS}
+        onchange={handleTimeChange}
+        hint={isNighttime
+          ? 'D-Schicht verschwindet, foF2 sinkt deutlich'
+          : 'Alle Schichten vorhanden, D-Schicht dämpft niedrige Frequenzen'}
+      />
     </div>
 
-    <!-- Solar Flux Input -->
-    <div class="space-y-2">
-      <label for="solar-flux" class="text-label">
-        Solar Flux Index (SFI)
-        <InfoTooltip
-          title="Solar Flux Index"
-          short="Mass für Sonnenaktivitaet (10.7 cm Flux)"
-          detailed="Niedriger SFI (65-80): Sonnenminimum. Hoher SFI (150-300): Sonnenmaximum. Beeinflusst die MUF stark."
-        />
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="solar-flux"
-          type="range"
-          value={solarFluxIndex}
-          oninput={handleSolarFluxInput}
-          class="flex-1"
-          min="65"
-          max="300"
-        />
-        <span class="text-secondary text-sm w-12">{solarFluxIndex}</span>
-      </div>
-      <div class="text-xs text-muted">
-        65=Minimum, 150=Mittel, 300=Maximum
-      </div>
+    <div class="iono__results">
+      <ResultCard
+        label="Kritische Frequenz foF2"
+        value={formatNumber(foF2MHz, 1)}
+        unit="MHz"
+        hint="senkrechter Einfall"
+      />
+      <ResultCard
+        label="MUF (3000 km)"
+        value={formatNumber(mufMHz, 1)}
+        unit="MHz"
+        hint="Sekantengesetz MUF = foF2 · sec φ"
+      />
+      <ResultCard
+        label="LUF (Schätzung)"
+        value={formatNumber(lufMHz, 1)}
+        unit="MHz"
+        hint="schematisch, abhängig von D-Schicht und Sendeleistung"
+      />
+      <ResultCard
+        label="Ausbreitung"
+        value={canPropagate ? 'möglich' : 'nicht möglich'}
+        tone={canPropagate ? 'success' : 'danger'}
+        hint={canPropagate
+          ? 'Frequenz liegt zwischen LUF und MUF'
+          : belowLuf
+            ? 'unter der LUF — Absorption in der D-Schicht'
+            : 'über der MUF — die Welle durchdringt die Ionosphäre'}
+        copyable={false}
+      />
     </div>
 
-    <!-- Day/Night Toggle -->
-    <div class="space-y-2">
-      <div class="text-label">Tageszeit</div>
-      <div class="flex items-center gap-4">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            name="daytime"
-            checked={!isNighttime}
-            onchange={() => { isNighttime = false; }}
-            class="radio"
-          />
-          <span class="text-secondary">Tag</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            name="daytime"
-            checked={isNighttime}
-            onchange={() => { isNighttime = true; }}
-            class="radio"
-          />
-          <span class="text-secondary">Nacht</span>
-        </label>
-      </div>
-      <div class="text-xs text-muted">
-        {isNighttime ? 'D-Schicht verschwindet, F1/F2 verschmelzen' : 'Alle Schichten aktiv'}
-      </div>
-    </div>
-  </div>
-
-  <!-- Results Section -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-    <div class="result-box">
-      <div class="result-label">Kritische Frequenz (foF2)</div>
-      <div class="text-xl font-bold text-blue-500 dark:text-blue-400">
-        {formatNumber(criticalFrequencyMHz, 1)} MHz
-      </div>
-    </div>
-    <div class="result-box">
-      <div class="result-label">MUF (3000 km)</div>
-      <div class="text-xl font-bold text-green-600 dark:text-green-400">
-        {formatNumber(mufMHz, 1)} MHz
-      </div>
-    </div>
-    <div class="result-box">
-      <div class="result-label">LUF (3000 km)</div>
-      <div class="text-xl font-bold text-amber-600 dark:text-amber-400">
-        {formatNumber(lufMHz, 1)} MHz
-      </div>
-    </div>
-    <div class="result-box">
-      <div class="result-label">Ausbreitung</div>
-      <div class="text-xl font-bold {canPropagate ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">
-        {canPropagate ? 'Möglich' : 'Nicht möglich'}
-      </div>
-    </div>
-  </div>
-
-  <!-- Ionosphere Visualization -->
-  <div class="w-full overflow-x-auto">
-    <svg
-      viewBox="0 0 {width} {height}"
-      class="w-full h-auto"
-      preserveAspectRatio="xMidYMid meet"
-      role="img"
-      aria-label="Ionosphären-Diagramm: Zeigt D-, E-, F1- und F2-Schichten mit Reflexionspfaden"
+    <ChartFrame
+      bind:width
+      description="Seitenriss der Ionosphäre mit D-, E-, F1- und F2-Schicht sowie dem Reflexionspfad der eingestellten Frequenz"
+      minWidth={560}
+      footnote="Schematische Darstellung; foF2 aus dem solaren Fluss interpoliert"
     >
-      <defs>
-        <!-- Gradient for sky background -->
-        <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:{isNighttime ? '#1e3a5f' : '#87CEEB'};stop-opacity:1" />
-          <stop offset="100%" style="stop-color:{isNighttime ? '#0a1929' : '#4a90c2'};stop-opacity:1" />
-        </linearGradient>
+      {#snippet legend()}
+        <ul class="iono__legend">
+          {#each IONOSPHERIC_LAYERS as layer (layer.id)}
+            {@const active = layers.includes(layer)}
+            <li class="iono__legend-item" class:is-inactive={!active}>
+              <span class="iono__swatch" style="background: {LAYER_COLORS[layer.id].stroke}" aria-hidden="true"></span>
+              <span>{layer.name} ({layer.altitudeMinKm}–{layer.altitudeMaxKm} km)</span>
+              {#if !active}<Badge tone="neutral">nachts inaktiv</Badge>{/if}
+            </li>
+          {/each}
+        </ul>
+      {/snippet}
 
-        <!-- Ground gradient -->
-        <linearGradient id="groundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
-        </linearGradient>
-      </defs>
+      <IonosphericScene {isNighttime} {canPropagate} {belowLuf} {reflection} {width} {height} />
 
-      <!-- Sky background -->
-      <rect
-        x={margin.left}
-        y={margin.top}
-        width={chartWidth}
-        height={chartHeight}
-        fill="url(#skyGradient)"
-      />
+      {#snippet dataTable()}
+        <table>
+          <caption>Kennzahlen der Ionosphäre</caption>
+          <tbody>
+            <tr><th scope="row">Frequenz</th><td>{formatNumber(frequencyMHz, 1)} MHz</td></tr>
+            <tr><th scope="row">Kritische Frequenz foF2</th><td>{formatNumber(foF2MHz, 1)} MHz</td></tr>
+            <tr><th scope="row">MUF</th><td>{formatNumber(mufMHz, 1)} MHz</td></tr>
+            <tr><th scope="row">LUF</th><td>{formatNumber(lufMHz, 1)} MHz</td></tr>
+            <tr><th scope="row">Reflexionshöhe</th><td>{formatNumber(reflection.altitude, 0)} km</td></tr>
+          </tbody>
+        </table>
+      {/snippet}
+    </ChartFrame>
 
-      <!-- Ground -->
-      <rect
-        x={margin.left}
-        y={margin.top + chartHeight - 20}
-        width={chartWidth}
-        height="20"
-        fill="url(#groundGradient)"
-      />
-
-      <!-- Chart area -->
-      <g transform="translate({margin.left}, {margin.top})">
-        <!-- Ionospheric layers -->
-        {#each visibleLayers as layer (layer.id)}
-          {@const yTop = altitudeToY(layer.altitudeMaxKm)}
-          {@const yBottom = altitudeToY(layer.altitudeMinKm)}
-          {@const layerHeight = yBottom - yTop}
-          {@const colors = layerColors[layer.id]}
-
-          <rect
-            x="0"
-            y={yTop}
-            width={chartWidth}
-            height={layerHeight}
-            fill={colors.fill}
-            stroke={colors.stroke}
-            stroke-width="1"
-            stroke-dasharray="4,4"
-          />
-
-          <!-- Layer label -->
-          <text
-            x={chartWidth - 10}
-            y={yTop + layerHeight / 2}
-            fill={colors.stroke}
-            font-size="12"
-            font-weight="500"
-            text-anchor="end"
-            dominant-baseline="middle"
-          >
-            {layer.name} ({layer.altitudeMinKm}-{layer.altitudeMaxKm} km)
-          </text>
-        {/each}
-
-        <!-- Altitude grid lines -->
-        {#each [100, 200, 300, 400] as alt (alt)}
-          <line
-            x1="0"
-            y1={altitudeToY(alt)}
-            x2={chartWidth}
-            y2={altitudeToY(alt)}
-            stroke="rgba(255,255,255,0.2)"
-            stroke-dasharray="2,4"
-          />
-          <text
-            x="-10"
-            y={altitudeToY(alt)}
-            fill="var(--color-chart-text-secondary)"
-            font-size="10"
-            text-anchor="end"
-            dominant-baseline="middle"
-          >
-            {alt} km
-          </text>
-        {/each}
-
-        <!-- Reflection path visualization -->
-        {#if reflectionPath && canPropagate}
-          {@const txX = 50}
-          {@const rxX = chartWidth - 50}
-          {@const midX = chartWidth / 2}
-          {@const groundY = chartHeight - 20}
-          {@const reflectionY = altitudeToY(reflectionPath.altitude)}
-
-          <!-- TX antenna -->
-          <line
-            x1={txX}
-            y1={groundY}
-            x2={txX}
-            y2={groundY - 30}
-            stroke="#ef4444"
-            stroke-width="3"
-          />
-          <circle cx={txX} cy={groundY - 35} r="5" fill="#ef4444" />
-          <text x={txX} y={groundY + 15} fill="var(--color-chart-text)" font-size="10" text-anchor="middle">TX</text>
-
-          <!-- RX antenna -->
-          <line
-            x1={rxX}
-            y1={groundY}
-            x2={rxX}
-            y2={groundY - 30}
-            stroke="#22c55e"
-            stroke-width="3"
-          />
-          <circle cx={rxX} cy={groundY - 35} r="5" fill="#22c55e" />
-          <text x={rxX} y={groundY + 15} fill="var(--color-chart-text)" font-size="10" text-anchor="middle">RX</text>
-
-          <!-- Signal path -->
-          <path
-            d="M {txX} {groundY - 35} Q {midX} {reflectionY - 20} {rxX} {groundY - 35}"
-            fill="none"
-            stroke="#fbbf24"
-            stroke-width="2"
-            stroke-dasharray="6,3"
-          >
-            <animate
-              attributeName="stroke-dashoffset"
-              from="18"
-              to="0"
-              dur="1s"
-              repeatCount="indefinite"
-            />
-          </path>
-
-          <!-- Reflection point -->
-          <circle
-            cx={midX}
-            cy={reflectionY}
-            r="6"
-            fill="#fbbf24"
-            opacity="0.8"
-          />
-
-          <!-- Skip distance label -->
-          <text
-            x={midX}
-            y={groundY + 35}
-            fill="var(--color-chart-text)"
-            font-size="11"
-            text-anchor="middle"
-          >
-            Skip: ~{formatNumber(reflectionPath.skipDistance, 0)} km
-          </text>
-        {:else if !canPropagate}
-          <!-- No propagation indicator -->
-          <text
-            x={chartWidth / 2}
-            y={chartHeight / 2}
-            fill="#ef4444"
-            font-size="16"
-            font-weight="500"
-            text-anchor="middle"
-          >
-            {frequencyMHz < lufMHz ? 'Frequenz unter LUF - zu starke D-Schicht Absorption' : 'Frequenz über MUF - keine Reflexion'}
-          </text>
-        {/if}
-
-        <!-- Y-axis label -->
-        <text
-          transform="rotate(-90)"
-          x={-chartHeight / 2}
-          y="-55"
-          fill="var(--color-chart-text)"
-          font-size="13"
-          font-weight="500"
-          text-anchor="middle"
-        >
-          Höhe (km)
-        </text>
-      </g>
-
-      <!-- Legend -->
-      <g transform="translate({width - margin.right + 20}, {margin.top})">
-        <text fill="var(--color-chart-text)" font-weight="500" font-size="12" y="0">
-          Ionosphärenschichten
-        </text>
-
-        {#each IONOSPHERIC_LAYERS as layer, i (layer.id)}
-          {@const colors = layerColors[layer.id]}
-          {@const isVisible = visibleLayers.includes(layer)}
-          <g transform="translate(0, {20 + i * 45})" opacity={isVisible ? 1 : 0.4}>
-            <rect x="0" y="0" width="16" height="16" fill={colors.fill} stroke={colors.stroke} />
-            <text x="24" y="12" fill="var(--color-chart-text-secondary)" font-size="11">
-              {layer.name}
-            </text>
-            <text x="24" y="26" fill="var(--color-text-tertiary)" font-size="9">
-              {layer.altitudeMinKm}-{layer.altitudeMaxKm} km
-            </text>
-            <text x="24" y="38" fill="var(--color-text-tertiary)" font-size="8">
-              {isVisible ? (layer.affectsHF ? 'HF-aktiv' : 'Passiv') : 'Nachts inaktiv'}
-            </text>
-          </g>
-        {/each}
-
-        <!-- Current frequency indicator -->
-        <g transform="translate(0, 210)">
-          <text fill="var(--color-chart-text)" font-weight="500" font-size="12" y="0">
-            Aktuelle Frequenz
-          </text>
-          <text fill="#fbbf24" font-size="14" font-weight="bold" y="20">
-            {formatNumber(frequencyMHz, 1)} MHz
-          </text>
-          <text fill="var(--color-text-tertiary)" font-size="10" y="36">
-            LUF: {formatNumber(lufMHz, 1)} MHz
-          </text>
-          <text fill="var(--color-text-tertiary)" font-size="10" y="50">
-            MUF: {formatNumber(mufMHz, 1)} MHz
-          </text>
-        </g>
-      </g>
-    </svg>
+    <div class="iono__notes">
+      <Callout tone="info" title="MUF — höchste nutzbare Frequenz">
+        Die höchste Frequenz, die von der Ionosphäre noch zum Boden zurückgeworfen wird. Sie steigt mit der
+        Sonnenaktivität und mit flacherem Einfallswinkel.
+      </Callout>
+      <Callout tone="info" title="LUF — niedrigste nutzbare Frequenz">
+        Darunter absorbiert die D-Schicht das Signal, bevor es die reflektierenden Schichten erreicht. Nachts
+        verschwindet die D-Schicht und die LUF sinkt.
+      </Callout>
+      <Callout tone="tip" title="Kritische Frequenz foF2">
+        Die Frequenz, die bei senkrechtem Einfall gerade noch reflektiert wird. Bei schrägem Einfall gilt das
+        Sekantengesetz MUF = foF2 · sec φ; über 3000 km liegt die MUF dadurch etwa dreimal höher.
+      </Callout>
+    </div>
   </div>
+</Card>
 
-  <!-- Explanation -->
-  <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
-    <p class="mb-2">
-      <strong>MUF (Maximum Usable Frequency):</strong> Höchste Frequenz, die noch von der Ionosphäre
-      reflektiert wird. Höher bei hoher Sonnenaktivitaet.
-    </p>
-    <p class="mb-2">
-      <strong>LUF (Lowest Usable Frequency):</strong> Niedrigste nutzbare Frequenz. Tiefere Frequenzen
-      werden von der D-Schicht absorbiert.
-    </p>
-    <p>
-      <strong>Kritische Frequenz (foF2):</strong> Frequenz, die bei senkrechtem Einfall gerade noch
-      reflektiert wird. Die MUF bei schraegem Einfall ist ca. 3x höher.
-    </p>
-  </div>
-</div>
+<style>
+  .iono {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .iono__inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: 1.25rem;
+  }
+
+  .iono__results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.75rem;
+  }
+
+  .iono__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .iono__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .iono__legend-item.is-inactive {
+    opacity: 0.5;
+  }
+
+  .iono__swatch {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 2px;
+    display: inline-block;
+    flex: none;
+  }
+
+  .iono__notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 0.75rem;
+  }
+</style>

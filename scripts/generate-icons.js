@@ -86,7 +86,7 @@ const iconSizes = [
   { name: 'icon-152x152.png', size: 152, dir: iconsDir },
   { name: 'icon-192x192.png', size: 192, dir: iconsDir },
   { name: 'icon-384x384.png', size: 384, dir: iconsDir },
-  { name: 'icon-512x512.png', size: 512, dir: iconsDir },
+  { name: 'icon-512x512.png', size: 512, dir: iconsDir }
 ];
 
 async function generateIcons() {
@@ -96,10 +96,7 @@ async function generateIcons() {
     const outputPath = path.join(icon.dir, icon.name);
 
     try {
-      await sharp(Buffer.from(svgContent))
-        .resize(icon.size, icon.size)
-        .png()
-        .toFile(outputPath);
+      await sharp(Buffer.from(svgContent)).resize(icon.size, icon.size).png().toFile(outputPath);
 
       console.log(`  Created: ${icon.name} (${icon.size}x${icon.size})`);
     } catch (error) {
@@ -112,9 +109,7 @@ async function generateIcons() {
   try {
     const sizes = [16, 32, 48];
     const pngBuffers = await Promise.all(
-      sizes.map((size) =>
-        sharp(Buffer.from(svgContent)).resize(size, size).png().toBuffer()
-      )
+      sizes.map((size) => sharp(Buffer.from(svgContent)).resize(size, size).png().toBuffer())
     );
 
     const icoBuffer = createIco(pngBuffers);

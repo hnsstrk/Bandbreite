@@ -23,8 +23,7 @@ import {
   type UnitDefinition,
   type PowerUnitWatt,
   type PowerUnitDb,
-  type DistanceUnit,
-  type AttenuationUnit,
+  type AttenuationUnit
 } from '$lib/data/units';
 
 // ============================================================================
@@ -128,7 +127,7 @@ describe('FREQUENCY_UNITS', () => {
   });
 
   it('should contain Hz, kHz, MHz, GHz, THz in order', () => {
-    const ids = FREQUENCY_UNITS.map(u => u.id);
+    const ids = FREQUENCY_UNITS.map((u) => u.id);
     expect(ids).toEqual(['Hz', 'kHz', 'MHz', 'GHz', 'THz']);
   });
 
@@ -147,7 +146,7 @@ describe('FREQUENCY_UNITS', () => {
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = FREQUENCY_UNITS.map(u => u.id);
+    const ids = FREQUENCY_UNITS.map((u) => u.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -163,7 +162,7 @@ describe('WAVELENGTH_UNITS', () => {
   });
 
   it('should contain km, m, cm, mm, \u03bcm, nm in order', () => {
-    const ids = WAVELENGTH_UNITS.map(u => u.id);
+    const ids = WAVELENGTH_UNITS.map((u) => u.id);
     expect(ids).toEqual(['km', 'm', 'cm', 'mm', '\u03bcm', 'nm']);
   });
 
@@ -182,7 +181,7 @@ describe('WAVELENGTH_UNITS', () => {
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = WAVELENGTH_UNITS.map(u => u.id);
+    const ids = WAVELENGTH_UNITS.map((u) => u.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -198,7 +197,7 @@ describe('DISTANCE_UNITS', () => {
   });
 
   it('should contain m, km, mi, ft, yd, nmi', () => {
-    const ids = DISTANCE_UNITS.map(u => u.id);
+    const ids = DISTANCE_UNITS.map((u) => u.id);
     expect(ids).toContain('m');
     expect(ids).toContain('km');
     expect(ids).toContain('mi');
@@ -217,13 +216,13 @@ describe('DISTANCE_UNITS', () => {
   });
 
   it('should have meter with factor 1 as the base unit', () => {
-    const meter = DISTANCE_UNITS.find(u => u.id === 'm');
+    const meter = DISTANCE_UNITS.find((u) => u.id === 'm');
     expect(meter).toBeDefined();
     expect(meter!.factor).toBe(1);
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = DISTANCE_UNITS.map(u => u.id);
+    const ids = DISTANCE_UNITS.map((u) => u.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -258,7 +257,7 @@ describe('POWER_UNITS_WATT', () => {
   });
 
   it('should contain uw, mw, w, kw', () => {
-    const ids = POWER_UNITS_WATT.map(u => u.id);
+    const ids = POWER_UNITS_WATT.map((u) => u.id);
     expect(ids).toContain('uw');
     expect(ids).toContain('mw');
     expect(ids).toContain('w');
@@ -266,7 +265,7 @@ describe('POWER_UNITS_WATT', () => {
   });
 
   it('should have Watt with factor 1 as the base unit', () => {
-    const watt = POWER_UNITS_WATT.find(u => u.id === 'w');
+    const watt = POWER_UNITS_WATT.find((u) => u.id === 'w');
     expect(watt).toBeDefined();
     expect(watt!.factor).toBe(1);
   });
@@ -282,7 +281,7 @@ describe('POWER_UNITS_WATT', () => {
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = POWER_UNITS_WATT.map(u => u.id);
+    const ids = POWER_UNITS_WATT.map((u) => u.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -307,25 +306,25 @@ describe('POWER_UNITS_DB', () => {
   });
 
   it('should contain dbm and dbw', () => {
-    const ids = POWER_UNITS_DB.map(u => u.id);
+    const ids = POWER_UNITS_DB.map((u) => u.id);
     expect(ids).toContain('dbm');
     expect(ids).toContain('dbw');
   });
 
   it('should have dBm reference of 1 mW (0.001 W)', () => {
-    const dbm = POWER_UNITS_DB.find(u => u.id === 'dbm') as PowerUnitDb;
+    const dbm = POWER_UNITS_DB.find((u) => u.id === 'dbm') as PowerUnitDb;
     expect(dbm).toBeDefined();
     expect(dbm.reference).toBe(1e-3);
   });
 
   it('should have dBW reference of 1 W', () => {
-    const dbw = POWER_UNITS_DB.find(u => u.id === 'dbw') as PowerUnitDb;
+    const dbw = POWER_UNITS_DB.find((u) => u.id === 'dbw') as PowerUnitDb;
     expect(dbw).toBeDefined();
     expect(dbw.reference).toBe(1);
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = POWER_UNITS_DB.map(u => u.id);
+    const ids = POWER_UNITS_DB.map((u) => u.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -350,25 +349,25 @@ describe('ATTENUATION_UNITS', () => {
   });
 
   it('should contain dB/km and dB/m', () => {
-    const ids = ATTENUATION_UNITS.map(u => u.id);
+    const ids = ATTENUATION_UNITS.map((u) => u.id);
     expect(ids).toContain('dB/km');
     expect(ids).toContain('dB/m');
   });
 
   it('should have dB/km with perKm = true', () => {
-    const dbKm = ATTENUATION_UNITS.find(u => u.id === 'dB/km') as AttenuationUnit;
+    const dbKm = ATTENUATION_UNITS.find((u) => u.id === 'dB/km') as AttenuationUnit;
     expect(dbKm).toBeDefined();
     expect(dbKm.perKm).toBe(true);
   });
 
   it('should have dB/m with perKm = false', () => {
-    const dbM = ATTENUATION_UNITS.find(u => u.id === 'dB/m') as AttenuationUnit;
+    const dbM = ATTENUATION_UNITS.find((u) => u.id === 'dB/m') as AttenuationUnit;
     expect(dbM).toBeDefined();
     expect(dbM.perKm).toBe(false);
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = ATTENUATION_UNITS.map(u => u.id);
+    const ids = ATTENUATION_UNITS.map((u) => u.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });

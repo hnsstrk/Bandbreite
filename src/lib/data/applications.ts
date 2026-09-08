@@ -19,18 +19,18 @@ import applicationData from './applications.json';
  * Application category classification
  */
 export type ApplicationCategory =
-  | 'broadcast'      // Rundfunk (AM, FM, DAB, DVB)
-  | 'mobile'         // Mobilfunk (GSM, UMTS, LTE, 5G)
-  | 'wlan'           // WLAN/WiFi
-  | 'satellite'      // Satellit (GPS, TV, Internet)
-  | 'radar'          // Radar (Wetter, Flug, Auto)
-  | 'amateur'        // Amateurfunk
-  | 'navigation'     // Navigation (GPS, LORAN, etc.)
-  | 'military'       // Militärische Anwendungen
-  | 'ism'            // Industrial, Scientific, Medical
-  | 'pmr'            // Professional/Private Mobile Radio
-  | 'maritime'       // Seefunk
-  | 'aviation';      // Flugfunk
+  | 'broadcast' // Rundfunk (AM, FM, DAB, DVB)
+  | 'mobile' // Mobilfunk (GSM, UMTS, LTE, 5G)
+  | 'wlan' // WLAN/WiFi
+  | 'satellite' // Satellit (GPS, TV, Internet)
+  | 'radar' // Radar (Wetter, Flug, Auto)
+  | 'amateur' // Amateurfunk
+  | 'navigation' // Navigation (GPS, LORAN, etc.)
+  | 'military' // Militärische Anwendungen
+  | 'ism' // Industrial, Scientific, Medical
+  | 'pmr' // Professional/Private Mobile Radio
+  | 'maritime' // Seefunk
+  | 'aviation'; // Flugfunk
 
 /**
  * RF Application interface
@@ -59,7 +59,8 @@ export const WLAN_APPLICATIONS: RFApplication[] = applicationData.wlan as RFAppl
 export const SATELLITE_APPLICATIONS: RFApplication[] = applicationData.satellite as RFApplication[];
 export const RADAR_APPLICATIONS: RFApplication[] = applicationData.radar as RFApplication[];
 export const AMATEUR_APPLICATIONS: RFApplication[] = applicationData.amateur as RFApplication[];
-export const NAVIGATION_APPLICATIONS: RFApplication[] = applicationData.navigation as RFApplication[];
+export const NAVIGATION_APPLICATIONS: RFApplication[] =
+  applicationData.navigation as RFApplication[];
 export const MILITARY_APPLICATIONS: RFApplication[] = applicationData.military as RFApplication[];
 export const ISM_APPLICATIONS: RFApplication[] = applicationData.ism as RFApplication[];
 export const PMR_APPLICATIONS: RFApplication[] = applicationData.pmr as RFApplication[];
@@ -85,7 +86,7 @@ export const ALL_APPLICATIONS: RFApplication[] = [
   ...ISM_APPLICATIONS,
   ...PMR_APPLICATIONS,
   ...MARITIME_APPLICATIONS,
-  ...AVIATION_APPLICATIONS,
+  ...AVIATION_APPLICATIONS
 ];
 
 /**
@@ -103,7 +104,7 @@ export const APPLICATIONS_BY_CATEGORY = {
   ism: ISM_APPLICATIONS,
   pmr: PMR_APPLICATIONS,
   maritime: MARITIME_APPLICATIONS,
-  aviation: AVIATION_APPLICATIONS,
+  aviation: AVIATION_APPLICATIONS
 } as const;
 
 /**
@@ -126,9 +127,7 @@ export function getApplicationsForFrequency(frequencyHz: number): RFApplication[
     return [];
   }
 
-  return ALL_APPLICATIONS.filter(
-    app => frequencyHz >= app.minHz && frequencyHz <= app.maxHz
-  );
+  return ALL_APPLICATIONS.filter((app) => frequencyHz >= app.minHz && frequencyHz <= app.maxHz);
 }
 
 /**
@@ -148,9 +147,10 @@ export function getApplicationsByCategory(category: ApplicationCategory): RFAppl
 export function searchApplications(query: string): RFApplication[] {
   const lowerQuery = query.toLowerCase();
   return ALL_APPLICATIONS.filter(
-    app => app.name.toLowerCase().includes(lowerQuery) ||
-           app.nameDE.toLowerCase().includes(lowerQuery) ||
-           app.description.toLowerCase().includes(lowerQuery) ||
-           app.descriptionDE.toLowerCase().includes(lowerQuery)
+    (app) =>
+      app.name.toLowerCase().includes(lowerQuery) ||
+      app.nameDE.toLowerCase().includes(lowerQuery) ||
+      app.description.toLowerCase().includes(lowerQuery) ||
+      app.descriptionDE.toLowerCase().includes(lowerQuery)
   );
 }

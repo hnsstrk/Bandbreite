@@ -10,6 +10,8 @@
         pathFrequencyUnit: string;
         miscLossDb: number;
         includeAtmosphericLoss: boolean;
+        pathType: "terrestrial" | "earth-space";
+        elevationAngleDeg: number;
         fsplDb: number;
         atmosphericLossDb: number;
         totalPathLossDb: number;
@@ -22,6 +24,8 @@
         pathFrequencyUnit = $bindable(),
         miscLossDb = $bindable(),
         includeAtmosphericLoss = $bindable(),
+        pathType = $bindable(),
+        elevationAngleDeg = $bindable(),
         fsplDb,
         atmosphericLossDb,
         totalPathLossDb,
@@ -132,6 +136,49 @@
             />
             Atmosphärische Dämpfung einbeziehen
         </label>
+
+        {#if includeAtmosphericLoss}
+            <div>
+                <label for="lb-path-type" class="text-label mb-1">
+                    Pfadtyp
+                    <InfoTooltip
+                        title="Pfadtyp"
+                        short="Terrestrisch: γ·d über die volle Strecke. Erde–Raum: nur der troposphärische Anteil dämpft."
+                        detailed="Für Satellitenstrecken gilt ITU-R P.676-13 Annex 2: A = (h₀·γ₀ + h_w·γ_w)/sin θ mit äquivalenten Höhen h₀ ≈ 5–6 km, h_w ≈ 2 km; Niederschlag wird über die Regenhöhe (ITU-R P.839, ≈ 3 km) begrenzt."
+                    />
+                </label>
+                <select
+                    id="lb-path-type"
+                    bind:value={pathType}
+                    class="select-field w-full"
+                >
+                    <option value="terrestrial">Terrestrisch</option>
+                    <option value="earth-space">Erde–Raum (Satellit)</option>
+                </select>
+            </div>
+            {#if pathType === "earth-space"}
+                <div>
+                    <label for="lb-elevation" class="text-label mb-1"
+                        >Elevationswinkel</label
+                    >
+                    <div class="flex items-center gap-2">
+                        <input
+                            id="lb-elevation"
+                            type="number"
+                            value={elevationAngleDeg}
+                            oninput={handleNumberInput(
+                                (v) => (elevationAngleDeg = Math.min(90, Math.max(5, v))),
+                            )}
+                            class="input-field flex-1"
+                            step="1"
+                            min="5"
+                            max="90"
+                        />
+                        <span class="text-muted text-sm w-12">°</span>
+                    </div>
+                </div>
+            {/if}
+        {/if}
 
         <!-- Path Loss Results -->
         <div class="result-box mt-4 space-y-2 text-left">

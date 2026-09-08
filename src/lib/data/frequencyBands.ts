@@ -86,10 +86,15 @@ export const FREQUENCY_LIMITS = {
   BROADCAST_90M_MAX: 3.4e6,
   BROADCAST_75M_MIN: 3.9e6,
   BROADCAST_75M_MAX: 4e6,
+  // 60-m-Tropenband: 4750-4995 kHz und 5005-5060 kHz. Dazwischen liegt der
+  // Normalfrequenz-/Zeitzeichenbereich 4995-5005 kHz (u. a. WWV 5 MHz).
   BROADCAST_60M_MIN: 4.75e6,
   BROADCAST_60M_MAX: 5.06e6,
+  BROADCAST_60M_GAP_MIN: 4.995e6,
+  BROADCAST_60M_GAP_MAX: 5.005e6,
   BROADCAST_49M_MIN: 5.9e6,
   BROADCAST_49M_MAX: 6.2e6,
+  // 41-m-Band Region 1: 7200-7450 kHz. Region 2/3 nutzen 7200-7600 kHz.
   BROADCAST_41M_MIN: 7.2e6,
   BROADCAST_41M_MAX: 7.45e6,
   BROADCAST_31M_MIN: 9.4e6,
@@ -106,7 +111,8 @@ export const FREQUENCY_LIMITS = {
   BROADCAST_15M_MAX: 19.02e6,
   BROADCAST_13M_MIN: 21.45e6,
   BROADCAST_13M_MAX: 21.85e6,
-  BROADCAST_11M_MIN: 25.6e6,
+  // 11-m-Rundfunkband: 25 670-26 100 kHz (ITU RR Art. 5), nicht 25 600 kHz
+  BROADCAST_11M_MIN: 25.67e6,
   BROADCAST_11M_MAX: 26.1e6,
 } as const;
 
@@ -214,12 +220,12 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.ULF_MAX, max: FREQUENCY_LIMITS.VLF_MAX },
     wavelength: '10 - 100 km',
-    applications: ['Time signals (DCF77)', 'Navigation (Omega)', 'Submarine broadcast'],
-    applicationsDE: ['Zeitzeichen (DCF77)', 'Navigation (Omega)', 'U-Boot-Rundfunk'],
+    applications: ['Marine VLF (e.g. DHO38 23.4 kHz)', 'Navigation (Omega, discontinued 1997)', 'Submarine broadcast'],
+    applicationsDE: ['Marine-VLF (z. B. DHO38, 23,4 kHz)', 'Omega-Navigation (1997 eingestellt)', 'U-Boot-Rundfunk'],
     propagation: 'Very stable ground wave propagation. Earth-ionosphere waveguide.',
     propagationDE: 'Sehr stabile Bodenwellenausbreitung. Erde-Ionosphäre-Wellenleiter.',
     propagationMode: 'groundWave',
-    notes: 'DCF77 (77,5 kHz) sendet von Mainflingen bei Frankfurt.',
+    notes: 'DHO38 (23,4 kHz) sendet von der Marinefunksendestelle Rhauderfehn. DCF77 (77,5 kHz) liegt dagegen im LF-Band.',
     color: '#2374ab'
   },
   {
@@ -229,8 +235,8 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.VLF_MAX, max: FREQUENCY_LIMITS.LF_MAX },
     wavelength: '1 - 10 km',
-    applications: ['Longwave broadcasting', 'Navigation (NDB)', 'LORAN-C', 'RFID (134 kHz)'],
-    applicationsDE: ['Langwellen-Rundfunk', 'Navigation (NDB)', 'LORAN-C', 'RFID (134 kHz)'],
+    applications: ['Longwave broadcasting', 'Time signals (DCF77, 77.5 kHz)', 'Navigation (NDB)', 'LORAN-C (100 kHz)', 'RFID (134 kHz)'],
+    applicationsDE: ['Langwellen-Rundfunk', 'Zeitzeichen (DCF77, 77,5 kHz)', 'Navigation (NDB)', 'LORAN-C (100 kHz)', 'RFID (134 kHz)'],
     propagation: 'Ground wave reaches several 100 km. Sky wave possible at night.',
     propagationDE: 'Bodenwelle reicht mehrere 100 km. Nachts Raumwelle möglich.',
     propagationMode: 'groundWave',
@@ -758,6 +764,11 @@ export const NATO_FREQUENCY_BANDS: FrequencyBandDetail[] = [
 // ============================================================================
 // Amateurfunkbänder (IARU Region 1)
 // Quelle: IARU Region 1 Bandplan, BNetzA Amateurfunkverordnung
+//
+// Hinweis: Diese Liste bildet nur die klassischen Bänder ab. Die vollständige
+// Übersicht einschließlich 2200 m, 630 m, 4 m und der Mikrowellenbänder
+// oberhalb 13 cm — jeweils mit Segmenten, Lizenzklassen und Leistungsgrenzen —
+// steht in `src/lib/data/amateurBands.ts` (AMATEUR_BANDS).
 // ============================================================================
 
 export const AMATEUR_FREQUENCY_BANDS: FrequencyBandDetail[] = [
@@ -803,7 +814,7 @@ export const AMATEUR_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     propagation: 'Good for emergency communications. Stable propagation.',
     propagationDE: 'Gut für Notfunkkommunikation. Stabile Ausbreitung.',
     propagationMode: 'skyWave',
-    notes: 'WRC-15 Sekundärzuweisung. In DE Kanalbetrieb mit 15 W EIRP.',
+    notes: 'WRC-15 Sekundärzuweisung. In Deutschland seit 2017 durchgehender Bereich 5351,5-5366,5 kHz mit 15 W EIRP, kein Kanalbetrieb mehr.',
     color: '#6366f1'
   },
   {
@@ -968,7 +979,7 @@ export const AMATEUR_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     propagation: 'Line-of-sight. EME becoming popular.',
     propagationDE: 'Sichtverbindung. EME wird beliebter.',
     propagationMode: 'lineOfSight',
-    notes: 'Erste Mikrowellenzuweisung. GPS-L-Band teilt diesen Bereich.',
+    notes: 'Erste Mikrowellenzuweisung, Sekundärstatus gegenüber der Satellitennavigation (Galileo E6, 1260-1300 MHz). Die WRC-23 hat dafür Schutzbedingungen festgelegt (Res. 774).',
     color: '#22c55e'
   },
   {

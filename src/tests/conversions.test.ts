@@ -358,3 +358,20 @@ describe('Edge cases', () => {
     expect(convertFromHz(-1e9, 'GHz')).toBe(-1);
   });
 });
+
+describe('wattToDbm / wattToDbW – Guards (P2-6)', () => {
+  it('0 W → −Infinity, negative Eingabe → −Infinity (kein NaN)', () => {
+    expect(wattToDbm(0)).toBe(-Infinity);
+    expect(wattToDbW(0)).toBe(-Infinity);
+    expect(wattToDbm(-1)).toBe(-Infinity);
+    expect(Number.isNaN(wattToDbW(-1))).toBe(false);
+  });
+  it('Referenzwerte: 1 W = 30 dBm = 0 dBW; 1000 W = 60 dBm; 0,5 W = −3,0103 dBW', () => {
+    expect(wattToDbm(1)).toBeCloseTo(30, 9);
+    expect(wattToDbm(1000)).toBeCloseTo(60, 9);
+    expect(wattToDbW(1)).toBeCloseTo(0, 9);
+    expect(wattToDbW(10)).toBeCloseTo(10, 9);
+    expect(wattToDbW(0.5)).toBeCloseTo(-3.0103, 4);
+    expect(dbmToWatt(-90)).toBeCloseTo(1e-12, 15);
+  });
+});

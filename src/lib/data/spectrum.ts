@@ -7,7 +7,8 @@
  * Quellen:
  * - ITU Radio Regulations
  * - IEEE Standard Letter Designations
- * - CODATA 2018 (Lichtgeschwindigkeit)
+ * - SI-Definition der Lichtgeschwindigkeit (seit 1983 exakt 299 792 458 m/s,
+ *   kein Messwert; siehe SPEED_OF_LIGHT in constants.ts)
  */
 
 import { SPEED_OF_LIGHT } from './constants';
@@ -80,6 +81,15 @@ export interface EMBand {
 
 /**
  * Standard-EM-Bänder für Spektrumsvisualisierungen
+ *
+ * ACHTUNG (bekannte Inkonsistenz, siehe Bericht 04 Befund 11/55):
+ * `src/lib/data/bands.ts` exportiert ebenfalls ein `EM_BANDS` mit abweichenden
+ * Grenzen (dort Radio 3 Hz-300 GHz als ein einziges Band). Hier ist das
+ * Radioband auf 3 kHz-300 MHz begrenzt und die Mikrowelle separat geführt;
+ * ELF/SLF/ULF unterhalb 3 kHz sind bewusst nicht dargestellt, obwohl
+ * SPECTRUM_MIN_HZ bei 3 Hz liegt. Beide Exporte werden derzeit parallel
+ * genutzt; die Zusammenführung auf eine Single Source of Truth ist dem
+ * Tech-Debt-Schritt vorbehalten und wird hier nur dokumentiert.
  */
 export const EM_BANDS: EMBand[] = [
   {

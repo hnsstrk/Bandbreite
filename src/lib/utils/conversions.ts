@@ -1,3 +1,5 @@
+import { safeLog } from '$lib/utils/handlers';
+
 // Frequency conversion factors to Hz
 export const FREQUENCY_FACTORS: Record<string, number> = {
   Hz: 1,
@@ -52,7 +54,8 @@ export function convertFromMeters(valueM: number, unit: string): number {
  * @returns Power in dBm
  */
 export function wattToDbm(watt: number): number {
-  return 10 * Math.log10(watt * 1000);
+  // 0 W entspricht −∞ dBm; negative/ungültige Eingaben ebenfalls (kein NaN)
+  return 10 * safeLog(watt * 1000, 10, -Infinity);
 }
 
 /**
@@ -72,7 +75,7 @@ export function dbmToWatt(dbm: number): number {
  * @returns Power in dBW
  */
 export function wattToDbW(watt: number): number {
-  return 10 * Math.log10(watt);
+  return 10 * safeLog(watt, 10, -Infinity);
 }
 
 /**

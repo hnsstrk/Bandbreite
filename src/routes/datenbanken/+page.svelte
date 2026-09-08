@@ -1,58 +1,38 @@
 <script lang="ts">
-  interface Section {
-    title: string;
-    description: string;
-    href: string;
-    icon: string;
-  }
+  import { getHubChildren, findNode } from '$lib/data/navigation';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
 
-  const sections: Section[] = [
-    {
-      title: 'Geschichte der Funktechnik',
-      description: 'Von Marconis ersten Experimenten bis zur modernen Kommunikation - eine Zeitreise durch die Entwicklung der Funktechnik.',
-      href: '/datenbanken/historie',
-      icon: '📜'
-    },
-    {
-      title: 'Senderdatenbank',
-      description: 'Referenzdaten zu bekannten Funk- und Rundfunksendern weltweit.',
-      href: '/datenbanken/sender',
-      icon: '📡'
-    }
-  ];
+  const hub = findNode('/datenbanken/');
+  const items = getHubChildren('/datenbanken/');
 </script>
-
-<svelte:head>
-  <title>Datenbanken - Bandbreite</title>
-  <meta name="description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
-  <meta property="og:title" content="Datenbanken | Bandbreite" />
-  <meta property="og:description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Datenbanken | Bandbreite" />
-  <meta name="twitter:description" content="Nachschlagewerke und Datenbanken zur Funktechnik: Geschichte und Senderdatenbank." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
     <h1 class="text-heading-1">Datenbanken</h1>
-    <p class="header-description">
-      Nachschlagewerke und Referenzdaten zur Funktechnik.
-    </p>
+    <p class="header-description">{hub?.description}</p>
   </header>
 
-  <section class="sections-grid">
-    {#each sections as section (section.href)}
-      <a href={section.href} class="section-card">
-        <div class="section-icon">{section.icon}</div>
-        <div class="section-content">
-          <h2>{section.title}</h2>
-          <p>{section.description}</p>
-        </div>
-        <div class="section-arrow">→</div>
-      </a>
+  <ul class="hub-grid">
+    {#each items as item (item.id)}
+      <li>
+        {#if item.status === 'geplant'}
+          <div class="hub-card planned">
+            <h2>{item.label}</h2>
+            <p>{item.description}</p>
+            <span class="hub-badge">geplant</span>
+          </div>
+        {:else}
+          <a class="hub-card" href={item.href}>
+            <h2>{item.label}</h2>
+            <p>{item.description}</p>
+            <span class="hub-arrow" aria-hidden="true">→</span>
+          </a>
+        {/if}
+      </li>
     {/each}
-  </section>
+  </ul>
+
+  <RelatedTopics href="/datenbanken/" />
 </div>
 
 <style>
@@ -63,72 +43,80 @@
     padding: 0 1rem;
   }
 
-  .page-header {
-    margin-bottom: 0;
-  }
-
   .header-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    margin-top: 0.5rem;
-    line-height: var(--line-height-relaxed);
     max-width: 65ch;
+    margin-top: 0.5rem;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
   }
 
-  .sections-grid {
-    display: flex;
-    flex-direction: column;
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    grid-auto-rows: 1fr;
     gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
-  .section-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    background: var(--color-bg-surface);
+  .hub-card {
+    position: relative;
+    display: block;
+    height: 100%;
+    padding: 1.25rem 2.25rem 1.25rem 1.25rem;
+    background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     text-decoration: none;
-    transition: all var(--transition-fast);
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
   }
 
-  .section-card:hover {
+  a.hub-card:hover {
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
   }
 
-  .section-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
-  }
-
-  .section-content {
-    flex: 1;
-  }
-
-  .section-content h2 {
-    margin: 0 0 0.5rem 0;
-    font-size: var(--font-size-lg);
+  .hub-card h2 {
+    margin: 0 0 0.375rem 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
   }
 
-  .section-content p {
+  .hub-card p {
     margin: 0;
     font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
     line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
   }
 
-  .section-arrow {
-    font-size: 1.5rem;
+  .hub-card.planned {
+    border-style: dashed;
+  }
+
+  .hub-card.planned h2,
+  .hub-card.planned p {
+    color: var(--color-text-disabled);
+  }
+
+  .hub-badge {
+    display: inline-block;
+    margin-top: 0.625rem;
+    padding: 0.0625rem 0.5rem;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+  }
+
+  .hub-arrow {
+    position: absolute;
+    top: 1.25rem;
+    right: 1rem;
     color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
-  }
-
-  .section-card:hover .section-arrow {
-    transform: translateX(4px);
-    color: var(--color-accent-primary);
   }
 </style>

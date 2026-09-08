@@ -1,52 +1,38 @@
 <script lang="ts">
-  interface Converter {
-    title: string;
-    description: string;
-    href: string;
-    icon: string;
-  }
+  import { getHubChildren, findNode } from '$lib/data/navigation';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
 
-  const converters: Converter[] = [
-    {
-      title: 'Frequenzkonverter',
-      description: 'Umrechnung zwischen Frequenz und Wellenlänge für das gesamte elektromagnetische Spektrum.',
-      href: '/konverter/frequenz',
-      icon: '〰️'
-    }
-  ];
+  const hub = findNode('/konverter/');
+  const items = getHubChildren('/konverter/');
 </script>
-
-<svelte:head>
-  <title>Konverter - Bandbreite</title>
-  <meta name="description" content="Einheitenumrechner für die Funktechnik: Frequenz und Wellenlänge." />
-  <meta property="og:title" content="Konverter | Bandbreite" />
-  <meta property="og:description" content="Einheitenumrechner für die Funktechnik: Frequenz und Wellenlänge." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Konverter | Bandbreite" />
-  <meta name="twitter:description" content="Einheitenumrechner für die Funktechnik: Frequenz und Wellenlänge." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
     <h1 class="text-heading-1">Konverter</h1>
-    <p class="header-description">
-      Einheitenumrechner für die Funktechnik.
-    </p>
+    <p class="header-description">{hub?.description}</p>
   </header>
 
-  <section class="converters-grid">
-    {#each converters as conv (conv.href)}
-      <a href={conv.href} class="conv-card">
-        <div class="conv-icon">{conv.icon}</div>
-        <div class="conv-content">
-          <h2>{conv.title}</h2>
-          <p>{conv.description}</p>
-        </div>
-        <div class="conv-arrow">→</div>
-      </a>
+  <ul class="hub-grid">
+    {#each items as item (item.id)}
+      <li>
+        {#if item.status === 'geplant'}
+          <div class="hub-card planned">
+            <h2>{item.label}</h2>
+            <p>{item.description}</p>
+            <span class="hub-badge">geplant</span>
+          </div>
+        {:else}
+          <a class="hub-card" href={item.href}>
+            <h2>{item.label}</h2>
+            <p>{item.description}</p>
+            <span class="hub-arrow" aria-hidden="true">→</span>
+          </a>
+        {/if}
+      </li>
     {/each}
-  </section>
+  </ul>
+
+  <RelatedTopics href="/konverter/" />
 </div>
 
 <style>
@@ -57,72 +43,80 @@
     padding: 0 1rem;
   }
 
-  .page-header {
-    margin-bottom: 0;
-  }
-
   .header-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    margin-top: 0.5rem;
-    line-height: var(--line-height-relaxed);
     max-width: 65ch;
+    margin-top: 0.5rem;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
   }
 
-  .converters-grid {
-    display: flex;
-    flex-direction: column;
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    grid-auto-rows: 1fr;
     gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
-  .conv-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    background: var(--color-bg-surface);
+  .hub-card {
+    position: relative;
+    display: block;
+    height: 100%;
+    padding: 1.25rem 2.25rem 1.25rem 1.25rem;
+    background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     text-decoration: none;
-    transition: all var(--transition-fast);
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
   }
 
-  .conv-card:hover {
+  a.hub-card:hover {
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
   }
 
-  .conv-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
-  }
-
-  .conv-content {
-    flex: 1;
-  }
-
-  .conv-content h2 {
-    margin: 0 0 0.5rem 0;
-    font-size: var(--font-size-lg);
+  .hub-card h2 {
+    margin: 0 0 0.375rem 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
   }
 
-  .conv-content p {
+  .hub-card p {
     margin: 0;
     font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
     line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
   }
 
-  .conv-arrow {
-    font-size: 1.5rem;
+  .hub-card.planned {
+    border-style: dashed;
+  }
+
+  .hub-card.planned h2,
+  .hub-card.planned p {
+    color: var(--color-text-disabled);
+  }
+
+  .hub-badge {
+    display: inline-block;
+    margin-top: 0.625rem;
+    padding: 0.0625rem 0.5rem;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+  }
+
+  .hub-arrow {
+    position: absolute;
+    top: 1.25rem;
+    right: 1rem;
     color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
-  }
-
-  .conv-card:hover .conv-arrow {
-    transform: translateX(4px);
-    color: var(--color-accent-primary);
   }
 </style>

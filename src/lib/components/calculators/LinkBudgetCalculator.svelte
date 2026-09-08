@@ -2,8 +2,15 @@
   import { calculateFSPL } from "$lib/utils/calculations";
   import { convertToHz } from "$lib/utils/conversions";
   import { atmosphericParameters } from "$lib/stores/atmosphericParameters.svelte";
-  import { calculateExtendedPathAttenuation } from "$lib/utils/atmosphericAttenuation";
+  import {
+    calculateExtendedPathAttenuation,
+    calculateEarthSpaceAttenuation,
+  } from "$lib/utils/atmosphericAttenuation";
   import { getDistanceFactor } from "$lib/data/units";
+  import {
+    EARTH_SPACE_PATH_THRESHOLD_KM,
+    DEFAULT_EARTH_SPACE_ELEVATION_DEG,
+  } from "$lib/data/constants";
   import {
     LINK_BUDGET_PRESETS,
     type LinkBudgetPreset,
@@ -33,6 +40,9 @@
   let pathFrequencyHz = $state(2.4e9); // 2.4 GHz default
   let pathFrequencyUnit = $state("GHz");
   let includeAtmosphericLoss = $state(false);
+  // Pfadtyp: terrestrisch (γ·d) oder Erde–Raum (troposphärischer Anteil, ITU-R P.676 Annex 2)
+  let pathType = $state<"terrestrial" | "earth-space">("terrestrial");
+  let elevationAngleDeg = $state<number>(DEFAULT_EARTH_SPACE_ELEVATION_DEG);
 
   // ===== RX (Receiver) Parameters =====
   let rxAntennaGainDbi = $state(2); // 2 dBi
@@ -88,11 +98,20 @@
     const freqGHz = effectiveFrequencyHz / 1e9;
     const distKm = effectiveDistanceM / 1000;
 
-    const result = calculateExtendedPathAttenuation(
-      freqGHz,
-      atmosphericParameters.allConditions,
-      distKm,
-    );
+    // Erde–Raum: nur der troposphärische Anteil dämpft (äquivalente Höhen / Regenhöhe),
+    // nicht die volle Distanz zum Satelliten (F-13).
+    const result =
+      pathType === "earth-space"
+        ? calculateEarthSpaceAttenuation(
+            freqGHz,
+            atmosphericParameters.allConditions,
+            elevationAngleDeg,
+          )
+        : calculateExtendedPathAttenuation(
+            freqGHz,
+            atmosphericParameters.allConditions,
+            distKm,
+          );
 
     return result.totalAllDb;
   });
@@ -129,6 +148,9 @@
     rxCableLossDb = preset.rxLoss;
     rxSensitivityDbm = preset.rxSens;
     fadingMarginDb = preset.fade;
+    // Strecken jenseits jeder terrestrischen Sichtverbindung sind Erde–Raum-Pfade
+    const presetDistanceKm = (preset.distance * getDistanceFactor(preset.distUnit)) / 1000;
+    pathType = presetDistanceKm >= EARTH_SPACE_PATH_THRESHOLD_KM ? "earth-space" : "terrestrial";
   }
 
   // Export link budget data for waterfall chart
@@ -188,6 +210,8 @@
       bind:pathFrequencyUnit
       bind:miscLossDb
       bind:includeAtmosphericLoss
+      bind:pathType
+      bind:elevationAngleDeg
       {fsplDb}
       {atmosphericLossDb}
       {totalPathLossDb}

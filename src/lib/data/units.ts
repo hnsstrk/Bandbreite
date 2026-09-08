@@ -60,7 +60,7 @@ export const DISTANCE_UNITS: DistanceUnit[] = [
   { id: 'm', label: 'Meter', symbol: 'm', factor: 1 },
   { id: 'km', label: 'Kilometer', symbol: 'km', factor: 1000 },
   { id: 'mi', label: 'Meile', symbol: 'mi', factor: 1609.344 },
-  { id: 'ft', label: 'Fuss', symbol: 'ft', factor: 0.3048 },
+  { id: 'ft', label: 'Fuß', symbol: 'ft', factor: 0.3048 },
   { id: 'yd', label: 'Yard', symbol: 'yd', factor: 0.9144 },
   { id: 'nmi', label: 'Seemeile', symbol: 'nmi', factor: 1852 },
 ];

@@ -1,192 +1,366 @@
 @import 'tailwindcss';
 
 /* ============================================
-   BANDBREITE - CSS Design System
+   BANDBREITE — CSS Design System
    ============================================
-   Dieses Design System definiert alle Farben,
-   Typografie und Komponenten-Styles für die
-   Bandbreite RF-Rechner Anwendung.
+   Eine Quelle der Wahrheit: Alle Design-Tokens
+   liegen im @theme-Block und stehen dadurch
+   gleichzeitig als CSS-Variable UND als
+   Tailwind-Utility zur Verfügung
+   (z. B. --color-surface → bg-surface).
+
+   Die alten --color-*-Namen bleiben als Aliase
+   erhalten, damit bestehende Komponenten
+   unverändert weiterlaufen.
    ============================================ */
 
+/* --------------------------------------------
+   Dark-Mode an die .dark-Klasse binden.
+   Ohne diese Zeile reagieren alle dark:-Utilities
+   in Tailwind 4 auf prefers-color-scheme statt auf
+   den Theme-Umschalter.
+   -------------------------------------------- */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================
-   Theme Variables (CSS Custom Properties)
+   Design-Tokens (Tailwind 4 @theme)
+   ============================================ */
+
+@theme static {
+  /* ----------------------------------------
+     Flächen
+     ---------------------------------------- */
+  --color-base: #f8fafc;
+  --color-surface: #ffffff;
+  --color-elevated: #f1f5f9;
+  --color-sunken: #f1f5f9;
+  --color-input: #ffffff;
+  --color-overlay: #ffffff;
+
+  /* ----------------------------------------
+     Text (kontrastgeprüft gegen --color-surface)
+     ---------------------------------------- */
+  --color-ink: #0f172a;         /* 17,9:1 */
+  --color-ink-muted: #475569;   /*  7,5:1 */
+  --color-ink-subtle: #64748b;  /*  4,8:1 */
+  --color-ink-faint: #6b7a90;   /*  4,5:1 — war #94a3b8 (2,6:1) */
+  --color-ink-inverse: #ffffff;
+
+  /* ----------------------------------------
+     Rahmen (UI-Grenzen brauchen 3:1, WCAG 1.4.11)
+     ---------------------------------------- */
+  --color-line: #cbd5e1;        /* war #e2e8f0 (1,2:1) */
+  --color-line-subtle: #e2e8f0;
+  --color-line-strong: #94a3b8; /* 3,0:1 — Rahmen von Bedienelementen */
+  --color-focus-ring: #1d4ed8;  /* 6,9:1 gegen --color-base */
+
+  /* ----------------------------------------
+     Marke
+     ---------------------------------------- */
+  --color-brand: #2563eb;       /* 5,2:1 auf weiß — war #3b82f6 (3,7:1) */
+  --color-brand-hover: #1d4ed8;
+  --color-brand-soft: #dbeafe;
+  --color-brand-ink: #1e3a8a;
+  --color-brand-on: #ffffff;    /* Text auf gefüllter Markenfläche */
+  --color-on-solid: #ffffff;    /* Text auf jeder gefüllten Semantikfläche */
+  --color-accent-primary-alpha: rgb(37 99 235 / 0.12);
+
+  --color-secondary: #16a34a;
+  --color-secondary-hover: #15803d;
+
+  /* ----------------------------------------
+     Semantik — je ein Solid-, ein Flächen- und
+     ein Textton. Alle -ink-auf--soft-Paarungen
+     liegen über 8:1.
+     ---------------------------------------- */
+  --color-success: #16a34a;
+  --color-success-soft: #dcfce7;
+  --color-success-ink: #14532d;
+
+  --color-warning: #d97706;
+  --color-warning-soft: #fef3c7;
+  --color-warning-ink: #78350f;
+
+  --color-danger: #dc2626;
+  --color-danger-soft: #fee2e2;
+  --color-danger-ink: #7f1d1d;
+
+  --color-info: #2563eb;
+  --color-info-soft: #dbeafe;
+  --color-info-ink: #1e3a8a;
+
+  --color-neutral-soft: #f1f5f9;
+  --color-neutral-ink: #334155;
+
+  /* Interaktive Hover-Fläche */
+  --color-hover: #e2e8f0;
+
+  /* ----------------------------------------
+     Datenserien (kategorial, beide Themes geprüft)
+     ---------------------------------------- */
+  --color-series-1: #3b82f6;
+  --color-series-2: #22c55e;
+  --color-series-3: #f97316;
+  --color-series-4: #a855f7;
+  --color-series-5: #06b6d4;
+  --color-series-6: #ef4444;
+  --color-series-7: #eab308;
+  --color-series-8: #94a3b8;
+  --color-series-9: #ec4899;
+  /* Gesättigte Varianten derselben Serien — für Flächen mit heller Schrift */
+  --color-series-1-solid: #2563eb;
+  --color-series-2-solid: #16a34a;
+  --color-series-3-solid: #ea580c;
+  --color-series-4-solid: #9333ea;
+  --color-series-5-solid: #0891b2;
+  --color-series-6-solid: #dc2626;
+  --color-series-7-solid: #ca8a04;
+  --color-series-8-solid: #64748b;
+  --color-series-9-solid: #db2777;
+  --color-marker: #fbbf24;      /* aktueller Arbeitspunkt */
+  --color-grid: #e2e8f0;
+  --color-axis: #64748b;
+
+  /* Kategorie-Textfarben — lesbar auf --color-surface (>= 4,5:1),
+     als Beschriftung neben den Serienfarben gedacht. */
+  --color-cat-blue: #2563eb;
+  --color-cat-green: #15803d;
+  --color-cat-orange: #c2410c;
+  --color-cat-violet: #7c3aed;
+  --color-cat-pink: #be185d;
+
+  /* ----------------------------------------
+     Typografie
+     ---------------------------------------- */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --text-2xs: 0.6875rem;        /* Chart- und Achsenbeschriftung */
+
+  /* ----------------------------------------
+     Radien
+     ---------------------------------------- */
+  --radius-control: 0.5rem;
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+
+  /* ----------------------------------------
+     Schatten
+     ---------------------------------------- */
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px -4px rgb(15 23 42 / 0.08);
+  --shadow-popover: 0 8px 24px -6px rgb(15 23 42 / 0.18);
+
+  /* ----------------------------------------
+     Layout-Breiten
+     ---------------------------------------- */
+  --container-prose: 68ch;
+  --container-page: 80rem;
+  --container-wide: 96rem;
+}
+
+/* ============================================
+   Nicht-Token-Variablen und Legacy-Aliase
+   ============================================
+   Wichtig: Aliase stehen VOR dem .dark-Block,
+   damit die Dark-Overrides greifen.
    ============================================ */
 
 :root {
-  /* ----------------------------------------
-     Color System - Light Theme (Default)
-     ---------------------------------------- */
+  color-scheme: light;
 
-  /* Background Colors */
-  --color-bg-base: #f8fafc;           /* slate-50 - Main page background */
-  --color-bg-surface: #ffffff;        /* white - Card/surface background */
-  --color-bg-elevated: #f1f5f9;       /* slate-100 - Elevated surfaces */
-  --color-bg-input: #ffffff;          /* white - Input backgrounds */
-  --color-bg-code: #f1f5f9;           /* slate-100 - Code block backgrounds */
+  /* ---- Legacy-Aliase: Flächen ---- */
+  --color-bg-base: var(--color-base);
+  --color-bg-surface: var(--color-surface);
+  --color-bg-elevated: var(--color-elevated);
+  --color-bg-input: var(--color-input);
+  --color-bg-code: var(--color-sunken);
+  --color-bg-muted: var(--color-elevated);
+  --color-bg-subtle: var(--color-base);
+  --color-bg-hover: var(--color-hover);
 
-  /* Text Colors */
-  --color-text-primary: #0f172a;      /* slate-900 - Primary text */
-  --color-text-secondary: #475569;    /* slate-600 - Secondary text */
-  --color-text-tertiary: #64748b;     /* slate-500 - Tertiary/muted text */
-  --color-text-disabled: #94a3b8;     /* slate-400 - Disabled text */
-  --color-text-inverse: #ffffff;      /* white - Text on dark backgrounds */
+  /* ---- Legacy-Aliase: Text ---- */
+  --color-text-primary: var(--color-ink);
+  --color-text-secondary: var(--color-ink-muted);
+  --color-text-tertiary: var(--color-ink-subtle);
+  --color-text-muted: var(--color-ink-subtle);
+  --color-text-disabled: var(--color-ink-faint);
+  --color-text-inverse: var(--color-ink-inverse);
+  --color-text-accent: var(--color-brand);
 
-  /* Border Colors */
-  --color-border-default: #e2e8f0;    /* slate-200 - Default borders */
-  --color-border-subtle: #f1f5f9;     /* slate-100 - Subtle borders */
-  --color-border-strong: #cbd5e1;     /* slate-300 - Strong borders */
-  --color-border-focus: #3b82f6;      /* blue-500 - Focus ring color */
+  /* ---- Legacy-Aliase: Rahmen ---- */
+  --color-border-default: var(--color-line);
+  --color-border-subtle: var(--color-line-subtle);
+  --color-border-strong: var(--color-line-strong);
+  --color-border-focus: var(--color-focus-ring);
+  --color-focus: var(--color-focus-ring);
 
-  /* Accent Colors (Brand) */
-  --color-accent-primary: #3b82f6;    /* blue-500 - Primary accent */
-  --color-accent-primary-hover: #2563eb; /* blue-600 */
-  --color-accent-secondary: #22c55e;  /* green-500 - Secondary accent */
-  --color-accent-secondary-hover: #16a34a; /* green-600 */
+  /* ---- Legacy-Aliase: Akzente ---- */
+  --color-accent-primary: var(--color-brand);
+  --color-accent-primary-hover: var(--color-brand-hover);
+  --color-accent-secondary: var(--color-secondary);
+  --color-accent-secondary-hover: var(--color-secondary-hover);
 
-  /* Semantic Colors */
-  --color-success: #22c55e;           /* green-500 */
-  --color-success-bg: #dcfce7;        /* green-100 */
-  --color-warning: #f59e0b;           /* amber-500 */
-  --color-warning-bg: #fef3c7;        /* amber-100 */
-  --color-error: #ef4444;             /* red-500 */
-  --color-error-bg: #fee2e2;          /* red-100 */
-  --color-info: #3b82f6;              /* blue-500 */
-  --color-info-bg: #dbeafe;           /* blue-100 */
+  /* ---- Legacy-Aliase: Semantik ---- */
+  --color-error: var(--color-danger);
+  --color-success-bg: var(--color-success-soft);
+  --color-warning-bg: var(--color-warning-soft);
+  --color-error-bg: var(--color-danger-soft);
+  --color-info-bg: var(--color-info-soft);
 
-  /* Chart Colors */
-  --color-chart-blue: #3b82f6;        /* blue-500 - Oxygen, primary data */
-  --color-chart-green: #22c55e;       /* green-500 - Water vapor, secondary */
-  --color-chart-orange: #f97316;      /* orange-500 - Totals, highlights */
-  --color-chart-amber: #fbbf24;       /* amber-400 - Current/active markers */
-  --color-chart-purple: #a855f7;      /* purple-500 - Fog, tertiary data */
-  --color-chart-cyan: #06b6d4;        /* cyan-500 - Rain, quaternary */
-  --color-chart-red: #ef4444;         /* red-500 - Errors, warnings */
-  --color-chart-gray: #94a3b8;        /* slate-400 - Snow, disabled */
-  --color-chart-grid: #e2e8f0;        /* slate-200 - Grid lines */
-  --color-chart-axis: #64748b;        /* slate-500 - Axis lines */
-  --color-chart-bg: #f8fafc;          /* slate-50 - Chart background */
-  --color-chart-text: #0f172a;        /* slate-900 - Chart text */
-  --color-chart-text-secondary: #475569; /* slate-600 - Secondary chart text */
-  --color-chart-tooltip-bg: #ffffff;  /* white - Tooltip background */
-  --color-chart-tooltip-border: #e2e8f0; /* slate-200 - Tooltip border */
+  /* ---- Legacy-Aliase: Charts ---- */
+  --color-chart-blue: var(--color-series-1);
+  --color-chart-green: var(--color-series-2);
+  --color-chart-orange: var(--color-series-3);
+  --color-chart-purple: var(--color-series-4);
+  --color-chart-cyan: var(--color-series-5);
+  --color-chart-red: var(--color-series-6);
+  --color-chart-gray: var(--color-series-8);
+  --color-chart-amber: var(--color-marker);
+  --color-chart-grid: var(--color-grid);
+  --color-chart-axis: var(--color-axis);
+  --color-chart-bg: var(--color-base);
+  --color-chart-text: var(--color-ink);
+  --color-chart-text-secondary: var(--color-ink-muted);
+  --color-chart-tooltip-bg: var(--color-surface);
+  --color-chart-tooltip-border: var(--color-line);
 
-  /* Shadow Values */
+  /* ---- Schatten (Legacy-Namen, überschreiben Tailwind-Defaults) ---- */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
-  /* Convenience Aliases (used across components) */
-  --color-text-muted: var(--color-text-tertiary);
-  --color-text-accent: var(--color-accent-primary);
-  --color-focus: var(--color-border-focus);
-  --color-bg-muted: var(--color-bg-elevated);
-  --color-bg-hover: #e2e8f0;           /* slate-200 - Interactive hover */
-  --color-bg-subtle: var(--color-bg-base);
+  /* ---- Spacing ---- */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
 
-  /* ----------------------------------------
-     Spacing System
-     ---------------------------------------- */
-  --spacing-xs: 0.25rem;   /* 4px */
-  --spacing-sm: 0.5rem;    /* 8px */
-  --spacing-md: 1rem;      /* 16px */
-  --spacing-lg: 1.5rem;    /* 24px */
-  --spacing-xl: 2rem;      /* 32px */
-  --spacing-2xl: 3rem;     /* 48px */
+  /* ---- Radien (Legacy-Namen) ---- */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
 
-  /* ----------------------------------------
-     Border Radius
-     ---------------------------------------- */
-  --radius-sm: 0.25rem;    /* 4px */
-  --radius-md: 0.5rem;     /* 8px */
-  --radius-lg: 0.75rem;    /* 12px */
-  --radius-xl: 1rem;       /* 16px */
-  --radius-full: 9999px;   /* Fully rounded */
+  /* ---- Typografie-Skala ---- */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
 
-  /* ----------------------------------------
-     Typography Scale
-     ---------------------------------------- */
-  --font-size-xs: 0.75rem;     /* 12px */
-  --font-size-sm: 0.875rem;    /* 14px */
-  --font-size-base: 1rem;      /* 16px */
-  --font-size-lg: 1.125rem;    /* 18px */
-  --font-size-xl: 1.25rem;     /* 20px */
-  --font-size-2xl: 1.5rem;     /* 24px */
-  --font-size-3xl: 1.875rem;   /* 30px */
-
-  /* Line Heights */
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
 
-  /* Font Weights */
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* ----------------------------------------
-     Transitions
-     ---------------------------------------- */
+  /* ---- Bewegung ---- */
   --transition-fast: 150ms ease;
   --transition-normal: 200ms ease;
   --transition-slow: 300ms ease;
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  /* ----------------------------------------
-     Chart Dimensions (Defaults)
-     ---------------------------------------- */
+  /* ---- Chart-Dimensionen ---- */
   --chart-min-width: 800px;
   --chart-height-sm: 400px;
   --chart-height-md: 500px;
   --chart-height-lg: 600px;
+
+  /* ---- Layout ---- */
+  --page-gutter: 1rem;
 }
 
 /* ============================================
    Dark Theme
+   ============================================
+   Nur Farbrollen werden umdefiniert. Alles,
+   was auf diese Rollen zeigt (inkl. der
+   Legacy-Aliase oben), zieht automatisch nach.
    ============================================ */
 
 .dark {
-  /* Background Colors */
-  --color-bg-base: #0f172a;           /* slate-900 - Main page background */
-  --color-bg-surface: #1e293b;        /* slate-800 - Card/surface background */
-  --color-bg-elevated: #334155;       /* slate-700 - Elevated surfaces */
-  --color-bg-input: #334155;          /* slate-700 - Input backgrounds */
-  --color-bg-code: #1e293b;           /* slate-800 - Code block backgrounds */
+  color-scheme: dark;
 
-  /* Text Colors */
-  --color-text-primary: #f1f5f9;      /* slate-100 - Primary text */
-  --color-text-secondary: #cbd5e1;    /* slate-300 - Secondary text */
-  --color-text-tertiary: #94a3b8;     /* slate-400 - Tertiary/muted text */
-  --color-text-disabled: #64748b;     /* slate-500 - Disabled text */
-  --color-text-inverse: #0f172a;      /* slate-900 - Text on light backgrounds */
+  /* Flächen */
+  --color-base: #0f172a;
+  --color-surface: #1e293b;
+  --color-elevated: #334155;
+  --color-sunken: #1e293b;
+  --color-input: #334155;
+  --color-overlay: #1e293b;
 
-  /* Border Colors */
-  --color-border-default: #334155;    /* slate-700 - Default borders */
-  --color-border-subtle: #1e293b;     /* slate-800 - Subtle borders */
-  --color-border-strong: #475569;     /* slate-600 - Strong borders */
-  --color-border-focus: #3b82f6;      /* blue-500 - Focus ring color */
+  /* Text */
+  --color-ink: #f1f5f9;
+  --color-ink-muted: #cbd5e1;
+  --color-ink-subtle: #94a3b8;
+  --color-ink-faint: #8496ae;
+  --color-ink-inverse: #0f172a;
 
-  /* Semantic Colors (slightly adjusted for dark mode) */
-  --color-success-bg: #14532d;        /* green-900 */
-  --color-warning-bg: #78350f;        /* amber-900 */
-  --color-error-bg: #7f1d1d;          /* red-900 */
-  --color-info-bg: #1e3a8a;           /* blue-900 */
+  /* Rahmen */
+  --color-line: #3f4f68;
+  --color-line-subtle: #1e293b;
+  --color-line-strong: #64748b;
+  --color-focus-ring: #93c5fd;
 
-  /* Chart Colors (adjusted for dark mode) */
-  --color-chart-grid: #334155;        /* slate-700 - Grid lines */
-  --color-chart-axis: #94a3b8;        /* slate-400 - Axis lines */
-  --color-chart-bg: #0f172a;          /* slate-900 - Chart background */
-  --color-chart-text: #f1f5f9;        /* slate-100 - Chart text */
-  --color-chart-text-secondary: #cbd5e1; /* slate-300 - Secondary chart text */
-  --color-chart-tooltip-bg: #1e293b;  /* slate-800 - Tooltip background */
-  --color-chart-tooltip-border: #475569; /* slate-600 - Tooltip border */
+  /* Marke */
+  --color-brand: #3b82f6;
+  --color-brand-hover: #60a5fa;
+  --color-brand-soft: #1e3a8a;
+  --color-brand-ink: #bfdbfe;
+  --color-brand-on: #ffffff;
+  --color-accent-primary-alpha: rgb(96 165 250 / 0.16);
 
-  /* Hover background (no alias target in dark, needs explicit value) */
-  --color-bg-hover: #475569;          /* slate-600 - Interactive hover */
+  --color-secondary: #4ade80;
+  --color-secondary-hover: #86efac;
 
-  /* Shadow Values (darker for dark theme) */
+  /* Semantik */
+  --color-success: #4ade80;
+  --color-success-soft: #14532d;
+  --color-success-ink: #bbf7d0;
+
+  --color-warning: #fbbf24;
+  --color-warning-soft: #78350f;
+  --color-warning-ink: #fde68a;
+
+  --color-danger: #f87171;
+  --color-danger-soft: #7f1d1d;
+  --color-danger-ink: #fecaca;
+
+  --color-info: #60a5fa;
+  --color-info-soft: #1e3a8a;
+  --color-info-ink: #bfdbfe;
+
+  --color-neutral-soft: #334155;
+  --color-neutral-ink: #e2e8f0;
+  --color-hover: #475569;
+
+  /* Datenserien */
+  --color-grid: #334155;
+  --color-axis: #94a3b8;
+
+  /* Kategorie-Textfarben */
+  --color-cat-blue: #60a5fa;
+  --color-cat-green: #4ade80;
+  --color-cat-orange: #fdba74;
+  --color-cat-violet: #c4b5fd;
+  --color-cat-pink: #f9a8d4;
+
+  /* Schatten */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35), 0 4px 16px -4px rgb(0 0 0 / 0.45);
+  --shadow-popover: 0 8px 24px -6px rgb(0 0 0 / 0.55);
 }
 
 /* ============================================
@@ -194,15 +368,189 @@
    ============================================ */
 
 html {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: var(--color-bg-base);
-  color: var(--color-text-primary);
+  background-color: var(--color-base);
+  color: var(--color-ink);
   transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Kein horizontales Seiten-Scrollen: Überbreite Inhalte
+   müssen in ihrem eigenen Container scrollen. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* ============================================
+   Layout-Container
+   ============================================ */
+
+/* Standard-Seitenbreite, deckungsgleich mit dem Header. */
+.page-container {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+/* Breite Variante für Bühnen-Widgets und Spektrum-Karten. */
+.page-container--wide {
+  max-width: var(--container-wide);
+}
+
+/* Lesebreite für Fließtext. */
+.prose {
+  max-width: var(--container-prose);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.prose > * + * {
+  margin-top: 1em;
+}
+
+.prose h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-ink);
+  scroll-margin-top: 5rem;
+}
+
+.prose h3 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-ink);
+  scroll-margin-top: 5rem;
+}
+
+.prose h4 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.375rem;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.prose p {
+  color: var(--color-ink-muted);
+}
+
+.prose strong {
+  color: var(--color-ink);
+  font-weight: var(--font-weight-semibold);
+}
+
+.prose a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.prose a:hover {
+  color: var(--color-brand-hover);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+  color: var(--color-ink-muted);
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li + li {
+  margin-top: 0.375rem;
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: var(--color-sunken);
+  color: var(--color-ink);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-sunken);
+  color: var(--color-ink);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-line-strong);
+  padding-left: var(--spacing-md);
+  color: var(--color-ink-subtle);
+  font-style: italic;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.prose th,
+.prose td {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-line-subtle);
+}
+
+.prose th {
+  color: var(--color-ink);
+  font-weight: var(--font-weight-semibold);
+  border-bottom-color: var(--color-line);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin-block: 2rem;
+}
+
+/* Ausbruch aus der Lesebreite für Diagramme und Widgets. */
+.bleed {
+  width: min(var(--container-wide), 100vw - 2 * var(--page-gutter));
+  max-width: none;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Tabellen und andere breite Blöcke scrollen in sich selbst. */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ============================================
@@ -213,58 +561,63 @@ body {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
-  color: var(--color-text-primary);
+  color: var(--color-ink);
 }
 
 .text-heading-2 {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
-  color: var(--color-text-primary);
+  color: var(--color-ink);
 }
 
 .text-heading-3 {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
-  color: var(--color-text-primary);
+  color: var(--color-ink);
 }
 
 .text-body {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
-  color: var(--color-text-primary);
+  color: var(--color-ink);
 }
 
 .text-body-secondary {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
-  color: var(--color-text-secondary);
+  color: var(--color-ink-muted);
 }
 
 .text-small {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
-  color: var(--color-text-secondary);
+  color: var(--color-ink-muted);
 }
 
 .text-caption {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
-  color: var(--color-text-tertiary);
+  color: var(--color-ink-subtle);
 }
 
 .text-label {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-normal);
-  color: var(--color-text-secondary);
+  color: var(--color-ink-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* Tabellenziffern für Messwerte */
+.tabular-nums-token {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ============================================
@@ -273,58 +626,64 @@ body {
 
 /* Cards */
 .card {
-  background-color: var(--color-bg-surface);
-  border-radius: var(--radius-xl);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-card);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-lg);
   transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .card-compact {
-  background-color: var(--color-bg-surface);
+  background-color: var(--color-surface);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
   box-shadow: var(--shadow-md);
   transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
+/* Im Dark-Theme trägt ein Schatten keine Tiefe — eine Kante schon.
+   Als Inset-Shadow, damit sich die Boxmasse nicht ändern. */
+.dark .card {
+  box-shadow: var(--shadow-lg), inset 0 0 0 1px var(--color-line);
+}
+
+.dark .card-compact {
+  box-shadow: var(--shadow-md), inset 0 0 0 1px var(--color-line);
+}
+
 /* Input Fields */
 .input-field {
-  background-color: var(--color-bg-input);
-  border: 1px solid var(--color-border-default);
+  background-color: var(--color-input);
+  border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-md);
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
+  color: var(--color-ink);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .input-field:focus {
-  outline: none;
-  border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: var(--color-focus-ring);
 }
 
 .input-field::placeholder {
-  color: var(--color-text-disabled);
+  color: var(--color-ink-faint);
 }
 
 /* Select Fields */
 .select-field {
-  background-color: var(--color-bg-input);
-  border: 1px solid var(--color-border-default);
+  background-color: var(--color-input);
+  border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-md);
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
+  color: var(--color-ink);
   cursor: pointer;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .select-field:focus {
-  outline: none;
-  border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: var(--color-focus-ring);
 }
 
 /* Buttons */
@@ -342,65 +701,60 @@ body {
   transition: all var(--transition-fast);
 }
 
-.btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-
 .btn-primary {
-  background-color: var(--color-accent-primary);
-  color: white;
-  border-color: var(--color-accent-primary);
+  background-color: var(--color-brand);
+  color: var(--color-brand-on);
+  border-color: var(--color-brand);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-accent-primary-hover);
-  border-color: var(--color-accent-primary-hover);
+  background-color: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
 }
 
 .btn-secondary {
   background-color: transparent;
-  color: var(--color-text-secondary);
-  border-color: var(--color-border-default);
+  color: var(--color-ink-muted);
+  border-color: var(--color-line-strong);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-bg-elevated);
-  border-color: var(--color-border-strong);
-  color: var(--color-text-primary);
+  background-color: var(--color-elevated);
+  border-color: var(--color-line-strong);
+  color: var(--color-ink);
 }
 
 .btn-ghost {
   background-color: transparent;
-  color: var(--color-text-secondary);
+  color: var(--color-ink-muted);
   border-color: transparent;
 }
 
 .btn-ghost:hover {
-  background-color: var(--color-bg-elevated);
-  color: var(--color-text-primary);
+  background-color: var(--color-elevated);
+  color: var(--color-ink);
 }
 
 /* Quick Action Buttons (Presets) */
 .btn-preset {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-xs);
-  background-color: var(--color-bg-elevated);
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border-default);
+  background-color: var(--color-elevated);
+  color: var(--color-ink-muted);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
 }
 
 .btn-preset:hover {
-  border-color: var(--color-accent-primary);
-  color: var(--color-accent-primary);
-  background-color: var(--color-bg-surface);
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+  background-color: var(--color-surface);
 }
 
 /* Result Displays */
 .result-box {
-  background-color: var(--color-bg-code);
+  background-color: var(--color-sunken);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
   text-align: center;
@@ -408,30 +762,31 @@ body {
 
 .result-label {
   font-size: var(--font-size-sm);
-  color: var(--color-text-tertiary);
+  color: var(--color-ink-subtle);
   margin-bottom: var(--spacing-xs);
 }
 
 .result-value {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
 }
 
 .result-unit {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-normal);
-  color: var(--color-text-tertiary);
+  color: var(--color-ink-subtle);
 }
 
 /* Formula Display */
 .formula-box {
-  background-color: var(--color-bg-code);
+  background-color: var(--color-sunken);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
+  color: var(--color-ink);
   text-align: center;
 }
 
@@ -439,18 +794,26 @@ body {
 .btn-chip {
   padding: 0.125rem 0.5rem;
   font-size: var(--font-size-xs);
-  background-color: var(--color-bg-elevated);
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border-default);
+  background-color: var(--color-elevated);
+  color: var(--color-ink-muted);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .btn-chip:hover {
-  border-color: var(--color-accent-primary);
-  color: var(--color-accent-primary);
-  background-color: var(--color-bg-surface);
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+  background-color: var(--color-surface);
+}
+
+/* Aktiver Chip-Zustand — bisher hat ihn jede Komponente selbst erfunden. */
+.btn-chip[aria-pressed='true'],
+.btn-preset[aria-pressed='true'] {
+  background-color: var(--color-brand);
+  border-color: var(--color-brand);
+  color: var(--color-brand-on);
 }
 
 /* Checkbox */
@@ -458,91 +821,178 @@ body {
   width: 1rem;
   height: 1rem;
   border-radius: var(--radius-sm);
-  background-color: var(--color-bg-input);
-  border: 1px solid var(--color-border-default);
+  background-color: var(--color-input);
+  border: 1px solid var(--color-line-strong);
   cursor: pointer;
-  accent-color: var(--color-accent-primary);
+  accent-color: var(--color-brand);
+}
+
+/* Radio — wurde bisher als Klasse benutzt, ohne dass sie existierte. */
+.radio {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-brand);
+  cursor: pointer;
+}
+
+/* Fehlende Flächenklassen, die bereits im Markup verwendet werden. */
+.bg-surface-secondary {
+  background-color: var(--color-elevated);
+}
+
+.bg-surface-tertiary {
+  background-color: var(--color-sunken);
 }
 
 /* Text Utilities */
 .text-primary {
-  color: var(--color-text-primary);
+  color: var(--color-ink);
 }
 
 .text-secondary {
-  color: var(--color-text-secondary);
+  color: var(--color-ink-muted);
 }
 
 .text-muted {
-  color: var(--color-text-tertiary);
+  color: var(--color-ink-subtle);
 }
 
 /* Dividers */
 .divider {
-  border-top: 1px solid var(--color-border-default);
+  border-top: 1px solid var(--color-line);
   margin: var(--spacing-md) 0;
+}
+
+/* ============================================
+   Range-Slider (beide Themes)
+   ============================================ */
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.5rem;
+  background: transparent;
+  cursor: pointer;
+  accent-color: var(--color-brand);
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  height: 0.375rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-elevated);
+  border: 1px solid var(--color-line);
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: -0.4375rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-brand);
+  border: 2px solid var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+input[type='range']:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+input[type='range']::-moz-range-track {
+  height: 0.375rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-elevated);
+  border: 1px solid var(--color-line);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-brand);
+  border: 2px solid var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+input[type='range']:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* ============================================
    Chart Utility Classes
    ============================================ */
 
+/* Der Container scrollt, nicht die Seite. Die Mindestbreite
+   liegt am inneren Element — sonst wächst die ganze Seite mit. */
 .chart-container {
   width: 100%;
-  min-width: var(--chart-min-width);
+  max-width: 100%;
   overflow-x: auto;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chart-container > svg,
+.chart-container > .chart-inner {
+  display: block;
+  min-width: var(--chart-min-width);
+  width: 100%;
 }
 
 .chart-background {
-  fill: var(--color-chart-bg);
+  fill: var(--color-base);
 }
 
 .chart-grid-line {
-  stroke: var(--color-chart-grid);
+  stroke: var(--color-grid);
   stroke-width: 0.5;
   stroke-dasharray: 4, 4;
 }
 
 .chart-axis-line {
-  stroke: var(--color-chart-axis);
+  stroke: var(--color-axis);
   stroke-width: 1;
 }
 
 .chart-axis-text {
-  fill: var(--color-text-secondary);
+  fill: var(--color-ink-muted);
   font-size: 11px;
 }
 
 .chart-axis-label {
-  fill: var(--color-text-primary);
+  fill: var(--color-ink);
   font-size: 14px;
   font-weight: 500;
 }
 
 .chart-title {
-  fill: var(--color-text-primary);
+  fill: var(--color-ink);
   font-size: 18px;
   font-weight: 600;
 }
 
 .chart-legend-text {
-  fill: var(--color-text-tertiary);
+  fill: var(--color-ink-subtle);
   font-size: 10px;
 }
 
 .chart-legend-title {
-  fill: var(--color-text-secondary);
+  fill: var(--color-ink-muted);
   font-size: 12px;
   font-weight: 500;
 }
 
 /* Chart Marker Styles */
 .chart-marker-primary {
-  fill: var(--color-chart-amber);
+  fill: var(--color-marker);
 }
 
 .chart-marker-crosshair {
-  stroke: var(--color-chart-amber);
+  stroke: var(--color-marker);
   stroke-width: 1.5;
   stroke-dasharray: 8, 4;
   opacity: 0.8;
@@ -550,14 +1000,14 @@ body {
 
 /* Chart Tooltip */
 .chart-tooltip {
-  fill: var(--color-bg-surface);
-  stroke: var(--color-border-default);
+  fill: var(--color-surface);
+  stroke: var(--color-line);
   stroke-width: 1;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
 .chart-tooltip-text {
-  fill: var(--color-text-primary);
+  fill: var(--color-ink);
   font-size: 11px;
 }
 
@@ -566,46 +1016,50 @@ body {
    ============================================ */
 
 .status-success {
-  color: var(--color-success);
+  color: var(--color-success-ink);
 }
 
 .status-warning {
-  color: var(--color-warning);
+  color: var(--color-warning-ink);
 }
 
 .status-error {
-  color: var(--color-error);
+  color: var(--color-danger-ink);
 }
 
 .status-info {
-  color: var(--color-info);
+  color: var(--color-info-ink);
 }
 
 .bg-status-success {
-  background-color: var(--color-success-bg);
-  color: var(--color-success);
+  background-color: var(--color-success-soft);
+  color: var(--color-success-ink);
 }
 
 .bg-status-warning {
-  background-color: var(--color-warning-bg);
-  color: var(--color-warning);
+  background-color: var(--color-warning-soft);
+  color: var(--color-warning-ink);
 }
 
 .bg-status-error {
-  background-color: var(--color-error-bg);
-  color: var(--color-error);
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger-ink);
 }
 
 .bg-status-info {
-  background-color: var(--color-info-bg);
-  color: var(--color-info);
+  background-color: var(--color-info-soft);
+  color: var(--color-info-ink);
 }
 
 /* ============================================
    Responsive Adjustments
    ============================================ */
 
-/* Large screens (lg: 1024px+) - Default styles apply */
+@media (min-width: 640px) {
+  :root {
+    --page-gutter: 1.5rem;
+  }
+}
 
 /* Medium screens (md: 768px - 1023px) */
 @media (max-width: 1023px) {
@@ -618,9 +1072,9 @@ body {
 @media (max-width: 767px) {
   :root {
     --chart-min-width: 600px;
-    --font-size-3xl: 1.5rem;      /* 24px instead of 30px */
-    --font-size-2xl: 1.25rem;     /* 20px instead of 24px */
-    --font-size-xl: 1.125rem;     /* 18px instead of 20px */
+    --font-size-3xl: 1.5rem;
+    --font-size-2xl: 1.25rem;
+    --font-size-xl: 1.125rem;
   }
 
   .card {
@@ -645,7 +1099,7 @@ body {
   .input-field,
   .select-field {
     min-height: 44px;
-    font-size: 16px; /* Prevent iOS zoom on focus */
+    font-size: 16px; /* Verhindert iOS-Zoom beim Fokussieren */
   }
 
   .checkbox {
@@ -653,7 +1107,6 @@ body {
     height: 1.25rem;
   }
 
-  /* Stack result boxes vertically */
   .result-box {
     padding: var(--spacing-sm) var(--spacing-md);
   }
@@ -662,7 +1115,6 @@ body {
     font-size: var(--font-size-xl);
   }
 
-  /* Improve table scrolling */
   .table-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -678,10 +1130,8 @@ body {
   }
 
   .card {
-    padding: var(--spacing-sm);
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
-    border-radius: 0;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
   }
 
   .text-heading-1 {
@@ -696,25 +1146,11 @@ body {
     font-size: 1.125rem;
   }
 
-  /* Full-width buttons on mobile */
   .btn-mobile-full {
     width: 100%;
     justify-content: center;
   }
 
-  /* Horizontal scroll indicator for charts */
-  .chart-container::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 20px;
-    background: linear-gradient(to right, transparent, var(--color-bg-surface));
-    pointer-events: none;
-  }
-
-  /* Improve preset button layout */
   .preset-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -726,25 +1162,26 @@ body {
    Touch-Friendly Utilities
    ============================================ */
 
-/* Ensure minimum touch target size (44x44px as per Apple/Google guidelines) */
 .touch-target {
   min-height: 44px;
   min-width: 44px;
 }
 
-/* Disable hover effects on touch devices */
+/* Auf Touch-Geräten nur den Hintergrundwechsel zurücknehmen,
+   nicht alle Farben — sonst verliert der Primärbutton seine Fläche. */
 @media (hover: none) {
-  .btn:hover,
-  .btn-preset:hover,
-  .btn-chip:hover,
   .btn-secondary:hover,
   .btn-ghost:hover {
-    background-color: inherit;
-    border-color: inherit;
-    color: inherit;
+    background-color: transparent;
   }
 
-  /* Add active state for touch feedback */
+  .btn-preset:hover,
+  .btn-chip:hover {
+    background-color: var(--color-elevated);
+    border-color: var(--color-line);
+    color: var(--color-ink-muted);
+  }
+
   .btn:active,
   .btn-preset:active,
   .btn-chip:active {
@@ -768,7 +1205,7 @@ body {
 }
 
 /* ============================================
-   Mobile Navigation Improvements
+   Mobile Navigation
    ============================================ */
 
 .mobile-nav {
@@ -776,8 +1213,8 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: var(--color-bg-surface);
-  border-top: 1px solid var(--color-border-default);
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-line);
   padding: var(--spacing-sm) var(--spacing-md);
   padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0));
   z-index: 50;
@@ -797,7 +1234,7 @@ body {
     align-items: center;
     gap: 0.25rem;
     padding: 0.5rem;
-    color: var(--color-text-secondary);
+    color: var(--color-ink-muted);
     text-decoration: none;
     font-size: 0.75rem;
     min-width: 64px;
@@ -808,8 +1245,8 @@ body {
 
   .mobile-nav-item:hover,
   .mobile-nav-item.active {
-    color: var(--color-accent-primary);
-    background-color: var(--color-bg-elevated);
+    color: var(--color-brand);
+    background-color: var(--color-elevated);
   }
 
   .mobile-nav-item svg {
@@ -817,7 +1254,6 @@ body {
     height: 1.25rem;
   }
 
-  /* Add padding to main content to account for mobile nav */
   .main-content-with-mobile-nav {
     padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0));
   }
@@ -839,11 +1275,10 @@ body {
     min-width: 500px;
   }
 
-  /* Alternatively: stack table rows on mobile */
   .table-stack tr {
     display: block;
     margin-bottom: 1rem;
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-md);
   }
 
@@ -851,13 +1286,13 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--color-line-subtle);
   }
 
   .table-stack td::before {
     content: attr(data-label);
     font-weight: 500;
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
   }
 
   .table-stack td:last-child {
@@ -869,18 +1304,35 @@ body {
    Accessibility
    ============================================ */
 
-/* Reduced motion preference */
+/* Reduzierte Bewegung */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    transition-duration: 0.01ms !important;
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
   }
 }
 
-/* Focus visible for keyboard navigation */
+/* Ein einziger Fokusring — sichtbar, kontrastreich (>= 3:1),
+   und nur bei Tastaturbedienung. Kein outline: none irgendwo. */
 :focus-visible {
-  outline: 2px solid var(--color-border-focus);
+  outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Mausklicks sollen keinen Ring erzeugen, aber der Ring darf
+   auch nicht unterdrückt werden — deshalb ausschließlich
+   :focus-visible verwenden. */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* ============================================

@@ -1,18 +1,8 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import WavePropagationDiagram from '$lib/components/charts/WavePropagationDiagram.svelte';
   import { FREQUENCY_BAND_PROPAGATION } from '$lib/data/propagation';
 </script>
-
-<svelte:head>
-  <title>Wellenausbreitung - Bandbreite</title>
-  <meta name="description" content="Umfassendes Nachschlagewerk zur Funkwellenausbreitung: Bodenwelle, Raumwelle, Sichtverbindung und ionosphärische Reflexion." />
-  <meta property="og:title" content="Wellenausbreitung | Bandbreite" />
-  <meta property="og:description" content="Umfassendes Nachschlagewerk zur Funkwellenausbreitung: Bodenwelle, Raumwelle, Sichtverbindung und ionosphärische Reflexion." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Wellenausbreitung | Bandbreite" />
-  <meta name="twitter:description" content="Umfassendes Nachschlagewerk zur Funkwellenausbreitung: Bodenwelle, Raumwelle, Sichtverbindung und ionosphärische Reflexion." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -319,54 +309,7 @@
   </section>
 
   <!-- Related Links -->
-  <section class="card">
-    <h2 class="text-heading-2">Verwandte Themen</h2>
-    <p class="section-description">
-      Entdecke weitere Inhalte, die mit der Wellenausbreitung zusammenhängen.
-    </p>
-    <div class="related-cards-grid">
-      <a href="/spektrum/ionosphaere" class="related-card">
-        <div class="related-card-icon">🌐</div>
-        <div class="related-card-content">
-          <h3>Ionosphärische Schichten</h3>
-          <p>Detaillierte Visualisierung der D-, E- und F-Schichten</p>
-        </div>
-        <div class="related-card-arrow">→</div>
-      </a>
-      <a href="/rechner/fspl" class="related-card">
-        <div class="related-card-icon">📉</div>
-        <div class="related-card-content">
-          <h3>FSPL-Rechner</h3>
-          <p>Berechne die Freiraumdämpfung für deine Funkstrecke</p>
-        </div>
-        <div class="related-card-arrow">→</div>
-      </a>
-      <a href="/rechner/link-budget" class="related-card">
-        <div class="related-card-icon">📊</div>
-        <div class="related-card-content">
-          <h3>Link Budget</h3>
-          <p>Vollständige Signalpfad-Analyse mit atmosphärischen Effekten</p>
-        </div>
-        <div class="related-card-arrow">→</div>
-      </a>
-      <a href="/rechner/fresnel" class="related-card">
-        <div class="related-card-icon">📡</div>
-        <div class="related-card-content">
-          <h3>Fresnel-Zone</h3>
-          <p>Berechne die erforderliche Hindernisfreiheit</p>
-        </div>
-        <div class="related-card-arrow">→</div>
-      </a>
-      <a href="/wissen/frequenzbaender" class="related-card">
-        <div class="related-card-icon">📶</div>
-        <div class="related-card-content">
-          <h3>Frequenzbänder</h3>
-          <p>Übersicht aller Frequenzbänder und deren Eigenschaften</p>
-        </div>
-        <div class="related-card-arrow">→</div>
-      </a>
-    </div>
-  </section>
+  <RelatedTopics href="/wissen/wellenausbreitung/" />
 </div>
 
 <style>
@@ -633,66 +576,5 @@
   .daytime-box li,
   .nighttime-box li {
     margin-bottom: 0.5rem;
-  }
-
-  /* Related Cards Grid */
-  .related-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .related-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1.25rem;
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .related-card:hover {
-    border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-  }
-
-  .related-card-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
-  }
-
-  .related-card-content {
-    flex: 1;
-  }
-
-  .related-card-content h3 {
-    margin: 0 0 0.375rem 0;
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    color: var(--color-text-primary);
-  }
-
-  .related-card-content p {
-    margin: 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-relaxed);
-  }
-
-  .related-card-arrow {
-    font-size: 1.25rem;
-    color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
-    align-self: center;
-  }
-
-  .related-card:hover .related-card-arrow {
-    transform: translateX(4px);
-    color: var(--color-accent-primary);
   }
 </style>

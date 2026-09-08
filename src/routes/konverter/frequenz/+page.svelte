@@ -1,17 +1,7 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
 </script>
-
-<svelte:head>
-  <title>Frequenzkonverter - Bandbreite</title>
-  <meta name="description" content="Umrechnung zwischen Frequenz und Wellenlänge für das gesamte elektromagnetische Spektrum." />
-  <meta property="og:title" content="Frequenzkonverter | Bandbreite" />
-  <meta property="og:description" content="Umrechnung zwischen Frequenz und Wellenlänge für das gesamte elektromagnetische Spektrum." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Frequenzkonverter | Bandbreite" />
-  <meta name="twitter:description" content="Umrechnung zwischen Frequenz und Wellenlänge für das gesamte elektromagnetische Spektrum." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -37,23 +27,7 @@
     </div>
   </section>
 
-  <section class="card">
-    <h2 class="text-heading-2">Verwandte Werkzeuge</h2>
-    <div class="tools-grid">
-      <a href="/spektrum" class="tool-link">
-        <strong>EM-Spektrum & Bänder</strong>
-        <span>Interaktive Bandübersicht</span>
-      </a>
-      <a href="/rechner/fspl" class="tool-link">
-        <strong>FSPL-Rechner</strong>
-        <span>Freiraumdämpfung berechnen</span>
-      </a>
-      <a href="/wissen/frequenzbaender" class="tool-link">
-        <strong>Frequenzbänder</strong>
-        <span>ITU, IEEE und NATO Bänder</span>
-      </a>
-    </div>
-  </section>
+  <RelatedTopics href="/konverter/frequenz/" />
 </div>
 
 <style>
@@ -102,36 +76,4 @@
     color: var(--color-text-tertiary);
   }
 
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .tool-link {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .tool-link:hover {
-    border-color: var(--color-accent-primary);
-    background: var(--color-bg-surface);
-  }
-
-  .tool-link strong {
-    color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  .tool-link span {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-  }
 </style>

@@ -1,17 +1,7 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import ApplicationOverlay from '$lib/components/charts/ApplicationOverlay.svelte';
 </script>
-
-<svelte:head>
-  <title>Anwendungen - Bandbreite</title>
-  <meta name="description" content="Frequenzband-Anwendungen und -Zuweisungen" />
-  <meta property="og:title" content="Anwendungen | Bandbreite" />
-  <meta property="og:description" content="Frequenzband-Anwendungen und -Zuweisungen" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Anwendungen | Bandbreite" />
-  <meta name="twitter:description" content="Frequenzband-Anwendungen und -Zuweisungen" />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -25,6 +15,8 @@
   <section class="application-section">
     <ApplicationOverlay />
   </section>
+
+  <RelatedTopics href="/spektrum/anwendungen/" />
 </div>
 
 <style>

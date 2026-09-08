@@ -1,6 +1,10 @@
 <script lang="ts">
   import * as d3 from 'd3';
-  import { frequencyToWavelength } from '$lib/utils/calculations';
+  import {
+    frequencyToWavelength,
+    calculateFresnelRadius as fresnelRadius,
+    FRESNEL_CLEARANCE_FRACTION
+  } from '$lib/utils/calculations';
   import { convertToHz } from '$lib/utils/conversions';
   import { FREQUENCY_UNITS, DISTANCE_UNITS } from '$lib/data/units';
   import { formatFrequency, formatDistance, formatNumber } from '$lib/utils/formatting';
@@ -55,9 +59,9 @@
   let obstaclePositionM = $derived(obstaclePositionKm * 1000);
 
   /**
-   * Calculate Fresnel zone radius at a specific point
-   * r_n = sqrt(n * lambda * d1 * d2 / D)
-   * where d1 = distance from TX to point, d2 = distance from point to RX, D = total distance
+   * Fresnel-Zonenradius an einem Punkt (Utility in $lib/utils/calculations.ts):
+   * r_n = √(n · λ · d1 · d2 / (d1 + d2)); der Parameter totalDistance bleibt aus
+   * Kompatibilitätsgründen erhalten (d1 + d2 = D).
    */
   function calculateFresnelRadius(
     wavelength: number,
@@ -66,8 +70,8 @@
     totalDistance: number,
     n: number = 1
   ): number {
-    if (wavelength <= 0 || d1 <= 0 || d2 <= 0 || totalDistance <= 0) return 0;
-    return Math.sqrt(n * wavelength * d1 * d2 / totalDistance);
+    if (totalDistance <= 0) return 0;
+    return fresnelRadius(wavelength, d1, d2, n);
   }
 
   // First Fresnel zone radius at obstacle position
@@ -81,8 +85,8 @@
     )
   );
 
-  // 60% clearance (minimum recommended)
-  let clearance60 = $derived(fresnelRadius1 * 0.6);
+  // 60% clearance (minimum recommended, ITU-R P.530)
+  let clearance60 = $derived(fresnelRadius1 * FRESNEL_CLEARANCE_FRACTION);
 
   // Maximum Fresnel radius (at midpoint)
   let maxFresnelRadius = $derived(
@@ -409,7 +413,7 @@
 
         <!-- 60% clearance zone -->
         {#if fresnel1Data.length > 0}
-          {@const clearance60Data = fresnel1Data.map(p => ({ x: p.x, y: p.y * 0.6 }))}
+          {@const clearance60Data = fresnel1Data.map(p => ({ x: p.x, y: p.y * FRESNEL_CLEARANCE_FRACTION }))}
           <path
             d={areaGenerator(clearance60Data)}
             fill="rgba(34, 197, 94, 0.2)"

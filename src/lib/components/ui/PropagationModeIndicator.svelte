@@ -25,17 +25,17 @@
     groundWave: {
       label: 'Ground Wave',
       labelDE: 'Bodenwelle',
-      color: 'text-emerald-600 dark:text-emerald-400',
-      bgColor: 'bg-emerald-100 dark:bg-emerald-900/30',
+      color: 'text-cat-green',
+      bgColor: 'bg-success-soft',
       icon: 'M3 15h18M3 15c0 3.5 4 6 9 6s9-2.5 9-6',
       description: 'Radio waves follow Earth\'s curvature. Range: hundreds to thousands of km.',
-      descriptionDE: 'Radiowellen folgen der Erdkruemmung. Reichweite: Hunderte bis Tausende km.'
+      descriptionDE: 'Radiowellen folgen der Erdkrümmung. Reichweite: Hunderte bis Tausende km.'
     },
     skyWave: {
       label: 'Sky Wave',
       labelDE: 'Raumwelle',
-      color: 'text-blue-600 dark:text-blue-400',
-      bgColor: 'bg-blue-100 dark:bg-blue-900/30',
+      color: 'text-cat-blue',
+      bgColor: 'bg-info-soft',
       icon: 'M3 18l6-6 4 4 8-8M21 6v4h-4',
       description: 'Radio waves reflect off ionosphere. Enables worldwide communication.',
       descriptionDE: 'Radiowellen werden an der Ionosphäre reflektiert. Weltweite Kommunikation möglich.'
@@ -43,8 +43,8 @@
     lineOfSight: {
       label: 'Line of Sight',
       labelDE: 'Sichtlinie',
-      color: 'text-amber-600 dark:text-amber-400',
-      bgColor: 'bg-amber-100 dark:bg-amber-900/30',
+      color: 'text-cat-orange',
+      bgColor: 'bg-warning-soft',
       icon: 'M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4',
       description: 'Direct path between transmitter and receiver. Limited by horizon.',
       descriptionDE: 'Direkter Pfad zwischen Sender und Empfänger. Durch Horizont begrenzt.'
@@ -52,8 +52,8 @@
     mixed: {
       label: 'Mixed',
       labelDE: 'Gemischt',
-      color: 'text-purple-600 dark:text-purple-400',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/30',
+      color: 'text-cat-violet',
+      bgColor: 'bg-neutral-soft',
       icon: 'M12 4v4m0 4v4m0 4v4M8 8l4 4-4 4M16 8l-4 4 4 4',
       description: 'Combination of propagation modes. Day/night variations.',
       descriptionDE: 'Kombination verschiedener Ausbreitungsarten. Tag/Nacht-Variationen.'
@@ -146,7 +146,7 @@
   </div>
 {:else}
   <div
-    class="inline-flex items-center {sizeClasses.gap} {sizeClasses.container} bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-500 dark:text-gray-400"
+    class="inline-flex items-center {sizeClasses.gap} {sizeClasses.container} bg-neutral-soft rounded-lg text-ink-subtle"
     role="status"
     aria-label="Keine Ausbreitungsinformation verfügbar"
   >

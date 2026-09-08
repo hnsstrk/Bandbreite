@@ -8,6 +8,7 @@ import {
   formatNumberAuto,
   formatNumberLocale,
   formatPrecisionNumber,
+  formatRcs,
   formatFrequency,
   formatFrequencyGHz,
   formatWavelength,
@@ -314,6 +315,16 @@ describe('formatPrecisionNumber', () => {
     expect(result).toBe('100');
   });
 
+  it('erhält signifikante Nullen ganzer Zahlen (F-04)', () => {
+    expect(formatPrecisionNumber(100000)).toBe('100000');
+    expect(formatPrecisionNumber(120000)).toBe('120000');
+    expect(formatPrecisionNumber(1e7, 8, 1e9, 6)).toBe('10000000');
+    expect(formatPrecisionNumber(12e6, 8, 1e9, 6)).toBe('12000000');
+    expect(formatPrecisionNumber(100000.5)).toBe('100001');
+    expect(formatPrecisionNumber(2.5)).toBe('2.5');
+    expect(formatPrecisionNumber(0.0001, 6, 1e6, 4)).toBe('1.0000e-4');
+  });
+
   it('should use exponential for very small values', () => {
     const result = formatPrecisionNumber(0.0001, 6, 1e6, 4);
     expect(result).toMatch(/e/);
@@ -333,5 +344,25 @@ describe('formatPrecisionNumber', () => {
     // With threshold 1e3, 1500 should be in exponential
     const result = formatPrecisionNumber(1500, 6, 1e3, 4);
     expect(result).toMatch(/e\+/);
+  });
+});
+
+// ============================================================================
+// formatRcs (F-11: Flächenfaktoren, nicht Längenfaktoren)
+// ============================================================================
+
+describe('formatRcs', () => {
+  it('rechnet Flächen korrekt um', () => {
+    expect(formatRcs(1e-5)).toBe('10.0 mm²');
+    expect(formatRcs(0.001)).toBe('10.0 cm²');
+    expect(formatRcs(0.005)).toBe('50.0 cm²');
+    expect(formatRcs(1)).toBe('1 m²');
+    expect(formatRcs(1e4)).toBe('10000 m²');
+    expect(formatRcs(2.5e6)).toBe('2.50 km²');
+  });
+  it('liefert — für ungültige Werte', () => {
+    expect(formatRcs(null)).toBe('—');
+    expect(formatRcs(NaN)).toBe('—');
+    expect(formatRcs(-1)).toBe('—');
   });
 });

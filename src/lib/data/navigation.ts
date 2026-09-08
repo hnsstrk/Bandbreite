@@ -1,0 +1,687 @@
+/**
+ * Zentrale Navigations-Registry — Single Source of Truth.
+ *
+ * Alle Konsumenten (Header, Mega-Menü, MobileMenu, Breadcrumb, Hub-Kacheln,
+ * Sitemap, Command-Palette, Verwandte Themen) leiten ihre Daten aus `NAV_TREE`
+ * ab. Es gibt keine zweite, händisch gepflegte Label- oder Kachelliste mehr.
+ *
+ * Konventionen:
+ * - Jeder `href` endet mit einem Schrägstrich (`trailingSlash: 'always'`).
+ * - `status: 'geplant'` markiert Seiten, die noch nicht existieren. Sie werden
+ *   in der Navigation ausgegraut dargestellt und **nicht** verlinkt.
+ * - `icon` ist ein Name, kein Markup — die Icon-Komponente des Design-Systems
+ *   löst ihn auf.
+ */
+
+import { humanizeSegment } from '$lib/utils/slug';
+
+
+/** Kanonische Basis-URL für canonical/og:url. */
+export const SITE_URL = 'https://bandbreite.online-resources.de';
+
+/** Standard-Titel und -Beschreibung, wenn eine Route nichts liefert. */
+export const SITE_NAME = 'Bandbreite';
+export const SITE_DESCRIPTION =
+  'Interaktive Visualisierung des elektromagnetischen Spektrums, Rechner für die Hochfrequenztechnik und ein Nachschlagewerk zur Funktechnik.';
+
+export type NavStatus = 'live' | 'geplant';
+
+export interface NavNode {
+  /** Punktnotierte ID, z. B. 'wissen.funktechnik.mobilfunk'. */
+  id: string;
+  /** Anzeigename in Navigation, Breadcrumb und Kachel. */
+  label: string;
+  /** Route mit Trailing Slash. */
+  href: string;
+  /** Ein Satz für Kacheln, Mega-Menü und Suchergebnisse. */
+  description?: string;
+  /** Name eines Icons (kein Markup). */
+  icon?: string;
+  /** Zusätzliche Suchbegriffe. */
+  keywords?: string[];
+  /** Ob die Seite existiert. */
+  status: NavStatus;
+  children?: NavNode[];
+}
+
+export const NAV_TREE: NavNode[] = [
+  {
+    id: 'spektrum',
+    label: 'Spektrum',
+    href: '/spektrum/',
+    icon: 'spectrum',
+    status: 'live',
+    description:
+      'Das elektromagnetische Spektrum interaktiv: Bänder, Frequenz- und Leistungsumrechnung, Reichweite und Bandzuordnung.',
+    keywords: [
+      'EM-Spektrum',
+      'Frequenz',
+      'Wellenlänge',
+      'Bänder',
+      'ITU',
+      'IEEE',
+      'NATO',
+      'Dashboard'
+    ],
+    children: [
+      {
+        id: 'spektrum.anwendungen',
+        label: 'Anwendungen im Spektrum',
+        href: '/spektrum/anwendungen/',
+        icon: 'radio',
+        status: 'live',
+        description:
+          'Welcher Dienst nutzt welches Band? Rundfunk, Mobilfunk, Radar, Satellit und WLAN als Überlagerung im Spektrum.',
+        keywords: ['Rundfunk', 'Mobilfunk', 'Radar', 'Satellit', 'WLAN', 'Dienste']
+      },
+      {
+        id: 'spektrum.sendeleistungen',
+        label: 'Sendeleistungen',
+        href: '/spektrum/sendeleistungen/',
+        icon: 'power',
+        status: 'live',
+        description:
+          'Typische Sendeleistungen von Rundfunk-, Radar-, Mobilfunk- und Satellitensystemen über der Frequenz aufgetragen.',
+        keywords: ['Leistung', 'Watt', 'dBm', 'EIRP', 'Sender']
+      },
+      {
+        id: 'spektrum.daempfung',
+        label: 'Atmosphärische Dämpfung',
+        href: '/spektrum/daempfung/',
+        icon: 'cloud',
+        status: 'live',
+        description:
+          'Dämpfung durch Sauerstoff, Wasserdampf und Niederschlag nach ITU-R P.676, P.838 und P.840.',
+        keywords: [
+          'Dämpfung',
+          'Absorption',
+          'Sauerstoff',
+          'Wasserdampf',
+          'Regen',
+          'Nebel',
+          '60 GHz',
+          '22 GHz',
+          'ITU-R P.676'
+        ]
+      },
+      {
+        id: 'spektrum.ionosphaere',
+        label: 'Ionosphärische Ausbreitung',
+        href: '/spektrum/ionosphaere/',
+        icon: 'globe',
+        status: 'live',
+        description:
+          'D-, E- und F-Schichten, MUF und LUF, Skip-Zone und Kurzwellenausbreitung über große Entfernungen.',
+        keywords: ['Ionosphäre', 'MUF', 'LUF', 'Skip-Zone', 'Raumwelle', 'Kurzwelle', 'F2']
+      }
+    ]
+  },
+  {
+    id: 'rechner',
+    label: 'Rechner',
+    href: '/rechner/',
+    icon: 'calculator',
+    status: 'live',
+    description:
+      'Werkzeuge für die Funkplanung: Eingabe, Formel, Ergebnis — von der Freiraumdämpfung bis zur Fresnel-Zone.',
+    keywords: ['Rechner', 'Formel', 'Berechnung', 'Werkzeuge'],
+    children: [
+      {
+        id: 'rechner.fspl',
+        label: 'Freiraumdämpfung (FSPL)',
+        href: '/rechner/fspl/',
+        icon: 'trending-down',
+        status: 'live',
+        description:
+          'Signalverlust im freien Raum zwischen Sender und Empfänger, mit Mehrfrequenz-Vergleich.',
+        keywords: ['FSPL', 'Freiraumdämpfung', 'Pfadverlust', 'Path Loss', 'Reichweite']
+      },
+      {
+        id: 'rechner.link-budget',
+        label: 'Link-Budget',
+        href: '/rechner/link-budget/',
+        icon: 'bar-chart',
+        status: 'live',
+        description:
+          'Vollständige Signalpfad-Analyse mit Sendeleistung, Antennengewinnen, Verlusten und Schwundreserve.',
+        keywords: ['Link Budget', 'EIRP', 'Empfangspegel', 'Schwundreserve', 'Systemgewinn']
+      },
+      {
+        id: 'rechner.radar',
+        label: 'Radar-Reichweite',
+        href: '/rechner/radar/',
+        icon: 'target',
+        status: 'live',
+        description:
+          'Radargleichung: Sendeleistung, Antennengewinn, Rückstreuquerschnitt und Empfindlichkeit ergeben die Reichweite.',
+        keywords: ['Radargleichung', 'RCS', 'Rückstreuquerschnitt', 'Radar', 'Reichweite']
+      },
+      {
+        id: 'rechner.kanalkapazitaet',
+        label: 'Kanalkapazität',
+        href: '/rechner/kanalkapazitaet/',
+        icon: 'signal',
+        status: 'live',
+        description:
+          'Shannon-Hartley: maximale Datenrate aus Bandbreite und Signal-Rausch-Verhältnis.',
+        keywords: ['Shannon', 'Hartley', 'SNR', 'Bandbreite', 'Datenrate', 'Kanalkapazität']
+      },
+      {
+        id: 'rechner.skin-tiefe',
+        label: 'Skin-Tiefe',
+        href: '/rechner/skin-tiefe/',
+        icon: 'layers',
+        status: 'live',
+        description:
+          'Eindringtiefe elektromagnetischer Wellen in leitfähige Materialien in Abhängigkeit von Frequenz und Material.',
+        keywords: ['Skin-Effekt', 'Eindringtiefe', 'Leitfähigkeit', 'Permeabilität', 'Abschirmung']
+      },
+      {
+        id: 'rechner.fresnel',
+        label: 'Fresnel-Zone',
+        href: '/rechner/fresnel/',
+        icon: 'ellipse',
+        status: 'live',
+        description:
+          'Radius der Fresnel-Zonen und die nötige Hindernisfreiheit einer Sichtverbindung.',
+        keywords: ['Fresnel', 'Sichtverbindung', 'Line of Sight', 'Hindernisfreiheit', 'Clearance']
+      }
+    ]
+  },
+  {
+    id: 'konverter',
+    label: 'Konverter',
+    href: '/konverter/',
+    icon: 'exchange',
+    status: 'live',
+    description: 'Einheitenumrechner für die Funktechnik.',
+    keywords: ['Umrechnung', 'Einheiten', 'Konverter'],
+    children: [
+      {
+        id: 'konverter.frequenz',
+        label: 'Frequenz ↔ Wellenlänge',
+        href: '/konverter/frequenz/',
+        icon: 'wave',
+        status: 'live',
+        description:
+          'Umrechnung zwischen Frequenz und Wellenlänge über das gesamte elektromagnetische Spektrum.',
+        keywords: ['Frequenz', 'Wellenlänge', 'Lambda', 'Hz', 'MHz', 'GHz', 'Meter']
+      }
+    ]
+  },
+  {
+    id: 'wissen',
+    label: 'Wissen',
+    href: '/wissen/',
+    icon: 'book',
+    status: 'live',
+    description:
+      'Lehrtexte zur Funk- und Hochfrequenztechnik — von der Wellenausbreitung über Modulation bis zur Radartechnik.',
+    keywords: ['Wissen', 'Grundlagen', 'Lehrtext', 'Nachschlagewerk'],
+    children: [
+      {
+        id: 'wissen.wellenausbreitung',
+        label: 'Wellenausbreitung',
+        href: '/wissen/wellenausbreitung/',
+        icon: 'waves',
+        status: 'live',
+        description:
+          'Bodenwelle, Raumwelle und Sichtverbindung: wie Funkwellen den Weg vom Sender zum Empfänger finden.',
+        keywords: [
+          'Bodenwelle',
+          'Raumwelle',
+          'Sichtverbindung',
+          'Sporadic E',
+          'MUF',
+          'LUF',
+          'Tote Zone',
+          'Beugung'
+        ]
+      },
+      {
+        id: 'wissen.funktechnik',
+        label: 'Funk & Fernmeldetechnik',
+        href: '/wissen/funktechnik/',
+        icon: 'antenna',
+        status: 'live',
+        description:
+          'Kapitel über die Funkdienste: wer welche Frequenzen nutzt und nach welchen Regeln.',
+        keywords: ['Funkdienste', 'Fernmeldetechnik', 'Frequenzplan', 'Betriebsarten'],
+        children: [
+          {
+            id: 'wissen.funktechnik.funkdienste',
+            label: 'Funkdienste & Frequenzplan',
+            href: '/wissen/funktechnik/funkdienste/',
+            icon: 'list',
+            status: 'geplant',
+            description:
+              'Das Ordnungssystem hinter den Frequenzen: ITU-Funkdienste, Regionen, primäre und sekundäre Zuweisung.',
+            keywords: ['ITU', 'Funkdienst', 'Frequenzplan', 'Zuweisung', 'Regionen', 'BNetzA']
+          },
+          {
+            id: 'wissen.funktechnik.amateurfunk',
+            label: 'Amateurfunk',
+            href: '/wissen/funktechnik/amateurfunk/',
+            icon: 'radio-tower',
+            status: 'geplant',
+            description:
+              'Bandplan, Zeugnisklassen, Betriebsarten und Rufzeichensystematik des Amateurfunkdienstes.',
+            keywords: ['Amateurfunk', 'Bandplan', 'IARU', 'CW', 'SSB', 'FT8', 'Locator', 'QSL']
+          },
+          {
+            id: 'wissen.funktechnik.mobilfunk',
+            label: 'Mobilfunk',
+            href: '/wissen/funktechnik/mobilfunk/',
+            icon: 'smartphone',
+            status: 'geplant',
+            description:
+              'Von GSM bis 5G NR: Zellprinzip, Zugriffsverfahren, Duplex und die Bandnummern in Deutschland.',
+            keywords: ['GSM', 'LTE', '5G', 'NR', 'n78', 'FDD', 'TDD', 'OFDMA', 'MIMO', 'mmWave']
+          },
+          {
+            id: 'wissen.funktechnik.rundfunk',
+            label: 'Rundfunk',
+            href: '/wissen/funktechnik/rundfunk/',
+            icon: 'broadcast',
+            status: 'geplant',
+            description:
+              'Rundfunk von Langwelle bis DVB-T2: Kanalraster, Modulation und Gleichwellennetze.',
+            keywords: ['Langwelle', 'Mittelwelle', 'Kurzwelle', 'UKW', 'FM', 'DAB+', 'DVB-T2', 'RDS']
+          }
+        ]
+      },
+      {
+        id: 'wissen.modulation',
+        label: 'Modulation',
+        href: '/wissen/modulation/',
+        icon: 'activity',
+        status: 'geplant',
+        description:
+          'Analoge und digitale Modulationsverfahren: AM, FM, SSB, PSK, QAM und OFDM.',
+        keywords: ['AM', 'FM', 'SSB', 'ASK', 'FSK', 'PSK', 'QAM', 'OFDM', 'Konstellation']
+      },
+      {
+        id: 'wissen.antennen',
+        label: 'Antennen',
+        href: '/wissen/antennen/',
+        icon: 'antenna',
+        status: 'geplant',
+        description:
+          'Gewinn, Richtcharakteristik, Wirkfläche und Anpassung — vom Dipol bis zur Gruppenantenne.',
+        keywords: ['Dipol', 'Yagi', 'Parabol', 'Patch', 'Phased Array', 'dBi', 'SWR', 'EIRP']
+      },
+      {
+        id: 'wissen.mathematik',
+        label: 'HF-Mathematik',
+        href: '/wissen/mathematik/',
+        icon: 'sigma',
+        status: 'live',
+        description:
+          'Die wichtigsten Formeln der Hochfrequenztechnik mit Herleitung und Rechenbeispielen.',
+        keywords: [
+          'Formeln',
+          'Dezibel',
+          'FSPL',
+          'Radargleichung',
+          'Shannon',
+          'Radiohorizont',
+          'Logarithmus'
+        ]
+      },
+      {
+        id: 'wissen.radar',
+        label: 'Radar-Grundlagen',
+        href: '/wissen/radar/',
+        icon: 'radar',
+        status: 'live',
+        description:
+          'Funktionsprinzip, Radargleichung, Rückstreuquerschnitt und die gängigen Radarverfahren.',
+        keywords: ['Radar', 'Pulsradar', 'Doppler', 'FMCW', 'RCS', 'SAR', 'Sekundärradar']
+      }
+    ]
+  },
+  {
+    id: 'datenbanken',
+    label: 'Datenbanken',
+    href: '/datenbanken/',
+    icon: 'database',
+    status: 'live',
+    description:
+      'Durchsuch- und filterbare Datensätze: Frequenzbänder, Funkdienste, Sender und Fernmeldegeschichte.',
+    keywords: ['Datenbank', 'Referenz', 'Tabelle', 'Nachschlagen'],
+    children: [
+      {
+        id: 'datenbanken.frequenzbaender',
+        label: 'Frequenzbänder',
+        href: '/datenbanken/frequenzbaender/',
+        icon: 'table',
+        status: 'live',
+        description:
+          'Alle Bänder nach ITU, IEEE, NATO sowie Amateurfunk- und Rundfunkbänder mit Eigenschaften und Anwendungen.',
+        keywords: [
+          'ITU-Bänder',
+          'IEEE-Bänder',
+          'NATO-Bänder',
+          'Amateurfunkbänder',
+          'Rundfunkbänder',
+          'ELF',
+          'VHF',
+          'UHF',
+          'SHF',
+          'X-Band',
+          'Ku-Band'
+        ]
+      },
+      {
+        id: 'datenbanken.funkdienste',
+        label: 'Funkdienste',
+        href: '/datenbanken/funkdienste/',
+        icon: 'list',
+        status: 'geplant',
+        description:
+          'Frequenzzuweisungen nach Dienst und Kategorie, filterbar nach Frequenzbereich, Region und Standard.',
+        keywords: ['Funkdienst', 'Zuweisung', 'Kategorie', 'ISM', 'PMR', 'Seefunk', 'Flugfunk']
+      },
+      {
+        id: 'datenbanken.sender',
+        label: 'Senderdatenbank',
+        href: '/datenbanken/sender/',
+        icon: 'radio-tower',
+        status: 'live',
+        description:
+          'Bekannte Zeitzeichen-, Rundfunk- und Navigationssender mit Frequenz, Leistung und Standort.',
+        keywords: ['Sender', 'DCF77', 'Zeitzeichen', 'Langwelle', 'Standort', 'Leistung']
+      },
+      {
+        id: 'datenbanken.historie',
+        label: 'Fernmeldegeschichte',
+        href: '/datenbanken/historie/',
+        icon: 'clock',
+        status: 'live',
+        description:
+          'Zeitleiste der Funk- und Fernmeldetechnik von den ersten Experimenten bis zur Gegenwart.',
+        keywords: ['Geschichte', 'Zeitleiste', 'Marconi', 'Hertz', 'Meilensteine']
+      }
+    ]
+  },
+  {
+    id: 'service',
+    label: 'Service',
+    href: '/service/',
+    icon: 'info',
+    status: 'live',
+    description: 'Sitemap, Quellenlage und Hinweise zum Projekt.',
+    keywords: ['Service', 'Sitemap', 'Quellen', 'Über'],
+    children: [
+      {
+        id: 'service.sitemap',
+        label: 'Sitemap',
+        href: '/service/sitemap/',
+        icon: 'map',
+        status: 'live',
+        description: 'Alle Seiten der Anwendung auf einen Blick, inklusive der geplanten Inhalte.',
+        keywords: ['Sitemap', 'Übersicht', 'Seitenverzeichnis']
+      },
+      {
+        id: 'service.quellen',
+        label: 'Quellen & Stand',
+        href: '/service/quellen/',
+        icon: 'file-text',
+        status: 'geplant',
+        description: 'Herkunft und Stand der verwendeten Daten sowie die verwendeten Normen.',
+        keywords: ['Quellen', 'ITU-R', 'BNetzA', 'IARU', '3GPP', 'Stand']
+      }
+    ]
+  }
+];
+
+// ============================================================================
+// Header-Gruppen (Mega-Menü)
+// ============================================================================
+
+export interface NavColumn {
+  /** Spaltenüberschrift. */
+  label: string;
+  /** Optionaler Link der Spaltenüberschrift (Kapitel-Hub). */
+  href?: string;
+  /** IDs der Einträge in dieser Spalte. */
+  itemIds: string[];
+}
+
+export interface NavGroup {
+  id: string;
+  label: string;
+  /** Hub der Gruppe — Ziel des Eintrags „Übersicht". */
+  href?: string;
+  columns: NavColumn[];
+}
+
+export const NAV_GROUPS: NavGroup[] = [
+  {
+    id: 'spektrum',
+    label: 'Spektrum',
+    href: '/spektrum/',
+    columns: [
+      {
+        label: 'Visualisierungen',
+        href: '/spektrum/',
+        itemIds: [
+          'spektrum.anwendungen',
+          'spektrum.sendeleistungen',
+          'spektrum.daempfung',
+          'spektrum.ionosphaere'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'werkzeuge',
+    label: 'Werkzeuge',
+    href: '/rechner/',
+    columns: [
+      {
+        label: 'Rechner',
+        href: '/rechner/',
+        itemIds: [
+          'rechner.fspl',
+          'rechner.link-budget',
+          'rechner.radar',
+          'rechner.kanalkapazitaet',
+          'rechner.skin-tiefe',
+          'rechner.fresnel'
+        ]
+      },
+      {
+        label: 'Konverter',
+        href: '/konverter/',
+        itemIds: ['konverter.frequenz']
+      }
+    ]
+  },
+  {
+    id: 'wissen',
+    label: 'Wissen',
+    href: '/wissen/',
+    columns: [
+      {
+        label: 'Funk & Fernmeldetechnik',
+        href: '/wissen/funktechnik/',
+        itemIds: [
+          'wissen.funktechnik.funkdienste',
+          'wissen.funktechnik.amateurfunk',
+          'wissen.funktechnik.mobilfunk',
+          'wissen.funktechnik.rundfunk'
+        ]
+      },
+      {
+        label: 'Wellenausbreitung',
+        itemIds: ['wissen.wellenausbreitung', 'spektrum.ionosphaere', 'spektrum.daempfung']
+      },
+      {
+        label: 'Technik & Verfahren',
+        itemIds: ['wissen.modulation', 'wissen.antennen', 'wissen.radar']
+      },
+      {
+        label: 'Grundlagen',
+        href: '/wissen/',
+        itemIds: ['wissen.mathematik']
+      }
+    ]
+  },
+  {
+    id: 'datenbanken',
+    label: 'Datenbanken',
+    href: '/datenbanken/',
+    columns: [
+      {
+        label: 'Datensätze',
+        href: '/datenbanken/',
+        itemIds: [
+          'datenbanken.frequenzbaender',
+          'datenbanken.funkdienste',
+          'datenbanken.sender',
+          'datenbanken.historie'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'service',
+    label: 'Service',
+    href: '/service/',
+    columns: [
+      {
+        label: 'Service',
+        href: '/service/',
+        itemIds: ['service.sitemap', 'service.quellen']
+      }
+    ]
+  }
+];
+
+// ============================================================================
+// Hilfsfunktionen
+// ============================================================================
+
+/** Ergänzt einen fehlenden Trailing Slash. */
+export function normalizeHref(href: string): string {
+  if (!href) return '/';
+  const withLeading = href.startsWith('/') ? href : `/${href}`;
+  const withoutQuery = withLeading.split(/[?#]/)[0];
+  return withoutQuery.endsWith('/') ? withoutQuery : `${withoutQuery}/`;
+}
+
+/** Alle Knoten des Baums in Tiefensuche-Reihenfolge. */
+export function flattenNav(nodes: NavNode[] = NAV_TREE): NavNode[] {
+  const result: NavNode[] = [];
+  for (const node of nodes) {
+    result.push(node);
+    if (node.children?.length) {
+      result.push(...flattenNav(node.children));
+    }
+  }
+  return result;
+}
+
+const NODES_BY_HREF = new Map<string, NavNode>(
+  flattenNav().map((node) => [node.href, node])
+);
+const NODES_BY_ID = new Map<string, NavNode>(flattenNav().map((node) => [node.id, node]));
+
+/** Knoten zu einer Route finden (Trailing Slash wird ergänzt). */
+export function findNode(href: string): NavNode | undefined {
+  return NODES_BY_HREF.get(normalizeHref(href));
+}
+
+/** Knoten zu einer ID finden. */
+export function findNodeById(id: string): NavNode | undefined {
+  return NODES_BY_ID.get(id);
+}
+
+/** Mehrere Knoten in der Reihenfolge der übergebenen IDs. */
+export function getNodesByIds(ids: readonly string[]): NavNode[] {
+  return ids.map((id) => NODES_BY_ID.get(id)).filter((node): node is NavNode => Boolean(node));
+}
+
+export interface BreadcrumbEntry {
+  label: string;
+  href: string;
+  /** Existiert die Zielseite? Geplante Ebenen werden nicht verlinkt. */
+  status: NavStatus;
+  isLast: boolean;
+}
+
+/**
+ * Breadcrumb-Kette für eine Route. Labels stammen ausschließlich aus dem
+ * Navigationsbaum; unbekannte Segmente werden lesbar formatiert.
+ */
+export function getBreadcrumbs(href: string): BreadcrumbEntry[] {
+  const path = normalizeHref(href);
+  const segments = path.split('/').filter(Boolean);
+  const entries: BreadcrumbEntry[] = [];
+  let cumulative = '';
+
+  segments.forEach((segment, index) => {
+    cumulative += `/${segment}`;
+    const nodeHref = `${cumulative}/`;
+    const node = NODES_BY_HREF.get(nodeHref);
+    entries.push({
+      label: node?.label ?? humanizeSegment(segment),
+      href: nodeHref,
+      status: node?.status ?? 'live',
+      isLast: index === segments.length - 1
+    });
+  });
+
+  return entries;
+}
+
+/** Geschwisterknoten einer Route (ohne die Route selbst). */
+export function getSiblings(href: string): NavNode[] {
+  const target = normalizeHref(href);
+  const parent = getParent(target);
+  const list = parent ? (parent.children ?? []) : NAV_TREE;
+  return list.filter((node) => node.href !== target);
+}
+
+/** Elternknoten einer Route. */
+export function getParent(href: string): NavNode | undefined {
+  const target = normalizeHref(href);
+  return flattenNav().find((node) => node.children?.some((child) => child.href === target));
+}
+
+/** Kinder eines Hubs — Grundlage für die Kachelraster der Hub-Seiten. */
+export function getHubChildren(href: string): NavNode[] {
+  return findNode(href)?.children ?? [];
+}
+
+export interface PageMeta {
+  title: string;
+  description: string;
+}
+
+/**
+ * Titel und Beschreibung einer Route für `Metadata.svelte`. Wird von den
+ * `+page.ts`-Ladefunktionen genutzt, damit Navigation und `<head>` niemals
+ * auseinanderlaufen.
+ */
+export function pageMeta(href: string, overrides: Partial<PageMeta> = {}): PageMeta {
+  const node = findNode(href);
+  return {
+    title: overrides.title ?? node?.label ?? SITE_NAME,
+    description: overrides.description ?? node?.description ?? SITE_DESCRIPTION
+  };
+}
+
+/** Nur die existierenden Seiten (z. B. für die Suche). */
+export function getLiveNodes(): NavNode[] {
+  return flattenNav().filter((node) => node.status === 'live');
+}
+
+/** Ist `href` die aktuelle Route oder ein Vorfahre davon? */
+export function isActivePath(href: string, currentPath: string): boolean {
+  const target = normalizeHref(href);
+  const current = normalizeHref(currentPath);
+  return current === target || current.startsWith(target);
+}
+

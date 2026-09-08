@@ -1,4 +1,5 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import { parseNumericInput, safeLog } from '$lib/utils/handlers';
   import { formatWavelength, formatNumber } from '$lib/utils/formatting';
   import { SPEED_OF_LIGHT, EARTH_RADIUS_MEAN, EFFECTIVE_EARTH_RADIUS_FACTOR } from '$lib/data/constants';
@@ -183,17 +184,6 @@
     { db: -20, powerRatio: 0.01, voltageRatio: 0.1 },
   ];
 </script>
-
-<svelte:head>
-  <title>RF-Mathematik - Bandbreite</title>
-  <meta name="description" content="Wichtige Formeln der Hochfrequenztechnik mit Herleitungen und interaktiven Rechnern: Wellenlänge, FSPL, Radargleichung, Shannon-Hartley und Dezibel-Rechnung." />
-  <meta property="og:title" content="RF-Mathematik | Bandbreite" />
-  <meta property="og:description" content="Wichtige Formeln der Hochfrequenztechnik mit Herleitungen und interaktiven Rechnern: Wellenlänge, FSPL, Radargleichung, Shannon-Hartley und Dezibel-Rechnung." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="RF-Mathematik | Bandbreite" />
-  <meta name="twitter:description" content="Wichtige Formeln der Hochfrequenztechnik mit Herleitungen und interaktiven Rechnern: Wellenlänge, FSPL, Radargleichung, Shannon-Hartley und Dezibel-Rechnung." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -874,57 +864,7 @@
   </section>
 
   <!-- Related Links -->
-  <section class="card">
-    <h2 class="text-heading-2">Verwandte Werkzeuge</h2>
-    <p class="section-intro">
-      Die hier vorgestellten Formeln können Sie direkt in unseren interaktiven Rechnern anwenden
-      oder in den Wissensartikeln vertiefen.
-    </p>
-    <div class="related-links">
-      <a href="/rechner/fspl" class="related-link">
-        <span class="related-icon" aria-hidden="true">~</span>
-        <div>
-          <strong>FSPL-Rechner</strong>
-          <p>Interaktive Berechnung der Freiraumdämpfung</p>
-        </div>
-      </a>
-      <a href="/rechner/radar" class="related-link">
-        <span class="related-icon" aria-hidden="true">)</span>
-        <div>
-          <strong>Radar-Reichweite</strong>
-          <p>Berechnung mit der Radargleichung</p>
-        </div>
-      </a>
-      <a href="/rechner/kanalkapazitaet" class="related-link">
-        <span class="related-icon" aria-hidden="true">#</span>
-        <div>
-          <strong>Kanalkapazität</strong>
-          <p>Shannon-Hartley Theorem anwenden</p>
-        </div>
-      </a>
-      <a href="/rechner/link-budget" class="related-link">
-        <span class="related-icon" aria-hidden="true">+</span>
-        <div>
-          <strong>Link Budget</strong>
-          <p>Vollständige Signalpfad-Analyse</p>
-        </div>
-      </a>
-      <a href="/wissen/radar" class="related-link">
-        <span class="related-icon" aria-hidden="true">?</span>
-        <div>
-          <strong>Radar-Grundlagen</strong>
-          <p>Theorie hinter der Radargleichung</p>
-        </div>
-      </a>
-      <a href="/wissen/wellenausbreitung" class="related-link">
-        <span class="related-icon" aria-hidden="true">^</span>
-        <div>
-          <strong>Wellenausbreitung</strong>
-          <p>Ausbreitungsmodi und Radiohorizont</p>
-        </div>
-      </a>
-    </div>
-  </section>
+  <RelatedTopics href="/wissen/mathematik/" />
 </div>
 
 <style>
@@ -1336,54 +1276,6 @@
   }
 
   /* Related Links */
-  .section-intro {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    margin: 0 0 1rem 0;
-    line-height: var(--line-height-relaxed);
-  }
-
-  .related-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .related-link {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .related-link:hover {
-    border-color: var(--color-accent-primary);
-    background: var(--color-bg-surface);
-  }
-
-  .related-icon {
-    font-size: 1.25rem;
-    color: var(--color-accent-primary);
-  }
-
-  .related-link strong {
-    display: block;
-    color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  .related-link p {
-    margin: 0;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-  }
-
   /* Responsive */
   @media (max-width: 640px) {
     .formula-main {

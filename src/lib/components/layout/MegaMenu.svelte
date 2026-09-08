@@ -1,0 +1,298 @@
+<script lang="ts">
+  import { page } from '$app/state';
+  import { getNodesByIds, findNode, type NavGroup, type NavNode } from '$lib/data/navigation';
+
+  interface Props {
+    group: NavGroup;
+    open: boolean;
+    /** Panel schließen und Fokus zurück auf den Auslöser geben. */
+    onclose: (returnFocus?: boolean) => void;
+  }
+
+  let { group, open, onclose }: Props = $props();
+
+  let panel = $state<HTMLDivElement | null>(null);
+
+  interface ResolvedColumn {
+    label: string;
+    href?: string;
+    nodes: NavNode[];
+  }
+
+  const columns = $derived<ResolvedColumn[]>(
+    group.columns.map((column) => ({
+      label: column.label,
+      href: column.href,
+      nodes: getNodesByIds(column.itemIds)
+    }))
+  );
+
+  const hub = $derived(group.href ? findNode(group.href) : undefined);
+
+  function linkElements(): HTMLAnchorElement[] {
+    return panel ? Array.from(panel.querySelectorAll<HTMLAnchorElement>('a[href]')) : [];
+  }
+
+  /** Erstes Element fokussieren — wird vom Header über bind:this aufgerufen. */
+  export function focusFirst() {
+    linkElements()[0]?.focus();
+  }
+
+  /** Letztes Element fokussieren. */
+  export function focusLast() {
+    linkElements().at(-1)?.focus();
+  }
+
+  function columnOf(element: Element): number {
+    const column = element.closest('[data-column]');
+    return column ? Number(column.getAttribute('data-column')) : 0;
+  }
+
+  function handleKeydown(event: KeyboardEvent) {
+    const items = linkElements();
+    if (items.length === 0) return;
+    const current = document.activeElement as HTMLAnchorElement | null;
+    const index = current ? items.indexOf(current) : -1;
+
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        onclose(true);
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        items[(index + 1) % items.length]?.focus();
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        items[index <= 0 ? items.length - 1 : index - 1]?.focus();
+        break;
+      case 'ArrowRight':
+      case 'ArrowLeft': {
+        if (columns.length < 2 || index < 0 || !current) return;
+        event.preventDefault();
+        const direction = event.key === 'ArrowRight' ? 1 : -1;
+        const target = (columnOf(current) + direction + columns.length) % columns.length;
+        const first = items.find((item) => columnOf(item) === target);
+        first?.focus();
+        break;
+      }
+      case 'Home':
+        event.preventDefault();
+        items[0]?.focus();
+        break;
+      case 'End':
+        event.preventDefault();
+        items.at(-1)?.focus();
+        break;
+    }
+  }
+</script>
+
+<div
+  class="mega-menu"
+  class:visible={open}
+  class:multi={columns.length > 1}
+  id={`megamenu-${group.id}`}
+  bind:this={panel}
+  onkeydown={handleKeydown}
+  aria-hidden={!open}
+  role="presentation"
+>
+  {#if hub}
+    <a class="mega-overview" href={hub.href} onclick={() => onclose(false)} tabindex={open ? 0 : -1}>
+      <span class="mega-overview-label">Übersicht: {hub.label}</span>
+      {#if hub.description}
+        <span class="mega-overview-desc">{hub.description}</span>
+      {/if}
+    </a>
+  {/if}
+
+  <div class="mega-columns">
+    {#each columns as column, columnIndex (column.label)}
+      <div class="mega-column" data-column={columnIndex}>
+        {#if column.href}
+          <a
+            class="mega-column-title link"
+            href={column.href}
+            onclick={() => onclose(false)}
+            tabindex={open ? 0 : -1}>{column.label}</a
+          >
+        {:else}
+          <p class="mega-column-title">{column.label}</p>
+        {/if}
+        <ul class="mega-list">
+          {#each column.nodes as node (node.id)}
+            <li>
+              {#if node.status === 'geplant'}
+                <span class="mega-item planned">
+                  <span class="mega-item-label">{node.label}</span>
+                  <span class="badge">geplant</span>
+                </span>
+              {:else}
+                <a
+                  class="mega-item"
+                  class:active={page.url.pathname === node.href}
+                  href={node.href}
+                  tabindex={open ? 0 : -1}
+                  onclick={() => onclose(false)}
+                >
+                  <span class="mega-item-label">{node.label}</span>
+                  {#if node.description}
+                    <span class="mega-item-desc">{node.description}</span>
+                  {/if}
+                </a>
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      </div>
+    {/each}
+  </div>
+</div>
+
+<style>
+  .mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.375rem;
+    min-width: 20rem;
+    max-width: min(56rem, calc(100vw - 2rem));
+    padding: 0.75rem;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out,
+      visibility 150ms ease-out;
+  }
+
+  .mega-menu.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mega-menu.multi {
+    min-width: 36rem;
+  }
+
+  .mega-overview {
+    display: block;
+    padding: 0.625rem 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-elevated);
+    text-decoration: none;
+  }
+
+  .mega-overview:hover {
+    background-color: var(--color-bg-hover);
+  }
+
+  .mega-overview-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+  }
+
+  .mega-overview-desc {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+  }
+
+  .mega-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .mega-column-title {
+    margin: 0 0 0.375rem 0;
+    padding: 0 0.75rem;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    display: block;
+  }
+
+  a.mega-column-title:hover {
+    color: var(--color-text-accent);
+    text-decoration: underline;
+  }
+
+  .mega-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .mega-item {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  a.mega-item:hover,
+  a.mega-item:focus-visible,
+  a.mega-item.active {
+    background-color: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+  }
+
+  .mega-item-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: inherit;
+  }
+
+  .mega-item-desc {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: var(--font-size-xs);
+    line-height: 1.4;
+    color: var(--color-text-tertiary);
+  }
+
+  .mega-item.planned {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: var(--color-text-disabled);
+    cursor: default;
+  }
+
+  .badge {
+    flex-shrink: 0;
+    padding: 0.0625rem 0.375rem;
+    font-size: 0.6875rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-tertiary);
+  }
+</style>

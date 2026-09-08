@@ -1,42 +1,76 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+  import { page } from '$app/state';
+  import {
+    SITE_URL,
+    SITE_NAME,
+    SITE_DESCRIPTION,
+    getBreadcrumbs,
+    normalizeHref
+  } from '$lib/data/navigation';
 
-    interface Props {
-        title?: string;
-        description?: string;
-        image?: string;
-        url?: string;
-        type?: string;
+  interface Props {
+    title?: string;
+    description?: string;
+    image?: string;
+    type?: string;
+  }
+
+  let {
+    title = SITE_NAME,
+    description = SITE_DESCRIPTION,
+    image = '/screenshot-spectrum.png',
+    type = 'website'
+  }: Props = $props();
+
+  const fullTitle = $derived(title === SITE_NAME ? SITE_NAME : `${title} | ${SITE_NAME}`);
+  const path = $derived(normalizeHref(page.url.pathname));
+  const canonical = $derived(`${SITE_URL}${path}`);
+  const imageUrl = $derived(image.startsWith('http') ? image : `${SITE_URL}${image}`);
+
+  /** JSON-LD BreadcrumbList — Labels stammen aus dem Navigationsbaum. */
+  const breadcrumbJsonLd = $derived.by(() => {
+    const crumbs = getBreadcrumbs(path);
+    if (crumbs.length === 0) return null;
+    // Die Startseite ist ein Redirect auf /spektrum/ — dort entfällt der
+    // zusätzliche „Start"-Eintrag, weil er auf dieselbe URL zeigen würde.
+    const items = crumbs.map((crumb) => ({ name: crumb.label, item: `${SITE_URL}${crumb.href}` }));
+    if (crumbs[0].href !== '/spektrum/') {
+      items.unshift({ name: 'Start', item: `${SITE_URL}/spektrum/` });
     }
-
-    let {
-        title = "Bandbreite - Visuelles Spektrum & Funk-Wissen",
-        description = "Interaktive Visualisierung des elektromagnetischen Spektrums und Wissensdatenbank für Funktechnik.",
-        image = "/screenshot-spectrum.png",
-        url = $page.url.href,
-        type = "website",
-    }: Props = $props();
-
-    let fullTitle = $derived(
-        title === "Bandbreite" ? title : `${title} | Bandbreite`,
-    );
+    return JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        ...item
+      }))
+    });
+  });
 </script>
 
 <svelte:head>
-    <title>{fullTitle}</title>
-    <meta name="description" content={description} />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content={type} />
-    <meta property="og:url" content={url} />
-    <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+  <!-- Open Graph -->
+  <meta property="og:site_name" content={SITE_NAME} />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={imageUrl} />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={url} />
-    <meta property="twitter:title" content={fullTitle} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={canonical} />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={imageUrl} />
+
+  {#if breadcrumbJsonLd}
+    {@html `<script type="application/ld+json">${breadcrumbJsonLd}<\/script>`}
+  {/if}
 </svelte:head>

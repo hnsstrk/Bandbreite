@@ -1,17 +1,7 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import ChannelCapacityCalculator from '$lib/components/calculators/ChannelCapacityCalculator.svelte';
 </script>
-
-<svelte:head>
-  <title>Kanalkapazität - Bandbreite</title>
-  <meta name="description" content="Shannon-Hartley Kanalkapazität Rechner" />
-  <meta property="og:title" content="Kanalkapazität | Bandbreite" />
-  <meta property="og:description" content="Shannon-Hartley Kanalkapazität Rechner" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Kanalkapazität | Bandbreite" />
-  <meta name="twitter:description" content="Shannon-Hartley Kanalkapazität Rechner" />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -26,6 +16,7 @@
     <ChannelCapacityCalculator />
   </section>
 
+  <RelatedTopics href="/rechner/kanalkapazitaet/" />
 </div>
 
 <style>

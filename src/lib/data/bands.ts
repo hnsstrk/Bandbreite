@@ -53,16 +53,22 @@ export const DE_ALT_BANDS: FrequencyBand[] = [
  * Alte US-amerikanische Frequenzband-Bezeichnungen (USA alt)
  * Traditional US military/radar band naming
  */
+/**
+ * Alte US-Militärnomenklatur der Radarbaender (P/L/S/C/X/K/Q/V/W).
+ * Diese Reihe ist offiziell außer Gebrauch und wird hier nur zur Einordnung
+ * historischer Quellen geführt; maßgeblich sind heute die IEEE-Bänder.
+ * Die Grenzen folgen der klassischen Tabelle (vor 1970), nicht IEEE Std 521.
+ */
 export const US_ALT_BANDS: FrequencyBand[] = [
   { id: 'us-i', name: 'I', nameDE: 'I-Band', minHz: 100e6, maxHz: 150e6, color: '#fde047', category: 'us-alt' },
   { id: 'us-g', name: 'G', nameDE: 'G-Band', minHz: 150e6, maxHz: 225e6, color: '#facc15', category: 'us-alt' },
   { id: 'us-p', name: 'P', nameDE: 'P-Band', minHz: 225e6, maxHz: 390e6, color: '#eab308', category: 'us-alt' },
   { id: 'us-l', name: 'L', nameDE: 'L-Band', minHz: 390e6, maxHz: 1.55e9, color: '#fde047', category: 'us-alt' },
-  { id: 'us-s', name: 'S', nameDE: 'S-Band', minHz: 1.55e9, maxHz: 5.2e9, color: '#facc15', category: 'us-alt' },
-  { id: 'us-c', name: 'C', nameDE: 'C-Band', minHz: 5.2e9, maxHz: 8e9, color: '#eab308', category: 'us-alt' },
-  { id: 'us-x', name: 'X', nameDE: 'X-Band', minHz: 8e9, maxHz: 12.4e9, color: '#fde047', category: 'us-alt' },
-  { id: 'us-k', name: 'K', nameDE: 'K-Band', minHz: 12.4e9, maxHz: 40e9, color: '#facc15', category: 'us-alt' },
-  { id: 'us-q', name: 'Q', nameDE: 'Q-Band', minHz: 40e9, maxHz: 46e9, color: '#eab308', category: 'us-alt' },
+  { id: 'us-s', name: 'S', nameDE: 'S-Band', minHz: 1.55e9, maxHz: 3.9e9, color: '#facc15', category: 'us-alt' },
+  { id: 'us-c', name: 'C', nameDE: 'C-Band', minHz: 3.9e9, maxHz: 6.2e9, color: '#eab308', category: 'us-alt' },
+  { id: 'us-x', name: 'X', nameDE: 'X-Band', minHz: 6.2e9, maxHz: 10.9e9, color: '#fde047', category: 'us-alt' },
+  { id: 'us-k', name: 'K', nameDE: 'K-Band', minHz: 10.9e9, maxHz: 36e9, color: '#facc15', category: 'us-alt' },
+  { id: 'us-q', name: 'Q', nameDE: 'Q-Band', minHz: 36e9, maxHz: 46e9, color: '#eab308', category: 'us-alt' },
   { id: 'us-v', name: 'V', nameDE: 'V-Band', minHz: 46e9, maxHz: 56e9, color: '#fde047', category: 'us-alt' },
   { id: 'us-w', name: 'W', nameDE: 'W-Band', minHz: 56e9, maxHz: 100e9, color: '#facc15', category: 'us-alt' },
 ];
@@ -124,6 +130,10 @@ export const NATO_BANDS: FrequencyBand[] = [
   { id: 'nato-k', name: 'K', nameDE: 'NATO K', minHz: 20e9, maxHz: 40e9, color: '#8b5cf6', category: 'nato' },
   { id: 'nato-l', name: 'L', nameDE: 'NATO L', minHz: 40e9, maxHz: 60e9, color: '#a855f7', category: 'nato' },
   { id: 'nato-m', name: 'M', nameDE: 'NATO M', minHz: 60e9, maxHz: 100e9, color: '#ec4899', category: 'nato' },
+  // Annahme: Das harmonisierte NATO-/ECM-Schema umfasst offiziell nur A bis M
+  // (0 bis 100 GHz). Die Bänder N und O stammen aus einzelnen US-/SACLANT-
+  // Sekundärtabellen und sind keine NATO-Standardbezeichnungen. Sie bleiben
+  // hier nur der Vollständigkeit halber erhalten.
   { id: 'nato-n', name: 'N', nameDE: 'NATO N', minHz: 100e9, maxHz: 200e9, color: '#f43f5e', category: 'nato' },
   { id: 'nato-o', name: 'O', nameDE: 'NATO O', minHz: 200e9, maxHz: 300e9, color: '#fb7185', category: 'nato' },
 ];
@@ -133,27 +143,35 @@ export const NATO_BANDS: FrequencyBand[] = [
  * Common wireless and broadcasting applications
  */
 export const CIVILIAN_BANDS: FrequencyBand[] = [
-  // Historisch / Langwelle
+  // Langwelle (LF): LORAN-C arbeitete auf 100 kHz, das Band 90-110 kHz war dafür
+  // geschuetzt. In Europa 2015 abgeschaltet; Quelle: ITU RR Art. 5.
   { id: 'loran-c', name: 'LORAN-C', nameDE: 'LORAN-C', minHz: 90e3, maxHz: 110e3, color: '#94a3b8', category: 'civilian' },
   // Navigation (NDB)
   { id: 'ndb', name: 'NDB', nameDE: 'NDB (Funkfeuer)', minHz: 190e3, maxHz: 1750e3, color: '#78716c', category: 'civilian' },
   // Rundfunk
-  { id: 'am-radio', name: 'AM Radio', nameDE: 'AM-Rundfunk', minHz: 535e3, maxHz: 1.7e6, color: '#3b82f6', category: 'civilian' },
+  // Mittelwelle ITU-Region 1 (Europa/DE): 526,5-1606,5 kHz im 9-kHz-Raster (GE75).
+  { id: 'am-radio', name: 'AM Radio (Region 1)', nameDE: 'AM-Rundfunk (Mittelwelle, Region 1)', minHz: 526.5e3, maxHz: 1606.5e3, color: '#3b82f6', category: 'civilian' },
+  // Region 2 (Amerika): 535-1705 kHz im 10-kHz-Raster.
+  { id: 'am-radio-us', name: 'AM Radio (Region 2)', nameDE: 'AM-Rundfunk (Mittelwelle, Region 2)', minHz: 535e3, maxHz: 1705e3, color: '#60a5fa', category: 'civilian' },
   { id: 'shortwave', name: 'Shortwave', nameDE: 'Kurzwelle', minHz: 3e6, maxHz: 30e6, color: '#06b6d4', category: 'civilian' },
   // Navigation (Marker Beacon)
-  { id: 'marker-beacon', name: 'Marker Beacon', nameDE: 'Marker Beacon (ILS)', minHz: 74.9e6, maxHz: 75.1e6, color: '#a1a1aa', category: 'civilian' },
+  { id: 'marker-beacon', name: 'Marker Beacon', nameDE: 'Marker Beacon (ILS)', minHz: 74.8e6, maxHz: 75.2e6, color: '#a1a1aa', category: 'civilian' },
   { id: 'fm-radio', name: 'FM Radio', nameDE: 'FM-Rundfunk', minHz: 87.5e6, maxHz: 108e6, color: '#22c55e', category: 'civilian' },
   // VOR und ILS Localizer
-  { id: 'vor', name: 'VOR/DVOR', nameDE: 'VOR/DVOR (Drehfunkfeuer)', minHz: 108e6, maxHz: 117.95e6, color: '#0d9488', category: 'civilian' },
+  { id: 'vor', name: 'VOR/DVOR', nameDE: 'VOR/DVOR (Drehfunkfeuer)', minHz: 108e6, maxHz: 117.975e6, color: '#0d9488', category: 'civilian' },
   { id: 'ils-loc', name: 'ILS Localizer', nameDE: 'ILS Landekurssender', minHz: 108.1e6, maxHz: 111.95e6, color: '#0f766e', category: 'civilian' },
-  { id: 'dab', name: 'DAB+', nameDE: 'DAB+', minHz: 174e6, maxHz: 240e6, color: '#84cc16', category: 'civilian' },
+  { id: 'dab', name: 'DAB+', nameDE: 'DAB+', minHz: 174e6, maxHz: 230e6, color: '#84cc16', category: 'civilian' },
   // ILS Glide Slope
   { id: 'ils-gs', name: 'ILS Glide Slope', nameDE: 'ILS Gleitwegsender', minHz: 329.15e6, maxHz: 335e6, color: '#115e59', category: 'civilian' },
   // Notfrequenz
   { id: 'cospas-sarsat', name: 'COSPAS-SARSAT', nameDE: 'COSPAS-SARSAT (Notsignal)', minHz: 406e6, maxHz: 406.1e6, color: '#dc2626', category: 'civilian' },
-  { id: 'dvb-t', name: 'DVB-T', nameDE: 'DVB-T/T2', minHz: 470e6, maxHz: 790e6, color: '#eab308', category: 'civilian' },
-  { id: 'lte-700', name: 'LTE 700', nameDE: 'LTE 700 MHz', minHz: 700e6, maxHz: 800e6, color: '#f97316', category: 'civilian' },
-  { id: 'lte-800', name: 'LTE 800', nameDE: 'LTE 800 MHz', minHz: 800e6, maxHz: 900e6, color: '#ef4444', category: 'civilian' },
+  // DVB-T2 in DE: Kanäle 21-48; oberhalb 694 MHz an den Mobilfunk abgegeben (WRC-15).
+  { id: 'dvb-t', name: 'DVB-T', nameDE: 'DVB-T/T2', minHz: 470e6, maxHz: 694e6, color: '#eab308', category: 'civilian' },
+  // 3GPP Band 28 / n28: UL 703-748 MHz, DL 758-803 MHz (Duplexabstand 55 MHz,
+  // Mittenlücke 748-758 MHz). Quelle: 3GPP TS 36.101 Tab. 5.5-1.
+  { id: 'lte-700', name: 'LTE Band 28 (700 MHz)', nameDE: 'LTE/5G Band 28 (700 MHz)', minHz: 703e6, maxHz: 803e6, color: '#f97316', category: 'civilian' },
+  // 3GPP Band 20 / n20: DL 791-821 MHz, UL 832-862 MHz.
+  { id: 'lte-800', name: 'LTE Band 20 (800 MHz)', nameDE: 'LTE/5G Band 20 (800 MHz)', minHz: 791e6, maxHz: 862e6, color: '#ef4444', category: 'civilian' },
   { id: 'gsm-900', name: 'GSM 900', nameDE: 'GSM 900', minHz: 880e6, maxHz: 960e6, color: '#dc2626', category: 'civilian' },
   // DME/TACAN
   { id: 'dme-tacan', name: 'DME/TACAN', nameDE: 'DME/TACAN (Entfernungsmessung)', minHz: 960e6, maxHz: 1215e6, color: '#0ea5e9', category: 'civilian' },
@@ -183,8 +201,10 @@ export const CIVILIAN_BANDS: FrequencyBand[] = [
   { id: '5g-n78', name: '5G n78', nameDE: '5G n78', minHz: 3.3e9, maxHz: 3.8e9, color: '#0ea5e9', category: 'civilian' },
   { id: 'wifi-5g', name: 'WiFi 5 GHz', nameDE: 'WLAN 5 GHz', minHz: 5.15e9, maxHz: 5.85e9, color: '#14b8a6', category: 'civilian' },
   // Wetterradar (C-Band)
-  { id: 'weather-c', name: 'Wetterradar C', nameDE: 'Wetterradar (C-Band)', minHz: 5.3e9, maxHz: 5.7e9, color: '#0284c7', category: 'civilian' },
-  { id: 'wifi-6e', name: 'WiFi 6E', nameDE: 'WLAN 6 GHz', minHz: 5.925e9, maxHz: 7.125e9, color: '#22d3d1', category: 'civilian' },
+  { id: 'weather-c', name: 'Wetterradar C', nameDE: 'Wetterradar (C-Band)', minHz: 5.25e9, maxHz: 5.725e9, color: '#0284c7', category: 'civilian' },
+  // WLAN 6 GHz: in der EU/DE ist nur das Low Band 5945-6425 MHz freigegeben
+  // (CEPT/ECC Dec. (20)01, EU-Beschluss 2021/1067). 6425-7125 MHz sind US-only.
+  { id: 'wifi-6e', name: 'WiFi 6E (EU)', nameDE: 'WLAN 6 GHz (EU)', minHz: 5.945e9, maxHz: 6.425e9, color: '#22d3d1', category: 'civilian' },
   // Marine-Navigationsradar (X-Band) und Wetterradar (X-Band)
   { id: 'marine-x', name: 'Marine Radar X', nameDE: 'Marine-Navigationsradar (X-Band)', minHz: 9.2e9, maxHz: 9.5e9, color: '#14b8a6', category: 'civilian' },
   { id: 'weather-x', name: 'Wetterradar X', nameDE: 'Wetterradar (X-Band)', minHz: 9.3e9, maxHz: 9.5e9, color: '#0369a1', category: 'civilian' },
@@ -214,7 +234,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'groundWave',
     applications: ['U-Boot-Kommunikation', 'Erdbebenforschung'],
-    notes: 'Durchdringt Seewasser bis ca. 200m. Extrem geringe Datenrate.'
+    notes: 'Eindringtiefe in Seewasser ca. 45 m bei 30 Hz (Skintiefe δ = 503/√(f·σ), σ ≈ 4 S/m). Extrem geringe Datenrate.'
   },
   {
     id: 'itu-slf',
@@ -226,7 +246,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'groundWave',
     applications: ['U-Boot-Kommunikation', 'Bergbau-Kommunikation'],
-    notes: 'Durchdringt Seewasser bis ca. 40m. Sehr grosse Antennen erforderlich.'
+    notes: 'Eindringtiefe in Seewasser ca. 15-45 m (Skintiefe bei 30-300 Hz). Sehr große Antennen erforderlich.'
   },
   {
     id: 'itu-ulf',
@@ -238,7 +258,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'groundWave',
     applications: ['U-Boot-Kommunikation', 'Geophysikalische Messungen'],
-    notes: 'Durchdringt Seewasser bis ca. 20m.'
+    notes: 'Eindringtiefe in Seewasser ca. 5-15 m (Skintiefe bei 300 Hz bis 3 kHz).'
   },
   {
     id: 'itu-vlf',
@@ -249,8 +269,8 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#2374ab',
     category: 'itu',
     propagation: 'groundWave',
-    applications: ['Zeitzeichensender (DCF77)', 'Navigation (Omega, LORAN)', 'U-Boot-Kommunikation'],
-    notes: 'Sehr stabile Ausbreitung. Wellenlänge 10-100 km.'
+    applications: ['Marine-VLF (z. B. DHO38, 23,4 kHz)', 'Omega-Navigation (10,2-13,6 kHz, 1997 eingestellt)', 'U-Boot-Kommunikation'],
+    notes: 'Sehr stabile Ausbreitung. Wellenlänge 10-100 km. DCF77 (77,5 kHz) und LORAN-C (100 kHz) liegen dagegen im LF-Band.'
   },
   {
     id: 'itu-lf',
@@ -261,7 +281,7 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#2e86c1',
     category: 'itu',
     propagation: 'groundWave',
-    applications: ['Langwellen-Rundfunk', 'Navigation (NDB)', 'LORAN-C', 'RFID (134 kHz)'],
+    applications: ['Langwellen-Rundfunk', 'Zeitzeichensender (DCF77, 77,5 kHz)', 'Navigation (NDB)', 'LORAN-C (100 kHz)', 'RFID (134 kHz)'],
     notes: 'Bodenwelle reicht mehrere 100 km. Nachts Raumwelle möglich.'
   },
   {
@@ -286,7 +306,7 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'skyWave',
     applications: ['Kurzwellen-Rundfunk', 'Amateurfunk (80m-10m)', 'Seefunk', 'Flugfunk (HF)', 'OTH-Radar'],
-    notes: 'Weltweite Reichweite durch Ionosphärenreflexion. Stark von Sonnenaktivitaet abhängig.'
+    notes: 'Weltweite Reichweite durch Ionosphärenreflexion. Stark von Sonnenaktivität abhängig.'
   },
   {
     id: 'itu-vhf',
@@ -353,6 +373,13 @@ export const ITU_BANDS: ITUBand[] = [
 /**
  * Electromagnetic Spectrum bands
  * Major divisions of the electromagnetic spectrum
+ *
+ * ACHTUNG (bekannte Inkonsistenz, siehe Bericht 04 Befund 11/55):
+ * Es existiert ein zweiter, gleichnamiger Export `EM_BANDS` in
+ * `src/lib/data/spectrum.ts` mit abweichenden Grenzen (dort Radio 3 kHz-300 MHz,
+ * Mikrowelle 300 MHz-300 GHz; hier Radio 3 Hz-300 GHz). Beide werden derzeit
+ * parallel genutzt. Die Zusammenführung auf eine Single Source of Truth ist
+ * bewusst dem Tech-Debt-Schritt vorbehalten und wird hier nur dokumentiert.
  */
 export const EM_BANDS: FrequencyBand[] = [
   { id: 'em-radio', name: 'Radio', nameDE: 'Radiowellen', minHz: 3, maxHz: 300e9, color: '#3b82f6', category: 'em' },
@@ -360,7 +387,7 @@ export const EM_BANDS: FrequencyBand[] = [
   { id: 'em-infrared', name: 'Infrared', nameDE: 'Infrarot', minHz: 300e9, maxHz: 400e12, color: '#ef4444', category: 'em' },
   { id: 'em-visible', name: 'Visible', nameDE: 'Sichtbares Licht', minHz: 400e12, maxHz: 800e12, color: '#22c55e', category: 'em' },
   { id: 'em-ultraviolet', name: 'Ultraviolet', nameDE: 'Ultraviolett', minHz: 800e12, maxHz: 30e15, color: '#8b5cf6', category: 'em' },
-  { id: 'em-xray', name: 'X-Ray', nameDE: 'Roentgenstrahlung', minHz: 30e15, maxHz: 30e18, color: '#06b6d4', category: 'em' },
+  { id: 'em-xray', name: 'X-Ray', nameDE: 'Röntgenstrahlung', minHz: 30e15, maxHz: 30e18, color: '#06b6d4', category: 'em' },
   { id: 'em-gamma', name: 'Gamma', nameDE: 'Gammastrahlung', minHz: 30e18, maxHz: Infinity, color: '#ec4899', category: 'em' },
 ];
 
@@ -444,6 +471,17 @@ export function getCivilianBandsForFrequency(frequencyHz: number): FrequencyBand
  * @param maxHz - Maximum frequency in Hertz
  * @returns Formatted string like "2-4 GHz"
  */
+/**
+ * Entfernt Gleitkomma-Artefakte (z. B. 3.3000000000000003 -> 3.3), ohne
+ * signifikante Stellen zu verlieren (z. B. 526.5 bleibt 526.5).
+ * PRECISION_DIGITS: 6 signifikante Stellen reichen für alle Bandgrenzen.
+ */
+const PRECISION_DIGITS = 6;
+
+function trimFloat(value: number): number {
+  return Number(value.toPrecision(PRECISION_DIGITS));
+}
+
 export function formatFrequencyRange(minHz: number, maxHz: number): string {
   const formatValue = (hz: number): { value: number; unit: string } => {
     if (hz >= 1e12) return { value: hz / 1e12, unit: 'THz' };
@@ -453,12 +491,19 @@ export function formatFrequencyRange(minHz: number, maxHz: number): string {
     return { value: hz, unit: 'Hz' };
   };
 
+  // Guard: Infinity/NaN (z. B. em-gamma mit maxHz = Infinity)
+  if (!isFinite(minHz) || !isFinite(maxHz)) {
+    const finite = isFinite(minHz) ? formatValue(minHz) : null;
+    return finite ? `ab ${trimFloat(finite.value)} ${finite.unit}` : 'unbegrenzt';
+  }
+
   const min = formatValue(minHz);
   const max = formatValue(maxHz);
 
   // Use the larger unit for both if they differ
   if (min.unit === max.unit) {
-    return `${min.value}-${max.value} ${min.unit}`;
+    // trimFloat entfernt Gleitkomma-Artefakte wie 3.3000000000000003
+    return `${trimFloat(min.value)}-${trimFloat(max.value)} ${min.unit}`;
   }
 
   // Different units - show both

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import { IEEE_BANDS } from '$lib/data/bands';
 
   // Animation state for radar diagram
@@ -80,20 +81,6 @@
     isAnimating = !isAnimating;
   }
 </script>
-
-<svelte:head>
-  <title>Radar-Grundlagen - Bandbreite</title>
-  <meta
-    name="description"
-    content="Umfassendes Nachschlagewerk zu Radar-Grundlagen: Radargleichung, RCS, Doppler-Radar, FMCW und Radarbänder."
-  />
-  <meta property="og:title" content="Radar-Grundlagen | Bandbreite" />
-  <meta property="og:description" content="Umfassendes Nachschlagewerk zu Radar-Grundlagen: Radargleichung, RCS, Doppler-Radar, FMCW und Radarbänder." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Radar-Grundlagen | Bandbreite" />
-  <meta name="twitter:description" content="Umfassendes Nachschlagewerk zu Radar-Grundlagen: Radargleichung, RCS, Doppler-Radar, FMCW und Radarbänder." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -627,7 +614,7 @@
     </div>
 
     <p class="table-note">
-      <a href="/wissen/frequenzbaender" class="internal-link"
+      <a href="/datenbanken/frequenzbaender/" class="internal-link"
         >Vollständige Übersicht aller Frequenzbänder</a
       >
     </p>
@@ -691,84 +678,7 @@
       </div>
     </div>
   </section>
-
-  <!-- Verwandte Themen -->
-  <section class="card">
-    <h2 class="text-heading-2">Verwandte Themen</h2>
-    <p class="section-description">
-      Vertiefe dein Wissen mit praktischen Rechnern und weiterführenden Informationen zur Radartechnik.
-    </p>
-    <div class="related-grid">
-      <a href="/rechner/radar" class="related-card">
-        <div class="related-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            <line x1="2" y1="12" x2="22" y2="12" />
-          </svg>
-        </div>
-        <div class="related-card-content">
-          <h4>Radar-Rechner</h4>
-          <p>Berechne Radar-Reichweiten mit der Radargleichung</p>
-        </div>
-      </a>
-
-      <a href="/wissen/mathematik" class="related-card">
-        <div class="related-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="4" y1="9" x2="20" y2="9" />
-            <line x1="4" y1="15" x2="20" y2="15" />
-            <line x1="10" y1="3" x2="8" y2="21" />
-            <line x1="16" y1="3" x2="14" y2="21" />
-          </svg>
-        </div>
-        <div class="related-card-content">
-          <h4>RF-Mathematik</h4>
-          <p>Mathematische Grundlagen inkl. Radargleichung</p>
-        </div>
-      </a>
-
-      <a href="/spektrum" class="related-card">
-        <div class="related-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-          </svg>
-        </div>
-        <div class="related-card-content">
-          <h4>Frequenzband-Explorer</h4>
-          <p>IEEE Radarbänder im Detail</p>
-        </div>
-      </a>
-
-      <a href="/wissen/frequenzbaender" class="related-card">
-        <div class="related-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-            <line x1="3" y1="9" x2="21" y2="9" />
-            <line x1="9" y1="21" x2="9" y2="9" />
-          </svg>
-        </div>
-        <div class="related-card-content">
-          <h4>Frequenzbänder</h4>
-          <p>Übersicht aller Radar-Frequenzbänder</p>
-        </div>
-      </a>
-
-      <a href="/rechner/fspl" class="related-card">
-        <div class="related-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 20V10" />
-            <path d="M12 20V4" />
-            <path d="M6 20v-6" />
-          </svg>
-        </div>
-        <div class="related-card-content">
-          <h4>FSPL-Rechner</h4>
-          <p>Freiraumdämpfung für Radar-Anwendungen</p>
-        </div>
-      </a>
-    </div>
-  </section>
+  <RelatedTopics href="/wissen/radar/" />
 </div>
 
 <style>
@@ -1294,74 +1204,5 @@
 
   .type-card li {
     margin-bottom: 0.25rem;
-  }
-
-  /* Related Topics Grid */
-  .related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .related-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1.25rem;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .related-card:hover {
-    border-color: var(--color-accent-primary);
-    background: var(--color-bg-surface);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .related-card-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary, #6366f1));
-    border-radius: var(--radius-md);
-    flex-shrink: 0;
-  }
-
-  .related-card-icon svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: white;
-  }
-
-  .related-card-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .related-card-content h4 {
-    margin: 0 0 0.25rem 0;
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    color: var(--color-text-primary);
-  }
-
-  .related-card-content p {
-    margin: 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-tertiary);
-    line-height: var(--line-height-normal);
-  }
-
-  @media (max-width: 640px) {
-    .related-grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>

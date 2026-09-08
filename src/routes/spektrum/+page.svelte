@@ -4,16 +4,9 @@
   import PowerConverter from '$lib/components/converters/PowerConverter.svelte';
   import RangeCalculator from '$lib/components/converters/RangeCalculator.svelte';
   import BandDetailSidebar from '$lib/components/BandDetailSidebar.svelte';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
+  import { getHubChildren } from '$lib/data/navigation';
   import type { FrequencyBand } from '$lib/data/bands';
-
-  interface SpectrumSection {
-    id: string;
-    title: string;
-    description: string;
-    href: string;
-    icon: string;
-    topics: string[];
-  }
 
   let currentFrequencyHz = $state<number | null>(null);
   let currentPowerWatt = $state<number | null>(1);
@@ -26,52 +19,9 @@
     currentFrequencyHz = Math.sqrt(band.minHz * band.maxHz);
   }
 
-  const sections: SpectrumSection[] = [
-    {
-      id: 'ionosphaere',
-      title: 'Ionosphärische Ausbreitung',
-      description: 'Ionosphärische Schichten und deren Einfluss auf die Funkwellenausbreitung. Wichtig für HF-Kommunikation über große Entfernungen.',
-      href: '/spektrum/ionosphaere',
-      icon: '🌐',
-      topics: ['D-Schicht', 'E-Schicht', 'F-Schicht', 'MUF/LUF', 'Raumwelle']
-    },
-    {
-      id: 'anwendungen',
-      title: 'Anwendungen nach Frequenzband',
-      description: 'Übersicht der typischen Anwendungen und Dienste in verschiedenen Frequenzbändern. Von Rundfunk bis Satellitenkommunikation.',
-      href: '/spektrum/anwendungen',
-      icon: '📻',
-      topics: ['Rundfunk', 'Mobilfunk', 'Radar', 'Satelliten', 'WLAN']
-    },
-    {
-      id: 'sendeleistungen',
-      title: 'Sendeleistungen im Frequenzspektrum',
-      description: 'Typische Sendeleistungen verschiedener Kommunikations-, Radar-, Satelliten- und IoT-Systeme im Frequenzspektrum.',
-      href: '/spektrum/sendeleistungen',
-      icon: '📡',
-      topics: ['Rundfunk', 'Radar', 'Mobilfunk', 'IoT', 'Satelliten']
-    },
-    {
-      id: 'daempfung',
-      title: 'Atmosphärische Dämpfung',
-      description: 'Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks und atmosphärische Fenster.',
-      href: '/spektrum/daempfung',
-      icon: '🌧️',
-      topics: ['O₂-Peak', 'H₂O-Peak', 'Atmosphärische Fenster', 'ITU-R P.676']
-    }
-  ];
+  // Unterseiten stammen aus der Navigations-Registry (Single Source of Truth).
+  const sections = getHubChildren('/spektrum/');
 </script>
-
-<svelte:head>
-  <title>Spektrum - Bandbreite</title>
-  <meta name="description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
-  <meta property="og:title" content="Spektrum | Bandbreite" />
-  <meta property="og:description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Spektrum | Bandbreite" />
-  <meta name="twitter:description" content="Übersicht über das elektromagnetische Spektrum: Frequenzbänder, ionosphärische Ausbreitung und Anwendungen im Funkspektrum." />
-</svelte:head>
 
 <div class="page-content">
   <!-- Page Header -->
@@ -149,12 +99,11 @@
   <section class="sections-grid">
     {#each sections as section (section.id)}
       <a href={section.href} class="section-card">
-        <div class="section-icon">{section.icon}</div>
         <div class="section-content">
-          <h2>{section.title}</h2>
+          <h2>{section.label}</h2>
           <p>{section.description}</p>
           <div class="topics">
-            {#each section.topics as topic (topic)}
+            {#each section.keywords ?? [] as topic (topic)}
               <span class="topic-tag">{topic}</span>
             {/each}
           </div>
@@ -163,6 +112,8 @@
       </a>
     {/each}
   </section>
+
+  <RelatedTopics href="/spektrum/" />
 </div>
 
 <style>
@@ -273,11 +224,6 @@
     border-color: var(--color-accent-primary);
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
-  }
-
-  .section-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
   }
 
   .section-content {

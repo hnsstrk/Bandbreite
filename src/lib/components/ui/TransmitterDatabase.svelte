@@ -25,21 +25,21 @@
 
   // Type colors
   const typeColors: Record<TransmitterType, string> = {
-    time_signal: '#3b82f6',
-    broadcast_lw: '#ef4444',
-    broadcast_mw: '#f97316',
-    broadcast_sw: '#eab308',
-    broadcast_fm: '#22c55e',
-    navigation: '#06b6d4',
-    amateur: '#ec4899',
-    utility: '#6b7280'
+    time_signal: 'var(--color-series-1)',
+    broadcast_lw: 'var(--color-series-6)',
+    broadcast_mw: 'var(--color-series-3)',
+    broadcast_sw: 'var(--color-series-7)',
+    broadcast_fm: 'var(--color-series-2)',
+    navigation: 'var(--color-series-5)',
+    amateur: 'var(--color-series-9)',
+    utility: 'var(--color-series-8)'
   };
 
   // Status colors and labels
   const statusConfig: Record<TransmitterStatus, { color: string; label: string }> = {
-    active: { color: 'text-green-600 dark:text-green-400', label: 'Aktiv' },
-    inactive: { color: 'text-red-500 dark:text-red-400', label: 'Inaktiv' },
-    unknown: { color: 'text-gray-500 dark:text-gray-400', label: 'Unbekannt' }
+    active: { color: 'text-cat-green', label: 'Aktiv' },
+    inactive: { color: 'text-danger', label: 'Inaktiv' },
+    unknown: { color: 'text-ink-subtle', label: 'Unbekannt' }
   };
 
   // Filtered transmitters
@@ -146,7 +146,7 @@
         onclick={() => handleTransmitterClick(transmitter)}
         class="w-full text-left p-3 rounded-lg transition-colors
                {isSelected
-                 ? 'bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-500'
+                 ? 'bg-info-soft ring-2 ring-brand'
                  : 'bg-surface-secondary hover:bg-surface-tertiary'}"
       >
         <div class="flex items-start justify-between">
@@ -211,7 +211,7 @@
         <!-- Frequency -->
         <div>
           <div class="text-label mb-1">Frequenz</div>
-          <div class="text-lg font-mono font-bold text-blue-500 dark:text-blue-400">
+          <div class="text-lg font-mono font-bold text-brand">
             {formatFrequency(selectedTransmitter.frequencyHz)}
           </div>
           {#if selectedTransmitter.frequencyHzSecondary}
@@ -223,7 +223,7 @@
             <button
               type="button"
               onclick={() => handleFrequencySelect(selectedTransmitter!.frequencyHz)}
-              class="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+              class="mt-2 px-3 py-1 bg-brand text-brand-on rounded text-sm hover:bg-brand-hover"
             >
               Frequenz übernehmen
             </button>

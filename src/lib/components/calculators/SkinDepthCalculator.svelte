@@ -1,11 +1,14 @@
 <script lang="ts">
   import * as d3 from "d3";
   import {
-    calculateSkinDepth,
     SEAWATER_CONDUCTIVITY,
     SEAWATER_PENETRATION,
-    VACUUM_PERMEABILITY,
+    GOOD_CONDUCTOR_LOSS_TANGENT_MIN,
   } from "$lib/data/constants";
+  import {
+    calculateSkinDepth,
+    calculateSkinDepthWithValidity,
+  } from "$lib/utils/calculations";
   import {
     formatFrequency,
     formatNumber,
@@ -25,6 +28,8 @@
   let frequencyHz = $state(10000);
   let conductivity = $state<number>(SEAWATER_CONDUCTIVITY);
   let selectedMedium = $state("seawater");
+  // Relative Permittivität εᵣ (ITU-R P.527) – für die Gültigkeitsprüfung σ ≫ ωε
+  let relativePermittivity = $state<number>(81);
 
   // Chart margins
   const margin = { top: 40, right: 120, bottom: 60, left: 80 };
@@ -41,13 +46,15 @@
       nameDE: "Seewasser",
       conductivity: 4,
       color: "#3b82f6",
+      relativePermittivity: 81,
     },
     {
       id: "freshwater",
       name: "Fresh Water",
-      nameDE: "Suesswasser",
+      nameDE: "Süßwasser",
       conductivity: 0.01,
       color: "#22c55e",
+      relativePermittivity: 81,
     },
     {
       id: "wet-earth",
@@ -55,6 +62,7 @@
       nameDE: "Feuchte Erde",
       conductivity: 0.1,
       color: "#8b5cf6",
+      relativePermittivity: 30,
     },
     {
       id: "dry-earth",
@@ -62,6 +70,7 @@
       nameDE: "Trockene Erde",
       conductivity: 0.001,
       color: "#f97316",
+      relativePermittivity: 5,
     },
     {
       id: "copper",
@@ -69,6 +78,7 @@
       nameDE: "Kupfer",
       conductivity: 5.96e7,
       color: "#ef4444",
+      relativePermittivity: 1,
     },
     {
       id: "aluminum",
@@ -76,6 +86,7 @@
       nameDE: "Aluminium",
       conductivity: 3.5e7,
       color: "#6b7280",
+      relativePermittivity: 1,
     },
   ];
 
@@ -90,12 +101,11 @@
     { label: "77.5 kHz", hz: 77500, desc: "DCF77" },
   ];
 
-  // Calculate skin depth
-  let skinDepthM = $derived(
-    frequencyHz > 0 && conductivity > 0
-      ? calculateSkinDepth(frequencyHz, conductivity)
-      : 0,
+  // Skin-Tiefe inkl. Gültigkeitsprüfung der Guter-Leiter-Näherung (F-16)
+  let skinDepthResult = $derived(
+    calculateSkinDepthWithValidity(frequencyHz, conductivity, relativePermittivity),
   );
+  let skinDepthM = $derived(skinDepthResult.depthM);
 
   // Practical communication depth (approx. 2-3 skin depths)
   let practicalDepthM = $derived(skinDepthM * 2.5);
@@ -209,6 +219,7 @@
   function setMedium(medium: (typeof mediumPresets)[0]) {
     selectedMedium = medium.id;
     conductivity = medium.conductivity;
+    relativePermittivity = medium.relativePermittivity;
   }
 
   function setFrequencyPreset(hz: number) {
@@ -596,17 +607,29 @@
       * sigma))
     </div>
     <div class="text-xs text-muted mt-2 text-center">
-      mit mu<sub>0</sub> = 4*pi*10<sup>-7</sup> H/m (Vakuumpermeabilitaet)
+      mit mu<sub>0</sub> = 4*pi*10<sup>-7</sup> H/m (Vakuumpermeabilität); gültig für gute Leiter (σ ≫ ωε)
     </div>
   </div>
+
+  {#if skinDepthM > 0 && !skinDepthResult.isGoodConductor}
+    <div
+      class="mt-4 p-3 rounded-lg text-sm bg-amber-50 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"
+      role="alert"
+    >
+      <strong>Hinweis:</strong> Bei dieser Frequenz ist σ/(ωε) ≈ {formatNumber(skinDepthResult.lossTangent, 1)}
+      (&lt; {GOOD_CONDUCTOR_LOSS_TANGENT_MIN}). Die Guter-Leiter-Näherung δ = √(2/(ωμσ)) gilt nur für
+      σ ≫ ωε; das Medium verhält sich hier eher wie ein verlustbehaftetes Dielektrikum, die
+      tatsächliche Eindringtiefe strebt gegen einen frequenzunabhängigen Grenzwert.
+    </div>
+  {/if}
 
   <!-- Explanation -->
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
       <strong>U-Boot-Kommunikation:</strong> U-Boote können nur bei sehr niedrigen
       Frequenzen (ELF/VLF) in getauchtem Zustand empfangen. Bei 76 Hz (US Navy ELF)
-      betraegt die Skin-Depth in Seewasser ca. 46 m, was eine praktische Empfangstiefe
-      von ~100 m ermöglicht.
+      beträgt die Skin-Depth in Seewasser ca. 29 m (bei 30 Hz ca. 46 m), was eine praktische
+      Empfangstiefe von ~70 m ermöglicht.
     </p>
     <p>
       <strong>Nachteile:</strong> Die extrem niedrige Frequenz bedeutet auch extrem

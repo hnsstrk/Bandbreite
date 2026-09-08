@@ -1,3 +1,1 @@
-<svelte:head>
-	<title>Bandbreite - RF-Frequenzrechner</title>
-</svelte:head>
+<p>Weiterleitung zum <a href="/spektrum/">Spektrum</a> …</p>

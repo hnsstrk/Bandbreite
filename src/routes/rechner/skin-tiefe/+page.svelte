@@ -1,17 +1,7 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import SkinDepthCalculator from '$lib/components/calculators/SkinDepthCalculator.svelte';
 </script>
-
-<svelte:head>
-  <title>Skin-Tiefe - Bandbreite</title>
-  <meta name="description" content="Berechnung der Skin-Tiefe (Eindringtiefe) in Leitern" />
-  <meta property="og:title" content="Skin-Tiefe | Bandbreite" />
-  <meta property="og:description" content="Berechnung der Skin-Tiefe (Eindringtiefe) in Leitern" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Skin-Tiefe | Bandbreite" />
-  <meta name="twitter:description" content="Berechnung der Skin-Tiefe (Eindringtiefe) in Leitern" />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -26,6 +16,7 @@
     <SkinDepthCalculator />
   </section>
 
+  <RelatedTopics href="/rechner/skin-tiefe/" />
 </div>
 
 <style>

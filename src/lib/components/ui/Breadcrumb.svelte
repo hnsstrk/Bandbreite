@@ -1,98 +1,40 @@
 <script lang="ts">
+  import { getBreadcrumbs } from '$lib/data/navigation';
+
   interface Props {
-    /** Die aktuelle URL/Pfad */
+    /** Aktueller Pfad, üblicherweise `page.url.pathname`. */
     currentPath: string;
   }
 
   let { currentPath }: Props = $props();
 
-  /** Mapping von URL-Segmenten zu lesbaren deutschen Namen */
-  const SEGMENT_LABELS: Record<string, string> = {
-    // Hauptkategorien
-    spektrum: 'Spektrum',
-    rechner: 'Rechner',
-    wissen: 'Wissen',
-    datenbanken: 'Referenz',
-    // Spektrum
-    explorer: 'Frequenzband-Explorer',
-    ionosphaere: 'Ionosphäre',
-    anwendungen: 'Anwendungen',
-    // Rechner
-    fspl: 'FSPL-Rechner',
-    'link-budget': 'Link Budget',
-    radar: 'Radar-Reichweite',
-    kanalkapazitaet: 'Kanalkapazität',
-    'skin-tiefe': 'Skin-Tiefe',
-    fresnel: 'Fresnel-Zone',
-    wellenausbreitung: 'Wellenausbreitung',
-    // Wissen
-    frequenzbaender: 'Frequenzbänder',
-    mathematik: 'RF-Mathematik',
-    // Datenbanken
-    sender: 'Senderdatenbank',
-    historie: 'Geschichte',
-    // Konverter
-    konverter: 'Konverter',
-    frequenz: 'Frequenzkonverter'
-  } as const;
+  /**
+   * Die Startseite ist ein 308-Redirect auf /spektrum/ — der Breadcrumb
+   * verlinkt deshalb direkt auf das Ziel und spart den Umweg.
+   */
+  const HOME_HREF = '/spektrum/';
 
-  /** Erzeugt Breadcrumb-Items aus dem Pfad */
-  interface BreadcrumbItem {
-    label: string;
-    href: string;
-    isLast: boolean;
-  }
-
-  const breadcrumbs = $derived.by(() => {
-    // Entferne führende/nachfolgende Slashes und teile den Pfad
-    const cleanPath = currentPath.replace(/^\/+|\/+$/g, '');
-
-    if (!cleanPath) {
-      return [];
-    }
-
-    const segments = cleanPath.split('/');
-    const items: BreadcrumbItem[] = [];
-
-    let cumulativePath = '';
-
-    for (let i = 0; i < segments.length; i++) {
-      const segment = segments[i];
-      cumulativePath += '/' + segment;
-
-      const label = SEGMENT_LABELS[segment] || formatSegment(segment);
-
-      items.push({
-        label,
-        href: cumulativePath,
-        isLast: i === segments.length - 1
-      });
-    }
-
-    return items;
-  });
-
-  /** Fallback-Formatierung für unbekannte Segmente */
-  function formatSegment(segment: string): string {
-    // Ersetze Bindestriche durch Leerzeichen und kapitalisiere Wörter
-    return segment
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
+  const breadcrumbs = $derived(getBreadcrumbs(currentPath));
+  const showHome = $derived(breadcrumbs[0]?.href !== HOME_HREF);
 </script>
 
 {#if breadcrumbs.length > 0}
-  <nav aria-label="Breadcrumb-Navigation" class="breadcrumb">
+  <nav aria-label="Brotkrümelnavigation" class="breadcrumb">
     <ol class="breadcrumb-list">
-      <li class="breadcrumb-item">
-        <a href="/" class="breadcrumb-link">Start</a>
-      </li>
-      {#each breadcrumbs as item (item.href)}
+      {#if showHome}
         <li class="breadcrumb-item">
-          <span class="breadcrumb-separator" aria-hidden="true">›</span>
+          <a href={HOME_HREF} class="breadcrumb-link">Start</a>
+        </li>
+      {/if}
+      {#each breadcrumbs as item, index (item.href)}
+        <li class="breadcrumb-item">
+          {#if index > 0 || showHome}
+            <span class="breadcrumb-separator" aria-hidden="true">›</span>
+          {/if}
           {#if item.isLast}
             <span class="breadcrumb-current" aria-current="page">{item.label}</span>
+          {:else if item.status === 'geplant'}
+            <span class="breadcrumb-planned">{item.label}</span>
           {:else}
             <a href={item.href} class="breadcrumb-link">{item.label}</a>
           {/if}
@@ -104,7 +46,7 @@
 
 <style>
   .breadcrumb {
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     line-height: 1.5;
   }
 
@@ -112,10 +54,10 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    gap: 0.25rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 0.25rem;
   }
 
   .breadcrumb-item {
@@ -125,14 +67,14 @@
   }
 
   .breadcrumb-separator {
-    color: var(--color-text-disabled);
     margin: 0 0.125rem;
+    color: var(--color-text-disabled);
   }
 
   .breadcrumb-link {
     color: var(--color-text-muted);
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color var(--transition-fast);
   }
 
   .breadcrumb-link:hover {
@@ -140,15 +82,19 @@
     text-decoration: underline;
   }
 
-  .breadcrumb-link:focus {
+  .breadcrumb-link:focus-visible {
     outline: 2px solid var(--color-focus);
     outline-offset: 2px;
-    border-radius: 0.125rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .breadcrumb-planned {
+    color: var(--color-text-disabled);
   }
 
   .breadcrumb-current {
     color: var(--color-text-primary);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
   }
 
   @media (max-width: 640px) {

@@ -1,18 +1,8 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import AtmosphericInputs from '$lib/components/converters/AtmosphericInputs.svelte';
   import AttenuationChart from '$lib/components/charts/AttenuationChart.svelte';
 </script>
-
-<svelte:head>
-  <title>Atmosphärische Dämpfung - Bandbreite</title>
-  <meta name="description" content="Atmosphärische Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks bei 22 GHz und 60 GHz." />
-  <meta property="og:title" content="Atmosphärische Dämpfung | Bandbreite" />
-  <meta property="og:description" content="Atmosphärische Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks bei 22 GHz und 60 GHz." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Atmosphärische Dämpfung | Bandbreite" />
-  <meta name="twitter:description" content="Atmosphärische Dämpfung durch Sauerstoff und Wasserdampf nach ITU-R P.676. Absorptionspeaks bei 22 GHz und 60 GHz." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -73,23 +63,7 @@
   </section>
 
   <!-- Related Tools -->
-  <section class="card">
-    <h2 class="text-heading-2">Verwandte Werkzeuge</h2>
-    <div class="tools-grid">
-      <a href="/spektrum" class="tool-link">
-        <strong>EM-Spektrum & Bänder</strong>
-        <span>Interaktive Bandübersicht</span>
-      </a>
-      <a href="/rechner/fspl" class="tool-link">
-        <strong>FSPL-Rechner</strong>
-        <span>Freiraumdämpfung berechnen</span>
-      </a>
-      <a href="/spektrum/sendeleistungen" class="tool-link">
-        <strong>Sendeleistungen</strong>
-        <span>Leistung über Frequenz</span>
-      </a>
-    </div>
-  </section>
+  <RelatedTopics href="/spektrum/daempfung/" />
 </div>
 
 <style>
@@ -154,36 +128,4 @@
     line-height: var(--line-height-relaxed);
   }
 
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .tool-link {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .tool-link:hover {
-    border-color: var(--color-accent-primary);
-    background: var(--color-bg-surface);
-  }
-
-  .tool-link strong {
-    color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  .tool-link span {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-  }
 </style>

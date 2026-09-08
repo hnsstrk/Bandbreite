@@ -14,10 +14,6 @@ export default defineConfig({
       include: ['src/lib/**/*.ts'],
       exclude: ['src/lib/**/*.svelte', 'src/lib/**/*.d.ts']
     }
-  },
-  resolve: {
-    alias: {
-      $lib: '/Users/hnsstrk/Repositories/bandbreite/src/lib'
-    }
   }
+  // Kein manueller $lib-Alias: das sveltekit()-Plugin liefert ihn maschinenunabhängig.
 });

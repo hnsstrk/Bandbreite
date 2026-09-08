@@ -1,17 +1,7 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import IonosphericPropagation from '$lib/components/charts/IonosphericPropagation.svelte';
 </script>
-
-<svelte:head>
-  <title>Ionosphäre - Bandbreite</title>
-  <meta name="description" content="Ionosphärische Ausbreitung und Kurzwellenkommunikation: Schichten, MUF, LUF und deren Einfluss auf HF-Verbindungen." />
-  <meta property="og:title" content="Ionosphäre | Bandbreite" />
-  <meta property="og:description" content="Ionosphärische Ausbreitung und Kurzwellenkommunikation: Schichten, MUF, LUF und deren Einfluss auf HF-Verbindungen." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Ionosphäre | Bandbreite" />
-  <meta name="twitter:description" content="Ionosphärische Ausbreitung und Kurzwellenkommunikation: Schichten, MUF, LUF und deren Einfluss auf HF-Verbindungen." />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -220,25 +210,7 @@
   </section>
 
   <!-- Related -->
-  <section class="card">
-    <h2 class="text-heading-2">Verwandte Themen</h2>
-    <div class="related-links">
-      <a href="/wissen/wellenausbreitung" class="related-link">
-        <span class="related-icon">📡</span>
-        <div>
-          <strong>Wellenausbreitung</strong>
-          <p>Alle Ausbreitungsmodi im Überblick</p>
-        </div>
-      </a>
-      <a href="/rechner/fspl" class="related-link">
-        <span class="related-icon">📉</span>
-        <div>
-          <strong>FSPL-Rechner</strong>
-          <p>Freiraumdämpfung berechnen</p>
-        </div>
-      </a>
-    </div>
-  </section>
+  <RelatedTopics href="/spektrum/ionosphaere/" />
 </div>
 
 <style>
@@ -458,46 +430,5 @@
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
     line-height: var(--line-height-relaxed);
-  }
-
-  /* Related Links */
-  .related-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .related-link {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-  }
-
-  .related-link:hover {
-    border-color: var(--color-accent-primary);
-    background: var(--color-bg-surface);
-  }
-
-  .related-icon {
-    font-size: 1.5rem;
-  }
-
-  .related-link strong {
-    display: block;
-    color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  .related-link p {
-    margin: 0;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
   }
 </style>

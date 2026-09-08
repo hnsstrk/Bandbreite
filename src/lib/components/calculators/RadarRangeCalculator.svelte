@@ -1,17 +1,17 @@
 <script lang="ts">
   import { frequencyToWavelength } from '$lib/utils/calculations';
-  import { convertToHz } from '$lib/utils/conversions';
-  import { FREQUENCY_UNITS, DISTANCE_UNITS } from '$lib/data/units';
+  import { convertToHz, wattToDbm } from '$lib/utils/conversions';
+  import { FREQUENCY_UNITS, getDistanceFactor } from '$lib/data/units';
+  import { RCS_REFERENCE } from '$lib/data/constants';
+  import { formatDistance, formatNumber } from '$lib/utils/formatting';
+  import { parseNumericInput, parseSelectValue } from '$lib/utils/handlers';
   import {
-    formatFrequency,
-    formatDistance,
-    formatPowerWatts,
-    formatPowerDbm,
-    formatNumber
-  } from '$lib/utils/formatting';
-  import { parseNumericInput, parseSelectValue, safeDivide, safePow, safeLog } from '$lib/utils/handlers';
-  import { SPEED_OF_LIGHT } from '$lib/data/constants';
+    calculateRadarMaxRange,
+    calculateRadarReceivedPowerDbm,
+    type RadarParameters
+  } from '$lib/utils/radar';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import RadarPulseParameters from './RadarPulseParameters.svelte';
 
   interface Props {
     frequencyHz?: number | null;
@@ -26,21 +26,14 @@
   let antennaGainDbi = $state(30);
   let rcsM2 = $state(1);
   let rxSensitivityDbm = $state(-90);
+  let systemLossDb = $state(0);
 
-  // RCS Presets (Radar Cross Section in m^2)
-  const rcsPresets = [
-    { label: 'Mensch', value: 1, desc: 'Typisch 0.5-1 m^2' },
-    { label: 'PKW', value: 10, desc: 'Mittelklasse Auto' },
-    { label: 'LKW', value: 100, desc: 'Grosser LKW' },
-    { label: 'Kleinflugzeug', value: 5, desc: 'Cessna-Klasse' },
-    { label: 'Verkehrsflugzeug', value: 100, desc: 'Boeing 737' },
-    { label: 'Kampfjet', value: 1, desc: 'Moderne Stealth: 0.001-0.1' },
-    { label: 'Stealth-Jet', value: 0.01, desc: 'F-22/F-35 Klasse' },
-    { label: 'Vogel', value: 0.01, desc: 'Moeve, Taube' },
-    { label: 'Drohne', value: 0.1, desc: 'Kleine Drohne' },
-    { label: 'Schiff (klein)', value: 1000, desc: 'Segelboot' },
-    { label: 'Schiff (gross)', value: 100000, desc: 'Containerschiff' },
-  ];
+  // RCS-Presets aus der zentralen Referenztabelle (Skolnik) – einzige Quelle für RCS-Werte
+  const rcsPresets = RCS_REFERENCE.map((r) => ({ label: r.nameDE, value: r.rcsM2, desc: r.descriptionDE }));
+  const QUICK_RCS_IDS = ['human', 'car', 'airliner', 'fighter'];
+  const quickRcsPresets = QUICK_RCS_IDS.map((id) => RCS_REFERENCE.find((r) => r.id === id))
+    .filter((r) => r !== undefined)
+    .map((r) => ({ label: r.nameDE, value: r.rcsM2, desc: r.descriptionDE }));
 
   // Frequency presets for radar applications
   const frequencyPresets = [
@@ -68,51 +61,26 @@
   let antennaGainLinear = $derived(Math.pow(10, antennaGainDbi / 10));
 
   // Convert TX power to dBm for display
-  let txPowerDbm = $derived(10 * safeLog(txPowerWatts * 1000));
+  let txPowerDbm = $derived(wattToDbm(txPowerWatts));
 
-  // Convert RX sensitivity to Watts
-  let rxSensitivityWatts = $derived(Math.pow(10, (rxSensitivityDbm - 30) / 10));
-
-  /**
-   * Calculate maximum radar range using the radar equation
-   * Pr = (Pt * G^2 * lambda^2 * sigma) / ((4*pi)^3 * R^4)
-   * Solving for R: R = ((Pt * G^2 * lambda^2 * sigma) / ((4*pi)^3 * Pr))^(1/4)
-   */
-  let maxRangeM = $derived.by(() => {
-    if (wavelengthM <= 0 || txPowerWatts <= 0 || antennaGainLinear <= 0 || rcsM2 <= 0) {
-      return 0;
-    }
-
-    const pi = Math.PI;
-    const numerator = txPowerWatts * Math.pow(antennaGainLinear, 2) * Math.pow(wavelengthM, 2) * rcsM2;
-    const denominator = Math.pow(4 * pi, 3) * rxSensitivityWatts;
-
-    const rangeM = safePow(safeDivide(numerator, denominator, 0), 0.25, 0);
-    return rangeM;
+  // Radarparameter für die Utilities in $lib/utils/radar.ts
+  let radarParams = $derived<RadarParameters>({
+    txPowerW: txPowerWatts,
+    antennaGainDbi,
+    wavelengthM,
+    rcsM2,
+    systemLossDb
   });
 
-  /**
-   * Calculate received power at a specific range
-   */
-  function calculateRxPowerAtRange(rangeM: number): number {
-    if (rangeM <= 0 || wavelengthM <= 0) return -Infinity;
-
-    const pi = Math.PI;
-    const numerator = txPowerWatts * Math.pow(antennaGainLinear, 2) * Math.pow(wavelengthM, 2) * rcsM2;
-    const denominator = Math.pow(4 * pi, 3) * Math.pow(rangeM, 4);
-
-    const rxPowerWatts = safeDivide(numerator, denominator, 0);
-    if (rxPowerWatts <= 0) return -Infinity;
-
-    return 10 * safeLog(rxPowerWatts * 1000); // Convert to dBm
-  }
+  // Maximale Reichweite (Skolnik Gl. 1.7 inkl. Systemverluste L)
+  let maxRangeM = $derived(calculateRadarMaxRange(radarParams, rxSensitivityDbm));
 
   // Power at various ranges for display
   let powerAtRanges = $derived([
-    { range: 1000, power: calculateRxPowerAtRange(1000), label: '1 km' },
-    { range: 10000, power: calculateRxPowerAtRange(10000), label: '10 km' },
-    { range: 50000, power: calculateRxPowerAtRange(50000), label: '50 km' },
-    { range: 100000, power: calculateRxPowerAtRange(100000), label: '100 km' },
+    { range: 1000, power: calculateRadarReceivedPowerDbm(radarParams, 1000), label: '1 km' },
+    { range: 10000, power: calculateRadarReceivedPowerDbm(radarParams, 10000), label: '10 km' },
+    { range: 50000, power: calculateRadarReceivedPowerDbm(radarParams, 50000), label: '50 km' },
+    { range: 100000, power: calculateRadarReceivedPowerDbm(radarParams, 100000), label: '100 km' },
   ]);
 
   // Event handlers
@@ -138,6 +106,10 @@
 
   function handleSensitivityInput(e: Event) {
     rxSensitivityDbm = parseNumericInput(e, -100);
+  }
+
+  function handleSystemLossInput(e: Event) {
+    systemLossDb = Math.max(0, parseNumericInput(e, 0));
   }
 
   function setPresetFrequency(hz: number) {
@@ -294,7 +266,7 @@
         <span class="text-secondary text-sm w-8">m2</span>
       </div>
       <div class="flex flex-wrap gap-1 mt-1">
-        {#each rcsPresets.slice(0, 4) as preset (preset.label)}
+        {#each quickRcsPresets as preset (preset.label)}
           <button
             type="button"
             onclick={() => setPresetRcs(preset.value)}
@@ -331,6 +303,31 @@
       </div>
     </div>
 
+    <!-- System Loss Input -->
+    <div class="space-y-2">
+      <label for="radar-system-loss" class="text-label">
+        Systemverluste (L)
+        <InfoTooltip
+          title="Systemverluste"
+          short="Summe aller Verluste in Sender, Empfänger und Antennensystem"
+          detailed="Wellenleiter-, Duplexer-, Signalverarbeitungs- und Strahlformverluste. Typisch 3–10 dB (Skolnik). L steht im Nenner der Radargleichung."
+        />
+      </label>
+      <div class="flex items-center gap-2">
+        <input
+          id="radar-system-loss"
+          type="number"
+          value={systemLossDb}
+          oninput={handleSystemLossInput}
+          class="input-field flex-1"
+          step="0.5"
+          min="0"
+          max="30"
+        />
+        <span class="text-secondary text-sm w-8">dB</span>
+      </div>
+    </div>
+
     <!-- Wavelength Display -->
     <div class="space-y-2">
       <div class="text-label">Wellenlänge</div>
@@ -359,7 +356,7 @@
       </div>
       {#if maxRangeM > 0}
         <div class="text-sm text-muted mt-1">
-          = {formatNumber(maxRangeM / 1852, 1)} nmi
+          = {formatNumber(maxRangeM / getDistanceFactor('nmi'), 1)} nmi
         </div>
       {/if}
     </div>
@@ -401,19 +398,22 @@
   <div class="formula-box">
     <div class="text-xs text-muted mb-2">Radargleichung:</div>
     <div class="font-mono text-sm text-primary text-center">
-      P<sub>r</sub> = (P<sub>t</sub> * G<sup>2</sup> * lambda<sup>2</sup> * sigma) / ((4pi)<sup>3</sup> * R<sup>4</sup>)
+      P<sub>r</sub> = (P<sub>t</sub> * G<sup>2</sup> * lambda<sup>2</sup> * sigma) / ((4pi)<sup>3</sup> * R<sup>4</sup> * L)
     </div>
     <div class="text-xs text-muted mt-2 text-center">
-      R<sub>max</sub> = ((P<sub>t</sub> * G<sup>2</sup> * lambda<sup>2</sup> * sigma) / ((4pi)<sup>3</sup> * P<sub>r,min</sub>))<sup>1/4</sup>
+      R<sub>max</sub> = ((P<sub>t</sub> * G<sup>2</sup> * lambda<sup>2</sup> * sigma) / ((4pi)<sup>3</sup> * P<sub>r,min</sub> * L))<sup>1/4</sup>
     </div>
   </div>
+
+  <!-- Doppler / Puls-Parameter (Utilities in $lib/utils/radar.ts) -->
+  <RadarPulseParameters frequencyHz={currentFrequencyHz} {wavelengthM} />
 
   <!-- Explanation -->
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
       <strong>Hinweis:</strong> Die Radargleichung beschreibt die Beziehung zwischen Sendeleistung,
       Antennengewinn, Ziel-RCS und Reichweite. Die R<sup>4</sup>-Abhängigkeit bedeutet, dass eine
-      Verdoppelung der Reichweite eine 16-fache Erhoehung der Sendeleistung erfordert.
+      Verdoppelung der Reichweite eine 16-fache Erhöhung der Sendeleistung erfordert.
     </p>
     <p>
       <strong>Anwendungsbeispiele:</strong> Flugsicherungsradar (L/S-Band, 200-400 km),

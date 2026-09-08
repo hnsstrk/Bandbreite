@@ -51,7 +51,7 @@ export const DISTANCE: Explanation = {
 
 export const WAVELENGTH: Explanation = {
   title: 'Wellenlänge',
-  short: 'Raeumliche Ausdehnung einer Schwingung. Bestimmt Antennengröße und Ausbreitungsverhalten.',
+  short: 'Räumliche Ausdehnung einer Schwingung. Bestimmt Antennengröße und Ausbreitungsverhalten.',
   detailed: `
     <p><strong>Formel:</strong> <code>lambda = c / f</code></p>
     <p><strong>Beispiele:</strong></p>
@@ -72,7 +72,7 @@ export const EIRP: Explanation = {
   detailed: `
     <p><strong>Formel:</strong><br/>
     <code>EIRP = P_TX + G_TX - L_kabel</code></p>
-    <p><strong>Bedeutung:</strong> Aequivalente Leistung, die ein isotroper Strahler (Kugelstrahler) abgeben muesste, um dieselbe Feldstärke in Hauptstrahlrichtung zu erzeugen.</p>
+    <p><strong>Bedeutung:</strong> Äquivalente Leistung, die ein isotroper Strahler (Kugelstrahler) abgeben müsste, um dieselbe Feldstärke in Hauptstrahlrichtung zu erzeugen.</p>
     <p><strong>Regulierung:</strong> In der EU oft auf 20 dBm (100 mW) begrenzt für ISM-Bänder.</p>
   `
 };
@@ -96,7 +96,7 @@ export const TX_ANTENNA_GAIN: Explanation = {
   short: 'Verstärkung gegenüber isotropem Strahler. Konzentriert Energie in bestimmte Richtungen.',
   detailed: `
     <p><strong>Einheit:</strong> dBi (Dezibel bezogen auf isotropen Strahler)</p>
-    <p><strong>Wichtig:</strong> Der Gewinn erhoeht nicht die Gesamtleistung, sondern konzentriert die Abstrahlung.</p>
+    <p><strong>Wichtig:</strong> Der Gewinn erhöht nicht die Gesamtleistung, sondern konzentriert die Abstrahlung.</p>
     <p><strong>Typische Werte:</strong></p>
     <p>- Dipol: 2,15 dBi<br/>
     - Patch-Antenne: 6-9 dBi<br/>
@@ -282,7 +282,7 @@ export const ATMOSPHERIC_60GHZ: Explanation = {
     <p>- WiGig (802.11ad/ay): Kurzstrecken-WLAN<br/>
     - Wireless Backhaul: 100-500m<br/>
     - Sichere Kommunikation (begrenzte Reichweite)</p>
-    <p>Vorteil: Frequenz kann raeumlich wiederverwendet werden.</p>
+    <p>Vorteil: Frequenz kann räumlich wiederverwendet werden.</p>
   `
 };
 

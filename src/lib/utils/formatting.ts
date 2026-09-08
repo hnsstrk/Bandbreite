@@ -81,7 +81,28 @@ export function formatPrecisionNumber(
   if (Math.abs(value) < 0.001 || Math.abs(value) >= expThreshold) {
     return value.toExponential(expDigits);
   }
-  return value.toPrecision(precision).replace(/\.?0+$/, '');
+  // Number(...) entfernt nachgestellte Nullen der Mantisse, ohne signifikante
+  // Nullen ganzer Zahlen zu verstümmeln (100000 → "100000", nicht "1").
+  const rounded = Number(value.toPrecision(precision));
+  if (Math.abs(rounded) >= 1e21) return rounded.toExponential(expDigits);
+  return rounded.toString();
+}
+
+/**
+ * Format a radar cross section (area!) with an appropriate unit.
+ * Uses area conversion factors: 1 km² = 10⁶ m², 1 m² = 10⁴ cm² = 10⁶ mm².
+ *
+ * @param rcsM2 - Radar cross section in m²
+ * @returns Formatted string, e.g. "50.0 cm²", "10000 m²", "10.0 mm²"
+ */
+export function formatRcs(rcsM2: number | null | undefined): string {
+  if (rcsM2 === null || rcsM2 === undefined || !Number.isFinite(rcsM2) || rcsM2 < 0) {
+    return '—';
+  }
+  if (rcsM2 >= 1e6) return `${(rcsM2 / 1e6).toFixed(2)} km²`;
+  if (rcsM2 >= 1) return `${rcsM2.toFixed(0)} m²`;
+  if (rcsM2 >= 1e-4) return `${(rcsM2 * 1e4).toFixed(1)} cm²`;
+  return `${(rcsM2 * 1e6).toFixed(1)} mm²`;
 }
 
 /**

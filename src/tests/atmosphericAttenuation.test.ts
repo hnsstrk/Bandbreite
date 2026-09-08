@@ -143,12 +143,16 @@ describe('calculateRainCoefficients', () => {
     expect(k50).toBeGreaterThan(k20);
   });
 
-  it('should handle elevation angle', () => {
+  it('should handle elevation angle (P.838-3 Gl. 4: H/V hängen von θ ab, zirkular nicht)', () => {
     const horizontal0 = calculateRainCoefficients(10, 'horizontal', 0);
     const horizontal45 = calculateRainCoefficients(10, 'horizontal', 45);
-    // Different elevation angles should give same result for pure H/V polarization
-    // but circular will vary
-    expect(horizontal0.k).toBeCloseTo(horizontal45.k, 5);
+    const vertical0 = calculateRainCoefficients(10, 'vertical', 0);
+    // Bei 45° liegt k_H zwischen dem H-Wert (θ = 0) und dem H/V-Mittel (θ = 90°)
+    expect(horizontal45.k).toBeLessThan(horizontal0.k);
+    expect(horizontal45.k).toBeGreaterThan((horizontal0.k + vertical0.k) / 2);
+    const circular0 = calculateRainCoefficients(10, 'circular', 0);
+    const circular45 = calculateRainCoefficients(10, 'circular', 45);
+    expect(circular0.k).toBeCloseTo(circular45.k, 10);
   });
 });
 
@@ -408,5 +412,177 @@ describe('Edge cases and robustness', () => {
     const cloudburst = calculateRainAttenuation(10, 200, 'horizontal');
     expect(cloudburst).toBeGreaterThan(0);
     expect(Number.isFinite(cloudburst)).toBe(true);
+  });
+});
+
+// ============================================================================
+// Referenzwert-Tests (Bericht 03, Abschnitt 4.3) – ITU-R P.676-13 / P.838-3 / P.840
+// ============================================================================
+
+import { calculateEarthSpaceAttenuation, calculateExtendedPathAttenuation } from '$lib/utils/atmosphericAttenuation';
+
+const STD = { temperatureK: 288.15, pressureHpa: 1013.25, waterVaporDensity: 7.5 };
+
+describe('Gasdämpfung gegen ITU-R P.676-13 Referenzen (1013.25 hPa, 288.15 K, 7.5 g/m³)', () => {
+  const cases: [number, number, number][] = [
+    [10, 0.015, 0.25],
+    [22.235, 0.19, 0.2],
+    [35, 0.1, 0.3],
+    [50, 0.35, 0.3],
+    [60, 15, 0.2],
+    [70, 0.55, 0.4],
+    [94, 0.4, 0.3],
+    [118.75, 2.0, 0.3],
+    [140, 1.0, 0.3],
+    [183.31, 28, 0.2],
+    [220, 2.5, 0.3]
+  ];
+  it.each(cases)('f = %s GHz → ≈ %s dB/km', (f, ref, tol) => {
+    const r = calculateAtmosphericAttenuation(f, STD);
+    expect(r.total).toBeGreaterThan(ref * (1 - tol));
+    expect(r.total).toBeLessThan(ref * (1 + tol));
+  });
+
+  it('Wasserdampf: 15 g/m³ ≈ 2 × 7,5 g/m³ (±5 %)', () => {
+    const a = calculateWaterVaporAttenuation(22.235, 1013.25, 7.5, 288.15);
+    const b = calculateWaterVaporAttenuation(22.235, 1013.25, 15, 288.15);
+    expect(b / a).toBeGreaterThan(1.9);
+    expect(b / a).toBeLessThan(2.1);
+  });
+
+  it('1 GHz liegt bei ≈ 0,005–0,007 dB/km (keine überhöhte 183-GHz-Fernflanke)', () => {
+    expect(calculateAtmosphericAttenuation(1, STD).total).toBeLessThan(0.008);
+  });
+});
+
+describe('Regenkoeffizienten gegen ITU-R P.838-3 Tabelle 5', () => {
+  const cases: [number, number, number, number, number][] = [
+    // f, kH, αH, kV, αV
+    [1, 0.0000259, 0.9691, 0.0000308, 0.8592],
+    [10, 0.01217, 1.2571, 0.01129, 1.2156],
+    [20, 0.09164, 1.0568, 0.09611, 0.9847],
+    [30, 0.2403, 0.9485, 0.2291, 0.9129]
+  ];
+  it.each(cases)('f = %s GHz', (f, kH, aH, kV, aV) => {
+    const h = calculateRainCoefficients(f, 'horizontal');
+    const v = calculateRainCoefficients(f, 'vertical');
+    expect(h.k / kH).toBeCloseTo(1, 2);
+    expect(h.alpha / aH).toBeCloseTo(1, 2);
+    expect(v.k / kV).toBeCloseTo(1, 2);
+    expect(v.alpha / aV).toBeCloseTo(1, 2);
+  });
+
+  it('zirkular = Mittel aus H und V, unabhängig von Elevation (P.838-3 Gl. 4/5, F-02)', () => {
+    const h = calculateRainCoefficients(10, 'horizontal');
+    const v = calculateRainCoefficients(10, 'vertical');
+    const c0 = calculateRainCoefficients(10, 'circular', 0);
+    const c45 = calculateRainCoefficients(10, 'circular', 45);
+    expect(c0.k).toBeCloseTo((h.k + v.k) / 2, 6);
+    expect(c0.k).toBeCloseTo(0.01173, 4);
+    expect(c0.alpha).toBeCloseTo((h.k * h.alpha + v.k * v.alpha) / (2 * c0.k), 6);
+    expect(c0.alpha).toBeCloseTo(1.2371, 3);
+    expect(c45.k).toBeCloseTo(c0.k, 10);
+    expect(c45.alpha).toBeCloseTo(c0.alpha, 10);
+  });
+
+  it('H-Polarisation bei 90° Elevation = Mittel aus H und V', () => {
+    expect(calculateRainCoefficients(10, 'horizontal', 90).k).toBeCloseTo(0.01173, 4);
+    expect(calculateRainCoefficients(10, 'vertical', 90).k).toBeCloseTo(0.01173, 4);
+  });
+
+  it('Guard: f = 0 / außerhalb 1–1000 GHz liefert {0, 0} statt NaN (F-18)', () => {
+    expect(calculateRainCoefficients(0, 'horizontal')).toEqual({ k: 0, alpha: 0 });
+    expect(calculateRainCoefficients(0.5, 'vertical')).toEqual({ k: 0, alpha: 0 });
+    expect(calculateRainCoefficients(NaN, 'circular')).toEqual({ k: 0, alpha: 0 });
+    expect(calculateRainCoefficients(2000, 'horizontal')).toEqual({ k: 0, alpha: 0 });
+  });
+});
+
+describe('Regendämpfung Referenzwerte (P.838-3, ±1 %)', () => {
+  const cases: [number, number, 'horizontal' | 'vertical' | 'circular', number][] = [
+    [10, 25, 'horizontal', 0.696],
+    [10, 25, 'vertical', 0.565],
+    [10, 25, 'circular', 0.627],
+    [10, 50, 'horizontal', 1.663],
+    [20, 25, 'horizontal', 2.751],
+    [30, 25, 'horizontal', 5.089],
+    [28, 12.5, 'horizontal', 2.364],
+    [12, 12.5, 'horizontal', 0.473]
+  ];
+  it.each(cases)('%s GHz, %s mm/h, %s → %s dB/km', (f, r, pol, ref) => {
+    expect(calculateRainAttenuation(f, r, pol) / ref).toBeCloseTo(1, 2);
+  });
+  it('0 bei 0,5 GHz oder 0 mm/h', () => {
+    expect(calculateRainAttenuation(0.5, 25)).toBe(0);
+    expect(calculateRainAttenuation(10, 0)).toBe(0);
+  });
+});
+
+describe('Nebel Referenzwerte (P.840, ±5 %)', () => {
+  it('K_l: 10 GHz/0 °C → 0,093; 30 GHz/20 °C → 0,470; 100 GHz/0 °C → 4,89', () => {
+    expect(calculateFogCoefficient(10, 273.15) / 0.093).toBeCloseTo(1, 1);
+    expect(calculateFogCoefficient(30, 293.15) / 0.47).toBeCloseTo(1, 1);
+    expect(calculateFogCoefficient(100, 273.15) / 4.89).toBeCloseTo(1, 1);
+  });
+  it('30 GHz, 0,5 g/m³, 0 °C → 0,387 dB/km', () => {
+    expect(calculateFogAttenuation(30, 0.5, 273.15) / 0.387).toBeCloseTo(1, 1);
+  });
+});
+
+describe('Schneedämpfung (F-01, F-05)', () => {
+  it('ist stetig in f (keine Sprünge bei 10 und 40 GHz)', () => {
+    expect(calculateSnowAttenuation(10.001, 5, true) / calculateSnowAttenuation(9.999, 5, true)).toBeCloseTo(1, 1);
+    expect(calculateSnowAttenuation(40.001, 5, false) / calculateSnowAttenuation(39.999, 5, false)).toBeCloseTo(1, 1);
+    expect(calculateSnowAttenuation(10.001, 5, false) / calculateSnowAttenuation(9.999, 5, false)).toBeCloseTo(1, 1);
+  });
+
+  it('Nassschnee entspricht Regen gleicher Wasseräquivalent-Rate (P.530-18)', () => {
+    expect(calculateSnowAttenuation(20, 5, true)).toBeCloseTo(calculateRainAttenuation(20, 5, 'horizontal'), 6);
+  });
+
+  it('Trockenschnee: Gunn & East – 10 GHz, 5 mm/h → 0,0043 dB/km; nie über Regen', () => {
+    expect(calculateSnowAttenuation(10, 5, false)).toBeCloseTo(0.0043, 3);
+    expect(calculateSnowAttenuation(30, 5, false)).toBeLessThan(calculateRainAttenuation(30, 5, 'horizontal'));
+    expect(calculateSnowAttenuation(94, 5, false)).toBeLessThanOrEqual(calculateRainAttenuation(94, 5, 'horizontal'));
+  });
+
+  it('behandelt Schnee bei −5 °C als Trockenschnee, bei +1 °C als Nassschnee', () => {
+    const base = {
+      pressureHpa: 1013.25, waterVaporDensity: 7.5, rainRateMmH: 0, fogDensityGM3: 0,
+      snowRateMmH: 5, polarization: 'horizontal' as const, elevationAngleDeg: 0
+    };
+    const cold = calculateAllAttenuation(30, { ...base, temperatureK: 268.15 });
+    const warm = calculateAllAttenuation(30, { ...base, temperatureK: 274.15 });
+    expect(cold.snow).toBeCloseTo(calculateSnowAttenuation(30, 5, false), 10);
+    expect(warm.snow).toBeCloseTo(calculateSnowAttenuation(30, 5, true), 10);
+    expect(warm.snow).toBeGreaterThan(cold.snow);
+  });
+});
+
+describe('Erde–Raum-Pfad (F-13)', () => {
+  const conditions = {
+    ...STD, rainRateMmH: 0, fogDensityGM3: 0, snowRateMmH: 0,
+    polarization: 'horizontal' as const, elevationAngleDeg: 0
+  };
+
+  it('12 GHz, 30°: Gasdämpfung ≈ 0,1 dB statt hunderten dB über 36 000 km', () => {
+    const slant = calculateEarthSpaceAttenuation(12, conditions, 30);
+    const terrestrial = calculateExtendedPathAttenuation(12, conditions, 36000);
+    expect(slant.totalDb).toBeGreaterThan(0.08);
+    expect(slant.totalDb).toBeLessThan(0.2);
+    expect(terrestrial.totalDb).toBeGreaterThan(400);
+    expect(slant.totalAllDb).toBeCloseTo(slant.totalDb, 12);
+  });
+
+  it('Regen wird über h_R/sin θ (3 km / sin 30° = 6 km) berücksichtigt', () => {
+    const rainy = calculateEarthSpaceAttenuation(12, { ...conditions, rainRateMmH: 12.5 }, 30);
+    expect(rainy.rainTotal).toBeCloseTo(rainy.rainPerKm * 6, 6);
+    // Bei 30° Elevation gilt k(θ) nach Gl. 4 (nicht der θ = 0-Wert 0,473 dB/km)
+    expect(rainy.rainPerKm).toBeCloseTo(calculateRainAttenuation(12, 12.5, 'horizontal', 30), 9);
+    expect(calculateRainAttenuation(12, 12.5, 'horizontal', 0)).toBeCloseTo(0.473, 2);
+  });
+
+  it('0 bei ungültiger Elevation', () => {
+    expect(calculateEarthSpaceAttenuation(12, conditions, 0).totalAllDb).toBe(0);
   });
 });

@@ -59,13 +59,13 @@
       "id": "sw-broadcast",
       "name": "Shortwave Broadcast",
       "nameDE": "Kurzwellen-Rundfunk",
-      "minHz": 5900000,
+      "minHz": 2300000,
       "maxHz": 26100000,
       "category": "broadcast",
       "description": "International shortwave broadcasting (multiple bands)",
       "descriptionDE": "Internationaler Kurzwellen-Rundfunk (verschiedene Bänder)",
       "region": "worldwide",
-      "notes": "Mehrere Teilbänder: 49m, 41m, 31m, 25m, 22m, 19m, 16m, 13m, 11m",
+      "notes": "Teilbänder 120m, 90m, 75m, 60m (Tropenbänder, 2,3-5,06 MHz) sowie 49m, 41m, 31m, 25m, 22m, 19m, 16m, 15m, 13m, 11m",
       "power": {
         "typical": {
           "value": 250,
@@ -121,7 +121,7 @@
       "descriptionDE": "Digitaler Rundfunk im VHF-Band III",
       "region": "europe",
       "standard": "ETSI EN 300 401",
-      "notes": "Bloecke 5A-13F, je 1,536 MHz Bandbreite",
+      "notes": "Blöcke 5A-13F, je 1,536 MHz Bandbreite",
       "power": {
         "typical": {
           "value": 4,
@@ -149,7 +149,7 @@
       "descriptionDE": "Digitaler Rundfunk im L-Band",
       "region": "europe",
       "standard": "ETSI EN 300 401",
-      "notes": "Bloecke LA-LW, in Deutschland nicht genutzt",
+      "notes": "Blöcke LA-LW. In Deutschland nicht für DAB genutzt: der Bereich 1452-1492 MHz ist seit 2015 als Supplemental Downlink (LTE Band 32 / NR n75) zugeteilt.",
       "power": {
         "typical": {
           "value": 2,
@@ -177,7 +177,7 @@
       "descriptionDE": "Digitales terrestrisches Fernsehen",
       "region": "europe",
       "standard": "ETSI EN 302 755",
-      "notes": "Kanaele 21-48, oberer Bereich (700 MHz) an Mobilfunk abgegeben",
+      "notes": "Kanäle 21-48, oberer Bereich (700 MHz) an Mobilfunk abgegeben",
       "power": {
         "typical": {
           "value": 20,
@@ -347,7 +347,7 @@
       "descriptionDE": "4G LTE im 1800 MHz Band",
       "region": "europe",
       "standard": "3GPP TS 36.104",
-      "notes": "Refarming von GSM-1800. Hohe Kapazität in Staedten.",
+      "notes": "Refarming von GSM-1800. Hohe Kapazität in Städten.",
       "power": {
         "typical": {
           "value": 200,
@@ -517,7 +517,7 @@
       "descriptionDE": "WLAN im 2,4 GHz ISM-Band",
       "region": "worldwide",
       "standard": "IEEE 802.11b/g/n/ax",
-      "notes": "13 Kanaele in Europa (14 in Japan), nur 3 überlappungsfrei",
+      "notes": "13 Kanäle in Europa (14 in Japan), nur 3 überlappungsfrei",
       "power": {
         "typical": {
           "value": 100,
@@ -542,7 +542,7 @@
       "maxHz": 5350000000,
       "category": "wlan",
       "description": "WiFi in 5 GHz band (lower channels)",
-      "descriptionDE": "WLAN im 5 GHz Band (untere Kanaele)",
+      "descriptionDE": "WLAN im 5 GHz Band (untere Kanäle)",
       "region": "worldwide",
       "standard": "IEEE 802.11a/n/ac/ax",
       "notes": "UNII-2 erfordert DFS (Radar Detection) in Europa",
@@ -570,7 +570,7 @@
       "maxHz": 5725000000,
       "category": "wlan",
       "description": "WiFi in 5 GHz band (upper channels)",
-      "descriptionDE": "WLAN im 5 GHz Band (obere Kanaele)",
+      "descriptionDE": "WLAN im 5 GHz Band (obere Kanäle)",
       "region": "worldwide",
       "standard": "IEEE 802.11a/n/ac/ax",
       "notes": "DFS erforderlich wegen Wetterradar",
@@ -722,16 +722,16 @@
     },
     {
       "id": "gps-l1",
-      "name": "GPS L1",
-      "nameDE": "GPS L1",
+      "name": "RNSS L1/E1 band",
+      "nameDE": "RNSS-Band L1/E1",
       "minHz": 1559000000,
       "maxHz": 1610000000,
       "category": "satellite",
-      "description": "GPS L1 signal (primary civilian)",
-      "descriptionDE": "GPS L1-Signal (primär zivil)",
+      "description": "RNSS allocation 1559-1610 MHz (GPS L1, Galileo E1, BeiDou B1, GLONASS L1)",
+      "descriptionDE": "RNSS-Zuweisung 1559-1610 MHz (GPS L1, Galileo E1, BeiDou B1, GLONASS L1)",
       "region": "worldwide",
       "standard": "IS-GPS-200",
-      "notes": "Hauptsignal für zivile Empfänger (1575,42 MHz)",
+      "notes": "Gesamtzuweisung des Bandes. GPS L1 selbst liegt bei 1575,42 MHz, GLONASS L1 bei 1602 MHz + k · 562,5 kHz.",
       "power": {
         "typical": {
           "value": 500,
@@ -822,7 +822,7 @@
       "description": "Fixed satellite services (C-Band downlink)",
       "descriptionDE": "Feste Satellitendienste (C-Band Downlink)",
       "region": "worldwide",
-      "notes": "Geringe Regendämpfung, grosse Antennen erforderlich",
+      "notes": "Geringe Regendämpfung, große Antennen erforderlich",
       "power": {
         "typical": {
           "value": 10,
@@ -1070,13 +1070,13 @@
       "id": "radar-police-ka",
       "name": "Speed Radar (Ka-Band)",
       "nameDE": "Geschwindigkeitsradar (Ka-Band)",
-      "minHz": 34000000000,
+      "minHz": 33400000000,
       "maxHz": 36000000000,
       "category": "radar",
       "description": "Police speed enforcement radar (Ka-Band)",
       "descriptionDE": "Polizei-Geschwindigkeitsmessung (Ka-Band)",
       "region": "usa",
-      "notes": "Häufig in USA, schwer zu detektieren",
+      "notes": "Funkortungszuteilung 33,4-36,0 GHz. Häufig in den USA, schwer zu detektieren.",
       "power": {
         "typical": {
           "value": 5,
@@ -1097,13 +1097,13 @@
       "id": "radar-automotive-24",
       "name": "Automotive Radar (24 GHz)",
       "nameDE": "Kfz-Radar (24 GHz)",
-      "minHz": 24000000000,
+      "minHz": 24050000000,
       "maxHz": 24250000000,
       "category": "radar",
       "description": "Short range automotive radar",
       "descriptionDE": "Kurzstrecken-Kfz-Radar",
       "region": "worldwide",
-      "notes": "Wird durch 77 GHz ersetzt (Auslauf 2022)",
+      "notes": "Ausgelaufen ist der UWB-Nahbereich 21,65-26,65 GHz (EU-Frist 01.01.2022). Der Schmalbandbereich 24,05-24,25 GHz bleibt nutzbar; neue Systeme arbeiten bei 76-81 GHz.",
       "power": {
         "typical": {
           "value": 10,
@@ -1150,6 +1150,48 @@
     }
   ],
   "amateur": [
+    {
+      "id": "ham-2200m",
+      "name": "Amateur 2200m Band",
+      "nameDE": "Amateurfunk 2200m",
+      "minHz": 135700,
+      "maxHz": 137800,
+      "category": "amateur",
+      "description": "Amateur 2200m Band",
+      "descriptionDE": "Längstwellenband mit nur 2,1 kHz Bandbreite",
+      "region": "europe",
+      "standard": "AFuV Anlage 1; IARU R1 Bandplan",
+      "notes": "Auf der WRC-07 zugewiesen, Sekundärstatus. Leistungsgrenze als EIRP.",
+      "power": {
+        "max": {
+          "value": 1,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Deutschland"
+        }
+      }
+    },
+    {
+      "id": "ham-630m",
+      "name": "Amateur 630m Band",
+      "nameDE": "Amateurfunk 630m",
+      "minHz": 472000,
+      "maxHz": 479000,
+      "category": "amateur",
+      "description": "Amateur 630m Band",
+      "descriptionDE": "Mittelwellenband oberhalb des historischen Seenot-Rufbereichs",
+      "region": "europe",
+      "standard": "AFuV Anlage 1; IARU R1 Bandplan",
+      "notes": "Auf der WRC-12 zugewiesen, Sekundärstatus. Leistungsgrenze als EIRP.",
+      "power": {
+        "max": {
+          "value": 1,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Deutschland"
+        }
+      }
+    },
     {
       "id": "ham-160m",
       "name": "Amateur 160m Band",
@@ -1205,6 +1247,27 @@
       }
     },
     {
+      "id": "ham-60m",
+      "name": "Amateur 60m Band",
+      "nameDE": "Amateurfunk 60m",
+      "minHz": 5351500,
+      "maxHz": 5366500,
+      "category": "amateur",
+      "description": "Amateur 60m Band",
+      "descriptionDE": "Schmalstes Kurzwellenband, schließt die Lücke zwischen 80 m und 40 m",
+      "region": "europe",
+      "standard": "AFuV Anlage 1; IARU R1 Bandplan",
+      "notes": "WRC-15-Sekundärzuweisung. In Deutschland durchgehender Bereich mit 15 W EIRP.",
+      "power": {
+        "max": {
+          "value": 15,
+          "unit": "W",
+          "type": "EIRP",
+          "context": "Deutschland"
+        }
+      }
+    },
+    {
       "id": "ham-40m",
       "name": "Amateur 40m Band",
       "nameDE": "Amateurfunk 40m",
@@ -1229,6 +1292,27 @@
           "context": "Klasse A (Deutschland)"
         },
         "notes": "USA: bis 1500 W erlaubt"
+      }
+    },
+    {
+      "id": "ham-30m",
+      "name": "Amateur 30m Band",
+      "nameDE": "Amateurfunk 30m",
+      "minHz": 10100000,
+      "maxHz": 10150000,
+      "category": "amateur",
+      "description": "Amateur 30m Band",
+      "descriptionDE": "Erstes WARC-Band, keine Telefonie und keine Conteste zugelassen",
+      "region": "europe",
+      "standard": "AFuV Anlage 1; IARU R1 Bandplan",
+      "notes": "Sekundärstatus gegenüber dem festen Funkdienst, deshalb 150 W PEP.",
+      "power": {
+        "max": {
+          "value": 150,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        }
       }
     },
     {
@@ -1259,6 +1343,27 @@
       }
     },
     {
+      "id": "ham-17m",
+      "name": "Amateur 17m Band",
+      "nameDE": "Amateurfunk 17m",
+      "minHz": 18068000,
+      "maxHz": 18168000,
+      "category": "amateur",
+      "description": "Amateur 17m Band",
+      "descriptionDE": "WARC-Band zwischen 20 m und 15 m, contestfrei",
+      "region": "europe",
+      "standard": "AFuV Anlage 1; IARU R1 Bandplan",
+      "notes": "WARC-79. Ausbreitung als Zwischenschritt zwischen 20 m und 15 m.",
+      "power": {
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        }
+      }
+    },
+    {
       "id": "ham-15m",
       "name": "Amateur 15m Band",
       "nameDE": "Amateurfunk 15m",
@@ -1268,7 +1373,7 @@
       "description": "DX band, solar cycle dependent",
       "descriptionDE": "DX-Band, sonnenzyklusabhängig",
       "region": "worldwide",
-      "notes": "Offen bei hoher Sonnenaktivitaet",
+      "notes": "Offen bei hoher Sonnenaktivität",
       "power": {
         "typical": {
           "value": 100,
@@ -1283,6 +1388,27 @@
           "context": "Klasse A (Deutschland)"
         },
         "notes": "Klasse E darf auf diesem Band senden"
+      }
+    },
+    {
+      "id": "ham-12m",
+      "name": "Amateur 12m Band",
+      "nameDE": "Amateurfunk 12m",
+      "minHz": 24890000,
+      "maxHz": 24990000,
+      "category": "amateur",
+      "description": "Amateur 12m Band",
+      "descriptionDE": "WARC-Band, öffnet nur bei mittlerer bis hoher Sonnenaktivität",
+      "region": "europe",
+      "standard": "AFuV Anlage 1; IARU R1 Bandplan",
+      "notes": "WARC-79. Bei geöffnetem Band sehr ergiebig und kaum belegt.",
+      "power": {
+        "max": {
+          "value": 750,
+          "unit": "W",
+          "type": "PEP",
+          "context": "Klasse A (Deutschland)"
+        }
       }
     },
     {
@@ -1317,12 +1443,12 @@
       "name": "Amateur 6m Band",
       "nameDE": "Amateurfunk 6m",
       "minHz": 50000000,
-      "maxHz": 54000000,
+      "maxHz": 52000000,
       "category": "amateur",
       "description": "Magic band, sporadic E propagation",
       "descriptionDE": "Magic Band, sporadische E-Ausbreitung",
-      "region": "worldwide",
-      "notes": "Übergang HF/VHF, unvorhersagbare Ausbreitung",
+      "region": "europe",
+      "notes": "Übergang HF/VHF, unvorhersagbare Ausbreitung. In ITU-Region 1 (DE) 50-52 MHz, in Region 2/3 50-54 MHz.",
       "power": {
         "typical": {
           "value": 25,
@@ -1337,6 +1463,27 @@
           "context": "Klasse A (Deutschland)"
         },
         "notes": "Klasse E: 25 W PEP, nur 50,08-51,0 MHz"
+      }
+    },
+    {
+      "id": "ham-4m",
+      "name": "Amateur 4m Band",
+      "nameDE": "Amateurfunk 4m",
+      "minHz": 70150000,
+      "maxHz": 70200000,
+      "category": "amateur",
+      "description": "Amateur 4m Band",
+      "descriptionDE": "In Deutschland kein reguläres Band, sondern befristete Allgemeinzuteilung",
+      "region": "europe",
+      "standard": "AFuV Anlage 1; IARU R1 Bandplan",
+      "notes": "Annahme: Grenzen und Gültigkeit wechselten mehrfach; aktuellen Stand bei der Bundesnetzagentur prüfen.",
+      "power": {
+        "max": {
+          "value": 25,
+          "unit": "W",
+          "type": "ERP",
+          "context": "Klasse A (Allgemeinzuteilung)"
+        }
       }
     },
     {
@@ -1615,13 +1762,13 @@
       "id": "nav-ads-b",
       "name": "ADS-B",
       "nameDE": "ADS-B",
-      "minHz": 1090000000,
-      "maxHz": 1090000000,
+      "minHz": 1089000000,
+      "maxHz": 1091000000,
       "category": "navigation",
       "description": "Automatic Dependent Surveillance Broadcast",
       "descriptionDE": "Automatische abhängige Überwachung",
       "region": "worldwide",
-      "notes": "Flugzeugposition per GPS, Pflicht seit 2020",
+      "notes": "Flugzeugposition per GPS, Pflicht seit 2020. Antwort-/Squitterfrequenz 1090 MHz +/- 1 MHz.",
       "power": {
         "typical": {
           "value": 125,
@@ -1637,6 +1784,19 @@
         },
         "notes": "Minimum: 70 W, typisch 125-500 W je nach Flugzeugklasse"
       }
+    },
+    {
+      "id": "nav-ssr-interrogation",
+      "name": "SSR/TCAS Interrogation",
+      "nameDE": "SSR-/TCAS-Abfrage",
+      "minHz": 1029000000,
+      "maxHz": 1031000000,
+      "category": "navigation",
+      "description": "Secondary surveillance radar and TCAS interrogations at 1030 MHz",
+      "descriptionDE": "Abfragen des Sekundärradars und der Kollisionswarnsysteme auf 1030 MHz",
+      "region": "worldwide",
+      "standard": "ICAO Annex 10 Vol. IV",
+      "notes": "Bodenstationen und TCAS fragen auf 1030 MHz ab, die Transponder antworten auf 1090 MHz."
     }
   ],
   "military": [
@@ -1650,7 +1810,7 @@
       "description": "One-way communication to submarines",
       "descriptionDE": "Einweg-Kommunikation zu U-Booten",
       "region": "worldwide",
-      "notes": "Durchdringt Seewasser bis ca. 20m bei 3 kHz",
+      "notes": "Skintiefe in Seewasser (Leitfähigkeit ca. 4 S/m): rund 4,6 m bei 3 kHz, rund 20 m bei 160 Hz. Formel: 503/Wurzel(f·Leitfähigkeit).",
       "power": {
         "typical": {
           "value": 500,
@@ -1779,13 +1939,13 @@
       "description": "Long-range surveillance radar",
       "descriptionDE": "Weitreichendes Überwachungsradar",
       "region": "worldwide",
-      "notes": "AWACS, Fruechwarnradar",
+      "notes": "Frühwarn- und Streckenradar. Das AWACS-Radar AN/APY-1/2 arbeitet dagegen im S-Band.",
       "power": {
         "typical": {
           "value": 1,
           "unit": "MW",
           "type": "Peak",
-          "context": "AWACS (E-3)"
+          "context": "Frühwarnradar"
         },
         "max": {
           "value": 10,
@@ -1806,7 +1966,7 @@
       "description": "Medium-range surveillance and tracking",
       "descriptionDE": "Mittlere Reichweite, Verfolgung",
       "region": "worldwide",
-      "notes": "Patriot, AEGIS Systeme",
+      "notes": "Patriot, AEGIS und AWACS (AN/APY-1/2, ca. 3 GHz)",
       "power": {
         "typical": {
           "value": 4,
@@ -2137,7 +2297,7 @@
       "descriptionDE": "Lizenzfreie Handfunkgeräte",
       "region": "europe",
       "standard": "ETSI EN 303 406",
-      "notes": "16 analoge Kanaele, 500 mW ERP",
+      "notes": "16 analoge Kanäle, 500 mW ERP",
       "power": {
         "typical": {
           "value": 500,
@@ -2165,7 +2325,7 @@
       "descriptionDE": "Digitales PMR446",
       "region": "europe",
       "standard": "ETSI TS 102 658",
-      "notes": "32 digitale Kanaele",
+      "notes": "32 digitale Kanäle",
       "power": {
         "typical": {
           "value": 500,
@@ -2186,27 +2346,27 @@
       "id": "freenet",
       "name": "Freenet",
       "nameDE": "Freenet",
-      "minHz": 149012500,
+      "minHz": 149025000,
       "maxHz": 149112500,
       "category": "pmr",
       "description": "German license-free VHF",
-      "descriptionDE": "Deutsches lizenzfreies VHF",
+      "descriptionDE": "Deutsches lizenzfreies VHF (6 Kanäle)",
       "region": "europe",
-      "notes": "6 Kanaele, nur Deutschland",
+      "notes": "6 Kanäle, nur Deutschland: 149,0250 / 149,0375 / 149,0500 / 149,0875 / 149,1000 / 149,1125 MHz (12,5 kHz Raster). Die Kanäle sind nicht zusammenhängend.",
       "power": {
         "typical": {
-          "value": 1,
+          "value": 0.5,
           "unit": "W",
           "type": "ERP",
           "context": "Handfunkgerät"
         },
         "max": {
-          "value": 1,
+          "value": 0.5,
           "unit": "W",
           "type": "ERP",
           "context": "BNetzA-Limit"
         },
-        "notes": "Höhere Leistung als PMR446, bessere Reichweite"
+        "notes": "500 mW ERP; höhere Leistung als PMR446 ist nicht zulässig, die Reichweite profitiert von der tieferen Frequenz."
       }
     },
     {
@@ -2459,30 +2619,72 @@
       }
     },
     {
-      "id": "elt",
-      "name": "ELT",
-      "nameDE": "ELT Notfunksender",
-      "minHz": 121500000,
-      "maxHz": 406025000,
+      "id": "elt-121",
+      "name": "ELT 121.5 MHz",
+      "nameDE": "ELT 121,5 MHz (Peilsender)",
+      "minHz": 121450000,
+      "maxHz": 121550000,
       "category": "aviation",
-      "description": "Emergency Locator Transmitter",
-      "descriptionDE": "Flugzeug-Notfunksender",
+      "description": "Aeronautical emergency locator beacon homing signal on 121.5 MHz",
+      "descriptionDE": "Peilsignal des Flugzeug-Notfunksenders auf der internationalen Luftfahrt-Notfrequenz 121,5 MHz",
       "region": "worldwide",
-      "notes": "121,5 MHz (lokal) und 406 MHz (Satellit)",
+      "standard": "ICAO Annex 10; COSPAS-SARSAT C/S T.001",
+      "notes": "Seit Februar 2009 nicht mehr satellitengestützt ausgewertet; dient nur noch der Nahbereichspeilung.",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Peilsender 121,5 MHz"
+        }
+      }
+    },
+    {
+      "id": "elt-243",
+      "name": "ELT 243 MHz",
+      "nameDE": "ELT 243 MHz (militärisch)",
+      "minHz": 242950000,
+      "maxHz": 243050000,
+      "category": "aviation",
+      "description": "Military emergency beacon frequency, exactly twice 121.5 MHz",
+      "descriptionDE": "Militärische Notfrequenz, exakt die doppelte Frequenz von 121,5 MHz",
+      "region": "worldwide",
+      "standard": "ICAO Annex 10; COSPAS-SARSAT C/S T.001",
+      "notes": "Wachfrequenz des militärischen UHF-Flugfunks.",
+      "power": {
+        "typical": {
+          "value": 100,
+          "unit": "mW",
+          "type": "EIRP",
+          "context": "Peilsender 121,5 MHz"
+        }
+      }
+    },
+    {
+      "id": "elt-406",
+      "name": "ELT/EPIRB/PLB 406 MHz",
+      "nameDE": "ELT/EPIRB/PLB 406 MHz (satellitengestützt)",
+      "minHz": 406000000,
+      "maxHz": 406100000,
+      "category": "aviation",
+      "description": "Digital 406 MHz distress beacons received by the COSPAS-SARSAT satellite system",
+      "descriptionDE": "Digitale Notfunkbaken im Bereich 406,0-406,1 MHz, ausgewertet vom Satellitensystem COSPAS-SARSAT",
+      "region": "worldwide",
+      "standard": "ICAO Annex 10; COSPAS-SARSAT C/S T.001",
+      "notes": "Burst alle 50 Sekunden mit codierter Kennung; Ortung über Satelliten in LEO, GEO und auf Navigationssatelliten.",
       "power": {
         "typical": {
           "value": 5,
           "unit": "W",
           "type": "EIRP",
-          "context": "406 MHz Burst"
+          "context": "406-MHz-Burst"
         },
         "max": {
           "value": 5,
           "unit": "W",
           "type": "EIRP",
-          "context": "COSPAS-SARSAT Spec"
-        },
-        "notes": "121,5 MHz Peilsender: 50-100 mW"
+          "context": "COSPAS-SARSAT-Spezifikation"
+        }
       }
     },
     {

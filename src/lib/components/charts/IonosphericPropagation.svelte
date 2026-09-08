@@ -4,8 +4,9 @@
     IONOSPHERE_PARAMETERS,
     type IonosphericLayer
   } from '$lib/data/constants';
-  import { formatFrequency, formatNumber } from '$lib/utils/formatting';
-  import { parseNumericInput, clamp } from '$lib/utils/handlers';
+  import { formatNumber } from '$lib/utils/formatting';
+  import { parseNumericInput, clamp, safeDivide } from '$lib/utils/handlers';
+  import { estimateMUF, calculateSkipDistanceForFrequency } from '$lib/data/propagation';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
 
   interface Props {
@@ -35,23 +36,32 @@
     return chartHeight - (altitudeKm / MAX_ALTITUDE_KM) * chartHeight;
   }
 
-  // Calculate critical frequency based on solar flux
-  // foF2 approximation: increases with solar activity
+  // Kritische Frequenz foF2 aus dem Solar Flux (lineare Interpolation zwischen den
+  // typischen Grenzwerten aus IONOSPHERE_PARAMETERS); nachts reduziert (typ. Faktor 0,4–0,6)
   let criticalFrequencyMHz = $derived.by(() => {
-    const { typicalF2CriticalFrequencyMHz, solarFluxRange } = IONOSPHERE_PARAMETERS;
-    const normalizedFlux = (solarFluxIndex - solarFluxRange.min) /
-                           (solarFluxRange.max - solarFluxRange.min);
+    const { typicalF2CriticalFrequencyMHz, solarFluxRange, nightF2ReductionFactor } = IONOSPHERE_PARAMETERS;
+    const normalizedFlux = safeDivide(
+      solarFluxIndex - solarFluxRange.min,
+      solarFluxRange.max - solarFluxRange.min,
+      0
+    );
     const foF2 = typicalF2CriticalFrequencyMHz.low +
                  normalizedFlux * (typicalF2CriticalFrequencyMHz.high - typicalF2CriticalFrequencyMHz.low);
-    // Reduce at night
-    return isNighttime ? foF2 * 0.7 : foF2;
+    return isNighttime ? foF2 * nightF2ReductionFactor : foF2;
   });
 
-  // Maximum Usable Frequency (MUF) for 3000 km skip
-  let mufMHz = $derived(criticalFrequencyMHz * IONOSPHERE_PARAMETERS.mufFactor3000km);
+  // MUF für die Referenzdistanz 3000 km nach dem Sekantengesetz (sphärisches Spiegelmodell)
+  let mufMHz = $derived(
+    estimateMUF(criticalFrequencyMHz, IONOSPHERE_PARAMETERS.mufReferenceDistanceKm)
+  );
 
-  // Lowest Usable Frequency (LUF)
-  let lufMHz = $derived(mufMHz * IONOSPHERE_PARAMETERS.lufFactorTypical);
+  // LUF: rein schematische Schätzung – die reale LUF hängt von D-Schicht-Absorption,
+  // Sendeleistung, Antennen und Rauschen ab und hat keinen festen Bezug zur MUF.
+  let lufMHz = $derived(
+    mufMHz * (isNighttime
+      ? IONOSPHERE_PARAMETERS.lufEstimateFactor.night
+      : IONOSPHERE_PARAMETERS.lufEstimateFactor.day)
+  );
 
   // Check if current frequency can propagate
   let canPropagate = $derived(
@@ -73,21 +83,24 @@
     'f2-layer': { fill: 'rgba(59, 130, 246, 0.3)', stroke: '#3b82f6' },
   };
 
-  // Calculate reflection path for visualization
+  // Reflexionspfad für die Visualisierung
   let reflectionPath = $derived.by(() => {
     if (!canPropagate) return null;
 
-    // Determine which layer reflects (simplified)
-    let reflectionAltitude = 300; // F2 default
-
+    // Reflektierende Schicht (vereinfacht nach Frequenz)
+    let reflectionAltitude: number = IONOSPHERE_PARAMETERS.typicalF2HeightKm;
     if (frequencyMHz < 4) {
-      reflectionAltitude = 110; // E layer for lower frequencies
+      reflectionAltitude = 110; // E-Schicht für niedrige Frequenzen
     } else if (frequencyMHz < 10) {
-      reflectionAltitude = 200; // F1 layer
+      reflectionAltitude = 200; // F1-Schicht
     }
 
-    // Skip distance calculation (simplified)
-    const skipDistanceKm = 1500 + (frequencyMHz / mufMHz) * 1500;
+    // Minimale Sprungdistanz nach dem Sekantengesetz (f = foF2·sec φ) an dieser Schicht
+    const skipDistanceKm = calculateSkipDistanceForFrequency(
+      frequencyMHz,
+      criticalFrequencyMHz,
+      reflectionAltitude
+    );
 
     return {
       altitude: reflectionAltitude,
@@ -162,7 +175,7 @@
         Solar Flux Index (SFI)
         <InfoTooltip
           title="Solar Flux Index"
-          short="Mass für Sonnenaktivitaet (10.7 cm Flux)"
+          short="Maß für Sonnenaktivität (10.7 cm Flux)"
           detailed="Niedriger SFI (65-80): Sonnenminimum. Hoher SFI (150-300): Sonnenmaximum. Beeinflusst die MUF stark."
         />
       </label>
@@ -229,7 +242,14 @@
       </div>
     </div>
     <div class="result-box">
-      <div class="result-label">LUF (3000 km)</div>
+      <div class="result-label">
+        LUF (schematisch)
+        <InfoTooltip
+          title="LUF – Schätzung"
+          short="Schematischer Wert, kein Rechenergebnis"
+          detailed="Die reale LUF hängt von der D-Schicht-Absorption (∝ 1/f², Sonnenzenitwinkel), Sendeleistung, Antennen und Rauschen ab – nicht von der MUF. Hier wird lediglich ein typischer Anteil der MUF gezeigt (tags höher als nachts)."
+        />
+      </div>
       <div class="text-xl font-bold text-amber-600 dark:text-amber-400">
         {formatNumber(lufMHz, 1)} MHz
       </div>
@@ -405,7 +425,11 @@
             font-size="11"
             text-anchor="middle"
           >
-            Skip: ~{formatNumber(reflectionPath.skipDistance, 0)} km
+            {reflectionPath.skipDistance === null
+              ? 'Keine Reflexion (f über MUF)'
+              : reflectionPath.skipDistance === 0
+                ? 'Skip: 0 km (f ≤ foF2, senkrechte Reflexion möglich)'
+                : `Skip (min.): ~${formatNumber(reflectionPath.skipDistance, 0)} km`}
           </text>
         {:else if !canPropagate}
           <!-- No propagation indicator -->
@@ -481,7 +505,7 @@
   <div class="mt-4 p-4 bg-surface-secondary rounded-lg text-sm text-secondary">
     <p class="mb-2">
       <strong>MUF (Maximum Usable Frequency):</strong> Höchste Frequenz, die noch von der Ionosphäre
-      reflektiert wird. Höher bei hoher Sonnenaktivitaet.
+      reflektiert wird. Höher bei hoher Sonnenaktivität.
     </p>
     <p class="mb-2">
       <strong>LUF (Lowest Usable Frequency):</strong> Niedrigste nutzbare Frequenz. Tiefere Frequenzen
@@ -489,7 +513,8 @@
     </p>
     <p>
       <strong>Kritische Frequenz (foF2):</strong> Frequenz, die bei senkrechtem Einfall gerade noch
-      reflektiert wird. Die MUF bei schraegem Einfall ist ca. 3x höher.
+      reflektiert wird. Die MUF bei schrägem Einfall folgt dem Sekantengesetz MUF = foF2·sec φ
+      und liegt für 3000 km etwa 3× höher.
     </p>
   </div>
 </div>

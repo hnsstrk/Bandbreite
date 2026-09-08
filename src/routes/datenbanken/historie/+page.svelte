@@ -1,17 +1,7 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import HistoricalTimeline from '$lib/components/charts/HistoricalTimeline.svelte';
 </script>
-
-<svelte:head>
-  <title>Historie - Bandbreite</title>
-  <meta name="description" content="Geschichte der Funktechnik und Frequenznutzung" />
-  <meta property="og:title" content="Historie | Bandbreite" />
-  <meta property="og:description" content="Geschichte der Funktechnik und Frequenznutzung" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Historie | Bandbreite" />
-  <meta name="twitter:description" content="Geschichte der Funktechnik und Frequenznutzung" />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -25,6 +15,8 @@
   <section class="timeline-section">
     <HistoricalTimeline />
   </section>
+
+  <RelatedTopics href="/datenbanken/historie/" />
 </div>
 
 <style>

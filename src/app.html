@@ -1,14 +1,36 @@
 <!doctype html>
-<html lang="de" class="dark">
+<html lang="de">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
+		<!--
+			Anti-FOUC: setzt die .dark-Klasse noch vor dem ersten Rendern.
+			Muss blockierend und vor allen Stylesheets stehen, sonst blitzt
+			bei jedem Kaltstart das falsche Theme auf.
+			Gespeicherte Werte: 'light' | 'dark' | 'system' (bzw. kein Wert).
+		-->
+		<script>
+			(function () {
+				try {
+					var stored = localStorage.getItem('theme');
+					var dark =
+						stored === 'dark' ||
+						((!stored || stored === 'system') &&
+							window.matchMedia('(prefers-color-scheme: dark)').matches);
+					document.documentElement.classList.toggle('dark', dark);
+					document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+					var meta = document.querySelector('meta[name="theme-color"]');
+					if (meta) meta.setAttribute('content', dark ? '#0f172a' : '#f8fafc');
+				} catch (e) {
+					/* localStorage kann blockiert sein — dann bleibt das helle Theme */
+				}
+			})();
+		</script>
+
 		<!-- PWA Meta Tags -->
-		<meta name="description" content="RF/Microwave frequency calculations and visualizations for engineers and radio enthusiasts" />
-		<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)" />
-		<meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)" />
+		<meta name="theme-color" content="#f8fafc" />
 		<link rel="manifest" href="%sveltekit.assets%/manifest.json" />
 
 		<!-- Apple PWA Meta Tags -->
@@ -30,11 +52,12 @@
 		<script>
 			if ('serviceWorker' in navigator) {
 				window.addEventListener('load', () => {
-					navigator.serviceWorker.register('/service-worker.js')
-						.then(registration => {
+					navigator.serviceWorker
+						.register('/service-worker.js')
+						.then((registration) => {
 							console.log('SW registered:', registration.scope);
 						})
-						.catch(error => {
+						.catch((error) => {
 							console.log('SW registration failed:', error);
 						});
 				});

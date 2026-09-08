@@ -1,17 +1,20 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
+  import { page } from '$app/state';
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import FSPLCalculator from '$lib/components/calculators/FSPLCalculator.svelte';
-</script>
 
-<svelte:head>
-  <title>FSPL-Rechner - Bandbreite</title>
-  <meta name="description" content="Free Space Path Loss (FSPL) Rechner" />
-  <meta property="og:title" content="FSPL-Rechner | Bandbreite" />
-  <meta property="og:description" content="Free Space Path Loss (FSPL) Rechner" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="FSPL-Rechner | Bandbreite" />
-  <meta name="twitter:description" content="Free Space Path Loss (FSPL) Rechner" />
-</svelte:head>
+  /**
+   * Deep-Link aus der Command-Palette: `/rechner/fspl/?f=<Hertz>`.
+   * Beim Prerendern gibt es keine Suchparameter — deshalb der browser-Guard.
+   */
+  const presetFrequencyHz = $derived.by(() => {
+    if (!browser) return undefined;
+    const raw = page.url.searchParams.get('f');
+    const value = raw ? Number(raw) : Number.NaN;
+    return Number.isFinite(value) && value > 0 ? value : undefined;
+  });
+</script>
 
 <div class="page-content">
   <header class="page-header">
@@ -23,9 +26,10 @@
   </header>
 
   <section class="calculator-section">
-    <FSPLCalculator />
+    <FSPLCalculator frequencyHz={presetFrequencyHz} />
   </section>
 
+  <RelatedTopics href="/rechner/fspl/" />
 </div>
 
 <style>

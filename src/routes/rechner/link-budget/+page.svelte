@@ -1,4 +1,5 @@
 <script lang="ts">
+  import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import LinkBudgetCalculator from '$lib/components/calculators/LinkBudgetCalculator.svelte';
   import LinkBudgetWaterfall from '$lib/components/charts/LinkBudgetWaterfall.svelte';
 
@@ -33,17 +34,6 @@
     }
   });
 </script>
-
-<svelte:head>
-  <title>Link Budget - Bandbreite</title>
-  <meta name="description" content="Link Budget Kalkulator für Funkstrecken" />
-  <meta property="og:title" content="Link Budget | Bandbreite" />
-  <meta property="og:description" content="Link Budget Kalkulator für Funkstrecken" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Link Budget | Bandbreite" />
-  <meta name="twitter:description" content="Link Budget Kalkulator für Funkstrecken" />
-</svelte:head>
 
 <div class="page-content">
   <header class="page-header">
@@ -86,6 +76,8 @@
       </p>
     </div>
   </section>
+
+  <RelatedTopics href="/rechner/link-budget/" />
 </div>
 
 <style>

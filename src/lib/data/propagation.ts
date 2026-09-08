@@ -13,7 +13,7 @@
  * - Wikipedia: Kurzwelle, Mittelwelle, Langwelle, Ultrakurzwelle
  */
 
-import { EARTH_RADIUS_MEAN, EFFECTIVE_EARTH_RADIUS_FACTOR } from './constants';
+import { EARTH_RADIUS_MEAN, EFFECTIVE_EARTH_RADIUS_FACTOR, IONOSPHERE_PARAMETERS } from './constants';
 
 // ============================================================================
 // Physikalische Konstanten für Wellenausbreitung
@@ -325,14 +325,16 @@ export const SKIP_ZONE_PARAMS: SkipZoneParameters = {
 };
 
 /**
- * MUF-Faktor abhängig von der Distanz
- * MUF = foF2 * MUF-Faktor
+ * Typische MUF-Faktoren M(d) = MUF/foF2 als Orientierung (Sekantengesetz mit h = 300 km).
+ * Die Berechnung erfolgt in estimateMUF(); diese Tabelle dient nur der Dokumentation/Anzeige.
+ * Quelle: ITU-R P.1239 (M(3000)F2 ≈ 2,5–3,5)
  */
 export const MUF_FACTORS: Record<number, number> = {
-  1000: 2.5,  // 1000 km
-  2000: 2.8,  // 2000 km
-  3000: 3.0,  // 3000 km (Standard)
-  4000: 3.2,  // 4000 km (Single-Hop Grenze)
+  0: 1.0,     // Senkrechtlotung: MUF = foF2
+  500: 1.3,
+  1000: 1.9,
+  2000: 2.8,
+  3000: 3.3,  // 3000 km (Standard)
 };
 
 // ============================================================================
@@ -383,11 +385,17 @@ export function calculateMaxLOSDistance(
 }
 
 /**
- * Berechnet die Sprungdistanz für HF-Raumwellen
+ * Berechnet die Sprungdistanz für HF-Raumwellen (sphärisches Spiegelmodell)
+ * d = 2·R·[arccos((R/(R+h))·cos θ) − θ]
+ *
+ * Für θ → 0 ergibt sich der geometrische Maximalwert 2·R·arccos(R/(R+h))
+ * (≈ 3830 km bei h = 300 km), daher ist keine künstliche Begrenzung nötig.
  *
  * @param reflectionHeightKm - Reflexionshöhe in km
  * @param elevationAngleDeg - Abstrahlwinkel in Grad (0° = horizontal)
- * @returns Sprungdistanz in Kilometern
+ * @returns Sprungdistanz in Kilometern (0 bei ungültigen Eingaben)
+ *
+ * Quelle: Davies, Ionospheric Radio, §6 (Spiegelmodell mit Kugelerde)
  */
 export function calculateSkipDistance(
   reflectionHeightKm: number,
@@ -400,12 +408,38 @@ export function calculateSkipDistance(
   const h = reflectionHeightKm;
   const theta = elevationAngleDeg * (Math.PI / 180);
 
-  // Vereinfachte Formel für flache Winkel
-  // Für genauere Berechnung wäre sphärische Trigonometrie nötig
-  const skipDistance = 2 * h / Math.tan(theta);
+  return 2 * R * (Math.acos((R / (R + h)) * Math.cos(theta)) - theta);
+}
 
-  // Begrenzung auf realistische Werte
-  return Math.min(skipDistance, 4000);
+/**
+ * Minimale Sprungdistanz, ab der eine Frequenz f an einer Schicht mit kritischer
+ * Frequenz foF2 reflektiert wird (Sekantengesetz f = foF2·sec φ, sphärisches Spiegelmodell).
+ *
+ * @param frequencyMHz - Betriebsfrequenz in MHz
+ * @param criticalFrequencyMHz - Kritische Frequenz foF2 in MHz
+ * @param reflectionHeightKm - Reflexionshöhe in km (Standard: 300 km)
+ * @returns Sprungdistanz in km; 0 wenn f ≤ foF2 (senkrechte Reflexion möglich);
+ *          null, wenn f oberhalb der maximalen MUF liegt (keine Reflexion)
+ */
+export function calculateSkipDistanceForFrequency(
+  frequencyMHz: number,
+  criticalFrequencyMHz: number,
+  reflectionHeightKm: number = IONOSPHERE_PARAMETERS.typicalF2HeightKm
+): number | null {
+  if (frequencyMHz <= 0 || criticalFrequencyMHz <= 0 || reflectionHeightKm <= 0) return null;
+  const M = frequencyMHz / criticalFrequencyMHz;
+  if (M <= 1) return 0;
+
+  const R = EARTH_RADIUS_KM;
+  const h = reflectionHeightKm;
+  // sec φ = M  →  sin φ = √(1 − 1/M²)
+  const sinPhi = Math.sqrt(1 - 1 / (M * M));
+  const cosTheta = ((R + h) * sinPhi) / R;
+  if (cosTheta > 1) return null; // selbst bei streifender Abstrahlung nicht erreichbar
+
+  const phi = Math.asin(sinPhi);
+  const theta = Math.acos(cosTheta);
+  return 2 * R * (Math.PI / 2 - phi - theta);
 }
 
 /**
@@ -436,29 +470,32 @@ export function calculateCriticalFrequency(electronDensity: number): number {
 
 /**
  * Schätzt die MUF (Maximum Usable Frequency) für eine gegebene Distanz
+ * nach dem Sekantengesetz im sphärischen Spiegelmodell: MUF = foF2 · sec φ,
+ * wobei φ der Einfallswinkel an der Schicht ist. Für d = 0 gilt MUF = foF2.
+ * Der Faktor wird auf IONOSPHERE_PARAMETERS.mufFactorMax (≈ M(3000)F2) begrenzt.
+ *
+ * Kontrollwerte (h = 300 km): d = 0 → 1,00; 500 km → 1,30; 1000 km → 1,86;
+ * 2000 km → 2,80; 3000 km → 3,28.
  *
  * @param criticalFrequencyMHz - Kritische Frequenz (foF2) in MHz
  * @param distanceKm - Verbindungsdistanz in km
+ * @param reflectionHeightKm - Reflexionshöhe in km (Standard: 300 km)
  * @returns MUF in MHz
+ *
+ * Quelle: Davies, Ionospheric Radio, §6; ITU-R P.1239
  */
-export function estimateMUF(criticalFrequencyMHz: number, distanceKm: number): number {
-  // Finde den passenden MUF-Faktor
-  const distances = Object.keys(MUF_FACTORS).map(Number).sort((a, b) => a - b);
-  let factor = 3.0; // Default für 3000 km
+export function estimateMUF(
+  criticalFrequencyMHz: number,
+  distanceKm: number,
+  reflectionHeightKm: number = IONOSPHERE_PARAMETERS.typicalF2HeightKm
+): number {
+  if (criticalFrequencyMHz <= 0 || distanceKm < 0 || reflectionHeightKm <= 0) return 0;
 
-  for (const d of distances) {
-    if (distanceKm <= d) {
-      factor = MUF_FACTORS[d];
-      break;
-    }
-  }
-
-  // Lineare Interpolation für genauere Werte
-  if (distanceKm < 1000) {
-    factor = 2.0 + (distanceKm / 1000) * 0.5;
-  } else if (distanceKm > 4000) {
-    factor = 3.2 + ((distanceKm - 4000) / 1000) * 0.1;
-  }
+  const R = EARTH_RADIUS_KM;
+  const halfAngle = distanceKm / (2 * R);
+  // Einfallswinkel φ an der Schicht (Dreieck Erdmittelpunkt – Sender – Reflexionspunkt)
+  const phi = Math.atan2(R * Math.sin(halfAngle), (R + reflectionHeightKm) - R * Math.cos(halfAngle));
+  const factor = Math.min(1 / Math.cos(phi), IONOSPHERE_PARAMETERS.mufFactorMax);
 
   return criticalFrequencyMHz * factor;
 }
@@ -624,6 +661,7 @@ export const calculations = {
   radioHorizon: calculateRadioHorizon,
   maxLOSDistance: calculateMaxLOSDistance,
   skipDistance: calculateSkipDistance,
+  skipDistanceForFrequency: calculateSkipDistanceForFrequency,
   plasmaFrequency: calculatePlasmaFrequency,
   criticalFrequency: calculateCriticalFrequency,
   estimateMUF

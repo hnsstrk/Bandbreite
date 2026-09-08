@@ -1,12 +1,17 @@
 <script lang="ts">
   import * as d3 from "d3";
   import { formatNumber } from "$lib/utils/formatting";
+  import { parseNumericInput, safeDivide, clamp } from "$lib/utils/handlers";
   import {
-    parseNumericInput,
-    safeDivide,
-    safeLog,
-    clamp,
-  } from "$lib/utils/handlers";
+    calculateShannonCapacity,
+    calculateSpectralEfficiency,
+    snrDbToLinear,
+  } from "$lib/utils/calculations";
+  import {
+    MODULATION_SCHEMES,
+    PRACTICAL_THROUGHPUT,
+    type ModulationScheme,
+  } from "$lib/data/constants";
   import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
 
   interface Props {
@@ -27,26 +32,8 @@
   let chartWidth = $derived(width - margin.left - margin.right);
   let chartHeight = $derived(height - margin.top - margin.bottom);
 
-  // Modulation schemes with their theoretical spectral efficiency
-  const modulationSchemes = [
-    { name: "BPSK", bitsPerSymbol: 1, requiredSnrDb: 6.8, color: "#22c55e" },
-    { name: "QPSK", bitsPerSymbol: 2, requiredSnrDb: 9.8, color: "#3b82f6" },
-    { name: "8-PSK", bitsPerSymbol: 3, requiredSnrDb: 14, color: "#8b5cf6" },
-    { name: "16-QAM", bitsPerSymbol: 4, requiredSnrDb: 16.5, color: "#f97316" },
-    { name: "64-QAM", bitsPerSymbol: 6, requiredSnrDb: 22.5, color: "#ef4444" },
-    {
-      name: "256-QAM",
-      bitsPerSymbol: 8,
-      requiredSnrDb: 28.5,
-      color: "#ec4899",
-    },
-    {
-      name: "1024-QAM",
-      bitsPerSymbol: 10,
-      requiredSnrDb: 34.5,
-      color: "#6366f1",
-    },
-  ];
+  // Modulationsarten mit SNR-Schwellen (Quelle: $lib/data/constants.ts, Proakis)
+  const modulationSchemes = MODULATION_SCHEMES;
 
   // Bandwidth presets
   const bandwidthPresets = [
@@ -60,20 +47,13 @@
   ];
 
   // Convert SNR from dB to linear
-  let snrLinear = $derived(Math.pow(10, snrDb / 10));
+  let snrLinear = $derived(snrDbToLinear(snrDb));
 
-  // Shannon-Hartley channel capacity in bits per second
-  // C = B * log2(1 + SNR)
-  let channelCapacityBps = $derived.by(() => {
-    if (bandwidthMHz <= 0 || snrLinear <= 0) return 0;
-    const bandwidthHz = bandwidthMHz * 1e6;
-    return bandwidthHz * safeLog(1 + snrLinear, 2);
-  });
+  // Shannon-Hartley channel capacity in bits per second: C = B · log₂(1 + SNR)
+  let channelCapacityBps = $derived(calculateShannonCapacity(bandwidthMHz * 1e6, snrDb));
 
   // Spectral efficiency in bits/s/Hz
-  let spectralEfficiency = $derived(
-    safeDivide(channelCapacityBps, bandwidthMHz * 1e6, 0),
-  );
+  let spectralEfficiency = $derived(calculateSpectralEfficiency(snrDb));
 
   // Format data rate
   function formatDataRate(bps: number): string {
@@ -89,12 +69,20 @@
     return suitable.length > 0 ? suitable[suitable.length - 1] : null;
   });
 
-  // Practical data rate (with achievable modulation, assuming 80% efficiency)
-  let practicalDataRate = $derived.by(() => {
-    if (!achievableModulation || bandwidthMHz <= 0) return 0;
-    const symbolRate = bandwidthMHz * 1e6; // Simplified: symbol rate ~ bandwidth
-    return symbolRate * achievableModulation.bitsPerSymbol * 0.8; // 80% efficiency
-  });
+  /**
+   * Praktische Datenrate: R_b = B/(1+α) · bits/Symbol · η
+   * (Symbolrate = B/(1+α) mit Roll-off α, Protokoll-/Codierungseffizienz η;
+   * Konstanten in PRACTICAL_THROUGHPUT)
+   */
+  function practicalDataRateFor(mod: ModulationScheme): number {
+    if (bandwidthMHz <= 0) return 0;
+    const symbolRate = safeDivide(bandwidthMHz * 1e6, 1 + PRACTICAL_THROUGHPUT.rollOffFactor, 0);
+    return symbolRate * mod.bitsPerSymbol * PRACTICAL_THROUGHPUT.protocolEfficiency;
+  }
+
+  let practicalDataRate = $derived(
+    achievableModulation ? practicalDataRateFor(achievableModulation) : 0,
+  );
 
   // D3 scales for chart
   let xScale = $derived(
@@ -109,8 +97,7 @@
   const shannonCurveData: { snr: number; capacity: number }[] = (() => {
     const points: { snr: number; capacity: number }[] = [];
     for (let snr = 0; snr <= 40; snr += 0.5) {
-      const snrLin = Math.pow(10, snr / 10);
-      const capacity = Math.log2(1 + snrLin);
+      const capacity = calculateSpectralEfficiency(snr);
       points.push({ snr, capacity });
     }
     return points;
@@ -538,7 +525,7 @@
         </thead>
         <tbody>
           {#each modulationSchemes as mod (mod.name)}
-            {@const dataRate = bandwidthMHz * 1e6 * mod.bitsPerSymbol * 0.8}
+            {@const dataRate = practicalDataRateFor(mod)}
             {@const isAchievable = snrDb >= mod.requiredSnrDb}
             <tr
               class="border-b border-border/50 {isAchievable

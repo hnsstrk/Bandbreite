@@ -24,7 +24,32 @@ export type TransmitterType =
   | 'broadcast_fm'     // UKW-Rundfunk
   | 'navigation'       // Navigationssender
   | 'amateur'          // Amateurfunk-Relais
-  | 'utility';         // Utility-Stationen
+  | 'utility';         // Utility-Stationen, Forschungs- und Militäranlagen
+
+/**
+ * Feinere Einordnung innerhalb eines TransmitterType.
+ *
+ * Hinweis (Bericht 04, Befund 54): Die Union `TransmitterType` selbst kennt
+ * keine Kategorien für Radar, Satellitensignale, Radioastronomie oder
+ * militärische Längstwellensender. Eine Erweiterung der Union würde die
+ * `Record<TransmitterType, ...>`-Tabellen in den Anzeigekomponenten brechen,
+ * deshalb wird die Zusatzinformation hier additiv als optionales Feld geführt.
+ */
+export type TransmitterSubtype =
+  | 'military_vlf'     // militärische Längstwellensender
+  | 'radar'            // Radaranlagen
+  | 'gnss'             // Satellitennavigationssignale
+  | 'deep_space'       // Boden-Weltraum-Verbindungen
+  | 'research';        // Forschungs- und Empfangsanlagen
+
+/**
+ * Art der angegebenen Leistung.
+ * Klärt die Mehrdeutigkeit des Feldes `powerWatts` (Bericht 04, Befund 45):
+ * - 'tx'   Senderausgangsleistung
+ * - 'erp'  effektive Strahlungsleistung (Bezug Halbwellendipol)
+ * - 'eirp' äquivalente isotrope Strahlungsleistung
+ */
+export type PowerType = 'tx' | 'erp' | 'eirp';
 
 /**
  * Transmitter status
@@ -42,6 +67,10 @@ export interface Transmitter {
   frequencyHz: number;
   frequencyHzSecondary?: number;
   powerWatts?: number;
+  /** Art der in powerWatts angegebenen Leistung */
+  powerType?: PowerType;
+  /** Feinere Einordnung, sofern TransmitterType zu grob ist */
+  subtype?: TransmitterSubtype;
   location: {
     name: string;
     country: string;
@@ -54,6 +83,8 @@ export interface Transmitter {
   coverage?: string;
   operator?: string;
   notes?: string;
+  /** Monat der letzten Prüfung im Format YYYY-MM */
+  lastVerified?: string;
 }
 
 // ============================================================================
@@ -64,6 +95,10 @@ export const TIME_SIGNAL_TRANSMITTERS: Transmitter[] = transmitterData.timeSigna
 export const BROADCAST_TRANSMITTERS: Transmitter[] = transmitterData.broadcast as Transmitter[];
 export const NAVIGATION_TRANSMITTERS: Transmitter[] = transmitterData.navigation as Transmitter[];
 export const AMATEUR_TRANSMITTERS: Transmitter[] = transmitterData.amateur as Transmitter[];
+/** Militärische Längstwellensender, Maschinensender und sonstige Utility-Stationen */
+export const UTILITY_TRANSMITTERS: Transmitter[] = transmitterData.utility as Transmitter[];
+/** Radar-, Deep-Space- und Forschungsanlagen (ebenfalls Typ 'utility') */
+export const SCIENCE_TRANSMITTERS: Transmitter[] = transmitterData.science as Transmitter[];
 
 // ============================================================================
 // Combined exports
@@ -73,7 +108,9 @@ export const ALL_TRANSMITTERS: Transmitter[] = [
   ...TIME_SIGNAL_TRANSMITTERS,
   ...BROADCAST_TRANSMITTERS,
   ...NAVIGATION_TRANSMITTERS,
-  ...AMATEUR_TRANSMITTERS
+  ...AMATEUR_TRANSMITTERS,
+  ...UTILITY_TRANSMITTERS,
+  ...SCIENCE_TRANSMITTERS
 ];
 
 export const TRANSMITTERS_BY_TYPE = {
@@ -84,6 +121,7 @@ export const TRANSMITTERS_BY_TYPE = {
   broadcast_fm: BROADCAST_TRANSMITTERS.filter(t => t.type === 'broadcast_fm'),
   navigation: NAVIGATION_TRANSMITTERS,
   amateur: AMATEUR_TRANSMITTERS,
+  utility: [...UTILITY_TRANSMITTERS, ...SCIENCE_TRANSMITTERS],
 } as const;
 
 export const TYPE_NAMES: Record<TransmitterType, { name: string; nameDE: string }> =
@@ -113,6 +151,13 @@ export function findTransmittersByFrequency(minHz: number, maxHz: number): Trans
   return ALL_TRANSMITTERS.filter(t =>
     t.frequencyHz >= minHz && t.frequencyHz <= maxHz
   );
+}
+
+/**
+ * Liefert alle Sender einer Feinkategorie (Subtype)
+ */
+export function getTransmittersBySubtype(subtype: TransmitterSubtype): Transmitter[] {
+  return ALL_TRANSMITTERS.filter(t => t.subtype === subtype);
 }
 
 /**

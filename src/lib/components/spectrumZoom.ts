@@ -33,7 +33,12 @@ export function logRange(minHz: number, maxHz: number): { logMin: number; logRan
  * Sichtbare Domäne [Hz, Hz] für Zoomstufe und Verschiebung; die Verschiebung
  * wird auf den zulässigen Bereich begrenzt.
  */
-export function zoomedDomain(minHz: number, maxHz: number, zoomLevel: number, panOffset: number): Domain {
+export function zoomedDomain(
+  minHz: number,
+  maxHz: number,
+  zoomLevel: number,
+  panOffset: number
+): Domain {
   const { logMin, logRange: range } = logRange(minHz, maxHz);
   const visibleLogRange = range / zoomLevel;
   const maxPan = range - visibleLogRange;

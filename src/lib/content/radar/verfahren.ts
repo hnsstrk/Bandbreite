@@ -50,8 +50,7 @@ export const radarVerfahrenArticle: KnowledgeArticle = {
   kicker: 'Wissen · Radartechnik',
   title: 'Radarverfahren',
   icon: 'wave',
-  lead:
-    'Wie ein Radar sendet, entscheidet darüber, was es messen kann. Dieses Unterkapitel stellt Puls- und Dauerstrichverfahren gegenüber und erklärt Doppler-Auswertung, MTI und MTD, FMCW, Pulskompression, CFAR, elektronische Strahlschwenkung, SAR sowie bistatische und passive Systeme.',
+  lead: 'Wie ein Radar sendet, entscheidet darüber, was es messen kann. Dieses Unterkapitel stellt Puls- und Dauerstrichverfahren gegenüber und erklärt Doppler-Auswertung, MTI und MTD, FMCW, Pulskompression, CFAR, elektronische Strahlschwenkung, SAR sowie bistatische und passive Systeme.',
   meta: [
     { label: 'Quelle', value: 'Skolnik, Introduction to Radar Systems' },
     { label: 'Rechner', value: 'Radar-Reichweite' }

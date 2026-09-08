@@ -26,6 +26,23 @@ export type WidgetId =
   | 'em-wave'
   | 'field-strength';
 
+/**
+ * Widgets, die in einer Kapitel**seite** direkt im Markup stehen — die Kapitel
+ * „Modulation" und „Antennen" sind (noch) keine Inhaltsdaten. Sie tragen
+ * keinen `widget`-Block, bekommen ihre Anker-ID aber ebenso vergeben, damit
+ * Deep-Link (`?w=<id>`) und Suchtreffer funktionieren.
+ */
+export type MarkupWidgetId =
+  | 'modulation-visualizer'
+  | 'constellation'
+  | 'carson'
+  | 'antenna-pattern'
+  | 'parabolic-gain'
+  | 'swr';
+
+/** Alle Kennungen des Widget-Katalogs (`data/widgets.ts`). */
+export type CatalogWidgetId = WidgetId | MarkupWidgetId;
+
 export interface FormulaVariable {
   symbol: string;
   meaning: string;

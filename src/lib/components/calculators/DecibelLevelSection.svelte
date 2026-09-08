@@ -140,10 +140,7 @@
       label="Spannungspegel"
       value={formatNumber(levels.dbuv, 2)}
       unit="dBµV"
-      hint="dBµV = dBm + {formatNumber(dbmToDbuvOffset(impedanceOhm), 2)} dB an {formatNumber(
-        impedanceOhm,
-        0
-      )} Ω"
+      hint="dBµV = dBm + {formatNumber(dbmToDbuvOffset(impedanceOhm), 2)} dB an {formatNumber(impedanceOhm, 0)} Ω"
     />
     <ResultCard
       label="Spannung"

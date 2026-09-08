@@ -26,7 +26,9 @@ export function createSpectrumCursor(scale: CursorScale) {
   );
 
   let cursorFrequencyLabel = $derived(
-    cursorFrequencyHz !== null && cursorFrequencyHz > 0 ? formatFrequencyLocal(cursorFrequencyHz) : ''
+    cursorFrequencyHz !== null && cursorFrequencyHz > 0
+      ? formatFrequencyLocal(cursorFrequencyHz)
+      : ''
   );
 
   /** Mausposition relativ zum linken Rand der Zeichenfläche (ohne MARGIN.left). */
@@ -47,10 +49,18 @@ export function createSpectrumCursor(scale: CursorScale) {
   }
 
   return {
-    get cursorFrequencyHz() { return cursorFrequencyHz; },
-    get cursorX() { return cursorX; },
-    get cursorWavelengthLabel() { return cursorWavelengthLabel; },
-    get cursorFrequencyLabel() { return cursorFrequencyLabel; },
+    get cursorFrequencyHz() {
+      return cursorFrequencyHz;
+    },
+    get cursorX() {
+      return cursorX;
+    },
+    get cursorWavelengthLabel() {
+      return cursorWavelengthLabel;
+    },
+    get cursorFrequencyLabel() {
+      return cursorFrequencyLabel;
+    },
     handleCursorMove,
     handleCursorLeave
   };

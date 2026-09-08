@@ -10,7 +10,10 @@
     title="Kanalkapazität"
     icon="signal"
     lead="Die theoretisch höchste fehlerfreie Datenrate eines Kanals — nach Shannon und Hartley, aus Bandbreite und Störabstand."
-    meta={[{ label: 'Quelle', value: 'Shannon 1948' }, { label: 'Gültig', value: 'AWGN-Kanal' }]}
+    meta={[
+      { label: 'Quelle', value: 'Shannon 1948' },
+      { label: 'Gültig', value: 'AWGN-Kanal' }
+    ]}
   />
 
   <ChannelCapacityCalculator />

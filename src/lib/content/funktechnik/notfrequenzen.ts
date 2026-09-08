@@ -49,12 +49,30 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'dl',
         items: [
-          { term: 'Kanal 16 (156,8 MHz)', def: 'UKW-Not- und Anrufkanal für den Sprechverkehr in Küstennähe.' },
-          { term: 'Kanal 70 (156,525 MHz)', def: 'Ausschließlich digitaler Selektivruf; hier läuft die Alarmierung, nicht das Gespräch.' },
-          { term: '2182 kHz', def: 'Not- und Anruffrequenz im Grenzwellenbereich, Reichweite über die Bodenwelle.' },
-          { term: '2187,5 kHz und die HF-Kanäle', def: 'Digitale Alarmierung auf Mittel- und Kurzwelle für Fahrt außerhalb der UKW-Reichweite.' },
-          { term: 'NAVTEX 518 kHz', def: 'Automatischer Empfang von Warn- und Wettermeldungen als Fernschreiben.' },
-          { term: 'AIS 161,975 / 162,025 MHz', def: 'Automatische Meldung von Kennung, Position und Kurs; auch für Seenotbaken genutzt.' }
+          {
+            term: 'Kanal 16 (156,8 MHz)',
+            def: 'UKW-Not- und Anrufkanal für den Sprechverkehr in Küstennähe.'
+          },
+          {
+            term: 'Kanal 70 (156,525 MHz)',
+            def: 'Ausschließlich digitaler Selektivruf; hier läuft die Alarmierung, nicht das Gespräch.'
+          },
+          {
+            term: '2182 kHz',
+            def: 'Not- und Anruffrequenz im Grenzwellenbereich, Reichweite über die Bodenwelle.'
+          },
+          {
+            term: '2187,5 kHz und die HF-Kanäle',
+            def: 'Digitale Alarmierung auf Mittel- und Kurzwelle für Fahrt außerhalb der UKW-Reichweite.'
+          },
+          {
+            term: 'NAVTEX 518 kHz',
+            def: 'Automatischer Empfang von Warn- und Wettermeldungen als Fernschreiben.'
+          },
+          {
+            term: 'AIS 161,975 / 162,025 MHz',
+            def: 'Automatische Meldung von Kennung, Position und Kurs; auch für Seenotbaken genutzt.'
+          }
         ]
       },
       {

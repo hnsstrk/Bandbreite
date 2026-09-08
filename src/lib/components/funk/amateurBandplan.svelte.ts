@@ -90,10 +90,7 @@ const POWER_DECIMALS = 2;
  * Abweichende Leistungsgrenzen eines Bandes für eine Klasse, aufbereitet als
  * Text. Leeres Array, wenn das Band keine Teilbereiche kennt.
  */
-export function powerSubrangeTexts(
-  band: AmateurBand,
-  licenseClass: LicenseClassDE
-): string[] {
+export function powerSubrangeTexts(band: AmateurBand, licenseClass: LicenseClassDE): string[] {
   return (band.powerSubranges ?? []).flatMap((range) => {
     const limit = range.limits[licenseClass];
     if (!limit) return [];

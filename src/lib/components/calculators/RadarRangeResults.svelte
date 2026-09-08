@@ -1,12 +1,7 @@
 <script lang="ts">
   /** Ergebnisse des Radar-Reichweiten-Rechners. */
   import { getDistanceFactor } from '$lib/data/units';
-  import {
-    formatDistance,
-    formatNumber,
-    formatPowerDbm,
-    formatWavelength
-  } from '$lib/utils/formatting';
+  import { formatDistance, formatNumber, formatPowerDbm, formatWavelength } from '$lib/utils/formatting';
   import { calculateRadarReceivedPowerDbm, type RadarParameters } from '$lib/utils/radar';
   import Badge from '$lib/components/ui/Badge.svelte';
   import ResultCard from '$lib/components/ui/ResultCard.svelte';
@@ -48,11 +43,7 @@
     emphasis="hero"
   />
 
-  <ResultCard
-    label="Wellenlänge"
-    value={wavelengthM > 0 ? formatWavelength(wavelengthM) : '—'}
-    hint="λ = c / f"
-  />
+  <ResultCard label="Wellenlänge" value={wavelengthM > 0 ? formatWavelength(wavelengthM) : '—'} hint="λ = c / f" />
 </div>
 
 <div class="radar-power">
@@ -62,15 +53,9 @@
       <li class="radar-power__item">
         <span class="radar-power__range">{item.label}</span>
         <span class="radar-power__value">
-          {Number.isFinite(item.power)
-            ? formatPowerDbm(item.power)
-            : `< ${DISPLAY_FLOOR_DBM} dBm`}
+          {Number.isFinite(item.power) ? formatPowerDbm(item.power) : `< ${DISPLAY_FLOOR_DBM} dBm`}
         </span>
-        <Badge
-          tone={item.detectable ? 'success' : 'danger'}
-          dot
-          srPrefix="Detektierbarkeit"
-        >
+        <Badge tone={item.detectable ? 'success' : 'danger'} dot srPrefix="Detektierbarkeit">
           {item.detectable ? 'detektierbar' : 'zu schwach'}
         </Badge>
       </li>

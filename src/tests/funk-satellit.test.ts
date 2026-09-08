@@ -152,7 +152,10 @@ import { findNode } from '$lib/data/navigation';
 import { getRelatedTopics } from '$lib/data/relations';
 import { sectionIds } from '$lib/content/funktechnik/types';
 import { articleSections } from '$lib/content/funktechnik/adapt';
-import { LEARNING_GOALS as PAGE_GOALS_SATELLITENFUNK, SECTIONS as PAGE_SECTIONS_SATELLITENFUNK } from '$lib/content/funktechnik/satellitenfunk';
+import {
+  LEARNING_GOALS as PAGE_GOALS_SATELLITENFUNK,
+  SECTIONS as PAGE_SECTIONS_SATELLITENFUNK
+} from '$lib/content/funktechnik/satellitenfunk';
 
 const PAGE_HREF_SATELLITENFUNK = '/wissen/funktechnik/satellitenfunk/';
 
@@ -171,8 +174,12 @@ describe('Seite /wissen/funktechnik/satellitenfunk/', () => {
   });
 
   it('hat Route und Metadaten-Lader', () => {
-    expect(ROUTE_FILES_SATELLITENFUNK.has(`/src/routes${PAGE_HREF_SATELLITENFUNK}+page.svelte`)).toBe(true);
-    expect(ROUTE_FILES_SATELLITENFUNK.has(`/src/routes${PAGE_HREF_SATELLITENFUNK}+page.ts`)).toBe(true);
+    expect(
+      ROUTE_FILES_SATELLITENFUNK.has(`/src/routes${PAGE_HREF_SATELLITENFUNK}+page.svelte`)
+    ).toBe(true);
+    expect(ROUTE_FILES_SATELLITENFUNK.has(`/src/routes${PAGE_HREF_SATELLITENFUNK}+page.ts`)).toBe(
+      true
+    );
   });
 
   it('verweist auf mindestens drei lebende Seiten, davon eine aus einem anderen Bereich', () => {
@@ -202,6 +209,7 @@ describe('Seite /wissen/funktechnik/satellitenfunk/', () => {
 
   it('enthält die Abschnitte, auf die die Route zugreift', () => {
     const ids = sectionIds(PAGE_SECTIONS_SATELLITENFUNK);
-    for (const id of ['bahnen', 'strecke', 'baender', 'transponder', 'systeme']) expect(ids, id).toContain(id);
+    for (const id of ['bahnen', 'strecke', 'baender', 'transponder', 'systeme'])
+      expect(ids, id).toContain(id);
   });
 });

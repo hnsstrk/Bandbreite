@@ -13,7 +13,7 @@ import {
   ITU_BANDS,
   NATO_BANDS,
   US_ALT_BANDS,
-  formatFrequencyRange,
+  formatFrequencyRange
 } from '$lib/data/bands';
 import { FREQUENCY_LIMITS } from '$lib/data/frequencyBands';
 import { ALL_APPLICATIONS, getApplicationsForFrequency } from '$lib/data/applications';
@@ -189,9 +189,7 @@ describe('frequencyBands.ts — korrigierte Grenzwerte', () => {
     expect(FREQUENCY_LIMITS.BROADCAST_60M_GAP_MIN).toBeGreaterThan(
       FREQUENCY_LIMITS.BROADCAST_60M_MIN
     );
-    expect(FREQUENCY_LIMITS.BROADCAST_60M_GAP_MAX).toBeLessThan(
-      FREQUENCY_LIMITS.BROADCAST_60M_MAX
-    );
+    expect(FREQUENCY_LIMITS.BROADCAST_60M_GAP_MAX).toBeLessThan(FREQUENCY_LIMITS.BROADCAST_60M_MAX);
   });
 
   // Befund 21: in Region 1 endet das 6-m-Band bei 52 MHz
@@ -220,9 +218,7 @@ describe('applications — korrigierte Einträge', () => {
     expect(adsb.maxHz).toBeGreaterThan(adsb.minHz);
     expect(getApplicationsForFrequency(1090e6).map((a) => a.id)).toContain('nav-ads-b');
     // Die Abfragefrequenz 1030 MHz ist ein eigener Eintrag
-    expect(getApplicationsForFrequency(1030e6).map((a) => a.id)).toContain(
-      'nav-ssr-interrogation'
-    );
+    expect(getApplicationsForFrequency(1030e6).map((a) => a.id)).toContain('nav-ssr-interrogation');
   });
 
   // Befund 25: der alte ELT-Eintrag markierte 284 MHz Spektrum als "ELT"
@@ -347,7 +343,7 @@ describe('history.ts — Korrekturen und Ergänzungen', () => {
       'gsm-germany',
       'umts-germany',
       'lte-germany',
-      'umts-shutdown-germany',
+      'umts-shutdown-germany'
     ]) {
       expect(ids, `Meilenstein ${id} fehlt`).toContain(id);
     }

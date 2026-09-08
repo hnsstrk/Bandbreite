@@ -148,40 +148,150 @@ const RAW_CHANNELS: [
   ['64', 156.225, 160.825, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
   ['05', 156.25, 160.85, 'oeffentlich', 'Zweifrequenzkanal; vielerorts Revierfunk.'],
   ['65', 156.275, 160.875, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst.'],
-  ['06', 156.3, null, 'schiff-schiff', 'Schiff–Schiff; zusätzlich Verkehr mit Luftfahrzeugen bei Such- und Rettungseinsätzen.'],
+  [
+    '06',
+    156.3,
+    null,
+    'schiff-schiff',
+    'Schiff–Schiff; zusätzlich Verkehr mit Luftfahrzeugen bei Such- und Rettungseinsätzen.'
+  ],
   ['66', 156.325, 160.925, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst.'],
   ['07', 156.35, 160.95, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
-  ['67', 156.375, null, 'schiff-schiff', 'Schiff–Schiff; in mehreren Staaten Sicherheitskanal für kleine Fahrzeuge.'],
+  [
+    '67',
+    156.375,
+    null,
+    'schiff-schiff',
+    'Schiff–Schiff; in mehreren Staaten Sicherheitskanal für kleine Fahrzeuge.'
+  ],
   ['08', 156.4, null, 'schiff-schiff', 'Schiff–Schiff, ausschließlich Einfrequenzbetrieb.'],
   ['68', 156.425, null, 'hafen-verkehr', 'Hafenfunk im Einfrequenzbetrieb.'],
   ['09', 156.45, null, 'schiff-schiff', 'Schiff–Schiff und Hafenfunk; vielerorts Lotsenkanal.'],
   ['69', 156.475, null, 'schiff-schiff', 'Schiff–Schiff und Hafenfunk.'],
-  ['10', 156.5, null, 'schiff-schiff', 'Schiff–Schiff und Hafenfunk; auch für Meeresverschmutzung.'],
-  ['70', 156.525, null, 'dsc', 'Ausschließlich digitaler Selektivruf — hier läuft die Alarmierung, kein Sprechverkehr.'],
+  [
+    '10',
+    156.5,
+    null,
+    'schiff-schiff',
+    'Schiff–Schiff und Hafenfunk; auch für Meeresverschmutzung.'
+  ],
+  [
+    '70',
+    156.525,
+    null,
+    'dsc',
+    'Ausschließlich digitaler Selektivruf — hier läuft die Alarmierung, kein Sprechverkehr.'
+  ],
   ['11', 156.55, null, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst.'],
   ['71', 156.575, null, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst.'],
   ['12', 156.6, null, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst.'],
   ['72', 156.625, null, 'schiff-schiff', 'Ausschließlich Schiff–Schiff.'],
-  ['13', 156.65, null, 'schiff-schiff', 'Brücke–Brücke: Verkehr zur Sicherheit der Schifffahrt; weltweit mitgehört.'],
+  [
+    '13',
+    156.65,
+    null,
+    'schiff-schiff',
+    'Brücke–Brücke: Verkehr zur Sicherheit der Schifffahrt; weltweit mitgehört.'
+  ],
   ['73', 156.675, null, 'schiff-schiff', 'Schiff–Schiff und Hafenfunk.'],
   ['14', 156.7, null, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst.'],
   ['74', 156.725, null, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst.'],
   ['15', 156.75, null, 'bordverkehr', 'Bordverkehr; höchstens 1 W.', MARITIME_LOW_POWER_W],
-  ['75', 156.775, null, 'bordverkehr', 'Nur navigationsbezogener Verkehr im Schutzabstand zu Kanal 16; höchstens 1 W.', MARITIME_LOW_POWER_W],
-  ['16', 156.8, null, 'not-sicherheit', 'Not-, Dringlichkeits- und Sicherheitsverkehr sowie Anruf. Dauerwache der Küstenfunkstellen.'],
-  ['76', 156.825, null, 'bordverkehr', 'Nur navigationsbezogener Verkehr im Schutzabstand zu Kanal 16; höchstens 1 W.', MARITIME_LOW_POWER_W],
+  [
+    '75',
+    156.775,
+    null,
+    'bordverkehr',
+    'Nur navigationsbezogener Verkehr im Schutzabstand zu Kanal 16; höchstens 1 W.',
+    MARITIME_LOW_POWER_W
+  ],
+  [
+    '16',
+    156.8,
+    null,
+    'not-sicherheit',
+    'Not-, Dringlichkeits- und Sicherheitsverkehr sowie Anruf. Dauerwache der Küstenfunkstellen.'
+  ],
+  [
+    '76',
+    156.825,
+    null,
+    'bordverkehr',
+    'Nur navigationsbezogener Verkehr im Schutzabstand zu Kanal 16; höchstens 1 W.',
+    MARITIME_LOW_POWER_W
+  ],
   ['17', 156.85, null, 'bordverkehr', 'Bordverkehr; höchstens 1 W.', MARITIME_LOW_POWER_W],
   ['77', 156.875, null, 'schiff-schiff', 'Ausschließlich Schiff–Schiff.'],
-  ['18', 156.9, 161.5, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['78', 156.925, 161.525, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['19', 156.95, 161.55, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['79', 156.975, 161.575, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['20', 157.0, 161.6, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['80', 157.025, 161.625, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['21', 157.05, 161.65, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['81', 157.075, 161.675, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['22', 157.1, 161.7, 'hafen-verkehr', 'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'],
-  ['82', 157.125, 161.725, 'hafen-verkehr', 'Hafenfunk, Schiffsbewegungsdienst und öffentlicher Verkehr.'],
+  [
+    '18',
+    156.9,
+    161.5,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '78',
+    156.925,
+    161.525,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '19',
+    156.95,
+    161.55,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '79',
+    156.975,
+    161.575,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '20',
+    157.0,
+    161.6,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '80',
+    157.025,
+    161.625,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '21',
+    157.05,
+    161.65,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '81',
+    157.075,
+    161.675,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '22',
+    157.1,
+    161.7,
+    'hafen-verkehr',
+    'Hafenfunk und Schiffsbewegungsdienst im Zweifrequenzbetrieb.'
+  ],
+  [
+    '82',
+    157.125,
+    161.725,
+    'hafen-verkehr',
+    'Hafenfunk, Schiffsbewegungsdienst und öffentlicher Verkehr.'
+  ],
   ['23', 157.15, 161.75, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
   ['83', 157.175, 161.775, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
   ['24', 157.2, 161.8, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
@@ -190,12 +300,48 @@ const RAW_CHANNELS: [
   ['85', 157.275, 161.875, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
   ['26', 157.3, 161.9, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
   ['86', 157.325, 161.925, 'oeffentlich', 'Zweifrequenzkanal der Küstenfunkstellen.'],
-  ['27', 157.35, 161.95, 'oeffentlich', 'Zweifrequenzkanal; die Küstenfrequenz 161,950 MHz ist seit WRC-15 dem Anwendungsspezifischen Nachrichtendienst ASM 1 zugewiesen.'],
-  ['87', 157.375, null, 'hafen-verkehr', 'Seit WRC-12 Einfrequenzkanal; die frühere Küstenfrequenz trägt heute AIS 1.'],
-  ['28', 157.4, 162.0, 'oeffentlich', 'Zweifrequenzkanal; die Küstenfrequenz 162,000 MHz ist seit WRC-15 dem Nachrichtendienst ASM 2 zugewiesen.'],
-  ['88', 157.425, null, 'hafen-verkehr', 'Seit WRC-12 Einfrequenzkanal; die frühere Küstenfrequenz trägt heute AIS 2.'],
-  ['AIS 1', 161.975, null, 'ais', 'Automatisches Identifikationssystem, Kanal 1 (früher 87B). Kennung, Position, Kurs und Fahrt im Zeitschlitzverfahren.'],
-  ['AIS 2', 162.025, null, 'ais', 'Automatisches Identifikationssystem, Kanal 2 (früher 88B). Die Stationen wechseln zwischen beiden AIS-Kanälen.']
+  [
+    '27',
+    157.35,
+    161.95,
+    'oeffentlich',
+    'Zweifrequenzkanal; die Küstenfrequenz 161,950 MHz ist seit WRC-15 dem Anwendungsspezifischen Nachrichtendienst ASM 1 zugewiesen.'
+  ],
+  [
+    '87',
+    157.375,
+    null,
+    'hafen-verkehr',
+    'Seit WRC-12 Einfrequenzkanal; die frühere Küstenfrequenz trägt heute AIS 1.'
+  ],
+  [
+    '28',
+    157.4,
+    162.0,
+    'oeffentlich',
+    'Zweifrequenzkanal; die Küstenfrequenz 162,000 MHz ist seit WRC-15 dem Nachrichtendienst ASM 2 zugewiesen.'
+  ],
+  [
+    '88',
+    157.425,
+    null,
+    'hafen-verkehr',
+    'Seit WRC-12 Einfrequenzkanal; die frühere Küstenfrequenz trägt heute AIS 2.'
+  ],
+  [
+    'AIS 1',
+    161.975,
+    null,
+    'ais',
+    'Automatisches Identifikationssystem, Kanal 1 (früher 87B). Kennung, Position, Kurs und Fahrt im Zeitschlitzverfahren.'
+  ],
+  [
+    'AIS 2',
+    162.025,
+    null,
+    'ais',
+    'Automatisches Identifikationssystem, Kanal 2 (früher 88B). Die Stationen wechseln zwischen beiden AIS-Kanälen.'
+  ]
 ];
 
 /** Alle UKW-Seefunkkanäle, aufsteigend nach Schiffsfrequenz. */
@@ -326,21 +472,111 @@ export const MARITIME_HF_FREQUENCIES: MaritimeHfFrequency[] = [
     mode: 'sprechfunk',
     noteDE: 'Not- und Sicherheitsverkehr; wird auch von Luftfahrzeugen im Rettungseinsatz genutzt.'
   },
-  { id: 'nbdp-4177', bandDE: '4-MHz-Band', frequencyHz: 4_177_500, mode: 'nbdp', noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.' },
-  { id: 'dsc-4207', bandDE: '4-MHz-Band', frequencyHz: 4_207_500, mode: 'dsc', noteDE: 'Digitaler Selektivruf im Seegebiet A3/A4.' },
-  { id: 'navtex-4209', bandDE: '4-MHz-Band', frequencyHz: NAVTEX_HF_HZ, mode: 'navtex', noteDE: 'NAVTEX-Aussendungen in tropischen Seegebieten.' },
-  { id: 'voice-6215', bandDE: '6-MHz-Band', frequencyHz: 6_215_000, mode: 'sprechfunk', noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.' },
-  { id: 'nbdp-6268', bandDE: '6-MHz-Band', frequencyHz: 6_268_000, mode: 'nbdp', noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.' },
-  { id: 'dsc-6312', bandDE: '6-MHz-Band', frequencyHz: 6_312_000, mode: 'dsc', noteDE: 'Digitaler Selektivruf im Seegebiet A3/A4.' },
-  { id: 'voice-8291', bandDE: '8-MHz-Band', frequencyHz: 8_291_000, mode: 'sprechfunk', noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.' },
-  { id: 'nbdp-8376', bandDE: '8-MHz-Band', frequencyHz: 8_376_500, mode: 'nbdp', noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.' },
-  { id: 'dsc-8414', bandDE: '8-MHz-Band', frequencyHz: 8_414_500, mode: 'dsc', noteDE: 'Digitaler Selektivruf; das am weitesten reichende DSC-Band bei Tag.' },
-  { id: 'voice-12290', bandDE: '12-MHz-Band', frequencyHz: 12_290_000, mode: 'sprechfunk', noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.' },
-  { id: 'nbdp-12520', bandDE: '12-MHz-Band', frequencyHz: 12_520_000, mode: 'nbdp', noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.' },
-  { id: 'dsc-12577', bandDE: '12-MHz-Band', frequencyHz: 12_577_000, mode: 'dsc', noteDE: 'Digitaler Selektivruf im Seegebiet A3/A4.' },
-  { id: 'voice-16420', bandDE: '16-MHz-Band', frequencyHz: 16_420_000, mode: 'sprechfunk', noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.' },
-  { id: 'nbdp-16695', bandDE: '16-MHz-Band', frequencyHz: 16_695_000, mode: 'nbdp', noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.' },
-  { id: 'dsc-16804', bandDE: '16-MHz-Band', frequencyHz: 16_804_500, mode: 'dsc', noteDE: 'Digitaler Selektivruf über große Entfernungen bei guter Ausbreitung.' }
+  {
+    id: 'nbdp-4177',
+    bandDE: '4-MHz-Band',
+    frequencyHz: 4_177_500,
+    mode: 'nbdp',
+    noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.'
+  },
+  {
+    id: 'dsc-4207',
+    bandDE: '4-MHz-Band',
+    frequencyHz: 4_207_500,
+    mode: 'dsc',
+    noteDE: 'Digitaler Selektivruf im Seegebiet A3/A4.'
+  },
+  {
+    id: 'navtex-4209',
+    bandDE: '4-MHz-Band',
+    frequencyHz: NAVTEX_HF_HZ,
+    mode: 'navtex',
+    noteDE: 'NAVTEX-Aussendungen in tropischen Seegebieten.'
+  },
+  {
+    id: 'voice-6215',
+    bandDE: '6-MHz-Band',
+    frequencyHz: 6_215_000,
+    mode: 'sprechfunk',
+    noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.'
+  },
+  {
+    id: 'nbdp-6268',
+    bandDE: '6-MHz-Band',
+    frequencyHz: 6_268_000,
+    mode: 'nbdp',
+    noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.'
+  },
+  {
+    id: 'dsc-6312',
+    bandDE: '6-MHz-Band',
+    frequencyHz: 6_312_000,
+    mode: 'dsc',
+    noteDE: 'Digitaler Selektivruf im Seegebiet A3/A4.'
+  },
+  {
+    id: 'voice-8291',
+    bandDE: '8-MHz-Band',
+    frequencyHz: 8_291_000,
+    mode: 'sprechfunk',
+    noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.'
+  },
+  {
+    id: 'nbdp-8376',
+    bandDE: '8-MHz-Band',
+    frequencyHz: 8_376_500,
+    mode: 'nbdp',
+    noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.'
+  },
+  {
+    id: 'dsc-8414',
+    bandDE: '8-MHz-Band',
+    frequencyHz: 8_414_500,
+    mode: 'dsc',
+    noteDE: 'Digitaler Selektivruf; das am weitesten reichende DSC-Band bei Tag.'
+  },
+  {
+    id: 'voice-12290',
+    bandDE: '12-MHz-Band',
+    frequencyHz: 12_290_000,
+    mode: 'sprechfunk',
+    noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.'
+  },
+  {
+    id: 'nbdp-12520',
+    bandDE: '12-MHz-Band',
+    frequencyHz: 12_520_000,
+    mode: 'nbdp',
+    noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.'
+  },
+  {
+    id: 'dsc-12577',
+    bandDE: '12-MHz-Band',
+    frequencyHz: 12_577_000,
+    mode: 'dsc',
+    noteDE: 'Digitaler Selektivruf im Seegebiet A3/A4.'
+  },
+  {
+    id: 'voice-16420',
+    bandDE: '16-MHz-Band',
+    frequencyHz: 16_420_000,
+    mode: 'sprechfunk',
+    noteDE: 'Not- und Sicherheitsverkehr im Sprechfunk.'
+  },
+  {
+    id: 'nbdp-16695',
+    bandDE: '16-MHz-Band',
+    frequencyHz: 16_695_000,
+    mode: 'nbdp',
+    noteDE: 'Funkfernschreiben für Not- und Sicherheitsverkehr.'
+  },
+  {
+    id: 'dsc-16804',
+    bandDE: '16-MHz-Band',
+    frequencyHz: 16_804_500,
+    mode: 'dsc',
+    noteDE: 'Digitaler Selektivruf über große Entfernungen bei guter Ausbreitung.'
+  }
 ];
 
 // ============================================================================
@@ -374,27 +610,43 @@ export const GMDSS_SEA_AREAS: GmdssSeaArea[] = [
     extentDE: 'Küstennah, innerhalb der UKW-Reichweite einer Küstenfunkstelle mit DSC-Wache',
     typicalRangeNm: 25,
     systemDE: 'UKW mit DSC auf Kanal 70',
-    equipmentDE: ['UKW-Anlage mit DSC (Kanal 70)', 'Kanal 16 für den Sprechverkehr', 'NAVTEX-Empfänger', 'Satelliten-EPIRB 406 MHz'],
+    equipmentDE: [
+      'UKW-Anlage mit DSC (Kanal 70)',
+      'Kanal 16 für den Sprechverkehr',
+      'NAVTEX-Empfänger',
+      'Satelliten-EPIRB 406 MHz'
+    ],
     descriptionDE:
       'Die Alarmierung läuft über den digitalen Selektivruf auf Kanal 70; die Reichweite folgt der Sichtweite und hängt vor allem von der Antennenhöhe der Küstenstation ab.'
   },
   {
     id: 'A2',
     nameDE: 'Seegebiet A2',
-    extentDE: 'Außerhalb von A1, aber innerhalb der Grenzwellenreichweite einer Küstenfunkstelle mit DSC-Wache',
+    extentDE:
+      'Außerhalb von A1, aber innerhalb der Grenzwellenreichweite einer Küstenfunkstelle mit DSC-Wache',
     typicalRangeNm: 150,
     systemDE: 'Grenzwelle mit DSC auf 2187,5 kHz',
-    equipmentDE: ['Grenzwellenanlage mit DSC (2187,5 kHz)', 'Sprechfunk auf 2182 kHz', 'zusätzlich die A1-Ausrüstung'],
+    equipmentDE: [
+      'Grenzwellenanlage mit DSC (2187,5 kHz)',
+      'Sprechfunk auf 2182 kHz',
+      'zusätzlich die A1-Ausrüstung'
+    ],
     descriptionDE:
       'Die Bodenwelle im 2-MHz-Bereich trägt über den Horizont hinaus. Nachts steigt die Reichweite durch die Raumwelle, gleichzeitig nehmen Störungen zu.'
   },
   {
     id: 'A3',
     nameDE: 'Seegebiet A3',
-    extentDE: 'Außerhalb von A1 und A2 innerhalb der Ausleuchtzone geostationärer Kommunikationssatelliten, etwa zwischen 76° Nord und 76° Süd',
+    extentDE:
+      'Außerhalb von A1 und A2 innerhalb der Ausleuchtzone geostationärer Kommunikationssatelliten, etwa zwischen 76° Nord und 76° Süd',
     typicalRangeNm: null,
     systemDE: 'Satellitenfunk (Inmarsat, Iridium) oder Kurzwelle mit DSC',
-    equipmentDE: ['Schiffs-Erdfunkstelle mit Notruftaste', 'Kurzwellenanlage mit DSC', 'EGC-Empfänger für Sicherheitsmeldungen', 'zusätzlich die A1- und A2-Ausrüstung'],
+    equipmentDE: [
+      'Schiffs-Erdfunkstelle mit Notruftaste',
+      'Kurzwellenanlage mit DSC',
+      'EGC-Empfänger für Sicherheitsmeldungen',
+      'zusätzlich die A1- und A2-Ausrüstung'
+    ],
     descriptionDE:
       'Ein geostationärer Satellit steht über dem Äquator; in hohen Breiten sinkt er unter den Horizont. Daraus ergibt sich die Grenze des Gebiets A3.'
   },
@@ -404,7 +656,10 @@ export const GMDSS_SEA_AREAS: GmdssSeaArea[] = [
     extentDE: 'Die Polargebiete außerhalb von A1, A2 und A3',
     typicalRangeNm: null,
     systemDE: 'Kurzwelle mit DSC; ergänzend Satellitensysteme in polaren Umlaufbahnen',
-    equipmentDE: ['Kurzwellenanlage mit DSC und Funkfernschreiben', 'zusätzlich die A1-, A2- und A3-Ausrüstung'],
+    equipmentDE: [
+      'Kurzwellenanlage mit DSC und Funkfernschreiben',
+      'zusätzlich die A1-, A2- und A3-Ausrüstung'
+    ],
     descriptionDE:
       'Ohne geostationäre Abdeckung bleibt die Kurzwelle das tragende System. Systeme in polnaher Umlaufbahn schließen die Lücke zunehmend.'
   }

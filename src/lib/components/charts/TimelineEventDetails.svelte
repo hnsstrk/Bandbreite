@@ -40,11 +40,7 @@
         onclick={() => handleEntryClick(event)}
       >
         <span class="tl-year">{event.year}</span>
-        <span
-          class="tl-swatch"
-          style="background: {CATEGORY_TOKENS[event.category]}"
-          aria-hidden="true"
-        ></span>
+        <span class="tl-swatch" style="background: {CATEGORY_TOKENS[event.category]}" aria-hidden="true"></span>
         <span class="tl-title">{event.titleDE}</span>
       </button>
     </li>
@@ -62,27 +58,29 @@
     tone="sunken"
   >
     {#snippet actions()}
-      <Button
-        size="sm"
-        variant="ghost"
-        iconOnly
-        icon="close"
-        label="Auswahl aufheben"
-        onclick={() => onselect(null)}
-      />
+      <Button size="sm" variant="ghost" iconOnly icon="close" label="Auswahl aufheben" onclick={() => onselect(null)} />
     {/snippet}
 
     <p class="tl-description">{selected.descriptionDE}</p>
 
     <dl class="tl-meta">
       {#if selected.person}
-        <div><dt>Person</dt><dd>{selected.person}</dd></div>
+        <div>
+          <dt>Person</dt>
+          <dd>{selected.person}</dd>
+        </div>
       {/if}
       {#if selected.location}
-        <div><dt>Ort</dt><dd>{selected.location}</dd></div>
+        <div>
+          <dt>Ort</dt>
+          <dd>{selected.location}</dd>
+        </div>
       {/if}
       {#if frequencyText(selected)}
-        <div><dt>Frequenz</dt><dd>{frequencyText(selected)}</dd></div>
+        <div>
+          <dt>Frequenz</dt>
+          <dd>{frequencyText(selected)}</dd>
+        </div>
       {/if}
       <div>
         <dt>Bedeutung</dt>
@@ -96,8 +94,7 @@
   </Card>
 {:else}
   <p class="tl-hint">
-    {events.length} von {HISTORICAL_EVENTS.length} Ereignissen sichtbar. Ein Klick auf einen
-    Eintrag zeigt die Einzelheiten.
+    {events.length} von {HISTORICAL_EVENTS.length} Ereignissen sichtbar. Ein Klick auf einen Eintrag zeigt die Einzelheiten.
   </p>
 {/if}
 

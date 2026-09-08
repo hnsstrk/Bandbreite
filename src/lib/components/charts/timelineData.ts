@@ -61,10 +61,34 @@ export const ALL_CATEGORIES: HistoryCategory[] = CATEGORY_ENTRIES.map((entry) =>
 
 /** Epochen als farbig hinterlegte Bänder. */
 export const ERAS = [
-  { id: 'discovery', startYear: 1860, endYear: 1900, label: 'Entdeckung', token: 'var(--color-series-4)' },
-  { id: 'early', startYear: 1900, endYear: 1950, label: 'Frühe Funkära', token: 'var(--color-series-1)' },
-  { id: 'analog', startYear: 1950, endYear: 1990, label: 'Analoge Ära', token: 'var(--color-series-2)' },
-  { id: 'digital', startYear: 1990, endYear: 2030, label: 'Digitale Ära', token: 'var(--color-series-3)' }
+  {
+    id: 'discovery',
+    startYear: 1860,
+    endYear: 1900,
+    label: 'Entdeckung',
+    token: 'var(--color-series-4)'
+  },
+  {
+    id: 'early',
+    startYear: 1900,
+    endYear: 1950,
+    label: 'Frühe Funkära',
+    token: 'var(--color-series-1)'
+  },
+  {
+    id: 'analog',
+    startYear: 1950,
+    endYear: 1990,
+    label: 'Analoge Ära',
+    token: 'var(--color-series-2)'
+  },
+  {
+    id: 'digital',
+    startYear: 1990,
+    endYear: 2030,
+    label: 'Digitale Ära',
+    token: 'var(--color-series-3)'
+  }
 ];
 
 /** Beschriftung der Bedeutung eines Ereignisses. */
@@ -121,8 +145,7 @@ export function filterEvents(
   onlyMajor: boolean
 ): HistoricalEvent[] {
   return HISTORICAL_EVENTS.filter(
-    (event) =>
-      categories.has(event.category) && (!onlyMajor || event.significance === 'major')
+    (event) => categories.has(event.category) && (!onlyMajor || event.significance === 'major')
   ).sort((a, b) => a.year - b.year);
 }
 

@@ -66,7 +66,7 @@ export const MOBILE_GENERATIONS: MobileGeneration[] = [
       'Funkkanal. Das deutsche C-Netz arbeitete bei 450 MHz und bot als Erstes ein ' +
       'automatisches Handover zwischen Funkzellen; Datenübertragung war nur über ' +
       'Modems mit wenigen Kilobit pro Sekunde möglich.',
-    source: 'Historische Netzbetreiberangaben; ITU-Statistiken',
+    source: 'Historische Netzbetreiberangaben; ITU-Statistiken'
   },
   {
     id: 'gen-2g',
@@ -85,7 +85,7 @@ export const MOBILE_GENERATIONS: MobileGeneration[] = [
       'die Sprache wird komprimiert und verschlüsselt übertragen. Mit GPRS kam die ' +
       'paketvermittelte Datenübertragung hinzu, mit EDGE eine höherwertige Modulation. ' +
       'GSM ist bis heute die Rückfallebene für Sprache und Maschinenkommunikation.',
-    source: 'ETSI TS 145 005; 3GPP TS 45.001',
+    source: 'ETSI TS 145 005; 3GPP TS 45.001'
   },
   {
     id: 'gen-3g',
@@ -104,7 +104,7 @@ export const MOBILE_GENERATIONS: MobileGeneration[] = [
       'orthogonale Spreizcodes getrennt. Damit wurde mobiles Internet praktikabel. ' +
       'In Deutschland sind die UMTS-Netze 2021 abgeschaltet und die Frequenzen an ' +
       'LTE und 5G übergegangen.',
-    source: '3GPP TS 25.104; 3GPP TS 25.306',
+    source: '3GPP TS 25.104; 3GPP TS 25.306'
   },
   {
     id: 'gen-4g',
@@ -123,7 +123,7 @@ export const MOBILE_GENERATIONS: MobileGeneration[] = [
       'Empfang auch bei starker Mehrwegeausbreitung robust macht; im Uplink senkt ' +
       'ein Einträgerverfahren die Spitzenlast des Endgerätesenders. Mit ' +
       'Trägeraggregation lassen sich mehrere Bänder bündeln.',
-    source: '3GPP TS 36.101; 3GPP TS 36.306',
+    source: '3GPP TS 36.101; 3GPP TS 36.306'
   },
   {
     id: 'gen-5g',
@@ -142,7 +142,7 @@ export const MOBILE_GENERATIONS: MobileGeneration[] = [
       '700 MHz bis in den Millimeterwellenbereich funktioniert. Neben hohen Datenraten ' +
       'adressiert 5G ausdrücklich sehr viele Sensoren pro Fläche und Anwendungen mit ' +
       'garantiert kurzer Verzögerung.',
-    source: '3GPP TS 38.101-1/-2; ITU-R M.2150',
+    source: '3GPP TS 38.101-1/-2; ITU-R M.2150'
   },
   {
     id: 'gen-6g',
@@ -161,8 +161,8 @@ export const MOBILE_GENERATIONS: MobileGeneration[] = [
       'Verschmelzung von Funkübertragung und Ortung, allgegenwärtige Abdeckung durch ' +
       'Einbindung von Satelliten sowie Energieeffizienz. Als Kandidatenbereiche gelten ' +
       'das obere Mittelband um 7 bis 15 GHz und Sub-Terahertz-Frequenzen.',
-    source: 'ITU-R M.2160 (IMT-2030 Framework, 2023); 3GPP Release 21 (in Arbeit)',
-  },
+    source: 'ITU-R M.2160 (IMT-2030 Framework, 2023); 3GPP Release 21 (in Arbeit)'
+  }
 ];
 
 // ============================================================================
@@ -209,7 +209,7 @@ export const MOBILE_BANDS: MobileBand[] = [
       'Ehemalige Fernsehfrequenzen, 2019 an den Mobilfunk übergeben. Große Zellradien ' +
       'und gute Gebäudedurchdringung; deshalb das Band der Wahl für Flächenversorgung ' +
       'und die 5G-Grundabdeckung.',
-    source: '3GPP TS 36.101 / TS 38.101-1; BNetzA-Auktion 2015',
+    source: '3GPP TS 36.101 / TS 38.101-1; BNetzA-Auktion 2015'
   },
   {
     id: 'band-n20',
@@ -224,7 +224,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     notesDE:
       'Ungewöhnlich: der Downlink liegt unterhalb des Uplinks. 2010 versteigert und ' +
       'zunächst mit Ausbauauflagen für unterversorgte Gebiete verknüpft.',
-    source: '3GPP TS 36.101; BNetzA-Auktion 2010',
+    source: '3GPP TS 36.101; BNetzA-Auktion 2010'
   },
   {
     id: 'band-n8',
@@ -239,7 +239,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     notesDE:
       'Ursprünglich das GSM-Kernband. Heute überwiegend für LTE und 5G umgewidmet, ' +
       'ein Reststreifen trägt weiterhin GSM für Sprache und Maschinenkommunikation.',
-    source: 'ETSI TS 145 005; 3GPP TS 36.101',
+    source: 'ETSI TS 145 005; 3GPP TS 36.101'
   },
   {
     id: 'band-n3',
@@ -254,7 +254,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     notesDE:
       'Mit 75 MHz je Richtung eines der breitesten gepaarten Bänder und daher die ' +
       'Kapazitätsstütze in Städten.',
-    source: '3GPP TS 36.101 / TS 38.101-1',
+    source: '3GPP TS 36.101 / TS 38.101-1'
   },
   {
     id: 'band-n1',
@@ -269,7 +269,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     notesDE:
       'Das ursprüngliche UMTS-Band aus der Auktion von 2000. Nach der UMTS-Abschaltung ' +
       '2021 vollständig für LTE und 5G nutzbar.',
-    source: '3GPP TS 25.104; TS 38.101-1',
+    source: '3GPP TS 25.104; TS 38.101-1'
   },
   {
     id: 'band-n7',
@@ -284,7 +284,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     notesDE:
       'Kapazitätsband mit geringerer Reichweite, typisch für dicht bebaute Gebiete ' +
       'und Veranstaltungsorte.',
-    source: '3GPP TS 36.101 / TS 38.101-1',
+    source: '3GPP TS 36.101 / TS 38.101-1'
   },
   {
     id: 'band-n38',
@@ -299,7 +299,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     notesDE:
       'Die 50 MHz zwischen den beiden gepaarten Hälften von Band 7 werden im ' +
       'Zeitduplex betrieben.',
-    source: '3GPP TS 36.101 / TS 38.101-1',
+    source: '3GPP TS 36.101 / TS 38.101-1'
   },
   {
     id: 'band-n78',
@@ -316,7 +316,7 @@ export const MOBILE_BANDS: MobileBand[] = [
       'liefern die höchsten Kapazitäten der Flächennetze. In Deutschland wurden ' +
       '2019 die Bereiche 3,4 bis 3,7 GHz versteigert, 3,7 bis 3,8 GHz sind für ' +
       'lokale Campusnetze reserviert.',
-    source: '3GPP TS 38.101-1; BNetzA-Auktion 2019',
+    source: '3GPP TS 38.101-1; BNetzA-Auktion 2019'
   },
   {
     id: 'band-n79',
@@ -329,7 +329,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     duplex: 'TDD',
     technologiesDE: ['5G NR'],
     notesDE: 'In Europa nicht zugeteilt; genutzt vor allem in Japan und China.',
-    source: '3GPP TS 38.101-1',
+    source: '3GPP TS 38.101-1'
   },
   {
     id: 'band-n75',
@@ -344,7 +344,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     notesDE:
       'Reines Zusatz-Downlink-Band ohne Uplink; wird per Trägeraggregation an ein ' +
       'gepaartes Band angehängt. Der Bereich war zuvor für DAB im L-Band vorgesehen.',
-    source: '3GPP TS 36.101 (Band 32); TS 38.101-1 (n75)',
+    source: '3GPP TS 36.101 (Band 32); TS 38.101-1 (n75)'
   },
   {
     id: 'band-n258',
@@ -360,7 +360,7 @@ export const MOBILE_BANDS: MobileBand[] = [
       'Europäisches Pionierband für Millimeterwellen. Kanalbandbreiten bis 400 MHz, ' +
       'dafür Reichweiten von einigen hundert Metern und praktisch keine ' +
       'Gebäudedurchdringung. In Deutschland als lokale Zuteilung vergeben.',
-    source: '3GPP TS 38.101-2; BNetzA lokale Zuteilungen 26 GHz',
+    source: '3GPP TS 38.101-2; BNetzA lokale Zuteilungen 26 GHz'
   },
   {
     id: 'band-n257',
@@ -373,7 +373,7 @@ export const MOBILE_BANDS: MobileBand[] = [
     duplex: 'TDD',
     technologiesDE: ['5G NR'],
     notesDE: 'Hauptsächlich in den USA, Japan und Korea genutzt.',
-    source: '3GPP TS 38.101-2',
+    source: '3GPP TS 38.101-2'
   },
   {
     id: 'band-n260',
@@ -386,8 +386,8 @@ export const MOBILE_BANDS: MobileBand[] = [
     duplex: 'TDD',
     technologiesDE: ['5G NR'],
     notesDE: 'Überwiegend US-amerikanische Nutzung, Kanalbandbreiten bis 400 MHz.',
-    source: '3GPP TS 38.101-2',
-  },
+    source: '3GPP TS 38.101-2'
+  }
 ];
 
 /**
@@ -403,8 +403,7 @@ export function getMobileBandsForFrequency(
   for (const band of MOBILE_BANDS) {
     const inUplink =
       band.uplinkMaxHz > 0 && frequencyHz >= band.uplinkMinHz && frequencyHz <= band.uplinkMaxHz;
-    const inDownlink =
-      frequencyHz >= band.downlinkMinHz && frequencyHz <= band.downlinkMaxHz;
+    const inDownlink = frequencyHz >= band.downlinkMinHz && frequencyHz <= band.downlinkMaxHz;
     if (inUplink && inDownlink) result.push({ band, direction: 'beide' });
     else if (inUplink) result.push({ band, direction: 'uplink' });
     else if (inDownlink) result.push({ band, direction: 'downlink' });

@@ -57,8 +57,7 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
   kicker: 'Wissen · Ausbreitung',
   title: 'Wellenausbreitung',
   icon: 'wave',
-  lead:
-    'Funkwellen finden je nach Frequenz auf sehr unterschiedliche Weise vom Sender zum Empfänger: als Bodenwelle entlang der Erdoberfläche, als Raumwelle über die Ionosphäre oder auf Sichtverbindung bis zum Radiohorizont. Dieses Kapitel zeigt die Mechanismen – mit Reglern für Frequenz, Antennenhöhe, Fresnel-Zone und Atmosphäre.',
+  lead: 'Funkwellen finden je nach Frequenz auf sehr unterschiedliche Weise vom Sender zum Empfänger: als Bodenwelle entlang der Erdoberfläche, als Raumwelle über die Ionosphäre oder auf Sichtverbindung bis zum Radiohorizont. Dieses Kapitel zeigt die Mechanismen – mit Reglern für Frequenz, Antennenhöhe, Fresnel-Zone und Atmosphäre.',
   meta: [{ label: 'Quellen', value: 'ITU-R P.526, P.530, P.676, P.834, P.1239' }],
   goals: [
     'Bodenwelle, Raumwelle und Sichtverbindung dem jeweils passenden Frequenzbereich zuordnen',
@@ -71,7 +70,8 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
     {
       id: 'ueberblick',
       title: 'Ausbreitungsmodi im Überblick',
-      description: 'Das interaktive Diagramm zeigt, wie Ionosphäre, Tageszeit und Frequenz die Ausbreitung bestimmen.',
+      description:
+        'Das interaktive Diagramm zeigt, wie Ionosphäre, Tageszeit und Frequenz die Ausbreitung bestimmen.',
       blocks: [
         { type: 'widget', id: 'wave-propagation-diagram' },
         {
@@ -88,7 +88,12 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
               title: 'Raumwelle',
               subtitle: 'Sky Wave · 3 – 30 MHz',
               html: 'Wird an den ionosphärischen Schichten reflektiert und erlaubt über Mehrfachsprünge weltweite Verbindungen.',
-              facts: [{ label: 'Sprung', value: `bis ${formatNumber(SKIP_ZONE_PARAMS.maxSingleHopKm, 0)} km` }]
+              facts: [
+                {
+                  label: 'Sprung',
+                  value: `bis ${formatNumber(SKIP_ZONE_PARAMS.maxSingleHopKm, 0)} km`
+                }
+              ]
             },
             {
               title: 'Sichtverbindung',
@@ -103,7 +108,8 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
     {
       id: 'bodenwelle',
       title: 'Bodenwelle',
-      description: 'Bei Lang- und Mittelwelle kriecht die Welle an der Erdoberfläche entlang; der Boden ist Teil des Wellenleiters.',
+      description:
+        'Bei Lang- und Mittelwelle kriecht die Welle an der Erdoberfläche entlang; der Boden ist Teil des Wellenleiters.',
       blocks: [
         {
           type: 'list',
@@ -124,7 +130,8 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
     {
       id: 'raumwelle',
       title: 'Raumwelle und Ionosphäre',
-      description: 'Kurzwellen werden in 100–400 km Höhe an ionisierten Schichten „reflektiert" – tatsächlich kontinuierlich gebrochen, bis sie zur Erde zurückkehren.',
+      description:
+        'Kurzwellen werden in 100–400 km Höhe an ionisierten Schichten „reflektiert" – tatsächlich kontinuierlich gebrochen, bis sie zur Erde zurückkehren.',
       blocks: [
         {
           type: 'formula',
@@ -144,17 +151,37 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
           label: `Sekantengesetz; für ${formatNumber(IONOSPHERE_PARAMETERS.mufReferenceDistanceKm, 0)} km ist der Faktor ≈ ${mufFactorExample}, also foF2 = ${MUF_EXAMPLE_FOF2_MHZ} MHz → MUF ≈ ${mufExample} MHz`,
           number: '(2)',
           variables: [
-            { symbol: 'foF2', meaning: 'Kritische Frequenz der F2-Schicht (senkrechter Einfall)', unit: 'MHz' },
+            {
+              symbol: 'foF2',
+              meaning: 'Kritische Frequenz der F2-Schicht (senkrechter Einfall)',
+              unit: 'MHz'
+            },
             { symbol: 'φ', meaning: 'Einfallswinkel an der Schicht' }
           ]
         },
         {
           type: 'definitions',
           items: [
-            { term: 'MUF', description: 'Maximum Usable Frequency – die höchste Frequenz, die für eine gegebene Strecke noch reflektiert wird. Steigt mit Sonnenaktivität und Streckenlänge.' },
-            { term: 'LUF', description: 'Lowest Usable Frequency – darunter frisst die D-Schicht-Absorption das Signal. Hängt von Sendeleistung und Tageszeit ab.' },
-            { term: 'Tote Zone', description: 'Bereich zwischen dem Ende der Bodenwelle und dem Auftreffpunkt der ersten Raumwelle, in dem kein Empfang möglich ist.' },
-            { term: 'Sonnenzyklus', description: 'Der 11-jährige Sonnenfleckenzyklus verschiebt die MUF um den Faktor zwei bis drei.' }
+            {
+              term: 'MUF',
+              description:
+                'Maximum Usable Frequency – die höchste Frequenz, die für eine gegebene Strecke noch reflektiert wird. Steigt mit Sonnenaktivität und Streckenlänge.'
+            },
+            {
+              term: 'LUF',
+              description:
+                'Lowest Usable Frequency – darunter frisst die D-Schicht-Absorption das Signal. Hängt von Sendeleistung und Tageszeit ab.'
+            },
+            {
+              term: 'Tote Zone',
+              description:
+                'Bereich zwischen dem Ende der Bodenwelle und dem Auftreffpunkt der ersten Raumwelle, in dem kein Empfang möglich ist.'
+            },
+            {
+              term: 'Sonnenzyklus',
+              description:
+                'Der 11-jährige Sonnenfleckenzyklus verschiebt die MUF um den Faktor zwei bis drei.'
+            }
           ]
         },
         { type: 'widget', id: 'propagation-sandbox' },
@@ -167,7 +194,8 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
     {
       id: 'sichtverbindung',
       title: 'Sichtverbindung und Radiohorizont',
-      description: 'Ab VHF durchdringen Wellen die Ionosphäre; es zählt die quasi-optische Sicht zwischen den Antennen.',
+      description:
+        'Ab VHF durchdringen Wellen die Ionosphäre; es zählt die quasi-optische Sicht zwischen den Antennen.',
       blocks: [
         {
           type: 'formula',
@@ -184,7 +212,10 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
         },
         {
           type: 'paragraph',
-          html: 'Freie Sicht allein reicht nicht: Die Welle braucht Platz um die Sichtlinie herum. Die <strong>erste Fresnel-Zone</strong> ist das Ellipsoid, innerhalb dessen Umwege höchstens λ/2 länger sind als der direkte Weg. Nach ITU-R P.530 sollten mindestens ' + formatPercentage(FRESNEL_CLEARANCE_FRACTION * 100, 0) + ' ihres Radius frei bleiben, sonst dämpft Beugung am Hindernis die Verbindung.'
+          html:
+            'Freie Sicht allein reicht nicht: Die Welle braucht Platz um die Sichtlinie herum. Die <strong>erste Fresnel-Zone</strong> ist das Ellipsoid, innerhalb dessen Umwege höchstens λ/2 länger sind als der direkte Weg. Nach ITU-R P.530 sollten mindestens ' +
+            formatPercentage(FRESNEL_CLEARANCE_FRACTION * 100, 0) +
+            ' ihres Radius frei bleiben, sonst dämpft Beugung am Hindernis die Verbindung.'
         },
         {
           type: 'formula',
@@ -205,7 +236,8 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
     {
       id: 'atmosphaere',
       title: 'Atmosphärische Dämpfung im Mikrowellenbereich',
-      description: 'Oberhalb von etwa 10 GHz absorbieren Wasserdampf und Sauerstoff Funkwellen bei bestimmten Resonanzfrequenzen – dazwischen liegen die „Fenster".',
+      description:
+        'Oberhalb von etwa 10 GHz absorbieren Wasserdampf und Sauerstoff Funkwellen bei bestimmten Resonanzfrequenzen – dazwischen liegen die „Fenster".',
       blocks: [
         {
           type: 'list',
@@ -226,7 +258,8 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
     {
       id: 'sporadic-e',
       title: 'Sporadische E-Schicht',
-      description: 'Temporäre, stark ionisierte Wolken in etwa 100 km Höhe reflektieren VHF-Signale und sorgen für unerwartete Überreichweiten.',
+      description:
+        'Temporäre, stark ionisierte Wolken in etwa 100 km Höhe reflektieren VHF-Signale und sorgen für unerwartete Überreichweiten.',
       blocks: [
         {
           type: 'cards',
@@ -235,12 +268,20 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
             {
               title: 'Sporadic E (Es)',
               subtitle: '30 – 150 MHz · 500 – 2300 km',
-              points: ['Saison Mai bis August auf der Nordhalbkugel', 'Metallionen aus verglühenden Meteoren und Windscherungen', 'Nicht vorhersagbar, aber statistisch gut erfasst']
+              points: [
+                'Saison Mai bis August auf der Nordhalbkugel',
+                'Metallionen aus verglühenden Meteoren und Windscherungen',
+                'Nicht vorhersagbar, aber statistisch gut erfasst'
+              ]
             },
             {
               title: 'Troposcatter',
               subtitle: 'UHF/SHF · 100 – 500 km',
-              points: ['Streuung an Brechungsindex-Inhomogenitäten der Troposphäre', 'Hohe Leistung und große Antennen nötig', 'Historisch für Richtfunk über den Horizont']
+              points: [
+                'Streuung an Brechungsindex-Inhomogenitäten der Troposphäre',
+                'Hohe Leistung und große Antennen nötig',
+                'Historisch für Richtfunk über den Horizont'
+              ]
             }
           ]
         }
@@ -249,7 +290,8 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
     {
       id: 'frequenzbaender',
       title: 'Frequenzbänder und Ausbreitung',
-      description: 'Jedes Band hat charakteristische Ausbreitungseigenschaften, die sich zwischen Tag und Nacht deutlich unterscheiden.',
+      description:
+        'Jedes Band hat charakteristische Ausbreitungseigenschaften, die sich zwischen Tag und Nacht deutlich unterscheiden.',
       blocks: [
         {
           type: 'table',
@@ -271,18 +313,32 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
           items: [
             {
               title: 'Tag',
-              points: ['<strong>D-Schicht aktiv:</strong> absorbiert niedrige HF-Frequenzen', '<strong>E-Schicht stark:</strong> reflektiert MF und untere HF', '<strong>F1-Schicht vorhanden:</strong> separate Reflexionsschicht', '<strong>F2-Schicht hoch:</strong> beste Reflexion für obere HF', '<strong>Höhere MUF</strong> durch stärkere Ionisation']
+              points: [
+                '<strong>D-Schicht aktiv:</strong> absorbiert niedrige HF-Frequenzen',
+                '<strong>E-Schicht stark:</strong> reflektiert MF und untere HF',
+                '<strong>F1-Schicht vorhanden:</strong> separate Reflexionsschicht',
+                '<strong>F2-Schicht hoch:</strong> beste Reflexion für obere HF',
+                '<strong>Höhere MUF</strong> durch stärkere Ionisation'
+              ]
             },
             {
               title: 'Nacht',
-              points: ['<strong>D-Schicht verschwindet:</strong> weniger Absorption', '<strong>E-Schicht schwächer:</strong> löst sich teilweise auf', '<strong>F1 und F2 verschmelzen</strong> zur F-Region', '<strong>Niedrigere MUF</strong> durch schwächere Ionisation', '<strong>Besserer MW/LW-Fernempfang</strong>']
+              points: [
+                '<strong>D-Schicht verschwindet:</strong> weniger Absorption',
+                '<strong>E-Schicht schwächer:</strong> löst sich teilweise auf',
+                '<strong>F1 und F2 verschmelzen</strong> zur F-Region',
+                '<strong>Niedrigere MUF</strong> durch schwächere Ionisation',
+                '<strong>Besserer MW/LW-Fernempfang</strong>'
+              ]
             }
           ]
         },
         {
           type: 'question',
-          question: 'Warum ist ein Mittelwellensender aus 800 km Entfernung nachts hörbar, tagsüber aber nicht?',
-          answer: 'Tagsüber absorbiert die D-Schicht die Raumwelle der Mittelwelle nahezu vollständig – es bleibt nur die Bodenwelle mit wenigen hundert Kilometern Reichweite. Nachts verschwindet die D-Schicht, die Raumwelle erreicht die E-/F-Schicht und wird reflektiert: Fernempfang wird möglich, allerdings mit Schwund (Fading), wenn Boden- und Raumwelle interferieren.'
+          question:
+            'Warum ist ein Mittelwellensender aus 800 km Entfernung nachts hörbar, tagsüber aber nicht?',
+          answer:
+            'Tagsüber absorbiert die D-Schicht die Raumwelle der Mittelwelle nahezu vollständig – es bleibt nur die Bodenwelle mit wenigen hundert Kilometern Reichweite. Nachts verschwindet die D-Schicht, die Raumwelle erreicht die E-/F-Schicht und wird reflektiert: Fernempfang wird möglich, allerdings mit Schwund (Fading), wenn Boden- und Raumwelle interferieren.'
         }
       ]
     }

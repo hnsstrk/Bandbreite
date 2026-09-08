@@ -103,11 +103,7 @@ export function decadeTicks(minHz: number, maxHz: number): number[] {
 }
 
 /** Anzahl der Anwendungen einer Kategorie im dargestellten Bereich. */
-export function categoryCount(
-  category: ApplicationCategory,
-  minHz: number,
-  maxHz: number
-): number {
+export function categoryCount(category: ApplicationCategory, minHz: number, maxHz: number): number {
   return APPLICATIONS_BY_CATEGORY[category].filter(
     (app) => app.maxHz >= minHz && app.minHz <= maxHz
   ).length;

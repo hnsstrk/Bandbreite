@@ -21,7 +21,7 @@ import { SPEED_OF_LIGHT } from '$lib/data/constants';
 import {
   RADIO_SERVICES,
   RADIO_SERVICE_GROUP_LABELS,
-  getServicesForFrequency,
+  getServicesForFrequency
 } from '$lib/data/radioServices';
 
 import {
@@ -39,13 +39,13 @@ import {
   POWER_LF_MF_ERP_W,
   getAmateurBandForFrequency,
   getAmateurSegmentForFrequency,
-  getBandsForLicenseClass,
+  getBandsForLicenseClass
 } from '$lib/data/amateurBands';
 
 import {
   MOBILE_GENERATIONS,
   MOBILE_BANDS,
-  getMobileBandsForFrequency,
+  getMobileBandsForFrequency
 } from '$lib/data/mobileNetworks';
 
 import {
@@ -67,13 +67,13 @@ import {
   AM_CHANNEL_SPACING_R1_HZ,
   SATELLITE_TV_BANDS,
   getDabBlockRange,
-  getDvbT2ChannelRange,
+  getDvbT2ChannelRange
 } from '$lib/data/broadcast';
 
 import {
   EMERGENCY_FREQUENCIES,
   getEmergencyFrequenciesByDomain,
-  findEmergencyFrequenciesNear,
+  findEmergencyFrequenciesNear
 } from '$lib/data/emergencyFrequencies';
 
 import {
@@ -82,7 +82,7 @@ import {
   fmModulationIndex,
   bitsPerSymbol,
   spreadingGainDb,
-  getModulationsByClass,
+  getModulationsByClass
 } from '$lib/data/modulation';
 
 import {
@@ -95,7 +95,7 @@ import {
   parabolicBeamwidthDeg,
   arrayGainDbi,
   dbdToDbi,
-  getAntennasByCategory,
+  getAntennasByCategory
 } from '$lib/data/antennas';
 
 // ============================================================================
@@ -146,9 +146,7 @@ describe('RADIO_SERVICES', () => {
   it('listet die Zuweisungen je Dienst aufsteigend nach Frequenz', () => {
     for (const service of RADIO_SERVICES) {
       for (let i = 0; i < service.allocations.length - 1; i++) {
-        expect(service.allocations[i].minHz).toBeLessThanOrEqual(
-          service.allocations[i + 1].minHz
-        );
+        expect(service.allocations[i].minHz).toBeLessThanOrEqual(service.allocations[i + 1].minHz);
       }
     }
   });
@@ -821,7 +819,7 @@ describe('MODULATIONS', () => {
       ['qam64', 64],
       ['qam256', 256],
       ['qpsk', 4],
-      ['bpsk', 2],
+      ['bpsk', 2]
     ];
     for (const [id, states] of cases) {
       const m = MODULATIONS.find((x) => x.id === id)!;

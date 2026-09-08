@@ -73,7 +73,7 @@ export const BROADCAST_RANGES: BroadcastRange[] = [
       'mehrere hundert Kilometer weit und schwankt kaum, weshalb Langwelle lange für ' +
       'landesweite Programme und Zeitzeichen genutzt wurde. In Mitteleuropa ist der ' +
       'Betrieb bis auf wenige Ausnahmen eingestellt.',
-    source: 'GE75; ITU RR Art. 5',
+    source: 'GE75; ITU RR Art. 5'
   },
   {
     id: 'mw',
@@ -86,7 +86,7 @@ export const BROADCAST_RANGES: BroadcastRange[] = [
       'überlagert die an der Ionosphäre reflektierte Raumwelle das Signal und bringt ' +
       'Fernempfang, aber auch Schwund und gegenseitige Störungen. In Region 2 gilt ' +
       'ein 10-kHz-Raster und der Bereich reicht bis 1705 kHz.',
-    source: 'GE75; ITU RR Art. 5',
+    source: 'GE75; ITU RR Art. 5'
   },
   {
     id: 'fm',
@@ -99,8 +99,8 @@ export const BROADCAST_RANGES: BroadcastRange[] = [
       'Carson-Regel ergibt sich daraus eine belegte Bandbreite von etwa 180 kHz, ' +
       'weshalb benachbarte Sender am selben Ort mindestens 300 bis 400 kHz Abstand ' +
       'halten. Der Stereo-Differenzkanal liegt oberhalb des Pilottons, RDS auf 57 kHz.',
-    source: 'GE84; ITU RR Anhang 10',
-  },
+    source: 'GE84; ITU RR Anhang 10'
+  }
 ];
 
 // ============================================================================
@@ -135,7 +135,7 @@ export const SHORTWAVE_BANDS: ShortwaveBand[] = [
   { nameDE: '16 m', minHz: 17480e3, maxHz: 17900e3, tropical: false },
   { nameDE: '15 m', minHz: 18900e3, maxHz: 19020e3, tropical: false },
   { nameDE: '13 m', minHz: 21450e3, maxHz: 21850e3, tropical: false },
-  { nameDE: '11 m', minHz: 25670e3, maxHz: 26100e3, tropical: false },
+  { nameDE: '11 m', minHz: 25670e3, maxHz: 26100e3, tropical: false }
 ];
 
 // ============================================================================
@@ -198,7 +198,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     noteDE:
       'Zwischenblock in einem Schutzabstand der Kanaltabelle, von CENELEC ' +
       'nachgetragen. Überlappt die benachbarten Blöcke und ist in Deutschland ' +
-      'nicht belegt.',
+      'nicht belegt.'
   },
   { block: '10B', centerHz: 211648000, usedInGermany: true },
   { block: '10C', centerHz: 213360000, usedInGermany: true },
@@ -211,7 +211,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     noteDE:
       'Zwischenblock in einem Schutzabstand der Kanaltabelle, von CENELEC ' +
       'nachgetragen. Überlappt die benachbarten Blöcke und ist in Deutschland ' +
-      'nicht belegt.',
+      'nicht belegt.'
   },
   { block: '11B', centerHz: 218640000, usedInGermany: true },
   { block: '11C', centerHz: 220352000, usedInGermany: true },
@@ -224,7 +224,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     noteDE:
       'Zwischenblock in einem Schutzabstand der Kanaltabelle, von CENELEC ' +
       'nachgetragen. Überlappt die benachbarten Blöcke und ist in Deutschland ' +
-      'nicht belegt.',
+      'nicht belegt.'
   },
   { block: '12B', centerHz: 225648000, usedInGermany: true },
   { block: '12C', centerHz: 227360000, usedInGermany: true },
@@ -235,7 +235,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     usedInGermany: false,
     noteDE:
       'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
-      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+      'genutzt wird er unter anderem in Norwegen und Dänemark.'
   },
   {
     block: '13B',
@@ -243,7 +243,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     usedInGermany: false,
     noteDE:
       'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
-      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+      'genutzt wird er unter anderem in Norwegen und Dänemark.'
   },
   {
     block: '13C',
@@ -251,7 +251,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     usedInGermany: false,
     noteDE:
       'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
-      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+      'genutzt wird er unter anderem in Norwegen und Dänemark.'
   },
   {
     block: '13D',
@@ -259,7 +259,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     usedInGermany: false,
     noteDE:
       'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
-      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+      'genutzt wird er unter anderem in Norwegen und Dänemark.'
   },
   {
     block: '13E',
@@ -267,7 +267,7 @@ export const DAB_BLOCKS: DabBlock[] = [
     usedInGermany: false,
     noteDE:
       'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
-      'genutzt wird er unter anderem in Norwegen und Dänemark.',
+      'genutzt wird er unter anderem in Norwegen und Dänemark.'
   },
   {
     block: '13F',
@@ -275,8 +275,8 @@ export const DAB_BLOCKS: DabBlock[] = [
     usedInGermany: false,
     noteDE:
       'Kanal 13 (230 bis 240 MHz) ist in Deutschland nicht für DAB+ vorgesehen; ' +
-      'genutzt wird er unter anderem in Norwegen und Dänemark.',
-  },
+      'genutzt wird er unter anderem in Norwegen und Dänemark.'
+  }
 ];
 
 /** Untere Bandgrenze des für DAB+ genutzten VHF-Band III in Hz. */
@@ -349,7 +349,7 @@ export const DVBT2_CHANNELS: DvbT2Channel[] = [
   { channel: 45, centerHz: 666e6 },
   { channel: 46, centerHz: 674e6 },
   { channel: 47, centerHz: 682e6 },
-  { channel: 48, centerHz: 690e6 },
+  { channel: 48, centerHz: 690e6 }
 ];
 
 /** Untere Grenze des terrestrischen Fernsehbereichs in Deutschland in Hz. */
@@ -405,7 +405,7 @@ export const SATELLITE_TV_BANDS: SatelliteTvBand[] = [
     descriptionDE:
       'Wird vom LNB mit einem Oszillator bei 9,75 GHz auf die Zwischenfrequenz ' +
       '950 bis 1950 MHz heruntergesetzt und über Koaxialkabel zum Empfänger geführt.',
-    source: 'ITU RR Anhang 30; Satellitenbetreiberangaben',
+    source: 'ITU RR Anhang 30; Satellitenbetreiberangaben'
   },
   {
     id: 'ku-high',
@@ -416,7 +416,7 @@ export const SATELLITE_TV_BANDS: SatelliteTvBand[] = [
       'Umsetzung mit einem Oszillator bei 10,6 GHz auf 1100 bis 2150 MHz. Die ' +
       'Umschaltung zwischen unterem und oberem Band erfolgt über einen 22-kHz-Ton ' +
       'auf der Antennenleitung.',
-    source: 'ITU RR Anhang 30; Satellitenbetreiberangaben',
+    source: 'ITU RR Anhang 30; Satellitenbetreiberangaben'
   },
   {
     id: 'ku-uplink',
@@ -426,7 +426,7 @@ export const SATELLITE_TV_BANDS: SatelliteTvBand[] = [
     descriptionDE:
       'Aufwärtsstrecke der Bodenstationen zum Satelliten. Die Trennung von Hin- und ' +
       'Rückrichtung über verschiedene Bänder vermeidet Selbststörungen des Transponders.',
-    source: 'ITU RR Anhang 30A',
+    source: 'ITU RR Anhang 30A'
   },
   {
     id: 'ka-downlink',
@@ -436,6 +436,6 @@ export const SATELLITE_TV_BANDS: SatelliteTvBand[] = [
     descriptionDE:
       'Von modernen Breitbandsatelliten und Konstellationen im niedrigen Erdorbit ' +
       'genutzt. Höhere Bandbreite als Ku, dafür deutlich stärkere Regendämpfung.',
-    source: 'ITU RR Art. 5',
-  },
+    source: 'ITU RR Art. 5'
+  }
 ];

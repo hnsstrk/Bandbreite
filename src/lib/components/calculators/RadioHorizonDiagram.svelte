@@ -39,9 +39,7 @@
   const MIN_SPAN_KM = 2;
 
   let totalKm = $derived(Math.max(horizon1Km + horizon2Km, MIN_SPAN_KM));
-  let geometry = $derived(
-    sketchGeometry(totalKm * SPAN_MARGIN, sketchAltitudeKm(height1M, height2M))
-  );
+  let geometry = $derived(sketchGeometry(totalKm * SPAN_MARGIN, sketchAltitudeKm(height1M, height2M)));
 
   /** Der Horizontpunkt liegt in der Bildmitte, die Antennen beiderseits. */
   let txFootKm = $derived(-horizon1Km);
@@ -53,9 +51,7 @@
   let rxTop = $derived(sketchPoint(geometry, rxFootKm, height2M / 1000));
   let horizonPoint = $derived(sketchPoint(geometry, 0, 0));
 
-  let groundPath = $derived(
-    sketchArcPath(geometry, -totalKm * SPAN_MARGIN * 0.5, totalKm * SPAN_MARGIN * 0.5, 0, 64)
-  );
+  let groundPath = $derived(sketchArcPath(geometry, -totalKm * SPAN_MARGIN * 0.5, totalKm * SPAN_MARGIN * 0.5, 0, 64));
 </script>
 
 <ChartFrame
@@ -90,27 +86,11 @@
       stroke-width="2"
     />
     <circle cx={horizonPoint.x} cy={horizonPoint.y} r="5" fill="var(--color-marker)" />
-    <text x={horizonPoint.x} y={horizonPoint.y + 22} text-anchor="middle" class="chart-axis-text">
-      Horizontpunkt
-    </text>
+    <text x={horizonPoint.x} y={horizonPoint.y + 22} text-anchor="middle" class="chart-axis-text"> Horizontpunkt </text>
 
     <!-- Antennenmasten -->
-    <line
-      x1={txFoot.x}
-      y1={txFoot.y}
-      x2={txTop.x}
-      y2={txTop.y}
-      stroke="var(--color-series-1)"
-      stroke-width="3"
-    />
-    <line
-      x1={rxFoot.x}
-      y1={rxFoot.y}
-      x2={rxTop.x}
-      y2={rxTop.y}
-      stroke="var(--color-series-2)"
-      stroke-width="3"
-    />
+    <line x1={txFoot.x} y1={txFoot.y} x2={txTop.x} y2={txTop.y} stroke="var(--color-series-1)" stroke-width="3" />
+    <line x1={rxFoot.x} y1={rxFoot.y} x2={rxTop.x} y2={rxTop.y} stroke="var(--color-series-2)" stroke-width="3" />
     <text x={txTop.x} y={txTop.y - 12} text-anchor="middle" class="chart-axis-text">
       h₁ = {formatNumber(height1M, 1)} m
     </text>

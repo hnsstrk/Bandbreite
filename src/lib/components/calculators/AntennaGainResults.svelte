@@ -68,9 +68,8 @@
 </div>
 
 <p class="gain-note">
-  Der Bezug entscheidet über die Zahl: dBi zählt gegenüber dem isotropen
-  Kugelstrahler, dBd gegenüber dem Halbwellendipol. Zwischen beiden liegen
-  genau {formatNumber(GAIN_DIPOLE_DBI, 2)} dB — der Gewinn des Dipols selbst.
+  Der Bezug entscheidet über die Zahl: dBi zählt gegenüber dem isotropen Kugelstrahler, dBd gegenüber dem
+  Halbwellendipol. Zwischen beiden liegen genau {formatNumber(GAIN_DIPOLE_DBI, 2)} dB — der Gewinn des Dipols selbst.
 </p>
 
 <style>

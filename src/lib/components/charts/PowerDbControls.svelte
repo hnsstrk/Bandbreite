@@ -16,7 +16,7 @@
     showRadar = $bindable(),
     showSatellite = $bindable(),
     showIot = $bindable(),
-    showIndustrial = $bindable(),
+    showIndustrial = $bindable()
   }: Props = $props();
 
   function toggleBandMode() {
@@ -24,40 +24,44 @@
   }
 </script>
 
-<div class="flex flex-wrap items-center gap-6 mb-4">
+<div class="mb-4 flex flex-wrap items-center gap-6">
   <!-- Band Mode Toggle Switch with Show/Hide -->
   <div class="flex items-center gap-3">
-    <span class="text-sm text-ink-subtle">Frequenzbänder:</span>
+    <span class="text-ink-subtle text-sm">Frequenzbänder:</span>
     <!-- Show/Hide Bands Toggle -->
-    <label class="flex items-center gap-1.5 cursor-pointer">
+    <label class="flex cursor-pointer items-center gap-1.5">
       <button
         type="button"
-        onclick={() => showIEEEBands = !showIEEEBands}
-        class="relative w-9 h-5 rounded-full transition-colors duration-200 {showIEEEBands ? 'bg-brand' : 'bg-line-strong'}"
+        onclick={() => (showIEEEBands = !showIEEEBands)}
+        class="relative h-5 w-9 rounded-full transition-colors duration-200 {showIEEEBands
+          ? 'bg-brand'
+          : 'bg-line-strong'}"
         role="switch"
         aria-checked={showIEEEBands}
         aria-label="Frequenzbänder anzeigen"
       >
         <span
-          class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-on-solid shadow-md transition-transform duration-200
+          class="bg-on-solid absolute top-0.5 left-0.5 h-4 w-4 rounded-full shadow-md transition-transform duration-200
                  {showIEEEBands ? 'translate-x-4' : 'translate-x-0'}"
         ></span>
       </button>
       <span class="text-xs {showIEEEBands ? 'text-cat-blue' : 'text-ink-faint'}">Anzeigen</span>
     </label>
     <!-- IEEE/NATO Switch -->
-    <div class="flex items-center gap-2 ml-2 pl-2 border-l border-line">
+    <div class="border-line ml-2 flex items-center gap-2 border-l pl-2">
       <span class="text-xs font-medium {bandMode === 'ieee' ? 'text-cat-violet' : 'text-ink-faint'}">IEEE</span>
       <button
         type="button"
         onclick={toggleBandMode}
-        class="relative w-12 h-6 rounded-full transition-colors duration-200 {bandMode === 'ieee' ? 'bg-series-4-solid' : 'bg-series-2-solid'}"
+        class="relative h-6 w-12 rounded-full transition-colors duration-200 {bandMode === 'ieee'
+          ? 'bg-series-4-solid'
+          : 'bg-series-2-solid'}"
         role="switch"
         aria-checked={bandMode === 'nato'}
         aria-label="Zwischen IEEE und NATO Bändern wechseln"
       >
         <span
-          class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-on-solid shadow-md transition-transform duration-200
+          class="bg-on-solid absolute top-0.5 left-0.5 h-5 w-5 rounded-full shadow-md transition-transform duration-200
                  {bandMode === 'nato' ? 'translate-x-[22px]' : 'translate-x-0'}"
         ></span>
       </button>
@@ -67,20 +71,22 @@
 
   <!-- Category Filter Toggles -->
   <div class="flex items-center gap-4">
-    <span class="text-sm text-ink-subtle">Filter:</span>
+    <span class="text-ink-subtle text-sm">Filter:</span>
 
     <!-- Communication Toggle -->
-    <label class="flex items-center gap-1.5 cursor-pointer">
+    <label class="flex cursor-pointer items-center gap-1.5">
       <button
         type="button"
-        onclick={() => showCommunication = !showCommunication}
-        class="relative w-9 h-5 rounded-full transition-colors duration-200 {showCommunication ? 'bg-series-1' : 'bg-line-strong'}"
+        onclick={() => (showCommunication = !showCommunication)}
+        class="relative h-5 w-9 rounded-full transition-colors duration-200 {showCommunication
+          ? 'bg-series-1'
+          : 'bg-line-strong'}"
         role="switch"
         aria-checked={showCommunication}
         aria-label="Kommunikation anzeigen"
       >
         <span
-          class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-on-solid shadow-md transition-transform duration-200
+          class="bg-on-solid absolute top-0.5 left-0.5 h-4 w-4 rounded-full shadow-md transition-transform duration-200
                  {showCommunication ? 'translate-x-4' : 'translate-x-0'}"
         ></span>
       </button>
@@ -88,17 +94,19 @@
     </label>
 
     <!-- Radar Toggle -->
-    <label class="flex items-center gap-1.5 cursor-pointer">
+    <label class="flex cursor-pointer items-center gap-1.5">
       <button
         type="button"
-        onclick={() => showRadar = !showRadar}
-        class="relative w-9 h-5 rounded-full transition-colors duration-200 {showRadar ? 'bg-series-3' : 'bg-line-strong'}"
+        onclick={() => (showRadar = !showRadar)}
+        class="relative h-5 w-9 rounded-full transition-colors duration-200 {showRadar
+          ? 'bg-series-3'
+          : 'bg-line-strong'}"
         role="switch"
         aria-checked={showRadar}
         aria-label="RADAR anzeigen"
       >
         <span
-          class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-on-solid shadow-md transition-transform duration-200
+          class="bg-on-solid absolute top-0.5 left-0.5 h-4 w-4 rounded-full shadow-md transition-transform duration-200
                  {showRadar ? 'translate-x-4' : 'translate-x-0'}"
         ></span>
       </button>
@@ -106,17 +114,19 @@
     </label>
 
     <!-- Satellite Toggle -->
-    <label class="flex items-center gap-1.5 cursor-pointer">
+    <label class="flex cursor-pointer items-center gap-1.5">
       <button
         type="button"
-        onclick={() => showSatellite = !showSatellite}
-        class="relative w-9 h-5 rounded-full transition-colors duration-200 {showSatellite ? 'bg-series-2' : 'bg-line-strong'}"
+        onclick={() => (showSatellite = !showSatellite)}
+        class="relative h-5 w-9 rounded-full transition-colors duration-200 {showSatellite
+          ? 'bg-series-2'
+          : 'bg-line-strong'}"
         role="switch"
         aria-checked={showSatellite}
         aria-label="Satellit anzeigen"
       >
         <span
-          class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-on-solid shadow-md transition-transform duration-200
+          class="bg-on-solid absolute top-0.5 left-0.5 h-4 w-4 rounded-full shadow-md transition-transform duration-200
                  {showSatellite ? 'translate-x-4' : 'translate-x-0'}"
         ></span>
       </button>
@@ -124,17 +134,19 @@
     </label>
 
     <!-- IoT Toggle -->
-    <label class="flex items-center gap-1.5 cursor-pointer">
+    <label class="flex cursor-pointer items-center gap-1.5">
       <button
         type="button"
-        onclick={() => showIot = !showIot}
-        class="relative w-9 h-5 rounded-full transition-colors duration-200 {showIot ? 'bg-series-4' : 'bg-line-strong'}"
+        onclick={() => (showIot = !showIot)}
+        class="relative h-5 w-9 rounded-full transition-colors duration-200 {showIot
+          ? 'bg-series-4'
+          : 'bg-line-strong'}"
         role="switch"
         aria-checked={showIot}
         aria-label="IoT/RFID anzeigen"
       >
         <span
-          class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-on-solid shadow-md transition-transform duration-200
+          class="bg-on-solid absolute top-0.5 left-0.5 h-4 w-4 rounded-full shadow-md transition-transform duration-200
                  {showIot ? 'translate-x-4' : 'translate-x-0'}"
         ></span>
       </button>
@@ -142,17 +154,19 @@
     </label>
 
     <!-- Industrial Toggle -->
-    <label class="flex items-center gap-1.5 cursor-pointer">
+    <label class="flex cursor-pointer items-center gap-1.5">
       <button
         type="button"
-        onclick={() => showIndustrial = !showIndustrial}
-        class="relative w-9 h-5 rounded-full transition-colors duration-200 {showIndustrial ? 'bg-series-9' : 'bg-line-strong'}"
+        onclick={() => (showIndustrial = !showIndustrial)}
+        class="relative h-5 w-9 rounded-full transition-colors duration-200 {showIndustrial
+          ? 'bg-series-9'
+          : 'bg-line-strong'}"
         role="switch"
         aria-checked={showIndustrial}
         aria-label="Industrie anzeigen"
       >
         <span
-          class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-on-solid shadow-md transition-transform duration-200
+          class="bg-on-solid absolute top-0.5 left-0.5 h-4 w-4 rounded-full shadow-md transition-transform duration-200
                  {showIndustrial ? 'translate-x-4' : 'translate-x-0'}"
         ></span>
       </button>

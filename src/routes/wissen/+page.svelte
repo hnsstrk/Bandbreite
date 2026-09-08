@@ -30,24 +30,12 @@
     {#each items as item (item.id)}
       <li class="hub-grid__cell">
         {#if item.status === 'geplant'}
-          <Card
-            title={item.label}
-            level={2}
-            icon={iconFor(item.icon)}
-            muted
-            class="hub-card"
-          >
+          <Card title={item.label} level={2} icon={iconFor(item.icon)} muted class="hub-card">
             {#snippet actions()}<Badge tone="neutral">geplant</Badge>{/snippet}
             {item.description ?? ''}
           </Card>
         {:else}
-          <Card
-            href={item.href}
-            title={item.label}
-            level={2}
-            icon={iconFor(item.icon)}
-            class="hub-card"
-          >
+          <Card href={item.href} title={item.label} level={2} icon={iconFor(item.icon)} class="hub-card">
             {item.description ?? ''}
           </Card>
         {/if}

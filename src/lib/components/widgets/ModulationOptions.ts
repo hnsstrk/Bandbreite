@@ -6,19 +6,27 @@
 import type { ModulationKind } from '$lib/utils/modulationMath';
 
 export interface ModulationChoice {
-	id: ModulationKind;
-	label: string;
-	/** Einzeiler, der das Verfahren erklärt */
-	hint: string;
+  id: ModulationKind;
+  label: string;
+  /** Einzeiler, der das Verfahren erklärt */
+  hint: string;
 }
 
 export const MODULATION_CHOICES: ModulationChoice[] = [
-	{ id: 'am', label: 'AM', hint: 'Die Amplitude des Trägers folgt der Nachricht.' },
-	{ id: 'fm', label: 'FM', hint: 'Die Augenblicksfrequenz folgt der Nachricht, die Amplitude bleibt konstant.' },
-	{ id: 'pm', label: 'PM', hint: 'Die Phasenlage folgt der Nachricht — nahe verwandt mit der Frequenzmodulation.' },
-	{ id: 'ask', label: 'ASK', hint: 'Der Träger wird im Takt der Bits ein- und ausgeschaltet.' },
-	{ id: 'fsk', label: 'FSK', hint: 'Null und Eins werden auf zwei Frequenzen abgebildet.' },
-	{ id: 'bpsk', label: 'BPSK', hint: 'Jeder Bitwechsel dreht die Phase um 180 Grad.' }
+  { id: 'am', label: 'AM', hint: 'Die Amplitude des Trägers folgt der Nachricht.' },
+  {
+    id: 'fm',
+    label: 'FM',
+    hint: 'Die Augenblicksfrequenz folgt der Nachricht, die Amplitude bleibt konstant.'
+  },
+  {
+    id: 'pm',
+    label: 'PM',
+    hint: 'Die Phasenlage folgt der Nachricht — nahe verwandt mit der Frequenzmodulation.'
+  },
+  { id: 'ask', label: 'ASK', hint: 'Der Träger wird im Takt der Bits ein- und ausgeschaltet.' },
+  { id: 'fsk', label: 'FSK', hint: 'Null und Eins werden auf zwei Frequenzen abgebildet.' },
+  { id: 'bpsk', label: 'BPSK', hint: 'Jeder Bitwechsel dreht die Phase um 180 Grad.' }
 ];
 
 /** Untere Grenze der Nachrichtenfrequenz in Hertz. */

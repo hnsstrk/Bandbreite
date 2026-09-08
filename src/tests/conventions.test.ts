@@ -35,8 +35,10 @@ const GROESSEN_AUSNAHMEN: Record<string, string> = {};
  * stehen inzwischen als `--color-scene-*`-Tokens in `app.css`.
  */
 const HEX_AUSNAHMEN: Record<string, string> = {
-  '/src/lib/components/SpectrumRows.svelte': 'Geschützte Spektrum-Unterkomponente (Bandrahmen, Auswahl).',
-  '/src/lib/components/SpectrumMarker.svelte': 'Geschützte Spektrum-Unterkomponente (Frequenzmarker).',
+  '/src/lib/components/SpectrumRows.svelte':
+    'Geschützte Spektrum-Unterkomponente (Bandrahmen, Auswahl).',
+  '/src/lib/components/SpectrumMarker.svelte':
+    'Geschützte Spektrum-Unterkomponente (Frequenzmarker).',
   '/src/lib/components/SpectrumCursor.svelte': 'Geschützte Spektrum-Unterkomponente.',
   '/src/lib/components/SpectrumTooltip.svelte': 'Farbverlauf des sichtbaren Lichts.',
   '/src/lib/components/SpectrumLegend.svelte': 'Farbverlauf des sichtbaren Lichts.'

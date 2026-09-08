@@ -7,7 +7,11 @@
  * Dezimalzeichen ist jetzt das Komma (und „um" wurde zu „μm").
  */
 import { describe, it, expect } from 'vitest';
-import { formatFrequencyLocal, formatWavelengthLocal, formatZoom } from '$lib/components/spectrumFormat';
+import {
+  formatFrequencyLocal,
+  formatWavelengthLocal,
+  formatZoom
+} from '$lib/components/spectrumFormat';
 
 /** Frühere Implementierung (Bericht 42, „Gemeldet, nicht geändert"). */
 function legacyFrequency(hz: number): string {
@@ -87,7 +91,9 @@ describe('formatWavelengthLocal', () => {
     for (let exp = -15; exp <= 5; exp += 0.5) {
       for (const m of [1, 1.5, 2.99, 9.99]) {
         const meters = m * Math.pow(10, exp);
-        expect(formatWavelengthLocal(meters), `${meters} m`).toBe(toGerman(legacyWavelength(meters)));
+        expect(formatWavelengthLocal(meters), `${meters} m`).toBe(
+          toGerman(legacyWavelength(meters))
+        );
       }
     }
   });

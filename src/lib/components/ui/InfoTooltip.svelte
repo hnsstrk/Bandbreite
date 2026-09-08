@@ -64,7 +64,7 @@
   <button
     type="button"
     onclick={toggleTooltip}
-    class="info-button {size === 'sm' ? 'w-4 h-4 text-xs' : 'w-5 h-5 text-sm'}"
+    class="info-button {size === 'sm' ? 'h-4 w-4 text-xs' : 'h-5 w-5 text-sm'}"
     aria-label="Info: {title}"
     aria-expanded={isOpen}
     aria-haspopup="true"
@@ -73,21 +73,14 @@
   </button>
 
   {#if isOpen}
-    <div
-      class="tooltip-popup"
-      role="tooltip"
-      aria-live="polite"
-    >
+    <div class="tooltip-popup" role="tooltip" aria-live="polite">
       <div class="tooltip-header">
         <span class="tooltip-title">{title}</span>
-        <button
-          type="button"
-          onclick={closeTooltip}
-          class="tooltip-close"
-          aria-label="Tooltip schließen"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
-            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+        <button type="button" onclick={closeTooltip} class="tooltip-close" aria-label="Tooltip schließen">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3 w-3">
+            <path
+              d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+            />
           </svg>
         </button>
       </div>
@@ -96,19 +89,18 @@
 
       {#if detailed}
         <div class="tooltip-details-section">
-          <button
-            type="button"
-            onclick={toggleDetails}
-            class="tooltip-expand-btn"
-            aria-expanded={showDetails}
-          >
+          <button type="button" onclick={toggleDetails} class="tooltip-expand-btn" aria-expanded={showDetails}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
               class="expand-icon {showDetails ? 'rotate-180' : ''}"
             >
-              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd"
+              />
             </svg>
             {showDetails ? 'Details ausblenden' : 'Mehr Details'}
           </button>
@@ -164,7 +156,9 @@
     background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border-default);
     border-radius: 0.5rem;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.1),
+      0 8px 10px -6px rgba(0, 0, 0, 0.1);
     padding: 0;
     overflow: hidden;
   }

@@ -25,10 +25,7 @@
 {#if visible && data}
   <div class="pdb-tooltip" style="left: {x}px; top: {y}px;">
     <div class="pdb-tooltip__head">
-      <span
-        class="pdb-tooltip__dot"
-        style="background-color: {categoryColors[data.category]};"
-        aria-hidden="true"
+      <span class="pdb-tooltip__dot" style="background-color: {categoryColors[data.category]};" aria-hidden="true"
       ></span>
       <span class="pdb-tooltip__name">{data.nameDE}</span>
     </div>

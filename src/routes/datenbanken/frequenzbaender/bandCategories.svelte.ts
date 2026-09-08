@@ -17,7 +17,11 @@ import { formatFrequency } from '$lib/utils/formatting';
 import type { IconName } from '$lib/components/ui/icons';
 
 /** Die fünf Bandsysteme als Reiter. */
-export const BAND_TABS: { id: FrequencyBandCategory; label: string; bands: FrequencyBandDetail[] }[] = [
+export const BAND_TABS: {
+  id: FrequencyBandCategory;
+  label: string;
+  bands: FrequencyBandDetail[];
+}[] = [
   { id: 'itu', label: 'ITU', bands: ITU_FREQUENCY_BANDS },
   { id: 'ieee', label: 'IEEE-Radar', bands: IEEE_FREQUENCY_BANDS },
   { id: 'nato', label: 'NATO', bands: NATO_FREQUENCY_BANDS },

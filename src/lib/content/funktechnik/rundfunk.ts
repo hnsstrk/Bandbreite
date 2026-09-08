@@ -94,10 +94,22 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'dl',
         items: [
-          { term: 'Ensemble', def: 'Alle Programme und Datendienste eines Blocks, gemeinsam moduliert.' },
-          { term: 'Block', def: 'Kanalraster in Band III, je 1,536 MHz breit. Deutschland nutzt 5A bis 12D zwischen 174 und 230 MHz; die Zwischenblöcke 10N, 11N und 12N sowie der Kanal 13 mit 13A bis 13F bis 240 MHz sind hier nicht belegt.' },
-          { term: 'Schutzintervall', def: 'Pause zwischen den Symbolen, in der Echos abklingen dürfen.' },
-          { term: 'DAB+', def: 'Erweiterung mit dem effizienteren Audiocodec HE-AAC v2 und stärkerem Fehlerschutz.' }
+          {
+            term: 'Ensemble',
+            def: 'Alle Programme und Datendienste eines Blocks, gemeinsam moduliert.'
+          },
+          {
+            term: 'Block',
+            def: 'Kanalraster in Band III, je 1,536 MHz breit. Deutschland nutzt 5A bis 12D zwischen 174 und 230 MHz; die Zwischenblöcke 10N, 11N und 12N sowie der Kanal 13 mit 13A bis 13F bis 240 MHz sind hier nicht belegt.'
+          },
+          {
+            term: 'Schutzintervall',
+            def: 'Pause zwischen den Symbolen, in der Echos abklingen dürfen.'
+          },
+          {
+            term: 'DAB+',
+            def: 'Erweiterung mit dem effizienteren Audiocodec HE-AAC v2 und stärkerem Fehlerschutz.'
+          }
         ]
       }
     ]

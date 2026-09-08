@@ -121,7 +121,9 @@ describe('computeDoppler (W2)', () => {
   });
 
   it('Standardträger existiert in der Auswahl', () => {
-    expect(DOPPLER_CARRIERS.some((carrier) => carrier.id === DEFAULT_DOPPLER_CARRIER_ID)).toBe(true);
+    expect(DOPPLER_CARRIERS.some((carrier) => carrier.id === DEFAULT_DOPPLER_CARRIER_ID)).toBe(
+      true
+    );
   });
 
   it('msToKmh', () => {

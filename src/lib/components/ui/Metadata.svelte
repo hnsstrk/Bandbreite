@@ -1,12 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import {
-    SITE_URL,
-    SITE_NAME,
-    SITE_DESCRIPTION,
-    getBreadcrumbs,
-    normalizeHref
-  } from '$lib/data/navigation';
+  import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, getBreadcrumbs, normalizeHref } from '$lib/data/navigation';
 
   interface Props {
     title?: string;
@@ -69,6 +63,9 @@
   <meta name="twitter:image" content={imageUrl} />
 
   {#if breadcrumbJsonLd}
+    <!-- Der Schrägstrich bleibt escaped: `</script>` im Literal beendete sonst
+         das Skript-Element beim HTML-Parsen der ausgelieferten Seite. -->
+    <!-- eslint-disable-next-line no-useless-escape -->
     {@html `<script type="application/ld+json">${breadcrumbJsonLd}<\/script>`}
   {/if}
 </svelte:head>

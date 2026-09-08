@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { getNodesByIds, findNode, type NavGroup, type NavNode } from '$lib/data/navigation';
+  import { megaMenuKeydown } from './header.svelte';
 
   interface Props {
     group: NavGroup;
@@ -43,49 +44,8 @@
     linkElements().at(-1)?.focus();
   }
 
-  function columnOf(element: Element): number {
-    const column = element.closest('[data-column]');
-    return column ? Number(column.getAttribute('data-column')) : 0;
-  }
-
   function handleKeydown(event: KeyboardEvent) {
-    const items = linkElements();
-    if (items.length === 0) return;
-    const current = document.activeElement as HTMLAnchorElement | null;
-    const index = current ? items.indexOf(current) : -1;
-
-    switch (event.key) {
-      case 'Escape':
-        event.preventDefault();
-        onclose(true);
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        items[(index + 1) % items.length]?.focus();
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        items[index <= 0 ? items.length - 1 : index - 1]?.focus();
-        break;
-      case 'ArrowRight':
-      case 'ArrowLeft': {
-        if (columns.length < 2 || index < 0 || !current) return;
-        event.preventDefault();
-        const direction = event.key === 'ArrowRight' ? 1 : -1;
-        const target = (columnOf(current) + direction + columns.length) % columns.length;
-        const first = items.find((item) => columnOf(item) === target);
-        first?.focus();
-        break;
-      }
-      case 'Home':
-        event.preventDefault();
-        items[0]?.focus();
-        break;
-      case 'End':
-        event.preventDefault();
-        items.at(-1)?.focus();
-        break;
-    }
+    megaMenuKeydown(event, linkElements(), columns.length, onclose);
   }
 </script>
 
@@ -112,11 +72,8 @@
     {#each columns as column, columnIndex (column.label)}
       <div class="mega-column" data-column={columnIndex}>
         {#if column.href}
-          <a
-            class="mega-column-title link"
-            href={column.href}
-            onclick={() => onclose(false)}
-            tabindex={open ? 0 : -1}>{column.label}</a
+          <a class="mega-column-title link" href={column.href} onclick={() => onclose(false)} tabindex={open ? 0 : -1}
+            >{column.label}</a
           >
         {:else}
           <p class="mega-column-title">{column.label}</p>
@@ -165,21 +122,30 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     z-index: 50;
+    /* Geschlossen ohne Layoutfläche: absolut positionierte Elemente zählen zur
+       Scrollhöhe des Dokuments, `visibility: hidden` genügt also nicht. */
+    display: none;
     opacity: 0;
-    visibility: hidden;
     transform: translateY(-6px);
     pointer-events: none;
     transition:
       opacity 150ms ease-out,
       transform 150ms ease-out,
-      visibility 150ms ease-out;
+      display 150ms allow-discrete;
   }
 
   .mega-menu.visible {
+    display: block;
     opacity: 1;
-    visibility: visible;
     transform: translateY(0);
     pointer-events: auto;
+  }
+
+  @starting-style {
+    .mega-menu.visible {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
   }
 
   .mega-menu.multi {

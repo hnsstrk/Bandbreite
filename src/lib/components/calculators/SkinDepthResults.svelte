@@ -24,9 +24,7 @@
   let referenceData = $derived.by(() => {
     if (!isSeawater || frequencyHz <= 0) return null;
     const closest = SEAWATER_PENETRATION.reduce((prev, curr) =>
-      Math.abs(curr.frequencyHz - frequencyHz) < Math.abs(prev.frequencyHz - frequencyHz)
-        ? curr
-        : prev
+      Math.abs(curr.frequencyHz - frequencyHz) < Math.abs(prev.frequencyHz - frequencyHz) ? curr : prev
     );
     const relative = safeDivide(Math.abs(closest.frequencyHz - frequencyHz), frequencyHz, 1);
     return relative < REFERENCE_TOLERANCE ? closest : null;

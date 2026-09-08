@@ -25,7 +25,10 @@ const ALLE: [string, FunkSection[]][] = [
 
 describe('toArticleBlock', () => {
   it('übersetzt Absätze', () => {
-    expect(toArticleBlock({ kind: 'p', text: 'Text' })).toEqual({ type: 'paragraph', html: 'Text' });
+    expect(toArticleBlock({ kind: 'p', text: 'Text' })).toEqual({
+      type: 'paragraph',
+      html: 'Text'
+    });
   });
 
   it('unterscheidet geordnete und ungeordnete Listen', () => {
@@ -38,7 +41,9 @@ describe('toArticleBlock', () => {
   });
 
   it('setzt Begriffslisten auf die Variante „term"', () => {
-    expect(toArticleBlock({ kind: 'dl', items: [{ term: 'Ensemble', def: 'Alle Programme' }] })).toEqual({
+    expect(
+      toArticleBlock({ kind: 'dl', items: [{ term: 'Ensemble', def: 'Alle Programme' }] })
+    ).toEqual({
       type: 'definitions',
       variant: 'term',
       items: [{ term: 'Ensemble', description: 'Alle Programme' }]
@@ -47,8 +52,20 @@ describe('toArticleBlock', () => {
 
   it('behält Ton, Titel und Quelle eines Hinweiskastens', () => {
     expect(
-      toArticleBlock({ kind: 'callout', tone: 'warning', title: 'Achtung', text: 'Inhalt', source: 'VO Funk' })
-    ).toEqual({ type: 'callout', tone: 'warning', title: 'Achtung', html: 'Inhalt', source: 'VO Funk' });
+      toArticleBlock({
+        kind: 'callout',
+        tone: 'warning',
+        title: 'Achtung',
+        text: 'Inhalt',
+        source: 'VO Funk'
+      })
+    ).toEqual({
+      type: 'callout',
+      tone: 'warning',
+      title: 'Achtung',
+      html: 'Inhalt',
+      source: 'VO Funk'
+    });
   });
 
   it('behält Formel, Alternativtext und Legende', () => {
@@ -66,8 +83,18 @@ describe('toArticleBlock', () => {
 
   it('macht aus dem Tabellenkopf die Spaltenüberschriften', () => {
     expect(
-      toArticleBlock({ kind: 'table', caption: 'Bänder', head: ['Band', 'MHz'], rows: [['2 m', '144']] })
-    ).toEqual({ type: 'table', caption: 'Bänder', columns: ['Band', 'MHz'], rows: [['2 m', '144']] });
+      toArticleBlock({
+        kind: 'table',
+        caption: 'Bänder',
+        head: ['Band', 'MHz'],
+        rows: [['2 m', '144']]
+      })
+    ).toEqual({
+      type: 'table',
+      caption: 'Bänder',
+      columns: ['Band', 'MHz'],
+      rows: [['2 m', '144']]
+    });
   });
 });
 

@@ -15,13 +15,7 @@
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
   import Slider from '$lib/components/ui/Slider.svelte';
   import { formatNumber } from '$lib/utils/formatting';
-  import {
-    horizonDistanceKm,
-    horizonFactor,
-    losDistanceKm,
-    K_FACTOR_MAX,
-    K_FACTOR_MIN
-  } from '$lib/data/propagation';
+  import { horizonDistanceKm, horizonFactor, losDistanceKm, K_FACTOR_MAX, K_FACTOR_MIN } from '$lib/data/propagation';
   import {
     UrlStateSync,
     buildShareLink,
@@ -191,13 +185,11 @@
     <RadioHorizonDiagram {height1M} {height2M} {horizon1Km} {horizon2Km} {kFactor} />
 
     <Callout tone="tip" title="Warum 4/3 und nicht 1?" source="ITU-R P.834-9">
-      Die Luftdichte nimmt mit der Höhe ab, dadurch krümmt sich der Strahl leicht
-      zur Erde hin. Rechnet man statt mit dem echten Erdradius mit dem
-      k-fachen davon, bleibt der Strahl in der Skizze gerade. In der
-      Standardatmosphäre gilt k = 4/3, der Radiohorizont liegt damit rund 15 %
-      weiter als der optische. Bei Inversionswetterlagen wächst k, bis der Strahl
-      im Extremfall in einem Duct geführt wird — dann sind Reichweiten weit
-      jenseits dieser Formel möglich.
+      Die Luftdichte nimmt mit der Höhe ab, dadurch krümmt sich der Strahl leicht zur Erde hin. Rechnet man statt mit
+      dem echten Erdradius mit dem k-fachen davon, bleibt der Strahl in der Skizze gerade. In der Standardatmosphäre
+      gilt k = 4/3, der Radiohorizont liegt damit rund 15 % weiter als der optische. Bei Inversionswetterlagen wächst k,
+      bis der Strahl im Extremfall in einem Duct geführt wird — dann sind Reichweiten weit jenseits dieser Formel
+      möglich.
     </Callout>
   </div>
 </Card>

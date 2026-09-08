@@ -75,7 +75,11 @@ export interface PulsePosition {
  * Wo befindet sich die Impulsfront zum Zeitpunkt t innerhalb eines PRI?
  * Hinweg: 0 … R/c, Rückweg: R/c … 2R/c, danach Pause bis zum nächsten Impuls.
  */
-export function pulsePositionAt(tS: number, rangeM: number, c: number = speedOfLight.value): PulsePosition {
+export function pulsePositionAt(
+  tS: number,
+  rangeM: number,
+  c: number = speedOfLight.value
+): PulsePosition {
   const oneWayS = safeDivide(rangeM, c, 0);
   if (oneWayS <= 0 || tS < 0) return { phase: 'pause', fraction: 0 };
   if (tS <= oneWayS) return { phase: 'hin', fraction: tS / oneWayS };

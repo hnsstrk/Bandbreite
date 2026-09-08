@@ -122,7 +122,8 @@ export const TX_CABLE_LOSS: Explanation = {
 
 export const RX_SENSITIVITY: Explanation = {
   title: 'Empfängerempfindlichkeit (RX Sensitivity)',
-  short: 'Minimale Signalstärke für zuverlässige Dekodierung. Abhängig von Modulation und Datenrate.',
+  short:
+    'Minimale Signalstärke für zuverlässige Dekodierung. Abhängig von Modulation und Datenrate.',
   detailed: `
     <p><strong>Einheit:</strong> dBm (typisch negativ, z.B. -90 dBm)</p>
     <p><strong>Einflussfaktoren:</strong></p>
@@ -320,7 +321,8 @@ export const EM_SPECTRUM: Explanation = {
 
 export const SPECTRUM_USAGE: Explanation = {
   title: 'Spektrumsnutzung',
-  short: 'Verschiedene Dienste teilen sich das Spektrum. Reguliert durch nationale/internationale Behörden.',
+  short:
+    'Verschiedene Dienste teilen sich das Spektrum. Reguliert durch nationale/internationale Behörden.',
   detailed: `
     <p><strong>Zuteilungsarten:</strong></p>
     <p>- Lizenziert: Exklusiv für Betreiber<br/>

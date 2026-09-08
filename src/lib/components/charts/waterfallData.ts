@@ -90,10 +90,7 @@ export function buildWaterfallSteps(data: LinkBudgetData | null): WaterfallStep[
 }
 
 /** Wertebereich der Y-Achse inklusive Rand und Empfindlichkeitslinie. */
-export function waterfallDomain(
-  steps: WaterfallStep[],
-  sensitivityDbm: number
-): [number, number] {
+export function waterfallDomain(steps: WaterfallStep[], sensitivityDbm: number): [number, number] {
   if (steps.length === 0) return [-150, 50];
 
   const values = steps.flatMap((step) => [step.barStart, step.barEnd]);

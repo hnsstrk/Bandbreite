@@ -6,11 +6,7 @@
    */
   import ChartFrame from '$lib/components/charts/ChartFrame.svelte';
   import { formatDistance, formatNumber } from '$lib/utils/formatting';
-  import {
-    DISH_VIEW_HEIGHT,
-    DISH_VIEW_WIDTH,
-    drawnHalfAngleDeg
-  } from './antennaGain.svelte';
+  import { DISH_VIEW_HEIGHT, DISH_VIEW_WIDTH, drawnHalfAngleDeg } from './antennaGain.svelte';
 
   interface Props {
     /** Spiegeldurchmesser in Metern */
@@ -54,9 +50,7 @@
     `M ${DISH_X} ${AXIS_Y - DISH_HALF_HEIGHT} Q ${DISH_X - DISH_DEPTH * 2} ${AXIS_Y} ${DISH_X} ${AXIS_Y + DISH_HALF_HEIGHT}`
   );
 
-  let beamPath = $derived(
-    `M ${DISH_X} ${AXIS_Y} L ${upper.x} ${upper.y} L ${lower.x} ${lower.y} Z`
-  );
+  let beamPath = $derived(`M ${DISH_X} ${AXIS_Y} L ${upper.x} ${upper.y} L ${lower.x} ${lower.y} Z`);
 </script>
 
 <ChartFrame
@@ -71,22 +65,8 @@
   <svg viewBox="0 0 {DISH_VIEW_WIDTH} {DISH_VIEW_HEIGHT}" aria-hidden="true">
     <!-- Halbwertskeule -->
     <path d={beamPath} fill="var(--color-series-1)" opacity="0.18" />
-    <line
-      x1={DISH_X}
-      y1={AXIS_Y}
-      x2={upper.x}
-      y2={upper.y}
-      stroke="var(--color-series-1)"
-      stroke-width="1.5"
-    />
-    <line
-      x1={DISH_X}
-      y1={AXIS_Y}
-      x2={lower.x}
-      y2={lower.y}
-      stroke="var(--color-series-1)"
-      stroke-width="1.5"
-    />
+    <line x1={DISH_X} y1={AXIS_Y} x2={upper.x} y2={upper.y} stroke="var(--color-series-1)" stroke-width="1.5" />
+    <line x1={DISH_X} y1={AXIS_Y} x2={lower.x} y2={lower.y} stroke="var(--color-series-1)" stroke-width="1.5" />
 
     <!-- Hauptstrahlrichtung -->
     <line
@@ -100,14 +80,7 @@
 
     <!-- Spiegel und Erreger -->
     <path d={dishPath} fill="none" stroke="var(--color-ink-muted)" stroke-width="4" />
-    <line
-      x1={DISH_X}
-      y1={AXIS_Y}
-      x2={DISH_X + 34}
-      y2={AXIS_Y}
-      stroke="var(--color-ink-muted)"
-      stroke-width="2"
-    />
+    <line x1={DISH_X} y1={AXIS_Y} x2={DISH_X + 34} y2={AXIS_Y} stroke="var(--color-ink-muted)" stroke-width="2" />
     <circle cx={DISH_X + 34} cy={AXIS_Y} r="5" fill="var(--color-series-3)" />
 
     <!-- Durchmesser -->
@@ -119,13 +92,7 @@
       stroke="var(--color-ink-subtle)"
       stroke-width="1"
     />
-    <text
-      x={DISH_X - 36}
-      y={AXIS_Y}
-      text-anchor="end"
-      dominant-baseline="middle"
-      class="chart-axis-text"
-    >
+    <text x={DISH_X - 36} y={AXIS_Y} text-anchor="end" dominant-baseline="middle" class="chart-axis-text">
       D = {formatDistance(diameterM, 2)}
     </text>
 

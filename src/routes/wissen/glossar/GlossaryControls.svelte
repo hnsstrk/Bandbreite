@@ -24,14 +24,7 @@
     total: number;
   }
 
-  let {
-    query = $bindable(),
-    category = $bindable(),
-    letters,
-    availableLetters,
-    count,
-    total
-  }: Props = $props();
+  let { query = $bindable(), category = $bindable(), letters, availableLetters, count, total }: Props = $props();
 
   const searchId = 'glossar-suche';
 
@@ -85,9 +78,7 @@
       </Button>
     {/each}
     {#if query || category}
-      <Button size="sm" variant="secondary" icon="reset" onclick={handleClear}>
-        Filter zurücksetzen
-      </Button>
+      <Button size="sm" variant="secondary" icon="reset" onclick={handleClear}>Filter zurücksetzen</Button>
     {/if}
   </div>
 

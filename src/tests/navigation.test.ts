@@ -13,9 +13,13 @@ import {
   getLiveNodes,
   getParent,
   isActivePath,
-  normalizeHref
+  normalizeHref,
+  resolveDynamicSegmentLabel
 } from '$lib/data/navigation';
+import { humanizeSegment } from '$lib/utils/slug';
 import { RELATIONS, getRelatedTopics } from '$lib/data/relations';
+// Der Import meldet nebenbei den Segment-Resolver der Lernpfade an.
+import { LEARNING_PATHS, learningPathHref } from '$lib/data/learningPaths';
 
 const allNodes = flattenNav();
 
@@ -31,7 +35,9 @@ describe('NAV_TREE Struktur', () => {
   });
 
   it('setzt für jeden Knoten einen Status', () => {
-    expect(allNodes.every((node) => node.status === 'live' || node.status === 'geplant')).toBe(true);
+    expect(allNodes.every((node) => node.status === 'live' || node.status === 'geplant')).toBe(
+      true
+    );
   });
 
   it('leitet die ID aus dem Pfad ab', () => {
@@ -124,6 +130,25 @@ describe('getBreadcrumbs', () => {
 
   it('liefert für die Wurzel eine leere Liste', () => {
     expect(getBreadcrumbs('/')).toEqual([]);
+  });
+
+  it('benennt dynamische Lernpfad-Segmente über den Resolver', () => {
+    for (const path of LEARNING_PATHS) {
+      const crumbs = getBreadcrumbs(learningPathHref(path.id));
+      expect(crumbs.map((b) => b.label)).toEqual(['Wissen', 'Lernpfade', path.title]);
+      expect(crumbs.at(-1)?.label).not.toBe(humanizeSegment(path.id));
+    }
+  });
+
+  it('meldet für unbekannte Segmente unterhalb der Lernpfade das humanisierte Label', () => {
+    expect(getBreadcrumbs('/wissen/lernpfade/gibt-es-nicht/').at(-1)?.label).toBe('Gibt Es Nicht');
+  });
+
+  it('registrierte Resolver gelten nur für ihren Elternpfad', () => {
+    expect(resolveDynamicSegmentLabel('/wissen/lernpfade/', LEARNING_PATHS[0].id)).toBe(
+      LEARNING_PATHS[0].title
+    );
+    expect(resolveDynamicSegmentLabel('/wissen/', LEARNING_PATHS[0].id)).toBeUndefined();
   });
 });
 

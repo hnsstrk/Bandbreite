@@ -224,12 +224,14 @@ export const BOS_COMPARISON: BosComparisonRow[] = [
   {
     aspectDE: 'Vertraulichkeit',
     analogDE: 'unverschlüsselt, mit jedem Empfänger mithörbar',
-    digitalDE: 'Verschlüsselung auf der Luftschnittstelle, zusätzlich Ende-zu-Ende-Verschlüsselung über eine Sicherheitskarte'
+    digitalDE:
+      'Verschlüsselung auf der Luftschnittstelle, zusätzlich Ende-zu-Ende-Verschlüsselung über eine Sicherheitskarte'
   },
   {
     aspectDE: 'Alarmierung',
     analogDE: 'Fünftonruf, später POCSAG im 2-m-Band',
-    digitalDE: 'Alarmierung über das TETRA-Netz; POCSAG bleibt vielerorts als zweiter Weg in Betrieb'
+    digitalDE:
+      'Alarmierung über das TETRA-Netz; POCSAG bleibt vielerorts als zweiter Weg in Betrieb'
   },
   {
     aspectDE: 'Zusatzdienste',

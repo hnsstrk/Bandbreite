@@ -27,13 +27,7 @@
 </script>
 
 <section class="drawer-section">
-  <button
-    type="button"
-    class="drawer-group"
-    class:active
-    aria-expanded={expanded}
-    onclick={toggle}
-  >
+  <button type="button" class="drawer-group" class:active aria-expanded={expanded} onclick={toggle}>
     <span>{group.label}</span>
     <svg
       class="chevron"
@@ -60,11 +54,8 @@
             {node.label}<span class="badge">geplant</span>
           </span>
         {:else}
-          <a
-            class="drawer-link"
-            class:active={page.url.pathname === node.href}
-            href={node.href}
-            onclick={close}>{node.label}</a
+          <a class="drawer-link" class:active={page.url.pathname === node.href} href={node.href} onclick={close}
+            >{node.label}</a
           >
         {/if}
       {/each}

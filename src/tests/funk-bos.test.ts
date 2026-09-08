@@ -156,7 +156,10 @@ import { findNode } from '$lib/data/navigation';
 import { getRelatedTopics } from '$lib/data/relations';
 import { sectionIds } from '$lib/content/funktechnik/types';
 import { articleSections } from '$lib/content/funktechnik/adapt';
-import { LEARNING_GOALS as PAGE_GOALS_BOS, SECTIONS as PAGE_SECTIONS_BOS } from '$lib/content/funktechnik/bos';
+import {
+  LEARNING_GOALS as PAGE_GOALS_BOS,
+  SECTIONS as PAGE_SECTIONS_BOS
+} from '$lib/content/funktechnik/bos';
 
 const PAGE_HREF_BOS = '/wissen/funktechnik/bos/';
 
@@ -206,6 +209,7 @@ describe('Seite /wissen/funktechnik/bos/', () => {
 
   it('enthält die Abschnitte, auf die die Route zugreift', () => {
     const ids = sectionIds(PAGE_SECTIONS_BOS);
-    for (const id of ['grundlagen', 'analog', 'digitalfunk', 'alarmierung', 'recht']) expect(ids, id).toContain(id);
+    for (const id of ['grundlagen', 'analog', 'digitalfunk', 'alarmierung', 'recht'])
+      expect(ids, id).toContain(id);
   });
 });

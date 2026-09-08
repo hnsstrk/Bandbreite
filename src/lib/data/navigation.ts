@@ -15,7 +15,6 @@
 
 import { humanizeSegment } from '$lib/utils/slug';
 
-
 /** Kanonische Basis-URL für canonical/og:url. */
 export const SITE_URL = 'https://bandbreite.online-resources.de';
 
@@ -470,7 +469,16 @@ export const NAV_TREE: NavNode[] = [
             status: 'live',
             description:
               'Rundfunk von Langwelle bis DVB-T2: Kanalraster, Modulation und Gleichwellennetze.',
-            keywords: ['Langwelle', 'Mittelwelle', 'Kurzwelle', 'UKW', 'FM', 'DAB+', 'DVB-T2', 'RDS']
+            keywords: [
+              'Langwelle',
+              'Mittelwelle',
+              'Kurzwelle',
+              'UKW',
+              'FM',
+              'DAB+',
+              'DVB-T2',
+              'RDS'
+            ]
           },
           {
             id: 'wissen.funktechnik.seefunk',
@@ -597,8 +605,7 @@ export const NAV_TREE: NavNode[] = [
         href: '/wissen/modulation/',
         icon: 'activity',
         status: 'live',
-        description:
-          'Analoge und digitale Modulationsverfahren: AM, FM, SSB, PSK, QAM und OFDM.',
+        description: 'Analoge und digitale Modulationsverfahren: AM, FM, SSB, PSK, QAM und OFDM.',
         keywords: ['AM', 'FM', 'SSB', 'ASK', 'FSK', 'PSK', 'QAM', 'OFDM', 'Konstellation']
       },
       {
@@ -1008,9 +1015,7 @@ export function flattenNav(nodes: NavNode[] = NAV_TREE): NavNode[] {
   return result;
 }
 
-const NODES_BY_HREF = new Map<string, NavNode>(
-  flattenNav().map((node) => [node.href, node])
-);
+const NODES_BY_HREF = new Map<string, NavNode>(flattenNav().map((node) => [node.href, node]));
 const NODES_BY_ID = new Map<string, NavNode>(flattenNav().map((node) => [node.id, node]));
 
 /** Knoten zu einer Route finden (Trailing Slash wird ergänzt). */
@@ -1037,8 +1042,41 @@ export interface BreadcrumbEntry {
 }
 
 /**
- * Breadcrumb-Kette für eine Route. Labels stammen ausschließlich aus dem
- * Navigationsbaum; unbekannte Segmente werden lesbar formatiert.
+ * Label eines dynamischen Segments (`[slug]`-Route) — bekommt das Segment und
+ * gibt den Anzeigenamen zurück oder `undefined`, wenn es ihn nicht kennt.
+ */
+export type SegmentLabelResolver = (segment: string) => string | undefined;
+
+const DYNAMIC_SEGMENT_LABELS = new Map<string, SegmentLabelResolver>();
+
+/**
+ * Dynamische Routen (z. B. `/wissen/lernpfade/<id>/`) stehen bewusst nicht im
+ * NAV_TREE — sonst quöllen Mega-Menü und Kapitelblättern über. Damit die
+ * Brotkrümel dort trotzdem kein rohes Slug-Fragment zeigen, meldet die
+ * zuständige Datenquelle einen Resolver für ihren Elternpfad an
+ * (`data/learningPaths.ts` für `/wissen/lernpfade/`). Die Abhängigkeit läuft
+ * nur in eine Richtung — Datenquelle → Navigation — und erzeugt daher keinen
+ * Import-Zyklus.
+ */
+export function registerDynamicSegmentLabels(
+  parentHref: string,
+  resolve: SegmentLabelResolver
+): void {
+  DYNAMIC_SEGMENT_LABELS.set(normalizeHref(parentHref), resolve);
+}
+
+/** Label eines dynamischen Segments unterhalb von `parentHref`. */
+export function resolveDynamicSegmentLabel(
+  parentHref: string,
+  segment: string
+): string | undefined {
+  return DYNAMIC_SEGMENT_LABELS.get(normalizeHref(parentHref))?.(segment);
+}
+
+/**
+ * Breadcrumb-Kette für eine Route. Labels stammen aus dem Navigationsbaum;
+ * dynamische Segmente fragen den angemeldeten Resolver ihres Elternpfads,
+ * alles Übrige wird lesbar formatiert.
  */
 export function getBreadcrumbs(href: string): BreadcrumbEntry[] {
   const path = normalizeHref(href);
@@ -1047,11 +1085,13 @@ export function getBreadcrumbs(href: string): BreadcrumbEntry[] {
   let cumulative = '';
 
   segments.forEach((segment, index) => {
+    const parentHref = `${cumulative}/`;
     cumulative += `/${segment}`;
     const nodeHref = `${cumulative}/`;
     const node = NODES_BY_HREF.get(nodeHref);
     entries.push({
-      label: node?.label ?? humanizeSegment(segment),
+      label:
+        node?.label ?? resolveDynamicSegmentLabel(parentHref, segment) ?? humanizeSegment(segment),
       href: nodeHref,
       status: node?.status ?? 'live',
       isLast: index === segments.length - 1
@@ -1115,4 +1155,3 @@ export function isActivePath(href: string, currentPath: string): boolean {
   const current = normalizeHref(currentPath);
   return current === target || current.startsWith(target);
 }
-

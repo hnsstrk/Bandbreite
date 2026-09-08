@@ -18,12 +18,12 @@
 
 /** Einsatzzweck einer Frequenz. */
 export type EmergencyPurpose =
-  | 'notruf'        // Absetzen eines Notrufs
-  | 'anruf'         // Anruf- und Verkehrsaufnahme
-  | 'sicherheit'    // Sicherheits- und Warnmeldungen
-  | 'ortung'        // Ortung, Peilung, Homing
-  | 'ueberwachung'  // Verkehrsüberwachung, Lagebild
-  | 'historisch';   // nicht mehr in Betrieb
+  | 'notruf' // Absetzen eines Notrufs
+  | 'anruf' // Anruf- und Verkehrsaufnahme
+  | 'sicherheit' // Sicherheits- und Warnmeldungen
+  | 'ortung' // Ortung, Peilung, Homing
+  | 'ueberwachung' // Verkehrsüberwachung, Lagebild
+  | 'historisch'; // nicht mehr in Betrieb
 
 /** Fachbereich. */
 export type EmergencyDomain = 'see' | 'luft' | 'land' | 'satellit' | 'amateur' | 'jedermann';
@@ -66,7 +66,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'hier wurde das Notzeichen SOS gesendet. Zweimal stündlich galten dreiminütige ' +
       'Funkstillezeiten, in denen alle Stationen nur zuhörten. Mit der vollständigen ' +
       'Einführung des GMDSS zum 1. Februar 1999 endete die Wachpflicht.',
-    source: 'ITU RR (historisch); SOLAS Kapitel IV',
+    source: 'ITU RR (historisch); SOLAS Kapitel IV'
   },
   {
     id: 'mf-2182khz',
@@ -79,7 +79,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Sprechfunk-Notfrequenz für die Küstenschifffahrt mit Reichweiten von etwa ' +
       '150 Seemeilen über die Bodenwelle. Auch nach Einführung der digitalen ' +
       'Notalarmierung weiterhin für den anschließenden Sprechverkehr vorgesehen.',
-    source: 'ITU RR Art. 31; IMO GMDSS',
+    source: 'ITU RR Art. 31; IMO GMDSS'
   },
   {
     id: 'mf-2187_5khz',
@@ -92,7 +92,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Digitaler Notruf im Mittelwellenbereich. Die Aussendung enthält die Kennung ' +
       'des Schiffes, die Notfallart und, sofern angeschlossen, die aus dem ' +
       'Navigationsempfänger übernommene Position.',
-    source: 'ITU RR Art. 31 und Anhang 15; ITU-R M.493',
+    source: 'ITU RR Art. 31 und Anhang 15; ITU-R M.493'
   },
   {
     id: 'hf-dsc-set',
@@ -108,7 +108,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Notalarmierung auf großer Fahrt. Da die nutzbare Frequenz von Tageszeit und ' +
       'Ionosphäre abhängt, wird ein Notruf üblicherweise auf mehreren dieser Kanäle ' +
       'nacheinander abgesetzt.',
-    source: 'ITU RR Anhang 15; IMO GMDSS',
+    source: 'ITU RR Anhang 15; IMO GMDSS'
   },
   {
     id: 'hf-voice-set',
@@ -123,7 +123,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Sprechfunkkanäle für den Not- und Sicherheitsverkehr nach erfolgter ' +
       'Alarmierung. 4125 kHz wird zusätzlich als Ergänzung zu 2182 kHz genutzt und ' +
       'auch von Luftfahrzeugen in Seenotfällen mitgehört.',
-    source: 'ITU RR Art. 31 und Anhang 15',
+    source: 'ITU RR Art. 31 und Anhang 15'
   },
   {
     id: 'vhf-ch16',
@@ -136,7 +136,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Der wichtigste Sprechfunkkanal der Seeschifffahrt: hier werden Notrufe ' +
       'abgesetzt und Verbindungen aufgebaut, die anschließend auf einen Arbeitskanal ' +
       'wechseln. Küstenfunkstellen und viele Schiffe halten dauerhaft Hörbereitschaft.',
-    source: 'ITU RR Anhang 18; IMO GMDSS',
+    source: 'ITU RR Anhang 18; IMO GMDSS'
   },
   {
     id: 'vhf-ch70',
@@ -149,7 +149,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Ausschließlich für den digitalen Selektivruf reserviert; Sprechfunk ist hier ' +
       'nicht zulässig. Ein Tastendruck löst einen codierten Notruf an alle Stationen ' +
       'in Reichweite aus.',
-    source: 'ITU RR Anhang 18; ITU-R M.493',
+    source: 'ITU RR Anhang 18; ITU-R M.493'
   },
   {
     id: 'vhf-ch06',
@@ -161,7 +161,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
     descriptionDE:
       'Vorrangig für die Verständigung zwischen Schiffen, Seenotrettungseinheiten ' +
       'und Luftfahrzeugen bei Suchaktionen.',
-    source: 'ITU RR Anhang 18',
+    source: 'ITU RR Anhang 18'
   },
   {
     id: 'vhf-ch13',
@@ -173,7 +173,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
     descriptionDE:
       'Direkte Absprachen zwischen Schiffsführungen zur Vermeidung von ' +
       'Nahbereichskollisionen, insbesondere in engen Fahrwassern.',
-    source: 'ITU RR Anhang 18',
+    source: 'ITU RR Anhang 18'
   },
   {
     id: 'ais-1',
@@ -187,7 +187,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'zyklisch Kennung, Position, Kurs und Geschwindigkeit; die Sendezeitpunkte ' +
       'werden über eine gemeinsame Zeitbasis koordiniert, sodass sich die Stationen ' +
       'nicht gegenseitig überschreiben.',
-    source: 'ITU-R M.1371; ITU RR Anhang 18',
+    source: 'ITU-R M.1371; ITU RR Anhang 18'
   },
   {
     id: 'ais-2',
@@ -199,7 +199,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
     descriptionDE:
       'Zweiter AIS-Kanal. Die Nutzung zweier Kanäle erhöht die Kapazität und ' +
       'erlaubt regional unterschiedliche Zuweisungen.',
-    source: 'ITU-R M.1371',
+    source: 'ITU-R M.1371'
   },
   {
     id: 'navtex-518',
@@ -212,7 +212,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Automatischer Empfang von Navigations- und Wetterwarnungen in englischer ' +
       'Sprache. Ergänzend dienen 490 kHz für landessprachliche und 4209,5 kHz für ' +
       'zusätzliche Aussendungen.',
-    source: 'IMO NAVTEX-Handbuch; ITU-R M.540',
+    source: 'IMO NAVTEX-Handbuch; ITU-R M.540'
   },
 
   // --------------------------------------------------------------------------
@@ -231,7 +231,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'abschwellenden Ton ab; seit Februar 2009 wertet das Satellitensystem diese ' +
       'analogen Signale nicht mehr aus, für die Nahbereichspeilung bleibt die ' +
       'Frequenz aber in Gebrauch.',
-    source: 'ICAO Annex 10; COSPAS-SARSAT',
+    source: 'ICAO Annex 10; COSPAS-SARSAT'
   },
   {
     id: 'air-243',
@@ -244,7 +244,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Genau die doppelte Frequenz von 121,5 MHz, wodurch sich ältere Sender mit ' +
       'geringem Aufwand für beide Bereiche auslegen ließen. Wachfrequenz des ' +
       'militärischen UHF-Flugfunks.',
-    source: 'ICAO Annex 10; NATO-Verfahren',
+    source: 'ICAO Annex 10; NATO-Verfahren'
   },
   {
     id: 'sarsat-406',
@@ -260,7 +260,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'zugeordnet ist. Satelliten im niedrigen und geostationären Orbit sowie ' +
       'Nutzlasten auf Navigationssatelliten empfangen die Bursts und leiten sie an ' +
       'die Rettungsleitstellen weiter.',
-    source: 'COSPAS-SARSAT C/S T.001; ITU RR Art. 5',
+    source: 'COSPAS-SARSAT C/S T.001; ITU RR Art. 5'
   },
   {
     id: 'air-vhf-band',
@@ -275,7 +275,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'wurde in Europa wegen Kanalknappheit auf 8,33 kHz verdichtet; die ' +
       'Amplitudenmodulation bleibt erhalten, weil sich gleichzeitig sendende ' +
       'Stationen dabei als hörbare Störung bemerkbar machen statt sich zu verdecken.',
-    source: 'ICAO Annex 10; EU-Verordnung 1079/2012 (8,33-kHz-Raster)',
+    source: 'ICAO Annex 10; EU-Verordnung 1079/2012 (8,33-kHz-Raster)'
   },
   {
     id: 'ssr-1030',
@@ -288,7 +288,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Auf dieser Frequenz senden Sekundärradaranlagen und Kollisionswarnsysteme ' +
       'ihre Abfragen. Der Bordtransponder antwortet auf einer anderen Frequenz, ' +
       'wodurch die Antwort deutlich stärker ist als ein passives Radarecho.',
-    source: 'ICAO Annex 10 Vol. IV',
+    source: 'ICAO Annex 10 Vol. IV'
   },
   {
     id: 'ssr-1090',
@@ -302,7 +302,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'sendet das Luftfahrzeug seine aus der Satellitennavigation gewonnene Position ' +
       'auch unaufgefordert aus, sodass sie von Bodenstationen und anderen Flugzeugen ' +
       'empfangen werden kann.',
-    source: 'ICAO Annex 10 Vol. IV; RTCA DO-260B',
+    source: 'ICAO Annex 10 Vol. IV; RTCA DO-260B'
   },
 
   // --------------------------------------------------------------------------
@@ -319,7 +319,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
     descriptionDE:
       'Senderichtung der Handsprech- und Fahrzeugfunkgeräte im bundesweiten ' +
       'Digitalfunknetz der Sicherheitsbehörden.',
-    source: 'BDBOS; ETSI EN 300 392',
+    source: 'BDBOS; ETSI EN 300 392'
   },
   {
     id: 'bos-tetra-dl',
@@ -332,7 +332,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
     descriptionDE:
       'Senderichtung der Basisstationen. Der Duplexabstand von 10 MHz erlaubt ' +
       'gleichzeitiges Senden und Empfangen im Endgerät.',
-    source: 'BDBOS; ETSI EN 300 392',
+    source: 'BDBOS; ETSI EN 300 392'
   },
   {
     id: 'bos-tetra-dmo',
@@ -345,7 +345,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
     descriptionDE:
       'Betrieb ohne Netzinfrastruktur, direkt von Gerät zu Gerät. Dient als ' +
       'Rückfallebene bei Netzausfall sowie für den Nahbereich an der Einsatzstelle.',
-    source: 'BDBOS; ETSI EN 300 396',
+    source: 'BDBOS; ETSI EN 300 396'
   },
   {
     id: 'bos-4m',
@@ -359,7 +359,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Historischer Fahrzeugfunkbereich der Behörden und Organisationen mit ' +
       'Sicherheitsaufgaben. Wird durch den Digitalfunk abgelöst, war aber in ' +
       'einzelnen Ländern und für Sonderanwendungen lange parallel in Betrieb.',
-    source: 'BNetzA-Frequenzplan',
+    source: 'BNetzA-Frequenzplan'
   },
   {
     id: 'pmr446',
@@ -373,7 +373,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Anmeldefreier Jedermannfunk mit 16 Kanälen und höchstens 500 mW ' +
       'Strahlungsleistung; feste Antennen sind nicht zulässig. Praktische ' +
       'Reichweiten liegen im offenen Gelände bei wenigen Kilometern.',
-    source: 'ETSI EN 300 296 / EN 303 406; ECC/DEC/(15)05; BNetzA-Allgemeinzuteilung',
+    source: 'ETSI EN 300 296 / EN 303 406; ECC/DEC/(15)05; BNetzA-Allgemeinzuteilung'
   },
   {
     id: 'freenet',
@@ -390,7 +390,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Nationale Besonderheit im VHF-Bereich mit sechs nicht zusammenhängenden ' +
       'Kanälen: 149,0250 / 149,0375 / 149,0500 / 149,0875 / 149,1000 / 149,1125 MHz. ' +
       'Höchstens 500 mW Strahlungsleistung, keine Nutzung außerhalb Deutschlands.',
-    source: 'BNetzA-Allgemeinzuteilung Freenet',
+    source: 'BNetzA-Allgemeinzuteilung Freenet'
   },
   {
     id: 'cb-funk',
@@ -405,7 +405,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'harmonisiert; Deutschland stellt darunter zusätzlich die Kanäle 41 bis 80 ' +
       'zwischen 26,565 und 26,955 MHz bereit, dort ist nur FM erlaubt. Kanal 9 gilt ' +
       'als Notrufkanal, Kanal 19 als Fernfahrerkanal.',
-    source: 'BNetzA Vfg. 21/2021; ECC/DEC/(11)03',
+    source: 'BNetzA Vfg. 21/2021; ECC/DEC/(11)03'
   },
 
   // --------------------------------------------------------------------------
@@ -424,7 +424,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
       'Die IARU hat je Band eine Frequenz als Schwerpunkt für Not- und ' +
       'Katastrophenfunk benannt: 3760, 7110, 14300, 18160 und 21360 kHz. Sie sind ' +
       'nicht gesperrt, sollen im Ereignisfall aber freigehalten werden.',
-    source: 'IARU Region 1, Emergency Centre of Activity Frequencies',
+    source: 'IARU Region 1, Emergency Centre of Activity Frequencies'
   },
   {
     id: 'ham-sstv-aprs',
@@ -436,8 +436,8 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
     descriptionDE:
       'Gemeinsame Frequenz für Positions-, Wetter- und Kurznachrichtenbaken. In ' +
       'Übungslagen und bei Katastrophenfunk dient sie der Lagedarstellung.',
-    source: 'IARU R1 VHF-Bandplan',
-  },
+    source: 'IARU R1 VHF-Bandplan'
+  }
 ];
 
 /**
@@ -446,7 +446,7 @@ export const EMERGENCY_FREQUENCIES: EmergencyFrequency[] = [
  */
 export const AIRBAND_CHANNEL_SPACING_HZ = {
   klassisch: 25e3,
-  verdichtet: 8.333333e3,
+  verdichtet: 8.333333e3
 } as const;
 
 /** Erster Kanal des harmonisierten CB-Funks in Hz. */
@@ -462,9 +462,7 @@ export const MARINE_VHF_CHANNEL_SPACING_HZ = 25e3;
  * Liefert alle Not- und Sicherheitsfrequenzen eines Fachbereichs.
  * @param domain Fachbereich
  */
-export function getEmergencyFrequenciesByDomain(
-  domain: EmergencyDomain
-): EmergencyFrequency[] {
+export function getEmergencyFrequenciesByDomain(domain: EmergencyDomain): EmergencyFrequency[] {
   return EMERGENCY_FREQUENCIES.filter((f) => f.domain === domain);
 }
 

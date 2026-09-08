@@ -30,12 +30,8 @@
   let chartWidth = $derived(Math.max(1, width - margin.left - margin.right));
   let chartHeight = $derived(Math.max(1, height - margin.top - margin.bottom));
 
-  let xScale = $derived(
-    scaleLog().domain([CHART_FREQ_MIN_HZ, CHART_FREQ_MAX_HZ]).range([0, chartWidth])
-  );
-  let yScale = $derived(
-    scaleLog().domain([CHART_DEPTH_MIN_M, CHART_DEPTH_MAX_M]).range([chartHeight, 0])
-  );
+  let xScale = $derived(scaleLog().domain([CHART_FREQ_MIN_HZ, CHART_FREQ_MAX_HZ]).range([0, chartWidth]));
+  let yScale = $derived(scaleLog().domain([CHART_DEPTH_MIN_M, CHART_DEPTH_MAX_M]).range([chartHeight, 0]));
 
   let lineGenerator = $derived(
     line<DepthPoint>()
@@ -69,8 +65,7 @@
     <ul class="skin-legend">
       {#each paths as entry (entry.id)}
         <li class="skin-legend__item">
-          <span class="skin-legend__swatch" style="background: {entry.color}" aria-hidden="true"
-          ></span>
+          <span class="skin-legend__swatch" style="background: {entry.color}" aria-hidden="true"></span>
           <span>{entry.label}</span>
         </li>
       {/each}
@@ -132,13 +127,7 @@
         y2={markerPos.y}
         stroke-dasharray="8,4"
       />
-      <circle
-        class="chart-marker-primary"
-        cx={markerPos.x}
-        cy={markerPos.y}
-        r="10"
-        filter="url(#skinMarkerGlow)"
-      />
+      <circle class="chart-marker-primary" cx={markerPos.x} cy={markerPos.y} r="10" filter="url(#skinMarkerGlow)" />
       <circle cx={markerPos.x} cy={markerPos.y} r="5" fill="var(--color-on-solid)" />
 
       <!-- X-Achse -->
@@ -152,9 +141,7 @@
             </text>
           </g>
         {/each}
-        <text class="chart-axis-label" x={chartWidth / 2} y="48" text-anchor="middle">
-          Frequenz (logarithmisch)
-        </text>
+        <text class="chart-axis-label" x={chartWidth / 2} y="48" text-anchor="middle"> Frequenz (logarithmisch) </text>
       </g>
 
       <!-- Y-Achse -->
@@ -168,12 +155,8 @@
             </text>
           </g>
         {/each}
-        <text
-          class="chart-axis-label"
-          transform="rotate(-90)"
-          x={-chartHeight / 2}
-          y="-55"
-          text-anchor="middle">Skin-Tiefe (m, logarithmisch)</text
+        <text class="chart-axis-label" transform="rotate(-90)" x={-chartHeight / 2} y="-55" text-anchor="middle"
+          >Skin-Tiefe (m, logarithmisch)</text
         >
       </g>
     </g>

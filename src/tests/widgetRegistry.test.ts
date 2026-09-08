@@ -11,7 +11,9 @@
 import { describe, it, expect } from 'vitest';
 import { WIDGETS } from '$lib/components/knowledge/widgetRegistry';
 import {
+  CONTENT_WIDGET_ENTRIES,
   KNOWN_WIDGET_IDS,
+  MARKUP_WIDGET_ENTRIES,
   WIDGET_ENTRIES,
   WIDGET_PARAM,
   findWidget,
@@ -27,8 +29,21 @@ import { wellenausbreitungArticle } from '$lib/content/wellenausbreitung';
 
 const locations = await widgetLocations();
 
-/** Widgets, die bereits in einem Kapitel eingebunden sind. */
-const platzierte = WIDGET_ENTRIES.filter((entry) => (locations[entry.id] ?? []).length > 0);
+/** Widgets, die bereits als Inhaltsblock in einem Kapitel eingebunden sind. */
+const platzierte = CONTENT_WIDGET_ENTRIES.filter((entry) => (locations[entry.id] ?? []).length > 0);
+
+/** Quelltext der Kapitelseiten, die Widgets direkt im Markup einbinden. */
+const SEITEN_QUELLTEXT = import.meta.glob('/src/routes/wissen/*/+page.svelte', {
+  query: '?raw',
+  import: 'default',
+  eager: true
+}) as Record<string, string>;
+
+/** Kapitelseiten, die Widgets direkt im Markup einbinden. */
+const MARKUP_SEITEN: Record<string, string> = {
+  '/wissen/modulation/': '/src/routes/wissen/modulation/+page.svelte',
+  '/wissen/antennen/': '/src/routes/wissen/antennen/+page.svelte'
+};
 
 describe('Widget-Katalog', () => {
   it('führt Metadaten für die eingebundenen Widgets', () => {
@@ -46,10 +61,17 @@ describe('Widget-Katalog', () => {
     expect(new Set(KNOWN_WIDGET_IDS).size).toBe(KNOWN_WIDGET_IDS.length);
   });
 
-  it('hat zu jedem Katalogeintrag eine Komponente', () => {
-    for (const entry of WIDGET_ENTRIES) {
-      expect(WIDGETS[entry.id], entry.id).toBeDefined();
+  it('hat zu jedem Inhaltsblock-Widget eine Komponente', () => {
+    for (const entry of CONTENT_WIDGET_ENTRIES) {
+      expect(WIDGETS[entry.id as keyof typeof WIDGETS], entry.id).toBeDefined();
     }
+  });
+
+  it('trennt Inhaltsblock- und Markup-Widgets vollständig', () => {
+    expect(CONTENT_WIDGET_ENTRIES.length + MARKUP_WIDGET_ENTRIES.length).toBe(
+      WIDGET_ENTRIES.length
+    );
+    expect(MARKUP_WIDGET_ENTRIES.length).toBeGreaterThanOrEqual(6);
   });
 
   it('nennt für platzierte Widgets ein Kapitel, in dem sie wirklich stehen', () => {
@@ -78,6 +100,35 @@ describe('Widget-Katalog', () => {
   it('bildet für Widgets ohne Metadaten eine lesbare Bezeichnung', () => {
     expect(widgetLabel('fresnel')).toBe('Fresnel-Zone und Hindernis');
     expect(widgetLabel('gibt-es-nicht')).toBe('Gibt Es Nicht');
+  });
+});
+
+describe('Widgets im Markup-Betrieb', () => {
+  it('stehen in keiner Kapiteldatei als Inhaltsblock', () => {
+    for (const entry of MARKUP_WIDGET_ENTRIES) {
+      expect(locations[entry.id], entry.id).toBeUndefined();
+    }
+  });
+
+  it('verweisen auf eine bekannte Kapitelseite', () => {
+    for (const entry of MARKUP_WIDGET_ENTRIES) {
+      expect(Object.keys(MARKUP_SEITEN), entry.id).toContain(entry.chapterHref);
+      expect(findNode(entry.chapterHref)?.status, entry.id).toBe('live');
+    }
+  });
+
+  it('tragen ihre Anker-ID in der Seitenkomponente — sonst greift `?w=` nicht', () => {
+    for (const entry of MARKUP_WIDGET_ENTRIES) {
+      const quelle = SEITEN_QUELLTEXT[MARKUP_SEITEN[entry.chapterHref]];
+      expect(quelle, entry.chapterHref).toBeDefined();
+      expect(quelle, entry.id).toContain(`widgetAnchorId('${entry.id}')`);
+    }
+  });
+
+  it('werden vom Deep-Link-Parser akzeptiert', () => {
+    for (const entry of MARKUP_WIDGET_ENTRIES) {
+      expect(parseWidgetParam(`?${WIDGET_PARAM}=${entry.id}`)).toBe(entry.id);
+    }
   });
 });
 

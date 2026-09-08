@@ -112,7 +112,9 @@ describe('Nachschlagen und Filtern', () => {
   it('findet den Kanal zu einer Frequenz', () => {
     const hits = maritimeChannelsForFrequency(MARITIME_DISTRESS_VHF_HZ);
     expect(hits.map((hit) => hit.channel.channel)).toContain('16');
-    expect(hits.every((hit) => hit.direction === 'schiff' || hit.direction === 'kueste')).toBe(true);
+    expect(hits.every((hit) => hit.direction === 'schiff' || hit.direction === 'kueste')).toBe(
+      true
+    );
   });
 
   it('unterscheidet Schiffs- und Küstenrichtung', () => {
@@ -121,9 +123,9 @@ describe('Nachschlagen und Filtern', () => {
       true
     );
     const coastSide = maritimeChannelsForFrequency(160_625_000);
-    expect(coastSide.some((hit) => hit.channel.channel === '60' && hit.direction === 'kueste')).toBe(
-      true
-    );
+    expect(
+      coastSide.some((hit) => hit.channel.channel === '60' && hit.direction === 'kueste')
+    ).toBe(true);
   });
 
   it('liefert außerhalb des Bandes keine Treffer', () => {
@@ -152,7 +154,9 @@ describe('Nachschlagen und Filtern', () => {
 
 describe('Grenz- und Kurzwelle', () => {
   it('führt 2182 kHz und 2187,5 kHz mit der richtigen Betriebsart', () => {
-    const voice = MARITIME_HF_FREQUENCIES.find((entry) => entry.frequencyHz === MARITIME_DISTRESS_MF_HZ);
+    const voice = MARITIME_HF_FREQUENCIES.find(
+      (entry) => entry.frequencyHz === MARITIME_DISTRESS_MF_HZ
+    );
     expect(voice?.mode).toBe('sprechfunk');
     const dsc = MARITIME_HF_FREQUENCIES.find((entry) => entry.frequencyHz === MARITIME_DSC_MF_HZ);
     expect(dsc?.mode).toBe('dsc');
@@ -218,7 +222,10 @@ import { findNode } from '$lib/data/navigation';
 import { getRelatedTopics } from '$lib/data/relations';
 import { sectionIds } from '$lib/content/funktechnik/types';
 import { articleSections } from '$lib/content/funktechnik/adapt';
-import { LEARNING_GOALS as PAGE_GOALS_SEEFUNK, SECTIONS as PAGE_SECTIONS_SEEFUNK } from '$lib/content/funktechnik/seefunk';
+import {
+  LEARNING_GOALS as PAGE_GOALS_SEEFUNK,
+  SECTIONS as PAGE_SECTIONS_SEEFUNK
+} from '$lib/content/funktechnik/seefunk';
 
 const PAGE_HREF_SEEFUNK = '/wissen/funktechnik/seefunk/';
 
@@ -268,6 +275,15 @@ describe('Seite /wissen/funktechnik/seefunk/', () => {
 
   it('enthält die Abschnitte, auf die die Route zugreift', () => {
     const ids = sectionIds(PAGE_SECTIONS_SEEFUNK);
-    for (const id of ['gmdss', 'ukw-seefunk', 'dsc', 'grenzwelle-kurzwelle', 'navtex-ais', 'satellit', 'betrieb']) expect(ids, id).toContain(id);
+    for (const id of [
+      'gmdss',
+      'ukw-seefunk',
+      'dsc',
+      'grenzwelle-kurzwelle',
+      'navtex-ais',
+      'satellit',
+      'betrieb'
+    ])
+      expect(ids, id).toContain(id);
   });
 });

@@ -33,9 +33,21 @@ describe('calculateOxygenAttenuation', () => {
   });
 
   it('should show peak attenuation around 60 GHz (O2 complex)', () => {
-    const attenuation50GHz = calculateOxygenAttenuation(50, STANDARD_PRESSURE_HPA, STANDARD_TEMPERATURE_K);
-    const attenuation60GHz = calculateOxygenAttenuation(60, STANDARD_PRESSURE_HPA, STANDARD_TEMPERATURE_K);
-    const attenuation70GHz = calculateOxygenAttenuation(70, STANDARD_PRESSURE_HPA, STANDARD_TEMPERATURE_K);
+    const attenuation50GHz = calculateOxygenAttenuation(
+      50,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_TEMPERATURE_K
+    );
+    const attenuation60GHz = calculateOxygenAttenuation(
+      60,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_TEMPERATURE_K
+    );
+    const attenuation70GHz = calculateOxygenAttenuation(
+      70,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_TEMPERATURE_K
+    );
 
     // 60 GHz should have highest attenuation in this range
     expect(attenuation60GHz).toBeGreaterThan(attenuation50GHz);
@@ -43,12 +55,25 @@ describe('calculateOxygenAttenuation', () => {
   });
 
   it('should show secondary peak around 118.75 GHz', () => {
-    const attenuation100GHz = calculateOxygenAttenuation(100, STANDARD_PRESSURE_HPA, STANDARD_TEMPERATURE_K);
-    const attenuation119GHz = calculateOxygenAttenuation(118.75, STANDARD_PRESSURE_HPA, STANDARD_TEMPERATURE_K);
-    const attenuation140GHz = calculateOxygenAttenuation(140, STANDARD_PRESSURE_HPA, STANDARD_TEMPERATURE_K);
+    const attenuation100GHz = calculateOxygenAttenuation(
+      100,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_TEMPERATURE_K
+    );
+    const attenuation119GHz = calculateOxygenAttenuation(
+      118.75,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_TEMPERATURE_K
+    );
+    const attenuation140GHz = calculateOxygenAttenuation(
+      140,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_TEMPERATURE_K
+    );
 
-    // 118.75 GHz should be a local peak
+    // 118.75 GHz should be a local peak — beidseitig fällt die Dämpfung ab
     expect(attenuation119GHz).toBeGreaterThan(attenuation100GHz);
+    expect(attenuation119GHz).toBeGreaterThan(attenuation140GHz);
   });
 
   it('should have attenuation around 15 dB/km at 60 GHz peak', () => {
@@ -78,19 +103,44 @@ describe('calculateOxygenAttenuation', () => {
 
 describe('calculateWaterVaporAttenuation', () => {
   it('should return 0 for zero water vapor density', () => {
-    const result = calculateWaterVaporAttenuation(22.235, STANDARD_PRESSURE_HPA, 0, STANDARD_TEMPERATURE_K);
+    const result = calculateWaterVaporAttenuation(
+      22.235,
+      STANDARD_PRESSURE_HPA,
+      0,
+      STANDARD_TEMPERATURE_K
+    );
     expect(result).toBe(0);
   });
 
   it('should return positive attenuation with water vapor present', () => {
-    const result = calculateWaterVaporAttenuation(22.235, STANDARD_PRESSURE_HPA, STANDARD_WATER_VAPOR, STANDARD_TEMPERATURE_K);
+    const result = calculateWaterVaporAttenuation(
+      22.235,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_WATER_VAPOR,
+      STANDARD_TEMPERATURE_K
+    );
     expect(result).toBeGreaterThan(0);
   });
 
   it('should show peak at 22.235 GHz water vapor line', () => {
-    const attenuation20GHz = calculateWaterVaporAttenuation(20, STANDARD_PRESSURE_HPA, STANDARD_WATER_VAPOR, STANDARD_TEMPERATURE_K);
-    const attenuation22GHz = calculateWaterVaporAttenuation(22.235, STANDARD_PRESSURE_HPA, STANDARD_WATER_VAPOR, STANDARD_TEMPERATURE_K);
-    const attenuation25GHz = calculateWaterVaporAttenuation(25, STANDARD_PRESSURE_HPA, STANDARD_WATER_VAPOR, STANDARD_TEMPERATURE_K);
+    const attenuation20GHz = calculateWaterVaporAttenuation(
+      20,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_WATER_VAPOR,
+      STANDARD_TEMPERATURE_K
+    );
+    const attenuation22GHz = calculateWaterVaporAttenuation(
+      22.235,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_WATER_VAPOR,
+      STANDARD_TEMPERATURE_K
+    );
+    const attenuation25GHz = calculateWaterVaporAttenuation(
+      25,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_WATER_VAPOR,
+      STANDARD_TEMPERATURE_K
+    );
 
     // 22.235 GHz should be a local peak
     expect(attenuation22GHz).toBeGreaterThan(attenuation20GHz);
@@ -98,19 +148,39 @@ describe('calculateWaterVaporAttenuation', () => {
   });
 
   it('should show strong peak at 183.31 GHz', () => {
-    const attenuation183GHz = calculateWaterVaporAttenuation(183.31, STANDARD_PRESSURE_HPA, STANDARD_WATER_VAPOR, STANDARD_TEMPERATURE_K);
+    const attenuation183GHz = calculateWaterVaporAttenuation(
+      183.31,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_WATER_VAPOR,
+      STANDARD_TEMPERATURE_K
+    );
     // This is the strongest water vapor line in the 1-350 GHz range
     expect(attenuation183GHz).toBeGreaterThan(10);
   });
 
   it('should scale with water vapor density', () => {
-    const lowDensity = calculateWaterVaporAttenuation(22.235, STANDARD_PRESSURE_HPA, 3.75, STANDARD_TEMPERATURE_K);
-    const highDensity = calculateWaterVaporAttenuation(22.235, STANDARD_PRESSURE_HPA, 15, STANDARD_TEMPERATURE_K);
+    const lowDensity = calculateWaterVaporAttenuation(
+      22.235,
+      STANDARD_PRESSURE_HPA,
+      3.75,
+      STANDARD_TEMPERATURE_K
+    );
+    const highDensity = calculateWaterVaporAttenuation(
+      22.235,
+      STANDARD_PRESSURE_HPA,
+      15,
+      STANDARD_TEMPERATURE_K
+    );
     expect(highDensity).toBeGreaterThan(lowDensity);
   });
 
   it('should return non-negative values', () => {
-    const result = calculateWaterVaporAttenuation(1, STANDARD_PRESSURE_HPA, STANDARD_WATER_VAPOR, STANDARD_TEMPERATURE_K);
+    const result = calculateWaterVaporAttenuation(
+      1,
+      STANDARD_PRESSURE_HPA,
+      STANDARD_WATER_VAPOR,
+      STANDARD_TEMPERATURE_K
+    );
     expect(result).toBeGreaterThanOrEqual(0);
   });
 });
@@ -338,7 +408,7 @@ describe('generateAttenuationCurve', () => {
     };
     const result = generateAttenuationCurve(conditions, 1, 350, 100);
 
-    result.forEach(point => {
+    result.forEach((point) => {
       expect(point.oxygen).toBeGreaterThanOrEqual(0);
       expect(point.waterVapor).toBeGreaterThanOrEqual(0);
       expect(point.total).toBe(point.oxygen + point.waterVapor);
@@ -353,11 +423,11 @@ describe('Reference data constants', () => {
     expect(ABSORPTION_PEAKS.windows).toBeDefined();
 
     // Check 22 GHz water vapor peak
-    const h2o22 = ABSORPTION_PEAKS.waterVapor.find(p => p.frequency === 22.235);
+    const h2o22 = ABSORPTION_PEAKS.waterVapor.find((p) => p.frequency === 22.235);
     expect(h2o22).toBeDefined();
 
     // Check 60 GHz oxygen peak
-    const o260 = ABSORPTION_PEAKS.oxygen.find(p => p.frequency === 60);
+    const o260 = ABSORPTION_PEAKS.oxygen.find((p) => p.frequency === 60);
     expect(o260).toBeDefined();
   });
 
@@ -419,7 +489,10 @@ describe('Edge cases and robustness', () => {
 // Referenzwert-Tests (Bericht 03, Abschnitt 4.3) – ITU-R P.676-13 / P.838-3 / P.840
 // ============================================================================
 
-import { calculateEarthSpaceAttenuation, calculateExtendedPathAttenuation } from '$lib/utils/atmosphericAttenuation';
+import {
+  calculateEarthSpaceAttenuation,
+  calculateExtendedPathAttenuation
+} from '$lib/utils/atmosphericAttenuation';
 
 const STD = { temperatureK: 288.15, pressureHpa: 1013.25, waterVaporDensity: 7.5 };
 
@@ -531,25 +604,43 @@ describe('Nebel Referenzwerte (P.840, ±5 %)', () => {
 
 describe('Schneedämpfung (F-01, F-05)', () => {
   it('ist stetig in f (keine Sprünge bei 10 und 40 GHz)', () => {
-    expect(calculateSnowAttenuation(10.001, 5, true) / calculateSnowAttenuation(9.999, 5, true)).toBeCloseTo(1, 1);
-    expect(calculateSnowAttenuation(40.001, 5, false) / calculateSnowAttenuation(39.999, 5, false)).toBeCloseTo(1, 1);
-    expect(calculateSnowAttenuation(10.001, 5, false) / calculateSnowAttenuation(9.999, 5, false)).toBeCloseTo(1, 1);
+    expect(
+      calculateSnowAttenuation(10.001, 5, true) / calculateSnowAttenuation(9.999, 5, true)
+    ).toBeCloseTo(1, 1);
+    expect(
+      calculateSnowAttenuation(40.001, 5, false) / calculateSnowAttenuation(39.999, 5, false)
+    ).toBeCloseTo(1, 1);
+    expect(
+      calculateSnowAttenuation(10.001, 5, false) / calculateSnowAttenuation(9.999, 5, false)
+    ).toBeCloseTo(1, 1);
   });
 
   it('Nassschnee entspricht Regen gleicher Wasseräquivalent-Rate (P.530-18)', () => {
-    expect(calculateSnowAttenuation(20, 5, true)).toBeCloseTo(calculateRainAttenuation(20, 5, 'horizontal'), 6);
+    expect(calculateSnowAttenuation(20, 5, true)).toBeCloseTo(
+      calculateRainAttenuation(20, 5, 'horizontal'),
+      6
+    );
   });
 
   it('Trockenschnee: Gunn & East – 10 GHz, 5 mm/h → 0,0043 dB/km; nie über Regen', () => {
     expect(calculateSnowAttenuation(10, 5, false)).toBeCloseTo(0.0043, 3);
-    expect(calculateSnowAttenuation(30, 5, false)).toBeLessThan(calculateRainAttenuation(30, 5, 'horizontal'));
-    expect(calculateSnowAttenuation(94, 5, false)).toBeLessThanOrEqual(calculateRainAttenuation(94, 5, 'horizontal'));
+    expect(calculateSnowAttenuation(30, 5, false)).toBeLessThan(
+      calculateRainAttenuation(30, 5, 'horizontal')
+    );
+    expect(calculateSnowAttenuation(94, 5, false)).toBeLessThanOrEqual(
+      calculateRainAttenuation(94, 5, 'horizontal')
+    );
   });
 
   it('behandelt Schnee bei −5 °C als Trockenschnee, bei +1 °C als Nassschnee', () => {
     const base = {
-      pressureHpa: 1013.25, waterVaporDensity: 7.5, rainRateMmH: 0, fogDensityGM3: 0,
-      snowRateMmH: 5, polarization: 'horizontal' as const, elevationAngleDeg: 0
+      pressureHpa: 1013.25,
+      waterVaporDensity: 7.5,
+      rainRateMmH: 0,
+      fogDensityGM3: 0,
+      snowRateMmH: 5,
+      polarization: 'horizontal' as const,
+      elevationAngleDeg: 0
     };
     const cold = calculateAllAttenuation(30, { ...base, temperatureK: 268.15 });
     const warm = calculateAllAttenuation(30, { ...base, temperatureK: 274.15 });
@@ -561,8 +652,12 @@ describe('Schneedämpfung (F-01, F-05)', () => {
 
 describe('Erde–Raum-Pfad (F-13)', () => {
   const conditions = {
-    ...STD, rainRateMmH: 0, fogDensityGM3: 0, snowRateMmH: 0,
-    polarization: 'horizontal' as const, elevationAngleDeg: 0
+    ...STD,
+    rainRateMmH: 0,
+    fogDensityGM3: 0,
+    snowRateMmH: 0,
+    polarization: 'horizontal' as const,
+    elevationAngleDeg: 0
   };
 
   it('12 GHz, 30°: Gasdämpfung ≈ 0,1 dB statt hunderten dB über 36 000 km', () => {

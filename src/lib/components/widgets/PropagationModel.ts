@@ -114,7 +114,11 @@ export function computePropagationScene(
     groundWaveRangeKm,
     skipDistanceKm,
     skipZone,
-    mufKm3000MHz: estimateMUF(foF2MHz, IONOSPHERE_PARAMETERS.mufReferenceDistanceKm, reflectionHeightKm),
+    mufKm3000MHz: estimateMUF(
+      foF2MHz,
+      IONOSPHERE_PARAMETERS.mufReferenceDistanceKm,
+      reflectionHeightKm
+    ),
     reflectionHeightKm,
     foF2MHz
   };
@@ -170,7 +174,11 @@ export function sketchGeometry(spanKm: number, maxAltitudeKm: number): SketchGeo
 }
 
 /** Punkt auf/über der Kugeloberfläche: Bogenlänge ab Bildmitte (km) und Höhe (km) */
-export function sketchPoint(geometry: SketchGeometry, distanceFromCenterKm: number, altitudeKm: number): { x: number; y: number } {
+export function sketchPoint(
+  geometry: SketchGeometry,
+  distanceFromCenterKm: number,
+  altitudeKm: number
+): { x: number; y: number } {
   const angle = distanceFromCenterKm * geometry.kmToRad;
   const radius = geometry.radiusPx + altitudeKm * geometry.altitudeScale;
   return {

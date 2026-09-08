@@ -238,4 +238,3 @@ export function visibleCycles(frequencyHz: number): number {
 export function stageLengthM(frequencyHz: number): number {
   return visibleCycles(frequencyHz) * frequencyToWavelength(frequencyHz);
 }
-

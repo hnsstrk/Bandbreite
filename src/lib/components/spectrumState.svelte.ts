@@ -34,8 +34,6 @@ import {
 } from './spectrumZoom';
 import {
   MARGIN,
-  ROW_HEIGHT,
-  GAP,
   ROW_ORDER,
   ROW_LABELS,
   ROW_SOURCES,
@@ -106,9 +104,12 @@ export function createSpectrumState() {
   // Derived spectrum max based on view mode
   let spectrumMax = $derived.by(() => {
     switch (viewMode) {
-      case 'rf': return SPECTRUM_MAX_RF;
-      case 'visible': return SPECTRUM_MAX_VISIBLE;
-      case 'full': return SPECTRUM_MAX_GAMMA;
+      case 'rf':
+        return SPECTRUM_MAX_RF;
+      case 'visible':
+        return SPECTRUM_MAX_VISIBLE;
+      case 'full':
+        return SPECTRUM_MAX_GAMMA;
     }
   });
 
@@ -117,7 +118,7 @@ export function createSpectrumState() {
   let panOffset = $state(0);
 
   // Row visibility state
-  let visibleRows = $state<VisibleRows>({ ...DEFAULT_VISIBLE_ROWS });
+  const visibleRows = $state<VisibleRows>({ ...DEFAULT_VISIBLE_ROWS });
 
   // Container state
   let containerWidth = $state(DEFAULT_CONTAINER_WIDTH);
@@ -250,29 +251,75 @@ export function createSpectrumState() {
   }
 
   return {
-    get currentSpeedOfLight() { return currentSpeedOfLight; },
-    get viewMode() { return viewMode; },
-    get spectrumMax() { return spectrumMax; },
-    get zoomLevel() { return zoomLevel; },
-    get panOffset() { return panOffset; },
-    get visibleRows() { return visibleRows; },
-    get containerWidth() { return containerWidth; },
-    set containerWidth(w: number) { containerWidth = w; },
-    get tooltip() { return tooltip; },
-    get innerWidth() { return innerWidth; },
-    get visibleRowCount() { return visibleRowCount; },
-    get zoomedDomain() { return zoomedDomain; },
-    get xScale() { return xScale; },
-    get visibleLightGradientStops() { return visibleLightGradientStops; },
-    get frequencyTicks() { return frequencyTicks; },
-    get wavelengthTicks() { return wavelengthTicks; },
-    get rowConfig() { return rowConfig; },
-    get totalHeight() { return totalHeight; },
-    get bandRowsHeight() { return bandRowsHeight; },
-    get cursorFrequencyHz() { return cursor.cursorFrequencyHz; },
-    get cursorX() { return cursor.cursorX; },
-    get cursorWavelengthLabel() { return cursor.cursorWavelengthLabel; },
-    get cursorFrequencyLabel() { return cursor.cursorFrequencyLabel; },
+    get currentSpeedOfLight() {
+      return currentSpeedOfLight;
+    },
+    get viewMode() {
+      return viewMode;
+    },
+    get spectrumMax() {
+      return spectrumMax;
+    },
+    get zoomLevel() {
+      return zoomLevel;
+    },
+    get panOffset() {
+      return panOffset;
+    },
+    get visibleRows() {
+      return visibleRows;
+    },
+    get containerWidth() {
+      return containerWidth;
+    },
+    set containerWidth(w: number) {
+      containerWidth = w;
+    },
+    get tooltip() {
+      return tooltip;
+    },
+    get innerWidth() {
+      return innerWidth;
+    },
+    get visibleRowCount() {
+      return visibleRowCount;
+    },
+    get zoomedDomain() {
+      return zoomedDomain;
+    },
+    get xScale() {
+      return xScale;
+    },
+    get visibleLightGradientStops() {
+      return visibleLightGradientStops;
+    },
+    get frequencyTicks() {
+      return frequencyTicks;
+    },
+    get wavelengthTicks() {
+      return wavelengthTicks;
+    },
+    get rowConfig() {
+      return rowConfig;
+    },
+    get totalHeight() {
+      return totalHeight;
+    },
+    get bandRowsHeight() {
+      return bandRowsHeight;
+    },
+    get cursorFrequencyHz() {
+      return cursor.cursorFrequencyHz;
+    },
+    get cursorX() {
+      return cursor.cursorX;
+    },
+    get cursorWavelengthLabel() {
+      return cursor.cursorWavelengthLabel;
+    },
+    get cursorFrequencyLabel() {
+      return cursor.cursorFrequencyLabel;
+    },
 
     toggleRow,
     getRowY,
@@ -289,6 +336,6 @@ export function createSpectrumState() {
     hideTooltip,
     safeFormatWavelength,
     handleCursorMove: cursor.handleCursorMove,
-    handleCursorLeave: cursor.handleCursorLeave,
+    handleCursorLeave: cursor.handleCursorLeave
   };
 }

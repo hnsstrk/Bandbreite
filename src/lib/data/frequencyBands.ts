@@ -114,7 +114,7 @@ export const FREQUENCY_LIMITS = {
   BROADCAST_13M_MAX: 21.85e6,
   // 11-m-Rundfunkband: 25 670-26 100 kHz (ITU RR Art. 5), nicht 25 600 kHz
   BROADCAST_11M_MIN: 25.67e6,
-  BROADCAST_11M_MAX: 26.1e6,
+  BROADCAST_11M_MAX: 26.1e6
 } as const;
 
 // ============================================================================
@@ -206,8 +206,16 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.SLF_MAX, max: FREQUENCY_LIMITS.ULF_MAX },
     wavelength: '100 - 1.000 km',
-    applications: ['Submarine communication', 'Geophysical measurements', 'Through-earth communication'],
-    applicationsDE: ['U-Boot-Kommunikation', 'Geophysikalische Messungen', 'Erdreich-Durchdringung'],
+    applications: [
+      'Submarine communication',
+      'Geophysical measurements',
+      'Through-earth communication'
+    ],
+    applicationsDE: [
+      'U-Boot-Kommunikation',
+      'Geophysikalische Messungen',
+      'Erdreich-Durchdringung'
+    ],
     propagation: 'Penetrates seawater (~20m depth). Can penetrate rock/soil.',
     propagationDE: 'Durchdringt Seewasser (~20m Tiefe). Kann Gestein/Erdreich durchdringen.',
     propagationMode: 'submarine',
@@ -221,12 +229,21 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.ULF_MAX, max: FREQUENCY_LIMITS.VLF_MAX },
     wavelength: '10 - 100 km',
-    applications: ['Marine VLF (e.g. DHO38 23.4 kHz)', 'Navigation (Omega, discontinued 1997)', 'Submarine broadcast'],
-    applicationsDE: ['Marine-VLF (z. B. DHO38, 23,4 kHz)', 'Omega-Navigation (1997 eingestellt)', 'U-Boot-Rundfunk'],
+    applications: [
+      'Marine VLF (e.g. DHO38 23.4 kHz)',
+      'Navigation (Omega, discontinued 1997)',
+      'Submarine broadcast'
+    ],
+    applicationsDE: [
+      'Marine-VLF (z. B. DHO38, 23,4 kHz)',
+      'Omega-Navigation (1997 eingestellt)',
+      'U-Boot-Rundfunk'
+    ],
     propagation: 'Very stable ground wave propagation. Earth-ionosphere waveguide.',
     propagationDE: 'Sehr stabile Bodenwellenausbreitung. Erde-Ionosphäre-Wellenleiter.',
     propagationMode: 'groundWave',
-    notes: 'DHO38 (23,4 kHz) sendet von der Marinefunksendestelle Rhauderfehn. DCF77 (77,5 kHz) liegt dagegen im LF-Band.',
+    notes:
+      'DHO38 (23,4 kHz) sendet von der Marinefunksendestelle Rhauderfehn. DCF77 (77,5 kHz) liegt dagegen im LF-Band.',
     color: '#2374ab'
   },
   {
@@ -236,8 +253,20 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.VLF_MAX, max: FREQUENCY_LIMITS.LF_MAX },
     wavelength: '1 - 10 km',
-    applications: ['Longwave broadcasting', 'Time signals (DCF77, 77.5 kHz)', 'Navigation (NDB)', 'LORAN-C (100 kHz)', 'RFID (134 kHz)'],
-    applicationsDE: ['Langwellen-Rundfunk', 'Zeitzeichen (DCF77, 77,5 kHz)', 'Navigation (NDB)', 'LORAN-C (100 kHz)', 'RFID (134 kHz)'],
+    applications: [
+      'Longwave broadcasting',
+      'Time signals (DCF77, 77.5 kHz)',
+      'Navigation (NDB)',
+      'LORAN-C (100 kHz)',
+      'RFID (134 kHz)'
+    ],
+    applicationsDE: [
+      'Langwellen-Rundfunk',
+      'Zeitzeichen (DCF77, 77,5 kHz)',
+      'Navigation (NDB)',
+      'LORAN-C (100 kHz)',
+      'RFID (134 kHz)'
+    ],
     propagation: 'Ground wave reaches several 100 km. Sky wave possible at night.',
     propagationDE: 'Bodenwelle reicht mehrere 100 km. Nachts Raumwelle möglich.',
     propagationMode: 'groundWave',
@@ -251,8 +280,18 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.LF_MAX, max: FREQUENCY_LIMITS.MF_MAX },
     wavelength: '100 m - 1 km',
-    applications: ['AM broadcasting', 'Maritime distress (500 kHz)', 'NDB navigation', 'Amateur radio (160m)'],
-    applicationsDE: ['AM-Rundfunk', 'Seenot-Frequenz (500 kHz)', 'NDB-Navigation', 'Amateurfunk (160m)'],
+    applications: [
+      'AM broadcasting',
+      'Maritime distress (500 kHz)',
+      'NDB navigation',
+      'Amateur radio (160m)'
+    ],
+    applicationsDE: [
+      'AM-Rundfunk',
+      'Seenot-Frequenz (500 kHz)',
+      'NDB-Navigation',
+      'Amateurfunk (160m)'
+    ],
     propagation: 'Ground wave by day (~300 km). Sky wave at night (D-layer disappears).',
     propagationDE: 'Tagsüber Bodenwelle (~300 km). Nachts Raumwelle (D-Schicht verschwindet).',
     propagationMode: 'mixed',
@@ -266,8 +305,18 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.MF_MAX, max: FREQUENCY_LIMITS.HF_MAX },
     wavelength: '10 - 100 m',
-    applications: ['Shortwave broadcasting', 'Amateur radio (80m-10m)', 'Maritime/aviation HF', 'OTH radar'],
-    applicationsDE: ['Kurzwellen-Rundfunk', 'Amateurfunk (80m-10m)', 'See-/Flugfunk HF', 'Überhorizont-Radar'],
+    applications: [
+      'Shortwave broadcasting',
+      'Amateur radio (80m-10m)',
+      'Maritime/aviation HF',
+      'OTH radar'
+    ],
+    applicationsDE: [
+      'Kurzwellen-Rundfunk',
+      'Amateurfunk (80m-10m)',
+      'See-/Flugfunk HF',
+      'Überhorizont-Radar'
+    ],
     propagation: 'Worldwide via ionospheric reflection. Heavily depends on solar activity.',
     propagationDE: 'Weltweit durch Ionosphärenreflexion. Stark von Sonnenaktivität abhängig.',
     propagationMode: 'skyWave',
@@ -281,8 +330,20 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.HF_MAX, max: FREQUENCY_LIMITS.VHF_MAX },
     wavelength: '1 - 10 m',
-    applications: ['FM broadcasting', 'DAB+', 'Air traffic control', 'Marine VHF', 'Amateur radio (6m, 2m)'],
-    applicationsDE: ['UKW-Rundfunk', 'DAB+', 'Flugverkehrskontrolle', 'Seefunk VHF', 'Amateurfunk (6m, 2m)'],
+    applications: [
+      'FM broadcasting',
+      'DAB+',
+      'Air traffic control',
+      'Marine VHF',
+      'Amateur radio (6m, 2m)'
+    ],
+    applicationsDE: [
+      'UKW-Rundfunk',
+      'DAB+',
+      'Flugverkehrskontrolle',
+      'Seefunk VHF',
+      'Amateurfunk (6m, 2m)'
+    ],
     propagation: 'Primarily line-of-sight. Limited by radio horizon. Sporadic E possible.',
     propagationDE: 'Primär Sichtverbindung. Durch Radiohorizont begrenzt. Sporadische E möglich.',
     propagationMode: 'lineOfSight',
@@ -296,10 +357,25 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.VHF_MAX, max: FREQUENCY_LIMITS.UHF_MAX },
     wavelength: '10 cm - 1 m',
-    applications: ['DVB-T/T2', 'Mobile (GSM, UMTS, LTE)', 'GPS', 'WiFi 2.4 GHz', 'Bluetooth', 'LoRa'],
-    applicationsDE: ['DVB-T/T2', 'Mobilfunk (GSM, UMTS, LTE)', 'GPS', 'WLAN 2,4 GHz', 'Bluetooth', 'LoRa'],
+    applications: [
+      'DVB-T/T2',
+      'Mobile (GSM, UMTS, LTE)',
+      'GPS',
+      'WiFi 2.4 GHz',
+      'Bluetooth',
+      'LoRa'
+    ],
+    applicationsDE: [
+      'DVB-T/T2',
+      'Mobilfunk (GSM, UMTS, LTE)',
+      'GPS',
+      'WLAN 2,4 GHz',
+      'Bluetooth',
+      'LoRa'
+    ],
     propagation: 'Line-of-sight. Good building penetration. Main band for mobile communications.',
-    propagationDE: 'Sichtverbindung. Gute Gebäudedurchdringung. Hauptbereich für Mobilkommunikation.',
+    propagationDE:
+      'Sichtverbindung. Gute Gebäudedurchdringung. Hauptbereich für Mobilkommunikation.',
     propagationMode: 'lineOfSight',
     notes: 'Fresnel-Zonen-Freiheit wichtig für störungsfreie Verbindungen.',
     color: '#d4e6f1'
@@ -311,8 +387,20 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.UHF_MAX, max: FREQUENCY_LIMITS.SHF_MAX },
     wavelength: '1 - 10 cm',
-    applications: ['WiFi 5/6 GHz', '5G (n78, n79)', 'Satellite (C, Ku, K-Band)', 'Radar', 'Microwave links'],
-    applicationsDE: ['WLAN 5/6 GHz', '5G (n78, n79)', 'Satellit (C, Ku, K-Band)', 'Radar', 'Richtfunk'],
+    applications: [
+      'WiFi 5/6 GHz',
+      '5G (n78, n79)',
+      'Satellite (C, Ku, K-Band)',
+      'Radar',
+      'Microwave links'
+    ],
+    applicationsDE: [
+      'WLAN 5/6 GHz',
+      '5G (n78, n79)',
+      'Satellit (C, Ku, K-Band)',
+      'Radar',
+      'Richtfunk'
+    ],
     propagation: 'Line-of-sight only. Rain attenuation becomes relevant above 10 GHz.',
     propagationDE: 'Nur Sichtverbindung. Regendämpfung ab ca. 10 GHz relevant.',
     propagationMode: 'lineOfSight',
@@ -326,8 +414,18 @@ export const ITU_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     category: 'itu',
     frequencyHz: { min: FREQUENCY_LIMITS.SHF_MAX, max: FREQUENCY_LIMITS.EHF_MAX },
     wavelength: '1 - 10 mm',
-    applications: ['5G mmWave (FR2)', 'WiGig (60 GHz)', 'Automotive radar (77 GHz)', 'Satellite (Ka, V-Band)'],
-    applicationsDE: ['5G mmWave (FR2)', 'WiGig (60 GHz)', 'Kfz-Radar (77 GHz)', 'Satellit (Ka, V-Band)'],
+    applications: [
+      '5G mmWave (FR2)',
+      'WiGig (60 GHz)',
+      'Automotive radar (77 GHz)',
+      'Satellite (Ka, V-Band)'
+    ],
+    applicationsDE: [
+      '5G mmWave (FR2)',
+      'WiGig (60 GHz)',
+      'Kfz-Radar (77 GHz)',
+      'Satellit (Ka, V-Band)'
+    ],
     propagation: 'Strong atmospheric absorption at 60 GHz (O2) and 183 GHz (H2O).',
     propagationDE: 'Starke atmosphärische Absorption bei 60 GHz (O2) und 183 GHz (H2O).',
     propagationMode: 'lineOfSight',
@@ -815,7 +913,8 @@ export const AMATEUR_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     propagation: 'Good for emergency communications. Stable propagation.',
     propagationDE: 'Gut für Notfunkkommunikation. Stabile Ausbreitung.',
     propagationMode: 'skyWave',
-    notes: 'WRC-15 Sekundärzuweisung. In Deutschland seit 2017 durchgehender Bereich 5351,5-5366,5 kHz mit 15 W EIRP, kein Kanalbetrieb mehr.',
+    notes:
+      'WRC-15 Sekundärzuweisung. In Deutschland seit 2017 durchgehender Bereich 5351,5-5366,5 kHz mit 15 W EIRP, kein Kanalbetrieb mehr.',
     color: '#6366f1'
   },
   {
@@ -980,7 +1079,8 @@ export const AMATEUR_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     propagation: 'Line-of-sight. EME becoming popular.',
     propagationDE: 'Sichtverbindung. EME wird beliebter.',
     propagationMode: 'lineOfSight',
-    notes: 'Erste Mikrowellenzuweisung, Sekundärstatus gegenüber der Satellitennavigation (Galileo E6, 1260-1300 MHz). Die WRC-23 hat dafür Schutzbedingungen festgelegt (Res. 774).',
+    notes:
+      'Erste Mikrowellenzuweisung, Sekundärstatus gegenüber der Satellitennavigation (Galileo E6, 1260-1300 MHz). Die WRC-23 hat dafür Schutzbedingungen festgelegt (Res. 774).',
     color: '#22c55e'
   },
   {
@@ -1041,7 +1141,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: 'Tropical 120m',
     nameDE: 'Tropenband 120m',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_120M_MIN, max: FREQUENCY_LIMITS.BROADCAST_120M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_120M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_120M_MAX
+    },
     wavelength: '120 - 130 m',
     applications: ['Regional broadcasting in tropical areas'],
     applicationsDE: ['Regionaler Rundfunk in tropischen Gebieten'],
@@ -1056,7 +1159,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: 'Tropical 90m',
     nameDE: 'Tropenband 90m',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_90M_MIN, max: FREQUENCY_LIMITS.BROADCAST_90M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_90M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_90M_MAX
+    },
     wavelength: '88 - 94 m',
     applications: ['Regional broadcasting in tropical areas'],
     applicationsDE: ['Regionaler Rundfunk in tropischen Gebieten'],
@@ -1071,7 +1177,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: 'Tropical 75m',
     nameDE: 'Tropenband 75m',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_75M_MIN, max: FREQUENCY_LIMITS.BROADCAST_75M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_75M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_75M_MAX
+    },
     wavelength: '75 - 77 m',
     applications: ['Regional broadcasting in tropical areas'],
     applicationsDE: ['Regionaler Rundfunk in tropischen Gebieten'],
@@ -1086,7 +1195,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: 'Tropical 60m',
     nameDE: 'Tropenband 60m',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_60M_MIN, max: FREQUENCY_LIMITS.BROADCAST_60M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_60M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_60M_MAX
+    },
     wavelength: '59 - 63 m',
     applications: ['Regional broadcasting in tropical areas'],
     applicationsDE: ['Regionaler Rundfunk in tropischen Gebieten'],
@@ -1101,7 +1213,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '49m Band',
     nameDE: '49m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_49M_MIN, max: FREQUENCY_LIMITS.BROADCAST_49M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_49M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_49M_MAX
+    },
     wavelength: '48 - 51 m',
     applications: ['International broadcasting', 'News services'],
     applicationsDE: ['Internationaler Rundfunk', 'Nachrichtendienste'],
@@ -1116,7 +1231,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '41m Band',
     nameDE: '41m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_41M_MIN, max: FREQUENCY_LIMITS.BROADCAST_41M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_41M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_41M_MAX
+    },
     wavelength: '40 - 42 m',
     applications: ['International broadcasting'],
     applicationsDE: ['Internationaler Rundfunk'],
@@ -1131,7 +1249,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '31m Band',
     nameDE: '31m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_31M_MIN, max: FREQUENCY_LIMITS.BROADCAST_31M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_31M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_31M_MAX
+    },
     wavelength: '30 - 32 m',
     applications: ['International broadcasting', 'Major stations'],
     applicationsDE: ['Internationaler Rundfunk', 'Große Sender'],
@@ -1146,7 +1267,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '25m Band',
     nameDE: '25m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_25M_MIN, max: FREQUENCY_LIMITS.BROADCAST_25M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_25M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_25M_MAX
+    },
     wavelength: '25 - 26 m',
     applications: ['International broadcasting'],
     applicationsDE: ['Internationaler Rundfunk'],
@@ -1161,7 +1285,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '22m Band',
     nameDE: '22m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_22M_MIN, max: FREQUENCY_LIMITS.BROADCAST_22M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_22M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_22M_MAX
+    },
     wavelength: '21,6 - 22,1 m',
     applications: ['International broadcasting'],
     applicationsDE: ['Internationaler Rundfunk'],
@@ -1176,7 +1303,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '19m Band',
     nameDE: '19m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_19M_MIN, max: FREQUENCY_LIMITS.BROADCAST_19M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_19M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_19M_MAX
+    },
     wavelength: '19 - 20 m',
     applications: ['International broadcasting', 'Major stations'],
     applicationsDE: ['Internationaler Rundfunk', 'Große Sender'],
@@ -1191,7 +1321,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '16m Band',
     nameDE: '16m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_16M_MIN, max: FREQUENCY_LIMITS.BROADCAST_16M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_16M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_16M_MAX
+    },
     wavelength: '16,7 - 17,2 m',
     applications: ['International broadcasting'],
     applicationsDE: ['Internationaler Rundfunk'],
@@ -1206,7 +1339,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '15m Band',
     nameDE: '15m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_15M_MIN, max: FREQUENCY_LIMITS.BROADCAST_15M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_15M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_15M_MAX
+    },
     wavelength: '15,8 - 15,9 m',
     applications: ['International broadcasting'],
     applicationsDE: ['Internationaler Rundfunk'],
@@ -1221,7 +1357,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '13m Band',
     nameDE: '13m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_13M_MIN, max: FREQUENCY_LIMITS.BROADCAST_13M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_13M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_13M_MAX
+    },
     wavelength: '13,7 - 14 m',
     applications: ['International broadcasting'],
     applicationsDE: ['Internationaler Rundfunk'],
@@ -1236,7 +1375,10 @@ export const BROADCAST_FREQUENCY_BANDS: FrequencyBandDetail[] = [
     name: '11m Band',
     nameDE: '11m-Band',
     category: 'broadcast',
-    frequencyHz: { min: FREQUENCY_LIMITS.BROADCAST_11M_MIN, max: FREQUENCY_LIMITS.BROADCAST_11M_MAX },
+    frequencyHz: {
+      min: FREQUENCY_LIMITS.BROADCAST_11M_MIN,
+      max: FREQUENCY_LIMITS.BROADCAST_11M_MAX
+    },
     wavelength: '11,5 - 11,7 m',
     applications: ['International broadcasting (rare)'],
     applicationsDE: ['Internationaler Rundfunk (selten)'],
@@ -1303,12 +1445,10 @@ export function getBandByFrequency(
     return undefined;
   }
 
-  const bandsToSearch = category
-    ? FREQUENCY_BANDS_BY_CATEGORY[category]
-    : ALL_FREQUENCY_BANDS;
+  const bandsToSearch = category ? FREQUENCY_BANDS_BY_CATEGORY[category] : ALL_FREQUENCY_BANDS;
 
   return bandsToSearch.find(
-    band => frequencyHz >= band.frequencyHz.min && frequencyHz <= band.frequencyHz.max
+    (band) => frequencyHz >= band.frequencyHz.min && frequencyHz <= band.frequencyHz.max
   );
 }
 
@@ -1329,13 +1469,13 @@ export function getAllBandsForFrequency(
   let bandsToSearch: FrequencyBandDetail[];
 
   if (categories && categories.length > 0) {
-    bandsToSearch = categories.flatMap(cat => FREQUENCY_BANDS_BY_CATEGORY[cat]);
+    bandsToSearch = categories.flatMap((cat) => FREQUENCY_BANDS_BY_CATEGORY[cat]);
   } else {
     bandsToSearch = ALL_FREQUENCY_BANDS;
   }
 
   return bandsToSearch.filter(
-    band => frequencyHz >= band.frequencyHz.min && frequencyHz <= band.frequencyHz.max
+    (band) => frequencyHz >= band.frequencyHz.min && frequencyHz <= band.frequencyHz.max
   );
 }
 
@@ -1345,7 +1485,7 @@ export function getAllBandsForFrequency(
  * @returns Das Band oder undefined
  */
 export function getBandById(id: string): FrequencyBandDetail | undefined {
-  return ALL_FREQUENCY_BANDS.find(band => band.id === id);
+  return ALL_FREQUENCY_BANDS.find((band) => band.id === id);
 }
 
 /**
@@ -1458,7 +1598,7 @@ export function searchBands(
 
   const term = searchTerm.toLowerCase().trim();
 
-  return ALL_FREQUENCY_BANDS.filter(band => {
+  return ALL_FREQUENCY_BANDS.filter((band) => {
     const name = language === 'de' ? band.nameDE : band.name;
     const apps = language === 'de' ? band.applicationsDE : band.applications;
     const prop = language === 'de' ? band.propagationDE : band.propagation;
@@ -1466,7 +1606,7 @@ export function searchBands(
     return (
       name.toLowerCase().includes(term) ||
       band.id.toLowerCase().includes(term) ||
-      apps.some(app => app.toLowerCase().includes(term)) ||
+      apps.some((app) => app.toLowerCase().includes(term)) ||
       prop.toLowerCase().includes(term) ||
       (band.notes && band.notes.toLowerCase().includes(term))
     );

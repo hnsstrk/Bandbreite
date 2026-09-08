@@ -5,12 +5,7 @@
    */
   import { line } from 'd3-shape';
   import { scaleLinear, scaleLog } from 'd3-scale';
-  import {
-    formatDistance,
-    formatFrequency,
-    formatLocaleNumber,
-    formatPowerDb
-  } from '$lib/utils/formatting';
+  import { formatDistance, formatFrequency, formatLocaleNumber, formatPowerDb } from '$lib/utils/formatting';
   import ChartFrame from './ChartFrame.svelte';
   import {
     FSPL_CHART_MARGIN,
@@ -107,8 +102,7 @@
     <ul class="fspl-legend">
       {#each legendEntries as entry (entry.hz)}
         <li class="fspl-legend__item">
-          <span class="fspl-legend__swatch" style="background: {entry.color}" aria-hidden="true"
-          ></span>
+          <span class="fspl-legend__swatch" style="background: {entry.color}" aria-hidden="true"></span>
           <span>{entry.label}</span>
         </li>
       {/each}
@@ -177,13 +171,7 @@
           y2={markerPos.y}
           stroke-dasharray="8,4"
         />
-        <circle
-          class="chart-marker-primary"
-          cx={markerPos.x}
-          cy={markerPos.y}
-          r="10"
-          filter="url(#fsplMarkerGlow)"
-        />
+        <circle class="chart-marker-primary" cx={markerPos.x} cy={markerPos.y} r="10" filter="url(#fsplMarkerGlow)" />
         <circle cx={markerPos.x} cy={markerPos.y} r="5" fill="var(--color-on-solid)" />
 
         <g
@@ -211,9 +199,7 @@
             </text>
           </g>
         {/each}
-        <text class="chart-axis-label" x={chartWidth / 2} y="48" text-anchor="middle">
-          Distanz (logarithmisch)
-        </text>
+        <text class="chart-axis-label" x={chartWidth / 2} y="48" text-anchor="middle"> Distanz (logarithmisch) </text>
       </g>
 
       <!-- Y-Achse -->
@@ -227,12 +213,8 @@
             </text>
           </g>
         {/each}
-        <text
-          class="chart-axis-label"
-          transform="rotate(-90)"
-          x={-chartHeight / 2}
-          y="-50"
-          text-anchor="middle">FSPL (dB)</text
+        <text class="chart-axis-label" transform="rotate(-90)" x={-chartHeight / 2} y="-50" text-anchor="middle"
+          >FSPL (dB)</text
         >
       </g>
     </g>

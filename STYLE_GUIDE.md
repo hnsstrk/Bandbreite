@@ -562,6 +562,71 @@ Gemeinsamer Rahmen für alle Diagramme.
 </ChartFrame>
 ```
 
+### GlossaryTerm (`components/ui/`)
+
+Verweist auf einen Begriff aus `data/glossary.ts`: sichtbarer Text mit
+gepunkteter Unterlinie, Kurzdefinition als `title`, Ziel
+`/wissen/glossar/?q=<Begriff>#<id>`. Angelegt, aber bewusst noch in keinem
+Kapitel eingebaut — vor dem ersten Einsatz prüfen, dass der Fließtext nicht zur
+Linkwüste wird.
+
+| Prop | Typ | Bedeutung |
+| --- | --- | --- |
+| `id` | `string` | ID des Glossareintrags |
+| `label` | `string` | abweichender Anzeigetext (Standard: der Begriff selbst) |
+
+### Portal-Bausteine (`components/portal/`)
+
+Nur auf der Startseite verwendet, alle unter 120 Zeilen und ohne eigene Farben:
+
+| Komponente | Zweck |
+| --- | --- |
+| `PortalSearch.svelte` | großes Suchfeld; öffnet über `layout/searchDialog.svelte.ts` dieselbe Command-Palette wie Lupe und `Strg + K` |
+| `PortalAreas.svelte` | fünf Bereichskacheln aus `NAV_GROUPS` mit je drei bis vier Direkteinstiegen |
+| `PortalTiles.svelte` | Kachelraster („Interaktiv lernen", „Werkzeuge"), Daten aus `portalContent.ts` |
+| `PortalLearningPaths.svelte` | Kachelreihe der Lernpfade mit Fortschrittsbalken |
+
+Die Kacheldaten stammen aus `portalContent.ts` (abgeleitet aus `NAV_GROUPS` und
+`getHubChildren()`) — auf der Seite steht keine zweite Linkliste.
+
+### Lernpfad-Bausteine (`components/learning/`)
+
+| Komponente | Zweck | Hinweise |
+| --- | --- | --- |
+| `LearningMeter.svelte` | Fortschrittsbalken | `role="progressbar"` mit `aria-valuenow`/`aria-valuetext` |
+| `LearningPathBar.svelte` | Leiste unter dem Header: „Schritt 3 von 7", Lernziel, Zurück/Weiter/Erledigt/Verlassen | `<nav aria-label="Lernpfad …">`, sticky ab 48 rem (`top: 3.5rem`, `z-index: 30`), Innenraum in `.page-container` |
+| `LearningPathCard.svelte` | Kachel je Pfad: Stufe (`Badge`-Ton aus `LEVEL_TONES`), Dauer, Balken, Starten/Fortsetzen | Dauer ist eine gekennzeichnete Annahme |
+| `LearningPathSteps.svelte` | nummerierte Schrittliste mit Status und Abhaken | optionale Schritte sind als solche ausgewiesen |
+
+Der Fortschritt liegt in `learningProgress.svelte.ts` (Runes-Klasse,
+`localStorage`) und wird erst in einem `$effect` gelesen — sonst wiche das
+hydrierte Markup vom prerenderten ab.
+
+### Spektrum-Teilkomponenten (`components/`)
+
+`SpectrumOverview.svelte` ist eine **geschützte Kernkomponente**; ihre
+Teilstücke stehen unter demselben Schutz und werden nur zusammen mit ihr
+geändert (Bedingung: pixelgleiche Darstellung).
+
+| Komponente | Zeichnet |
+| --- | --- |
+| `SpectrumWavelengthAxis.svelte` | obere Wellenlängenachse und vertikale Gitterlinien |
+| `SpectrumRows.svelte` | Bandreihen als `rect`-Elemente mit Tooltip-/Klick-Handlern und `aria-label` |
+| `SpectrumMarker.svelte` | Markerlinie und Markerpunkte zur aktuellen Frequenz |
+| `SpectrumFrequencyAxis.svelte` | untere Frequenzachse mit dualer λ-Beschriftung |
+
+Geometrie und Zahlen kommen aus `spectrumZoom.ts`, `spectrumBands.ts`,
+`spectrumCursor.svelte.ts` und `spectrumFormat.ts` — die Komponenten enthalten
+keine Rechnung. Dasselbe Muster gilt für den Frequenzkonverter mit
+`FrequencyPresets.svelte` und `FrequencyFormula.svelte`.
+
+Die verbliebenen Hex-Ausnahmen in `conventions.test.ts` liegen sämtlich hier:
+`SpectrumRows`, `SpectrumMarker`, `SpectrumCursor` (theme-invariante
+Markerfarben) sowie `SpectrumTooltip` und `SpectrumLegend` (Farbverlauf des
+sichtbaren Lichts). Sie wurden beim Refactor bewusst nicht getauscht, um die
+Pixelgleichheit nicht zu riskieren. Eine Größenausnahme gibt es nicht mehr —
+alle Komponenten liegen unter 300 Zeilen.
+
 ---
 
 ## Chart-Standards

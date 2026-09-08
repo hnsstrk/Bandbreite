@@ -15,10 +15,7 @@ import {
   POWER_CHART_CATEGORY_LABELS,
   frequencyPresets,
   distancePresets,
-  linkBudgetPresets,
-  type FrequencyPreset,
-  type ChartFrequency,
-  type LinkBudgetPreset,
+  linkBudgetPresets
 } from '$lib/data/presets';
 
 // ============================================================================
@@ -48,7 +45,7 @@ describe('FREQUENCY_CONVERTER_PRESETS', () => {
   });
 
   it('should contain a 2.4 GHz WiFi preset', () => {
-    const wifi = FREQUENCY_CONVERTER_PRESETS.find(p => p.hz === 2.4e9);
+    const wifi = FREQUENCY_CONVERTER_PRESETS.find((p) => p.hz === 2.4e9);
     expect(wifi).toBeDefined();
     expect(wifi!.label).toBe('2.4 GHz');
   });
@@ -85,14 +82,14 @@ describe('FSPL_FREQUENCY_PRESETS', () => {
   });
 
   it('should include IoT frequencies (433, 868, 915 MHz)', () => {
-    const frequencies = FSPL_FREQUENCY_PRESETS.map(p => p.hz);
+    const frequencies = FSPL_FREQUENCY_PRESETS.map((p) => p.hz);
     expect(frequencies).toContain(433e6);
     expect(frequencies).toContain(868e6);
     expect(frequencies).toContain(915e6);
   });
 
   it('should include mmWave frequencies (28, 60, 77 GHz)', () => {
-    const frequencies = FSPL_FREQUENCY_PRESETS.map(p => p.hz);
+    const frequencies = FSPL_FREQUENCY_PRESETS.map((p) => p.hz);
     expect(frequencies).toContain(28e9);
     expect(frequencies).toContain(60e9);
     expect(frequencies).toContain(77e9);
@@ -131,13 +128,13 @@ describe('FSPL_CHART_FREQUENCIES', () => {
   });
 
   it('should have unique colors for visual distinguishability', () => {
-    const colors = FSPL_CHART_FREQUENCIES.map(f => f.color);
+    const colors = FSPL_CHART_FREQUENCIES.map((f) => f.color);
     const uniqueColors = new Set(colors);
     expect(uniqueColors.size).toBe(colors.length);
   });
 
   it('should have unique frequency values', () => {
-    const frequencies = FSPL_CHART_FREQUENCIES.map(f => f.hz);
+    const frequencies = FSPL_CHART_FREQUENCIES.map((f) => f.hz);
     const uniqueFreqs = new Set(frequencies);
     expect(uniqueFreqs.size).toBe(frequencies.length);
   });
@@ -261,17 +258,17 @@ describe('LINK_BUDGET_PRESETS', () => {
   });
 
   it('should contain a WLAN Indoor preset', () => {
-    const wlan = LINK_BUDGET_PRESETS.find(p => p.name === 'WLAN Indoor');
+    const wlan = LINK_BUDGET_PRESETS.find((p) => p.name === 'WLAN Indoor');
     expect(wlan).toBeDefined();
   });
 
   it('should contain a LoRa Outdoor preset', () => {
-    const lora = LINK_BUDGET_PRESETS.find(p => p.name === 'LoRa Outdoor');
+    const lora = LINK_BUDGET_PRESETS.find((p) => p.name === 'LoRa Outdoor');
     expect(lora).toBeDefined();
   });
 
   it('should have unique names', () => {
-    const names = LINK_BUDGET_PRESETS.map(p => p.name);
+    const names = LINK_BUDGET_PRESETS.map((p) => p.name);
     const uniqueNames = new Set(names);
     expect(uniqueNames.size).toBe(names.length);
   });

@@ -117,8 +117,22 @@ describe('tocItems', () => {
 describe('findSection', () => {
   it('findet die von den Routen benannten Abschnitte', () => {
     const erwartet: Record<string, string[]> = {
-      funkdienste: ['begriff', 'regionen', 'primaer-sekundaer', 'vom-vertrag-zur-zuteilung', 'frequenzplan', 'lesen'],
-      amateurfunk: ['dienst', 'klassen', 'rufzeichen', 'bandplan-prinzip', 'betriebsarten', 'welches-band'],
+      funkdienste: [
+        'begriff',
+        'regionen',
+        'primaer-sekundaer',
+        'vom-vertrag-zur-zuteilung',
+        'frequenzplan',
+        'lesen'
+      ],
+      amateurfunk: [
+        'dienst',
+        'klassen',
+        'rufzeichen',
+        'bandplan-prinzip',
+        'betriebsarten',
+        'welches-band'
+      ],
       mobilfunk: ['zellprinzip', 'zugriffsverfahren', 'duplex', 'baender-de', 'mimo'],
       rundfunk: ['am-bereiche', 'ukw', 'dab', 'dvbt2', 'wandel'],
       notfrequenzen: ['grundidee', 'see', 'luft', 'land']

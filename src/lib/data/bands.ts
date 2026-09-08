@@ -17,7 +17,7 @@ export type PropagationMode = 'groundWave' | 'skyWave' | 'lineOfSight' | 'mixed'
 export interface FrequencyBand {
   id: string;
   name: string;
-  nameDE: string;  // German name
+  nameDE: string; // German name
   minHz: number;
   maxHz: number;
   color: string;
@@ -39,16 +39,96 @@ export interface ITUBand extends FrequencyBand {
  * Traditional German/European radar band naming
  */
 export const DE_ALT_BANDS: FrequencyBand[] = [
-  { id: 'de-vhf', name: 'VHF', nameDE: 'VHF', minHz: 30e6, maxHz: 300e6, color: '#6366f1', category: 'de-alt' },
-  { id: 'de-uhf', name: 'UHF', nameDE: 'UHF', minHz: 300e6, maxHz: 1e9, color: '#818cf8', category: 'de-alt' },
-  { id: 'de-l', name: 'L', nameDE: 'L-Band', minHz: 1e9, maxHz: 2e9, color: '#a5b4fc', category: 'de-alt' },
-  { id: 'de-s', name: 'S', nameDE: 'S-Band', minHz: 2e9, maxHz: 4e9, color: '#818cf8', category: 'de-alt' },
-  { id: 'de-c', name: 'C', nameDE: 'C-Band', minHz: 4e9, maxHz: 8e9, color: '#6366f1', category: 'de-alt' },
-  { id: 'de-x', name: 'X', nameDE: 'X-Band', minHz: 8e9, maxHz: 12e9, color: '#818cf8', category: 'de-alt' },
-  { id: 'de-ku', name: 'Ku', nameDE: 'Ku-Band', minHz: 12e9, maxHz: 18e9, color: '#a5b4fc', category: 'de-alt' },
-  { id: 'de-k', name: 'K', nameDE: 'K-Band', minHz: 18e9, maxHz: 27e9, color: '#818cf8', category: 'de-alt' },
-  { id: 'de-ka', name: 'Ka', nameDE: 'Ka-Band', minHz: 27e9, maxHz: 40e9, color: '#6366f1', category: 'de-alt' },
-  { id: 'de-mm', name: 'Millimeter', nameDE: 'Millimeterwellen', minHz: 40e9, maxHz: 300e9, color: '#818cf8', category: 'de-alt' },
+  {
+    id: 'de-vhf',
+    name: 'VHF',
+    nameDE: 'VHF',
+    minHz: 30e6,
+    maxHz: 300e6,
+    color: '#6366f1',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-uhf',
+    name: 'UHF',
+    nameDE: 'UHF',
+    minHz: 300e6,
+    maxHz: 1e9,
+    color: '#818cf8',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-l',
+    name: 'L',
+    nameDE: 'L-Band',
+    minHz: 1e9,
+    maxHz: 2e9,
+    color: '#a5b4fc',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-s',
+    name: 'S',
+    nameDE: 'S-Band',
+    minHz: 2e9,
+    maxHz: 4e9,
+    color: '#818cf8',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-c',
+    name: 'C',
+    nameDE: 'C-Band',
+    minHz: 4e9,
+    maxHz: 8e9,
+    color: '#6366f1',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-x',
+    name: 'X',
+    nameDE: 'X-Band',
+    minHz: 8e9,
+    maxHz: 12e9,
+    color: '#818cf8',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-ku',
+    name: 'Ku',
+    nameDE: 'Ku-Band',
+    minHz: 12e9,
+    maxHz: 18e9,
+    color: '#a5b4fc',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-k',
+    name: 'K',
+    nameDE: 'K-Band',
+    minHz: 18e9,
+    maxHz: 27e9,
+    color: '#818cf8',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-ka',
+    name: 'Ka',
+    nameDE: 'Ka-Band',
+    minHz: 27e9,
+    maxHz: 40e9,
+    color: '#6366f1',
+    category: 'de-alt'
+  },
+  {
+    id: 'de-mm',
+    name: 'Millimeter',
+    nameDE: 'Millimeterwellen',
+    minHz: 40e9,
+    maxHz: 300e9,
+    color: '#818cf8',
+    category: 'de-alt'
+  }
 ];
 
 /**
@@ -62,17 +142,105 @@ export const DE_ALT_BANDS: FrequencyBand[] = [
  * Die Grenzen folgen der klassischen Tabelle (vor 1970), nicht IEEE Std 521.
  */
 export const US_ALT_BANDS: FrequencyBand[] = [
-  { id: 'us-i', name: 'I', nameDE: 'I-Band', minHz: 100e6, maxHz: 150e6, color: '#fde047', category: 'us-alt' },
-  { id: 'us-g', name: 'G', nameDE: 'G-Band', minHz: 150e6, maxHz: 225e6, color: '#facc15', category: 'us-alt' },
-  { id: 'us-p', name: 'P', nameDE: 'P-Band', minHz: 225e6, maxHz: 390e6, color: '#eab308', category: 'us-alt' },
-  { id: 'us-l', name: 'L', nameDE: 'L-Band', minHz: 390e6, maxHz: 1.55e9, color: '#fde047', category: 'us-alt' },
-  { id: 'us-s', name: 'S', nameDE: 'S-Band', minHz: 1.55e9, maxHz: 3.9e9, color: '#facc15', category: 'us-alt' },
-  { id: 'us-c', name: 'C', nameDE: 'C-Band', minHz: 3.9e9, maxHz: 6.2e9, color: '#eab308', category: 'us-alt' },
-  { id: 'us-x', name: 'X', nameDE: 'X-Band', minHz: 6.2e9, maxHz: 10.9e9, color: '#fde047', category: 'us-alt' },
-  { id: 'us-k', name: 'K', nameDE: 'K-Band', minHz: 10.9e9, maxHz: 36e9, color: '#facc15', category: 'us-alt' },
-  { id: 'us-q', name: 'Q', nameDE: 'Q-Band', minHz: 36e9, maxHz: 46e9, color: '#eab308', category: 'us-alt' },
-  { id: 'us-v', name: 'V', nameDE: 'V-Band', minHz: 46e9, maxHz: 56e9, color: '#fde047', category: 'us-alt' },
-  { id: 'us-w', name: 'W', nameDE: 'W-Band', minHz: 56e9, maxHz: 100e9, color: '#facc15', category: 'us-alt' },
+  {
+    id: 'us-i',
+    name: 'I',
+    nameDE: 'I-Band',
+    minHz: 100e6,
+    maxHz: 150e6,
+    color: '#fde047',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-g',
+    name: 'G',
+    nameDE: 'G-Band',
+    minHz: 150e6,
+    maxHz: 225e6,
+    color: '#facc15',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-p',
+    name: 'P',
+    nameDE: 'P-Band',
+    minHz: 225e6,
+    maxHz: 390e6,
+    color: '#eab308',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-l',
+    name: 'L',
+    nameDE: 'L-Band',
+    minHz: 390e6,
+    maxHz: 1.55e9,
+    color: '#fde047',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-s',
+    name: 'S',
+    nameDE: 'S-Band',
+    minHz: 1.55e9,
+    maxHz: 3.9e9,
+    color: '#facc15',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-c',
+    name: 'C',
+    nameDE: 'C-Band',
+    minHz: 3.9e9,
+    maxHz: 6.2e9,
+    color: '#eab308',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-x',
+    name: 'X',
+    nameDE: 'X-Band',
+    minHz: 6.2e9,
+    maxHz: 10.9e9,
+    color: '#fde047',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-k',
+    name: 'K',
+    nameDE: 'K-Band',
+    minHz: 10.9e9,
+    maxHz: 36e9,
+    color: '#facc15',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-q',
+    name: 'Q',
+    nameDE: 'Q-Band',
+    minHz: 36e9,
+    maxHz: 46e9,
+    color: '#eab308',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-v',
+    name: 'V',
+    nameDE: 'V-Band',
+    minHz: 46e9,
+    maxHz: 56e9,
+    color: '#fde047',
+    category: 'us-alt'
+  },
+  {
+    id: 'us-w',
+    name: 'W',
+    nameDE: 'W-Band',
+    minHz: 56e9,
+    maxHz: 100e9,
+    color: '#facc15',
+    category: 'us-alt'
+  }
 ];
 
 /**
@@ -80,19 +248,123 @@ export const US_ALT_BANDS: FrequencyBand[] = [
  * Current NATO/European frequency band designation A-M
  */
 export const EU_NATO_BANDS: FrequencyBand[] = [
-  { id: 'eu-a', name: 'A', nameDE: 'NATO A', minHz: 0, maxHz: 250e6, color: '#86efac', category: 'eu-nato' },
-  { id: 'eu-b', name: 'B', nameDE: 'NATO B', minHz: 250e6, maxHz: 500e6, color: '#4ade80', category: 'eu-nato' },
-  { id: 'eu-c', name: 'C', nameDE: 'NATO C', minHz: 500e6, maxHz: 1e9, color: '#22c55e', category: 'eu-nato' },
-  { id: 'eu-d', name: 'D', nameDE: 'NATO D', minHz: 1e9, maxHz: 2e9, color: '#86efac', category: 'eu-nato' },
-  { id: 'eu-e', name: 'E', nameDE: 'NATO E', minHz: 2e9, maxHz: 3e9, color: '#4ade80', category: 'eu-nato' },
-  { id: 'eu-f', name: 'F', nameDE: 'NATO F', minHz: 3e9, maxHz: 4e9, color: '#22c55e', category: 'eu-nato' },
-  { id: 'eu-g', name: 'G', nameDE: 'NATO G', minHz: 4e9, maxHz: 6e9, color: '#86efac', category: 'eu-nato' },
-  { id: 'eu-h', name: 'H', nameDE: 'NATO H', minHz: 6e9, maxHz: 8e9, color: '#4ade80', category: 'eu-nato' },
-  { id: 'eu-i', name: 'I', nameDE: 'NATO I', minHz: 8e9, maxHz: 10e9, color: '#22c55e', category: 'eu-nato' },
-  { id: 'eu-j', name: 'J', nameDE: 'NATO J', minHz: 10e9, maxHz: 20e9, color: '#86efac', category: 'eu-nato' },
-  { id: 'eu-k', name: 'K', nameDE: 'NATO K', minHz: 20e9, maxHz: 40e9, color: '#4ade80', category: 'eu-nato' },
-  { id: 'eu-l', name: 'L', nameDE: 'NATO L', minHz: 40e9, maxHz: 60e9, color: '#22c55e', category: 'eu-nato' },
-  { id: 'eu-m', name: 'M', nameDE: 'NATO M', minHz: 60e9, maxHz: 100e9, color: '#86efac', category: 'eu-nato' },
+  {
+    id: 'eu-a',
+    name: 'A',
+    nameDE: 'NATO A',
+    minHz: 0,
+    maxHz: 250e6,
+    color: '#86efac',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-b',
+    name: 'B',
+    nameDE: 'NATO B',
+    minHz: 250e6,
+    maxHz: 500e6,
+    color: '#4ade80',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-c',
+    name: 'C',
+    nameDE: 'NATO C',
+    minHz: 500e6,
+    maxHz: 1e9,
+    color: '#22c55e',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-d',
+    name: 'D',
+    nameDE: 'NATO D',
+    minHz: 1e9,
+    maxHz: 2e9,
+    color: '#86efac',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-e',
+    name: 'E',
+    nameDE: 'NATO E',
+    minHz: 2e9,
+    maxHz: 3e9,
+    color: '#4ade80',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-f',
+    name: 'F',
+    nameDE: 'NATO F',
+    minHz: 3e9,
+    maxHz: 4e9,
+    color: '#22c55e',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-g',
+    name: 'G',
+    nameDE: 'NATO G',
+    minHz: 4e9,
+    maxHz: 6e9,
+    color: '#86efac',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-h',
+    name: 'H',
+    nameDE: 'NATO H',
+    minHz: 6e9,
+    maxHz: 8e9,
+    color: '#4ade80',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-i',
+    name: 'I',
+    nameDE: 'NATO I',
+    minHz: 8e9,
+    maxHz: 10e9,
+    color: '#22c55e',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-j',
+    name: 'J',
+    nameDE: 'NATO J',
+    minHz: 10e9,
+    maxHz: 20e9,
+    color: '#86efac',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-k',
+    name: 'K',
+    nameDE: 'NATO K',
+    minHz: 20e9,
+    maxHz: 40e9,
+    color: '#4ade80',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-l',
+    name: 'L',
+    nameDE: 'NATO L',
+    minHz: 40e9,
+    maxHz: 60e9,
+    color: '#22c55e',
+    category: 'eu-nato'
+  },
+  {
+    id: 'eu-m',
+    name: 'M',
+    nameDE: 'NATO M',
+    minHz: 60e9,
+    maxHz: 100e9,
+    color: '#86efac',
+    category: 'eu-nato'
+  }
 ];
 
 /**
@@ -100,18 +372,114 @@ export const EU_NATO_BANDS: FrequencyBand[] = [
  * Standard frequency bands used in radar and microwave engineering
  */
 export const IEEE_BANDS: FrequencyBand[] = [
-  { id: 'hf', name: 'HF', nameDE: 'HF', minHz: 3e6, maxHz: 30e6, color: '#3b82f6', category: 'ieee' },
-  { id: 'vhf', name: 'VHF', nameDE: 'VHF', minHz: 30e6, maxHz: 300e6, color: '#22c55e', category: 'ieee' },
-  { id: 'uhf', name: 'UHF', nameDE: 'UHF', minHz: 300e6, maxHz: 1e9, color: '#eab308', category: 'ieee' },
-  { id: 'l', name: 'L', nameDE: 'L-Band', minHz: 1e9, maxHz: 2e9, color: '#f97316', category: 'ieee' },
-  { id: 's', name: 'S', nameDE: 'S-Band', minHz: 2e9, maxHz: 4e9, color: '#ef4444', category: 'ieee' },
-  { id: 'c', name: 'C', nameDE: 'C-Band', minHz: 4e9, maxHz: 8e9, color: '#ec4899', category: 'ieee' },
-  { id: 'x', name: 'X', nameDE: 'X-Band', minHz: 8e9, maxHz: 12e9, color: '#a855f7', category: 'ieee' },
-  { id: 'ku', name: 'Ku', nameDE: 'Ku-Band', minHz: 12e9, maxHz: 18e9, color: '#6366f1', category: 'ieee' },
-  { id: 'k', name: 'K', nameDE: 'K-Band', minHz: 18e9, maxHz: 27e9, color: '#0ea5e9', category: 'ieee' },
-  { id: 'ka', name: 'Ka', nameDE: 'Ka-Band', minHz: 27e9, maxHz: 40e9, color: '#14b8a6', category: 'ieee' },
-  { id: 'v', name: 'V', nameDE: 'V-Band', minHz: 40e9, maxHz: 75e9, color: '#84cc16', category: 'ieee' },
-  { id: 'w', name: 'W', nameDE: 'W-Band', minHz: 75e9, maxHz: 110e9, color: '#f59e0b', category: 'ieee' },
+  {
+    id: 'hf',
+    name: 'HF',
+    nameDE: 'HF',
+    minHz: 3e6,
+    maxHz: 30e6,
+    color: '#3b82f6',
+    category: 'ieee'
+  },
+  {
+    id: 'vhf',
+    name: 'VHF',
+    nameDE: 'VHF',
+    minHz: 30e6,
+    maxHz: 300e6,
+    color: '#22c55e',
+    category: 'ieee'
+  },
+  {
+    id: 'uhf',
+    name: 'UHF',
+    nameDE: 'UHF',
+    minHz: 300e6,
+    maxHz: 1e9,
+    color: '#eab308',
+    category: 'ieee'
+  },
+  {
+    id: 'l',
+    name: 'L',
+    nameDE: 'L-Band',
+    minHz: 1e9,
+    maxHz: 2e9,
+    color: '#f97316',
+    category: 'ieee'
+  },
+  {
+    id: 's',
+    name: 'S',
+    nameDE: 'S-Band',
+    minHz: 2e9,
+    maxHz: 4e9,
+    color: '#ef4444',
+    category: 'ieee'
+  },
+  {
+    id: 'c',
+    name: 'C',
+    nameDE: 'C-Band',
+    minHz: 4e9,
+    maxHz: 8e9,
+    color: '#ec4899',
+    category: 'ieee'
+  },
+  {
+    id: 'x',
+    name: 'X',
+    nameDE: 'X-Band',
+    minHz: 8e9,
+    maxHz: 12e9,
+    color: '#a855f7',
+    category: 'ieee'
+  },
+  {
+    id: 'ku',
+    name: 'Ku',
+    nameDE: 'Ku-Band',
+    minHz: 12e9,
+    maxHz: 18e9,
+    color: '#6366f1',
+    category: 'ieee'
+  },
+  {
+    id: 'k',
+    name: 'K',
+    nameDE: 'K-Band',
+    minHz: 18e9,
+    maxHz: 27e9,
+    color: '#0ea5e9',
+    category: 'ieee'
+  },
+  {
+    id: 'ka',
+    name: 'Ka',
+    nameDE: 'Ka-Band',
+    minHz: 27e9,
+    maxHz: 40e9,
+    color: '#14b8a6',
+    category: 'ieee'
+  },
+  {
+    id: 'v',
+    name: 'V',
+    nameDE: 'V-Band',
+    minHz: 40e9,
+    maxHz: 75e9,
+    color: '#84cc16',
+    category: 'ieee'
+  },
+  {
+    id: 'w',
+    name: 'W',
+    nameDE: 'W-Band',
+    minHz: 75e9,
+    maxHz: 110e9,
+    color: '#f59e0b',
+    category: 'ieee'
+  }
 ];
 
 /**
@@ -119,25 +487,145 @@ export const IEEE_BANDS: FrequencyBand[] = [
  * Military frequency band classification system
  */
 export const NATO_BANDS: FrequencyBand[] = [
-  { id: 'nato-a', name: 'A', nameDE: 'NATO A', minHz: 0, maxHz: 250e6, color: '#ef4444', category: 'nato' },
-  { id: 'nato-b', name: 'B', nameDE: 'NATO B', minHz: 250e6, maxHz: 500e6, color: '#f97316', category: 'nato' },
-  { id: 'nato-c', name: 'C', nameDE: 'NATO C', minHz: 500e6, maxHz: 1e9, color: '#eab308', category: 'nato' },
-  { id: 'nato-d', name: 'D', nameDE: 'NATO D', minHz: 1e9, maxHz: 2e9, color: '#84cc16', category: 'nato' },
-  { id: 'nato-e', name: 'E', nameDE: 'NATO E', minHz: 2e9, maxHz: 3e9, color: '#22c55e', category: 'nato' },
-  { id: 'nato-f', name: 'F', nameDE: 'NATO F', minHz: 3e9, maxHz: 4e9, color: '#14b8a6', category: 'nato' },
-  { id: 'nato-g', name: 'G', nameDE: 'NATO G', minHz: 4e9, maxHz: 6e9, color: '#06b6d4', category: 'nato' },
-  { id: 'nato-h', name: 'H', nameDE: 'NATO H', minHz: 6e9, maxHz: 8e9, color: '#0ea5e9', category: 'nato' },
-  { id: 'nato-i', name: 'I', nameDE: 'NATO I', minHz: 8e9, maxHz: 10e9, color: '#3b82f6', category: 'nato' },
-  { id: 'nato-j', name: 'J', nameDE: 'NATO J', minHz: 10e9, maxHz: 20e9, color: '#6366f1', category: 'nato' },
-  { id: 'nato-k', name: 'K', nameDE: 'NATO K', minHz: 20e9, maxHz: 40e9, color: '#8b5cf6', category: 'nato' },
-  { id: 'nato-l', name: 'L', nameDE: 'NATO L', minHz: 40e9, maxHz: 60e9, color: '#a855f7', category: 'nato' },
-  { id: 'nato-m', name: 'M', nameDE: 'NATO M', minHz: 60e9, maxHz: 100e9, color: '#ec4899', category: 'nato' },
+  {
+    id: 'nato-a',
+    name: 'A',
+    nameDE: 'NATO A',
+    minHz: 0,
+    maxHz: 250e6,
+    color: '#ef4444',
+    category: 'nato'
+  },
+  {
+    id: 'nato-b',
+    name: 'B',
+    nameDE: 'NATO B',
+    minHz: 250e6,
+    maxHz: 500e6,
+    color: '#f97316',
+    category: 'nato'
+  },
+  {
+    id: 'nato-c',
+    name: 'C',
+    nameDE: 'NATO C',
+    minHz: 500e6,
+    maxHz: 1e9,
+    color: '#eab308',
+    category: 'nato'
+  },
+  {
+    id: 'nato-d',
+    name: 'D',
+    nameDE: 'NATO D',
+    minHz: 1e9,
+    maxHz: 2e9,
+    color: '#84cc16',
+    category: 'nato'
+  },
+  {
+    id: 'nato-e',
+    name: 'E',
+    nameDE: 'NATO E',
+    minHz: 2e9,
+    maxHz: 3e9,
+    color: '#22c55e',
+    category: 'nato'
+  },
+  {
+    id: 'nato-f',
+    name: 'F',
+    nameDE: 'NATO F',
+    minHz: 3e9,
+    maxHz: 4e9,
+    color: '#14b8a6',
+    category: 'nato'
+  },
+  {
+    id: 'nato-g',
+    name: 'G',
+    nameDE: 'NATO G',
+    minHz: 4e9,
+    maxHz: 6e9,
+    color: '#06b6d4',
+    category: 'nato'
+  },
+  {
+    id: 'nato-h',
+    name: 'H',
+    nameDE: 'NATO H',
+    minHz: 6e9,
+    maxHz: 8e9,
+    color: '#0ea5e9',
+    category: 'nato'
+  },
+  {
+    id: 'nato-i',
+    name: 'I',
+    nameDE: 'NATO I',
+    minHz: 8e9,
+    maxHz: 10e9,
+    color: '#3b82f6',
+    category: 'nato'
+  },
+  {
+    id: 'nato-j',
+    name: 'J',
+    nameDE: 'NATO J',
+    minHz: 10e9,
+    maxHz: 20e9,
+    color: '#6366f1',
+    category: 'nato'
+  },
+  {
+    id: 'nato-k',
+    name: 'K',
+    nameDE: 'NATO K',
+    minHz: 20e9,
+    maxHz: 40e9,
+    color: '#8b5cf6',
+    category: 'nato'
+  },
+  {
+    id: 'nato-l',
+    name: 'L',
+    nameDE: 'NATO L',
+    minHz: 40e9,
+    maxHz: 60e9,
+    color: '#a855f7',
+    category: 'nato'
+  },
+  {
+    id: 'nato-m',
+    name: 'M',
+    nameDE: 'NATO M',
+    minHz: 60e9,
+    maxHz: 100e9,
+    color: '#ec4899',
+    category: 'nato'
+  },
   // Annahme: Das harmonisierte NATO-/ECM-Schema umfasst offiziell nur A bis M
   // (0 bis 100 GHz). Die Bänder N und O stammen aus einzelnen US-/SACLANT-
   // Sekundärtabellen und sind keine NATO-Standardbezeichnungen. Sie bleiben
   // hier nur der Vollständigkeit halber erhalten.
-  { id: 'nato-n', name: 'N', nameDE: 'NATO N', minHz: 100e9, maxHz: 200e9, color: '#f43f5e', category: 'nato' },
-  { id: 'nato-o', name: 'O', nameDE: 'NATO O', minHz: 200e9, maxHz: 300e9, color: '#fb7185', category: 'nato' },
+  {
+    id: 'nato-n',
+    name: 'N',
+    nameDE: 'NATO N',
+    minHz: 100e9,
+    maxHz: 200e9,
+    color: '#f43f5e',
+    category: 'nato'
+  },
+  {
+    id: 'nato-o',
+    name: 'O',
+    nameDE: 'NATO O',
+    minHz: 200e9,
+    maxHz: 300e9,
+    color: '#fb7185',
+    category: 'nato'
+  }
 ];
 
 /**
@@ -147,75 +635,419 @@ export const NATO_BANDS: FrequencyBand[] = [
 export const CIVILIAN_BANDS: FrequencyBand[] = [
   // Langwelle (LF): LORAN-C arbeitete auf 100 kHz, das Band 90-110 kHz war dafür
   // geschuetzt. In Europa 2015 abgeschaltet; Quelle: ITU RR Art. 5.
-  { id: 'loran-c', name: 'LORAN-C', nameDE: 'LORAN-C', minHz: 90e3, maxHz: 110e3, color: '#94a3b8', category: 'civilian' },
+  {
+    id: 'loran-c',
+    name: 'LORAN-C',
+    nameDE: 'LORAN-C',
+    minHz: 90e3,
+    maxHz: 110e3,
+    color: '#94a3b8',
+    category: 'civilian'
+  },
   // Navigation (NDB)
-  { id: 'ndb', name: 'NDB', nameDE: 'NDB (Funkfeuer)', minHz: 190e3, maxHz: 1750e3, color: '#78716c', category: 'civilian' },
+  {
+    id: 'ndb',
+    name: 'NDB',
+    nameDE: 'NDB (Funkfeuer)',
+    minHz: 190e3,
+    maxHz: 1750e3,
+    color: '#78716c',
+    category: 'civilian'
+  },
   // Rundfunk
   // Mittelwelle ITU-Region 1 (Europa/DE): 526,5-1606,5 kHz im 9-kHz-Raster (GE75).
-  { id: 'am-radio', name: 'AM Radio (Region 1)', nameDE: 'AM-Rundfunk (Mittelwelle, Region 1)', minHz: 526.5e3, maxHz: 1606.5e3, color: '#3b82f6', category: 'civilian' },
+  {
+    id: 'am-radio',
+    name: 'AM Radio (Region 1)',
+    nameDE: 'AM-Rundfunk (Mittelwelle, Region 1)',
+    minHz: 526.5e3,
+    maxHz: 1606.5e3,
+    color: '#3b82f6',
+    category: 'civilian'
+  },
   // Region 2 (Amerika): 535-1705 kHz im 10-kHz-Raster.
-  { id: 'am-radio-us', name: 'AM Radio (Region 2)', nameDE: 'AM-Rundfunk (Mittelwelle, Region 2)', minHz: 535e3, maxHz: 1705e3, color: '#60a5fa', category: 'civilian' },
-  { id: 'shortwave', name: 'Shortwave', nameDE: 'Kurzwelle', minHz: 3e6, maxHz: 30e6, color: '#06b6d4', category: 'civilian' },
+  {
+    id: 'am-radio-us',
+    name: 'AM Radio (Region 2)',
+    nameDE: 'AM-Rundfunk (Mittelwelle, Region 2)',
+    minHz: 535e3,
+    maxHz: 1705e3,
+    color: '#60a5fa',
+    category: 'civilian'
+  },
+  {
+    id: 'shortwave',
+    name: 'Shortwave',
+    nameDE: 'Kurzwelle',
+    minHz: 3e6,
+    maxHz: 30e6,
+    color: '#06b6d4',
+    category: 'civilian'
+  },
   // Navigation (Marker Beacon)
-  { id: 'marker-beacon', name: 'Marker Beacon', nameDE: 'Marker Beacon (ILS)', minHz: 74.8e6, maxHz: 75.2e6, color: '#a1a1aa', category: 'civilian' },
-  { id: 'fm-radio', name: 'FM Radio', nameDE: 'FM-Rundfunk', minHz: 87.5e6, maxHz: 108e6, color: '#22c55e', category: 'civilian' },
+  {
+    id: 'marker-beacon',
+    name: 'Marker Beacon',
+    nameDE: 'Marker Beacon (ILS)',
+    minHz: 74.8e6,
+    maxHz: 75.2e6,
+    color: '#a1a1aa',
+    category: 'civilian'
+  },
+  {
+    id: 'fm-radio',
+    name: 'FM Radio',
+    nameDE: 'FM-Rundfunk',
+    minHz: 87.5e6,
+    maxHz: 108e6,
+    color: '#22c55e',
+    category: 'civilian'
+  },
   // VOR und ILS Localizer
-  { id: 'vor', name: 'VOR/DVOR', nameDE: 'VOR/DVOR (Drehfunkfeuer)', minHz: 108e6, maxHz: 117.975e6, color: '#0d9488', category: 'civilian' },
-  { id: 'ils-loc', name: 'ILS Localizer', nameDE: 'ILS Landekurssender', minHz: 108.1e6, maxHz: 111.95e6, color: '#0f766e', category: 'civilian' },
-  { id: 'dab', name: 'DAB+', nameDE: 'DAB+', minHz: 174e6, maxHz: 230e6, color: '#84cc16', category: 'civilian' },
+  {
+    id: 'vor',
+    name: 'VOR/DVOR',
+    nameDE: 'VOR/DVOR (Drehfunkfeuer)',
+    minHz: 108e6,
+    maxHz: 117.975e6,
+    color: '#0d9488',
+    category: 'civilian'
+  },
+  {
+    id: 'ils-loc',
+    name: 'ILS Localizer',
+    nameDE: 'ILS Landekurssender',
+    minHz: 108.1e6,
+    maxHz: 111.95e6,
+    color: '#0f766e',
+    category: 'civilian'
+  },
+  {
+    id: 'dab',
+    name: 'DAB+',
+    nameDE: 'DAB+',
+    minHz: 174e6,
+    maxHz: 230e6,
+    color: '#84cc16',
+    category: 'civilian'
+  },
   // ILS Glide Slope
-  { id: 'ils-gs', name: 'ILS Glide Slope', nameDE: 'ILS Gleitwegsender', minHz: 329.15e6, maxHz: 335e6, color: '#115e59', category: 'civilian' },
+  {
+    id: 'ils-gs',
+    name: 'ILS Glide Slope',
+    nameDE: 'ILS Gleitwegsender',
+    minHz: 329.15e6,
+    maxHz: 335e6,
+    color: '#115e59',
+    category: 'civilian'
+  },
   // Notfrequenz
-  { id: 'cospas-sarsat', name: 'COSPAS-SARSAT', nameDE: 'COSPAS-SARSAT (Notsignal)', minHz: 406e6, maxHz: 406.1e6, color: '#dc2626', category: 'civilian' },
+  {
+    id: 'cospas-sarsat',
+    name: 'COSPAS-SARSAT',
+    nameDE: 'COSPAS-SARSAT (Notsignal)',
+    minHz: 406e6,
+    maxHz: 406.1e6,
+    color: '#dc2626',
+    category: 'civilian'
+  },
   // DVB-T2 in DE: Kanäle 21-48; oberhalb 694 MHz an den Mobilfunk abgegeben (WRC-15).
-  { id: 'dvb-t', name: 'DVB-T', nameDE: 'DVB-T/T2', minHz: 470e6, maxHz: 694e6, color: '#eab308', category: 'civilian' },
+  {
+    id: 'dvb-t',
+    name: 'DVB-T',
+    nameDE: 'DVB-T/T2',
+    minHz: 470e6,
+    maxHz: 694e6,
+    color: '#eab308',
+    category: 'civilian'
+  },
   // 3GPP Band 28 / n28: UL 703-748 MHz, DL 758-803 MHz (Duplexabstand 55 MHz,
   // Mittenlücke 748-758 MHz). Quelle: 3GPP TS 36.101 Tab. 5.5-1.
-  { id: 'lte-700', name: 'LTE Band 28 (700 MHz)', nameDE: 'LTE/5G Band 28 (700 MHz)', minHz: 703e6, maxHz: 803e6, color: '#f97316', category: 'civilian' },
+  {
+    id: 'lte-700',
+    name: 'LTE Band 28 (700 MHz)',
+    nameDE: 'LTE/5G Band 28 (700 MHz)',
+    minHz: 703e6,
+    maxHz: 803e6,
+    color: '#f97316',
+    category: 'civilian'
+  },
   // 3GPP Band 20 / n20: DL 791-821 MHz, UL 832-862 MHz.
-  { id: 'lte-800', name: 'LTE Band 20 (800 MHz)', nameDE: 'LTE/5G Band 20 (800 MHz)', minHz: 791e6, maxHz: 862e6, color: '#ef4444', category: 'civilian' },
-  { id: 'gsm-900', name: 'GSM 900', nameDE: 'GSM 900', minHz: 880e6, maxHz: 960e6, color: '#dc2626', category: 'civilian' },
+  {
+    id: 'lte-800',
+    name: 'LTE Band 20 (800 MHz)',
+    nameDE: 'LTE/5G Band 20 (800 MHz)',
+    minHz: 791e6,
+    maxHz: 862e6,
+    color: '#ef4444',
+    category: 'civilian'
+  },
+  {
+    id: 'gsm-900',
+    name: 'GSM 900',
+    nameDE: 'GSM 900',
+    minHz: 880e6,
+    maxHz: 960e6,
+    color: '#dc2626',
+    category: 'civilian'
+  },
   // DME/TACAN
-  { id: 'dme-tacan', name: 'DME/TACAN', nameDE: 'DME/TACAN (Entfernungsmessung)', minHz: 960e6, maxHz: 1215e6, color: '#0ea5e9', category: 'civilian' },
+  {
+    id: 'dme-tacan',
+    name: 'DME/TACAN',
+    nameDE: 'DME/TACAN (Entfernungsmessung)',
+    minHz: 960e6,
+    maxHz: 1215e6,
+    color: '#0ea5e9',
+    category: 'civilian'
+  },
   // SSR/TCAS Abfrage
-  { id: 'ssr-interrogation', name: 'SSR/TCAS TX', nameDE: 'SSR/TCAS Abfrage', minHz: 1029.5e6, maxHz: 1030.5e6, color: '#7c3aed', category: 'civilian' },
+  {
+    id: 'ssr-interrogation',
+    name: 'SSR/TCAS TX',
+    nameDE: 'SSR/TCAS Abfrage',
+    minHz: 1029.5e6,
+    maxHz: 1030.5e6,
+    color: '#7c3aed',
+    category: 'civilian'
+  },
   // ADS-B / SSR Antwort
-  { id: 'ads-b', name: 'ADS-B/SSR', nameDE: 'ADS-B / SSR Antwort', minHz: 1089.5e6, maxHz: 1090.5e6, color: '#6d28d9', category: 'civilian' },
+  {
+    id: 'ads-b',
+    name: 'ADS-B/SSR',
+    nameDE: 'ADS-B / SSR Antwort',
+    minHz: 1089.5e6,
+    maxHz: 1090.5e6,
+    color: '#6d28d9',
+    category: 'civilian'
+  },
   // GNSS-Einzelsysteme (ersetzen den bisherigen GPS-Eintrag)
-  { id: 'gnss-l5', name: 'GNSS L5/E5', nameDE: 'GNSS L5/E5a (GPS, Galileo, BeiDou)', minHz: 1164e6, maxHz: 1189e6, color: '#059669', category: 'civilian' },
-  { id: 'gnss-e5b', name: 'GNSS E5b/B2b', nameDE: 'GNSS E5b/B2b (Galileo, BeiDou)', minHz: 1197e6, maxHz: 1212e6, color: '#047857', category: 'civilian' },
-  { id: 'gps-l2', name: 'GPS L2', nameDE: 'GPS L2', minHz: 1215e6, maxHz: 1240e6, color: '#059669', category: 'civilian' },
+  {
+    id: 'gnss-l5',
+    name: 'GNSS L5/E5',
+    nameDE: 'GNSS L5/E5a (GPS, Galileo, BeiDou)',
+    minHz: 1164e6,
+    maxHz: 1189e6,
+    color: '#059669',
+    category: 'civilian'
+  },
+  {
+    id: 'gnss-e5b',
+    name: 'GNSS E5b/B2b',
+    nameDE: 'GNSS E5b/B2b (Galileo, BeiDou)',
+    minHz: 1197e6,
+    maxHz: 1212e6,
+    color: '#047857',
+    category: 'civilian'
+  },
+  {
+    id: 'gps-l2',
+    name: 'GPS L2',
+    nameDE: 'GPS L2',
+    minHz: 1215e6,
+    maxHz: 1240e6,
+    color: '#059669',
+    category: 'civilian'
+  },
   // Streckenradar (ARSR)
-  { id: 'arsr', name: 'ARSR (Streckenradar)', nameDE: 'Streckenradar (ARSR)', minHz: 1.215e9, maxHz: 1.4e9, color: '#ec4899', category: 'civilian' },
-  { id: 'glonass-l2', name: 'GLONASS L2', nameDE: 'GLONASS L2', minHz: 1240e6, maxHz: 1260e6, color: '#065f46', category: 'civilian' },
-  { id: 'gnss-e6', name: 'Galileo E6/BeiDou B3', nameDE: 'Galileo E6 / BeiDou B3', minHz: 1260e6, maxHz: 1300e6, color: '#064e3b', category: 'civilian' },
-  { id: 'gnss-l1', name: 'GNSS L1/E1/B1C', nameDE: 'GNSS L1 (GPS, Galileo, BeiDou)', minHz: 1559e6, maxHz: 1592e6, color: '#10b981', category: 'civilian' },
-  { id: 'glonass-l1', name: 'GLONASS L1', nameDE: 'GLONASS L1', minHz: 1598e6, maxHz: 1606e6, color: '#34d399', category: 'civilian' },
-  { id: 'lte-1800', name: 'LTE 1800', nameDE: 'LTE 1800 MHz', minHz: 1.71e9, maxHz: 1.88e9, color: '#ec4899', category: 'civilian' },
-  { id: 'umts', name: 'UMTS', nameDE: 'UMTS/3G', minHz: 1.92e9, maxHz: 2.17e9, color: '#a855f7', category: 'civilian' },
-  { id: 'wifi-2g', name: 'WiFi 2.4 GHz', nameDE: 'WLAN 2,4 GHz', minHz: 2.4e9, maxHz: 2.5e9, color: '#6366f1', category: 'civilian' },
-  { id: 'lte-2600', name: 'LTE 2600', nameDE: 'LTE 2600 MHz', minHz: 2.5e9, maxHz: 2.69e9, color: '#8b5cf6', category: 'civilian' },
+  {
+    id: 'arsr',
+    name: 'ARSR (Streckenradar)',
+    nameDE: 'Streckenradar (ARSR)',
+    minHz: 1.215e9,
+    maxHz: 1.4e9,
+    color: '#ec4899',
+    category: 'civilian'
+  },
+  {
+    id: 'glonass-l2',
+    name: 'GLONASS L2',
+    nameDE: 'GLONASS L2',
+    minHz: 1240e6,
+    maxHz: 1260e6,
+    color: '#065f46',
+    category: 'civilian'
+  },
+  {
+    id: 'gnss-e6',
+    name: 'Galileo E6/BeiDou B3',
+    nameDE: 'Galileo E6 / BeiDou B3',
+    minHz: 1260e6,
+    maxHz: 1300e6,
+    color: '#064e3b',
+    category: 'civilian'
+  },
+  {
+    id: 'gnss-l1',
+    name: 'GNSS L1/E1/B1C',
+    nameDE: 'GNSS L1 (GPS, Galileo, BeiDou)',
+    minHz: 1559e6,
+    maxHz: 1592e6,
+    color: '#10b981',
+    category: 'civilian'
+  },
+  {
+    id: 'glonass-l1',
+    name: 'GLONASS L1',
+    nameDE: 'GLONASS L1',
+    minHz: 1598e6,
+    maxHz: 1606e6,
+    color: '#34d399',
+    category: 'civilian'
+  },
+  {
+    id: 'lte-1800',
+    name: 'LTE 1800',
+    nameDE: 'LTE 1800 MHz',
+    minHz: 1.71e9,
+    maxHz: 1.88e9,
+    color: '#ec4899',
+    category: 'civilian'
+  },
+  {
+    id: 'umts',
+    name: 'UMTS',
+    nameDE: 'UMTS/3G',
+    minHz: 1.92e9,
+    maxHz: 2.17e9,
+    color: '#a855f7',
+    category: 'civilian'
+  },
+  {
+    id: 'wifi-2g',
+    name: 'WiFi 2.4 GHz',
+    nameDE: 'WLAN 2,4 GHz',
+    minHz: 2.4e9,
+    maxHz: 2.5e9,
+    color: '#6366f1',
+    category: 'civilian'
+  },
+  {
+    id: 'lte-2600',
+    name: 'LTE 2600',
+    nameDE: 'LTE 2600 MHz',
+    minHz: 2.5e9,
+    maxHz: 2.69e9,
+    color: '#8b5cf6',
+    category: 'civilian'
+  },
   // Flugsicherungsradar (ASR) und Wetterradar (S-Band)
-  { id: 'asr', name: 'ASR (Flugsicherung)', nameDE: 'Flugsicherungsradar (ASR)', minHz: 2.7e9, maxHz: 2.9e9, color: '#f472b6', category: 'civilian' },
-  { id: 'weather-s', name: 'Wetterradar S', nameDE: 'Wetterradar (S-Band)', minHz: 2.7e9, maxHz: 3.0e9, color: '#38bdf8', category: 'civilian' },
+  {
+    id: 'asr',
+    name: 'ASR (Flugsicherung)',
+    nameDE: 'Flugsicherungsradar (ASR)',
+    minHz: 2.7e9,
+    maxHz: 2.9e9,
+    color: '#f472b6',
+    category: 'civilian'
+  },
+  {
+    id: 'weather-s',
+    name: 'Wetterradar S',
+    nameDE: 'Wetterradar (S-Band)',
+    minHz: 2.7e9,
+    maxHz: 3.0e9,
+    color: '#38bdf8',
+    category: 'civilian'
+  },
   // Marine-Navigationsradar (S-Band)
-  { id: 'marine-s', name: 'Marine Radar S', nameDE: 'Marine-Navigationsradar (S-Band)', minHz: 2.9e9, maxHz: 3.1e9, color: '#2dd4bf', category: 'civilian' },
-  { id: '5g-n78', name: '5G n78', nameDE: '5G n78', minHz: 3.3e9, maxHz: 3.8e9, color: '#0ea5e9', category: 'civilian' },
-  { id: 'wifi-5g', name: 'WiFi 5 GHz', nameDE: 'WLAN 5 GHz', minHz: 5.15e9, maxHz: 5.85e9, color: '#14b8a6', category: 'civilian' },
+  {
+    id: 'marine-s',
+    name: 'Marine Radar S',
+    nameDE: 'Marine-Navigationsradar (S-Band)',
+    minHz: 2.9e9,
+    maxHz: 3.1e9,
+    color: '#2dd4bf',
+    category: 'civilian'
+  },
+  {
+    id: '5g-n78',
+    name: '5G n78',
+    nameDE: '5G n78',
+    minHz: 3.3e9,
+    maxHz: 3.8e9,
+    color: '#0ea5e9',
+    category: 'civilian'
+  },
+  {
+    id: 'wifi-5g',
+    name: 'WiFi 5 GHz',
+    nameDE: 'WLAN 5 GHz',
+    minHz: 5.15e9,
+    maxHz: 5.85e9,
+    color: '#14b8a6',
+    category: 'civilian'
+  },
   // Wetterradar (C-Band)
-  { id: 'weather-c', name: 'Wetterradar C', nameDE: 'Wetterradar (C-Band)', minHz: 5.25e9, maxHz: 5.725e9, color: '#0284c7', category: 'civilian' },
+  {
+    id: 'weather-c',
+    name: 'Wetterradar C',
+    nameDE: 'Wetterradar (C-Band)',
+    minHz: 5.25e9,
+    maxHz: 5.725e9,
+    color: '#0284c7',
+    category: 'civilian'
+  },
   // WLAN 6 GHz: in der EU/DE ist nur das Low Band 5945-6425 MHz freigegeben
   // (CEPT/ECC Dec. (20)01, EU-Beschluss 2021/1067). 6425-7125 MHz sind US-only.
-  { id: 'wifi-6e', name: 'WiFi 6E (EU)', nameDE: 'WLAN 6 GHz (EU)', minHz: 5.945e9, maxHz: 6.425e9, color: '#22d3d1', category: 'civilian' },
+  {
+    id: 'wifi-6e',
+    name: 'WiFi 6E (EU)',
+    nameDE: 'WLAN 6 GHz (EU)',
+    minHz: 5.945e9,
+    maxHz: 6.425e9,
+    color: '#22d3d1',
+    category: 'civilian'
+  },
   // Marine-Navigationsradar (X-Band) und Wetterradar (X-Band)
-  { id: 'marine-x', name: 'Marine Radar X', nameDE: 'Marine-Navigationsradar (X-Band)', minHz: 9.2e9, maxHz: 9.5e9, color: '#14b8a6', category: 'civilian' },
-  { id: 'weather-x', name: 'Wetterradar X', nameDE: 'Wetterradar (X-Band)', minHz: 9.3e9, maxHz: 9.5e9, color: '#0369a1', category: 'civilian' },
+  {
+    id: 'marine-x',
+    name: 'Marine Radar X',
+    nameDE: 'Marine-Navigationsradar (X-Band)',
+    minHz: 9.2e9,
+    maxHz: 9.5e9,
+    color: '#14b8a6',
+    category: 'civilian'
+  },
+  {
+    id: 'weather-x',
+    name: 'Wetterradar X',
+    nameDE: 'Wetterradar (X-Band)',
+    minHz: 9.3e9,
+    maxHz: 9.5e9,
+    color: '#0369a1',
+    category: 'civilian'
+  },
   // Geschwindigkeitsradar (K-Band)
-  { id: 'radar-k', name: 'Radar K-Band', nameDE: 'Geschwindigkeitsradar (K-Band)', minHz: 24.05e9, maxHz: 24.25e9, color: '#fbbf24', category: 'civilian' },
+  {
+    id: 'radar-k',
+    name: 'Radar K-Band',
+    nameDE: 'Geschwindigkeitsradar (K-Band)',
+    minHz: 24.05e9,
+    maxHz: 24.25e9,
+    color: '#fbbf24',
+    category: 'civilian'
+  },
   // Geschwindigkeitsradar (Ka-Band)
-  { id: 'radar-ka', name: 'Radar Ka-Band', nameDE: 'Geschwindigkeitsradar (Ka-Band)', minHz: 33.4e9, maxHz: 36.0e9, color: '#f59e0b', category: 'civilian' },
+  {
+    id: 'radar-ka',
+    name: 'Radar Ka-Band',
+    nameDE: 'Geschwindigkeitsradar (Ka-Band)',
+    minHz: 33.4e9,
+    maxHz: 36.0e9,
+    color: '#f59e0b',
+    category: 'civilian'
+  },
   // Kfz-Radar (77 GHz)
-  { id: 'radar-auto', name: 'Automotive Radar', nameDE: 'Kfz-Radar', minHz: 76e9, maxHz: 81e9, color: '#f59e0b', category: 'civilian' },
+  {
+    id: 'radar-auto',
+    name: 'Automotive Radar',
+    nameDE: 'Kfz-Radar',
+    minHz: 76e9,
+    maxHz: 81e9,
+    color: '#f59e0b',
+    category: 'civilian'
+  }
 ];
 
 /**
@@ -236,7 +1068,8 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'groundWave',
     applications: ['U-Boot-Kommunikation', 'Erdbebenforschung'],
-    notes: 'Eindringtiefe in Seewasser ca. 45 m bei 30 Hz (Skintiefe δ = 503/√(f·σ), σ ≈ 4 S/m). Extrem geringe Datenrate.'
+    notes:
+      'Eindringtiefe in Seewasser ca. 45 m bei 30 Hz (Skintiefe δ = 503/√(f·σ), σ ≈ 4 S/m). Extrem geringe Datenrate.'
   },
   {
     id: 'itu-slf',
@@ -248,7 +1081,8 @@ export const ITU_BANDS: ITUBand[] = [
     category: 'itu',
     propagation: 'groundWave',
     applications: ['U-Boot-Kommunikation', 'Bergbau-Kommunikation'],
-    notes: 'Eindringtiefe in Seewasser ca. 15-45 m (Skintiefe bei 30-300 Hz). Sehr große Antennen erforderlich.'
+    notes:
+      'Eindringtiefe in Seewasser ca. 15-45 m (Skintiefe bei 30-300 Hz). Sehr große Antennen erforderlich.'
   },
   {
     id: 'itu-ulf',
@@ -271,8 +1105,13 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#2374ab',
     category: 'itu',
     propagation: 'groundWave',
-    applications: ['Marine-VLF (z. B. DHO38, 23,4 kHz)', 'Omega-Navigation (10,2-13,6 kHz, 1997 eingestellt)', 'U-Boot-Kommunikation'],
-    notes: 'Sehr stabile Ausbreitung. Wellenlänge 10-100 km. DCF77 (77,5 kHz) und LORAN-C (100 kHz) liegen dagegen im LF-Band.'
+    applications: [
+      'Marine-VLF (z. B. DHO38, 23,4 kHz)',
+      'Omega-Navigation (10,2-13,6 kHz, 1997 eingestellt)',
+      'U-Boot-Kommunikation'
+    ],
+    notes:
+      'Sehr stabile Ausbreitung. Wellenlänge 10-100 km. DCF77 (77,5 kHz) und LORAN-C (100 kHz) liegen dagegen im LF-Band.'
   },
   {
     id: 'itu-lf',
@@ -283,7 +1122,13 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#2e86c1',
     category: 'itu',
     propagation: 'groundWave',
-    applications: ['Langwellen-Rundfunk', 'Zeitzeichensender (DCF77, 77,5 kHz)', 'Navigation (NDB)', 'LORAN-C (100 kHz)', 'RFID (134 kHz)'],
+    applications: [
+      'Langwellen-Rundfunk',
+      'Zeitzeichensender (DCF77, 77,5 kHz)',
+      'Navigation (NDB)',
+      'LORAN-C (100 kHz)',
+      'RFID (134 kHz)'
+    ],
     notes: 'Bodenwelle reicht mehrere 100 km. Nachts Raumwelle möglich.'
   },
   {
@@ -295,7 +1140,12 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#5499c7',
     category: 'itu',
     propagation: 'mixed',
-    applications: ['AM-Rundfunk (MW)', 'Seefunk (500 kHz Not)', 'NDB Navigation', 'Amateurfunk (160m)'],
+    applications: [
+      'AM-Rundfunk (MW)',
+      'Seefunk (500 kHz Not)',
+      'NDB Navigation',
+      'Amateurfunk (160m)'
+    ],
     notes: 'Tagsüber Bodenwelle, nachts Raumwelle durch D-Schicht-Abbau.'
   },
   {
@@ -307,7 +1157,13 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#7fb3d5',
     category: 'itu',
     propagation: 'skyWave',
-    applications: ['Kurzwellen-Rundfunk', 'Amateurfunk (80m-10m)', 'Seefunk', 'Flugfunk (HF)', 'OTH-Radar'],
+    applications: [
+      'Kurzwellen-Rundfunk',
+      'Amateurfunk (80m-10m)',
+      'Seefunk',
+      'Flugfunk (HF)',
+      'OTH-Radar'
+    ],
     notes: 'Weltweite Reichweite durch Ionosphärenreflexion. Stark von Sonnenaktivität abhängig.'
   },
   {
@@ -319,7 +1175,14 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#a9cce3',
     category: 'itu',
     propagation: 'lineOfSight',
-    applications: ['FM-Rundfunk', 'DAB+', 'Flugfunk', 'BOS-Funk', 'Amateurfunk (2m/70cm)', 'Marine VHF'],
+    applications: [
+      'FM-Rundfunk',
+      'DAB+',
+      'Flugfunk',
+      'BOS-Funk',
+      'Amateurfunk (2m/70cm)',
+      'Marine VHF'
+    ],
     notes: 'Primär Sichtlinienausbreitung. Troposphärische Überreichweiten möglich.'
   },
   {
@@ -331,7 +1194,15 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#d4e6f1',
     category: 'itu',
     propagation: 'lineOfSight',
-    applications: ['DVB-T/T2', 'Mobilfunk (GSM, UMTS, LTE)', 'GPS', 'WLAN 2.4 GHz', 'Bluetooth', 'LoRa', 'PMR446'],
+    applications: [
+      'DVB-T/T2',
+      'Mobilfunk (GSM, UMTS, LTE)',
+      'GPS',
+      'WLAN 2.4 GHz',
+      'Bluetooth',
+      'LoRa',
+      'PMR446'
+    ],
     notes: 'Gute Gebäudedurchdringung. Hauptbereich für mobile Kommunikation.'
   },
   {
@@ -343,7 +1214,13 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#85c1e9',
     category: 'itu',
     propagation: 'lineOfSight',
-    applications: ['WLAN 5 GHz/6 GHz', '5G (n78, n79)', 'Satellit (C, Ku, K-Band)', 'Radar', 'Richtfunk'],
+    applications: [
+      'WLAN 5 GHz/6 GHz',
+      '5G (n78, n79)',
+      'Satellit (C, Ku, K-Band)',
+      'Radar',
+      'Richtfunk'
+    ],
     notes: 'Hohe Bandbreiten. Regendämpfung ab ca. 10 GHz relevant.'
   },
   {
@@ -355,7 +1232,13 @@ export const ITU_BANDS: ITUBand[] = [
     color: '#3498db',
     category: 'itu',
     propagation: 'lineOfSight',
-    applications: ['5G mmWave (FR2)', 'WiGig (60 GHz)', 'Automotive Radar (77 GHz)', 'Satellit (Ka, V-Band)', 'Radioastronomie'],
+    applications: [
+      '5G mmWave (FR2)',
+      'WiGig (60 GHz)',
+      'Automotive Radar (77 GHz)',
+      'Satellit (Ka, V-Band)',
+      'Radioastronomie'
+    ],
     notes: 'Millimeterwellen. Starke atmosphärische Absorption bei 60 GHz (O2) und 183 GHz (H2O).'
   },
   {
@@ -369,28 +1252,82 @@ export const ITU_BANDS: ITUBand[] = [
     propagation: 'lineOfSight',
     applications: ['Terahertz-Imaging', 'Sicherheitsscanner', 'Spektroskopie', '6G Forschung'],
     notes: 'Übergang zu Infrarot. Starke Absorption durch Wasserdampf. Noch experimentell.'
-  },
+  }
 ];
 
 /**
  * Electromagnetic Spectrum bands
  * Major divisions of the electromagnetic spectrum
  *
- * ACHTUNG (bekannte Inkonsistenz, siehe Bericht 04 Befund 11/55):
- * Es existiert ein zweiter, gleichnamiger Export `EM_BANDS` in
- * `src/lib/data/spectrum.ts` mit abweichenden Grenzen (dort Radio 3 kHz-300 MHz,
- * Mikrowelle 300 MHz-300 GHz; hier Radio 3 Hz-300 GHz). Beide werden derzeit
- * parallel genutzt. Die Zusammenführung auf eine Single Source of Truth ist
- * bewusst dem Tech-Debt-Schritt vorbehalten und wird hier nur dokumentiert.
+ * Einzige grobe EM-Einteilung der Anwendung: Der frühere zweite, gleichnamige
+ * Export in `src/lib/data/spectrum.ts` (Bericht 04, Befund 11/55) war ohne
+ * Konsumenten und ist entfernt. Die im Spektrum-Dashboard gezeichnete, feinere
+ * Reihe steht in `components/spectrumBands.ts` (`EXTENDED_EM_BANDS`).
  */
 export const EM_BANDS: FrequencyBand[] = [
-  { id: 'em-radio', name: 'Radio', nameDE: 'Radiowellen', minHz: 3, maxHz: 300e9, color: '#3b82f6', category: 'em' },
-  { id: 'em-microwave', name: 'Microwave', nameDE: 'Mikrowellen', minHz: 300e6, maxHz: 300e9, color: '#6366f1', category: 'em' },
-  { id: 'em-infrared', name: 'Infrared', nameDE: 'Infrarot', minHz: 300e9, maxHz: 400e12, color: '#ef4444', category: 'em' },
-  { id: 'em-visible', name: 'Visible', nameDE: 'Sichtbares Licht', minHz: 400e12, maxHz: 800e12, color: '#22c55e', category: 'em' },
-  { id: 'em-ultraviolet', name: 'Ultraviolet', nameDE: 'Ultraviolett', minHz: 800e12, maxHz: 30e15, color: '#8b5cf6', category: 'em' },
-  { id: 'em-xray', name: 'X-Ray', nameDE: 'Röntgenstrahlung', minHz: 30e15, maxHz: 30e18, color: '#06b6d4', category: 'em' },
-  { id: 'em-gamma', name: 'Gamma', nameDE: 'Gammastrahlung', minHz: 30e18, maxHz: Infinity, color: '#ec4899', category: 'em' },
+  {
+    id: 'em-radio',
+    name: 'Radio',
+    nameDE: 'Radiowellen',
+    minHz: 3,
+    maxHz: 300e9,
+    color: '#3b82f6',
+    category: 'em'
+  },
+  {
+    id: 'em-microwave',
+    name: 'Microwave',
+    nameDE: 'Mikrowellen',
+    minHz: 300e6,
+    maxHz: 300e9,
+    color: '#6366f1',
+    category: 'em'
+  },
+  {
+    id: 'em-infrared',
+    name: 'Infrared',
+    nameDE: 'Infrarot',
+    minHz: 300e9,
+    maxHz: 400e12,
+    color: '#ef4444',
+    category: 'em'
+  },
+  {
+    id: 'em-visible',
+    name: 'Visible',
+    nameDE: 'Sichtbares Licht',
+    minHz: 400e12,
+    maxHz: 800e12,
+    color: '#22c55e',
+    category: 'em'
+  },
+  {
+    id: 'em-ultraviolet',
+    name: 'Ultraviolet',
+    nameDE: 'Ultraviolett',
+    minHz: 800e12,
+    maxHz: 30e15,
+    color: '#8b5cf6',
+    category: 'em'
+  },
+  {
+    id: 'em-xray',
+    name: 'X-Ray',
+    nameDE: 'Röntgenstrahlung',
+    minHz: 30e15,
+    maxHz: 30e18,
+    color: '#06b6d4',
+    category: 'em'
+  },
+  {
+    id: 'em-gamma',
+    name: 'Gamma',
+    nameDE: 'Gammastrahlung',
+    minHz: 30e18,
+    maxHz: Infinity,
+    color: '#ec4899',
+    category: 'em'
+  }
 ];
 
 /**
@@ -404,7 +1341,7 @@ export const ALL_BANDS: FrequencyBand[] = [
   ...EM_BANDS,
   ...DE_ALT_BANDS,
   ...US_ALT_BANDS,
-  ...EU_NATO_BANDS,
+  ...EU_NATO_BANDS
 ];
 
 /**
@@ -417,9 +1354,7 @@ export function getBandsForFrequency(frequencyHz: number): FrequencyBand[] {
     return [];
   }
 
-  return ALL_BANDS.filter(
-    band => frequencyHz >= band.minHz && frequencyHz <= band.maxHz
-  );
+  return ALL_BANDS.filter((band) => frequencyHz >= band.minHz && frequencyHz <= band.maxHz);
 }
 
 /**
@@ -432,9 +1367,7 @@ export function getIEEEBandsForFrequency(frequencyHz: number): FrequencyBand[] {
     return [];
   }
 
-  return IEEE_BANDS.filter(
-    band => frequencyHz >= band.minHz && frequencyHz <= band.maxHz
-  );
+  return IEEE_BANDS.filter((band) => frequencyHz >= band.minHz && frequencyHz <= band.maxHz);
 }
 
 /**
@@ -447,9 +1380,7 @@ export function getNATOBandsForFrequency(frequencyHz: number): FrequencyBand[] {
     return [];
   }
 
-  return NATO_BANDS.filter(
-    band => frequencyHz >= band.minHz && frequencyHz <= band.maxHz
-  );
+  return NATO_BANDS.filter((band) => frequencyHz >= band.minHz && frequencyHz <= band.maxHz);
 }
 
 /**
@@ -462,9 +1393,7 @@ export function getCivilianBandsForFrequency(frequencyHz: number): FrequencyBand
     return [];
   }
 
-  return CIVILIAN_BANDS.filter(
-    band => frequencyHz >= band.minHz && frequencyHz <= band.maxHz
-  );
+  return CIVILIAN_BANDS.filter((band) => frequencyHz >= band.minHz && frequencyHz <= band.maxHz);
 }
 
 /**

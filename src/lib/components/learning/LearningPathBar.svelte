@@ -84,9 +84,7 @@
           disabled={!current.next}
           label="Zum nächsten Schritt">Weiter</Button
         >
-        <Button size="sm" variant="ghost" icon="close" onclick={handleLeaveClick}>
-          Pfad verlassen
-        </Button>
+        <Button size="sm" variant="ghost" icon="close" onclick={handleLeaveClick}>Pfad verlassen</Button>
       </div>
     </div>
   </nav>

@@ -3,8 +3,8 @@
    * Bandreihen des Spektrums (EM, ITU, IEEE, NATO, Zivil) mit Bandrechtecken.
    * Reines Markup — Geometrie kommt aus `spectrumState`.
    */
-  import { formatFrequencyRange, type FrequencyBand } from "$lib/data/bands";
-  import { ROW_HEIGHT, type RowConfig, type VisibleRows } from "./spectrumBands";
+  import { formatFrequencyRange, type FrequencyBand } from '$lib/data/bands';
+  import { ROW_HEIGHT, type RowConfig, type VisibleRows } from './spectrumBands';
 
   interface Props {
     rows: RowConfig[];
@@ -27,7 +27,7 @@
     getRowY,
     onBandClick,
     onShowTooltip,
-    onHideTooltip,
+    onHideTooltip
   }: Props = $props();
 
   /** Schmalste Darstellung eines Bands, damit es sichtbar bleibt. */
@@ -74,7 +74,7 @@
           onmousemove={(e) => onShowTooltip(e, band)}
           onclick={() => onBandClick?.(band)}
           onkeydown={(e) => {
-            if (e.key === "Enter" || e.key === " ") onBandClick?.(band);
+            if (e.key === 'Enter' || e.key === ' ') onBandClick?.(band);
           }}
           tabindex="0"
           class="cursor-pointer"
@@ -84,11 +84,9 @@
             y="2"
             width={Math.max(band.width, MIN_BAND_WIDTH)}
             height={ROW_HEIGHT - 4}
-            fill={band.color === "visible"
-              ? "url(#visibleLightGradient)"
-              : band.color}
+            fill={band.color === 'visible' ? 'url(#visibleLightGradient)' : band.color}
             opacity={selectedBandId === band.id ? 1 : 0.9}
-            stroke={selectedBandId === band.id ? "#fbbf24" : "#0f172a"}
+            stroke={selectedBandId === band.id ? '#fbbf24' : '#0f172a'}
             stroke-width={selectedBandId === band.id ? 2.5 : 0.5}
             class="transition-opacity hover:opacity-70"
           />
@@ -98,7 +96,7 @@
               y={ROW_HEIGHT / 2}
               text-anchor="middle"
               dominant-baseline="middle"
-              class="fill-white text-xs font-medium pointer-events-none"
+              class="pointer-events-none fill-white text-xs font-medium"
               style="text-shadow: 0 1px 2px rgba(0,0,0,0.9); font-size: 11px;"
             >
               {band.name}

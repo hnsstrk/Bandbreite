@@ -10,7 +10,10 @@
     title="Fresnel-Zone"
     icon="wave"
     lead="Wie viel Platz eine Funkstrecke seitlich braucht — der Radius der ersten Fresnel-Zone und die 60-Prozent-Regel für hindernisfreie Verbindungen."
-    meta={[{ label: 'Quelle', value: 'ITU-R P.530-18' }, { label: 'Gültig', value: 'Sichtverbindung' }]}
+    meta={[
+      { label: 'Quelle', value: 'ITU-R P.530-18' },
+      { label: 'Gültig', value: 'Sichtverbindung' }
+    ]}
   />
 
   <FresnelZoneCalculator />

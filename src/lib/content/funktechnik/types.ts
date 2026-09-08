@@ -87,10 +87,7 @@ export function tocItems(
 }
 
 /** Schlägt einen Abschnitt anhand seiner ID nach. */
-export function findSection(
-  sections: ArticleSection[],
-  id: string
-): ArticleSection | undefined {
+export function findSection(sections: ArticleSection[], id: string): ArticleSection | undefined {
   return sections.find((section) => section.id === id);
 }
 

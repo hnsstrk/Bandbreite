@@ -8,7 +8,6 @@
   import { ALTITUDE_TICKS_KM, LAYER_COLORS, altitudeToY, visibleLayers } from './ionosphericData';
 
   interface Props {
-    frequencyMHz: number;
     isNighttime: boolean;
     canPropagate: boolean;
     belowLuf: boolean;
@@ -17,15 +16,7 @@
     height: number;
   }
 
-  let {
-    frequencyMHz,
-    isNighttime,
-    canPropagate,
-    belowLuf,
-    reflection,
-    width,
-    height
-  }: Props = $props();
+  let { isNighttime, canPropagate, belowLuf, reflection, width, height }: Props = $props();
 
   const margin = { top: 40, right: 40, bottom: 60, left: 80 } as const;
 
@@ -56,19 +47,11 @@
   });
 </script>
 
-<svg
-  class="iono-scene"
-  viewBox="0 0 {width} {height}"
-  preserveAspectRatio="xMidYMid meet"
-  aria-hidden="true"
->
+<svg class="iono-scene" viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
   <defs>
     <linearGradient id="{uid}-sky" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color={isNighttime ? 'var(--sky-night-top)' : 'var(--sky-day-top)'} />
-      <stop
-        offset="100%"
-        stop-color={isNighttime ? 'var(--sky-night-bottom)' : 'var(--sky-day-bottom)'}
-      />
+      <stop offset="100%" stop-color={isNighttime ? 'var(--sky-night-bottom)' : 'var(--sky-day-bottom)'} />
     </linearGradient>
     <linearGradient id="{uid}-ground" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="var(--ground-top)" />
@@ -76,13 +59,7 @@
     </linearGradient>
   </defs>
 
-  <rect
-    x={margin.left}
-    y={margin.top}
-    width={chartWidth}
-    height={chartHeight}
-    fill="url(#{uid}-sky)"
-  />
+  <rect x={margin.left} y={margin.top} width={chartWidth} height={chartHeight} fill="url(#{uid}-sky)" />
   <rect
     x={margin.left}
     y={margin.top + chartHeight - GROUND_HEIGHT}
@@ -121,14 +98,7 @@
     {/each}
 
     {#each ALTITUDE_TICKS_KM as alt (alt)}
-      <line
-        class="chart-grid-line"
-        x1="0"
-        y1={y(alt)}
-        x2={chartWidth}
-        y2={y(alt)}
-        stroke-dasharray="2,4"
-      />
+      <line class="chart-grid-line" x1="0" y1={y(alt)} x2={chartWidth} y2={y(alt)} stroke-dasharray="2,4" />
       <text class="chart-axis-text" x="-10" y={y(alt)} text-anchor="end" dominant-baseline="middle">
         {alt} km
       </text>
@@ -136,32 +106,17 @@
 
     {#if canPropagate}
       {@const reflectionY = y(reflection.altitude)}
-      <line
-        x1={txX}
-        y1={groundY}
-        x2={txX}
-        y2={groundY - MAST_HEIGHT}
-        stroke="var(--color-series-6)"
-        stroke-width="3"
-      />
+      <line x1={txX} y1={groundY} x2={txX} y2={groundY - MAST_HEIGHT} stroke="var(--color-series-6)" stroke-width="3" />
       <circle cx={txX} cy={groundY - MAST_HEIGHT - 5} r="5" fill="var(--color-series-6)" />
       <text class="chart-axis-label" x={txX} y={groundY + 15} text-anchor="middle">TX</text>
 
-      <line
-        x1={rxX}
-        y1={groundY}
-        x2={rxX}
-        y2={groundY - MAST_HEIGHT}
-        stroke="var(--color-series-2)"
-        stroke-width="3"
-      />
+      <line x1={rxX} y1={groundY} x2={rxX} y2={groundY - MAST_HEIGHT} stroke="var(--color-series-2)" stroke-width="3" />
       <circle cx={rxX} cy={groundY - MAST_HEIGHT - 5} r="5" fill="var(--color-series-2)" />
       <text class="chart-axis-label" x={rxX} y={groundY + 15} text-anchor="middle">RX</text>
 
       <path
         class="iono-path"
-        d="M {txX} {groundY - MAST_HEIGHT - 5} Q {midX} {reflectionY - 20} {rxX} {groundY -
-          MAST_HEIGHT - 5}"
+        d="M {txX} {groundY - MAST_HEIGHT - 5} Q {midX} {reflectionY - 20} {rxX} {groundY - MAST_HEIGHT - 5}"
         fill="none"
         stroke="var(--color-marker)"
         stroke-width="2"
@@ -186,12 +141,8 @@
       </text>
     {/if}
 
-    <text
-      class="chart-axis-label"
-      transform="rotate(-90)"
-      x={-chartHeight / 2}
-      y="-55"
-      text-anchor="middle">Höhe (km)</text
+    <text class="chart-axis-label" transform="rotate(-90)" x={-chartHeight / 2} y="-55" text-anchor="middle"
+      >Höhe (km)</text
     >
   </g>
 </svg>

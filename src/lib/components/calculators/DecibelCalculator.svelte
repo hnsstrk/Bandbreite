@@ -36,9 +36,7 @@
     serializeChain
   } from './decibelCalculator.svelte';
 
-  const initial = browser
-    ? readParams(page.url.searchParams, DECIBEL_PARAMS)
-    : defaultValues(DECIBEL_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, DECIBEL_PARAMS) : defaultValues(DECIBEL_PARAMS);
 
   let levelDbm = $state(initial.l);
   let impedanceId = $state(initial.z);
@@ -112,10 +110,13 @@
     />
 
     <Callout tone="info" title="Der Bezug gehört zur Zahl" source="ITU-R V.574-5">
-      Ein Verhältnis in dB ist einheitenlos, ein Absolutpegel nicht: dBm zählt ab
-      1 mW, dBW ab 1 W, dBµV ab 1 µV. An {formatNumber(impedanceOhm, 0)} Ω liegen
-      zwischen dBm und dBµV genau {formatNumber(dbmToDbuvOffset(impedanceOhm), 2)} dB
-      — 0 dBm sind dort {formatNumber(dbmToDbuvOffset(impedanceOhm), 1)} dBµV.
+      Ein Verhältnis in dB ist einheitenlos, ein Absolutpegel nicht: dBm zählt ab 1 mW, dBW ab 1 W, dBµV ab 1 µV. An {formatNumber(
+        impedanceOhm,
+        0
+      )} Ω liegen zwischen dBm und dBµV genau {formatNumber(dbmToDbuvOffset(impedanceOhm), 2)} dB — 0 dBm sind dort {formatNumber(
+        dbmToDbuvOffset(impedanceOhm),
+        1
+      )} dBµV.
     </Callout>
 
     <section aria-labelledby="verhaeltnis">

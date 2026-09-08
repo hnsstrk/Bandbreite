@@ -103,7 +103,10 @@ export interface EquivalentHeights {
 /**
  * Wasserdampf-Partialdruck e in hPa (P.676-13 Gl. 4)
  */
-export function waterVaporPartialPressure(waterVaporDensityGM3: number, temperatureK: number): number {
+export function waterVaporPartialPressure(
+  waterVaporDensityGM3: number,
+  temperatureK: number
+): number {
   if (!Number.isFinite(waterVaporDensityGM3) || waterVaporDensityGM3 <= 0) return 0;
   return (waterVaporDensityGM3 * temperatureK) / WATER_VAPOR_PRESSURE_FACTOR;
 }
@@ -114,17 +117,21 @@ export function waterVaporPartialPressure(waterVaporDensityGM3: number, temperat
 function lineShape(f: number, f0: number, deltaF: number, delta: number): number {
   const lower = (f0 - f) ** 2 + deltaF * deltaF;
   const upper = (f0 + f) ** 2 + deltaF * deltaF;
-  return (f / f0) * (
-    safeDivide(deltaF - delta * (f0 - f), lower, 0) +
-    safeDivide(deltaF - delta * (f0 + f), upper, 0)
+  return (
+    (f / f0) *
+    (safeDivide(deltaF - delta * (f0 - f), lower, 0) +
+      safeDivide(deltaF - delta * (f0 + f), upper, 0))
   );
 }
 
 function isValidInput(frequencyGHz: number, pressureHpa: number, temperatureK: number): boolean {
   return (
-    Number.isFinite(frequencyGHz) && frequencyGHz > 0 &&
-    Number.isFinite(pressureHpa) && pressureHpa > 0 &&
-    Number.isFinite(temperatureK) && temperatureK > 0
+    Number.isFinite(frequencyGHz) &&
+    frequencyGHz > 0 &&
+    Number.isFinite(pressureHpa) &&
+    pressureHpa > 0 &&
+    Number.isFinite(temperatureK) &&
+    temperatureK > 0
   );
 }
 
@@ -167,10 +174,13 @@ export function oxygenSpecificAttenuation(
 
   // Debye-Kontinuum trockener Luft N″_D (Gl. 8, 9)
   const d = DEBYE_WIDTH_FACTOR * (p + e) * theta ** 0.8;
-  const debye = f * p * theta * theta * (
-    safeDivide(DEBYE_TERM_1, d * (1 + (f / d) ** 2), 0) +
-    safeDivide(DEBYE_TERM_2 * p * theta ** 1.5, 1 + DEBYE_TERM_2_FREQ * f ** 1.5, 0)
-  );
+  const debye =
+    f *
+    p *
+    theta *
+    theta *
+    (safeDivide(DEBYE_TERM_1, d * (1 + (f / d) ** 2), 0) +
+      safeDivide(DEBYE_TERM_2 * p * theta ** 1.5, 1 + DEBYE_TERM_2_FREQ * f ** 1.5, 0));
 
   const gamma = GAMMA_PREFACTOR * f * (nO2 + debye);
   return Number.isFinite(gamma) ? Math.max(0, gamma) : 0;
@@ -204,7 +214,8 @@ export function waterVaporSpecificAttenuation(
     const strength = line.b1 * 1e-1 * e * theta ** 3.5 * Math.exp(line.b2 * (1 - theta));
     // Linienbreite Δf (Gl. 6a) inkl. Doppler-Verbreiterung (Gl. 6b)
     let width = line.b3 * 1e-4 * (p * theta ** line.b4 + line.b5 * e * theta ** line.b6);
-    width = H2O_DOPPLER_A * width +
+    width =
+      H2O_DOPPLER_A * width +
       Math.sqrt(H2O_DOPPLER_B * width * width + (H2O_DOPPLER_C * line.f0 * line.f0) / theta);
     // Für Wasserdampf ist δ = 0 (Gl. 7)
     nH2O += strength * lineShape(f, line.f0, width, 0);
@@ -230,8 +241,18 @@ export function specificGasAttenuation(
 ): GasAttenuationResult {
   const e = waterVaporPartialPressure(waterVaporDensityGM3, temperatureK);
   const dryPressure = Math.max(0, totalPressureHpa - e);
-  const oxygen = oxygenSpecificAttenuation(frequencyGHz, dryPressure, temperatureK, waterVaporDensityGM3);
-  const waterVapor = waterVaporSpecificAttenuation(frequencyGHz, dryPressure, temperatureK, waterVaporDensityGM3);
+  const oxygen = oxygenSpecificAttenuation(
+    frequencyGHz,
+    dryPressure,
+    temperatureK,
+    waterVaporDensityGM3
+  );
+  const waterVapor = waterVaporSpecificAttenuation(
+    frequencyGHz,
+    dryPressure,
+    temperatureK,
+    waterVaporDensityGM3
+  );
   return { oxygen, waterVapor, total: oxygen + waterVapor };
 }
 
@@ -247,13 +268,15 @@ export function specificGasAttenuation(
  * @param frequencyGHz - Frequenz in GHz
  * @param totalPressureHpa - Gesamtdruck am Boden in hPa
  * @param temperatureK - Bodentemperatur in K
- * @param waterVaporDensityGM3 - Wasserdampfdichte am Boden in g/m³
+ * @param _waterVaporDensityGM3 - Wasserdampfdichte am Boden in g/m³ (von den
+ *   Näherungen für h_o und h_w nicht benötigt, bleibt aber im Signaturbild der
+ *   Empfehlung erhalten)
  */
 export function equivalentHeights(
   frequencyGHz: number,
   totalPressureHpa: number,
   temperatureK: number,
-  waterVaporDensityGM3: number
+  _waterVaporDensityGM3: number
 ): EquivalentHeights {
   if (!isValidInput(frequencyGHz, totalPressureHpa, temperatureK)) return { h0Km: 0, hwKm: 0 };
   const f = frequencyGHz;
@@ -261,13 +284,15 @@ export function equivalentHeights(
   const tCelsius = temperatureK - 273.15;
 
   // --- h_o (P.676-12 Gl. 30–34) ---
-  const t1 = (5.104 / (1 + 0.066 * rp ** -2.3)) *
+  const t1 =
+    (5.104 / (1 + 0.066 * rp ** -2.3)) *
     Math.exp(-(((f - 59.7) / (2.87 + 12.4 * Math.exp(-7.9 * rp))) ** 2));
   let t2 = 0;
   for (const line of H0_T2_LINES) {
     t2 += (line.c * Math.exp(2.12 * rp)) / ((f - line.f0) ** 2 + 0.025 * Math.exp(2.2 * rp));
   }
-  const t3 = ((0.0114 * f) / (1 + 0.14 * rp ** -2.6)) *
+  const t3 =
+    ((0.0114 * f) / (1 + 0.14 * rp ** -2.6)) *
     safeDivide(15.02 * f * f - 1353 * f + 5.333e4, f ** 3 - 151.3 * f * f + 9629 * f - 6803, 0);
   const a0 = 0.7832 + 0.00709 * tCelsius;
   let h0 = ((6.1 * a0) / (1 + 0.17 * rp ** -1.1)) * (1 + t1 + t2 + t3);
@@ -306,8 +331,18 @@ export function slantPathGasAttenuation(
   if (!Number.isFinite(elevationAngleDeg) || elevationAngleDeg <= 0 || elevationAngleDeg > 90) {
     return { oxygen: 0, waterVapor: 0, total: 0 };
   }
-  const gamma = specificGasAttenuation(frequencyGHz, totalPressureHpa, temperatureK, waterVaporDensityGM3);
-  const { h0Km, hwKm } = equivalentHeights(frequencyGHz, totalPressureHpa, temperatureK, waterVaporDensityGM3);
+  const gamma = specificGasAttenuation(
+    frequencyGHz,
+    totalPressureHpa,
+    temperatureK,
+    waterVaporDensityGM3
+  );
+  const { h0Km, hwKm } = equivalentHeights(
+    frequencyGHz,
+    totalPressureHpa,
+    temperatureK,
+    waterVaporDensityGM3
+  );
   const sinEl = Math.sin((elevationAngleDeg * Math.PI) / 180);
   const oxygen = safeDivide(gamma.oxygen * h0Km, sinEl, 0);
   const waterVapor = safeDivide(gamma.waterVapor * hwKm, sinEl, 0);

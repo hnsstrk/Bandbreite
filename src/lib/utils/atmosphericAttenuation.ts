@@ -72,7 +72,12 @@ export function calculateWaterVaporAttenuation(
   temperatureK: number
 ): number {
   const e = waterVaporPartialPressure(waterVaporDensity, temperatureK);
-  return waterVaporSpecificAttenuation(frequencyGHz, pressureHpa - e, temperatureK, waterVaporDensity);
+  return waterVaporSpecificAttenuation(
+    frequencyGHz,
+    pressureHpa - e,
+    temperatureK,
+    waterVaporDensity
+  );
 }
 
 // ============================================================================
@@ -98,9 +103,9 @@ const POLARIZATION_TILT_DEG: Record<Polarization, number> = {
  */
 const RAIN_COEFFICIENTS = {
   kH: {
-    aj: [-5.33980, -0.35351, -0.23789, -0.94158],
-    bj: [-0.10008, 1.26970, 0.86036, 0.64552],
-    cj: [1.13098, 0.45400, 0.15354, 0.16817],
+    aj: [-5.3398, -0.35351, -0.23789, -0.94158],
+    bj: [-0.10008, 1.2697, 0.86036, 0.64552],
+    cj: [1.13098, 0.454, 0.15354, 0.16817],
     mk: -0.18961,
     ck: 0.71147
   },
@@ -112,15 +117,15 @@ const RAIN_COEFFICIENTS = {
     ck: 0.63297
   },
   alphaH: {
-    aj: [-0.14318, 0.29591, 0.32177, -5.37610, 16.1721],
-    bj: [1.82442, 0.77564, 0.63773, -0.96230, -3.29980],
-    cj: [-0.55187, 0.19822, 0.13164, 1.47828, 3.43990],
+    aj: [-0.14318, 0.29591, 0.32177, -5.3761, 16.1721],
+    bj: [1.82442, 0.77564, 0.63773, -0.9623, -3.2998],
+    cj: [-0.55187, 0.19822, 0.13164, 1.47828, 3.4399],
     ma: 0.67849,
     ca: -1.95537
   },
   alphaV: {
     aj: [-0.07771, 0.56727, -0.20238, -48.2991, 48.5833],
-    bj: [2.33840, 0.95545, 1.14520, 0.791669, 0.791459],
+    bj: [2.3384, 0.95545, 1.1452, 0.791669, 0.791459],
     cj: [-0.76284, 0.54039, 0.26809, 0.116226, 0.116479],
     ma: -0.053739,
     ca: 0.83433
@@ -170,7 +175,11 @@ export function calculateRainCoefficients(
   const weight = Math.pow(Math.cos(thetaRad), 2) * Math.cos(2 * tauRad); // cos²θ · cos 2τ
 
   const k = (kH + kV + (kH - kV) * weight) / 2;
-  const alpha = safeDivide(kH * alphaH + kV * alphaV + (kH * alphaH - kV * alphaV) * weight, 2 * k, 0);
+  const alpha = safeDivide(
+    kH * alphaH + kV * alphaV + (kH * alphaH - kV * alphaV) * weight,
+    2 * k,
+    0
+  );
 
   return { k, alpha };
 }
@@ -198,10 +207,7 @@ export function calculateRainAttenuation(
 /**
  * Spezifischer Dämpfungskoeffizient K_l in (dB/km)/(g/m³) nach ITU-R P.840 (Double-Debye).
  */
-export function calculateFogCoefficient(
-  frequencyGHz: number,
-  temperatureK: number
-): number {
+export function calculateFogCoefficient(frequencyGHz: number, temperatureK: number): number {
   if (!Number.isFinite(frequencyGHz) || frequencyGHz <= 0) return 0;
   if (!Number.isFinite(temperatureK) || temperatureK <= 0) return 0;
 
@@ -212,7 +218,7 @@ export function calculateFogCoefficient(
   const epsilon1 = 0.0671 * epsilon0;
   const epsilon2 = 3.52;
 
-  const fp = 20.20 - 146.4 * (theta - 1) + 316 * Math.pow(theta - 1, 2);
+  const fp = 20.2 - 146.4 * (theta - 1) + 316 * Math.pow(theta - 1, 2);
   if (fp <= 0) return 0;
   const fs = 39.8 * fp;
 
@@ -288,7 +294,8 @@ export function calculateSnowAttenuation(
 
   const wavelengthCm = WAVELENGTH_CM_GHZ / frequencyGHz;
   const dry =
-    (DRY_SNOW_RAYLEIGH_COEFF * Math.pow(snowRateMmH, DRY_SNOW_RAYLEIGH_EXPONENT)) / Math.pow(wavelengthCm, 4) +
+    (DRY_SNOW_RAYLEIGH_COEFF * Math.pow(snowRateMmH, DRY_SNOW_RAYLEIGH_EXPONENT)) /
+      Math.pow(wavelengthCm, 4) +
     (DRY_SNOW_ABSORPTION_COEFF * snowRateMmH) / wavelengthCm;
   return Math.min(dry, rainEquivalent);
 }
@@ -343,7 +350,11 @@ export function calculateAllAttenuation(
   const rain = calculateRainAttenuation(frequencyGHz, rainRateMmH, polarization, elevationAngleDeg);
   const fog = calculateFogAttenuation(frequencyGHz, fogDensityGM3, temperatureK);
   // Nassschnee bei T ≥ 0 °C (schmelzende Flocken), Trockenschnee darunter
-  const snow = calculateSnowAttenuation(frequencyGHz, snowRateMmH, temperatureK >= WET_SNOW_THRESHOLD_K);
+  const snow = calculateSnowAttenuation(
+    frequencyGHz,
+    snowRateMmH,
+    temperatureK >= WET_SNOW_THRESHOLD_K
+  );
 
   const total = gas.total;
   const totalAll = total + rain + fog + snow;
@@ -451,7 +462,10 @@ export function calculateEarthSpaceAttenuation(
     conditions.temperatureK,
     conditions.waterVaporDensity
   );
-  const sinEl = elevationAngleDeg > 0 && elevationAngleDeg <= 90 ? Math.sin((elevationAngleDeg * Math.PI) / 180) : 0;
+  const sinEl =
+    elevationAngleDeg > 0 && elevationAngleDeg <= 90
+      ? Math.sin((elevationAngleDeg * Math.PI) / 180)
+      : 0;
   const precipitationPathKm = safeDivide(RAIN_HEIGHT_KM, sinEl, 0);
 
   const rainTotal = perKm.rain * precipitationPathKm;
@@ -564,13 +578,21 @@ export function generateRainAttenuationCurves(
 
 export const ABSORPTION_PEAKS = {
   waterVapor: [
-    { frequency: 22.235, description: 'Primary H2O resonance', typicalAttenuation: '0.15-0.2 dB/km' },
+    {
+      frequency: 22.235,
+      description: 'Primary H2O resonance',
+      typicalAttenuation: '0.15-0.2 dB/km'
+    },
     { frequency: 183.31, description: 'Strong H2O resonance', typicalAttenuation: '25-30 dB/km' },
     { frequency: 325.15, description: 'H2O resonance', typicalAttenuation: '30-40 dB/km' },
     { frequency: 380.2, description: 'H2O resonance', typicalAttenuation: '> 100 dB/km' }
   ],
   oxygen: [
-    { frequency: 60, description: 'O2 band (50-70 GHz complex)', typicalAttenuation: '10-15 dB/km' },
+    {
+      frequency: 60,
+      description: 'O2 band (50-70 GHz complex)',
+      typicalAttenuation: '10-15 dB/km'
+    },
     { frequency: 118.75, description: 'O2 resonance', typicalAttenuation: '1.5-2 dB/km' },
     { frequency: 368.5, description: 'O2 resonance', typicalAttenuation: '1-2 dB/km' },
     { frequency: 424.76, description: 'O2 resonance', typicalAttenuation: '5-10 dB/km' }

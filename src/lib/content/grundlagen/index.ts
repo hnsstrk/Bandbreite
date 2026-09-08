@@ -96,11 +96,19 @@ export const grundlagenHub: KnowledgeArticle = {
           rows: [
             ['λ = c / f', 'Wellenlänge aus der Frequenz', 'Elektromagnetische Wellen'],
             ['T = 1 / f', 'Periodendauer', 'Elektromagnetische Wellen'],
-            ['Z₀ = E / H ≈ 377 Ω', 'Feldwellenwiderstand des freien Raums', 'Elektromagnetische Wellen'],
+            [
+              'Z₀ = E / H ≈ 377 Ω',
+              'Feldwellenwiderstand des freien Raums',
+              'Elektromagnetische Wellen'
+            ],
             ['d_ff = 2·D² / λ', 'Beginn des Fernfelds', 'Elektromagnetische Wellen'],
             ['a = 10·log₁₀(P₂/P₁)', 'Leistungsverhältnis in Dezibel', 'Dezibel und Pegel'],
             ['a = 20·log₁₀(U₂/U₁)', 'Spannungs- und Feldstärkeverhältnis', 'Dezibel und Pegel'],
-            ['EIRP = P · G', 'Äquivalente isotrope Strahlungsleistung', 'Leistung, EIRP und Feldstärke'],
+            [
+              'EIRP = P · G',
+              'Äquivalente isotrope Strahlungsleistung',
+              'Leistung, EIRP und Feldstärke'
+            ],
             ['S = EIRP / (4π·d²)', 'Leistungsdichte im Abstand d', 'Leistung, EIRP und Feldstärke'],
             ['E = √(S · Z₀)', 'Feldstärke aus der Leistungsdichte', 'Leistung, EIRP und Feldstärke']
           ]

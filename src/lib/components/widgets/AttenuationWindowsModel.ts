@@ -23,7 +23,11 @@ export const WINDOW_CURVE_MAX_GHZ = 350;
 export const WINDOW_CURVE_POINTS_PER_DECADE = 120;
 
 /** Reglerbereich der Wasserdampfdichte in g/m³ */
-export const WATER_VAPOR_LIMITS = { min: 0, max: 30, default: STANDARD_WATER_VAPOR_DENSITY } as const;
+export const WATER_VAPOR_LIMITS = {
+  min: 0,
+  max: 30,
+  default: STANDARD_WATER_VAPOR_DENSITY
+} as const;
 
 /** Wertebereich der logarithmischen y-Achse in dB/km */
 export const WINDOW_CURVE_MIN_DB_KM = 1e-3;
@@ -62,7 +66,12 @@ export function generateWindowCurve(
   const conditions = { temperatureK, pressureHpa, waterVaporDensity };
   return windowCurveFrequencies().map((frequencyGHz) => {
     const result = calculateAtmosphericAttenuation(frequencyGHz, conditions);
-    return { frequencyGHz, oxygen: result.oxygen, waterVapor: result.waterVapor, total: result.total };
+    return {
+      frequencyGHz,
+      oxygen: result.oxygen,
+      waterVapor: result.waterVapor,
+      total: result.total
+    };
   });
 }
 
@@ -105,7 +114,10 @@ export function attenuationToFraction(
 }
 
 /** Nächstgelegener Kurvenpunkt zu einer Frequenz (logarithmischer Abstand) */
-export function findNearestPoint(points: readonly WindowCurvePoint[], frequencyGHz: number): WindowCurvePoint | null {
+export function findNearestPoint(
+  points: readonly WindowCurvePoint[],
+  frequencyGHz: number
+): WindowCurvePoint | null {
   if (points.length === 0 || frequencyGHz <= 0) return null;
   const target = safeLog(frequencyGHz, 10, 0);
   let best = points[0];
@@ -130,7 +142,8 @@ export interface WindowMarker {
 /** Resonanzen (aus den Projektkonstanten) und Fenster im Kurvenbereich */
 export const WINDOW_MARKERS: WindowMarker[] = [
   ...ATMOSPHERIC_ABSORPTION_PEAKS.filter(
-    (peak) => peak.peakFrequencyGHz >= WINDOW_CURVE_MIN_GHZ && peak.peakFrequencyGHz <= WINDOW_CURVE_MAX_GHZ
+    (peak) =>
+      peak.peakFrequencyGHz >= WINDOW_CURVE_MIN_GHZ && peak.peakFrequencyGHz <= WINDOW_CURVE_MAX_GHZ
   ).map((peak) => ({
     id: peak.id,
     frequencyGHz: peak.peakFrequencyGHz,

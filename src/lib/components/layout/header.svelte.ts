@@ -42,3 +42,55 @@ export function watchDesktopWidth(onDesktop: () => void): () => void {
   media.addEventListener('change', handleChange);
   return () => media.removeEventListener('change', handleChange);
 }
+
+/** Spaltenindex eines Menüeintrags (`data-column` am Spaltencontainer). */
+export function columnOf(element: Element): number {
+  const column = element.closest('[data-column]');
+  return column ? Number(column.getAttribute('data-column')) : 0;
+}
+
+/**
+ * Tastaturführung im Mega-Menü: Pfeile wandern durch die Einträge, links und
+ * rechts wechseln die Spalte, Pos1/Ende springen an die Ränder, Escape
+ * schließt. Gibt `true` zurück, wenn die Taste verarbeitet wurde.
+ */
+export function megaMenuKeydown(
+  event: KeyboardEvent,
+  items: HTMLAnchorElement[],
+  columnCount: number,
+  onclose: (returnFocus?: boolean) => void
+): boolean {
+  if (items.length === 0) return false;
+  const current = document.activeElement as HTMLAnchorElement | null;
+  const index = current ? items.indexOf(current) : -1;
+
+  switch (event.key) {
+    case 'Escape':
+      onclose(true);
+      break;
+    case 'ArrowDown':
+      items[(index + 1) % items.length]?.focus();
+      break;
+    case 'ArrowUp':
+      items[index <= 0 ? items.length - 1 : index - 1]?.focus();
+      break;
+    case 'ArrowRight':
+    case 'ArrowLeft': {
+      if (columnCount < 2 || index < 0 || !current) return false;
+      const direction = event.key === 'ArrowRight' ? 1 : -1;
+      const target = (columnOf(current) + direction + columnCount) % columnCount;
+      items.find((item) => columnOf(item) === target)?.focus();
+      break;
+    }
+    case 'Home':
+      items[0]?.focus();
+      break;
+    case 'End':
+      items.at(-1)?.focus();
+      break;
+    default:
+      return false;
+  }
+  event.preventDefault();
+  return true;
+}

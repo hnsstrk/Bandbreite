@@ -147,7 +147,10 @@ describe('Gruppenantenne', () => {
 
   it('macht die Keule mit wachsender Elementzahl schmaler', () => {
     const narrow = halfPowerBeamwidthDeg(
-      samplePattern({ type: 'array', elementCount: 16, spacingWavelengths: 0.5, steerDeg: 90 }, 0.25)
+      samplePattern(
+        { type: 'array', elementCount: 16, spacingWavelengths: 0.5, steerDeg: 90 },
+        0.25
+      )
     );
     const wide = halfPowerBeamwidthDeg(
       samplePattern({ type: 'array', elementCount: 4, spacingWavelengths: 0.5, steerDeg: 90 }, 0.25)

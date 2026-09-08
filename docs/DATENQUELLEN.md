@@ -53,12 +53,18 @@ Diese Seite dokumentiert für jeden Datensatz und jedes Rechenmodell der Anwendu
 | ETSI TS 145 005, EN 300 401, EN 302 755 | GSM, DAB, DVB-T2 | `data/broadcast.ts`, `data/mobileNetworks.ts` |
 | IEEE Std 521-2019 | Radarband-Buchstaben | `data/bands.ts`, `data/frequencyBands.ts` |
 | IEEE Std 145 | Antennenbegriffe | `data/antennas.ts` |
+| ICAO Annex 10 Vol. IV | Sekundärradar: Modi A, C und S, Impulsabstände, Antwortrahmen | `widgets/SsrModel.ts` |
+| ICAO Doc 4444 (PANS-ATM) | Squawk-Codes mit fester Bedeutung (7500, 7600, 7700) | `widgets/SsrModel.ts`, `widgets/SsrCodePicker.svelte` |
+| EUROCONTROL, *Principles of Mode S Operation and Interrogator Codes* | Mode-S-Abfragebetrieb, Interrogator-Kennungen | `widgets/SsrModel.ts` |
+| RTCA DO-260B / EUROCAE ED-102A | ADS-B auf 1090 MHz (Extended Squitter) | `widgets/SsrModel.ts`, `data/aviationBands.ts` |
+| ETSI EN 301 091 | Kfz-Radar im 76–77-GHz-Band | `widgets/FmcwModel.ts` |
 | NATO STANAG 4193 | NATO-Bandsystematik | `data/frequencyBands.ts` |
 | Skolnik, *Introduction to Radar Systems* (3. Aufl.) und *Radar Handbook* | Radargleichung, RCS, Doppler, Eindeutigkeit | `utils/radar.ts`, `data/constants.ts` |
 | Balanis, *Antenna Theory*; ITU-R BS.1195, F.699 | Antennendiagramme und Kennwerte | `data/antennas.ts`, `utils/antennaMath.ts` |
 | Gunn & East (1954), Oguchi (Proc. IEEE 71/9, 1983), Ippolito (NASA Propagation Effects Handbook) | Schneedämpfung | `utils/atmosphericAttenuation.ts` |
 | Semtech AN1200.22 | LoRa/CSS | `data/modulation.ts` |
-| CODATA 2018 (NIST), SI-Definitionen | Naturkonstanten | `data/constants.ts`, `utils/constants.ts` |
+| ICNIRP-Leitlinien (1998/2020), 26. BImSchV | **Nur zur Einordnung** genannt — keine Grenzwerttabellen hinterlegt | `content/grundlagen/leistung-und-pegel.ts` |
+| CODATA 2018 (NIST), SI-Definitionen | Naturkonstanten: c, k_B, Planck-Konstante h, Feldwellenwiderstand Z₀ = 376,730 313 668 Ω | `data/constants.ts`, `utils/constants.ts` |
 | ITU-Rpy (BSD, inigodelportillo/ITU-Rpy) | Gegenprüfung der P.676-Implementierung und Herkunft der Linientabellen | `utils/itu676.ts` |
 
 Die Lichtgeschwindigkeit ist seit der Neudefinition des Meters (1983) keine Messgröße, sondern exakt 299 792 458 m/s. Alle Umrechnungen zwischen Frequenz und Wellenlänge nutzen diesen Wert; ein gerundeter Wert (3·10⁸ m/s) ist über den Store `speedOfLight` umschaltbar.
@@ -196,7 +202,7 @@ Ergänzt am 08.09.2026 zusammen mit den Kapiteln `/wissen/funktechnik/seefunk/`,
 `/wissen/funktechnik/flugfunk/`, `/wissen/funktechnik/bos/` und
 `/wissen/funktechnik/satellitenfunk/`.
 
-### `data/maritimeChannels.ts` — Seefunk (57 UKW-Kanäle, 21 MF/HF-Frequenzen, 4 Seegebiete)
+### `data/maritimeChannels.ts` — Seefunk (59 UKW-Kanäle, 21 MF/HF-Frequenzen, 4 Seegebiete)
 
 - **Quelle:** ITU Radio Regulations Appendix 18 (Rev. WRC-19) für die UKW-Kanaltabelle,
   Appendix 15 für die Not- und Sicherheitsfrequenzen auf Grenz- und Kurzwelle;
@@ -285,3 +291,27 @@ Ergänzt am 08.09.2026 zusammen mit den Kapiteln `/wissen/funktechnik/seefunk/`,
   Antennen erreichen 20 bis 30 dB. **Grenzwerte des Personenschutzes** (26. BImSchV, ICNIRP)
   werden im Kapitel nur genannt und verlinkt; es sind bewusst **keine Grenzwerttabellen**
   hinterlegt, weil die Werte frequenzabhängig sind und fortgeschrieben werden.
+
+---
+
+## Nachtrag: Datensätze aus Welle 5 (Glossar, Lernpfade, Widget-Katalog)
+
+Diese drei Datensätze enthalten **keine neuen Messwerte** — sie ordnen vorhandene Inhalte. Trotzdem gehören sie hierher, damit die Übersicht vollständig bleibt.
+
+### `data/glossary.ts` — Glossar (92 Begriffe, 7 Kategorien)
+
+- **Quelle:** Die Definitionen sind eigenständig formuliert und stützen sich auf die bereits in diesem Dokument geführten Regelwerke und Normen (VO Funk, ITU-R P-Serie, IEEE Std 145/521, 3GPP, ICAO Annex 10). Elf Kurztexte (u. a. FSPL, EIRP, Empfindlichkeit, Schwundreserve, ITU-/IEEE-/NATO-Bänder, Regendämpfung) werden aus `data/explanations.ts` **eingebunden**, nicht kopiert — es gibt für sie weiterhin nur eine Fassung.
+- **Modellierung:** je Eintrag `id`, `term`, Kurz- und optionaler Langtext, Einheit, Formel, `related`-Verweise, Kategorie und optionale Quelle. `GLOSSARY_COVERED_TITLES` verhindert Doppeleinträge im Suchindex.
+- **Unsicherheiten:** Die `related`-Ziele werden im Test gegen `NAV_TREE` und die Ankerlisten geprüft; fachliche Abgrenzungen (etwa „Bandbreite" im Signal- und im Kanalkontext) sind bewusst knapp gehalten und verweisen auf das jeweilige Kapitel.
+
+### `data/learningPaths.ts` — Lernpfade (4 Pfade, 30 Schritte)
+
+- **Quelle:** didaktische Setzung des Projekts, keine externe Vorlage. Jeder Schritt zeigt auf eine bestehende Seite; die Reihenfolge folgt der fachlichen Abhängigkeit (Spektrum → EM-Wellen → Dezibel → Ausbreitung → Streckenrechnung).
+- **Unsicherheiten / Annahme:** `durationMin` (70–80 min je Pfad) ist ausdrücklich als **Annahme** gekennzeichnet — gerechnet mit rund 10 min je Kapitel und 5 min je Rechner. Der Wert ist eine Orientierung, keine Messung.
+- **Konsistenz:** `src/tests/learningPaths.test.ts` verlangt, dass jeder Schritt ein lebender Knoten aus `NAV_TREE` ist; `resolvePathSteps()` blendet fehlende Ziele zur Laufzeit aus.
+
+### `data/widgets.ts` — Widget-Katalog (20 Einträge)
+
+- **Quelle:** Metadaten zu den interaktiven Widgets (Bezeichnung, Beschreibung, Stichworte, Kapitel). Die fachlichen Grundlagen der Widgets stehen bei den jeweiligen Rechenmodellen und sind oben in diesem Dokument belegt.
+- **Modellierung:** `embed: 'content'` für Widgets, die als Block in den Kapiteldaten stehen (von `widgetLocations()` auffindbar), `embed: 'markup'` für die sechs Widgets, die direkt in den Seitenkomponenten von `/wissen/modulation/` und `/wissen/antennen/` sitzen und ihre Anker-ID dort tragen.
+- **Unsicherheiten:** keine — `src/tests/widgetRegistry.test.ts` prüft für jeden Eintrag Komponente, Kapitelknoten und Fundstelle.

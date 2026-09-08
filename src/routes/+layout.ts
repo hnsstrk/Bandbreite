@@ -13,7 +13,7 @@ export const trailingSlash = 'always';
  * einzige Stelle, die daraus `<head>`-Tags erzeugt.
  */
 export const load = () => ({
-	title: 'Bandbreite',
-	description:
-		'Interaktive Visualisierung des elektromagnetischen Spektrums, Rechner für die Hochfrequenztechnik und ein Nachschlagewerk zur Funktechnik.'
+  title: 'Bandbreite',
+  description:
+    'Interaktive Visualisierung des elektromagnetischen Spektrums, Rechner für die Hochfrequenztechnik und ein Nachschlagewerk zur Funktechnik.'
 });

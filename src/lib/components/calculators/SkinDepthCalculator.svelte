@@ -46,9 +46,7 @@
 
   let { height = 400 }: Props = $props();
 
-  const initial = browser
-    ? readParams(page.url.searchParams, SKIN_PARAMS)
-    : defaultValues(SKIN_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, SKIN_PARAMS) : defaultValues(SKIN_PARAMS);
 
   let frequencyHz = $state(initial.f);
   let conductivity = $state(initial.sigma);
@@ -81,9 +79,7 @@
   let selectedMedium = $derived(mediumForConductivity(conductivity)?.id ?? 'custom');
   let isSeawater = $derived(selectedMedium === 'seawater');
 
-  let skinDepthResult = $derived(
-    calculateSkinDepthWithValidity(frequencyHz, conductivity, relativePermittivity)
-  );
+  let skinDepthResult = $derived(calculateSkinDepthWithValidity(frequencyHz, conductivity, relativePermittivity));
   let skinDepthM = $derived(skinDepthResult.depthM);
 
   function handleMediumChange(id: string) {
@@ -171,10 +167,9 @@
 
     {#if skinDepthM > 0 && !skinDepthResult.isGoodConductor}
       <Callout tone="warning" title="Näherung außerhalb ihres Gültigkeitsbereichs">
-        Bei dieser Frequenz ist σ/(ωε) ≈ {formatNumber(skinDepthResult.lossTangent, 1)} und damit
-        kleiner als {GOOD_CONDUCTOR_LOSS_TANGENT_MIN}. Die Guter-Leiter-Näherung δ = √(2/(ωμσ))
-        setzt σ ≫ ωε voraus; das Medium verhält sich hier eher wie ein verlustbehaftetes
-        Dielektrikum, und die tatsächliche Eindringtiefe strebt gegen einen frequenzunabhängigen
+        Bei dieser Frequenz ist σ/(ωε) ≈ {formatNumber(skinDepthResult.lossTangent, 1)} und damit kleiner als {GOOD_CONDUCTOR_LOSS_TANGENT_MIN}.
+        Die Guter-Leiter-Näherung δ = √(2/(ωμσ)) setzt σ ≫ ωε voraus; das Medium verhält sich hier eher wie ein
+        verlustbehaftetes Dielektrikum, und die tatsächliche Eindringtiefe strebt gegen einen frequenzunabhängigen
         Grenzwert.
       </Callout>
     {/if}
@@ -183,20 +178,20 @@
 
     <Callout tone="info" title="U-Boot-Kommunikation">
       <p>
-        Getauchte U-Boote empfangen nur bei sehr niedrigen Frequenzen. In Seewasser
-        (σ = 4 S/m) ergeben sich diese Eindringtiefen:
+        Getauchte U-Boote empfangen nur bei sehr niedrigen Frequenzen. In Seewasser (σ = 4 S/m) ergeben sich diese
+        Eindringtiefen:
       </p>
       <ul class="skin__examples">
         {#each seawaterExamples as example (example.frequencyHz)}
           <li>
-            <strong>{formatFrequency(example.frequencyHz, 0)}</strong> ({example.label}):
-            δ = {example.depthText}, praktisch nutzbar bis etwa {example.practicalText}
+            <strong>{formatFrequency(example.frequencyHz, 0)}</strong> ({example.label}): δ = {example.depthText},
+            praktisch nutzbar bis etwa {example.practicalText}
           </li>
         {/each}
       </ul>
       <p>
-        Der Preis ist die Datenrate: im ELF-Bereich typisch unter 1 bit pro Minute, weshalb nur
-        kurze Befehle übertragen werden.
+        Der Preis ist die Datenrate: im ELF-Bereich typisch unter 1 bit pro Minute, weshalb nur kurze Befehle übertragen
+        werden.
       </p>
     </Callout>
   </div>

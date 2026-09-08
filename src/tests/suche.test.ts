@@ -14,7 +14,12 @@ import {
   searchPageHref
 } from '../routes/suche/searchPage';
 import { SEARCH_GROUPS, LIVE_SEARCH_INDEX } from '$lib/data/searchIndex';
-import { allResultsHref, allResultsItem, ALL_RESULTS_ID, buildGroups } from '$lib/components/layout/commandPalette.svelte';
+import {
+  allResultsHref,
+  allResultsItem,
+  ALL_RESULTS_ID,
+  buildGroups
+} from '$lib/components/layout/commandPalette.svelte';
 import { findNode } from '$lib/data/navigation';
 
 describe('resultGroups', () => {
@@ -75,9 +80,9 @@ describe('frequencyResult', () => {
     expect(result?.parsed.hz).toBeCloseTo(2.4e9);
     expect(result?.actions).toHaveLength(4);
     expect(result?.matches.length).toBeGreaterThan(0);
-    expect(
-      result?.matches.every((entry) => entry.minHz! <= 2.4e9 && entry.maxHz! >= 2.4e9)
-    ).toBe(true);
+    expect(result?.matches.every((entry) => entry.minHz! <= 2.4e9 && entry.maxHz! >= 2.4e9)).toBe(
+      true
+    );
   });
 
   it('nimmt ohne Einheit Megahertz an', () => {

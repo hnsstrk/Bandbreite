@@ -84,9 +84,8 @@
   </section>
 
   <Callout tone="tip" title="Faustregel">
-    Unterhalb von 10 GHz bleibt die Gasdämpfung meist unter 0,02 dB/km und ist gegenüber der
-    Freiraumdämpfung vernachlässigbar. Ab 20 GHz wird sie relevant, ab 50 GHz dominiert sie
-    kurze Strecken.
+    Unterhalb von 10 GHz bleibt die Gasdämpfung meist unter 0,02 dB/km und ist gegenüber der Freiraumdämpfung
+    vernachlässigbar. Ab 20 GHz wird sie relevant, ab 50 GHz dominiert sie kurze Strecken.
   </Callout>
 
   <RelatedTopics href="/wissen/wellenausbreitung/daempfung/" />

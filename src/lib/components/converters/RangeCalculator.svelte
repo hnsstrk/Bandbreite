@@ -17,15 +17,11 @@
 
   // Derived calculations
   let rangeMeters = $derived(
-    frequencyHz !== null && frequencyHz > 0
-      ? calculateRange(frequencyHz, txPowerDbm, rxSensitivityDbm)
-      : null
+    frequencyHz !== null && frequencyHz > 0 ? calculateRange(frequencyHz, txPowerDbm, rxSensitivityDbm) : null
   );
 
   let fsplAtRange = $derived(
-    rangeMeters !== null && frequencyHz !== null && frequencyHz > 0
-      ? calculateFSPL(rangeMeters, frequencyHz)
-      : null
+    rangeMeters !== null && frequencyHz !== null && frequencyHz > 0 ? calculateFSPL(rangeMeters, frequencyHz) : null
   );
 
   /** Ab 1000 km Exponentialschreibweise, damit die Zeile nicht umbricht. */

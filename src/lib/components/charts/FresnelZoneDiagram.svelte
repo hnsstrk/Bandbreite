@@ -4,10 +4,7 @@
   import { scaleLinear } from 'd3-scale';
   import { FRESNEL_CLEARANCE_FRACTION } from '$lib/utils/calculations';
   import { formatDistance, formatNumber } from '$lib/utils/formatting';
-  import {
-    generateFresnelEllipse,
-    type EllipsePoint
-  } from '$lib/components/calculators/fresnelZone.svelte';
+  import { generateFresnelEllipse, type EllipsePoint } from '$lib/components/calculators/fresnelZone.svelte';
   import ChartFrame from './ChartFrame.svelte';
 
   interface Props {
@@ -41,9 +38,7 @@
   let chartWidth = $derived(Math.max(1, width - margin.left - margin.right));
   let chartHeight = $derived(Math.max(1, height - margin.top - margin.bottom));
 
-  let yMax = $derived(
-    Math.max(maxFresnelRadiusM * Y_PADDING_FACTOR, fresnelRadius2M * 1.2, Y_MIN_METERS)
-  );
+  let yMax = $derived(Math.max(maxFresnelRadiusM * Y_PADDING_FACTOR, fresnelRadius2M * 1.2, Y_MIN_METERS));
 
   let xScale = $derived(scaleLinear().domain([0, totalDistanceM]).range([0, chartWidth]));
   let yScale = $derived(scaleLinear().domain([-yMax, yMax]).range([chartHeight, 0]));
@@ -57,9 +52,7 @@
 
   let zone1 = $derived(generateFresnelEllipse(wavelengthM, totalDistanceM, 1));
   let zone2 = $derived(generateFresnelEllipse(wavelengthM, totalDistanceM, 2));
-  let clearance = $derived(
-    generateFresnelEllipse(wavelengthM, totalDistanceM, 1, FRESNEL_CLEARANCE_FRACTION)
-  );
+  let clearance = $derived(generateFresnelEllipse(wavelengthM, totalDistanceM, 1, FRESNEL_CLEARANCE_FRACTION));
 
   let obstacleX = $derived(xScale(obstaclePositionM));
 </script>
@@ -72,20 +65,16 @@
   {#snippet legend()}
     <ul class="fresnel-legend">
       <li class="fresnel-legend__item">
-        <span class="fresnel-legend__swatch fresnel-legend__swatch--zone1" aria-hidden="true"
-        ></span>1. Fresnel-Zone
+        <span class="fresnel-legend__swatch fresnel-legend__swatch--zone1" aria-hidden="true"></span>1. Fresnel-Zone
       </li>
       <li class="fresnel-legend__item">
-        <span class="fresnel-legend__swatch fresnel-legend__swatch--zone2" aria-hidden="true"
-        ></span>2. Fresnel-Zone
+        <span class="fresnel-legend__swatch fresnel-legend__swatch--zone2" aria-hidden="true"></span>2. Fresnel-Zone
       </li>
       <li class="fresnel-legend__item">
-        <span class="fresnel-legend__swatch fresnel-legend__swatch--clear" aria-hidden="true"
-        ></span>60 % Freiheit
+        <span class="fresnel-legend__swatch fresnel-legend__swatch--clear" aria-hidden="true"></span>60 % Freiheit
       </li>
       <li class="fresnel-legend__item">
-        <span class="fresnel-legend__swatch fresnel-legend__swatch--los" aria-hidden="true"
-        ></span>Sichtlinie
+        <span class="fresnel-legend__swatch fresnel-legend__swatch--los" aria-hidden="true"></span>Sichtlinie
       </li>
     </ul>
   {/snippet}
@@ -166,12 +155,7 @@
         stroke-dasharray="2,2"
       />
 
-      <text
-        class="chart-axis-text"
-        x={obstacleX + 10}
-        y={yScale(fresnelRadius1M / 2)}
-        fill="var(--color-series-1)"
-      >
+      <text class="chart-axis-text" x={obstacleX + 10} y={yScale(fresnelRadius1M / 2)} fill="var(--color-series-1)">
         r₁ = {formatNumber(fresnelRadius1M, 1)} m
       </text>
 

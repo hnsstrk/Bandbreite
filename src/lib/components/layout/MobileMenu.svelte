@@ -21,9 +21,9 @@
 
   function focusables(): HTMLElement[] {
     if (!drawer) return [];
-    return Array.from(
-      drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
-    ).filter((element) => element.offsetParent !== null);
+    return Array.from(drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
+      (element) => element.offsetParent !== null
+    );
   }
 
   function handleKeydown(event: KeyboardEvent) {
@@ -85,19 +85,12 @@
         </svg>
         Seite, Band oder Frequenz suchen
       </button>
-      <button type="button" class="drawer-close" onclick={close} aria-label="Menü schließen">
-        ✕
-      </button>
+      <button type="button" class="drawer-close" onclick={close} aria-label="Menü schließen"> ✕ </button>
     </div>
 
     <nav class="drawer-nav" aria-label="Mobile Navigation">
       {#each NAV_GROUPS as group (group.id)}
-        <MobileMenuGroup
-          {group}
-          expanded={Boolean(expanded[group.id])}
-          toggle={() => toggle(group.id)}
-          {close}
-        />
+        <MobileMenuGroup {group} expanded={Boolean(expanded[group.id])} toggle={() => toggle(group.id)} {close} />
       {/each}
     </nav>
   </div>

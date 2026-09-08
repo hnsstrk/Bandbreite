@@ -59,14 +59,7 @@
         aria-describedby={countId}
       />
       {#if query}
-        <Button
-          size="sm"
-          variant="ghost"
-          icon="close"
-          iconOnly
-          label="Suche leeren"
-          onclick={handleClearClick}
-        />
+        <Button size="sm" variant="ghost" icon="close" iconOnly label="Suche leeren" onclick={handleClearClick} />
       {/if}
     </div>
   </div>

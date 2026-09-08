@@ -5,17 +5,22 @@
   import {
     type DataPoint,
     MARGIN,
-    MIN_FREQ, MAX_FREQ, MIN_POWER, MAX_POWER,
-    X_TICK_VALUES, X_TICK_LABELS,
-    Y_TICK_VALUES, Y_TICK_LABELS, Y_DBM_LABELS,
-    COMMUNICATION_POINTS, RADAR_POINTS, SATELLITE_POINTS, IOT_POINTS, INDUSTRIAL_POINTS,
+    MIN_FREQ,
+    MAX_FREQ,
+    MIN_POWER,
+    MAX_POWER,
+    COMMUNICATION_POINTS,
+    RADAR_POINTS,
+    SATELLITE_POINTS,
+    IOT_POINTS,
+    INDUSTRIAL_POINTS
   } from './powerDbData';
-  import { frequencyToWavelength } from '$lib/utils/calculations';
-  import { formatWavelength } from '$lib/utils/formatting';
   import ChartFrame from './ChartFrame.svelte';
   import PowerDbControls from './PowerDbControls.svelte';
   import PowerDbTable from './PowerDbTable.svelte';
   import PowerDbLegend from './PowerDbLegend.svelte';
+  import PowerDbAxes from './PowerDbAxes.svelte';
+  import PowerDbGrid from './PowerDbGrid.svelte';
   import PowerDbTooltip from './PowerDbTooltip.svelte';
 
   interface Props {
@@ -63,18 +68,13 @@
   ]);
 
   // Scales
-  let xScale = $derived(
-    scaleLog().domain([MIN_FREQ, MAX_FREQ]).range([0, chartWidth])
-  );
+  let xScale = $derived(scaleLog().domain([MIN_FREQ, MAX_FREQ]).range([0, chartWidth]));
 
-  let yScale = $derived(
-    scaleLog().domain([MIN_POWER, MAX_POWER]).range([chartHeight, 0])
-  );
+  let yScale = $derived(scaleLog().domain([MIN_POWER, MAX_POWER]).range([chartHeight, 0]));
 
   // Filter bands that are in our frequency range
   let visibleBands = $derived(
-    (bandMode === 'ieee' ? IEEE_BANDS : NATO_BANDS)
-      .filter(band => band.maxHz >= MIN_FREQ && band.minHz <= MAX_FREQ)
+    (bandMode === 'ieee' ? IEEE_BANDS : NATO_BANDS).filter((band) => band.maxHz >= MIN_FREQ && band.minHz <= MAX_FREQ)
   );
 
   // Tooltip event handlers
@@ -138,129 +138,133 @@
     minWidth={720}
     footnote="Typische Werte; regulatorische Grenzwerte und Betriebsarten können abweichen."
   >
-  <svg viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <defs>
-      <filter id="pointGlow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-      </filter>
-      <clipPath id="chartClip">
-        <rect x="0" y="0" width={chartWidth} height={chartHeight} />
-      </clipPath>
-    </defs>
+    <svg viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <filter id="pointGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+          <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <clipPath id="chartClip">
+          <rect x="0" y="0" width={chartWidth} height={chartHeight} />
+        </clipPath>
+      </defs>
 
-    <!-- Background -->
-    <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
+      <!-- Background -->
+      <rect x="0" y="0" {width} {height} style="fill: var(--color-chart-bg)" />
 
-    <g transform="translate({margin.left}, {margin.top})">
-      <!-- Band backgrounds -->
-      {#if showIEEEBands}
-      <g clip-path="url(#chartClip)" opacity="0.18">
-        {#each visibleBands as band (band.id)}
-          {@const x1 = Math.max(0, xScale(Math.max(MIN_FREQ, band.minHz)))}
-          {@const x2 = Math.min(chartWidth, xScale(Math.min(MAX_FREQ, band.maxHz)))}
-          {@const bandWidth = x2 - x1}
-          {#if bandWidth > 0}
-            <rect x={x1} y="0" width={bandWidth} height={chartHeight} fill={band.color} />
-            {#if bandWidth > 30}
-              <text x={x1 + bandWidth / 2} y="20" text-anchor="middle" fill="var(--color-on-solid)" font-weight="600" font-size="13">
-                {band.name}
-              </text>
+      <g transform="translate({margin.left}, {margin.top})">
+        <!-- Band backgrounds -->
+        {#if showIEEEBands}
+          <g clip-path="url(#chartClip)" opacity="0.18">
+            {#each visibleBands as band (band.id)}
+              {@const x1 = Math.max(0, xScale(Math.max(MIN_FREQ, band.minHz)))}
+              {@const x2 = Math.min(chartWidth, xScale(Math.min(MAX_FREQ, band.maxHz)))}
+              {@const bandWidth = x2 - x1}
+              {#if bandWidth > 0}
+                <rect x={x1} y="0" width={bandWidth} height={chartHeight} fill={band.color} />
+                {#if bandWidth > 30}
+                  <text
+                    x={x1 + bandWidth / 2}
+                    y="20"
+                    text-anchor="middle"
+                    fill="var(--color-on-solid)"
+                    font-weight="600"
+                    font-size="13"
+                  >
+                    {band.name}
+                  </text>
+                {/if}
+              {/if}
+            {/each}
+          </g>
+        {/if}
+
+        <!-- Gitternetz -->
+        <PowerDbGrid {chartWidth} {chartHeight} {xScale} {yScale} />
+
+        <!-- All data points rendered by category -->
+        {#each allPoints as point (point.name)}
+          {@const cx = xScale(point.frequencyHz)}
+          {@const cy = yScale(point.powerWatt)}
+          {@const color = categoryColors[point.category]}
+          <g
+            class="data-point"
+            onmouseenter={(e) => handleMouseEnter(e, point)}
+            onmousemove={handleMouseMove}
+            onmouseleave={handleMouseLeave}
+            role="button"
+            tabindex="0"
+          >
+            <circle {cx} {cy} r="12" fill="transparent" class="cursor-pointer" />
+            {#if point.category === 'communication'}
+              <circle
+                {cx}
+                {cy}
+                r="5"
+                fill={color}
+                stroke="var(--color-surface)"
+                stroke-width="1.5"
+                filter="url(#pointGlow)"
+                class="pointer-events-none"
+              />
+            {:else if point.category === 'radar'}
+              <rect
+                x={cx - 5}
+                y={cy - 5}
+                width="10"
+                height="10"
+                rx="1.5"
+                fill={color}
+                stroke="var(--color-surface)"
+                stroke-width="1.5"
+                filter="url(#pointGlow)"
+                class="pointer-events-none"
+              />
+            {:else if point.category === 'satellite'}
+              <polygon
+                points="{cx},{cy - 6} {cx + 5},{cy + 4} {cx - 5},{cy + 4}"
+                fill={color}
+                stroke="var(--color-surface)"
+                stroke-width="1.5"
+                filter="url(#pointGlow)"
+                class="pointer-events-none"
+              />
+            {:else if point.category === 'iot'}
+              <polygon
+                points="{cx},{cy - 5} {cx + 5},{cy} {cx},{cy + 5} {cx - 5},{cy}"
+                fill={color}
+                stroke="var(--color-surface)"
+                stroke-width="1.5"
+                filter="url(#pointGlow)"
+                class="pointer-events-none"
+              />
+            {:else if point.category === 'industrial'}
+              <circle
+                {cx}
+                {cy}
+                r="6"
+                fill={color}
+                stroke="var(--color-surface)"
+                stroke-width="1.5"
+                filter="url(#pointGlow)"
+                class="pointer-events-none"
+              />
+              <circle {cx} {cy} r="2" fill="var(--color-surface)" class="pointer-events-none" />
             {/if}
-          {/if}
-        {/each}
-      </g>
-      {/if}
-
-      <!-- Grid lines - vertical (frequency) -->
-      {#each X_TICK_VALUES as tickVal (tickVal)}
-        <line x1={xScale(tickVal)} y1="0" x2={xScale(tickVal)} y2={chartHeight} style="stroke: var(--color-chart-grid)" stroke-dasharray="4,4" stroke-width="0.5" />
-      {/each}
-
-      <!-- Grid lines - horizontal (power) -->
-      {#each Y_TICK_VALUES as tickVal (tickVal)}
-        <line x1="0" y1={yScale(tickVal)} x2={chartWidth} y2={yScale(tickVal)} style="stroke: var(--color-chart-grid)" stroke-dasharray="4,4" stroke-width="0.5" />
-      {/each}
-
-      <!-- All data points rendered by category -->
-      {#each allPoints as point (point.name)}
-        {@const cx = xScale(point.frequencyHz)}
-        {@const cy = yScale(point.powerWatt)}
-        {@const color = categoryColors[point.category]}
-        <g class="data-point" onmouseenter={(e) => handleMouseEnter(e, point)} onmousemove={handleMouseMove} onmouseleave={handleMouseLeave} role="button" tabindex="0">
-          <circle cx={cx} cy={cy} r="12" fill="transparent" class="cursor-pointer" />
-          {#if point.category === 'communication'}
-            <circle cx={cx} cy={cy} r="5" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
-          {:else if point.category === 'radar'}
-            <rect x={cx - 5} y={cy - 5} width="10" height="10" rx="1.5" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
-          {:else if point.category === 'satellite'}
-            <polygon points="{cx},{cy - 6} {cx + 5},{cy + 4} {cx - 5},{cy + 4}" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
-          {:else if point.category === 'iot'}
-            <polygon points="{cx},{cy - 5} {cx + 5},{cy} {cx},{cy + 5} {cx - 5},{cy}" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
-          {:else if point.category === 'industrial'}
-            <circle cx={cx} cy={cy} r="6" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
-            <circle cx={cx} cy={cy} r="2" fill="var(--color-surface)" class="pointer-events-none" />
-          {/if}
-        </g>
-      {/each}
-
-      <!-- X-axis bottom (Frequency) -->
-      <g transform="translate(0, {chartHeight})">
-        <line x1="0" y1="0" x2={chartWidth} y2="0" style="stroke: var(--color-chart-axis)" stroke-width="1" />
-        {#each X_TICK_VALUES as tickVal, i (tickVal)}
-          <g transform="translate({xScale(tickVal)}, 0)">
-            <line y2="8" style="stroke: var(--color-chart-axis)" />
-            <text y="24" text-anchor="middle" style="fill: var(--color-chart-text-secondary)" font-size="11">{X_TICK_LABELS[i]}</text>
           </g>
         {/each}
-        <text x={chartWidth / 2} y="48" text-anchor="middle" style="fill: var(--color-chart-text)" font-size="14" font-weight="500">Frequenz (Hz)</text>
+
+        <!-- Achsen: Frequenz, Wellenlänge, Leistung in Watt und dBm -->
+        <PowerDbAxes {chartWidth} {chartHeight} {xScale} {yScale} />
+
+        <!-- Legend -->
+        <PowerDbLegend {chartWidth} {chartHeight} {bandMode} />
       </g>
+    </svg>
 
-      <!-- X-axis top (Wavelength) -->
-      <g>
-        <line x1="0" y1="0" x2={chartWidth} y2="0" style="stroke: var(--color-chart-axis)" stroke-width="1" />
-        {#each X_TICK_VALUES as tickVal, i (tickVal)}
-          {@const wavelength = frequencyToWavelength(tickVal)}
-          <g transform="translate({xScale(tickVal)}, 0)">
-            <line y2="-8" style="stroke: var(--color-chart-axis)" />
-            <text y="-14" text-anchor="middle" style="fill: var(--color-text-tertiary)" font-size="10">{formatWavelength(wavelength, 0)}</text>
-          </g>
-        {/each}
-        <text x={chartWidth / 2} y="-36" text-anchor="middle" style="fill: var(--color-text-tertiary)" font-size="12">Wellenlänge (m)</text>
-      </g>
-
-      <!-- Y-axis left (Power in Watt) -->
-      <g>
-        <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" stroke-width="1" />
-        {#each Y_TICK_VALUES as tickVal, i (tickVal)}
-          <g transform="translate(0, {yScale(tickVal)})">
-            <line x2="-8" style="stroke: var(--color-chart-axis)" />
-            <text x="-12" text-anchor="end" dominant-baseline="middle" style="fill: var(--color-chart-text-secondary)" font-size="10">{Y_TICK_LABELS[i]}</text>
-          </g>
-        {/each}
-        <text transform="rotate(-90)" x={-chartHeight / 2} y="-70" text-anchor="middle" style="fill: var(--color-chart-text)" font-size="14" font-weight="500">Leistung (Watt)</text>
-      </g>
-
-      <!-- Y-axis right (Power in dBm) -->
-      <g transform="translate({chartWidth}, 0)">
-        <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" stroke-width="1" />
-        {#each Y_TICK_VALUES as tickVal, i (tickVal)}
-          <g transform="translate(0, {yScale(tickVal)})">
-            <line x2="8" style="stroke: var(--color-chart-axis)" />
-            <text x="12" text-anchor="start" dominant-baseline="middle" style="fill: var(--color-text-tertiary)" font-size="10">{Y_DBM_LABELS[i]}</text>
-          </g>
-        {/each}
-        <text transform="rotate(90)" x={chartHeight / 2} y="-70" text-anchor="middle" style="fill: var(--color-text-tertiary)" font-size="12">Leistung (dBm)</text>
-      </g>
-
-      <!-- Legend -->
-      <PowerDbLegend {chartWidth} {chartHeight} {bandMode} />
-    </g>
-  </svg>
-
-  {#snippet dataTable()}
-    <PowerDbTable points={allPoints} />
-  {/snippet}
+    {#snippet dataTable()}
+      <PowerDbTable points={allPoints} />
+    {/snippet}
   </ChartFrame>
 
   <!-- Tooltip -->

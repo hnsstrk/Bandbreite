@@ -34,9 +34,7 @@
     visibleCount
   }: Props = $props();
 
-  const utilityCount = ALL_TRANSMITTERS.filter(
-    (t) => t.type === 'utility' && !SCIENCE_IDS.has(t.id)
-  ).length;
+  const utilityCount = ALL_TRANSMITTERS.filter((t) => t.type === 'utility' && !SCIENCE_IDS.has(t.id)).length;
 
   const GROUP_OPTIONS = [
     { value: 'all', label: `Alle Typen (${ALL_TRANSMITTERS.length})` },
@@ -95,12 +93,7 @@
   </div>
 
   <Select label="Typ" value={group} options={GROUP_OPTIONS} onchange={handleGroupChange} />
-  <Select
-    label="Einordnung"
-    value={subtype}
-    options={SUBTYPE_OPTIONS}
-    onchange={handleSubtypeChange}
-  />
+  <Select label="Einordnung" value={subtype} options={SUBTYPE_OPTIONS} onchange={handleSubtypeChange} />
   <Select label="Sortierung" value={sortKey} options={SORT_OPTIONS} onchange={handleSortChange} />
 </div>
 

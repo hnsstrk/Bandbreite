@@ -23,13 +23,9 @@ export function technologyOptions(bands: MobileBand[] = MOBILE_BANDS): string[] 
 }
 
 /** Bänder nach Technologie und Duplexverfahren filtern. */
-export function filterBands(
-  filter: BandFilter,
-  bands: MobileBand[] = MOBILE_BANDS
-): MobileBand[] {
+export function filterBands(filter: BandFilter, bands: MobileBand[] = MOBILE_BANDS): MobileBand[] {
   return bands.filter((band) => {
-    const techOk =
-      filter.technology === 'alle' || band.technologiesDE.includes(filter.technology);
+    const techOk = filter.technology === 'alle' || band.technologiesDE.includes(filter.technology);
     const duplexOk = filter.duplex === 'alle' || band.duplex === filter.duplex;
     return techOk && duplexOk;
   });
@@ -47,10 +43,7 @@ export function bandSpan(band: MobileBand): { minHz: number; maxHz: number } {
 export function bandwidthHz(band: MobileBand): number {
   return band.duplex === 'TDD'
     ? band.downlinkMaxHz - band.downlinkMinHz
-    : Math.min(
-        band.uplinkMaxHz - band.uplinkMinHz,
-        band.downlinkMaxHz - band.downlinkMinHz
-      );
+    : Math.min(band.uplinkMaxHz - band.uplinkMinHz, band.downlinkMaxHz - band.downlinkMinHz);
 }
 
 /** Balkengeometrie eines Teilbereichs relativ zum Gesamtbereich des Bandes. */
@@ -74,11 +67,7 @@ export function barGeometry(
  * R = B · η · N — Bandbreite mal spektraler Effizienz mal Anzahl der
  * räumlichen Schichten (MIMO-Ströme).
  */
-export function dataRateBps(
-  bandwidthInHz: number,
-  efficiencyBpsPerHz: number,
-  layers = 1
-): number {
+export function dataRateBps(bandwidthInHz: number, efficiencyBpsPerHz: number, layers = 1): number {
   if (
     !Number.isFinite(bandwidthInHz) ||
     !Number.isFinite(efficiencyBpsPerHz) ||
@@ -110,8 +99,23 @@ export interface EfficiencyPreset {
  * Kanalkodierung, Signal-Rausch-Verhältnis und Zellauslastung ab.
  */
 export const EFFICIENCY_PRESETS: EfficiencyPreset[] = [
-  { id: 'zellrand', label: 'Zellrand (QPSK)', value: 0.8, hint: 'schlechtes SNR, robuste Modulation' },
-  { id: 'mittel', label: 'Mittlere Lage (16-QAM)', value: 2.5, hint: 'typischer Durchschnitt im Netz' },
+  {
+    id: 'zellrand',
+    label: 'Zellrand (QPSK)',
+    value: 0.8,
+    hint: 'schlechtes SNR, robuste Modulation'
+  },
+  {
+    id: 'mittel',
+    label: 'Mittlere Lage (16-QAM)',
+    value: 2.5,
+    hint: 'typischer Durchschnitt im Netz'
+  },
   { id: 'gut', label: 'Gute Lage (64-QAM)', value: 4.5, hint: 'nahe der Basisstation' },
-  { id: 'spitze', label: 'Spitzenwert (256-QAM)', value: 6.5, hint: 'Laborbedingungen, kaum Störer' }
+  {
+    id: 'spitze',
+    label: 'Spitzenwert (256-QAM)',
+    value: 6.5,
+    hint: 'Laborbedingungen, kaum Störer'
+  }
 ];

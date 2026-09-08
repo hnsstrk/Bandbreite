@@ -20,13 +20,7 @@
 <ul class="portal-tiles" aria-label={label}>
   {#each items as item (item.id)}
     <li class="portal-tiles__cell">
-      <Card
-        href={item.href}
-        title={item.title}
-        {level}
-        icon={item.icon}
-        class="portal-tiles__card"
-      >
+      <Card href={item.href} title={item.title} {level} icon={item.icon} class="portal-tiles__card">
         <p class="portal-tiles__text">{item.text}</p>
       </Card>
     </li>

@@ -18,16 +18,7 @@
     reflectionHeightKm: number;
   }
 
-  let {
-    selectedModeId,
-    color,
-    chartWidth,
-    chartHeight,
-    txX,
-    rxX,
-    groundY,
-    reflectionHeightKm
-  }: Props = $props();
+  let { selectedModeId, color, chartWidth, chartHeight, txX, rxX, groundY, reflectionHeightKm }: Props = $props();
 
   /** Breite der toten Zone im Raumwellenbild. */
   const DEAD_ZONE_WIDTH = 80;
@@ -61,8 +52,8 @@
   {#each [[txX, hop1X], [hop1X, hop2X], [hop2X, rxX]] as [from, to], index (index)}
     <path
       class="wave-path"
-      d="M {from} {groundY - (index === 0 ? 50 : 20)} Q {(from + to) / 2} {reflectionY -
-        30} {to} {groundY - (index === 2 ? 50 : 20)}"
+      d="M {from} {groundY - (index === 0 ? 50 : 20)} Q {(from + to) / 2} {reflectionY - 30} {to} {groundY -
+        (index === 2 ? 50 : 20)}"
       fill="none"
       stroke={color}
       stroke-width="2.5"
@@ -102,17 +93,8 @@
     stroke-width="3"
     stroke-dasharray="10,5"
   />
-  <line
-    class="chart-grid-line"
-    x1="0"
-    y1={horizonY}
-    x2={chartWidth}
-    y2={horizonY}
-    stroke-dasharray="4,4"
-  />
-  <text class="chart-axis-text" x={chartWidth / 2} y={horizonY - 8} text-anchor="middle">
-    Radiohorizont
-  </text>
+  <line class="chart-grid-line" x1="0" y1={horizonY} x2={chartWidth} y2={horizonY} stroke-dasharray="4,4" />
+  <text class="chart-axis-text" x={chartWidth / 2} y={horizonY - 8} text-anchor="middle"> Radiohorizont </text>
 {:else if selectedModeId === 'sporadic-e'}
   {@const eLayerY = y(SPORADIC_E_ALTITUDE_KM)}
   <ellipse
@@ -137,19 +119,15 @@
   />
   <path
     class="wave-path"
-    d="M {txX} {groundY - 50} Q {chartWidth * 0.35} {eLayerY - 20} {chartWidth *
-      0.5} {groundY - 30} Q {chartWidth * 0.65} {eLayerY - 20} {rxX} {groundY - 50}"
+    d="M {txX} {groundY - 50} Q {chartWidth * 0.35} {eLayerY - 20} {chartWidth * 0.5} {groundY - 30} Q {chartWidth *
+      0.65} {eLayerY - 20} {rxX} {groundY - 50}"
     fill="none"
     stroke={color}
     stroke-width="2.5"
     stroke-dasharray="6,3"
   />
-  <text
-    x={chartWidth * 0.35}
-    y={eLayerY - 18}
-    fill="var(--color-series-4)"
-    font-size="9"
-    text-anchor="middle">Es-Wolke</text
+  <text x={chartWidth * 0.35} y={eLayerY - 18} fill="var(--color-series-4)" font-size="9" text-anchor="middle"
+    >Es-Wolke</text
   >
 {/if}
 

@@ -139,11 +139,7 @@
     />
   {/if}
 
-  <ResultCard
-    label="Gesamte Streckendämpfung"
-    value={formatPowerDb(totalPathLossDb)}
-    tone="warning"
-  />
+  <ResultCard label="Gesamte Streckendämpfung" value={formatPowerDb(totalPathLossDb)} tone="warning" />
 </div>
 
 <style>

@@ -19,7 +19,12 @@ import { render, screen, fireEvent } from '@testing-library/svelte';
 import { flushSync } from 'svelte';
 import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
 import { createBindableHost } from './helpers/bindableHost.svelte';
-import { convertToHz, convertFromHz, convertToMeters, convertFromMeters } from '$lib/utils/conversions';
+import {
+  convertToHz,
+  convertFromHz,
+  convertToMeters,
+  convertFromMeters
+} from '$lib/utils/conversions';
 import { frequencyToWavelength, wavelengthToFrequency } from '$lib/utils/calculations';
 import { FREQUENCY_CONVERTER_PRESETS } from '$lib/data/presets';
 
@@ -205,7 +210,10 @@ describe('FrequencyConverter: Dezimalanzeige im number-Feld', () => {
   // Dezimalpunkt; ein Komma-String wird vom Browser zu „" bereinigt.
   it('zeigt nicht ganzzahlige Werte (2,4 GHz, λ = 2,998 m) im Feld an', async () => {
     const { host, f } = mitHost();
-    expect(wert(f.wellenlaenge)).toBeCloseTo(convertFromMeters(frequencyToWavelength(START_HZ), 'm'), 3);
+    expect(wert(f.wellenlaenge)).toBeCloseTo(
+      convertFromMeters(frequencyToWavelength(START_HZ), 'm'),
+      3
+    );
     host.value = 2.4e9;
     flushSync();
     expect(wert(f.frequenz)).toBeCloseTo(2.4, 6);

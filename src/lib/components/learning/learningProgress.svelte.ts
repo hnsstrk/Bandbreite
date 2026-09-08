@@ -95,9 +95,8 @@ function sanitize(raw: unknown): StoredState {
     paths[id] = { visited: list(entry.visited), done: list(entry.done) };
   }
 
-  const activeId = typeof value.activeId === 'string' && known.has(value.activeId)
-    ? value.activeId
-    : null;
+  const activeId =
+    typeof value.activeId === 'string' && known.has(value.activeId) ? value.activeId : null;
   return { version: SCHEMA_VERSION, activeId, paths };
 }
 

@@ -2,11 +2,7 @@
   /** Ergebnisse und Modulationsvergleich des Kanalkapazitäts-Rechners. */
   import { formatDataRate, formatNumber } from '$lib/utils/formatting';
   import ResultCard from '$lib/components/ui/ResultCard.svelte';
-  import {
-    MODULATION_ENTRIES,
-    practicalDataRate,
-    type ModulationEntry
-  } from './channelCapacity.svelte';
+  import { MODULATION_ENTRIES, practicalDataRate, type ModulationEntry } from './channelCapacity.svelte';
 
   interface Props {
     bandwidthHz: number;
@@ -17,8 +13,7 @@
     modulation: ModulationEntry | null;
   }
 
-  let { bandwidthHz, snrDb, snrLinear, capacityBps, spectralEfficiency, modulation }: Props =
-    $props();
+  let { bandwidthHz, snrDb, snrLinear, capacityBps, spectralEfficiency, modulation }: Props = $props();
 
   let practicalBps = $derived(modulation ? practicalDataRate(bandwidthHz, modulation) : 0);
 

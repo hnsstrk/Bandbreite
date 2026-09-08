@@ -47,7 +47,17 @@ export function rcsToDbsm(rcsM2: number): number {
 }
 
 const SUPERSCRIPT_DIGITS: Record<string, string> = {
-  '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻'
+  '0': '⁰',
+  '1': '¹',
+  '2': '²',
+  '3': '³',
+  '4': '⁴',
+  '5': '⁵',
+  '6': '⁶',
+  '7': '⁷',
+  '8': '⁸',
+  '9': '⁹',
+  '-': '⁻'
 };
 
 /**
@@ -57,7 +67,10 @@ export function formatPowerOfTen(value: number): string {
   if (!Number.isFinite(value) || value <= 0) return '—';
   const exponent = Math.floor(Math.log10(value));
   const mantissa = value / Math.pow(10, exponent);
-  const superscript = String(exponent).split('').map((ch) => SUPERSCRIPT_DIGITS[ch] ?? ch).join('');
+  const superscript = String(exponent)
+    .split('')
+    .map((ch) => SUPERSCRIPT_DIGITS[ch] ?? ch)
+    .join('');
   const roundedMantissa = Math.round(mantissa * 10) / 10;
   return roundedMantissa === 1 ? `10${superscript}` : `${roundedMantissa}·10${superscript}`;
 }

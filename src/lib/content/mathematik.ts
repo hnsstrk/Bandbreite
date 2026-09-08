@@ -14,9 +14,19 @@ import {
   snrDbToLinear
 } from '$lib/utils/calculations';
 import { calculateRadioHorizon } from '$lib/data/propagation';
-import { RCS_REFERENCE, EARTH_RADIUS_MEAN, EFFECTIVE_EARTH_RADIUS_FACTOR } from '$lib/data/constants';
+import {
+  RCS_REFERENCE,
+  EARTH_RADIUS_MEAN,
+  EFFECTIVE_EARTH_RADIUS_FACTOR
+} from '$lib/data/constants';
 import { SPEED_OF_LIGHT_EXACT_DISPLAY } from '$lib/utils/constants';
-import { formatWavelength, formatNumber, formatDataRate, formatRcs, formatFrequency } from '$lib/utils/formatting';
+import {
+  formatWavelength,
+  formatNumber,
+  formatDataRate,
+  formatRcs,
+  formatFrequency
+} from '$lib/utils/formatting';
 import { buildDecibelTable } from '$lib/components/widgets/DecibelModel';
 
 const WAVELENGTH_EXAMPLES = [
@@ -60,7 +70,9 @@ const wavelengthRows = WAVELENGTH_EXAMPLES.map((e) => [
 
 const fsplRows = FSPL_EXAMPLES.map((e) => [
   formatFrequency(e.frequencyHz, 1),
-  e.distanceM >= 1000 ? `${formatNumber(e.distanceM / 1000, 0)} km` : `${formatNumber(e.distanceM, 0)} m`,
+  e.distanceM >= 1000
+    ? `${formatNumber(e.distanceM / 1000, 0)} km`
+    : `${formatNumber(e.distanceM, 0)} m`,
   `${formatNumber(calculateFSPL(e.distanceM, e.frequencyHz), 1)} dB`
 ]);
 
@@ -91,8 +103,7 @@ export const mathematikArticle: KnowledgeArticle = {
   kicker: 'Wissen · Grundlagen',
   title: 'HF-Mathematik',
   icon: 'calculator',
-  lead:
-    'Die sechs Formeln, ohne die in der Hochfrequenztechnik nichts geht: Wellenlänge, Freiraumdämpfung, Radargleichung, Shannon-Kapazität, Dezibel und Radiohorizont – mit Herleitung, berechneten Beispielen und Reglern zum Ausprobieren.',
+  lead: 'Die sechs Formeln, ohne die in der Hochfrequenztechnik nichts geht: Wellenlänge, Freiraumdämpfung, Radargleichung, Shannon-Kapazität, Dezibel und Radiohorizont – mit Herleitung, berechneten Beispielen und Reglern zum Ausprobieren.',
   meta: [{ label: 'Lichtgeschwindigkeit', value: `${SPEED_OF_LIGHT_EXACT_DISPLAY} m/s` }],
   goals: [
     'Frequenz und Wellenlänge über λ = c/f ineinander umrechnen und Größenordnungen (m, cm, mm) sicher zuordnen',
@@ -106,7 +117,8 @@ export const mathematikArticle: KnowledgeArticle = {
     {
       id: 'wellenlaenge',
       title: 'Wellenlänge und Frequenz',
-      description: 'Wellenlänge und Frequenz einer elektromagnetischen Welle sind über die Lichtgeschwindigkeit verknüpft – die Basis fast jeder HF-Rechnung.',
+      description:
+        'Wellenlänge und Frequenz einer elektromagnetischen Welle sind über die Lichtgeschwindigkeit verknüpft – die Basis fast jeder HF-Rechnung.',
       blocks: [
         {
           type: 'formula',
@@ -116,7 +128,10 @@ export const mathematikArticle: KnowledgeArticle = {
           number: '(1)',
           variables: [
             { symbol: 'λ', meaning: 'Wellenlänge', unit: 'm' },
-            { symbol: 'c', meaning: `Lichtgeschwindigkeit im Vakuum, ${SPEED_OF_LIGHT_EXACT_DISPLAY} m/s` },
+            {
+              symbol: 'c',
+              meaning: `Lichtgeschwindigkeit im Vakuum, ${SPEED_OF_LIGHT_EXACT_DISPLAY} m/s`
+            },
             { symbol: 'f', meaning: 'Frequenz', unit: 'Hz' }
           ]
         },
@@ -142,7 +157,8 @@ export const mathematikArticle: KnowledgeArticle = {
     {
       id: 'fspl',
       title: 'Freiraumdämpfung (FSPL)',
-      description: 'Die Freiraumdämpfung beschreibt den Signalverlust einer Welle im freien Raum ohne Hindernisse oder Atmosphäre – rein durch die geometrische Ausbreitung.',
+      description:
+        'Die Freiraumdämpfung beschreibt den Signalverlust einer Welle im freien Raum ohne Hindernisse oder Atmosphäre – rein durch die geometrische Ausbreitung.',
       blocks: [
         {
           type: 'formula',
@@ -186,7 +202,8 @@ export const mathematikArticle: KnowledgeArticle = {
     {
       id: 'radargleichung',
       title: 'Radargleichung',
-      description: 'Die Radargleichung beschreibt die empfangene Leistung nach Reflexion an einem Ziel – Hin- und Rückweg plus Rückstreuquerschnitt.',
+      description:
+        'Die Radargleichung beschreibt die empfangene Leistung nach Reflexion an einem Ziel – Hin- und Rückweg plus Rückstreuquerschnitt.',
       blocks: [
         {
           type: 'formula',
@@ -197,7 +214,10 @@ export const mathematikArticle: KnowledgeArticle = {
           variables: [
             { symbol: 'P_r', meaning: 'Empfangene Leistung', unit: 'W' },
             { symbol: 'P_t', meaning: 'Sendeleistung', unit: 'W' },
-            { symbol: 'G', meaning: 'Antennengewinn (linear, gleiche Antenne für Senden und Empfangen)' },
+            {
+              symbol: 'G',
+              meaning: 'Antennengewinn (linear, gleiche Antenne für Senden und Empfangen)'
+            },
             { symbol: 'λ', meaning: 'Wellenlänge', unit: 'm' },
             { symbol: 'σ', meaning: 'Radarquerschnitt des Ziels', unit: 'm²' },
             { symbol: 'R', meaning: 'Entfernung zum Ziel', unit: 'm' }
@@ -229,7 +249,8 @@ export const mathematikArticle: KnowledgeArticle = {
     {
       id: 'shannon',
       title: 'Shannon-Hartley-Theorem',
-      description: 'Die theoretische Obergrenze der fehlerfreien Datenrate über einen gestörten Kanal – das Fundament der digitalen Nachrichtentechnik.',
+      description:
+        'Die theoretische Obergrenze der fehlerfreien Datenrate über einen gestörten Kanal – das Fundament der digitalen Nachrichtentechnik.',
       blocks: [
         {
           type: 'formula',
@@ -238,7 +259,11 @@ export const mathematikArticle: KnowledgeArticle = {
           label: 'Kanalkapazität',
           number: '(4)',
           variables: [
-            { symbol: 'C', meaning: 'Kanalkapazität (maximale fehlerfreie Datenrate)', unit: 'bit/s' },
+            {
+              symbol: 'C',
+              meaning: 'Kanalkapazität (maximale fehlerfreie Datenrate)',
+              unit: 'bit/s'
+            },
             { symbol: 'B', meaning: 'Bandbreite des Kanals', unit: 'Hz' },
             { symbol: 'SNR', meaning: 'Signal-Rausch-Verhältnis – linear, nicht in dB' }
           ]
@@ -272,7 +297,8 @@ export const mathematikArticle: KnowledgeArticle = {
     {
       id: 'dezibel',
       title: 'Dezibel-Rechnung',
-      description: 'Das Dezibel ist ein logarithmisches Verhältnismaß: Verstärkungen und Dämpfungen werden addiert statt multipliziert.',
+      description:
+        'Das Dezibel ist ein logarithmisches Verhältnismaß: Verstärkungen und Dämpfungen werden addiert statt multipliziert.',
       blocks: [
         {
           type: 'formula',
@@ -291,9 +317,21 @@ export const mathematikArticle: KnowledgeArticle = {
         {
           type: 'definitions',
           items: [
-            { term: 'dBm', description: 'Leistung bezogen auf 1 mW: P_dBm = 10·log₁₀(P/1 mW). 0 dBm = 1 mW, 30 dBm = 1 W.' },
-            { term: 'dBW', description: 'Leistung bezogen auf 1 W: P_dBW = 10·log₁₀(P/1 W). Umrechnung: dBm = dBW + 30.' },
-            { term: 'dBµV', description: 'Spannung bezogen auf 1 µV: U_dBµV = 20·log₁₀(U/1 µV) – üblich in EMV und Antennenmesstechnik.' },
+            {
+              term: 'dBm',
+              description:
+                'Leistung bezogen auf 1 mW: P_dBm = 10·log₁₀(P/1 mW). 0 dBm = 1 mW, 30 dBm = 1 W.'
+            },
+            {
+              term: 'dBW',
+              description:
+                'Leistung bezogen auf 1 W: P_dBW = 10·log₁₀(P/1 W). Umrechnung: dBm = dBW + 30.'
+            },
+            {
+              term: 'dBµV',
+              description:
+                'Spannung bezogen auf 1 µV: U_dBµV = 20·log₁₀(U/1 µV) – üblich in EMV und Antennenmesstechnik.'
+            },
             { term: 'dBi', description: 'Antennengewinn bezogen auf den isotropen Kugelstrahler.' }
           ]
         },
@@ -317,7 +355,8 @@ export const mathematikArticle: KnowledgeArticle = {
     {
       id: 'radiohorizont',
       title: 'Radiohorizont',
-      description: 'Die maximale Entfernung einer direkten Sichtverbindung, begrenzt durch Erdkrümmung und atmosphärische Refraktion.',
+      description:
+        'Die maximale Entfernung einer direkten Sichtverbindung, begrenzt durch Erdkrümmung und atmosphärische Refraktion.',
       blocks: [
         {
           type: 'formula',
@@ -327,7 +366,10 @@ export const mathematikArticle: KnowledgeArticle = {
           number: '(7)',
           variables: [
             { symbol: 'd', meaning: 'Distanz zum Horizont', unit: 'km' },
-            { symbol: 'k', meaning: `Refraktionsfaktor, typisch 4/3 ≈ ${formatNumber(EFFECTIVE_EARTH_RADIUS_FACTOR, 3)}` },
+            {
+              symbol: 'k',
+              meaning: `Refraktionsfaktor, typisch 4/3 ≈ ${formatNumber(EFFECTIVE_EARTH_RADIUS_FACTOR, 3)}`
+            },
             { symbol: 'R', meaning: `Erdradius, ${EARTH_RADIUS_KM_DISPLAY} km` },
             { symbol: 'h', meaning: 'Antennenhöhe', unit: 'km' }
           ]

@@ -3,7 +3,13 @@
  * Farbberechnung — reine Funktionen ohne Zustand.
  */
 
-import { IEEE_BANDS, NATO_BANDS, ITU_BANDS, CIVILIAN_BANDS, type FrequencyBand } from '$lib/data/bands';
+import {
+  IEEE_BANDS,
+  NATO_BANDS,
+  ITU_BANDS,
+  CIVILIAN_BANDS,
+  type FrequencyBand
+} from '$lib/data/bands';
 import { safeDivide } from '$lib/utils/handlers';
 import { VISIBLE_LIGHT } from '$lib/data/spectrum';
 import type { Domain } from './spectrumZoom';
@@ -73,19 +79,123 @@ export const VISIBLE_MAX_HZ = VISIBLE_LIGHT.maxHz;
  * Die Farben bilden zugleich die Legende in `SpectrumLegend.svelte`.
  */
 export const EXTENDED_EM_BANDS: FrequencyBand[] = [
-  { id: 'em-radio', name: 'Radio', nameDE: 'Radiowellen', minHz: 3, maxHz: 300e9, color: '#3b82f6', category: 'em' },
-  { id: 'em-microwave', name: 'Microwave', nameDE: 'Mikrowellen', minHz: 300e6, maxHz: 300e9, color: '#6366f1', category: 'em' },
-  { id: 'em-infrared-far', name: 'Far-IR', nameDE: 'Fernes Infrarot', minHz: 300e9, maxHz: 30e12, color: '#991b1b', category: 'em' },
-  { id: 'em-infrared-mid', name: 'Mid-IR', nameDE: 'Mittleres Infrarot', minHz: 30e12, maxHz: 120e12, color: '#b91c1c', category: 'em' },
-  { id: 'em-infrared-near', name: 'Near-IR', nameDE: 'Nahes Infrarot', minHz: 120e12, maxHz: VISIBLE_MIN_HZ, color: '#dc2626', category: 'em' },
-  { id: 'em-visible', name: 'Visible', nameDE: 'Sichtbares Licht', minHz: VISIBLE_MIN_HZ, maxHz: VISIBLE_MAX_HZ, color: 'visible', category: 'em' },
-  { id: 'em-uv-near', name: 'UV-A', nameDE: 'UV-A', minHz: VISIBLE_MAX_HZ, maxHz: 952e12, color: '#7c3aed', category: 'em' },
-  { id: 'em-uv-mid', name: 'UV-B', nameDE: 'UV-B', minHz: 952e12, maxHz: 1.07e15, color: '#6d28d9', category: 'em' },
-  { id: 'em-uv-far', name: 'UV-C', nameDE: 'UV-C', minHz: 1.07e15, maxHz: 3e15, color: '#5b21b6', category: 'em' },
-  { id: 'em-euv', name: 'EUV', nameDE: 'Extremes UV', minHz: 3e15, maxHz: 30e15, color: '#4c1d95', category: 'em' },
-  { id: 'em-xray-soft', name: 'Soft X-Ray', nameDE: 'Weiche Röntgenstrahlung', minHz: 30e15, maxHz: 3e17, color: '#0891b2', category: 'em' },
-  { id: 'em-xray-hard', name: 'Hard X-Ray', nameDE: 'Harte Röntgenstrahlung', minHz: 3e17, maxHz: 30e18, color: '#0e7490', category: 'em' },
-  { id: 'em-gamma', name: 'Gamma', nameDE: 'Gammastrahlung', minHz: 30e18, maxHz: 3e22, color: '#ec4899', category: 'em' },
+  {
+    id: 'em-radio',
+    name: 'Radio',
+    nameDE: 'Radiowellen',
+    minHz: 3,
+    maxHz: 300e9,
+    color: '#3b82f6',
+    category: 'em'
+  },
+  {
+    id: 'em-microwave',
+    name: 'Microwave',
+    nameDE: 'Mikrowellen',
+    minHz: 300e6,
+    maxHz: 300e9,
+    color: '#6366f1',
+    category: 'em'
+  },
+  {
+    id: 'em-infrared-far',
+    name: 'Far-IR',
+    nameDE: 'Fernes Infrarot',
+    minHz: 300e9,
+    maxHz: 30e12,
+    color: '#991b1b',
+    category: 'em'
+  },
+  {
+    id: 'em-infrared-mid',
+    name: 'Mid-IR',
+    nameDE: 'Mittleres Infrarot',
+    minHz: 30e12,
+    maxHz: 120e12,
+    color: '#b91c1c',
+    category: 'em'
+  },
+  {
+    id: 'em-infrared-near',
+    name: 'Near-IR',
+    nameDE: 'Nahes Infrarot',
+    minHz: 120e12,
+    maxHz: VISIBLE_MIN_HZ,
+    color: '#dc2626',
+    category: 'em'
+  },
+  {
+    id: 'em-visible',
+    name: 'Visible',
+    nameDE: 'Sichtbares Licht',
+    minHz: VISIBLE_MIN_HZ,
+    maxHz: VISIBLE_MAX_HZ,
+    color: 'visible',
+    category: 'em'
+  },
+  {
+    id: 'em-uv-near',
+    name: 'UV-A',
+    nameDE: 'UV-A',
+    minHz: VISIBLE_MAX_HZ,
+    maxHz: 952e12,
+    color: '#7c3aed',
+    category: 'em'
+  },
+  {
+    id: 'em-uv-mid',
+    name: 'UV-B',
+    nameDE: 'UV-B',
+    minHz: 952e12,
+    maxHz: 1.07e15,
+    color: '#6d28d9',
+    category: 'em'
+  },
+  {
+    id: 'em-uv-far',
+    name: 'UV-C',
+    nameDE: 'UV-C',
+    minHz: 1.07e15,
+    maxHz: 3e15,
+    color: '#5b21b6',
+    category: 'em'
+  },
+  {
+    id: 'em-euv',
+    name: 'EUV',
+    nameDE: 'Extremes UV',
+    minHz: 3e15,
+    maxHz: 30e15,
+    color: '#4c1d95',
+    category: 'em'
+  },
+  {
+    id: 'em-xray-soft',
+    name: 'Soft X-Ray',
+    nameDE: 'Weiche Röntgenstrahlung',
+    minHz: 30e15,
+    maxHz: 3e17,
+    color: '#0891b2',
+    category: 'em'
+  },
+  {
+    id: 'em-xray-hard',
+    name: 'Hard X-Ray',
+    nameDE: 'Harte Röntgenstrahlung',
+    minHz: 3e17,
+    maxHz: 30e18,
+    color: '#0e7490',
+    category: 'em'
+  },
+  {
+    id: 'em-gamma',
+    name: 'Gamma',
+    nameDE: 'Gammastrahlung',
+    minHz: 30e18,
+    maxHz: 3e22,
+    color: '#ec4899',
+    category: 'em'
+  }
 ];
 
 /** Datenquelle jeder Bandreihe. */
@@ -119,8 +229,14 @@ export function calcBandRect(
 }
 
 /** Sichtbare Bandrechtecke einer Datenquelle. */
-export function bandRects(bands: FrequencyBand[], domain: Domain, xScale: (hz: number) => number): BandRect[] {
-  return bands.map((band) => ({ ...band, ...calcBandRect(band, domain, xScale) })).filter((b) => b.visible);
+export function bandRects(
+  bands: FrequencyBand[],
+  domain: Domain,
+  xScale: (hz: number) => number
+): BandRect[] {
+  return bands
+    .map((band) => ({ ...band, ...calcBandRect(band, domain, xScale) }))
+    .filter((b) => b.visible);
 }
 
 /** Y-Position einer Reihe: Summe der sichtbaren Reihen darüber. */
@@ -151,7 +267,9 @@ export function getVisibleLightColor(frequencyHz: number, c: number): string {
 
   const wavelengthNm = safeDivide(c, frequencyHz, 0) * 1e9;
 
-  let r = 0, g = 0, b = 0;
+  let r = 0,
+    g = 0,
+    b = 0;
 
   if (wavelengthNm >= 380 && wavelengthNm < 440) {
     r = -(wavelengthNm - 440) / (440 - 380);
@@ -181,9 +299,9 @@ export function getVisibleLightColor(frequencyHz: number, c: number): string {
 
   let factor = 1.0;
   if (wavelengthNm >= 380 && wavelengthNm < 420) {
-    factor = 0.3 + 0.7 * (wavelengthNm - 380) / (420 - 380);
+    factor = 0.3 + (0.7 * (wavelengthNm - 380)) / (420 - 380);
   } else if (wavelengthNm >= 645 && wavelengthNm <= 780) {
-    factor = 0.3 + 0.7 * (780 - wavelengthNm) / (780 - 645);
+    factor = 0.3 + (0.7 * (780 - wavelengthNm)) / (780 - 645);
   }
 
   r = Math.round(255 * Math.pow(r * factor, 0.8));
@@ -197,7 +315,10 @@ export function getVisibleLightColor(frequencyHz: number, c: number): string {
 const GRADIENT_STOPS = 20;
 
 /** Verlaufsstützen des sichtbaren Lichts innerhalb der Domäne (leer, wenn außerhalb). */
-export function visibleLightGradientStops(domain: Domain, c: number): { offset: string; color: string }[] {
+export function visibleLightGradientStops(
+  domain: Domain,
+  c: number
+): { offset: string; color: string }[] {
   const [domainMin, domainMax] = domain;
   const visMin = Math.max(VISIBLE_MIN_HZ, domainMin);
   const visMax = Math.min(VISIBLE_MAX_HZ, domainMax);

@@ -6,11 +6,7 @@
    * die Detailtafel in `TransmitterDetails.svelte`.
    */
   import { untrack } from 'svelte';
-  import {
-    ALL_TRANSMITTERS,
-    type Transmitter,
-    type TransmitterSubtype
-  } from '$lib/data/transmitters';
+  import { ALL_TRANSMITTERS, type Transmitter, type TransmitterSubtype } from '$lib/data/transmitters';
   import { formatFrequency, formatPowerWatts } from '$lib/utils/formatting';
   import Badge from './Badge.svelte';
   import Button from './Button.svelte';
@@ -43,9 +39,7 @@
   // `{#key}` in der Seite ohnehin neu auf.
   let selectedId = $state<string | null>(untrack(() => initialSelectedId));
 
-  let filtered = $derived(
-    filterTransmitters({ query, group, subtype, onlyActive, sortKey, ascending })
-  );
+  let filtered = $derived(filterTransmitters({ query, group, subtype, onlyActive, sortKey, ascending }));
 
   let selected = $derived(filtered.find((t) => t.id === selectedId) ?? null);
 
@@ -62,14 +56,11 @@
     onlyActive = false;
     selectedId = null;
   }
-
 </script>
 
 <Card title="Senderdatenbank" subtitle="{ALL_TRANSMITTERS.length} Einträge" icon="database">
   {#snippet actions()}
-    <Button size="sm" variant="ghost" icon="reset" onclick={handleResetClick}>
-      Filter zurücksetzen
-    </Button>
+    <Button size="sm" variant="ghost" icon="reset" onclick={handleResetClick}>Filter zurücksetzen</Button>
   {/snippet}
 
   <div class="txdb">
@@ -93,11 +84,7 @@
             aria-pressed={selectedId === transmitter.id}
             onclick={() => handleRowClick(transmitter)}
           >
-            <span
-              class="txdb__dot"
-              style="background-color: {TYPE_COLORS[transmitter.type]}"
-              aria-hidden="true"
-            ></span>
+            <span class="txdb__dot" style="background-color: {TYPE_COLORS[transmitter.type]}" aria-hidden="true"></span>
             <span class="txdb__identity">
               <span class="txdb__name">{transmitter.nameDE}</span>
               <span class="txdb__place">
@@ -123,16 +110,12 @@
     </ul>
 
     {#if selected}
-      <TransmitterDetails
-        transmitter={selected}
-        onclose={() => (selectedId = null)}
-        {onSelectFrequency}
-      />
+      <TransmitterDetails transmitter={selected} onclose={() => (selectedId = null)} {onSelectFrequency} />
     {/if}
 
     <p class="txdb__footnote">
-      Diese Datenbank dient Bildungszwecken. Aktuelle Frequenzen und Parameter können abweichen;
-      das Feld „Zuletzt geprüft" nennt den Stand des jeweiligen Eintrags.
+      Diese Datenbank dient Bildungszwecken. Aktuelle Frequenzen und Parameter können abweichen; das Feld „Zuletzt
+      geprüft" nennt den Stand des jeweiligen Eintrags.
     </p>
   </div>
 </Card>

@@ -5,7 +5,11 @@
  * und die Kennlinie des Shannon-Limits — alles DOM-frei und testbar.
  */
 
-import { MODULATION_SCHEMES, PRACTICAL_THROUGHPUT, type ModulationScheme } from '$lib/data/constants';
+import {
+  MODULATION_SCHEMES,
+  PRACTICAL_THROUGHPUT,
+  type ModulationScheme
+} from '$lib/data/constants';
 import { calculateSpectralEfficiency } from '$lib/utils/calculations';
 import { safeDivide } from '$lib/utils/handlers';
 import type { ParamSpecs } from '$lib/utils/urlState.svelte';

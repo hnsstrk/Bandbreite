@@ -136,12 +136,28 @@ export const SECTIONS: ArticleSection[] = [
         caption: 'Gebräuchliche Betriebsarten mit typischer Bandbreite',
         head: ['Betriebsart', 'Bandbreite', 'Einordnung'],
         rows: [
-          ['CW (Telegrafie)', 'etwa 100–500 Hz', 'Kommt mit sehr wenig Leistung aus, wird direkt vom Menschen dekodiert.'],
-          ['FT8', 'etwa 50 Hz je Signal', 'Feste Zeitschlitze von 15 Sekunden, arbeitet noch weit unter der Rauschgrenze.'],
+          [
+            'CW (Telegrafie)',
+            'etwa 100–500 Hz',
+            'Kommt mit sehr wenig Leistung aus, wird direkt vom Menschen dekodiert.'
+          ],
+          [
+            'FT8',
+            'etwa 50 Hz je Signal',
+            'Feste Zeitschlitze von 15 Sekunden, arbeitet noch weit unter der Rauschgrenze.'
+          ],
           ['PSK31', 'etwa 60 Hz', 'Tastaturbetrieb in Echtzeit, phasenumgetastet.'],
           ['RTTY', 'etwa 250 Hz', 'Älteres Fernschreibverfahren mit Frequenzumtastung.'],
-          ['SSB', 'etwa 2,4–2,7 kHz', 'Sprechfunk mit unterdrücktem Träger; unterhalb 10 MHz unteres, darüber oberes Seitenband.'],
-          ['FM', 'etwa 12,5–16 kHz', 'Rauschfreier Nahbereichsfunk, Standard im Relaisbetrieb auf 2 m und 70 cm.']
+          [
+            'SSB',
+            'etwa 2,4–2,7 kHz',
+            'Sprechfunk mit unterdrücktem Träger; unterhalb 10 MHz unteres, darüber oberes Seitenband.'
+          ],
+          [
+            'FM',
+            'etwa 12,5–16 kHz',
+            'Rauschfreier Nahbereichsfunk, Standard im Relaisbetrieb auf 2 m und 70 cm.'
+          ]
         ]
       },
       {
@@ -164,7 +180,8 @@ export const SECTIONS: ArticleSection[] = [
   {
     id: 'welches-band',
     title: 'Welches Band ist gerade offen?',
-    description: 'Faustregeln statt Vorhersage — maßgeblich sind Sonnenstand, Jahreszeit und Sonnenaktivität.',
+    description:
+      'Faustregeln statt Vorhersage — maßgeblich sind Sonnenstand, Jahreszeit und Sonnenaktivität.',
     blocks: [
       {
         kind: 'ul',

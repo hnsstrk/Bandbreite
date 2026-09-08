@@ -77,7 +77,11 @@ export const emWellenArticle: KnowledgeArticle = {
           number: '(1)',
           variables: [
             { symbol: 'λ', meaning: 'Wellenlänge', unit: 'm' },
-            { symbol: 'c', meaning: 'Lichtgeschwindigkeit im Vakuum (exakt 299 792 458 m/s)', unit: 'm/s' },
+            {
+              symbol: 'c',
+              meaning: 'Lichtgeschwindigkeit im Vakuum (exakt 299 792 458 m/s)',
+              unit: 'm/s'
+            },
             { symbol: 'f', meaning: 'Frequenz', unit: 'Hz' }
           ]
         },

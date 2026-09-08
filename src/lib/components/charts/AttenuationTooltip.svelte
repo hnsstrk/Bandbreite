@@ -14,28 +14,14 @@
 
   let tooltipWidth = $derived(hasPrecipitation ? 220 : 200);
   let tooltipHeight = $derived(hasPrecipitation ? 150 : 90);
-  let tooltipX = $derived(
-    markerData.x > chartWidth / 2
-      ? markerData.x - tooltipWidth - 15
-      : markerData.x + 15
-  );
+  let tooltipX = $derived(markerData.x > chartWidth / 2 ? markerData.x - tooltipWidth - 15 : markerData.x + 15);
   let tooltipY = $derived(
-    markerData.yTotal > chartHeight / 2
-      ? markerData.yTotal - tooltipHeight - 10
-      : markerData.yTotal + 10
+    markerData.yTotal > chartHeight / 2 ? markerData.yTotal - tooltipHeight - 10 : markerData.yTotal + 10
   );
 </script>
 
 <g transform="translate({tooltipX}, {tooltipY})" filter="url(#attenuationTooltipShadow)">
-  <rect
-    x="0"
-    y="0"
-    width={tooltipWidth}
-    height={tooltipHeight}
-    rx="6"
-    class="chart-tooltip"
-    stroke-width="1"
-  />
+  <rect x="0" y="0" width={tooltipWidth} height={tooltipHeight} rx="6" class="chart-tooltip" stroke-width="1" />
   <text x="12" y="20" class="chart-tooltip-text" font-weight="500" font-size="12">
     f = {formatNumber(markerData.frequency, 2)} GHz
   </text>
@@ -65,7 +51,11 @@
       </text>
     {/if}
     {#if atmosphericParameters.snowRateMmH > 0}
-      <text x="12" y={90 + (atmosphericParameters.rainRateMmH > 0 ? 16 : 0) + (atmosphericParameters.fogDensityGM3 > 0 ? 16 : 0)} font-size="11">
+      <text
+        x="12"
+        y={90 + (atmosphericParameters.rainRateMmH > 0 ? 16 : 0) + (atmosphericParameters.fogDensityGM3 > 0 ? 16 : 0)}
+        font-size="11"
+      >
         <tspan style="fill: var(--color-series-8)">Schnee:</tspan>
         <tspan class="chart-tooltip-text"> {formatAttenuationValue(markerData.snow)} dB/km</tspan>
       </text>

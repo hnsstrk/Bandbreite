@@ -20,7 +20,12 @@ import {
   reactiveNearFieldM,
   tiltLossDb
 } from '$lib/components/widgets/EmWaveModel';
-import { formatDistance, formatFrequency, formatNumber, formatWavelength } from '$lib/utils/formatting';
+import {
+  formatDistance,
+  formatFrequency,
+  formatNumber,
+  formatWavelength
+} from '$lib/utils/formatting';
 
 /** Beispielfrequenzen — die Zahlenwerte im Text folgen daraus. */
 export const EXAMPLES_HZ = [153e3, 100e6, 900e6, 2.4e9, 10e9, 5e14];
@@ -52,7 +57,10 @@ export const exampleRows = EXAMPLES_HZ.map((hz) => [
 
 export const lambdaReference = formatWavelength(frequencyToWavelength(REFERENCE_HZ), 0);
 export const periodReference = seconds(periodS(REFERENCE_HZ));
-export const nearFieldReference = formatDistance(reactiveNearFieldM(frequencyToWavelength(REFERENCE_HZ)), 2);
+export const nearFieldReference = formatDistance(
+  reactiveNearFieldM(frequencyToWavelength(REFERENCE_HZ)),
+  2
+);
 export const dishFarField = formatDistance(
   fraunhoferDistanceM(DISH_DIAMETER_M, frequencyToWavelength(DISH_FREQUENCY_HZ)),
   0

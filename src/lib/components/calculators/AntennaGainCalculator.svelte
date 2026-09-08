@@ -55,9 +55,7 @@
     type AntennaPreset
   } from './antennaGain.svelte';
 
-  const initial = browser
-    ? readParams(page.url.searchParams, ANTENNA_GAIN_PARAMS)
-    : defaultValues(ANTENNA_GAIN_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, ANTENNA_GAIN_PARAMS) : defaultValues(ANTENNA_GAIN_PARAMS);
 
   let diameterM = $state(initial.d);
   let diameterUnit = $state('m');
@@ -173,14 +171,7 @@
       />
     </div>
 
-    <AntennaGainResults
-      {gainDbi}
-      {beamwidthDeg}
-      {apertureM2}
-      {farFieldM}
-      wavelengthM={lambdaM}
-      {diameterM}
-    />
+    <AntennaGainResults {gainDbi} {beamwidthDeg} {apertureM2} {farFieldM} wavelengthM={lambdaM} {diameterM} />
 
     <FormulaBlock
       formula="G = η · (π · D / λ)²   ·   θ ≈ 70° · λ / D"
@@ -222,9 +213,8 @@
     </section>
 
     <Callout tone="tip" title="Doppelter Durchmesser, vierfacher Gewinn" source="Balanis, Antenna Theory">
-      Der Gewinn wächst mit der Fläche: doppelter Durchmesser bedeutet +6 dB,
-      doppelte Frequenz ebenfalls +6 dB. Zugleich halbiert sich die
-      Keulenbreite — große Spiegel müssen entsprechend genau ausgerichtet werden.
+      Der Gewinn wächst mit der Fläche: doppelter Durchmesser bedeutet +6 dB, doppelte Frequenz ebenfalls +6 dB.
+      Zugleich halbiert sich die Keulenbreite — große Spiegel müssen entsprechend genau ausgerichtet werden.
     </Callout>
   </div>
 </Card>

@@ -72,7 +72,10 @@
   {:else}
     {#if primaryBand}
       <div class="sidebar-header">
-        <span class="color-dot" style="background-color: {primaryBand.color === 'visible' ? 'var(--color-series-2)' : primaryBand.color}"></span>
+        <span
+          class="color-dot"
+          style="background-color: {primaryBand.color === 'visible' ? 'var(--color-series-2)' : primaryBand.color}"
+        ></span>
         <div class="header-text">
           <h3 class="band-name">{primaryBand.nameDE}</h3>
           <span class="band-freq">{formatFrequencyRange(primaryBand.minHz, primaryBand.maxHz)}</span>

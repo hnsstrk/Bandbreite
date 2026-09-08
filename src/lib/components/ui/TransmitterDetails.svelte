@@ -5,12 +5,7 @@
   import Badge from './Badge.svelte';
   import Button from './Button.svelte';
   import Card from './Card.svelte';
-  import {
-    POWER_TYPE_LABELS,
-    STATUS_CONFIG,
-    SUBTYPE_LABELS,
-    formatVerified
-  } from './transmitterDatabase.svelte';
+  import { POWER_TYPE_LABELS, STATUS_CONFIG, SUBTYPE_LABELS, formatVerified } from './transmitterDatabase.svelte';
 
   interface Props {
     transmitter: Transmitter;
@@ -23,21 +18,9 @@
   let verified = $derived(formatVerified(transmitter.lastVerified));
 </script>
 
-<Card
-  title={transmitter.nameDE}
-  subtitle={TYPE_NAMES[transmitter.type].nameDE}
-  level={3}
-  tone="sunken"
->
+<Card title={transmitter.nameDE} subtitle={TYPE_NAMES[transmitter.type].nameDE} level={3} tone="sunken">
   {#snippet actions()}
-    <Button
-      size="sm"
-      variant="ghost"
-      iconOnly
-      icon="close"
-      label="Auswahl aufheben"
-      onclick={onclose}
-    />
+    <Button size="sm" variant="ghost" iconOnly icon="close" label="Auswahl aufheben" onclick={onclose} />
   {/snippet}
 
   <dl class="details">
@@ -86,11 +69,17 @@
     {/if}
 
     {#if transmitter.coverage}
-      <div class="details__item"><dt>Reichweite</dt><dd>{transmitter.coverage}</dd></div>
+      <div class="details__item">
+        <dt>Reichweite</dt>
+        <dd>{transmitter.coverage}</dd>
+      </div>
     {/if}
 
     {#if transmitter.operator}
-      <div class="details__item"><dt>Betreiber</dt><dd>{transmitter.operator}</dd></div>
+      <div class="details__item">
+        <dt>Betreiber</dt>
+        <dd>{transmitter.operator}</dd>
+      </div>
     {/if}
 
     <div class="details__item">
@@ -103,7 +92,10 @@
     </div>
 
     {#if verified}
-      <div class="details__item"><dt>Zuletzt geprüft</dt><dd>{verified}</dd></div>
+      <div class="details__item">
+        <dt>Zuletzt geprüft</dt>
+        <dd>{verified}</dd>
+      </div>
     {/if}
   </dl>
 
@@ -114,12 +106,7 @@
   {/if}
 
   {#if onSelectFrequency}
-    <Button
-      size="sm"
-      variant="primary"
-      icon="arrow-right"
-      onclick={() => onSelectFrequency?.(transmitter.frequencyHz)}
-    >
+    <Button size="sm" variant="primary" icon="arrow-right" onclick={() => onSelectFrequency?.(transmitter.frequencyHz)}>
       Frequenz übernehmen
     </Button>
   {/if}

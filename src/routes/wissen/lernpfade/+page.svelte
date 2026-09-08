@@ -40,8 +40,8 @@
 
   {#if active}
     <Callout tone="info" title={`Aktiver Pfad: ${active.title}`}>
-      Beim Aufruf eines Kapitels dieses Pfads erscheint oben eine Leiste mit Schrittzähler und
-      den Schaltflächen für zurück, weiter und erledigt.
+      Beim Aufruf eines Kapitels dieses Pfads erscheint oben eine Leiste mit Schrittzähler und den Schaltflächen für
+      zurück, weiter und erledigt.
       <a href={learningPathHref(active.id)}>Alle Schritte ansehen</a>.
     </Callout>
   {/if}
@@ -71,13 +71,10 @@
       description="Bandbreite kennt keine Anmeldung."
     />
     <Callout tone="info" title="Nur in diesem Browser gespeichert">
-      Aktiver Pfad und abgehakte Schritte liegen im lokalen Speicher dieses Browsers. Sie werden
-      nicht übertragen und stehen auf anderen Geräten nicht zur Verfügung; ein geleerter
-      Browserspeicher setzt sie zurück.
+      Aktiver Pfad und abgehakte Schritte liegen im lokalen Speicher dieses Browsers. Sie werden nicht übertragen und
+      stehen auf anderen Geräten nicht zur Verfügung; ein geleerter Browserspeicher setzt sie zurück.
       <span class="page-section__action">
-        <Button size="sm" variant="secondary" icon="reset" onclick={handleResetClick}>
-          Fortschritt zurücksetzen
-        </Button>
+        <Button size="sm" variant="secondary" icon="reset" onclick={handleResetClick}>Fortschritt zurücksetzen</Button>
       </span>
     </Callout>
   </section>

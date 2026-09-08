@@ -22,14 +22,7 @@
     refractionNote: string;
   }
 
-  let {
-    horizon1Km,
-    horizon2Km,
-    totalKm,
-    geometricKm,
-    factor,
-    refractionNote
-  }: Props = $props();
+  let { horizon1Km, horizon2Km, totalKm, geometricKm, factor, refractionNote }: Props = $props();
 
   let gainPercent = $derived(safeDivide(totalKm - geometricKm, geometricKm, 0) * 100);
 </script>

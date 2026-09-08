@@ -40,15 +40,7 @@
 
 <div class="calc-actions {klass}">
   <Button size="sm" icon="share" onclick={handleCopyClick}>Link kopieren</Button>
-  <Button
-    size="sm"
-    variant="ghost"
-    icon="reset"
-    disabled={!canReset}
-    onclick={handleResetClick}
-  >
-    Zurücksetzen
-  </Button>
+  <Button size="sm" variant="ghost" icon="reset" disabled={!canReset} onclick={handleResetClick}>Zurücksetzen</Button>
   <span class="calc-actions__status" role="status" aria-live="polite">
     {#if status === 'copied'}Link kopiert{:else if status === 'failed'}Kopieren nicht möglich{/if}
   </span>

@@ -40,29 +40,29 @@
   /* ----------------------------------------
      Text (kontrastgeprüft gegen --color-surface)
      ---------------------------------------- */
-  --color-ink: #0f172a;         /* 17,9:1 */
-  --color-ink-muted: #475569;   /*  7,5:1 */
-  --color-ink-subtle: #64748b;  /*  4,8:1 */
-  --color-ink-faint: #6b7a90;   /*  4,5:1 — war #94a3b8 (2,6:1) */
+  --color-ink: #0f172a; /* 17,9:1 */
+  --color-ink-muted: #475569; /*  7,5:1 */
+  --color-ink-subtle: #64748b; /*  4,8:1 */
+  --color-ink-faint: #6b7a90; /*  4,5:1 — war #94a3b8 (2,6:1) */
   --color-ink-inverse: #ffffff;
 
   /* ----------------------------------------
      Rahmen (UI-Grenzen brauchen 3:1, WCAG 1.4.11)
      ---------------------------------------- */
-  --color-line: #cbd5e1;        /* war #e2e8f0 (1,2:1) */
+  --color-line: #cbd5e1; /* war #e2e8f0 (1,2:1) */
   --color-line-subtle: #e2e8f0;
   --color-line-strong: #94a3b8; /* 3,0:1 — Rahmen von Bedienelementen */
-  --color-focus-ring: #1d4ed8;  /* 6,9:1 gegen --color-base */
+  --color-focus-ring: #1d4ed8; /* 6,9:1 gegen --color-base */
 
   /* ----------------------------------------
      Marke
      ---------------------------------------- */
-  --color-brand: #2563eb;       /* 5,2:1 auf weiß — war #3b82f6 (3,7:1) */
+  --color-brand: #2563eb; /* 5,2:1 auf weiß — war #3b82f6 (3,7:1) */
   --color-brand-hover: #1d4ed8;
   --color-brand-soft: #dbeafe;
   --color-brand-ink: #1e3a8a;
-  --color-brand-on: #ffffff;    /* Text auf gefüllter Markenfläche */
-  --color-on-solid: #ffffff;    /* Text auf jeder gefüllten Semantikfläche */
+  --color-brand-on: #ffffff; /* Text auf gefüllter Markenfläche */
+  --color-on-solid: #ffffff; /* Text auf jeder gefüllten Semantikfläche */
   --color-accent-primary-alpha: rgb(37 99 235 / 0.12);
 
   --color-secondary: #16a34a;
@@ -117,7 +117,7 @@
   --color-series-7-solid: #ca8a04;
   --color-series-8-solid: #64748b;
   --color-series-9-solid: #db2777;
-  --color-marker: #fbbf24;      /* aktueller Arbeitspunkt */
+  --color-marker: #fbbf24; /* aktueller Arbeitspunkt */
   --color-grid: #e2e8f0;
   --color-axis: #64748b;
 
@@ -152,10 +152,12 @@
   /* ----------------------------------------
      Typografie
      ---------------------------------------- */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-  --text-2xs: 0.6875rem;        /* Chart- und Achsenbeschriftung */
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --text-2xs: 0.6875rem; /* Chart- und Achsenbeschriftung */
 
   /* ----------------------------------------
      Radien
@@ -411,7 +413,9 @@ html {
 body {
   background-color: var(--color-base);
   color: var(--color-ink);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
 }
 
 /* Kein horizontales Seiten-Scrollen: Überbreite Inhalte
@@ -666,7 +670,9 @@ body {
   border-radius: var(--radius-card);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-lg);
-  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+  transition:
+    background-color var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 .card-compact {
@@ -674,17 +680,23 @@ body {
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
   box-shadow: var(--shadow-md);
-  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+  transition:
+    background-color var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 /* Im Dark-Theme trägt ein Schatten keine Tiefe — eine Kante schon.
    Als Inset-Shadow, damit sich die Boxmasse nicht ändern. */
 .dark .card {
-  box-shadow: var(--shadow-lg), inset 0 0 0 1px var(--color-line);
+  box-shadow:
+    var(--shadow-lg),
+    inset 0 0 0 1px var(--color-line);
 }
 
 .dark .card-compact {
-  box-shadow: var(--shadow-md), inset 0 0 0 1px var(--color-line);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 0 0 1px var(--color-line);
 }
 
 /* Input Fields */
@@ -695,7 +707,9 @@ body {
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-sm);
   color: var(--color-ink);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .input-field:focus {
@@ -715,7 +729,9 @@ body {
   font-size: var(--font-size-sm);
   color: var(--color-ink);
   cursor: pointer;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .select-field:focus {
@@ -1276,7 +1292,9 @@ input[type='range']:disabled {
     min-width: 64px;
     min-height: 44px;
     border-radius: var(--radius-md);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
   }
 
   .mobile-nav-item:hover,

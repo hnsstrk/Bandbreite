@@ -15,19 +15,35 @@ import { formatNumber, formatFrequency } from '$lib/utils/formatting';
 const LAYER_NOTES: Record<string, { html: string; points: string[] }> = {
   'd-layer': {
     html: 'Die unterste Schicht entsteht durch Röntgenstrahlung der Sonne und verschwindet nach Sonnenuntergang wegen der hohen Luftdichte sehr schnell.',
-    points: ['<strong>Tag:</strong> absorbiert niedrige HF-Frequenzen stark', '<strong>Nacht:</strong> löst sich vollständig auf', 'Hauptursache der Tagesdämpfung bei MF und HF']
+    points: [
+      '<strong>Tag:</strong> absorbiert niedrige HF-Frequenzen stark',
+      '<strong>Nacht:</strong> löst sich vollständig auf',
+      'Hauptursache der Tagesdämpfung bei MF und HF'
+    ]
   },
   'e-layer': {
     html: 'Reflektiert Mittelwelle und untere Kurzwelle; verschwindet einige Stunden nach Sonnenuntergang. Die sporadische E-Schicht (Es) ermöglicht VHF-Überreichweiten.',
-    points: ['Reflektiert Frequenzen bis etwa 10 MHz', '<strong>Sporadic E:</strong> dünne, stark ionisierte Wolken', 'Metallionen aus Meteoren als Ursache']
+    points: [
+      'Reflektiert Frequenzen bis etwa 10 MHz',
+      '<strong>Sporadic E:</strong> dünne, stark ionisierte Wolken',
+      'Metallionen aus Meteoren als Ursache'
+    ]
   },
   'f1-layer': {
     html: 'Nur tagsüber als eigene Schicht vorhanden, am ausgeprägtesten im Sommer mittlerer Breiten. Verschmilzt nachts mit der F2-Schicht zur F-Region.',
-    points: ['Tagsüber eigenständige Reflexionsschicht', 'Beeinflusst mittlere HF-Frequenzen', '<strong>Nachts:</strong> Teil der einheitlichen F-Region']
+    points: [
+      'Tagsüber eigenständige Reflexionsschicht',
+      'Beeinflusst mittlere HF-Frequenzen',
+      '<strong>Nachts:</strong> Teil der einheitlichen F-Region'
+    ]
   },
   'f2-layer': {
     html: 'Die wichtigste Schicht für HF-Weitverkehr. Tag und Nacht vorhanden; die Ionisation nimmt nachts ab, verschwindet aber nicht.',
-    points: ['Bestimmt die MUF', 'Höhe und Dichte variieren mit dem Sonnenzyklus', 'Ermöglicht weltweite Kurzwellenverbindungen']
+    points: [
+      'Bestimmt die MUF',
+      'Höhe und Dichte variieren mit dem Sonnenzyklus',
+      'Ermöglicht weltweite Kurzwellenverbindungen'
+    ]
   }
 };
 
@@ -37,7 +53,10 @@ const layerCards: CardItem[] = IONOSPHERIC_LAYERS.map((layer) => ({
   html: LAYER_NOTES[layer.id]?.html ?? layer.descriptionDE,
   points: LAYER_NOTES[layer.id]?.points,
   facts: [
-    { label: 'Tag / Nacht', value: `${layer.daytimePresent ? 'ja' : 'nein'} / ${layer.nighttimePresent ? 'ja' : 'nein'}` }
+    {
+      label: 'Tag / Nacht',
+      value: `${layer.daytimePresent ? 'ja' : 'nein'} / ${layer.nighttimePresent ? 'ja' : 'nein'}`
+    }
   ]
 }));
 
@@ -50,7 +69,8 @@ const referenceKm = IONOSPHERE_PARAMETERS.mufReferenceDistanceKm;
 const mufExample = formatNumber(estimateMUF(FOF2_EXAMPLE_MHZ, referenceKm), 1);
 const mufFactor = formatNumber(estimateMUF(1, referenceKm), 2);
 const skipExample = calculateSkipDistanceForFrequency(SKIP_EXAMPLE_FREQUENCY_MHZ, FOF2_EXAMPLE_MHZ);
-const skipExampleText = skipExample === null ? 'keine Reflexion' : `${formatNumber(skipExample, 0)} km`;
+const skipExampleText =
+  skipExample === null ? 'keine Reflexion' : `${formatNumber(skipExample, 0)} km`;
 const plasmaExample = formatFrequency(calculatePlasmaFrequency(PLASMA_EXAMPLE_DENSITY), 0);
 const fof2Range = `${IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.low}–${IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.high} MHz`;
 
@@ -59,8 +79,7 @@ export const ionosphaereArticle: KnowledgeArticle = {
   kicker: 'Spektrum · Ausbreitung',
   title: 'Ionosphärische Ausbreitung',
   icon: 'globe',
-  lead:
-    'Zwischen 60 und 400 km Höhe ionisiert die Sonne die dünne Luft zu leitfähigen Schichten. Sie spiegeln Kurzwellen um die Erde – abhängig von Tageszeit, Jahreszeit und Sonnenaktivität. Dieses Kapitel erklärt die Schichten, die Kenngrößen MUF, LUF und foF2 sowie die tote Zone.',
+  lead: 'Zwischen 60 und 400 km Höhe ionisiert die Sonne die dünne Luft zu leitfähigen Schichten. Sie spiegeln Kurzwellen um die Erde – abhängig von Tageszeit, Jahreszeit und Sonnenaktivität. Dieses Kapitel erklärt die Schichten, die Kenngrößen MUF, LUF und foF2 sowie die tote Zone.',
   meta: [{ label: 'Quellen', value: 'ITU-R P.1239, Davies: Ionospheric Radio' }],
   goals: [
     'die Schichten D, E, F1 und F2 nach Höhe, Entstehung und Tag-Nacht-Verhalten unterscheiden',
@@ -73,13 +92,15 @@ export const ionosphaereArticle: KnowledgeArticle = {
     {
       id: 'visualisierung',
       title: 'Schichten und Reflexion im Diagramm',
-      description: 'Das interaktive Diagramm zeigt die Schichten, den Strahlverlauf und die Kenngrößen für Tag und Nacht.',
+      description:
+        'Das interaktive Diagramm zeigt die Schichten, den Strahlverlauf und die Kenngrößen für Tag und Nacht.',
       blocks: [{ type: 'widget', id: 'ionospheric-propagation' }]
     },
     {
       id: 'schichten',
       title: 'Ionosphärische Schichten',
-      description: 'Vier Schichten mit unterschiedlicher Höhe, Ionisation und Wirkung auf die Funkwellen (Daten: IONOSPHERIC_LAYERS).',
+      description:
+        'Vier Schichten mit unterschiedlicher Höhe, Ionisation und Wirkung auf die Funkwellen (Daten: IONOSPHERIC_LAYERS).',
       blocks: [{ type: 'cards', columns: 2, items: layerCards }]
     },
     {
@@ -94,7 +115,11 @@ export const ionosphaereArticle: KnowledgeArticle = {
           label: `Kritische Frequenz der F2-Schicht; typisch ${fof2Range}. Beispiel: N_e = 10¹² e⁻/m³ → ${plasmaExample}`,
           number: '(1)',
           variables: [
-            { symbol: 'foF2', meaning: 'Höchste bei senkrechtem Einfall reflektierte Frequenz', unit: 'Hz' },
+            {
+              symbol: 'foF2',
+              meaning: 'Höchste bei senkrechtem Einfall reflektierte Frequenz',
+              unit: 'Hz'
+            },
             { symbol: 'N_e,max', meaning: 'Maximale Elektronendichte', unit: 'e⁻/m³' }
           ]
         },
@@ -108,10 +133,26 @@ export const ionosphaereArticle: KnowledgeArticle = {
         {
           type: 'definitions',
           items: [
-            { term: 'foF2', description: 'Kritische Frequenz der F2-Schicht, weltweit von Ionosonden gemessen. Sie steigt mit der Sonnenaktivität.' },
-            { term: 'MUF', description: 'Maximum Usable Frequency – die höchste Frequenz, die für eine bestimmte Strecke noch reflektiert wird. Der klassische Faktor M(3000)F2 liegt bei 2,5–3,5.' },
-            { term: 'LUF', description: 'Lowest Usable Frequency – darunter reicht das Signal wegen der D-Schicht-Absorption nicht mehr. Mehr Sendeleistung senkt die LUF; nachts liegt sie deutlich tiefer.' },
-            { term: 'FOT', description: 'Frequency of Optimum Traffic – etwa 85 % der MUF, ein Sicherheitsabstand gegen Schwankungen.' }
+            {
+              term: 'foF2',
+              description:
+                'Kritische Frequenz der F2-Schicht, weltweit von Ionosonden gemessen. Sie steigt mit der Sonnenaktivität.'
+            },
+            {
+              term: 'MUF',
+              description:
+                'Maximum Usable Frequency – die höchste Frequenz, die für eine bestimmte Strecke noch reflektiert wird. Der klassische Faktor M(3000)F2 liegt bei 2,5–3,5.'
+            },
+            {
+              term: 'LUF',
+              description:
+                'Lowest Usable Frequency – darunter reicht das Signal wegen der D-Schicht-Absorption nicht mehr. Mehr Sendeleistung senkt die LUF; nachts liegt sie deutlich tiefer.'
+            },
+            {
+              term: 'FOT',
+              description:
+                'Frequency of Optimum Traffic – etwa 85 % der MUF, ein Sicherheitsabstand gegen Schwankungen.'
+            }
           ]
         }
       ]
@@ -119,7 +160,8 @@ export const ionosphaereArticle: KnowledgeArticle = {
     {
       id: 'tote-zone',
       title: 'Sprungdistanz und tote Zone',
-      description: 'Zwischen dem Ende der Bodenwelle und dem ersten Auftreffpunkt der Raumwelle herrscht Funkstille.',
+      description:
+        'Zwischen dem Ende der Bodenwelle und dem ersten Auftreffpunkt der Raumwelle herrscht Funkstille.',
       blocks: [
         {
           type: 'paragraph',
@@ -128,15 +170,18 @@ export const ionosphaereArticle: KnowledgeArticle = {
         { type: 'widget', id: 'propagation-sandbox' },
         {
           type: 'question',
-          question: 'Ein Sender auf 21 MHz wird in 3000 km Entfernung laut gehört, in 300 km Entfernung aber gar nicht. Warum?',
-          answer: 'Die Bodenwelle reicht bei 21 MHz nur wenige Dutzend Kilometer, und für 300 km müsste der Strahl so steil abgestrahlt werden, dass die Frequenz über der dortigen MUF liegt – er durchdringt die Ionosphäre. Erst bei flacherem Einfall (größere Entfernung) reicht das Sekantengesetz aus, um ihn zurückzubiegen: 300 km liegt in der toten Zone.'
+          question:
+            'Ein Sender auf 21 MHz wird in 3000 km Entfernung laut gehört, in 300 km Entfernung aber gar nicht. Warum?',
+          answer:
+            'Die Bodenwelle reicht bei 21 MHz nur wenige Dutzend Kilometer, und für 300 km müsste der Strahl so steil abgestrahlt werden, dass die Frequenz über der dortigen MUF liegt – er durchdringt die Ionosphäre. Erst bei flacherem Einfall (größere Entfernung) reicht das Sekantengesetz aus, um ihn zurückzubiegen: 300 km liegt in der toten Zone.'
         }
       ]
     },
     {
       id: 'sonnenaktivitaet',
       title: 'Sonnenaktivität und Funkausbreitung',
-      description: 'Die Ionisation wird primär durch solare UV- und Röntgenstrahlung erzeugt; der etwa 11-jährige Sonnenfleckenzyklus prägt die Kurzwelle.',
+      description:
+        'Die Ionisation wird primär durch solare UV- und Röntgenstrahlung erzeugt; der etwa 11-jährige Sonnenfleckenzyklus prägt die Kurzwelle.',
       blocks: [
         {
           type: 'cards',
@@ -145,12 +190,22 @@ export const ionosphaereArticle: KnowledgeArticle = {
             {
               title: 'Sonnenfleckenminimum',
               subtitle: 'Solarer Flux SFI 65–80',
-              points: ['Niedrigere MUF (typisch 8–12 MHz)', 'Bessere Ausbreitung auf den niedrigen Bändern', '40-m- und 80-m-Band optimal', 'Obere HF-Bänder oft geschlossen']
+              points: [
+                'Niedrigere MUF (typisch 8–12 MHz)',
+                'Bessere Ausbreitung auf den niedrigen Bändern',
+                '40-m- und 80-m-Band optimal',
+                'Obere HF-Bänder oft geschlossen'
+              ]
             },
             {
               title: 'Sonnenfleckenmaximum',
               subtitle: 'Solarer Flux SFI 150–300',
-              points: ['Höhere MUF (typisch 15–35 MHz)', 'Bessere Ausbreitung auf den hohen Bändern', '10-m- und 15-m-Band optimal', 'Gelegentlich Öffnungen im 6-m-Band']
+              points: [
+                'Höhere MUF (typisch 15–35 MHz)',
+                'Bessere Ausbreitung auf den hohen Bändern',
+                '10-m- und 15-m-Band optimal',
+                'Gelegentlich Öffnungen im 6-m-Band'
+              ]
             }
           ]
         },

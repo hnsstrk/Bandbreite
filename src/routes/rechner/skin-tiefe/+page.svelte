@@ -10,7 +10,10 @@
     title="Skin-Tiefe"
     icon="wave"
     lead="Wie tief ein hochfrequentes Feld in einen Leiter eindringt — die Grundlage für Abschirmung, Leiterquerschnitte und HF-Verluste."
-    meta={[{ label: 'Quelle', value: 'Pozar, Microwave Engineering' }, { label: 'Gültig', value: 'guter Leiter, σ ≫ ωε' }]}
+    meta={[
+      { label: 'Quelle', value: 'Pozar, Microwave Engineering' },
+      { label: 'Gültig', value: 'guter Leiter, σ ≫ ωε' }
+    ]}
   />
 
   <SkinDepthCalculator />

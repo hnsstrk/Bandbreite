@@ -36,14 +36,10 @@
     k: { default: '', options: ['', ...CATEGORY_IDS] }
   } satisfies ParamSpecs;
 
-  const initial = browser
-    ? readParams(page.url.searchParams, GLOSSARY_PARAMS)
-    : defaultValues(GLOSSARY_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, GLOSSARY_PARAMS) : defaultValues(GLOSSARY_PARAMS);
 
   let query = $state(initial.q);
-  let category = $state<GlossaryCategory | null>(
-    initial.k ? (initial.k as GlossaryCategory) : null
-  );
+  let category = $state<GlossaryCategory | null>(initial.k ? (initial.k as GlossaryCategory) : null);
 
   const sync = new UrlStateSync(GLOSSARY_PARAMS);
   // Den Startzustand übernehmen, damit ein Sprungziel (`#dbm`) beim Laden

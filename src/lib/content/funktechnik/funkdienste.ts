@@ -127,7 +127,8 @@ export const SECTIONS: ArticleSection[] = [
   {
     id: 'vom-vertrag-zur-zuteilung',
     title: 'Vom Vertrag zur einzelnen Zuteilung',
-    description: 'Vier Ebenen liegen zwischen dem völkerrechtlichen Vertrag und der Frequenz im Gerät.',
+    description:
+      'Vier Ebenen liegen zwischen dem völkerrechtlichen Vertrag und der Frequenz im Gerät.',
     blocks: [
       {
         kind: 'ol',
@@ -144,9 +145,17 @@ export const SECTIONS: ArticleSection[] = [
         head: ['Merkmal', 'Allgemeinzuteilung', 'Einzelzuteilung'],
         rows: [
           ['Antragsteller', 'nicht erforderlich', 'benannte Person oder Firma'],
-          ['Beispiele', 'PMR446, CB-Funk, WLAN, Freenet', 'Rundfunksender, Mobilfunknetz, Richtfunkstrecke'],
+          [
+            'Beispiele',
+            'PMR446, CB-Funk, WLAN, Freenet',
+            'Rundfunksender, Mobilfunknetz, Richtfunkstrecke'
+          ],
           ['Schutz vor Störungen', 'kein Anspruch', 'im zugeteilten Umfang geschützt'],
-          ['Bindung an Gerätetechnik', 'Grenzwerte für Leistung und Betriebsart', 'Standort, Frequenz, Leistung, Antenne']
+          [
+            'Bindung an Gerätetechnik',
+            'Grenzwerte für Leistung und Betriebsart',
+            'Standort, Frequenz, Leistung, Antenne'
+          ]
         ]
       },
       {

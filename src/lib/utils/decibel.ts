@@ -163,9 +163,7 @@ export function dbuvToDbm(dbuv: number, impedanceOhm: number = IMPEDANCE_RF_OHM)
  * 10·log₁₀(Z / Ω) + 90 (an 50 Ω ≈ 106,99 dB).
  */
 export function dbmToDbuvOffset(impedanceOhm: number = IMPEDANCE_RF_OHM): number {
-  return (
-    POWER_DECADE_FACTOR * safeLog(impedanceOhm, 10, 0) + DBUV_PER_VOLT - DBM_PER_DBW
-  );
+  return POWER_DECADE_FACTOR * safeLog(impedanceOhm, 10, 0) + DBUV_PER_VOLT - DBM_PER_DBW;
 }
 
 /**

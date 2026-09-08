@@ -13,7 +13,7 @@
  * `src/tests/widgetRegistry.test.ts` decken die Lücke auf).
  */
 
-import type { KnowledgeArticle, WidgetId } from '$lib/content/types';
+import type { CatalogWidgetId, KnowledgeArticle } from '$lib/content/types';
 import { humanizeSegment } from '$lib/utils/slug';
 
 /** Suchparameter des Widget-Deep-Links: `/wissen/radar/?w=doppler`. */
@@ -21,7 +21,7 @@ export const WIDGET_PARAM = 'w';
 
 /** Anzeige- und Suchdaten eines Widgets. */
 export interface WidgetMeta {
-  id: WidgetId;
+  id: CatalogWidgetId;
   /** Überschrift des Widgets, wie sie im Kapitel steht. */
   label: string;
   /** Ein Satz für Suchergebnis und Verweis. */
@@ -30,6 +30,13 @@ export interface WidgetMeta {
   keywords: string[];
   /** Kanonisches Kapitel mit Trailing Slash (aus den Inhaltsdaten geprüft). */
   chapterHref: string;
+  /**
+   * Wie das Widget im Kapitel steht: `content` als `widget`-Block der
+   * Inhaltsdaten (Regelfall, von `widgetLocations()` auffindbar) oder `markup`
+   * direkt in der Seitenkomponente. Markup-Widgets tragen ihre Anker-ID
+   * (`widgetAnchorId`) dort von Hand.
+   */
+  embed?: 'content' | 'markup';
 }
 
 /**
@@ -38,7 +45,7 @@ export interface WidgetMeta {
  * die in mehreren Kapiteln stehen (etwa der Ausbreitungs-Sandkasten), tragen
  * hier ihr Stammkapitel — `widgetLocations()` kennt alle Fundstellen.
  */
-export const WIDGET_META: Partial<Record<WidgetId, Omit<WidgetMeta, 'id'>>> = {
+export const WIDGET_META: Partial<Record<CatalogWidgetId, Omit<WidgetMeta, 'id'>>> = {
   'radar-pulse': {
     label: 'Impuls, Laufzeit und Eindeutigkeit',
     description:
@@ -146,14 +153,74 @@ export const WIDGET_META: Partial<Record<WidgetId, Omit<WidgetMeta, 'id'>>> = {
       'Von der Sendeleistung über EIRP und ERP zur Leistungsdichte und zur elektrischen Feldstärke in V/m und dBµV/m.',
     keywords: ['EIRP', 'ERP', 'Feldstärke', 'Leistungsdichte', 'dBµV/m', 'V/m', 'Sendeleistung'],
     chapterHref: '/wissen/grundlagen/leistung-und-pegel/'
+  },
+
+  // --- Widgets im Markup-Betrieb (Kapitelseiten ohne Inhaltsdaten) ---
+  'modulation-visualizer': {
+    label: 'Modulations-Visualisierer',
+    description:
+      'AM, FM, PM und die digitalen Verfahren im Zeitverlauf und im Spektrum — Regler für Modulationsgrad, Hub und Symbolrate.',
+    keywords: ['Modulation', 'AM', 'FM', 'PM', 'Zeitverlauf', 'Spektrum', 'Hüllkurve'],
+    chapterHref: '/wissen/modulation/',
+    embed: 'markup'
+  },
+  constellation: {
+    label: 'Konstellation mit Rauschen',
+    description:
+      'Konstellationsdiagramm von BPSK bis 64-QAM: Der Störabstand verwischt die Symbolwolken, bis benachbarte Punkte sich berühren.',
+    keywords: ['Konstellation', 'IQ', 'QPSK', 'QAM', 'PSK', 'Störabstand', 'EVM'],
+    chapterHref: '/wissen/modulation/',
+    embed: 'markup'
+  },
+  carson: {
+    label: 'Carson-Rechner',
+    description:
+      'Bandbreite einer frequenzmodulierten Aussendung nach der Carson-Formel B = 2·(Δf + f_max).',
+    keywords: ['Carson', 'FM', 'Bandbreite', 'Frequenzhub', 'Modulationsindex'],
+    chapterHref: '/wissen/modulation/',
+    embed: 'markup'
+  },
+  'antenna-pattern': {
+    label: 'Polardiagramm-Generator',
+    description:
+      'Richtdiagramm von Isotropstrahler, Dipol, Yagi und Parabol mit Halbwertsbreite, Nebenkeulen und Vor-Rück-Verhältnis.',
+    keywords: ['Richtdiagramm', 'Polardiagramm', 'Halbwertsbreite', 'Nebenkeule', 'Dipol', 'Yagi'],
+    chapterHref: '/wissen/antennen/',
+    embed: 'markup'
+  },
+  'parabolic-gain': {
+    label: 'Parabolantennen-Rechner',
+    description:
+      'Gewinn, Halbwertsbreite und Fernfeldabstand einer Parabolantenne aus Durchmesser, Frequenz und Wirkungsgrad.',
+    keywords: ['Parabol', 'Gewinn', 'Apertur', 'Wirkfläche', 'Fernfeld', 'Halbwertsbreite'],
+    chapterHref: '/wissen/antennen/',
+    embed: 'markup'
+  },
+  swr: {
+    label: 'Anpassung im Zusammenhang',
+    description:
+      'Stehwellenverhältnis, Reflexionsfaktor, Rückflussdämpfung und Fehlanpassungsverlust im Zusammenhang.',
+    keywords: ['SWR', 'VSWR', 'Reflexionsfaktor', 'Rückflussdämpfung', 'Anpassung', 'Impedanz'],
+    chapterHref: '/wissen/antennen/',
+    embed: 'markup'
   }
 };
 
 /** Alle Widgets mit Metadaten, in der Reihenfolge des Katalogs. */
 export const WIDGET_ENTRIES: WidgetMeta[] = Object.entries(WIDGET_META).map(([id, meta]) => ({
-  id: id as WidgetId,
+  id: id as CatalogWidgetId,
   ...(meta as Omit<WidgetMeta, 'id'>)
 }));
+
+/** Widgets, die als `widget`-Block in Kapiteldaten stehen. */
+export const CONTENT_WIDGET_ENTRIES: WidgetMeta[] = WIDGET_ENTRIES.filter(
+  (entry) => entry.embed !== 'markup'
+);
+
+/** Widgets, die in einer Kapitelseite direkt im Markup stehen. */
+export const MARKUP_WIDGET_ENTRIES: WidgetMeta[] = WIDGET_ENTRIES.filter(
+  (entry) => entry.embed === 'markup'
+);
 
 /** IDs, für die Metadaten gepflegt sind. */
 export const KNOWN_WIDGET_IDS: string[] = WIDGET_ENTRIES.map((entry) => entry.id);

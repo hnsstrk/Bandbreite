@@ -14,7 +14,6 @@ import {
   formatLocaleNumber,
   formatNumber,
   formatNumberAuto,
-  formatNumberLocale,
   formatPrecisionNumber,
   formatRcs,
   formatFrequency,

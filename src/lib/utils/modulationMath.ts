@@ -429,9 +429,8 @@ export function constellationPoints(scheme: ConstellationScheme): ConstellationP
       points.push({
         index,
         i: (2 * iIndex - (levels - 1)) * scale,
-        q: ((levels - 1) - 2 * qIndex) * scale,
-        bits:
-          toBitString(grayEncode(iIndex), halfBits) + toBitString(grayEncode(qIndex), halfBits)
+        q: (levels - 1 - 2 * qIndex) * scale,
+        bits: toBitString(grayEncode(iIndex), halfBits) + toBitString(grayEncode(qIndex), halfBits)
       });
     }
   }

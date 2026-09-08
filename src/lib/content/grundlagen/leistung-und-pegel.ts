@@ -103,7 +103,11 @@ export const leistungUndPegelArticle: KnowledgeArticle = {
           label: 'Äquivalente isotrope Strahlungsleistung',
           number: '(1)',
           variables: [
-            { symbol: 'EIRP', meaning: 'Strahlungsleistung bezogen auf den Kugelstrahler', unit: 'W bzw. dBm' },
+            {
+              symbol: 'EIRP',
+              meaning: 'Strahlungsleistung bezogen auf den Kugelstrahler',
+              unit: 'W bzw. dBm'
+            },
             { symbol: 'P', meaning: 'Speiseleistung an der Antenne', unit: 'W' },
             { symbol: 'G', meaning: 'Antennengewinn (isotroper Bezug)', unit: 'dBi' }
           ]
@@ -167,7 +171,11 @@ export const leistungUndPegelArticle: KnowledgeArticle = {
           variables: [
             { symbol: 'E', meaning: 'Elektrische Feldstärke (Effektivwert)', unit: 'V/m' },
             { symbol: 'S', meaning: 'Leistungsdichte', unit: 'W/m²' },
-            { symbol: 'Z₀', meaning: `Feldwellenwiderstand des freien Raums (${impedance} Ω)`, unit: 'Ω' },
+            {
+              symbol: 'Z₀',
+              meaning: `Feldwellenwiderstand des freien Raums (${impedance} Ω)`,
+              unit: 'Ω'
+            },
             { symbol: 'P · G', meaning: 'EIRP', unit: 'W' },
             { symbol: 'd', meaning: 'Abstand', unit: 'm' }
           ]
@@ -215,7 +223,11 @@ export const leistungUndPegelArticle: KnowledgeArticle = {
           label: 'Wirkfläche und Empfangsleistung',
           number: '(6)',
           variables: [
-            { symbol: 'A_w', meaning: 'Wirkfläche (effektive Apertur) der Empfangsantenne', unit: 'm²' },
+            {
+              symbol: 'A_w',
+              meaning: 'Wirkfläche (effektive Apertur) der Empfangsantenne',
+              unit: 'm²'
+            },
             { symbol: 'G', meaning: 'Gewinn der Empfangsantenne (Faktor)', unit: '—' },
             { symbol: 'λ', meaning: 'Wellenlänge', unit: 'm' },
             { symbol: 'P_rx', meaning: 'Verfügbare Empfangsleistung', unit: 'W' }
@@ -227,8 +239,10 @@ export const leistungUndPegelArticle: KnowledgeArticle = {
         },
         {
           type: 'question',
-          question: 'Warum steht in der Freiraumdämpfung ein Frequenzterm, obwohl der Raum die Welle doch gar nicht dämpft?',
-          answer: 'Weil nicht der Raum dämpft, sondern die Empfangsantenne kleiner wird: Ihre Wirkfläche geht mit λ². Bei gleichem Gewinn fängt sie bei doppelter Frequenz nur ein Viertel der Leistung auf — das sind die 20·log₁₀(f) in der FSPL-Formel.'
+          question:
+            'Warum steht in der Freiraumdämpfung ein Frequenzterm, obwohl der Raum die Welle doch gar nicht dämpft?',
+          answer:
+            'Weil nicht der Raum dämpft, sondern die Empfangsantenne kleiner wird: Ihre Wirkfläche geht mit λ². Bei gleichem Gewinn fängt sie bei doppelter Frequenz nur ein Viertel der Leistung auf — das sind die 20·log₁₀(f) in der FSPL-Formel.'
         }
       ]
     },

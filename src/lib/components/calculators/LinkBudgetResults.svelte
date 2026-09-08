@@ -37,9 +37,8 @@
   </Callout>
 {:else}
   <Callout tone="warning" title="Strecke trägt nicht">
-    Es fehlen {formatPowerDb(Math.abs(systemMarginDb))}. Abhilfe schaffen mehr Antennengewinn,
-    eine kürzere Strecke, eine niedrigere Frequenz oder ein empfindlicherer Empfänger — jede
-    Verdopplung des Antennengewinns bringt 3 dB.
+    Es fehlen {formatPowerDb(Math.abs(systemMarginDb))}. Abhilfe schaffen mehr Antennengewinn, eine kürzere Strecke,
+    eine niedrigere Frequenz oder ein empfindlicherer Empfänger — jede Verdopplung des Antennengewinns bringt 3 dB.
   </Callout>
 {/if}
 

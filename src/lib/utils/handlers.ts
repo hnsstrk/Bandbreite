@@ -78,10 +78,7 @@ export function parseLocaleNumber(raw: string): number {
  * @param fallback - Fallback value for invalid input (default: 0)
  * @returns Parsed number
  */
-export function parseNumericInput(
-  event: Event,
-  fallback: number = 0
-): number {
+export function parseNumericInput(event: Event, fallback: number = 0): number {
   const target = event.target as HTMLInputElement;
   const parsed = parseLocaleNumber(target.value);
   return Number.isFinite(parsed) ? parsed : fallback;
@@ -108,10 +105,7 @@ export function parseNullableNumericInput(event: Event): number | null {
  * @param fallback - Fallback value for invalid input (default: 0)
  * @returns Parsed positive number
  */
-export function parsePositiveInput(
-  event: Event,
-  fallback: number = 0
-): number {
+export function parsePositiveInput(event: Event, fallback: number = 0): number {
   const value = parseNumericInput(event, fallback);
   return value > 0 ? value : fallback;
 }
@@ -123,10 +117,7 @@ export function parsePositiveInput(
  * @param fallback - Fallback value for invalid input (default: 0)
  * @returns Parsed non-negative number
  */
-export function parseNonNegativeInput(
-  event: Event,
-  fallback: number = 0
-): number {
+export function parseNonNegativeInput(event: Event, fallback: number = 0): number {
   const value = parseNumericInput(event, fallback);
   return value >= 0 ? value : fallback;
 }
@@ -195,9 +186,7 @@ export function createNumericHandler(
  * @param setter - State setter function
  * @returns Event handler function
  */
-export function createSelectHandler(
-  setter: (value: string) => void
-): (event: Event) => void {
+export function createSelectHandler(setter: (value: string) => void): (event: Event) => void {
   return (event: Event) => {
     setter(parseSelectValue(event));
   };
@@ -209,9 +198,7 @@ export function createSelectHandler(
  * @param setter - State setter function
  * @returns Event handler function
  */
-export function createCheckboxHandler(
-  setter: (value: boolean) => void
-): (event: Event) => void {
+export function createCheckboxHandler(setter: (value: boolean) => void): (event: Event) => void {
   return (event: Event) => {
     setter(parseCheckboxValue(event));
   };
@@ -229,11 +216,7 @@ export function createCheckboxHandler(
  * @param max - Maximum value (inclusive)
  * @returns True if valid
  */
-export function isInRange(
-  value: number,
-  min: number,
-  max: number
-): boolean {
+export function isInRange(value: number, min: number, max: number): boolean {
   return Number.isFinite(value) && value >= min && value <= max;
 }
 
@@ -282,11 +265,7 @@ export function clamp(value: number, min: number, max: number): number {
  * @param fallback - Fallback value (default: 0)
  * @returns Division result or fallback
  */
-export function safeDivide(
-  numerator: number,
-  denominator: number,
-  fallback: number = 0
-): number {
+export function safeDivide(numerator: number, denominator: number, fallback: number = 0): number {
   if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator === 0) {
     return fallback;
   }
@@ -302,11 +281,7 @@ export function safeDivide(
  * @param fallback - Fallback value (default: 0)
  * @returns Logarithm result or fallback
  */
-export function safeLog(
-  value: number,
-  base: number = 10,
-  fallback: number = 0
-): number {
+export function safeLog(value: number, base: number = 10, fallback: number = 0): number {
   if (!Number.isFinite(value) || value <= 0) {
     return fallback;
   }
@@ -322,11 +297,7 @@ export function safeLog(
  * @param fallback - Fallback value (default: 0)
  * @returns Power result or fallback
  */
-export function safePow(
-  base: number,
-  exponent: number,
-  fallback: number = 0
-): number {
+export function safePow(base: number, exponent: number, fallback: number = 0): number {
   if (!Number.isFinite(base) || !Number.isFinite(exponent)) {
     return fallback;
   }

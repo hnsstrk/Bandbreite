@@ -31,11 +31,7 @@
         aria-pressed={selectedId === app.id}
         onclick={() => handleEntryClick(app)}
       >
-        <span
-          class="ao-swatch"
-          style="background: {CATEGORY_TOKENS[app.category]}"
-          aria-hidden="true"
-        ></span>
+        <span class="ao-swatch" style="background: {CATEGORY_TOKENS[app.category]}" aria-hidden="true"></span>
         <span class="ao-name">{app.nameDE}</span>
         <span class="ao-range">{formatFrequencyRange(app.minHz, app.maxHz)}</span>
       </button>
@@ -47,21 +43,9 @@
 </ul>
 
 {#if selected}
-  <Card
-    title={selected.nameDE}
-    subtitle={formatFrequencyRange(selected.minHz, selected.maxHz)}
-    level={3}
-    tone="sunken"
-  >
+  <Card title={selected.nameDE} subtitle={formatFrequencyRange(selected.minHz, selected.maxHz)} level={3} tone="sunken">
     {#snippet actions()}
-      <Button
-        size="sm"
-        variant="ghost"
-        iconOnly
-        icon="close"
-        label="Auswahl aufheben"
-        onclick={() => onselect(null)}
-      />
+      <Button size="sm" variant="ghost" iconOnly icon="close" label="Auswahl aufheben" onclick={() => onselect(null)} />
     {/snippet}
 
     <p class="ao-description">{selected.descriptionDE}</p>
@@ -72,21 +56,29 @@
         <dd>{CATEGORY_NAMES[selected.category].nameDE}</dd>
       </div>
       {#if selected.region}
-        <div><dt>Region</dt><dd>{selected.region}</dd></div>
+        <div>
+          <dt>Region</dt>
+          <dd>{selected.region}</dd>
+        </div>
       {/if}
       {#if selected.standard}
-        <div><dt>Standard</dt><dd>{selected.standard}</dd></div>
+        <div>
+          <dt>Standard</dt>
+          <dd>{selected.standard}</dd>
+        </div>
       {/if}
       {#if selected.notes}
-        <div><dt>Hinweis</dt><dd>{selected.notes}</dd></div>
+        <div>
+          <dt>Hinweis</dt>
+          <dd>{selected.notes}</dd>
+        </div>
       {/if}
     </dl>
   </Card>
 {:else}
   <p class="ao-hint">
-    {applications.length} Dienste sichtbar. Ein Klick auf einen Eintrag zeigt die Einzelheiten.
-    \u00dcberlappungen sind normal \u2014 B\u00e4nder werden oft prim\u00e4r und sekund\u00e4r zugewiesen oder regional
-    unterschiedlich genutzt.
+    {applications.length} Dienste sichtbar. Ein Klick auf einen Eintrag zeigt die Einzelheiten. \u00dcberlappungen sind normal
+    \u2014 B\u00e4nder werden oft prim\u00e4r und sekund\u00e4r zugewiesen oder regional unterschiedlich genutzt.
   </p>
 {/if}
 

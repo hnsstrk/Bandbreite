@@ -158,9 +158,7 @@ export function applicationDetail(app: RFApplication): ApplicationDetail {
   return {
     centerHz: centerHz(app),
     wavelengthM: frequencyToWavelength(centerHz(app)),
-    ituBands: ITU_BANDS.filter((band) => overlaps(band.minHz, band.maxHz)).map(
-      (band) => band.name
-    ),
+    ituBands: ITU_BANDS.filter((band) => overlaps(band.minHz, band.maxHz)).map((band) => band.name),
     ieeeBands: IEEE_BANDS.filter((band) => overlaps(band.minHz, band.maxHz)).map(
       (band) => band.name
     ),

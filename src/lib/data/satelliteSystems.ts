@@ -161,7 +161,8 @@ export const SATELLITE_BANDS: SatelliteBand[] = [
     uplinkMaxHz: 2_110_000_000,
     downlinkMinHz: 2_200_000_000,
     downlinkMaxHz: 2_290_000_000,
-    usageDE: 'Telemetrie und Steuerung von Raumfahrzeugen, Wettersatelliten, Rundfunk über Satellit',
+    usageDE:
+      'Telemetrie und Steuerung von Raumfahrzeugen, Wettersatelliten, Rundfunk über Satellit',
     rainDE: 'nahezu regenunempfindlich',
     uplinkAbove: false,
     noteDE:
@@ -212,7 +213,8 @@ export const SATELLITE_BANDS: SatelliteBand[] = [
     downlinkMinHz: 17_700_000_000,
     downlinkMaxHz: 20_200_000_000,
     usageDE: 'Breitband mit vielen engen Spotbeams, moderne Konstellationen',
-    rainDE: 'stark regenempfindlich; Verbindungen brauchen eine Leistungsreserve und adaptive Codierung',
+    rainDE:
+      'stark regenempfindlich; Verbindungen brauchen eine Leistungsreserve und adaptive Codierung',
     uplinkAbove: true
   }
 ];
@@ -223,12 +225,7 @@ export const SATELLITE_BANDS: SatelliteBand[] = [
 
 /** Einsatzgebiet eines Satellitensystems. */
 export type SatelliteCategory =
-  | 'kommunikation'
-  | 'navigation'
-  | 'rundfunk'
-  | 'wetter'
-  | 'amateur'
-  | 'notruf';
+  'kommunikation' | 'navigation' | 'rundfunk' | 'wetter' | 'amateur' | 'notruf';
 
 /** Anzeigetexte der Einsatzgebiete. */
 export const SATELLITE_CATEGORY_LABELS: Record<SatelliteCategory, string> = {

@@ -13,7 +13,11 @@
  * - Wikipedia: Kurzwelle, Mittelwelle, Langwelle, Ultrakurzwelle
  */
 
-import { EARTH_RADIUS_MEAN, EFFECTIVE_EARTH_RADIUS_FACTOR, IONOSPHERE_PARAMETERS } from './constants';
+import {
+  EARTH_RADIUS_MEAN,
+  EFFECTIVE_EARTH_RADIUS_FACTOR,
+  IONOSPHERE_PARAMETERS
+} from './constants';
 
 // ============================================================================
 // Physikalische Konstanten für Wellenausbreitung
@@ -56,7 +60,7 @@ export const PROPAGATION_GROUND_WAVE: PropagationMode = {
   id: 'ground-wave',
   name: 'Ground Wave',
   nameDE: 'Bodenwelle',
-  description: 'Follows the Earth\'s surface, attenuated by terrain and conductivity',
+  description: "Follows the Earth's surface, attenuated by terrain and conductivity",
   descriptionDE: 'Folgt der Erdoberfläche, wird durch Gelände und Leitfähigkeit gedämpft',
   frequencyRangeHz: { min: 30e3, max: 3e6 },
   typicalRangeKm: { min: 30, max: 300 },
@@ -330,11 +334,11 @@ export const SKIP_ZONE_PARAMS: SkipZoneParameters = {
  * Quelle: ITU-R P.1239 (M(3000)F2 ≈ 2,5–3,5)
  */
 export const MUF_FACTORS: Record<number, number> = {
-  0: 1.0,     // Senkrechtlotung: MUF = foF2
+  0: 1.0, // Senkrechtlotung: MUF = foF2
   500: 1.3,
   1000: 1.9,
   2000: 2.8,
-  3000: 3.3,  // 3000 km (Standard)
+  3000: 3.3 // 3000 km (Standard)
 };
 
 // ============================================================================
@@ -542,7 +546,7 @@ export function estimateMUF(
   const R = EARTH_RADIUS_KM;
   const halfAngle = distanceKm / (2 * R);
   // Einfallswinkel φ an der Schicht (Dreieck Erdmittelpunkt – Sender – Reflexionspunkt)
-  const phi = Math.atan2(R * Math.sin(halfAngle), (R + reflectionHeightKm) - R * Math.cos(halfAngle));
+  const phi = Math.atan2(R * Math.sin(halfAngle), R + reflectionHeightKm - R * Math.cos(halfAngle));
   const factor = Math.min(1 / Math.cos(phi), IONOSPHERE_PARAMETERS.mufFactorMax);
 
   return criticalFrequencyMHz * factor;

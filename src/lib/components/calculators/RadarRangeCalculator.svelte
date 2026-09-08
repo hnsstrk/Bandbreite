@@ -27,9 +27,7 @@
   import RadarRangeResults from './RadarRangeResults.svelte';
   import { RADAR_PARAMS, type PresetChip } from './radarRange.svelte';
 
-  const initial = browser
-    ? readParams(page.url.searchParams, RADAR_PARAMS)
-    : defaultValues(RADAR_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, RADAR_PARAMS) : defaultValues(RADAR_PARAMS);
 
   let frequencyHz = $state(initial.f);
   let frequencyUnit = $state('GHz');
@@ -143,16 +141,16 @@
     />
 
     <Callout tone="info" title="Warum die vierte Wurzel?">
-      Die Echoleistung fällt mit R⁴, weil das Signal zweimal die volle Strecke zurücklegt.
-      Deshalb erfordert eine Verdoppelung der Reichweite die sechzehnfache Sendeleistung —
-      und ein 10 dB besserer Empfänger bringt nur den Faktor 1,78.
+      Die Echoleistung fällt mit R⁴, weil das Signal zweimal die volle Strecke zurücklegt. Deshalb erfordert eine
+      Verdoppelung der Reichweite die sechzehnfache Sendeleistung — und ein 10 dB besserer Empfänger bringt nur den
+      Faktor 1,78.
     </Callout>
 
     <RadarPulseParameters {frequencyHz} {wavelengthM} />
 
     <Callout tone="tip" title="Anwendungsbeispiele">
-      Flugsicherung (L- und S-Band, 200–400 km), Wetterradar (C-Band, 200 km),
-      Marineradar (X-Band, 50–100 km), Kfz-Radar (77 GHz, 200 m).
+      Flugsicherung (L- und S-Band, 200–400 km), Wetterradar (C-Band, 200 km), Marineradar (X-Band, 50–100 km),
+      Kfz-Radar (77 GHz, 200 m).
     </Callout>
   </div>
 </Card>

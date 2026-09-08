@@ -53,7 +53,10 @@ function radarNumerator(p: RadarParameters): number {
  * @param minDetectablePowerDbm - Minimal detektierbare Empfangsleistung in dBm
  * @returns Reichweite in m (0 bei ungültigen Eingaben)
  */
-export function calculateRadarMaxRange(params: RadarParameters, minDetectablePowerDbm: number): number {
+export function calculateRadarMaxRange(
+  params: RadarParameters,
+  minDetectablePowerDbm: number
+): number {
   if (!isValid(params) || !Number.isFinite(minDetectablePowerDbm)) return 0;
   const pMinW = dbmToWatt(minDetectablePowerDbm);
   const lossLinear = dbToLinear(params.systemLossDb ?? 0);
@@ -100,7 +103,10 @@ export function calculateDopplerShift(
  * @param pulseWidthS - Pulsdauer τ in s
  * @returns Auflösung in m
  */
-export function calculateRangeResolution(pulseWidthS: number, c: number = speedOfLight.value): number {
+export function calculateRangeResolution(
+  pulseWidthS: number,
+  c: number = speedOfLight.value
+): number {
   if (pulseWidthS <= 0) return 0;
   return (c * pulseWidthS) / 2;
 }

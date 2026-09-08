@@ -33,7 +33,12 @@ export function formatFrequencyLocal(hz: number): string {
  * die Nachkommastelle („1,5 m", aber „15 m"); die Schwellen stehen explizit,
  * damit kein Gleitkommaprodukt über die Stellenzahl entscheidet.
  */
-const WAVELENGTH_STEPS: ReadonlyArray<{ min: number; tenMin: number; factor: number; unit: string }> = [
+const WAVELENGTH_STEPS: ReadonlyArray<{
+  min: number;
+  tenMin: number;
+  factor: number;
+  unit: string;
+}> = [
   { min: 1, tenMin: 10, factor: 1, unit: 'm' },
   { min: 0.01, tenMin: 0.1, factor: 100, unit: 'cm' },
   { min: 0.001, tenMin: 0.01, factor: 1000, unit: 'mm' },

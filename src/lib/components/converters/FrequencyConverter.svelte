@@ -53,9 +53,7 @@
   const FIELD_EXP_DIGITS = 6;
 
   // Derived values for display - reactive to speed of light changes
-  let frequencyDisplay = $derived(
-    frequencyHz !== null ? convertFromHz(frequencyHz, frequencyUnit) : null
-  );
+  let frequencyDisplay = $derived(frequencyHz !== null ? convertFromHz(frequencyHz, frequencyUnit) : null);
 
   let wavelengthDisplay = $derived(
     frequencyHz !== null && frequencyHz > 0
@@ -110,9 +108,7 @@
   <div class="converter-row">
     <!-- Frequency Input -->
     <div class="input-group">
-      <label for="frequency" class="input-label">
-        Frequenz
-      </label>
+      <label for="frequency" class="input-label"> Frequenz </label>
       <input
         type="number"
         id="frequency"
@@ -139,9 +135,7 @@
 
     <!-- Wavelength Input -->
     <div class="input-group">
-      <label for="wavelength" class="input-label">
-        Wellenlänge
-      </label>
+      <label for="wavelength" class="input-label"> Wellenlänge </label>
       <input
         type="number"
         id="wavelength"
@@ -173,11 +167,7 @@
 
   <!-- Collapsible Formula Section -->
   {#if showFormula}
-    <FrequencyFormula
-      {speedOfLightDisplay}
-      {isExactMode}
-      onToggleSpeedOfLight={handleSpeedOfLightToggle}
-    />
+    <FrequencyFormula {speedOfLightDisplay} {isExactMode} onToggleSpeedOfLight={handleSpeedOfLightToggle} />
   {/if}
 </div>
 

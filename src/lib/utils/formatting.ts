@@ -127,10 +127,7 @@ export function formatNumber(
  * @param fallback - Fallback string for invalid values
  * @returns Formatted string
  */
-export function formatNumberAuto(
-  value: number | null | undefined,
-  fallback: string = '—'
-): string {
+export function formatNumberAuto(value: number | null | undefined, fallback: string = '—'): string {
   if (value === null || value === undefined || !Number.isFinite(value)) {
     return fallback;
   }
@@ -216,10 +213,7 @@ export function formatRcs(rcsM2: number | null | undefined): string {
  * @param decimals - Number of decimal places
  * @returns Formatted string with German locale
  */
-export function formatNumberLocale(
-  value: number | null | undefined,
-  decimals: number = 0
-): string {
+export function formatNumberLocale(value: number | null | undefined, decimals: number = 0): string {
   if (value === null || value === undefined || !Number.isFinite(value)) {
     return '—';
   }
@@ -238,10 +232,7 @@ export function formatNumberLocale(
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted string with unit
  */
-export function formatFrequency(
-  hz: number | null | undefined,
-  decimals: number = 2
-): string {
+export function formatFrequency(hz: number | null | undefined, decimals: number = 2): string {
   if (hz === null || hz === undefined || !Number.isFinite(hz) || hz < 0) {
     return '—';
   }
@@ -262,10 +253,7 @@ export function formatFrequency(
  * @param decimals - Number of decimal places
  * @returns Formatted string with GHz unit
  */
-export function formatFrequencyGHz(
-  ghz: number | null | undefined,
-  decimals: number = 2
-): string {
+export function formatFrequencyGHz(ghz: number | null | undefined, decimals: number = 2): string {
   if (ghz === null || ghz === undefined || !Number.isFinite(ghz)) {
     return '—';
   }
@@ -284,10 +272,7 @@ export function formatFrequencyGHz(
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted string with unit
  */
-export function formatWavelength(
-  meters: number | null | undefined,
-  decimals: number = 2
-): string {
+export function formatWavelength(meters: number | null | undefined, decimals: number = 2): string {
   if (meters === null || meters === undefined || !Number.isFinite(meters) || meters <= 0) {
     return '—';
   }
@@ -312,10 +297,7 @@ export function formatWavelength(
  * @param decimals - Number of decimal places (default: 1)
  * @returns Formatted string with unit
  */
-export function formatDistance(
-  meters: number | null | undefined,
-  decimals: number = 1
-): string {
+export function formatDistance(meters: number | null | undefined, decimals: number = 1): string {
   if (meters === null || meters === undefined || !Number.isFinite(meters) || meters < 0) {
     return '—';
   }
@@ -355,10 +337,7 @@ export function formatDistanceWithUnit(
  * @param decimals - Number of decimal places (default: 1)
  * @returns Formatted string with dBm unit
  */
-export function formatPowerDbm(
-  dbm: number | null | undefined,
-  decimals: number = 1
-): string {
+export function formatPowerDbm(dbm: number | null | undefined, decimals: number = 1): string {
   if (dbm === null || dbm === undefined || !Number.isFinite(dbm)) {
     return '—';
   }
@@ -392,10 +371,7 @@ export function formatPowerDb(
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted string with unit
  */
-export function formatPowerWatts(
-  watts: number | null | undefined,
-  decimals: number = 2
-): string {
+export function formatPowerWatts(watts: number | null | undefined, decimals: number = 2): string {
   if (watts === null || watts === undefined || !Number.isFinite(watts) || watts < 0) {
     return '—';
   }
@@ -483,7 +459,8 @@ export function formatDataRate(
     { factor: 1e3, symbol: 'kbit/s' },
     { factor: 1, symbol: 'bit/s' }
   ];
-  const unit = units.find((candidate) => bitsPerSecond >= candidate.factor) ?? units[units.length - 1];
+  const unit =
+    units.find((candidate) => bitsPerSecond >= candidate.factor) ?? units[units.length - 1];
   return `${formatFixed(bitsPerSecond / unit.factor, decimals)} ${unit.symbol}`;
 }
 
@@ -522,10 +499,7 @@ export function formatPercentage(
  * @param decimals - Number of decimal places (default: 1)
  * @returns Formatted string with degree symbol
  */
-export function formatAngle(
-  degrees: number | null | undefined,
-  decimals: number = 1
-): string {
+export function formatAngle(degrees: number | null | undefined, decimals: number = 1): string {
   if (degrees === null || degrees === undefined || !Number.isFinite(degrees)) {
     return '—';
   }
@@ -581,10 +555,7 @@ export function formatTemperatureKelvin(
  * @param decimals - Number of decimal places (default: 1)
  * @returns Formatted string with unit
  */
-export function formatPressure(
-  hpa: number | null | undefined,
-  decimals: number = 1
-): string {
+export function formatPressure(hpa: number | null | undefined, decimals: number = 1): string {
   if (hpa === null || hpa === undefined || !Number.isFinite(hpa)) {
     return '—';
   }

@@ -74,7 +74,11 @@ export function calculateFSPL(distanceM: number, frequencyHz: number): number {
  * @param rxSensitivityDbm - Receiver sensitivity in dBm (typically negative)
  * @returns Range in meters
  */
-export function calculateRange(frequencyHz: number, txPowerDbm: number, rxSensitivityDbm: number): number {
+export function calculateRange(
+  frequencyHz: number,
+  txPowerDbm: number,
+  rxSensitivityDbm: number
+): number {
   if (frequencyHz <= 0) return 0;
   const maxPathLoss = txPowerDbm - rxSensitivityDbm;
   const exponent = (maxPathLoss - 20 * safeLog(frequencyHz) - getFsplConstant()) / 20;
@@ -94,7 +98,10 @@ export function calculateRange(frequencyHz: number, txPowerDbm: number, rxSensit
  * @returns Skin-Tiefe in Metern (0 bei ungültigen Eingaben)
  * Quelle: Pozar, Microwave Engineering, Gl. (1.60)
  */
-export function calculateSkinDepth(frequencyHz: number, conductivity: number = SEAWATER_CONDUCTIVITY): number {
+export function calculateSkinDepth(
+  frequencyHz: number,
+  conductivity: number = SEAWATER_CONDUCTIVITY
+): number {
   if (frequencyHz <= 0 || conductivity <= 0) return 0;
   const omega = 2 * Math.PI * frequencyHz;
   return Math.sqrt(safeDivide(2, omega * VACUUM_PERMEABILITY * conductivity, 0));
@@ -161,7 +168,12 @@ export function calculateSkinDepthWithValidity(
  * @returns Radius in m (0 bei ungültigen Eingaben)
  * Quelle: ITU-R P.530, Meinke/Gundlach
  */
-export function calculateFresnelRadius(wavelengthM: number, d1M: number, d2M: number, n: number = 1): number {
+export function calculateFresnelRadius(
+  wavelengthM: number,
+  d1M: number,
+  d2M: number,
+  n: number = 1
+): number {
   if (wavelengthM <= 0 || d1M <= 0 || d2M <= 0 || n <= 0) return 0;
   return Math.sqrt(safeDivide(n * wavelengthM * d1M * d2M, d1M + d2M, 0));
 }
@@ -208,7 +220,10 @@ export function calculateSpectralEfficiency(snrDb: number): number {
  * @param bandwidthHz - Bandbreite in Hz
  * @param temperatureK - Rauschtemperatur in K (Standard: 290 K)
  */
-export function calculateThermalNoiseDbm(bandwidthHz: number, temperatureK: number = REFERENCE_TEMPERATURE): number {
+export function calculateThermalNoiseDbm(
+  bandwidthHz: number,
+  temperatureK: number = REFERENCE_TEMPERATURE
+): number {
   if (bandwidthHz <= 0 || temperatureK <= 0) return -Infinity;
   const noiseWatts = BOLTZMANN_CONSTANT * temperatureK * bandwidthHz;
   return 10 * safeLog(noiseWatts * 1000, 10, -Infinity);

@@ -25,13 +25,7 @@
   import Tabs from '$lib/components/ui/Tabs.svelte';
   import BandDetails from './BandDetails.svelte';
   import BandTable from './BandTable.svelte';
-  import {
-    BAND_TABS,
-    PROPAGATION_CONFIG,
-    SEARCH_MAX_HZ,
-    SEARCH_MIN_HZ,
-    SEARCH_UNITS
-  } from './bandCategories.svelte';
+  import { BAND_TABS, PROPAGATION_CONFIG, SEARCH_MAX_HZ, SEARCH_MIN_HZ, SEARCH_UNITS } from './bandCategories.svelte';
 
   /** Standardfrequenz der Suche, wenn die URL nichts vorgibt. */
   const DEFAULT_SEARCH_HZ = 100e6;
@@ -77,17 +71,11 @@
     searchUnit = unitFor(next);
   });
 
-  let tabItems = $derived(
-    BAND_TABS.map((tab) => ({ id: tab.id, label: tab.label, badge: String(tab.bands.length) }))
-  );
+  let tabItems = $derived(BAND_TABS.map((tab) => ({ id: tab.id, label: tab.label, badge: String(tab.bands.length) })));
 
-  let activeBands = $derived(
-    BAND_TABS.find((tab) => tab.id === (activeTab as FrequencyBandCategory))?.bands ?? []
-  );
+  let activeBands = $derived(BAND_TABS.find((tab) => tab.id === (activeTab as FrequencyBandCategory))?.bands ?? []);
 
-  let searchResults = $derived(
-    searchFrequencyHz > 0 ? getAllBandsForFrequency(searchFrequencyHz) : []
-  );
+  let searchResults = $derived(searchFrequencyHz > 0 ? getAllBandsForFrequency(searchFrequencyHz) : []);
 
   let allBands = $derived(BAND_TABS.flatMap((tab) => tab.bands));
   let selectedBand = $derived(allBands.find((band) => band.id === selectedId) ?? null);
@@ -155,11 +143,7 @@
 
   <Tabs tabs={tabItems} bind:active={activeTab} label="Bandsysteme">
     {#snippet panel()}
-      <BandTable
-        bands={activeBands}
-        {selectedId}
-        onselect={(id) => (selectedId = id)}
-      />
+      <BandTable bands={activeBands} {selectedId} onselect={(id) => (selectedId = id)} />
     {/snippet}
   </Tabs>
 

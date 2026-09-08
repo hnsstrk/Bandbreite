@@ -2,10 +2,7 @@
   import { scaleLog } from 'd3-scale';
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import { formatLocaleNumber } from '$lib/utils/formatting';
-  import {
-    generateExtendedAttenuationCurve,
-    calculateAllAttenuation
-  } from '$lib/utils/atmosphericAttenuation';
+  import { generateExtendedAttenuationCurve, calculateAllAttenuation } from '$lib/utils/atmosphericAttenuation';
   import {
     ATTENUATION_SERIES,
     MIN_FREQ,
@@ -49,22 +46,13 @@
   let chartHeight = $derived(height - CHART_MARGIN.top - CHART_MARGIN.bottom);
 
   // Logarithmic scales using D3
-  let xScale = $derived(
-    scaleLog().domain([MIN_FREQ, MAX_FREQ]).range([0, chartWidth]).clamp(true)
-  );
+  let xScale = $derived(scaleLog().domain([MIN_FREQ, MAX_FREQ]).range([0, chartWidth]).clamp(true));
 
-  let yScale = $derived(
-    scaleLog().domain([MIN_ATTENUATION, MAX_ATTENUATION]).range([chartHeight, 0]).clamp(true)
-  );
+  let yScale = $derived(scaleLog().domain([MIN_ATTENUATION, MAX_ATTENUATION]).range([chartHeight, 0]).clamp(true));
 
   // Generate extended curve data including precipitation - reactive to all parameters
   let curveData = $derived(
-    generateExtendedAttenuationCurve(
-      atmosphericParameters.allConditions,
-      MIN_FREQ,
-      MAX_FREQ,
-      CURVE_RESOLUTION
-    )
+    generateExtendedAttenuationCurve(atmosphericParameters.allConditions, MIN_FREQ, MAX_FREQ, CURVE_RESOLUTION)
   );
 
   // Check if precipitation is active
@@ -148,7 +136,7 @@
       </filter>
     </defs>
 
-    <rect class="chart-background" x="0" y="0" width={width} height={height} />
+    <rect class="chart-background" x="0" y="0" {width} {height} />
 
     <g transform="translate({CHART_MARGIN.left}, {CHART_MARGIN.top})">
       <!-- Absorptionsbereiche -->
@@ -198,13 +186,8 @@
             stroke-dasharray="2,4"
             opacity="0.5"
           />
-          <text
-            x={xScale(peak.freq)}
-            y="-8"
-            fill={peak.color}
-            font-size="9"
-            text-anchor="middle"
-            opacity="0.8">{peak.label}</text
+          <text x={xScale(peak.freq)} y="-8" fill={peak.color} font-size="9" text-anchor="middle" opacity="0.8"
+            >{peak.label}</text
           >
         {/if}
       {/each}
@@ -232,9 +215,7 @@
             >
           </g>
         {/each}
-        <text class="chart-axis-label" x={chartWidth / 2} y="52" text-anchor="middle">
-          Frequenz (GHz)
-        </text>
+        <text class="chart-axis-label" x={chartWidth / 2} y="52" text-anchor="middle"> Frequenz (GHz) </text>
       </g>
 
       <!-- Y-Achse -->
@@ -248,13 +229,7 @@
             </text>
           </g>
         {/each}
-        <text
-          class="chart-axis-label"
-          transform="rotate(-90)"
-          x={-chartHeight / 2}
-          y="-55"
-          text-anchor="middle"
-        >
+        <text class="chart-axis-label" transform="rotate(-90)" x={-chartHeight / 2} y="-55" text-anchor="middle">
           Spezifische Dämpfung (dB/km)
         </text>
       </g>
@@ -270,14 +245,7 @@
           y2={chartHeight}
           stroke-dasharray="8,4"
         />
-        <line
-          class="chart-marker-crosshair"
-          x1="0"
-          y1={markerY}
-          x2={chartWidth}
-          y2={markerY}
-          stroke-dasharray="8,4"
-        />
+        <line class="chart-marker-crosshair" x1="0" y1={markerY} x2={chartWidth} y2={markerY} stroke-dasharray="8,4" />
         <circle
           class="chart-marker-primary"
           cx={markerData.x}

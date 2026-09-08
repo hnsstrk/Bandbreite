@@ -35,13 +35,7 @@
   <ul class="portal-paths__grid" aria-label="Lernpfade">
     {#each paths as path (path.id)}
       <li class="portal-paths__cell">
-        <Card
-          href={path.href}
-          title={path.title}
-          level={3}
-          icon={path.icon}
-          class="portal-paths__card"
-        >
+        <Card href={path.href} title={path.title} level={3} icon={path.icon} class="portal-paths__card">
           {#snippet actions()}
             <Badge tone={LEVEL_TONES[path.level]} srPrefix="Stufe">
               {LEVEL_LABELS[path.level]}

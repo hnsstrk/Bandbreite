@@ -7,11 +7,7 @@
 
 import { POWER_UNITS_WATT } from '$lib/data/units';
 import { clamp, safeDivide } from '$lib/utils/handlers';
-import {
-  IMPEDANCE_RF_OHM,
-  IMPEDANCE_VIDEO_OHM,
-  type ChainStage
-} from '$lib/utils/decibel';
+import { IMPEDANCE_RF_OHM, IMPEDANCE_VIDEO_OHM, type ChainStage } from '$lib/utils/decibel';
 import type { ParamSpecs } from '$lib/utils/urlState.svelte';
 
 /** Pegelbereich des Reglers in dBm: von der Rauschgrenze bis zum Großsender. */
@@ -97,7 +93,10 @@ export const CHAIN_REFERENCE_DBM = -90;
 
 export const DECIBEL_PARAMS = {
   l: { default: 30, min: LEVEL_MIN_DBM, max: LEVEL_MAX_DBM },
-  z: { default: String(IMPEDANCE_RF_OHM), options: [String(IMPEDANCE_RF_OHM), String(IMPEDANCE_VIDEO_OHM)] },
+  z: {
+    default: String(IMPEDANCE_RF_OHM),
+    options: [String(IMPEDANCE_RF_OHM), String(IMPEDANCE_VIDEO_OHM)]
+  },
   r: { default: 3, min: RATIO_MIN_DB, max: RATIO_MAX_DB },
   c: { default: serializeChain(DEFAULT_LEVEL_CHAIN) }
 } satisfies ParamSpecs;

@@ -6,13 +6,20 @@
  * Frequenz wird nachgeschlagen, welche Dienste passen) prüfbar bleiben.
  */
 import type { FrequencyBand } from '$lib/data/bands';
-import { ALL_APPLICATIONS, getApplicationsForFrequency, type RFApplication } from '$lib/data/applications';
+import {
+  ALL_APPLICATIONS,
+  getApplicationsForFrequency,
+  type RFApplication
+} from '$lib/data/applications';
 
 /** Höchstzahl der aufgelisteten Dienste. */
 export const MAX_SIDEBAR_APPLICATIONS = 15;
 
 /** Alle Bänder einer Liste, die die Frequenz enthalten. */
-export function bandsAt<T extends FrequencyBand>(bands: readonly T[], frequencyHz: number | null): T[] {
+export function bandsAt<T extends FrequencyBand>(
+  bands: readonly T[],
+  frequencyHz: number | null
+): T[] {
   if (!frequencyHz || frequencyHz <= 0) return [];
   return bands.filter((band) => frequencyHz >= band.minHz && frequencyHz <= band.maxHz);
 }
@@ -26,7 +33,8 @@ export function resolveSelectedBand(
   frequencyHz: number | null
 ): FrequencyBand | null {
   if (!selectedBand) return null;
-  if (frequencyHz && (frequencyHz < selectedBand.minHz || frequencyHz > selectedBand.maxHz)) return null;
+  if (frequencyHz && (frequencyHz < selectedBand.minHz || frequencyHz > selectedBand.maxHz))
+    return null;
   return selectedBand;
 }
 

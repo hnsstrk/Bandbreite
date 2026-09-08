@@ -138,9 +138,13 @@ describe('Dämpfungsfenster (W8)', () => {
   });
 
   it('Marker enthalten die Peaks 22, 60, 118, 183 GHz und die Fenster 35/94 GHz', () => {
-    const peakFrequencies = WINDOW_MARKERS.filter((m) => m.kind === 'peak').map((m) => Math.round(m.frequencyGHz));
+    const peakFrequencies = WINDOW_MARKERS.filter((m) => m.kind === 'peak').map((m) =>
+      Math.round(m.frequencyGHz)
+    );
     expect(peakFrequencies).toEqual(expect.arrayContaining([22, 60, 119, 183]));
-    const windowFrequencies = WINDOW_MARKERS.filter((m) => m.kind === 'window').map((m) => m.frequencyGHz);
+    const windowFrequencies = WINDOW_MARKERS.filter((m) => m.kind === 'window').map(
+      (m) => m.frequencyGHz
+    );
     expect(windowFrequencies).toEqual(expect.arrayContaining([35, 94]));
     expect(WINDOW_MARKERS.every((m) => m.frequencyGHz <= WINDOW_CURVE_MAX_GHZ)).toBe(true);
   });

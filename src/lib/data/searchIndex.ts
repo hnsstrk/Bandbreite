@@ -25,13 +25,7 @@ import { formatFrequency } from '$lib/utils/formatting';
 import { formatFrequencyRange } from '$lib/data/bands';
 
 export type SearchEntryType =
-  | 'seite'
-  | 'werkzeug'
-  | 'widget'
-  | 'band'
-  | 'funkdienst'
-  | 'sender'
-  | 'glossar';
+  'seite' | 'werkzeug' | 'widget' | 'band' | 'funkdienst' | 'sender' | 'glossar';
 
 export interface SearchEntry {
   id: string;

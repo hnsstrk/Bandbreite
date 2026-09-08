@@ -114,8 +114,7 @@ export function fmNearestRaster(
   if (!Number.isFinite(frequencyHz)) return undefined;
   if (frequencyHz < FM_BAND_MIN_HZ - FM_CHANNEL_RASTER_HZ / 2) return undefined;
   if (frequencyHz > FM_BAND_MAX_HZ + FM_CHANNEL_RASTER_HZ / 2) return undefined;
-  const index =
-    Math.round((frequencyHz - FM_BAND_MIN_HZ) / FM_CHANNEL_RASTER_HZ) + 1;
+  const index = Math.round((frequencyHz - FM_BAND_MIN_HZ) / FM_CHANNEL_RASTER_HZ) + 1;
   const clamped = Math.min(Math.max(index, 1), FM_CHANNEL_COUNT);
   const exact = fmRasterFrequency(clamped);
   if (exact === undefined) return undefined;

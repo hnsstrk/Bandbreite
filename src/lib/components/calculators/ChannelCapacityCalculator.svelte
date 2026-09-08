@@ -8,11 +8,7 @@
    */
   import { browser } from '$app/environment';
   import { page } from '$app/state';
-  import {
-    calculateShannonCapacity,
-    calculateSpectralEfficiency,
-    snrDbToLinear
-  } from '$lib/utils/calculations';
+  import { calculateShannonCapacity, calculateSpectralEfficiency, snrDbToLinear } from '$lib/utils/calculations';
   import {
     UrlStateSync,
     buildShareLink,
@@ -46,9 +42,7 @@
 
   let { height = 400 }: Props = $props();
 
-  const initial = browser
-    ? readParams(page.url.searchParams, CAPACITY_PARAMS)
-    : defaultValues(CAPACITY_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, CAPACITY_PARAMS) : defaultValues(CAPACITY_PARAMS);
 
   let bandwidthHz = $state(initial.b);
   let bandwidthUnit = $state('MHz');
@@ -116,14 +110,7 @@
       />
     </div>
 
-    <ChannelCapacityResults
-      {bandwidthHz}
-      {snrDb}
-      {snrLinear}
-      {capacityBps}
-      {spectralEfficiency}
-      {modulation}
-    />
+    <ChannelCapacityResults {bandwidthHz} {snrDb} {snrLinear} {capacityBps} {spectralEfficiency} {modulation} />
 
     <FormulaBlock
       formula="C = B · log₂(1 + SNR),  SNR = 10^(SNR_dB / 10)"
@@ -138,9 +125,9 @@
     />
 
     <Callout tone="info" title="Theorie und Praxis" source="Shannon 1948">
-      Die Shannon-Kapazität ist eine Obergrenze, keine Verheißung: Sie gilt für unbegrenzten
-      Codierungsaufwand und beliebig lange Blöcke. Reale Systeme erreichen davon 60 bis 80 %.
-      Jede zusätzliche 3 dB Störabstand bringen im hohen SNR-Bereich rund 1 bit/s/Hz.
+      Die Shannon-Kapazität ist eine Obergrenze, keine Verheißung: Sie gilt für unbegrenzten Codierungsaufwand und
+      beliebig lange Blöcke. Reale Systeme erreichen davon 60 bis 80 %. Jede zusätzliche 3 dB Störabstand bringen im
+      hohen SNR-Bereich rund 1 bit/s/Hz.
     </Callout>
 
     <ShannonLimitChart {snrDb} {spectralEfficiency} {height} />

@@ -10,7 +10,10 @@
     title="Radar-Reichweite"
     icon="radio"
     lead="Wie weit ein Radar ein Ziel erkennt — aus Sendeleistung, Antennengewinn, Radarquerschnitt und Empfängerempfindlichkeit."
-    meta={[{ label: 'Quelle', value: 'Skolnik, Radar Handbook' }, { label: 'Gültig', value: 'Freiraum ohne Clutter' }]}
+    meta={[
+      { label: 'Quelle', value: 'Skolnik, Radar Handbook' },
+      { label: 'Gültig', value: 'Freiraum ohne Clutter' }
+    ]}
   />
 
   <RadarRangeCalculator />

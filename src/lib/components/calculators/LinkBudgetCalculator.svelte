@@ -10,10 +10,7 @@
   import { page } from '$app/state';
   import { calculateFSPL } from '$lib/utils/calculations';
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
-  import {
-    calculateEarthSpaceAttenuation,
-    calculateExtendedPathAttenuation
-  } from '$lib/utils/atmosphericAttenuation';
+  import { calculateEarthSpaceAttenuation, calculateExtendedPathAttenuation } from '$lib/utils/atmosphericAttenuation';
   import { EARTH_SPACE_PATH_THRESHOLD_KM } from '$lib/data/constants';
   import {
     UrlStateSync,
@@ -42,9 +39,7 @@
     type PresetChip
   } from './linkBudget.svelte';
 
-  const initial = browser
-    ? readParams(page.url.searchParams, LINK_BUDGET_PARAMS)
-    : defaultValues(LINK_BUDGET_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, LINK_BUDGET_PARAMS) : defaultValues(LINK_BUDGET_PARAMS);
 
   // Sendeseite
   let txPowerDbm = $state(initial.pt);
@@ -118,9 +113,7 @@
 
   let eirpDbm = $derived(txPowerDbm + txAntennaGainDbi - txCableLossDb);
 
-  let fsplDb = $derived(
-    pathLengthM > 0 && pathFrequencyHz > 0 ? calculateFSPL(pathLengthM, pathFrequencyHz) : 0
-  );
+  let fsplDb = $derived(pathLengthM > 0 && pathFrequencyHz > 0 ? calculateFSPL(pathLengthM, pathFrequencyHz) : 0);
 
   let atmosphericLossDb = $derived.by(() => {
     if (!includeAtmosphericLoss) return 0;
@@ -133,24 +126,14 @@
     // Regenhöhe), nicht die volle Distanz zum Satelliten.
     const result =
       pathType === 'earth-space'
-        ? calculateEarthSpaceAttenuation(
-            freqGHz,
-            atmosphericParameters.allConditions,
-            elevationAngleDeg
-          )
-        : calculateExtendedPathAttenuation(
-            freqGHz,
-            atmosphericParameters.allConditions,
-            distKm
-          );
+        ? calculateEarthSpaceAttenuation(freqGHz, atmosphericParameters.allConditions, elevationAngleDeg)
+        : calculateExtendedPathAttenuation(freqGHz, atmosphericParameters.allConditions, distKm);
 
     return result.totalAllDb;
   });
 
   let totalPathLossDb = $derived(fsplDb + atmosphericLossDb + miscLossDb);
-  let receivedPowerDbm = $derived(
-    eirpDbm - totalPathLossDb + rxAntennaGainDbi - rxCableLossDb
-  );
+  let receivedPowerDbm = $derived(eirpDbm - totalPathLossDb + rxAntennaGainDbi - rxCableLossDb);
   let linkMarginDb = $derived(receivedPowerDbm - rxSensitivityDbm);
   let systemMarginDb = $derived(linkMarginDb - fadingMarginDb);
   let linkViable = $derived(systemMarginDb >= 0);
@@ -197,8 +180,7 @@
     rxSensitivityDbm = preset.rxSens;
     fadingMarginDb = preset.fade;
     // Strecken jenseits jeder terrestrischen Sichtverbindung sind Erde–Raum-Pfade
-    pathType =
-      pathLengthM / 1000 >= EARTH_SPACE_PATH_THRESHOLD_KM ? 'earth-space' : 'terrestrial';
+    pathType = pathLengthM / 1000 >= EARTH_SPACE_PATH_THRESHOLD_KM ? 'earth-space' : 'terrestrial';
   }
 
   function handleReset() {
@@ -208,9 +190,7 @@
   }
 
   /** Kein Chip ist aktiv, solange kein Preset gewählt wurde. */
-  let presetValue = $derived(
-    presetId ? (presetChips.find((chip) => chip.id === presetId)?.value ?? -1) : -1
-  );
+  let presetValue = $derived(presetId ? (presetChips.find((chip) => chip.id === presetId)?.value ?? -1) : -1);
 </script>
 
 <Card title="Streckenbilanz" subtitle="Link Budget vom Sender bis zur Reserve" icon="antenna">
@@ -228,12 +208,7 @@
     />
 
     <div class="lb__columns">
-      <LinkBudgetTxSection
-        bind:txPowerDbm
-        bind:txAntennaGainDbi
-        bind:txCableLossDb
-        {eirpDbm}
-      />
+      <LinkBudgetTxSection bind:txPowerDbm bind:txAntennaGainDbi bind:txCableLossDb {eirpDbm} />
 
       <LinkBudgetPathSection
         bind:pathLengthM

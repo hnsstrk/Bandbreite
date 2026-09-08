@@ -18,18 +18,10 @@
     class?: string;
   }
 
-  let {
-    done,
-    total,
-    label = 'Fortschritt im Lernpfad',
-    showCount = false,
-    class: klass = ''
-  }: Props = $props();
+  let { done, total, label = 'Fortschritt im Lernpfad', showCount = false, class: klass = '' }: Props = $props();
 
   const percent = $derived(total > 0 ? (done / total) * 100 : 0);
-  const valueText = $derived(
-    `${done} von ${total} Schritten erledigt (${formatPercentage(percent, 0)})`
-  );
+  const valueText = $derived(`${done} von ${total} Schritten erledigt (${formatPercentage(percent, 0)})`);
 </script>
 
 <div class="meter {klass}">

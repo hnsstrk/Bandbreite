@@ -151,7 +151,8 @@ export interface ParsedFrequency {
   assumedUnit: boolean;
 }
 
-const FREQUENCY_PATTERN = /^\s*([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]+(?:[.,][0-9]+)?)\s*(hz|khz|mhz|ghz|thz)?\s*$/i;
+const FREQUENCY_PATTERN =
+  /^\s*([0-9]{1,3}(?:[.\s][0-9]{3})+|[0-9]+(?:[.,][0-9]+)?)\s*(hz|khz|mhz|ghz|thz)?\s*$/i;
 
 /**
  * Erkennt Frequenzeingaben wie „2,4 GHz", „144.800 MHz" oder „77,5 kHz".
@@ -190,6 +191,6 @@ export function entriesForFrequency(
         hz >= entry.minHz &&
         hz <= entry.maxHz
     )
-    .sort((a, b) => (a.maxHz! - a.minHz!) - (b.maxHz! - b.minHz!))
+    .sort((a, b) => a.maxHz! - a.minHz! - (b.maxHz! - b.minHz!))
     .slice(0, limit);
 }

@@ -12,11 +12,7 @@
   import LearningMeter from '$lib/components/learning/LearningMeter.svelte';
   import LearningPathSteps from '$lib/components/learning/LearningPathSteps.svelte';
   import { learningProgress } from '$lib/components/learning/learningProgress.svelte';
-  import {
-    LEVEL_LABELS,
-    findLearningPath,
-    resolvePathSteps
-  } from '$lib/data/learningPaths';
+  import { LEVEL_LABELS, findLearningPath, resolvePathSteps } from '$lib/data/learningPaths';
 
   let { data } = $props();
 
@@ -94,9 +90,7 @@
     <Callout tone="info" title="Fortschritt nur in diesem Browser">
       Abgehakte Schritte liegen im lokalen Speicher dieses Browsers und werden nicht übertragen.
       <span class="page-section__action">
-        <Button size="sm" variant="secondary" icon="reset" onclick={handleResetClick}>
-          Diesen Pfad zurücksetzen
-        </Button>
+        <Button size="sm" variant="secondary" icon="reset" onclick={handleResetClick}>Diesen Pfad zurücksetzen</Button>
       </span>
     </Callout>
 

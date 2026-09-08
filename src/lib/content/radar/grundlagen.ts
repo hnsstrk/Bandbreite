@@ -18,8 +18,7 @@ export const radarGrundlagenArticle: KnowledgeArticle = {
   kicker: 'Wissen · Radartechnik',
   title: 'Radar-Grundlagen',
   icon: 'signal',
-  lead:
-    'Ein Radar sendet elektromagnetische Energie aus und wertet aus, was zurückkommt. Dieses Unterkapitel klärt die vier Größen, die alles Weitere tragen: Laufzeit, Leistungsbilanz, Rückstreuquerschnitt und die Grenzen von Auflösung und Eindeutigkeit.',
+  lead: 'Ein Radar sendet elektromagnetische Energie aus und wertet aus, was zurückkommt. Dieses Unterkapitel klärt die vier Größen, die alles Weitere tragen: Laufzeit, Leistungsbilanz, Rückstreuquerschnitt und die Grenzen von Auflösung und Eindeutigkeit.',
   meta: [
     { label: 'Quelle', value: 'Skolnik, Introduction to Radar Systems' },
     { label: 'Rechner', value: 'Radar-Reichweite' }
@@ -214,7 +213,12 @@ export const radarGrundlagenArticle: KnowledgeArticle = {
           type: 'table',
           caption:
             'Das PRF-Dilemma: Eindeutigkeitsgrenzen über der Pulswiederholfrequenz (gerechnet für 10 GHz, λ = 3 cm)',
-          columns: ['PRF', 'Eindeutige Entfernung R_u', 'Eindeutige Geschwindigkeit', 'Typische Verwendung'],
+          columns: [
+            'PRF',
+            'Eindeutige Entfernung R_u',
+            'Eindeutige Geschwindigkeit',
+            'Typische Verwendung'
+          ],
           rows: prfRows,
           monoColumns: [0, 1, 2]
         },

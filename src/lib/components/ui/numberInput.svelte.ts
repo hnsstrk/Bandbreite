@@ -18,13 +18,13 @@ export const SLIDER_RESOLUTION = 1000;
 
 /** Einheit für die Wertumrechnung: Basiswert = Anzeigewert × factor. */
 export interface UnitOption {
-	id: string;
-	/** Sichtbares Symbol, z. B. „GHz" */
-	symbol: string;
-	/** Umrechnungsfaktor in die Basiseinheit */
-	factor: number;
-	/** Optionale Gruppe für das Auswahlfeld */
-	group?: string;
+  id: string;
+  /** Sichtbares Symbol, z. B. „GHz" */
+  symbol: string;
+  /** Umrechnungsfaktor in die Basiseinheit */
+  factor: number;
+  /** Optionale Gruppe für das Auswahlfeld */
+  group?: string;
 }
 
 /**
@@ -32,7 +32,7 @@ export interface UnitOption {
  * Sie verlangt einen echt positiven, aufsteigenden Bereich.
  */
 export function canUseLogScale(min: number, max: number): boolean {
-	return Number.isFinite(min) && Number.isFinite(max) && min > 0 && max > min;
+  return Number.isFinite(min) && Number.isFinite(max) && min > 0 && max > min;
 }
 
 /**
@@ -40,40 +40,40 @@ export function canUseLogScale(min: number, max: number): boolean {
  * Werte außerhalb des Bereichs werden auf die Enden begrenzt.
  */
 export function valueToPosition(
-	value: number,
-	min: number,
-	max: number,
-	scale: ScaleMode = 'linear'
+  value: number,
+  min: number,
+  max: number,
+  scale: ScaleMode = 'linear'
 ): number {
-	if (!Number.isFinite(value) || !Number.isFinite(min) || !Number.isFinite(max) || max <= min) {
-		return 0;
-	}
-	const bounded = clamp(value, min, max);
-	const ratio =
-		scale === 'log' && canUseLogScale(min, max)
-			? safeDivide(safeLog(bounded) - safeLog(min), safeLog(max) - safeLog(min), 0)
-			: safeDivide(bounded - min, max - min, 0);
-	return Math.round(clamp(ratio, 0, 1) * SLIDER_RESOLUTION);
+  if (!Number.isFinite(value) || !Number.isFinite(min) || !Number.isFinite(max) || max <= min) {
+    return 0;
+  }
+  const bounded = clamp(value, min, max);
+  const ratio =
+    scale === 'log' && canUseLogScale(min, max)
+      ? safeDivide(safeLog(bounded) - safeLog(min), safeLog(max) - safeLog(min), 0)
+      : safeDivide(bounded - min, max - min, 0);
+  return Math.round(clamp(ratio, 0, 1) * SLIDER_RESOLUTION);
 }
 
 /**
  * Wandelt eine Reglerposition (0 … SLIDER_RESOLUTION) zurück in einen Wert.
  */
 export function positionToValue(
-	position: number,
-	min: number,
-	max: number,
-	scale: ScaleMode = 'linear'
+  position: number,
+  min: number,
+  max: number,
+  scale: ScaleMode = 'linear'
 ): number {
-	if (!Number.isFinite(position) || !Number.isFinite(min) || !Number.isFinite(max) || max <= min) {
-		return min;
-	}
-	const ratio = clamp(safeDivide(position, SLIDER_RESOLUTION, 0), 0, 1);
-	if (scale === 'log' && canUseLogScale(min, max)) {
-		const exponent = safeLog(min) + ratio * (safeLog(max) - safeLog(min));
-		return 10 ** exponent;
-	}
-	return min + ratio * (max - min);
+  if (!Number.isFinite(position) || !Number.isFinite(min) || !Number.isFinite(max) || max <= min) {
+    return min;
+  }
+  const ratio = clamp(safeDivide(position, SLIDER_RESOLUTION, 0), 0, 1);
+  if (scale === 'log' && canUseLogScale(min, max)) {
+    const exponent = safeLog(min) + ratio * (safeLog(max) - safeLog(min));
+    return 10 ** exponent;
+  }
+  return min + ratio * (max - min);
 }
 
 /**
@@ -81,10 +81,10 @@ export function positionToValue(
  * `step = 'any'` lässt den Wert unverändert.
  */
 export function roundToStep(value: number, step: number | 'any', min = 0): number {
-	if (step === 'any' || !Number.isFinite(value)) return value;
-	if (!Number.isFinite(step) || step <= 0) return value;
-	const base = Number.isFinite(min) ? min : 0;
-	return base + Math.round(safeDivide(value - base, step, 0)) * step;
+  if (step === 'any' || !Number.isFinite(value)) return value;
+  if (!Number.isFinite(step) || step <= 0) return value;
+  const base = Number.isFinite(min) ? min : 0;
+  return base + Math.round(safeDivide(value - base, step, 0)) * step;
 }
 
 /**
@@ -92,30 +92,30 @@ export function roundToStep(value: number, step: number | 'any', min = 0): numbe
  * Fehlende Grenzen bleiben offen.
  */
 export function clampToRange(value: number, min?: number, max?: number): number {
-	if (!Number.isFinite(value)) return Number.isFinite(min as number) ? (min as number) : 0;
-	let result = value;
-	if (Number.isFinite(min as number) && result < (min as number)) result = min as number;
-	if (Number.isFinite(max as number) && result > (max as number)) result = max as number;
-	return result;
+  if (!Number.isFinite(value)) return Number.isFinite(min as number) ? (min as number) : 0;
+  let result = value;
+  if (Number.isFinite(min as number) && result < (min as number)) result = min as number;
+  if (Number.isFinite(max as number) && result > (max as number)) result = max as number;
+  return result;
 }
 
 /** Rechnet einen Anzeigewert in die Basiseinheit um. */
 export function toBaseValue(displayValue: number, factor: number): number {
-	if (!Number.isFinite(displayValue) || !Number.isFinite(factor)) return 0;
-	return displayValue * factor;
+  if (!Number.isFinite(displayValue) || !Number.isFinite(factor)) return 0;
+  return displayValue * factor;
 }
 
 /** Rechnet einen Basiswert in die gewählte Anzeigeeinheit um. */
 export function fromBaseValue(baseValue: number, factor: number): number {
-	return safeDivide(baseValue, factor, 0);
+  return safeDivide(baseValue, factor, 0);
 }
 
 /** Ein Voreinstellungs-Chip unter dem Feldnamen. */
 export interface NumberPreset {
-	label: string;
-	/** Wert in der Basiseinheit */
-	value: number;
-	hint?: string;
+  label: string;
+  /** Wert in der Basiseinheit */
+  value: number;
+  hint?: string;
 }
 
 /**
@@ -132,10 +132,10 @@ export type InputPhase = 'typing' | 'commit';
 
 /** Ergebnis einer Feldeingabe. */
 export interface FieldInputResult {
-	/** Wert in der Basiseinheit, oder `null` bei (noch) unlesbarer Eingabe */
-	value: number | null;
-	/** Gilt die Eingabe als bestätigt? Nur dann ist ein Einheitenwechsel erlaubt. */
-	commit: boolean;
+  /** Wert in der Basiseinheit, oder `null` bei (noch) unlesbarer Eingabe */
+  value: number | null;
+  /** Gilt die Eingabe als bestätigt? Nur dann ist ein Einheitenwechsel erlaubt. */
+  commit: boolean;
 }
 
 /**
@@ -145,9 +145,9 @@ export interface FieldInputResult {
  * „2," liefern `null` — „2," endet auf dem Trenner und ergibt 2.
  */
 export function parseFieldInput(raw: string, factor: number): number | null {
-	const parsed = parseLocaleNumber(raw);
-	if (!Number.isFinite(parsed)) return null;
-	return toBaseValue(parsed, factor);
+  const parsed = parseLocaleNumber(raw);
+  if (!Number.isFinite(parsed)) return null;
+  return toBaseValue(parsed, factor);
 }
 
 /**
@@ -157,19 +157,19 @@ export function parseFieldInput(raw: string, factor: number): number | null {
  * Abschluss zusätzlich die Bestätigung gemeldet.
  */
 export function applyFieldInput(
-	raw: string,
-	factor: number,
-	phase: InputPhase = 'typing'
+  raw: string,
+  factor: number,
+  phase: InputPhase = 'typing'
 ): FieldInputResult {
-	const value = parseFieldInput(raw, factor);
-	return { value, commit: phase === 'commit' };
+  const value = parseFieldInput(raw, factor);
+  return { value, commit: phase === 'commit' };
 }
 
 /** Ergebnis der Eingabeprüfung. */
 export interface ValidationResult {
-	valid: boolean;
-	/** Deutschsprachige Fehlermeldung, sonst `null` */
-	message: string | null;
+  valid: boolean;
+  /** Deutschsprachige Fehlermeldung, sonst `null` */
+  message: string | null;
 }
 
 /**
@@ -177,25 +177,31 @@ export interface ValidationResult {
  * Die Meldung ist bereits für die Anzeige formuliert.
  */
 export function validateValue(
-	value: number,
-	options: { min?: number; max?: number; unitSymbol?: string; factor?: number } = {}
+  value: number,
+  options: { min?: number; max?: number; unitSymbol?: string; factor?: number } = {}
 ): ValidationResult {
-	const { min, max, unitSymbol, factor = 1 } = options;
-	const suffix = unitSymbol ? ` ${unitSymbol}` : '';
-	// Verglichen wird in der Basiseinheit, gemeldet in der Anzeigeeinheit —
-	// sonst stünde die Grenze in Hertz neben dem Symbol „THz".
-	const inUnit = (limit: number) => formatFieldValue(fromBaseValue(limit, factor));
+  const { min, max, unitSymbol, factor = 1 } = options;
+  const suffix = unitSymbol ? ` ${unitSymbol}` : '';
+  // Verglichen wird in der Basiseinheit, gemeldet in der Anzeigeeinheit —
+  // sonst stünde die Grenze in Hertz neben dem Symbol „THz".
+  const inUnit = (limit: number) => formatFieldValue(fromBaseValue(limit, factor));
 
-	if (!Number.isFinite(value)) {
-		return { valid: false, message: 'Bitte eine gültige Zahl eingeben.' };
-	}
-	if (Number.isFinite(min as number) && value < (min as number)) {
-		return { valid: false, message: `Wert muss mindestens ${inUnit(min as number)}${suffix} betragen.` };
-	}
-	if (Number.isFinite(max as number) && value > (max as number)) {
-		return { valid: false, message: `Wert darf höchstens ${inUnit(max as number)}${suffix} betragen.` };
-	}
-	return { valid: true, message: null };
+  if (!Number.isFinite(value)) {
+    return { valid: false, message: 'Bitte eine gültige Zahl eingeben.' };
+  }
+  if (Number.isFinite(min as number) && value < (min as number)) {
+    return {
+      valid: false,
+      message: `Wert muss mindestens ${inUnit(min as number)}${suffix} betragen.`
+    };
+  }
+  if (Number.isFinite(max as number) && value > (max as number)) {
+    return {
+      valid: false,
+      message: `Wert darf höchstens ${inUnit(max as number)}${suffix} betragen.`
+    };
+  }
+  return { valid: true, message: null };
 }
 
 /**
@@ -206,17 +212,17 @@ export function validateValue(
  * Feld, dort stören Gruppierungspunkte beim Weitertippen.
  */
 export function formatFieldValue(value: number, maxDecimals = 6): string {
-	if (!Number.isFinite(value)) return '';
-	if (value === 0) return '0';
-	const magnitude = Math.abs(value);
-	if (magnitude >= 1e15 || magnitude < 1e-9) {
-		return formatExponential(value, 3);
-	}
-	const decimals = magnitude >= 100 ? 2 : magnitude >= 1 ? 3 : maxDecimals;
-	return formatLocaleNumber(value, {
-		maxFrac: Math.min(decimals, maxDecimals),
-		grouping: false
-	});
+  if (!Number.isFinite(value)) return '';
+  if (value === 0) return '0';
+  const magnitude = Math.abs(value);
+  if (magnitude >= 1e15 || magnitude < 1e-9) {
+    return formatExponential(value, 3);
+  }
+  const decimals = magnitude >= 100 ? 2 : magnitude >= 1 ? 3 : maxDecimals;
+  return formatLocaleNumber(value, {
+    maxFrac: Math.min(decimals, maxDecimals),
+    grouping: false
+  });
 }
 
 /**
@@ -224,11 +230,11 @@ export function formatFieldValue(value: number, maxDecimals = 6): string {
  * bei der der Anzeigewert noch >= 1 bleibt.
  */
 export function pickBestUnit(baseValue: number, units: UnitOption[]): UnitOption | undefined {
-	if (units.length === 0) return undefined;
-	const magnitude = Math.abs(baseValue);
-	const sorted = [...units].sort((a, b) => b.factor - a.factor);
-	if (magnitude === 0 || !Number.isFinite(magnitude)) {
-		return sorted[sorted.length - 1];
-	}
-	return sorted.find((unit) => magnitude / unit.factor >= 1) ?? sorted[sorted.length - 1];
+  if (units.length === 0) return undefined;
+  const magnitude = Math.abs(baseValue);
+  const sorted = [...units].sort((a, b) => b.factor - a.factor);
+  if (magnitude === 0 || !Number.isFinite(magnitude)) {
+    return sorted[sorted.length - 1];
+  }
+  return sorted.find((unit) => magnitude / unit.factor >= 1) ?? sorted[sorted.length - 1];
 }

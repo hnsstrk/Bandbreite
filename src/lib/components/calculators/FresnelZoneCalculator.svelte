@@ -8,11 +8,7 @@
    */
   import { browser } from '$app/environment';
   import { page } from '$app/state';
-  import {
-    FRESNEL_CLEARANCE_FRACTION,
-    calculateFresnelRadius,
-    frequencyToWavelength
-  } from '$lib/utils/calculations';
+  import { FRESNEL_CLEARANCE_FRACTION, calculateFresnelRadius, frequencyToWavelength } from '$lib/utils/calculations';
   import { formatNumber, formatWavelength } from '$lib/utils/formatting';
   import {
     UrlStateSync,
@@ -49,9 +45,7 @@
 
   let { height = 400 }: Props = $props();
 
-  const initial = browser
-    ? readParams(page.url.searchParams, FRESNEL_PARAMS)
-    : defaultValues(FRESNEL_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, FRESNEL_PARAMS) : defaultValues(FRESNEL_PARAMS);
 
   let frequencyHz = $state(initial.f);
   let frequencyUnit = $state('GHz');
@@ -89,9 +83,7 @@
   let fresnelRadius2M = $derived(
     calculateFresnelRadius(wavelengthM, obstaclePositionM, totalDistanceM - obstaclePositionM, 2)
   );
-  let maxFresnelRadiusM = $derived(
-    calculateFresnelRadius(wavelengthM, totalDistanceM / 2, totalDistanceM / 2, 1)
-  );
+  let maxFresnelRadiusM = $derived(calculateFresnelRadius(wavelengthM, totalDistanceM / 2, totalDistanceM / 2, 1));
   let clearance60M = $derived(fresnelRadius1M * FRESNEL_CLEARANCE_FRACTION);
 
   function handleDistanceChange(value: number) {
@@ -179,11 +171,7 @@
         unit="m"
         hint="destruktive Interferenz"
       />
-      <ResultCard
-        label="Wellenlänge"
-        value={wavelengthM > 0 ? formatWavelength(wavelengthM) : '—'}
-        hint="λ = c / f"
-      />
+      <ResultCard label="Wellenlänge" value={wavelengthM > 0 ? formatWavelength(wavelengthM) : '—'} hint="λ = c / f" />
     </div>
 
     <FormulaBlock
@@ -212,9 +200,9 @@
     />
 
     <Callout tone="tip" title="Die 60-Prozent-Regel" source="ITU-R P.530-18">
-      Bleiben mindestens 60 % der ersten Fresnel-Zone frei, entsteht praktisch kein
-      Zusatzverlust gegenüber der Freiraumdämpfung. Als Faustformel für die Antennenhöhe gilt:
-      60 % des Fresnel-Radius plus Hindernishöhe plus Sicherheitsmarge.
+      Bleiben mindestens 60 % der ersten Fresnel-Zone frei, entsteht praktisch kein Zusatzverlust gegenüber der
+      Freiraumdämpfung. Als Faustformel für die Antennenhöhe gilt: 60 % des Fresnel-Radius plus Hindernishöhe plus
+      Sicherheitsmarge.
     </Callout>
   </div>
 </Card>

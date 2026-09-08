@@ -66,12 +66,7 @@
       {/key}
     </Card>
 
-    <Card
-      title="Bandzuordnung"
-      subtitle="In welchen Bändern die eingestellte Frequenz liegt"
-      level={2}
-      padding="md"
-    >
+    <Card title="Bandzuordnung" subtitle="In welchen Bändern die eingestellte Frequenz liegt" level={2} padding="md">
       <BandInfo {frequencyHz} />
     </Card>
   </div>
@@ -89,15 +84,14 @@
   />
 
   <Callout tone="tip" title="Zahlen zum Merken">
-    300 MHz entsprechen genau 1 m, 3 GHz sind 10 cm und 30 GHz sind 1 cm. Wer die Frequenz in
-    Megahertz kennt, teilt 300 durch diesen Wert und erhält die Wellenlänge in Metern — genau
-    genug für jede Antennenabschätzung.
+    300 MHz entsprechen genau 1 m, 3 GHz sind 10 cm und 30 GHz sind 1 cm. Wer die Frequenz in Megahertz kennt, teilt 300
+    durch diesen Wert und erhält die Wellenlänge in Metern — genau genug für jede Antennenabschätzung.
   </Callout>
 
   <Callout tone="info" title="Im Medium wird es kürzer">
-    Die Formel gilt für das Vakuum. In einem Medium mit der relativen Permittivität εᵣ läuft die
-    Welle langsamer, die Wellenlänge verkürzt sich um den Faktor 1/√εᵣ — deshalb ist ein
-    λ/4-Element auf einer Leiterplatte deutlich kürzer als in Luft.
+    Die Formel gilt für das Vakuum. In einem Medium mit der relativen Permittivität εᵣ läuft die Welle langsamer, die
+    Wellenlänge verkürzt sich um den Faktor 1/√εᵣ — deshalb ist ein λ/4-Element auf einer Leiterplatte deutlich kürzer
+    als in Luft.
   </Callout>
 
   <RelatedTopics href="/konverter/frequenz/" />

@@ -45,9 +45,7 @@
   let unambiguousVelocityMs = $derived(calculateUnambiguousVelocity(prfHz, wavelengthM));
   let unambiguousVelocityKmh = $derived(unambiguousVelocityMs / KMH_TO_MS);
 
-  let velocityAmbiguous = $derived(
-    unambiguousVelocityKmh > 0 && Math.abs(radialVelocityKmh) > unambiguousVelocityKmh
-  );
+  let velocityAmbiguous = $derived(unambiguousVelocityKmh > 0 && Math.abs(radialVelocityKmh) > unambiguousVelocityKmh);
 </script>
 
 <section class="pulse" aria-labelledby="radar-pulse-heading">
@@ -115,9 +113,8 @@
 
   {#if velocityAmbiguous}
     <Callout tone="warning" title="Geschwindigkeitsmehrdeutigkeit">
-      Die eingestellte Radialgeschwindigkeit liegt über der eindeutigen Geschwindigkeit
-      v_u = λ · PRF / 4. Das Radar misst sie gefaltet — eine höhere PRF schafft Abhilfe,
-      verkleinert aber die eindeutige Reichweite.
+      Die eingestellte Radialgeschwindigkeit liegt über der eindeutigen Geschwindigkeit v_u = λ · PRF / 4. Das Radar
+      misst sie gefaltet — eine höhere PRF schafft Abhilfe, verkleinert aber die eindeutige Reichweite.
     </Callout>
   {/if}
 </section>

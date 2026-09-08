@@ -155,9 +155,7 @@ describe('Doppler und Antennengüte', () => {
   });
 
   it('ist auf der geostationären Bahn für den festen Beobachter belanglos klein im Vergleich', () => {
-    expect(maxDopplerShift(1e9, GEO_ALTITUDE_M)).toBeLessThan(
-      maxDopplerShift(1e9, ISS_ALTITUDE_M)
-    );
+    expect(maxDopplerShift(1e9, GEO_ALTITUDE_M)).toBeLessThan(maxDopplerShift(1e9, ISS_ALTITUDE_M));
   });
 
   it('rechnet G/T als Gewinn minus 10·log₁₀(T)', () => {

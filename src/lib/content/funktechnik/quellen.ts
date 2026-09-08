@@ -97,23 +97,77 @@ export const SECTIONS: ArticleSection[] = [
         head: ['Quelle', 'Gegenstand', 'Verwendet für'],
         rows: [
           ['ITU-R P.525', 'Freiraumausbreitung', 'Freiraumdämpfung und Reichweitenabschätzung'],
-          ['ITU-R P.676', 'Gasförmige Dämpfung', 'Sauerstoff- und Wasserdampflinien der Dämpfungskurven'],
+          [
+            'ITU-R P.676',
+            'Gasförmige Dämpfung',
+            'Sauerstoff- und Wasserdampflinien der Dämpfungskurven'
+          ],
           ['ITU-R P.838', 'Regendämpfung', 'Spezifische Dämpfung durch Niederschlag'],
           ['ITU-R P.840', 'Wolken und Nebel', 'Dämpfung durch Flüssigwasser in der Atmosphäre'],
           ['ITU-R P.372', 'Funkrauschen', 'Einordnung der Rauschbeiträge'],
           ['ITU-R M.493 und M.541', 'Digitaler Selektivruf', 'DSC-Kanäle im Seefunk'],
-          ['ITU-R M.2150 und M.2160', 'IMT-2020 und IMT-2030', 'Kennwerte von 5G und der 6G-Ausblick'],
-          ['3GPP TS 36.101 und TS 38.101', 'LTE- und NR-Bandtabellen', 'Uplink- und Downlink-Bereiche der Mobilfunkbänder'],
-          ['ETSI TS 145 005 sowie EN 300 401', 'GSM-Funkübertragung und DAB', 'Kanalraster und Systemparameter'],
+          [
+            'ITU-R M.2150 und M.2160',
+            'IMT-2020 und IMT-2030',
+            'Kennwerte von 5G und der 6G-Ausblick'
+          ],
+          [
+            '3GPP TS 36.101 und TS 38.101',
+            'LTE- und NR-Bandtabellen',
+            'Uplink- und Downlink-Bereiche der Mobilfunkbänder'
+          ],
+          [
+            'ETSI TS 145 005 sowie EN 300 401',
+            'GSM-Funkübertragung und DAB',
+            'Kanalraster und Systemparameter'
+          ],
           ['ETSI EN 302 755', 'DVB-T2', 'Kanalbreite und Übertragungsverfahren'],
           ['IEEE Std 521', 'Radarband-Bezeichnungen', 'Buchstabenbänder L bis W'],
-          ['Merrill I. Skolnik: Introduction to Radar Systems', 'Radartechnik', 'Radargleichung und Kenngrößen'],
-          ['CODATA und SI-Definitionen', 'Naturkonstanten', 'Lichtgeschwindigkeit, Boltzmann-Konstante']
+          [
+            'ICAO Annex 10 Volume IV',
+            'Sekundärradar und Kollisionswarnung',
+            'Modi A, C und S: Impulsabstände der Abfrage, Antwortrahmen auf 1090 MHz'
+          ],
+          [
+            'ICAO Doc 4444 (PANS-ATM)',
+            'Flugverkehrsmanagement',
+            'Squawk-Codes mit fester Bedeutung (7500, 7600, 7700)'
+          ],
+          [
+            'EUROCONTROL: Principles of Mode S Operation and Interrogator Codes',
+            'Mode-S-Betrieb',
+            'Selektive Abfrage, Interrogator-Kennungen'
+          ],
+          [
+            'RTCA DO-260B und EUROCAE ED-102A',
+            'ADS-B',
+            'Aussendungen auf 1090 MHz (Extended Squitter)'
+          ],
+          ['ETSI EN 301 091', 'Kfz-Radar', 'Frequenzbereich 76 bis 77 GHz der FMCW-Darstellung'],
+          [
+            'Merrill I. Skolnik: Introduction to Radar Systems',
+            'Radartechnik',
+            'Radargleichung und Kenngrößen'
+          ],
+          [
+            'CODATA 2018 und SI-Definitionen',
+            'Naturkonstanten',
+            'Lichtgeschwindigkeit, Boltzmann-Konstante, Planck-Konstante, Feldwellenwiderstand Z₀'
+          ],
+          [
+            'ICNIRP-Leitlinien und 26. BImSchV',
+            'Personenschutz in elektromagnetischen Feldern',
+            'Nur zur Einordnung genannt — diese Anwendung hinterlegt keine Grenzwerte'
+          ]
         ]
       },
       {
         kind: 'p',
         text: 'Die Lichtgeschwindigkeit ist seit der Neudefinition des Meters von 1983 keine Messgröße mehr, sondern exakt auf 299 792 458 m/s festgelegt. Alle Umrechnungen zwischen Frequenz und Wellenlänge in dieser Anwendung nutzen diesen Wert.'
+      },
+      {
+        kind: 'p',
+        text: 'Grenzwerte des Personenschutzes (26. BImSchV, ICNIRP-Leitlinien) werden im Kapitel „Leistung und Pegel“ nur genannt und eingeordnet. Grenzwerttabellen sind bewusst nicht hinterlegt: Die Werte sind frequenzabhängig und werden fortgeschrieben; verbindlich ist allein die jeweils gültige Fassung.'
       }
     ]
   },
@@ -126,15 +180,51 @@ export const SECTIONS: ArticleSection[] = [
         caption: 'Wichtigste Datensätze mit ihrer Herkunft',
         head: ['Datensatz', 'Inhalt', 'Hauptquelle'],
         rows: [
-          ['Funkdienste', '18 Funkdienste mit Zuweisungen in Region 1', 'VO Funk Art. 1 und 5, BNetzA-Frequenzplan'],
-          ['Amateurfunkbänder', '22 Bänder mit Betriebsartensegmenten', 'AFuV Anlage 1, IARU-R1-Bandpläne'],
-          ['Mobilfunk', '6 Generationen und 13 Bänder', '3GPP TS 36.101 / 38.101, BNetzA-Vergabeverfahren'],
-          ['Rundfunk', 'Bereiche, Kurzwellenbänder, DAB-Blöcke, DVB-T2-Kanäle', 'GE75, GE84, GE06, ETSI'],
-          ['Not- und Sicherheitsfrequenzen', 'See, Luft, Land, Satellit, Amateur, Jedermann', 'VO Funk Art. 30–34, GMDSS, ICAO Annex 10, Cospas-Sarsat'],
-          ['Frequenzzuweisungen (Anwendungen)', 'Über 100 Funkanwendungen im Spektrum', 'ITU, ETSI, BNetzA'],
-          ['Frequenzbänder', 'ITU-, IEEE- und NATO-Bandschemata', 'VO Funk, IEEE Std 521, NATO-Bandsystematik'],
-          ['Sender', 'Zeitzeichen-, Rundfunk-, Navigations- und Forschungssender', 'Betreiberangaben und Fachveröffentlichungen'],
-          ['Fernmeldegeschichte', 'Meilensteine von der Telegrafie bis 5G', 'Fachliteratur und Betreiberangaben']
+          [
+            'Funkdienste',
+            '18 Funkdienste mit Zuweisungen in Region 1',
+            'VO Funk Art. 1 und 5, BNetzA-Frequenzplan'
+          ],
+          [
+            'Amateurfunkbänder',
+            '22 Bänder mit Betriebsartensegmenten',
+            'AFuV Anlage 1, IARU-R1-Bandpläne'
+          ],
+          [
+            'Mobilfunk',
+            '6 Generationen und 13 Bänder',
+            '3GPP TS 36.101 / 38.101, BNetzA-Vergabeverfahren'
+          ],
+          [
+            'Rundfunk',
+            'Bereiche, Kurzwellenbänder, DAB-Blöcke, DVB-T2-Kanäle',
+            'GE75, GE84, GE06, ETSI'
+          ],
+          [
+            'Not- und Sicherheitsfrequenzen',
+            'See, Luft, Land, Satellit, Amateur, Jedermann',
+            'VO Funk Art. 30–34, GMDSS, ICAO Annex 10, Cospas-Sarsat'
+          ],
+          [
+            'Frequenzzuweisungen (Anwendungen)',
+            'Über 100 Funkanwendungen im Spektrum',
+            'ITU, ETSI, BNetzA'
+          ],
+          [
+            'Frequenzbänder',
+            'ITU-, IEEE- und NATO-Bandschemata',
+            'VO Funk, IEEE Std 521, NATO-Bandsystematik'
+          ],
+          [
+            'Sender',
+            'Zeitzeichen-, Rundfunk-, Navigations- und Forschungssender',
+            'Betreiberangaben und Fachveröffentlichungen'
+          ],
+          [
+            'Fernmeldegeschichte',
+            'Meilensteine von der Telegrafie bis 5G',
+            'Fachliteratur und Betreiberangaben'
+          ]
         ]
       }
     ]
@@ -142,7 +232,8 @@ export const SECTIONS: ArticleSection[] = [
   {
     id: 'unsicherheiten',
     title: 'Bekannte Unsicherheiten',
-    description: 'Diese Angaben sind vor einer praktischen Verwendung gegen die Primärquelle zu prüfen.',
+    description:
+      'Diese Angaben sind vor einer praktischen Verwendung gegen die Primärquelle zu prüfen.',
     blocks: [
       {
         kind: 'ul',

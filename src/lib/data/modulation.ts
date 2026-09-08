@@ -66,7 +66,8 @@ export function spreadingGainDb(chipRate: number, dataRate: number): number {
 // ============================================================================
 
 /** Klasse eines Modulationsverfahrens. */
-export type ModulationClass = 'analog' | 'digital-einzeltraeger' | 'digital-mehrtraeger' | 'spreizband';
+export type ModulationClass =
+  'analog' | 'digital-einzeltraeger' | 'digital-mehrtraeger' | 'spreizband';
 
 /** Robustheit gegenüber Rauschen und Mehrwegeausbreitung. */
 export type Robustness = 'sehr hoch' | 'hoch' | 'mittel' | 'gering' | 'sehr gering';
@@ -113,7 +114,7 @@ export const MODULATIONS: Modulation[] = [
       'aber mindestens zwei Drittel der Sendeleistung.',
     bandwidthNoteDE: 'B = 2 · f_max; im Mittelwellenrundfunk auf 9 kHz Kanalraster begrenzt.',
     applicationsDE: ['Mittelwellen- und Kurzwellenrundfunk', 'VHF-Flugfunk'],
-    source: 'ITU-R SM.328',
+    source: 'ITU-R SM.328'
   },
   {
     id: 'dsb-sc',
@@ -131,7 +132,7 @@ export const MODULATIONS: Modulation[] = [
       'und im Stereo-Differenzkanal des UKW-Rundfunks.',
     bandwidthNoteDE: 'B = 2 · f_max, identisch zu AM.',
     applicationsDE: ['Stereo-Differenzsignal im UKW-Rundfunk', 'Messtechnik'],
-    source: 'ITU-R SM.328',
+    source: 'ITU-R SM.328'
   },
   {
     id: 'ssb',
@@ -149,8 +150,12 @@ export const MODULATIONS: Modulation[] = [
       'Der Preis ist ein aufwendigerer Empfänger, dessen Frequenzabweichung sich ' +
       'unmittelbar als Tonhöhenverschiebung bemerkbar macht.',
     bandwidthNoteDE: 'B = f_max; für Sprache üblich 2,4 bis 3,0 kHz.',
-    applicationsDE: ['Kurzwellen-Amateurfunk', 'See- und Flugfunk auf HF', 'Militärische Kurzwelle'],
-    source: 'ITU-R SM.328',
+    applicationsDE: [
+      'Kurzwellen-Amateurfunk',
+      'See- und Flugfunk auf HF',
+      'Militärische Kurzwelle'
+    ],
+    source: 'ITU-R SM.328'
   },
   {
     id: 'fm',
@@ -170,7 +175,7 @@ export const MODULATIONS: Modulation[] = [
       'Carson-Regel B = 2 · (Δf + f_max). UKW-Rundfunk: 2 · (75 kHz + 15 kHz) = 180 kHz. ' +
       'Schmalband-FM im Betriebsfunk: 2 · (2,5 kHz + 3 kHz) = 11 kHz.',
     applicationsDE: ['UKW-Rundfunk', 'Betriebs- und Amateurfunk', 'Seefunk VHF'],
-    source: 'ITU-R SM.328; Carson-Regel',
+    source: 'ITU-R SM.328; Carson-Regel'
   },
   {
     id: 'pm',
@@ -188,7 +193,7 @@ export const MODULATIONS: Modulation[] = [
       'FM verwendet.',
     bandwidthNoteDE: 'Ebenfalls nach Carson, mit dem Phasenhub anstelle des Frequenzhubs.',
     applicationsDE: ['Erzeugung von FM in Sendern', 'Telemetrie'],
-    source: 'ITU-R SM.328',
+    source: 'ITU-R SM.328'
   },
   {
     id: 'ask',
@@ -205,7 +210,7 @@ export const MODULATIONS: Modulation[] = [
       'Störungen. Deshalb fast nur in sehr billigen Kurzstreckenanwendungen.',
     bandwidthNoteDE: 'Etwa das Doppelte der Bitrate; steile Flanken erzeugen breite Nebenspektren.',
     applicationsDE: ['Funkfernsteuerungen 433 MHz', 'einfache Sensorfunkstrecken', 'RFID'],
-    source: 'ITU-R SM.328',
+    source: 'ITU-R SM.328'
   },
   {
     id: 'fsk',
@@ -221,10 +226,9 @@ export const MODULATIONS: Modulation[] = [
       'bleibt, dürfen die Sendeverstärker im Sättigungsbereich arbeiten, was den ' +
       'Wirkungsgrad stark erhöht. Bei GMSK glättet ein Gaußfilter die Übergänge und ' +
       'hält das Spektrum schmal — deshalb hat GSM diese Variante gewählt.',
-    bandwidthNoteDE:
-      'GSM erreicht 270,833 kBit/s in einem 200-kHz-Kanal, also rund 1,35 Bit/s/Hz.',
+    bandwidthNoteDE: 'GSM erreicht 270,833 kBit/s in einem 200-kHz-Kanal, also rund 1,35 Bit/s/Hz.',
     applicationsDE: ['GSM', 'Bluetooth', 'Wireless M-Bus', 'Pager (POCSAG)'],
-    source: '3GPP TS 45.004; ETSI TS 145 005',
+    source: '3GPP TS 45.004; ETSI TS 145 005'
   },
   {
     id: 'bpsk',
@@ -241,7 +245,7 @@ export const MODULATIONS: Modulation[] = [
       'entsprechend wird es dort eingesetzt, wo der Störabstand knapp ist.',
     bandwidthNoteDE: 'Symbolrate gleich Bitrate; Bandbreite etwa Bitrate mal Rolloff-Faktor.',
     applicationsDE: ['Satellitennavigation', 'Telemetrie aus dem Weltraum', 'PSK31 im Amateurfunk'],
-    source: 'IS-GPS-200; ITU-R SM.328',
+    source: 'IS-GPS-200; ITU-R SM.328'
   },
   {
     id: 'qpsk',
@@ -258,7 +262,7 @@ export const MODULATIONS: Modulation[] = [
       'und die Basisstufe vieler Mobilfunksysteme.',
     bandwidthNoteDE: 'Halbe Symbolrate gegenüber BPSK bei gleicher Bitrate.',
     applicationsDE: ['UMTS', 'DVB-S', 'LTE und 5G bei schlechtem Empfang'],
-    source: '3GPP TS 25.213; ETSI EN 300 421',
+    source: '3GPP TS 25.213; ETSI EN 300 421'
   },
   {
     id: 'qam16',
@@ -275,7 +279,7 @@ export const MODULATIONS: Modulation[] = [
       'ein weiteres Bit je Symbol, verlangt aber rund 6 dB mehr Störabstand.',
     bandwidthNoteDE: 'Vier Bit je Symbol; netto rund 3 Bit/s/Hz nach Codierung.',
     applicationsDE: ['LTE', 'WLAN', 'DVB-T2 bei mittlerer Empfangsqualität'],
-    source: '3GPP TS 36.211; IEEE 802.11',
+    source: '3GPP TS 36.211; IEEE 802.11'
   },
   {
     id: 'qam64',
@@ -291,7 +295,7 @@ export const MODULATIONS: Modulation[] = [
       'Sendeverstärker, weil Amplitudenfehler direkt Symbolverwechslungen erzeugen.',
     bandwidthNoteDE: 'Sechs Bit je Symbol; netto rund 4,5 Bit/s/Hz.',
     applicationsDE: ['LTE', 'WLAN 802.11n', 'DVB-T2', 'DOCSIS'],
-    source: '3GPP TS 36.211; ETSI EN 302 755',
+    source: '3GPP TS 36.211; ETSI EN 302 755'
   },
   {
     id: 'qam256',
@@ -308,7 +312,7 @@ export const MODULATIONS: Modulation[] = [
       '30 dB Signal-Rausch-Abstand.',
     bandwidthNoteDE: 'Acht Bit je Symbol; netto rund 6 Bit/s/Hz.',
     applicationsDE: ['LTE-Advanced', 'WLAN 802.11ac/ax', 'Richtfunk'],
-    source: '3GPP TS 36.211; IEEE 802.11ac',
+    source: '3GPP TS 36.211; IEEE 802.11ac'
   },
   {
     id: 'ofdm',
@@ -331,7 +335,7 @@ export const MODULATIONS: Modulation[] = [
       'ergibt sich aus der Modulation je Unterträger abzüglich Schutzintervall und ' +
       'Pilottönen.',
     applicationsDE: ['DAB+', 'DVB-T2', 'WLAN', 'LTE', '5G NR', 'Powerline'],
-    source: 'ETSI EN 300 401; ETSI EN 302 755; 3GPP TS 38.211',
+    source: 'ETSI EN 300 401; ETSI EN 302 755; 3GPP TS 38.211'
   },
   {
     id: 'dsss',
@@ -352,7 +356,7 @@ export const MODULATIONS: Modulation[] = [
       'Prozessgewinn = 10 · log10(Chiprate / Datenrate). Beispiel GPS C/A: ' +
       '1,023 Mchip/s bei 50 Bit/s ergibt rund 43 dB.',
     applicationsDE: ['GPS und Galileo', 'UMTS', 'WLAN 802.11b', 'militärische Störfestigkeit'],
-    source: 'IS-GPS-200; 3GPP TS 25.213',
+    source: 'IS-GPS-200; 3GPP TS 25.213'
   },
   {
     id: 'fhss',
@@ -372,7 +376,7 @@ export const MODULATIONS: Modulation[] = [
       'Momentane Bandbreite entspricht einem Kanal, die belegte Gesamtbandbreite ' +
       'dem gesamten Sprungbereich.',
     applicationsDE: ['Bluetooth', 'militärische Funkgeräte (SATURN, HAVE QUICK)', 'Industriefunk'],
-    source: 'Bluetooth Core Specification; ETSI EN 300 328',
+    source: 'Bluetooth Core Specification; ETSI EN 300 328'
   },
   {
     id: 'lora-css',
@@ -394,8 +398,8 @@ export const MODULATIONS: Modulation[] = [
       'etwa 250 Bit/s bis 11 kBit/s. Sehr geringe spektrale Effizienz, dafür hohe ' +
       'Reichweite bei minimaler Sendeleistung.',
     applicationsDE: ['LoRaWAN-Sensornetze', 'Zählerfernauslesung', 'Ortungsbaken'],
-    source: 'Semtech AN1200.22; LoRa Alliance LoRaWAN-Spezifikation',
-  },
+    source: 'Semtech AN1200.22; LoRa Alliance LoRaWAN-Spezifikation'
+  }
 ];
 
 /**

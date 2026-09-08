@@ -22,7 +22,11 @@ import {
   RAIN_HEIGHT_KM
 } from '$lib/data/constants';
 import { SPEED_OF_LIGHT_EXACT, SPEED_OF_LIGHT_ROUNDED } from '$lib/utils/constants';
-import { calculateRainAttenuation, calculateAtmosphericAttenuation, ABSORPTION_PEAKS } from '$lib/utils/atmosphericAttenuation';
+import {
+  calculateRainAttenuation,
+  calculateAtmosphericAttenuation,
+  ABSORPTION_PEAKS
+} from '$lib/utils/atmosphericAttenuation';
 import { getFsplConstant } from '$lib/utils/calculations';
 
 describe('Lichtgeschwindigkeit – eine Quelle', () => {
@@ -56,7 +60,11 @@ describe('Erd- und Atmosphärenkonstanten', () => {
 
 describe('RAIN_ATTENUATION_HEAVY stimmt mit ITU-R P.838-3 überein (25 mm/h, H-Pol., ±2 %)', () => {
   it.each(Object.values(RAIN_ATTENUATION_HEAVY))('%o', (entry) => {
-    const model = calculateRainAttenuation(entry.frequencyGHz, RAIN_RATES.heavy.mmPerHour, 'horizontal');
+    const model = calculateRainAttenuation(
+      entry.frequencyGHz,
+      RAIN_RATES.heavy.mmPerHour,
+      'horizontal'
+    );
     expect(entry.attenuationDbKm / model).toBeGreaterThan(0.98);
     expect(entry.attenuationDbKm / model).toBeLessThan(1.02);
   });
@@ -74,7 +82,9 @@ describe('Absorptionspeaks stimmen mit dem P.676-13-Modell überein (±25 %)', (
     expect(peak.peakAttenuationDbKm / model).toBeLessThan(1.25);
   });
   it('ABSORPTION_PEAKS (atmosphericAttenuation.ts) nennt dieselben Linien', () => {
-    const freqs = [...ABSORPTION_PEAKS.waterVapor, ...ABSORPTION_PEAKS.oxygen].map((p) => p.frequency);
+    const freqs = [...ABSORPTION_PEAKS.waterVapor, ...ABSORPTION_PEAKS.oxygen].map(
+      (p) => p.frequency
+    );
     for (const peak of ATMOSPHERIC_ABSORPTION_PEAKS) {
       expect(freqs.some((f) => Math.abs(f - peak.peakFrequencyGHz) < 0.5)).toBe(true);
     }
@@ -101,8 +111,12 @@ describe('RCS_REFERENCE (Skolnik Tab. 2.2)', () => {
 describe('MODULATION_SCHEMES / PRACTICAL_THROUGHPUT', () => {
   it('SNR-Schwellen und Bits/Symbol steigen monoton', () => {
     for (let i = 1; i < MODULATION_SCHEMES.length; i++) {
-      expect(MODULATION_SCHEMES[i].requiredSnrDb).toBeGreaterThan(MODULATION_SCHEMES[i - 1].requiredSnrDb);
-      expect(MODULATION_SCHEMES[i].bitsPerSymbol).toBeGreaterThan(MODULATION_SCHEMES[i - 1].bitsPerSymbol);
+      expect(MODULATION_SCHEMES[i].requiredSnrDb).toBeGreaterThan(
+        MODULATION_SCHEMES[i - 1].requiredSnrDb
+      );
+      expect(MODULATION_SCHEMES[i].bitsPerSymbol).toBeGreaterThan(
+        MODULATION_SCHEMES[i - 1].bitsPerSymbol
+      );
     }
   });
   it('Roll-off 0–0,5 und Effizienz 0–1', () => {

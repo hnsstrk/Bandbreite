@@ -17,14 +17,14 @@ import transmitterData from './transmitters.json';
  * Transmitter type classification
  */
 export type TransmitterType =
-  | 'time_signal'      // Zeitzeichensender
-  | 'broadcast_lw'     // Langwellen-Rundfunk
-  | 'broadcast_mw'     // Mittelwellen-Rundfunk
-  | 'broadcast_sw'     // Kurzwellen-Rundfunk
-  | 'broadcast_fm'     // UKW-Rundfunk
-  | 'navigation'       // Navigationssender
-  | 'amateur'          // Amateurfunk-Relais
-  | 'utility';         // Utility-Stationen, Forschungs- und Militäranlagen
+  | 'time_signal' // Zeitzeichensender
+  | 'broadcast_lw' // Langwellen-Rundfunk
+  | 'broadcast_mw' // Mittelwellen-Rundfunk
+  | 'broadcast_sw' // Kurzwellen-Rundfunk
+  | 'broadcast_fm' // UKW-Rundfunk
+  | 'navigation' // Navigationssender
+  | 'amateur' // Amateurfunk-Relais
+  | 'utility'; // Utility-Stationen, Forschungs- und Militäranlagen
 
 /**
  * Feinere Einordnung innerhalb eines TransmitterType.
@@ -36,11 +36,11 @@ export type TransmitterType =
  * deshalb wird die Zusatzinformation hier additiv als optionales Feld geführt.
  */
 export type TransmitterSubtype =
-  | 'military_vlf'     // militärische Längstwellensender
-  | 'radar'            // Radaranlagen
-  | 'gnss'             // Satellitennavigationssignale
-  | 'deep_space'       // Boden-Weltraum-Verbindungen
-  | 'research';        // Forschungs- und Empfangsanlagen
+  | 'military_vlf' // militärische Längstwellensender
+  | 'radar' // Radaranlagen
+  | 'gnss' // Satellitennavigationssignale
+  | 'deep_space' // Boden-Weltraum-Verbindungen
+  | 'research'; // Forschungs- und Empfangsanlagen
 
 /**
  * Art der angegebenen Leistung.
@@ -115,13 +115,13 @@ export const ALL_TRANSMITTERS: Transmitter[] = [
 
 export const TRANSMITTERS_BY_TYPE = {
   time_signal: TIME_SIGNAL_TRANSMITTERS,
-  broadcast_lw: BROADCAST_TRANSMITTERS.filter(t => t.type === 'broadcast_lw'),
-  broadcast_mw: BROADCAST_TRANSMITTERS.filter(t => t.type === 'broadcast_mw'),
-  broadcast_sw: BROADCAST_TRANSMITTERS.filter(t => t.type === 'broadcast_sw'),
-  broadcast_fm: BROADCAST_TRANSMITTERS.filter(t => t.type === 'broadcast_fm'),
+  broadcast_lw: BROADCAST_TRANSMITTERS.filter((t) => t.type === 'broadcast_lw'),
+  broadcast_mw: BROADCAST_TRANSMITTERS.filter((t) => t.type === 'broadcast_mw'),
+  broadcast_sw: BROADCAST_TRANSMITTERS.filter((t) => t.type === 'broadcast_sw'),
+  broadcast_fm: BROADCAST_TRANSMITTERS.filter((t) => t.type === 'broadcast_fm'),
   navigation: NAVIGATION_TRANSMITTERS,
   amateur: AMATEUR_TRANSMITTERS,
-  utility: [...UTILITY_TRANSMITTERS, ...SCIENCE_TRANSMITTERS],
+  utility: [...UTILITY_TRANSMITTERS, ...SCIENCE_TRANSMITTERS]
 } as const;
 
 export const TYPE_NAMES: Record<TransmitterType, { name: string; nameDE: string }> =
@@ -136,11 +136,12 @@ export const TYPE_NAMES: Record<TransmitterType, { name: string; nameDE: string 
  */
 export function searchTransmitters(query: string): Transmitter[] {
   const lowerQuery = query.toLowerCase();
-  return ALL_TRANSMITTERS.filter(t =>
-    t.name.toLowerCase().includes(lowerQuery) ||
-    t.nameDE.toLowerCase().includes(lowerQuery) ||
-    t.location.name.toLowerCase().includes(lowerQuery) ||
-    t.location.country.toLowerCase().includes(lowerQuery)
+  return ALL_TRANSMITTERS.filter(
+    (t) =>
+      t.name.toLowerCase().includes(lowerQuery) ||
+      t.nameDE.toLowerCase().includes(lowerQuery) ||
+      t.location.name.toLowerCase().includes(lowerQuery) ||
+      t.location.country.toLowerCase().includes(lowerQuery)
   );
 }
 
@@ -148,21 +149,19 @@ export function searchTransmitters(query: string): Transmitter[] {
  * Find transmitters by frequency range
  */
 export function findTransmittersByFrequency(minHz: number, maxHz: number): Transmitter[] {
-  return ALL_TRANSMITTERS.filter(t =>
-    t.frequencyHz >= minHz && t.frequencyHz <= maxHz
-  );
+  return ALL_TRANSMITTERS.filter((t) => t.frequencyHz >= minHz && t.frequencyHz <= maxHz);
 }
 
 /**
  * Liefert alle Sender einer Feinkategorie (Subtype)
  */
 export function getTransmittersBySubtype(subtype: TransmitterSubtype): Transmitter[] {
-  return ALL_TRANSMITTERS.filter(t => t.subtype === subtype);
+  return ALL_TRANSMITTERS.filter((t) => t.subtype === subtype);
 }
 
 /**
  * Get transmitters by type
  */
 export function getTransmittersByType(type: TransmitterType): Transmitter[] {
-  return ALL_TRANSMITTERS.filter(t => t.type === type);
+  return ALL_TRANSMITTERS.filter((t) => t.type === type);
 }

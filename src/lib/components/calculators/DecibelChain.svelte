@@ -10,13 +10,7 @@
   import ResultCard from '$lib/components/ui/ResultCard.svelte';
   import Slider from '$lib/components/ui/Slider.svelte';
   import { formatNumber } from '$lib/utils/formatting';
-  import {
-    accumulateChain,
-    chainGainDb,
-    chainLossDb,
-    chainTotalDbm,
-    type ChainStage
-  } from '$lib/utils/decibel';
+  import { accumulateChain, chainGainDb, chainLossDb, chainTotalDbm, type ChainStage } from '$lib/utils/decibel';
   import {
     CHAIN_AXIS_LEFT,
     CHAIN_AXIS_RIGHT,
@@ -70,22 +64,11 @@
           y2={viewHeight - FOOT_HEIGHT}
           class="chart-grid-line"
         />
-        <text
-          x={chainX(tick)}
-          y={viewHeight - FOOT_HEIGHT + 18}
-          text-anchor="middle"
-          class="chart-axis-text"
-        >
+        <text x={chainX(tick)} y={viewHeight - FOOT_HEIGHT + 18} text-anchor="middle" class="chart-axis-text">
           {tick}
         </text>
       {/each}
-      <line
-        x1={chainX(0)}
-        y1={HEAD_HEIGHT - 6}
-        x2={chainX(0)}
-        y2={viewHeight - FOOT_HEIGHT}
-        class="chart-axis-line"
-      />
+      <line x1={chainX(0)} y1={HEAD_HEIGHT - 6} x2={chainX(0)} y2={viewHeight - FOOT_HEIGHT} class="chart-axis-line" />
 
       {#each chain as point, index (point.stage.id)}
         {@const previous = index === 0 ? 0 : chain[index - 1].levelDbm}
@@ -94,7 +77,7 @@
         {@const to = Math.max(chainX(previous), chainX(point.levelDbm))}
         <rect
           x={from}
-          y={y}
+          {y}
           width={Math.max(2, to - from)}
           height={BAR_HEIGHT}
           rx="3"
@@ -102,15 +85,10 @@
           opacity="0.85"
         />
         <text x={CHAIN_AXIS_LEFT + 6} y={y + 14} class="chart-axis-text">
-          {point.stage.label} {signed(point.stage.db, 0)} dB
+          {point.stage.label}
+          {signed(point.stage.db, 0)} dB
         </text>
-        <text
-          x={CHAIN_AXIS_RIGHT}
-          y={y + 14}
-          text-anchor="end"
-          class="chart-axis-text"
-          font-weight="600"
-        >
+        <text x={CHAIN_AXIS_RIGHT} y={y + 14} text-anchor="end" class="chart-axis-text" font-weight="600">
           {formatNumber(point.levelDbm, 1)} dBm
         </text>
       {/each}
@@ -124,11 +102,7 @@
         stroke-width="1"
         stroke-dasharray="3,3"
       />
-      <text
-        x={chainX(CHAIN_REFERENCE_DBM) + 4}
-        y={viewHeight - FOOT_HEIGHT + 18}
-        class="chart-legend-text"
-      >
+      <text x={chainX(CHAIN_REFERENCE_DBM) + 4} y={viewHeight - FOOT_HEIGHT + 18} class="chart-legend-text">
         Empfindlichkeit {CHAIN_REFERENCE_DBM} dBm
       </text>
     </svg>

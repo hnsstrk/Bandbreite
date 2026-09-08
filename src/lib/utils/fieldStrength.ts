@@ -185,8 +185,7 @@ export function computeFieldStrength(input: FieldStrengthInput): FieldStrengthRe
   const eirpW = eirpWatt(txPowerW, gainDbi);
   const powerDensityW = powerDensityWattPerM2(eirpW, distanceM);
   const fieldVPerM = fieldStrengthVPerM(eirpW, distanceM);
-  const apertureM2 =
-    frequencyHz > 0 ? effectiveApertureM2(rxGainDbi, wavelengthM(frequencyHz)) : 0;
+  const apertureM2 = frequencyHz > 0 ? effectiveApertureM2(rxGainDbi, wavelengthM(frequencyHz)) : 0;
 
   return {
     eirpW,

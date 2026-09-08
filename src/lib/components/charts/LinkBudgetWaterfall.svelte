@@ -84,8 +84,7 @@
       <ul class="wf-legend">
         {#each LEGEND_ENTRIES as entry (entry.id)}
           <li class="wf-legend__item">
-            <span class="wf-legend__swatch" style="background: {entry.color}" aria-hidden="true"
-            ></span>
+            <span class="wf-legend__swatch" style="background: {entry.color}" aria-hidden="true"></span>
             <span>{entry.label}</span>
           </li>
         {/each}
@@ -148,7 +147,7 @@
           <g>
             <title>{ariaLabelFor(step)}</title>
             <rect
-              x={x}
+              {x}
               y={barY1}
               width={barWidth}
               height={Math.max(barHeight, MIN_BAR_HEIGHT)}
@@ -188,12 +187,8 @@
         <g transform="translate(0, {chartHeight + 10})">
           {#each steps as step, i (step.shortLabel)}
             {@const x = (xScale(i) ?? 0) + xScale.bandwidth() / 2}
-            <text
-              class="chart-axis-text"
-              x={x}
-              y="0"
-              text-anchor="middle"
-              transform="rotate(-45 {x} 0)">{step.shortLabel}</text
+            <text class="chart-axis-text" {x} y="0" text-anchor="middle" transform="rotate(-45 {x} 0)"
+              >{step.shortLabel}</text
             >
           {/each}
         </g>
@@ -209,12 +204,8 @@
               </text>
             </g>
           {/each}
-          <text
-            class="chart-axis-label"
-            transform="rotate(-90)"
-            x={-chartHeight / 2}
-            y="-45"
-            text-anchor="middle">Pegel (dBm)</text
+          <text class="chart-axis-label" transform="rotate(-90)" x={-chartHeight / 2} y="-45" text-anchor="middle"
+            >Pegel (dBm)</text
           >
         </g>
       </g>

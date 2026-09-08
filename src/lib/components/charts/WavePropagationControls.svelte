@@ -19,16 +19,10 @@
     frequencyMHz: number;
   }
 
-  let {
-    selectedModeId = $bindable(),
-    isNighttime = $bindable(),
-    frequencyMHz = $bindable()
-  }: Props = $props();
+  let { selectedModeId = $bindable(), isNighttime = $bindable(), frequencyMHz = $bindable() }: Props = $props();
 
   let recommendedId = $derived(recommendedMode(frequencyMHz));
-  let recommendedLabel = $derived(
-    MODE_OPTIONS.find((option) => option.id === recommendedId)?.label ?? ''
-  );
+  let recommendedLabel = $derived(MODE_OPTIONS.find((option) => option.id === recommendedId)?.label ?? '');
 
   function handleModeClick(id: string) {
     selectedModeId = id;
@@ -62,9 +56,7 @@
     value={isNighttime ? 'night' : 'day'}
     options={TIME_OPTIONS}
     onchange={handleTimeChange}
-    hint={isNighttime
-      ? 'D-Schicht verschwindet, F1 und F2 verschmelzen'
-      : 'Alle Ionosphärenschichten aktiv'}
+    hint={isNighttime ? 'D-Schicht verschwindet, F1 und F2 verschmelzen' : 'Alle Ionosphärenschichten aktiv'}
   />
 
   <NumberInput

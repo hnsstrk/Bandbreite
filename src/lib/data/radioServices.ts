@@ -85,10 +85,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 3.95e6, maxHz: 26.1e6, label: 'Kurzwelle (Teilbänder)', status: 'primaer' },
       { minHz: 87.5e6, maxHz: 108e6, label: 'UKW/FM (Band II)', status: 'primaer' },
       { minHz: 174e6, maxHz: 230e6, label: 'DAB+ (Band III)', status: 'primaer' },
-      { minHz: 470e6, maxHz: 694e6, label: 'DVB-T2 (UHF-Kanäle 21–48)', status: 'primaer' },
+      { minHz: 470e6, maxHz: 694e6, label: 'DVB-T2 (UHF-Kanäle 21–48)', status: 'primaer' }
     ],
     examplesDE: ['UKW-Hörfunk', 'DAB+ Bundesmux', 'DVB-T2 HD', 'Kurzwellen-Auslandsdienste'],
-    source: 'VO Funk Art. 5; Genfer Pläne GE75/GE84/GE06; BNetzA-Frequenzplan',
+    source: 'VO Funk Art. 5; Genfer Pläne GE75/GE84/GE06; BNetzA-Frequenzplan'
   },
   {
     id: 'rundfunkdienst-satellit',
@@ -102,10 +102,10 @@ export const RADIO_SERVICES: RadioService[] = [
     allocations: [
       { minHz: 10.7e9, maxHz: 12.75e9, label: 'Ku-Band Downlink', status: 'primaer' },
       { minHz: 13.75e9, maxHz: 14.5e9, label: 'Ku-Band Uplink', status: 'primaer' },
-      { minHz: 21.4e9, maxHz: 22e9, label: 'Ka-Band BSS (Region 1)', status: 'primaer' },
+      { minHz: 21.4e9, maxHz: 22e9, label: 'Ka-Band BSS (Region 1)', status: 'primaer' }
     ],
     examplesDE: ['Astra 19,2° Ost', 'Eutelsat Hotbird 13° Ost'],
-    source: 'VO Funk Art. 5 und Anhang 30/30A',
+    source: 'VO Funk Art. 5 und Anhang 30/30A'
   },
 
   // --------------------------------------------------------------------------
@@ -126,10 +126,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 1710e6, maxHz: 1880e6, label: '1800-MHz-Band (n3/B3)', status: 'primaer' },
       { minHz: 1920e6, maxHz: 2170e6, label: '2100-MHz-Band (n1/B1)', status: 'primaer' },
       { minHz: 2500e6, maxHz: 2690e6, label: '2600-MHz-Band (n7/n38)', status: 'primaer' },
-      { minHz: 3400e6, maxHz: 3800e6, label: '3,6-GHz-Band (n78)', status: 'primaer' },
+      { minHz: 3400e6, maxHz: 3800e6, label: '3,6-GHz-Band (n78)', status: 'primaer' }
     ],
     examplesDE: ['GSM', 'UMTS', 'LTE', '5G NR', 'Betriebsfunk', 'Bündelfunk'],
-    source: 'BNetzA-Frequenzplan; 3GPP TS 36.101 / TS 38.101-1',
+    source: 'BNetzA-Frequenzplan; 3GPP TS 36.101 / TS 38.101-1'
   },
   {
     id: 'seefunkdienst',
@@ -143,10 +143,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 415e3, maxHz: 526.5e3, label: 'MF-Seefunk / NAVTEX', status: 'primaer' },
       { minHz: 1605e3, maxHz: 4000e3, label: 'MF-Seefunk (u. a. 2182 kHz)', status: 'primaer' },
       { minHz: 4e6, maxHz: 27.5e6, label: 'HF-Seefunkbänder (4–25 MHz)', status: 'primaer' },
-      { minHz: 156e6, maxHz: 162.05e6, label: 'UKW-Seefunk (Kanäle 1–88, AIS)', status: 'primaer' },
+      { minHz: 156e6, maxHz: 162.05e6, label: 'UKW-Seefunk (Kanäle 1–88, AIS)', status: 'primaer' }
     ],
     examplesDE: ['UKW-Kanal 16', 'DSC-Kanal 70', 'NAVTEX 518 kHz', 'AIS 161,975/162,025 MHz'],
-    source: 'VO Funk Art. 5, 31–34 und Anhang 18; IMO GMDSS',
+    source: 'VO Funk Art. 5, 31–34 und Anhang 18; IMO GMDSS'
   },
   {
     id: 'flugfunkdienst',
@@ -160,10 +160,10 @@ export const RADIO_SERVICES: RadioService[] = [
     allocations: [
       { minHz: 2850e3, maxHz: 22e6, label: 'HF-Flugfunk (Ozeanstrecken)', status: 'primaer' },
       { minHz: 117.975e6, maxHz: 137e6, label: 'VHF-Flugfunk', status: 'primaer' },
-      { minHz: 225e6, maxHz: 400e6, label: 'UHF-Militärflugfunk', status: 'primaer' },
+      { minHz: 225e6, maxHz: 400e6, label: 'UHF-Militärflugfunk', status: 'primaer' }
     ],
     examplesDE: ['Towerfrequenzen', 'ATIS', 'ACARS', 'HF-Ozeanfunk (SELCAL)'],
-    source: 'ICAO Annex 10; VO Funk Art. 5 und Anhang 27',
+    source: 'ICAO Annex 10; VO Funk Art. 5 und Anhang 27'
   },
 
   // --------------------------------------------------------------------------
@@ -183,10 +183,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 10.7e9, maxHz: 13.25e9, label: 'Richtfunk 11/13 GHz', status: 'primaer' },
       { minHz: 17.7e9, maxHz: 19.7e9, label: 'Richtfunk 18 GHz', status: 'primaer' },
       { minHz: 24.25e9, maxHz: 26.5e9, label: 'Richtfunk 26 GHz', status: 'primaer' },
-      { minHz: 71e9, maxHz: 86e9, label: 'E-Band-Richtfunk (71–76/81–86 GHz)', status: 'primaer' },
+      { minHz: 71e9, maxHz: 86e9, label: 'E-Band-Richtfunk (71–76/81–86 GHz)', status: 'primaer' }
     ],
     examplesDE: ['Mobilfunk-Backhaul', 'E-Band-Gigabit-Richtfunk', 'Behördenrichtfunknetze'],
-    source: 'VO Funk Art. 5; ECC/REC über Richtfunkkanalraster',
+    source: 'VO Funk Art. 5; ECC/REC über Richtfunkkanalraster'
   },
 
   // --------------------------------------------------------------------------
@@ -207,10 +207,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 108e6, maxHz: 117.975e6, label: 'VOR / ILS-Landekurs', status: 'primaer' },
       { minHz: 328.6e6, maxHz: 335.4e6, label: 'ILS-Gleitweg', status: 'primaer' },
       { minHz: 960e6, maxHz: 1215e6, label: 'DME / TACAN', status: 'primaer' },
-      { minHz: 4.2e9, maxHz: 4.4e9, label: 'Radarhöhenmesser', status: 'primaer' },
+      { minHz: 4.2e9, maxHz: 4.4e9, label: 'Radarhöhenmesser', status: 'primaer' }
     ],
     examplesDE: ['VOR/DME', 'ILS CAT III', 'DME-Kanalpaare', 'Radioaltimeter'],
-    source: 'ICAO Annex 10 Vol. I; VO Funk Art. 5',
+    source: 'ICAO Annex 10 Vol. I; VO Funk Art. 5'
   },
   {
     id: 'funknavigation-satellit',
@@ -223,10 +223,10 @@ export const RADIO_SERVICES: RadioService[] = [
     allocations: [
       { minHz: 1164e6, maxHz: 1215e6, label: 'L5/E5/B2', status: 'primaer' },
       { minHz: 1215e6, maxHz: 1300e6, label: 'L2/E6/B3', status: 'primaer' },
-      { minHz: 1559e6, maxHz: 1610e6, label: 'L1/E1/B1', status: 'primaer' },
+      { minHz: 1559e6, maxHz: 1610e6, label: 'L1/E1/B1', status: 'primaer' }
     ],
     examplesDE: ['GPS', 'Galileo', 'GLONASS', 'BeiDou', 'EGNOS (SBAS)'],
-    source: 'VO Funk Art. 5; IS-GPS-200/705; Galileo OS SIS ICD',
+    source: 'VO Funk Art. 5; IS-GPS-200/705; Galileo OS SIS ICD'
   },
   {
     id: 'funkortung',
@@ -238,14 +238,24 @@ export const RADIO_SERVICES: RadioService[] = [
       'mitwirkt. Umfasst Flugsicherungs-, Wetter-, Schiffs-, Militär- und Kfz-Radar.',
     allocations: [
       { minHz: 1215e6, maxHz: 1400e6, label: 'Streckenradar (L-Band)', status: 'primaer' },
-      { minHz: 2700e6, maxHz: 3100e6, label: 'Anflug-, Wetter- und Schiffsradar (S-Band)', status: 'primaer' },
+      {
+        minHz: 2700e6,
+        maxHz: 3100e6,
+        label: 'Anflug-, Wetter- und Schiffsradar (S-Band)',
+        status: 'primaer'
+      },
       { minHz: 5250e6, maxHz: 5725e6, label: 'Wetterradar (C-Band)', status: 'primaer' },
       { minHz: 8.5e9, maxHz: 10.68e9, label: 'X-Band-Radar', status: 'primaer' },
-      { minHz: 24.05e9, maxHz: 24.25e9, label: 'Bewegungsmelder, Verkehrsradar', status: 'primaer' },
-      { minHz: 76e9, maxHz: 81e9, label: 'Kfz-Radar', status: 'primaer' },
+      {
+        minHz: 24.05e9,
+        maxHz: 24.25e9,
+        label: 'Bewegungsmelder, Verkehrsradar',
+        status: 'primaer'
+      },
+      { minHz: 76e9, maxHz: 81e9, label: 'Kfz-Radar', status: 'primaer' }
     ],
     examplesDE: ['DWD-Wetterradarverbund (C-Band)', 'ASR/ARSR', 'Marineradar', 'ADAS-Radar'],
-    source: 'VO Funk Art. 5; ETSI EN 301 091 (Kfz-Radar)',
+    source: 'VO Funk Art. 5; ETSI EN 301 091 (Kfz-Radar)'
   },
 
   // --------------------------------------------------------------------------
@@ -270,10 +280,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 28e6, maxHz: 29.7e6, label: '10 m', status: 'primaer' },
       { minHz: 144e6, maxHz: 146e6, label: '2 m', status: 'primaer' },
       { minHz: 430e6, maxHz: 440e6, label: '70 cm', status: 'gemischt' },
-      { minHz: 10e9, maxHz: 10.5e9, label: '3 cm', status: 'gemischt' },
+      { minHz: 10e9, maxHz: 10.5e9, label: '3 cm', status: 'gemischt' }
     ],
     examplesDE: ['CW/SSB-DX-Verkehr', 'FM-Relaisfunk', 'FT8', 'EME (Erde-Mond-Erde)', 'ATV'],
-    source: 'AFuV Anlage 1; IARU-Region-1-Bandpläne — Details siehe amateurBands.ts',
+    source: 'AFuV Anlage 1; IARU-Region-1-Bandpläne — Details siehe amateurBands.ts'
   },
   {
     id: 'amateurfunk-satellit',
@@ -286,10 +296,10 @@ export const RADIO_SERVICES: RadioService[] = [
     allocations: [
       { minHz: 145.8e6, maxHz: 146e6, label: '2-m-Satellitensegment', status: 'primaer' },
       { minHz: 435e6, maxHz: 438e6, label: '70-cm-Satellitensegment', status: 'sekundaer' },
-      { minHz: 1260e6, maxHz: 1270e6, label: '23-cm-Uplink', status: 'sekundaer' },
+      { minHz: 1260e6, maxHz: 1270e6, label: '23-cm-Uplink', status: 'sekundaer' }
     ],
     examplesDE: ['AMSAT-Transponder', 'ISS-Packet-Digipeater', 'QO-100 (geostationär)'],
-    source: 'AFuV Anlage 1; VO Funk Art. 5',
+    source: 'AFuV Anlage 1; VO Funk Art. 5'
   },
 
   // --------------------------------------------------------------------------
@@ -309,10 +319,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 165.21e6, maxHz: 169.38e6, label: 'Analoges 2-m-Band (Auslauf)', status: 'primaer' },
       { minHz: 380e6, maxHz: 385e6, label: 'TETRA Uplink (Endgerät → Basis)', status: 'primaer' },
       { minHz: 390e6, maxHz: 395e6, label: 'TETRA Downlink (Basis → Endgerät)', status: 'primaer' },
-      { minHz: 406.1e6, maxHz: 410e6, label: 'TETRA Direktbetrieb (DMO)', status: 'primaer' },
+      { minHz: 406.1e6, maxHz: 410e6, label: 'TETRA Direktbetrieb (DMO)', status: 'primaer' }
     ],
     examplesDE: ['BOS-Digitalfunk (BDBOS)', 'Alarmierung über POCSAG/TETRA'],
-    source: 'BDBOS; BNetzA-Frequenzplan; ETSI EN 300 392 (TETRA)',
+    source: 'BDBOS; BNetzA-Frequenzplan; ETSI EN 300 392 (TETRA)'
   },
   {
     id: 'pmr-jedermannfunk',
@@ -328,10 +338,15 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 149.025e6, maxHz: 149.1125e6, label: 'Freenet (nur DE)', status: 'primaer' },
       { minHz: 433.05e6, maxHz: 434.79e6, label: 'SRD 433 MHz (ISM)', status: 'sekundaer' },
       { minHz: 446e6, maxHz: 446.2e6, label: 'PMR446 (analog und digital)', status: 'primaer' },
-      { minHz: 863e6, maxHz: 870e6, label: 'SRD 868 MHz (LoRa, Wireless M-Bus)', status: 'sekundaer' },
+      {
+        minHz: 863e6,
+        maxHz: 870e6,
+        label: 'SRD 868 MHz (LoRa, Wireless M-Bus)',
+        status: 'sekundaer'
+      }
     ],
     examplesDE: ['PMR446-Handfunkgeräte', 'CB-Funk Kanal 9/19', 'LoRaWAN', 'Funkfernsteuerungen'],
-    source: 'BNetzA Vfg. 21/2021 (CB); ETSI EN 300 220, EN 303 406; ECC/DEC/(15)05',
+    source: 'BNetzA Vfg. 21/2021 (CB); ETSI EN 300 220, EN 303 406; ECC/DEC/(15)05'
   },
 
   // --------------------------------------------------------------------------
@@ -351,10 +366,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 1610.6e6, maxHz: 1613.8e6, label: 'OH-Linie', status: 'primaer' },
       { minHz: 4990e6, maxHz: 5000e6, label: 'Kontinuum C-Band', status: 'primaer' },
       { minHz: 22.21e9, maxHz: 22.5e9, label: 'H2O-Maser', status: 'primaer' },
-      { minHz: 42.5e9, maxHz: 43.5e9, label: 'SiO-Maser', status: 'primaer' },
+      { minHz: 42.5e9, maxHz: 43.5e9, label: 'SiO-Maser', status: 'primaer' }
     ],
     examplesDE: ['Radioteleskop Effelsberg (100 m)', 'LOFAR-Stationen', 'ALMA'],
-    source: 'VO Funk Art. 5 und Res. 739; ITU-R RA.769',
+    source: 'VO Funk Art. 5 und Res. 739; ITU-R RA.769'
   },
   {
     id: 'weltraumforschung',
@@ -371,10 +386,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 7145e6, maxHz: 7235e6, label: 'Deep Space Uplink (X-Band)', status: 'primaer' },
       { minHz: 8400e6, maxHz: 8450e6, label: 'Deep Space Downlink (X-Band)', status: 'primaer' },
       { minHz: 31.8e9, maxHz: 32.3e9, label: 'Deep Space Downlink (Ka-Band)', status: 'primaer' },
-      { minHz: 34.2e9, maxHz: 34.7e9, label: 'Deep Space Uplink (Ka-Band)', status: 'primaer' },
+      { minHz: 34.2e9, maxHz: 34.7e9, label: 'Deep Space Uplink (Ka-Band)', status: 'primaer' }
     ],
     examplesDE: ['NASA Deep Space Network', 'ESA Estrack (Cebreros, New Norcia, Malargüe)'],
-    source: 'VO Funk Art. 5; CCSDS/SFCG-Empfehlungen',
+    source: 'VO Funk Art. 5; CCSDS/SFCG-Empfehlungen'
   },
   {
     id: 'erderkundung-satellit',
@@ -389,10 +404,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 5250e6, maxHz: 5570e6, label: 'SAR C-Band (aktiv)', status: 'primaer' },
       { minHz: 9.3e9, maxHz: 9.9e9, label: 'SAR X-Band (aktiv)', status: 'primaer' },
       { minHz: 23.6e9, maxHz: 24e9, label: 'Wasserdampfradiometrie (passiv)', status: 'primaer' },
-      { minHz: 50.2e9, maxHz: 50.4e9, label: 'Temperatursondierung (passiv)', status: 'primaer' },
+      { minHz: 50.2e9, maxHz: 50.4e9, label: 'Temperatursondierung (passiv)', status: 'primaer' }
     ],
     examplesDE: ['Sentinel-1 (C-Band-SAR)', 'TerraSAR-X', 'MetOp-Radiometer'],
-    source: 'VO Funk Art. 5; EUMETSAT/ESA-Missionsdaten',
+    source: 'VO Funk Art. 5; EUMETSAT/ESA-Missionsdaten'
   },
   {
     id: 'normalfrequenz-zeitzeichen',
@@ -412,10 +427,10 @@ export const RADIO_SERVICES: RadioService[] = [
       { minHz: 9.995e6, maxHz: 10.005e6, label: 'Normalfrequenz 10 MHz', status: 'primaer' },
       { minHz: 14.99e6, maxHz: 15.01e6, label: 'Normalfrequenz 15 MHz', status: 'primaer' },
       { minHz: 19.99e6, maxHz: 20.01e6, label: 'Normalfrequenz 20 MHz', status: 'primaer' },
-      { minHz: 24.99e6, maxHz: 25.01e6, label: 'Normalfrequenz 25 MHz', status: 'primaer' },
+      { minHz: 24.99e6, maxHz: 25.01e6, label: 'Normalfrequenz 25 MHz', status: 'primaer' }
     ],
     examplesDE: ['DCF77 (77,5 kHz, LF-Zuweisung)', 'WWV/WWVH', 'RWM', 'CHU'],
-    source: 'VO Funk Art. 5 (Bänder um 2,5/5/10/15/20/25 MHz)',
+    source: 'VO Funk Art. 5 (Bänder um 2,5/5/10/15/20/25 MHz)'
   },
   {
     id: 'meteorologie',
@@ -426,14 +441,24 @@ export const RADIO_SERVICES: RadioService[] = [
       'Übertragung von Messwerten aufsteigender Radiosonden sowie Bild- und Datenempfang ' +
       'von Wettersatelliten.',
     allocations: [
-      { minHz: 137e6, maxHz: 138e6, label: 'Polarumlaufende Wettersatelliten (APT/LRPT)', status: 'primaer' },
+      {
+        minHz: 137e6,
+        maxHz: 138e6,
+        label: 'Polarumlaufende Wettersatelliten (APT/LRPT)',
+        status: 'primaer'
+      },
       { minHz: 400.15e6, maxHz: 406e6, label: 'Radiosonden (403-MHz-Band)', status: 'primaer' },
-      { minHz: 1668.4e6, maxHz: 1700e6, label: 'Radiosonden 1680 MHz / Satellitendaten', status: 'primaer' },
-      { minHz: 1690e6, maxHz: 1710e6, label: 'Wettersatelliten-Downlink', status: 'primaer' },
+      {
+        minHz: 1668.4e6,
+        maxHz: 1700e6,
+        label: 'Radiosonden 1680 MHz / Satellitendaten',
+        status: 'primaer'
+      },
+      { minHz: 1690e6, maxHz: 1710e6, label: 'Wettersatelliten-Downlink', status: 'primaer' }
     ],
     examplesDE: ['Radiosondenaufstiege des DWD', 'Meteosat', 'NOAA-APT'],
-    source: 'VO Funk Art. 5; WMO/EUMETSAT',
-  },
+    source: 'VO Funk Art. 5; WMO/EUMETSAT'
+  }
 ];
 
 /** Gruppenbezeichnungen für UI-Filter. */
@@ -446,7 +471,7 @@ export const RADIO_SERVICE_GROUP_LABELS: Record<RadioServiceGroup, string> = {
   satellit: 'Satellitenfunk',
   wissenschaft: 'Wissenschaft und Zeitzeichen',
   sicherheit: 'Sicherheitsbehörden',
-  amateur: 'Amateurfunk',
+  amateur: 'Amateurfunk'
 } as const;
 
 /**

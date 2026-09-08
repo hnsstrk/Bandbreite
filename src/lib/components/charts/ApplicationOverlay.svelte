@@ -4,11 +4,7 @@
    * Layout und Farben liegen in `applicationOverlayData.ts`.
    */
   import { scaleLog } from 'd3-scale';
-  import {
-    ALL_APPLICATIONS,
-    CATEGORY_NAMES,
-    type ApplicationCategory
-  } from '$lib/data/applications';
+  import { ALL_APPLICATIONS, CATEGORY_NAMES, type ApplicationCategory } from '$lib/data/applications';
   import { formatFrequencyRange } from '$lib/data/bands';
   import { formatFrequency } from '$lib/utils/formatting';
   import Button from '$lib/components/ui/Button.svelte';
@@ -17,7 +13,6 @@
   import ChartFrame from './ChartFrame.svelte';
   import {
     CATEGORY_ENTRIES,
-    CATEGORY_TOKENS,
     LABEL_MIN_WIDTH,
     LABEL_WIDE_WIDTH,
     ROW_HEIGHT,
@@ -34,12 +29,7 @@
     maxFrequencyHz?: number;
   }
 
-  let {
-    width = $bindable(1100),
-    height = 700,
-    minFrequencyHz = 100e3,
-    maxFrequencyHz = 100e9
-  }: Props = $props();
+  let { width = $bindable(1100), height = 700, minFrequencyHz = 100e3, maxFrequencyHz = 100e9 }: Props = $props();
 
   const margin = { top: 40, right: 20, bottom: 80, left: 60 } as const;
   /** Platz unterhalb der Balken für die Achse. */
@@ -55,20 +45,13 @@
 
   let filteredApplications = $derived(
     ALL_APPLICATIONS.filter(
-      (app) =>
-        selectedCategories.has(app.category) &&
-        app.maxHz >= minFrequencyHz &&
-        app.minHz <= maxFrequencyHz
+      (app) => selectedCategories.has(app.category) && app.maxHz >= minFrequencyHz && app.minHz <= maxFrequencyHz
     )
   );
 
-  let xScale = $derived(
-    scaleLog().domain([minFrequencyHz, maxFrequencyHz]).range([0, chartWidth]).clamp(true)
-  );
+  let xScale = $derived(scaleLog().domain([minFrequencyHz, maxFrequencyHz]).range([0, chartWidth]).clamp(true));
 
-  let rects = $derived(
-    layoutApplications(filteredApplications, xScale, minFrequencyHz, maxFrequencyHz)
-  );
+  let rects = $derived(layoutApplications(filteredApplications, xScale, minFrequencyHz, maxFrequencyHz));
 
   let contentHeight = $derived(
     rects.length === 0
@@ -97,7 +80,6 @@
     selectedCategories = new Set();
     selectedId = null;
   }
-
 </script>
 
 <Card
@@ -135,8 +117,7 @@
           {#each CATEGORY_ENTRIES as entry (entry.id)}
             {#if selectedCategories.has(entry.id)}
               <li class="overlay__legend-item">
-                <span class="overlay__swatch" style="background: {entry.token}" aria-hidden="true"
-                ></span>
+                <span class="overlay__swatch" style="background: {entry.token}" aria-hidden="true"></span>
                 <span>{entry.label}</span>
               </li>
             {/if}
@@ -230,12 +211,7 @@
       {/snippet}
     </ChartFrame>
 
-    <ApplicationDetails
-      applications={filteredApplications}
-      {selectedId}
-      onselect={(id) => (selectedId = id)}
-    />
-
+    <ApplicationDetails applications={filteredApplications} {selectedId} onselect={(id) => (selectedId = id)} />
   </div>
 </Card>
 
@@ -274,15 +250,4 @@
     display: inline-block;
     flex: none;
   }
-
-
-
-
-
-
-
-
-
-
-
 </style>

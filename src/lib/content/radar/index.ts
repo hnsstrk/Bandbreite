@@ -18,7 +18,9 @@ const microsecondsPerKm = formatNumber(calculateRoundTripTime(ONE_KILOMETRE_M) *
 const chapterCards: CardItem[] = getHubChildren('/wissen/radar/').map((node) => ({
   title: node.label,
   html: `${node.description ?? ''} <a href="${node.href}">Zum Unterkapitel</a>`,
-  facts: node.keywords?.length ? [{ label: 'Themen', value: node.keywords.slice(0, 4).join(' · ') }] : undefined
+  facts: node.keywords?.length
+    ? [{ label: 'Themen', value: node.keywords.slice(0, 4).join(' · ') }]
+    : undefined
 }));
 
 export const radarHubArticle: KnowledgeArticle = {
@@ -26,8 +28,7 @@ export const radarHubArticle: KnowledgeArticle = {
   kicker: 'Wissen · Kapitel',
   title: 'Radartechnik',
   icon: 'signal',
-  lead:
-    'RADAR — Radio Detection and Ranging — ortet Objekte mit elektromagnetischen Wellen und misst dabei Entfernung, Richtung und Geschwindigkeit. Dieses Kapitel führt in drei Schritten durch das Thema: von der Laufzeitmessung und der Radargleichung über die Sende- und Auswerteverfahren bis zum kooperativen Sekundärradar der Luftfahrt.',
+  lead: 'RADAR — Radio Detection and Ranging — ortet Objekte mit elektromagnetischen Wellen und misst dabei Entfernung, Richtung und Geschwindigkeit. Dieses Kapitel führt in drei Schritten durch das Thema: von der Laufzeitmessung und der Radargleichung über die Sende- und Auswerteverfahren bis zum kooperativen Sekundärradar der Luftfahrt.',
   meta: [
     { label: 'Unterkapitel', value: '3' },
     { label: 'Quelle', value: 'Skolnik · IEEE Std 521 · ICAO Annex 10' }

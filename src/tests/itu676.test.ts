@@ -25,8 +25,10 @@ describe('Linienkatalog P.676-13', () => {
   });
 
   it('Linienfrequenzen sind aufsteigend und im Bereich der Recommendation', () => {
-    for (let i = 1; i < O2_LINES.length; i++) expect(O2_LINES[i].f0).toBeGreaterThan(O2_LINES[i - 1].f0);
-    for (let i = 1; i < H2O_LINES.length; i++) expect(H2O_LINES[i].f0).toBeGreaterThan(H2O_LINES[i - 1].f0);
+    for (let i = 1; i < O2_LINES.length; i++)
+      expect(O2_LINES[i].f0).toBeGreaterThan(O2_LINES[i - 1].f0);
+    for (let i = 1; i < H2O_LINES.length; i++)
+      expect(H2O_LINES[i].f0).toBeGreaterThan(H2O_LINES[i - 1].f0);
     expect(O2_LINES[0].f0).toBeCloseTo(50.474214, 6);
     expect(H2O_LINES[0].f0).toBeCloseTo(22.23508, 5);
     expect(H2O_LINES[3].f0).toBeCloseTo(183.310087, 6);
@@ -68,7 +70,7 @@ describe('specificGasAttenuation gegen P.676-13-Referenzen (Meereshöhe, 15 °C,
 
   it('exakte Modellwerte (Regression gegen ITU-Rpy-identische Implementierung)', () => {
     expect(specificGasAttenuation(10, P, T, RHO).total).toBeCloseTo(0.014, 3);
-    expect(specificGasAttenuation(60, P, T, RHO).oxygen).toBeCloseTo(14.50, 1);
+    expect(specificGasAttenuation(60, P, T, RHO).oxygen).toBeCloseTo(14.5, 1);
     expect(specificGasAttenuation(94, P, T, RHO).total).toBeCloseTo(0.404, 2);
     expect(specificGasAttenuation(183.31, P, T, RHO).waterVapor).toBeCloseTo(28.25, 1);
   });
@@ -96,7 +98,9 @@ describe('specificGasAttenuation gegen P.676-13-Referenzen (Meereshöhe, 15 °C,
   });
 
   it('Sauerstoffdämpfung steigt mit dem Druck', () => {
-    expect(oxygenSpecificAttenuation(60, 1100, T)).toBeGreaterThan(oxygenSpecificAttenuation(60, 900, T));
+    expect(oxygenSpecificAttenuation(60, 1100, T)).toBeGreaterThan(
+      oxygenSpecificAttenuation(60, 900, T)
+    );
   });
 });
 
@@ -110,7 +114,9 @@ describe('equivalentHeights / slantPathGasAttenuation (Annex 2)', () => {
   });
 
   it('h_w steigt an der 22-GHz-Linie', () => {
-    expect(equivalentHeights(22.235, P, T, RHO).hwKm).toBeGreaterThan(equivalentHeights(12, P, T, RHO).hwKm);
+    expect(equivalentHeights(22.235, P, T, RHO).hwKm).toBeGreaterThan(
+      equivalentHeights(12, P, T, RHO).hwKm
+    );
   });
 
   it('A = (h_o·γ_o + h_w·γ_w)/sin θ – 12 GHz, 30°: ≈ 0,12 dB', () => {

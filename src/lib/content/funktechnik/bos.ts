@@ -64,7 +64,7 @@ export const SECTIONS: ArticleSection[] = [
         label: 'Kanalfrequenz im analogen BOS-Funk',
         variables: [
           { symbol: 'f_U', meaning: 'Frequenz im Unterband', unit: 'Hz' },
-          { symbol: 'f_0', meaning: 'Bandanfang, 74,215 MHz im 4-m-Band' , unit: 'Hz' },
+          { symbol: 'f_0', meaning: 'Bandanfang, 74,215 MHz im 4-m-Band', unit: 'Hz' },
           { symbol: 'K', meaning: 'Kanalnummer' },
           { symbol: 'K_0', meaning: 'erste Kanalnummer des Bandes, 347 im 4-m-Band' }
         ]

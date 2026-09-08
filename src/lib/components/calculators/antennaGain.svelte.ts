@@ -41,9 +41,7 @@ export const GAIN_FREQUENCY_UNITS = FREQUENCY_UNITS.filter(
 );
 
 /** Einheiten der Fernfeldangabe. */
-export const FAR_FIELD_UNITS = DISTANCE_UNITS.filter(
-  (unit) => unit.id === 'm' || unit.id === 'km'
-);
+export const FAR_FIELD_UNITS = DISTANCE_UNITS.filter((unit) => unit.id === 'm' || unit.id === 'km');
 
 export const ANTENNA_GAIN_PARAMS = {
   d: { default: 0.6, min: DIAMETER_MIN_M, max: DIAMETER_MAX_M },

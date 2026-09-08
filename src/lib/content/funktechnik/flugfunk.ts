@@ -111,7 +111,8 @@ export const SECTIONS: ArticleSection[] = [
   {
     id: 'navigation',
     title: 'Funknavigation: NDB, VOR, ILS und DME',
-    description: 'Vier Verfahren, vier Messgrößen — Richtung zum Sender, Richtung vom Sender, Ablage und Entfernung.',
+    description:
+      'Vier Verfahren, vier Messgrößen — Richtung zum Sender, Richtung vom Sender, Ablage und Entfernung.',
     blocks: [
       {
         kind: 'p',

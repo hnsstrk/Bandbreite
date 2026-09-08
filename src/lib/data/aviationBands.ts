@@ -95,7 +95,10 @@ const KHZ_PER_MHZ = 1000;
 
 /** Kanalbezeichnung in ihre Bestandteile zerlegen: „118.005" → 118 und 5 kHz. */
 function splitDesignator(designator: string): { mhz: number; khz: number } | undefined {
-  const match = designator.trim().replace(',', '.').match(/^(\d{3})\.(\d{3})$/);
+  const match = designator
+    .trim()
+    .replace(',', '.')
+    .match(/^(\d{3})\.(\d{3})$/);
   if (!match) return undefined;
   return { mhz: Number(match[1]), khz: Number(match[2]) };
 }

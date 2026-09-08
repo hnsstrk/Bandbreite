@@ -9,14 +9,14 @@
  * Historical event category
  */
 export type HistoryCategory =
-  | 'theory'       // Theoretical foundations
-  | 'invention'    // Key inventions
-  | 'broadcast'    // Broadcasting milestones
-  | 'mobile'       // Mobile communications
-  | 'satellite'    // Satellite communications
-  | 'digital'      // Digital revolution
-  | 'telegraphy'   // Draht- und Funktelegrafie, Telefonie
-  | 'navigation';  // Funknavigation, Radar und Ortung
+  | 'theory' // Theoretical foundations
+  | 'invention' // Key inventions
+  | 'broadcast' // Broadcasting milestones
+  | 'mobile' // Mobile communications
+  | 'satellite' // Satellite communications
+  | 'digital' // Digital revolution
+  | 'telegraphy' // Draht- und Funktelegrafie, Telefonie
+  | 'navigation'; // Funknavigation, Radar und Ortung
 
 /**
  * Historical event definition
@@ -45,10 +45,11 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
   {
     id: 'maxwell-equations',
     year: 1865,
-    title: 'Maxwell\'s Equations',
+    title: "Maxwell's Equations",
     titleDE: 'Maxwellsche Gleichungen',
     description: 'James Clerk Maxwell publishes his theory predicting electromagnetic waves',
-    descriptionDE: 'James Clerk Maxwell veröffentlicht seine Theorie der elektromagnetischen Wellen',
+    descriptionDE:
+      'James Clerk Maxwell veröffentlicht seine Theorie der elektromagnetischen Wellen',
     category: 'theory',
     person: 'James Clerk Maxwell',
     location: 'United Kingdom',
@@ -76,10 +77,12 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
   {
     id: 'marconi-patent',
     year: 1896,
-    title: 'Marconi\'s Radio Patent',
+    title: "Marconi's Radio Patent",
     titleDE: 'Marconis Funkpatent',
-    description: 'Marconi files the provisional patent application on 2 June 1896; British patent 12039 is granted in July 1897',
-    descriptionDE: 'Guglielmo Marconi meldet am 2. Juni 1896 vorläufig zum Patent an; das britische Patent 12039 wird im Juli 1897 erteilt',
+    description:
+      'Marconi files the provisional patent application on 2 June 1896; British patent 12039 is granted in July 1897',
+    descriptionDE:
+      'Guglielmo Marconi meldet am 2. Juni 1896 vorläufig zum Patent an; das britische Patent 12039 wird im Juli 1897 erteilt',
     category: 'invention',
     person: 'Guglielmo Marconi',
     location: 'United Kingdom',
@@ -103,8 +106,10 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     year: 1912,
     title: 'Titanic Disaster',
     titleDE: 'Titanic-Katastrophe',
-    description: 'The Carpathia rescues 712 people after a radio distress call; SOLAS 1914 makes radio watch mandatory',
-    descriptionDE: 'Nach dem Funknotruf rettet die Carpathia 712 Menschen. Die Folge ist die Funkwachpflicht nach SOLAS 1914.',
+    description:
+      'The Carpathia rescues 712 people after a radio distress call; SOLAS 1914 makes radio watch mandatory',
+    descriptionDE:
+      'Nach dem Funknotruf rettet die Carpathia 712 Menschen. Die Folge ist die Funkwachpflicht nach SOLAS 1914.',
     category: 'invention',
     frequencyHz: 500e3,
     significance: 'major'
@@ -129,7 +134,8 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     title: 'First Commercial Radio Broadcast',
     titleDE: 'Erste kommerzielle Radiosendung',
     description: 'KDKA Pittsburgh begins regular radio broadcasts',
-    descriptionDE: 'KDKA Pittsburgh beginnt regelmäßigen Rundfunk. Gesendet wurde zunächst auf 360 m Wellenlänge, also rund 833 kHz.',
+    descriptionDE:
+      'KDKA Pittsburgh beginnt regelmäßigen Rundfunk. Gesendet wurde zunächst auf 360 m Wellenlänge, also rund 833 kHz.',
     category: 'broadcast',
     frequencyHz: 833e3,
     location: 'Pittsburgh, USA',
@@ -313,7 +319,8 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     title: 'Bluetooth 1.0 Specification',
     titleDE: 'Bluetooth-Spezifikation 1.0',
     description: 'Bluetooth 1.0 specification released; the Bluetooth SIG had been founded in 1998',
-    descriptionDE: 'Die Bluetooth-Spezifikation 1.0 erscheint; die Bluetooth SIG war 1998 gegründet worden',
+    descriptionDE:
+      'Die Bluetooth-Spezifikation 1.0 erscheint; die Bluetooth SIG war 1998 gegründet worden',
     category: 'digital',
     frequencyHz: 2.4e9,
     significance: 'moderate'
@@ -343,7 +350,8 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     year: 1837,
     title: 'Electric Telegraph',
     titleDE: 'Elektrischer Telegraf',
-    description: 'Morse in the USA and Cooke/Wheatstone in Britain patent working telegraph systems',
+    description:
+      'Morse in the USA and Cooke/Wheatstone in Britain patent working telegraph systems',
     descriptionDE:
       'Samuel Morse in den USA sowie Cooke und Wheatstone in Großbritannien melden im ' +
       'selben Jahr betriebsfähige Telegrafensysteme zum Patent an. Nachrichten überholen ' +
@@ -351,7 +359,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'telegraphy',
     person: 'Samuel Morse; William Cooke und Charles Wheatstone',
     location: 'USA und Großbritannien',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'transatlantic-cable',
@@ -364,15 +372,16 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
       'funktionierendes Seekabel Irland mit Neufundland. Die Übertragungszeit für eine ' +
       'Nachricht über den Atlantik sinkt von Wochen auf Minuten.',
     category: 'telegraphy',
-    location: 'Valentia (Irland) — Heart\'s Content (Neufundland)',
-    significance: 'moderate',
+    location: "Valentia (Irland) — Heart's Content (Neufundland)",
+    significance: 'moderate'
   },
   {
     id: 'telephone-bell',
     year: 1876,
     title: 'Telephone Patent',
     titleDE: 'Telefonpatent',
-    description: 'Alexander Graham Bell patents the telephone; Philipp Reis had demonstrated a precursor in 1861',
+    description:
+      'Alexander Graham Bell patents the telephone; Philipp Reis had demonstrated a precursor in 1861',
     descriptionDE:
       'Alexander Graham Bell erhält das Patent auf den Fernsprecher. Einen Vorläufer ' +
       'hatte Philipp Reis bereits 1861 vorgeführt. Damit wird erstmals Sprache ' +
@@ -380,12 +389,12 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'telegraphy',
     person: 'Alexander Graham Bell',
     location: 'USA',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'marconi-first-transmission',
     year: 1895,
-    title: 'Marconi\'s First Wireless Transmission',
+    title: "Marconi's First Wireless Transmission",
     titleDE: 'Marconis erste Funkübertragung',
     description: 'Marconi transmits signals over about two kilometres, including over a hill',
     descriptionDE:
@@ -395,12 +404,12 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'invention',
     person: 'Guglielmo Marconi',
     location: 'Villa Griffone, Italien',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'huelsmeyer-telemobiloskop',
     year: 1904,
-    title: 'Hülsmeyer\'s Telemobiloscope',
+    title: "Hülsmeyer's Telemobiloscope",
     titleDE: 'Hülsmeyers Telemobiloskop',
     description: 'First patented device detecting ships by reflected radio waves',
     descriptionDE:
@@ -410,7 +419,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'navigation',
     person: 'Christian Hülsmeyer',
     location: 'Köln und Rotterdam',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'sos-berlin-conference',
@@ -426,14 +435,15 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'telegraphy',
     frequencyHz: 500e3,
     location: 'Berlin',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'fessenden-voice',
     year: 1906,
     title: 'First Voice and Music Broadcast',
     titleDE: 'Erste Sprach- und Musikübertragung',
-    description: 'Reginald Fessenden is credited with transmitting speech and music to ships at sea',
+    description:
+      'Reginald Fessenden is credited with transmitting speech and music to ships at sea',
     descriptionDE:
       'Reginald Fessenden soll an Heiligabend von Brant Rock aus Sprache und Musik zu ' +
       'Schiffen im Atlantik übertragen haben. Die Überlieferung stützt sich auf spätere ' +
@@ -441,7 +451,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'broadcast',
     person: 'Reginald Fessenden',
     location: 'Brant Rock, USA',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'first-broadcast-germany',
@@ -456,14 +466,15 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'broadcast',
     frequencyHz: 750e3,
     location: 'Berlin',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'radar-watson-watt',
     year: 1935,
     title: 'Practical Radar Demonstrated',
     titleDE: 'Radar praktisch vorgeführt',
-    description: 'Watson-Watt demonstrates aircraft detection by radio; independent German developments follow',
+    description:
+      'Watson-Watt demonstrates aircraft detection by radio; independent German developments follow',
     descriptionDE:
       'Robert Watson-Watt weist bei Daventry nach, dass sich Flugzeuge anhand ' +
       'reflektierter Funkwellen orten lassen. Parallel entstehen in Deutschland ' +
@@ -472,14 +483,15 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     frequencyHz: 6e6,
     person: 'Robert Watson-Watt',
     location: 'Daventry, Großbritannien',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'transistor',
     year: 1947,
     title: 'Invention of the Transistor',
     titleDE: 'Erfindung des Transistors',
-    description: 'Bardeen, Brattain and Shockley demonstrate the point-contact transistor at Bell Labs',
+    description:
+      'Bardeen, Brattain and Shockley demonstrate the point-contact transistor at Bell Labs',
     descriptionDE:
       'In den Bell-Laboratorien gelingt der erste funktionierende Transistor. Er ' +
       'ersetzt die Elektronenröhre, macht Funkgeräte klein, sparsam und robust und ' +
@@ -487,7 +499,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'invention',
     person: 'John Bardeen, Walter Brattain, William Shockley',
     location: 'Murray Hill, USA',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'ukw-germany',
@@ -504,7 +516,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     frequencyHz: 87.5e6,
     frequencyHzMax: 100e6,
     location: 'München',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'echo-1',
@@ -520,7 +532,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     frequencyHz: 960e6,
     frequencyHzMax: 2.39e9,
     location: 'USA',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'intelsat-early-bird',
@@ -536,7 +548,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     frequencyHz: 4e9,
     frequencyHzMax: 6e9,
     location: 'Atlantikregion',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'arpanet',
@@ -551,14 +563,15 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
       'einschließlich des Mobilfunks.',
     category: 'digital',
     location: 'Kalifornien, USA',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'alohanet',
     year: 1971,
     title: 'ALOHAnet — First Wireless Packet Network',
     titleDE: 'ALOHAnet — erstes drahtloses Paketnetz',
-    description: 'Radio packet network linking the Hawaiian islands; origin of random access protocols',
+    description:
+      'Radio packet network linking the Hawaiian islands; origin of random access protocols',
     descriptionDE:
       'Ein Funknetz verbindet die Rechner der hawaiianischen Inseln über ' +
       'Paketübertragung. Das dabei entwickelte Zugriffsverfahren, bei dem Stationen ' +
@@ -567,7 +580,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'digital',
     frequencyHz: 407.35e6,
     location: 'Hawaii, USA',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'gps-first-satellite',
@@ -581,14 +594,15 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'satellite',
     frequencyHz: 1.57542e9,
     location: 'USA',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'nmt-1g',
     year: 1981,
     title: 'NMT — First Automatic Mobile Network',
     titleDE: 'NMT — erstes automatisches Mobilfunknetz',
-    description: 'Nordic Mobile Telephone starts in Scandinavia with automatic handover and roaming',
+    description:
+      'Nordic Mobile Telephone starts in Scandinavia with automatic handover and roaming',
     descriptionDE:
       'In Skandinavien startet das erste automatische zellulare Mobilfunknetz mit ' +
       'Übergabe zwischen Funkzellen und länderübergreifender Nutzung. Es arbeitet ' +
@@ -596,14 +610,14 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'mobile',
     frequencyHz: 450e6,
     location: 'Skandinavien',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'c-netz-germany',
     year: 1985,
     title: 'C-Netz Launched in Germany',
     titleDE: 'C-Netz-Start in Deutschland',
-    description: 'Germany\'s third-generation analogue mobile network introduces automatic handover',
+    description: "Germany's third-generation analogue mobile network introduces automatic handover",
     descriptionDE:
       'Das C-Netz löst die Vorläufer A-Netz (ab 1958) und B-Netz (ab 1972) ab. Erstmals ' +
       'ist in Deutschland automatische Übergabe zwischen Funkzellen möglich und der ' +
@@ -611,7 +625,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'mobile',
     frequencyHz: 450e6,
     location: 'Deutschland',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'gsm-germany',
@@ -626,14 +640,15 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'mobile',
     frequencyHz: 900e6,
     location: 'Deutschland',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'dvb-t-germany',
     year: 2002,
     title: 'DVB-T Starts in Germany',
     titleDE: 'DVB-T-Start in Deutschland',
-    description: 'Digital terrestrial television begins in Berlin; analogue TV is switched off in 2003',
+    description:
+      'Digital terrestrial television begins in Berlin; analogue TV is switched off in 2003',
     descriptionDE:
       'Im November 2002 startet in Berlin und Brandenburg das digitale Antennenfernsehen. ' +
       'Im August 2003 wird dort als weltweit erster Region die analoge terrestrische ' +
@@ -642,7 +657,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     frequencyHz: 470e6,
     frequencyHzMax: 862e6,
     location: 'Berlin-Brandenburg',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'umts-germany',
@@ -657,7 +672,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'mobile',
     frequencyHz: 2.1e9,
     location: 'Deutschland',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'lte-germany',
@@ -672,14 +687,14 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'mobile',
     frequencyHz: 800e6,
     location: 'Deutschland',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: 'galileo-initial-services',
     year: 2016,
     title: 'Galileo Initial Services',
     titleDE: 'Galileo — Beginn der Dienste',
-    description: 'Europe\'s satellite navigation system starts initial operational service',
+    description: "Europe's satellite navigation system starts initial operational service",
     descriptionDE:
       'Das europäische Satellitennavigationssystem nimmt im Dezember 2016 den ' +
       'Anfangsbetrieb auf. Es steht unter ziviler Kontrolle und liefert in Kombination ' +
@@ -688,7 +703,7 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     frequencyHz: 1.1764e9,
     frequencyHzMax: 1.57542e9,
     location: 'Europa',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'dvbt2-germany',
@@ -704,21 +719,22 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     frequencyHz: 470e6,
     frequencyHzMax: 694e6,
     location: 'Deutschland',
-    significance: 'moderate',
+    significance: 'moderate'
   },
   {
     id: '5g-germany',
     year: 2019,
     title: '5G Launch in Germany',
     titleDE: '5G-Start in Deutschland',
-    description: 'After the June 2019 auction the first commercial 5G networks go live in July 2019',
+    description:
+      'After the June 2019 auction the first commercial 5G networks go live in July 2019',
     descriptionDE:
       'Nach der Versteigerung der Frequenzen im Juni 2019 gehen im Juli 2019 die ersten ' +
       'kommerziellen 5G-Netze in Betrieb, überwiegend im Bereich um 3,6 GHz.',
     category: 'mobile',
     frequencyHz: 3.6e9,
     location: 'Deutschland',
-    significance: 'major',
+    significance: 'major'
   },
   {
     id: 'umts-shutdown-germany',
@@ -733,14 +749,17 @@ export const HISTORICAL_EVENTS: HistoricalEvent[] = [
     category: 'mobile',
     frequencyHz: 2.1e9,
     location: 'Deutschland',
-    significance: 'moderate',
-  },
+    significance: 'moderate'
+  }
 ];
 
 /**
  * Category display configuration
  */
-export const CATEGORY_CONFIG: Record<HistoryCategory, { name: string; nameDE: string; color: string }> = {
+export const CATEGORY_CONFIG: Record<
+  HistoryCategory,
+  { name: string; nameDE: string; color: string }
+> = {
   theory: { name: 'Theory', nameDE: 'Theorie', color: '#8b5cf6' },
   invention: { name: 'Inventions', nameDE: 'Erfindungen', color: '#3b82f6' },
   broadcast: { name: 'Broadcasting', nameDE: 'Rundfunk', color: '#ef4444' },
@@ -755,19 +774,19 @@ export const CATEGORY_CONFIG: Record<HistoryCategory, { name: string; nameDE: st
  * Get events by category
  */
 export function getEventsByCategory(category: HistoryCategory): HistoricalEvent[] {
-  return HISTORICAL_EVENTS.filter(e => e.category === category);
+  return HISTORICAL_EVENTS.filter((e) => e.category === category);
 }
 
 /**
  * Get events in year range
  */
 export function getEventsByYearRange(startYear: number, endYear: number): HistoricalEvent[] {
-  return HISTORICAL_EVENTS.filter(e => e.year >= startYear && e.year <= endYear);
+  return HISTORICAL_EVENTS.filter((e) => e.year >= startYear && e.year <= endYear);
 }
 
 /**
  * Get major events only
  */
 export function getMajorEvents(): HistoricalEvent[] {
-  return HISTORICAL_EVENTS.filter(e => e.significance === 'major');
+  return HISTORICAL_EVENTS.filter((e) => e.significance === 'major');
 }

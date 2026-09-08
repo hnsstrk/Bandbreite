@@ -139,7 +139,7 @@ export function shortDipolePattern(thetaRad: number): number {
  * @param beamwidthDeg Halbwertsbreite in Grad
  */
 export function gaussianMainLobe(offsetRad: number, beamwidthDeg: number): number {
-  const halfWidthRad = (Math.max(beamwidthDeg, MIN_BEAMWIDTH_DEG) / 2) / DEG_PER_RAD;
+  const halfWidthRad = Math.max(beamwidthDeg, MIN_BEAMWIDTH_DEG) / 2 / DEG_PER_RAD;
   const ratio = safeDivide(offsetRad, halfWidthRad, 0);
   return Math.exp(-(Math.LN2 / 2) * ratio * ratio);
 }

@@ -90,8 +90,7 @@ export function presetDistanceM(preset: LinkBudgetPreset): number {
 
 /** Frequenz eines Presets in Hertz. */
 export function presetFrequencyHz(preset: LinkBudgetPreset): number {
-  const factor =
-    FREQUENCY_UNITS.find((unit) => unit.id === preset.freqUnit)?.factor ?? 1;
+  const factor = FREQUENCY_UNITS.find((unit) => unit.id === preset.freqUnit)?.factor ?? 1;
   return preset.freq * factor;
 }
 

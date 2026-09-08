@@ -73,7 +73,10 @@ describe('panOffsetStepped', () => {
     const zoom = 4;
     const visible = logRange(MIN, MAX).logRange / zoom;
     expect(panOffsetStepped(MIN, MAX, zoom, 1, 1)).toBeCloseTo(1 + visible * PAN_STEP_FRACTION, 12);
-    expect(panOffsetStepped(MIN, MAX, zoom, 1, -1)).toBeCloseTo(1 - visible * PAN_STEP_FRACTION, 12);
+    expect(panOffsetStepped(MIN, MAX, zoom, 1, -1)).toBeCloseTo(
+      1 - visible * PAN_STEP_FRACTION,
+      12
+    );
   });
 
   it('bleibt an beiden Rändern stehen', () => {

@@ -23,8 +23,7 @@
     <NumberInput
       label="Temperatur"
       bind:value={
-        () => atmosphericParameters.temperatureCelsius,
-        (value) => atmosphericParameters.setTemperatureCelsius(value)
+        () => atmosphericParameters.temperatureCelsius, (value) => atmosphericParameters.setTemperatureCelsius(value)
       }
       units={[{ id: 'c', symbol: '°C', factor: 1 }]}
       min={TEMPERATURE_MIN_C}
@@ -35,10 +34,7 @@
 
     <NumberInput
       label="Luftdruck"
-      bind:value={
-        () => atmosphericParameters.pressureHpa,
-        (value) => atmosphericParameters.setPressureHpa(value)
-      }
+      bind:value={() => atmosphericParameters.pressureHpa, (value) => atmosphericParameters.setPressureHpa(value)}
       units={[{ id: 'hpa', symbol: 'hPa', factor: 1 }]}
       min={PRESSURE_MIN_HPA}
       max={PRESSURE_MAX_HPA}
@@ -49,8 +45,7 @@
     <NumberInput
       label="Wasserdampfdichte"
       bind:value={
-        () => atmosphericParameters.waterVaporDensity,
-        (value) => atmosphericParameters.setWaterVaporDensity(value)
+        () => atmosphericParameters.waterVaporDensity, (value) => atmosphericParameters.setWaterVaporDensity(value)
       }
       units={[{ id: 'gm3', symbol: 'g/m³', factor: 1 }]}
       min={WATER_VAPOR_MIN}
@@ -67,9 +62,8 @@
   </div>
 
   <Callout tone="info" title="Standardatmosphäre" source="ITU-R P.676-13">
-    Voreingestellt ist die ISA: 15 °C, 1013,25 hPa und 7,5 g/m³ Wasserdampf.
-    Der Wasserdampf bestimmt die Linien bei 22,2 und 183,3 GHz, der Sauerstoff die bei
-    60 und 118,75 GHz.
+    Voreingestellt ist die ISA: 15 °C, 1013,25 hPa und 7,5 g/m³ Wasserdampf. Der Wasserdampf bestimmt die Linien bei
+    22,2 und 183,3 GHz, der Sauerstoff die bei 60 und 118,75 GHz.
   </Callout>
 </div>
 

@@ -65,7 +65,19 @@ export const SQUAWK_CODE_COUNT = 8 ** 4;
 
 /** Reihenfolge der Informationsimpulse zwischen F1 und F2 (ICAO Annex 10 Vol. IV). */
 export const REPLY_SLOTS = [
-  'C1', 'A1', 'C2', 'A2', 'C4', 'A4', 'X', 'B1', 'D1', 'B2', 'D2', 'B4', 'D4'
+  'C1',
+  'A1',
+  'C2',
+  'A2',
+  'C4',
+  'A4',
+  'X',
+  'B1',
+  'D1',
+  'B2',
+  'D2',
+  'B4',
+  'D4'
 ] as const;
 export type ReplySlot = (typeof REPLY_SLOTS)[number];
 
@@ -85,7 +97,11 @@ export type SsrMode = 'a' | 'c' | 's';
 export const SSR_MODES: { id: SsrMode; label: string; purposeDE: string }[] = [
   { id: 'a', label: 'Modus A (Kennung)', purposeDE: 'fragt den vierstelligen Squawk-Code ab' },
   { id: 'c', label: 'Modus C (Flughöhe)', purposeDE: 'fragt die barometrische Höhe ab' },
-  { id: 's', label: 'Modus S (selektiv)', purposeDE: 'spricht ein Luftfahrzeug über seine 24-Bit-Adresse an' }
+  {
+    id: 's',
+    label: 'Modus S (selektiv)',
+    purposeDE: 'spricht ein Luftfahrzeug über seine 24-Bit-Adresse an'
+  }
 ];
 
 /** Ein Impuls im Zeitdiagramm. */
@@ -109,8 +125,22 @@ export function interrogationSpacingUs(mode: SsrMode): number {
 
 /** Impulsfolge der Abfrage auf 1030 MHz. */
 export function interrogationPulses(mode: SsrMode): SsrPulse[] {
-  const p1: SsrPulse = { id: 'p1', label: 'P1', startUs: 0, widthUs: INTERROGATION_PULSE_WIDTH_US, active: true, kind: 'frame' };
-  const p2: SsrPulse = { id: 'p2', label: 'P2', startUs: P1_P2_SPACING_US, widthUs: INTERROGATION_PULSE_WIDTH_US, active: true, kind: 'control' };
+  const p1: SsrPulse = {
+    id: 'p1',
+    label: 'P1',
+    startUs: 0,
+    widthUs: INTERROGATION_PULSE_WIDTH_US,
+    active: true,
+    kind: 'frame'
+  };
+  const p2: SsrPulse = {
+    id: 'p2',
+    label: 'P2',
+    startUs: P1_P2_SPACING_US,
+    widthUs: INTERROGATION_PULSE_WIDTH_US,
+    active: true,
+    kind: 'control'
+  };
   if (mode === 's') {
     return [
       p1,
@@ -186,7 +216,14 @@ export function squawkPulseStates(code: string): Record<ReplySlot, boolean> {
 export function replyPulses(code: string, withSpi = false): SsrPulse[] {
   const states = squawkPulseStates(code);
   const pulses: SsrPulse[] = [
-    { id: 'f1', label: 'F1', startUs: 0, widthUs: REPLY_PULSE_WIDTH_US, active: true, kind: 'frame' }
+    {
+      id: 'f1',
+      label: 'F1',
+      startUs: 0,
+      widthUs: REPLY_PULSE_WIDTH_US,
+      active: true,
+      kind: 'frame'
+    }
   ];
   REPLY_SLOTS.forEach((slot, index) => {
     pulses.push({
@@ -198,7 +235,14 @@ export function replyPulses(code: string, withSpi = false): SsrPulse[] {
       kind: 'data'
     });
   });
-  pulses.push({ id: 'f2', label: 'F2', startUs: REPLY_FRAME_US, widthUs: REPLY_PULSE_WIDTH_US, active: true, kind: 'frame' });
+  pulses.push({
+    id: 'f2',
+    label: 'F2',
+    startUs: REPLY_FRAME_US,
+    widthUs: REPLY_PULSE_WIDTH_US,
+    active: true,
+    kind: 'frame'
+  });
   if (withSpi) {
     pulses.push({
       id: 'spi',

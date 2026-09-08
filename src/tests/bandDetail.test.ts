@@ -78,7 +78,9 @@ describe('pickPrimaryBand', () => {
 
   it('bevorzugt die Auswahl', () => {
     const gewaehlt = band('sel', 1, 2);
-    expect(pickPrimaryBand({ ...leer, selected: gewaehlt, ieee: [band('ieee', 1, 2)] })).toBe(gewaehlt);
+    expect(pickPrimaryBand({ ...leer, selected: gewaehlt, ieee: [band('ieee', 1, 2)] })).toBe(
+      gewaehlt
+    );
   });
 
   it('nimmt danach IEEE, dann ITU, dann NATO, dann zivil', () => {

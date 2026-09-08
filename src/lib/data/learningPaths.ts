@@ -16,7 +16,7 @@
  *   10 Minuten je Kapitel und 5 Minuten je Rechner.
  */
 
-import { findNode, normalizeHref, type NavNode } from './navigation';
+import { findNode, normalizeHref, registerDynamicSegmentLabels, type NavNode } from './navigation';
 import type { IconName } from '$lib/components/ui/icons';
 
 /** Einstiegshöhe eines Pfads. */
@@ -269,10 +269,20 @@ export function findLearningPath(id: string): LearningPath | undefined {
   return LEARNING_PATHS.find((path) => path.id === id);
 }
 
+/** Elternroute aller Pfad-Detailseiten. */
+export const LEARNING_PATHS_HREF = '/wissen/lernpfade/';
+
 /** Route der Detailseite eines Pfads. */
 export function learningPathHref(id: string): string {
-  return `/wissen/lernpfade/${id}/`;
+  return `${LEARNING_PATHS_HREF}${id}/`;
 }
+
+/**
+ * Die Detailseiten sind eine `[slug]`-Route und stehen deshalb nicht im
+ * NAV_TREE. Ohne diesen Resolver zeigte die Brotkrümelnavigation dort den
+ * humanisierten Slug („Spektrum Zur Funkverbindung") statt des Pfadtitels.
+ */
+registerDynamicSegmentLabels(LEARNING_PATHS_HREF, (segment) => findLearningPath(segment)?.title);
 
 /**
  * Die tatsächlich begehbaren Schritte eines Pfads.

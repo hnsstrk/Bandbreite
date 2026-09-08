@@ -265,7 +265,7 @@ export const IONOSPHERIC_LAYERS: IonosphericLayer[] = [
   IONOSPHERE_D_LAYER,
   IONOSPHERE_E_LAYER,
   IONOSPHERE_F1_LAYER,
-  IONOSPHERE_F2_LAYER,
+  IONOSPHERE_F2_LAYER
 ];
 
 /**
@@ -293,7 +293,7 @@ export const IONOSPHERE_PARAMETERS = {
    */
   lufEstimateFactor: { day: 0.5, night: 0.2 },
   /** Solar flux index range (10.7cm flux) */
-  solarFluxRange: { min: 65, max: 300 },
+  solarFluxRange: { min: 65, max: 300 }
 } as const;
 
 // ============================================================================
@@ -407,7 +407,7 @@ export const ATMOSPHERIC_ABSORPTION_PEAKS: AtmosphericAbsorptionPeak[] = [
   ABSORPTION_OXYGEN_60GHZ,
   ABSORPTION_OXYGEN_118GHZ,
   ABSORPTION_WATER_183GHZ,
-  ABSORPTION_WATER_325GHZ,
+  ABSORPTION_WATER_325GHZ
 ];
 
 /**
@@ -424,7 +424,7 @@ export const ATMOSPHERIC_WINDOWS = {
   /** 130-170 GHz: Window between oxygen and water peaks */
   dBand: { minGHz: 130, maxGHz: 170, attenuationDbKm: 0.5 },
   /** 200-320 GHz: Window with some usability */
-  subThz1: { minGHz: 200, maxGHz: 320, attenuationDbKm: 2 },
+  subThz1: { minGHz: 200, maxGHz: 320, attenuationDbKm: 2 }
 } as const;
 
 // ============================================================================
@@ -492,7 +492,7 @@ export const SEAWATER_PENETRATION: SeawaterPenetration[] = [
     skinDepthM: 1.5,
     practicalDepthM: 5,
     notes: 'Upper VLF'
-  },
+  }
 ];
 
 // calculateSkinDepth() wurde nach $lib/utils/calculations.ts verschoben
@@ -516,7 +516,7 @@ export const RAIN_RATES = {
   /** Very heavy rain */
   veryHeavy: { mmPerHour: 50, description: 'Very heavy rain', descriptionDE: 'Sehr starker Regen' },
   /** Tropical/Monsoon */
-  tropical: { mmPerHour: 100, description: 'Tropical/Monsoon', descriptionDE: 'Tropisch/Monsun' },
+  tropical: { mmPerHour: 100, description: 'Tropical/Monsoon', descriptionDE: 'Tropisch/Monsun' }
 } as const;
 
 /**
@@ -526,12 +526,12 @@ export const RAIN_RATES = {
  * Source: ITU-R P.838-3
  */
 export const RAIN_ATTENUATION_HEAVY = {
-  '10GHz': { frequencyGHz: 10, attenuationDbKm: 0.70 },
+  '10GHz': { frequencyGHz: 10, attenuationDbKm: 0.7 },
   '20GHz': { frequencyGHz: 20, attenuationDbKm: 2.75 },
   '30GHz': { frequencyGHz: 30, attenuationDbKm: 5.09 },
   '40GHz': { frequencyGHz: 40, attenuationDbKm: 7.23 },
-  '50GHz': { frequencyGHz: 50, attenuationDbKm: 8.90 },
-  '80GHz': { frequencyGHz: 80, attenuationDbKm: 11.56 },
+  '50GHz': { frequencyGHz: 50, attenuationDbKm: 8.9 },
+  '80GHz': { frequencyGHz: 80, attenuationDbKm: 11.56 }
 } as const;
 
 /**
@@ -578,7 +578,7 @@ export const NOISE_TEMPERATURES = {
   /** Quiet rural area at VHF */
   ruralVhf: 1000,
   /** Urban area at VHF */
-  urbanVhf: 10000,
+  urbanVhf: 10000
 } as const;
 
 /**
@@ -588,7 +588,7 @@ export const THERMAL_NOISE = {
   /** Noise power density at T0 = 290K: -174 dBm/Hz */
   noiseDensityDbmHz: -174,
   /** Noise floor in 1 Hz bandwidth at 290K (watts) */
-  noiseFloor1Hz: BOLTZMANN_CONSTANT * REFERENCE_TEMPERATURE,
+  noiseFloor1Hz: BOLTZMANN_CONSTANT * REFERENCE_TEMPERATURE
 } as const;
 
 // ============================================================================
@@ -611,7 +611,7 @@ export const FSPL_REFERENCES = {
   /** 28 GHz, 100 m (5G mmWave) */
   '28GHz_100m': { frequencyHz: 28e9, distanceM: 100, fsplDb: 101.4 },
   /** 77 GHz, 100 m (automotive radar) */
-  '77GHz_100m': { frequencyHz: 77e9, distanceM: 100, fsplDb: 110.2 },
+  '77GHz_100m': { frequencyHz: 77e9, distanceM: 100, fsplDb: 110.2 }
 } as const;
 
 // ============================================================================
@@ -636,16 +636,36 @@ export interface RcsReference {
 export const RCS_REFERENCE: readonly RcsReference[] = [
   { id: 'insect', nameDE: 'Insekt', rcsM2: 1e-5, descriptionDE: 'ca. 10⁻⁵ m²' },
   { id: 'bird', nameDE: 'Vogel', rcsM2: 0.01, descriptionDE: 'Möwe, Taube: 0,001–0,01 m²' },
-  { id: 'stealth-jet', nameDE: 'Stealth-Jet', rcsM2: 0.005, descriptionDE: 'Öffentliche Schätzungen 0,001–0,01 m²' },
+  {
+    id: 'stealth-jet',
+    nameDE: 'Stealth-Jet',
+    rcsM2: 0.005,
+    descriptionDE: 'Öffentliche Schätzungen 0,001–0,01 m²'
+  },
   { id: 'drone', nameDE: 'Drohne (klein)', rcsM2: 0.1, descriptionDE: 'Quadrocopter: 0,01–0,1 m²' },
   { id: 'human', nameDE: 'Mensch', rcsM2: 1, descriptionDE: 'Typisch 0,5–1 m²' },
-  { id: 'small-aircraft', nameDE: 'Kleinflugzeug', rcsM2: 2, descriptionDE: 'Cessna-Klasse: 1–2 m²' },
+  {
+    id: 'small-aircraft',
+    nameDE: 'Kleinflugzeug',
+    rcsM2: 2,
+    descriptionDE: 'Cessna-Klasse: 1–2 m²'
+  },
   { id: 'fighter', nameDE: 'Kampfjet (konventionell)', rcsM2: 5, descriptionDE: '2–6 m²' },
   { id: 'car', nameDE: 'PKW', rcsM2: 100, descriptionDE: 'Mittelklasse: ca. 100 m²' },
-  { id: 'airliner', nameDE: 'Verkehrsflugzeug', rcsM2: 100, descriptionDE: 'Boeing 737: 20–100 m²' },
+  {
+    id: 'airliner',
+    nameDE: 'Verkehrsflugzeug',
+    rcsM2: 100,
+    descriptionDE: 'Boeing 737: 20–100 m²'
+  },
   { id: 'truck', nameDE: 'LKW', rcsM2: 200, descriptionDE: 'ca. 200 m²' },
-  { id: 'boat', nameDE: 'Schiff (klein)', rcsM2: 1000, descriptionDE: 'Kutter, Segelboot mit Reflektor' },
-  { id: 'ship', nameDE: 'Schiff (groß)', rcsM2: 1e4, descriptionDE: 'Containerschiff: ≥ 10⁴ m²' },
+  {
+    id: 'boat',
+    nameDE: 'Schiff (klein)',
+    rcsM2: 1000,
+    descriptionDE: 'Kutter, Segelboot mit Reflektor'
+  },
+  { id: 'ship', nameDE: 'Schiff (groß)', rcsM2: 1e4, descriptionDE: 'Containerschiff: ≥ 10⁴ m²' }
 ] as const;
 
 // ============================================================================
@@ -669,7 +689,7 @@ export const MODULATION_SCHEMES: readonly ModulationScheme[] = [
   { name: '16-QAM', bitsPerSymbol: 4, requiredSnrDb: 16.5, color: '#f97316' },
   { name: '64-QAM', bitsPerSymbol: 6, requiredSnrDb: 22.5, color: '#ef4444' },
   { name: '256-QAM', bitsPerSymbol: 8, requiredSnrDb: 28.5, color: '#ec4899' },
-  { name: '1024-QAM', bitsPerSymbol: 10, requiredSnrDb: 34.5, color: '#6366f1' },
+  { name: '1024-QAM', bitsPerSymbol: 10, requiredSnrDb: 34.5, color: '#6366f1' }
 ] as const;
 
 /**
@@ -681,5 +701,5 @@ export const MODULATION_SCHEMES: readonly ModulationScheme[] = [
  */
 export const PRACTICAL_THROUGHPUT = {
   rollOffFactor: 0.25,
-  protocolEfficiency: 0.8,
+  protocolEfficiency: 0.8
 } as const;

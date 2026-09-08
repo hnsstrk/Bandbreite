@@ -150,14 +150,42 @@ export const dezibelArticle: KnowledgeArticle = {
           type: 'definitions',
           variant: 'term',
           items: [
-            { term: 'dB', description: 'Reines Verhältnis, etwa ein Gewinn oder eine Dämpfung. Kein absoluter Wert.' },
-            { term: 'dBm', description: `Leistungspegel bezogen auf 1 mW. 1 W = ${oneWattDbm} dBm, 1 mW = 0 dBm, 1 µW = −30 dBm.` },
-            { term: 'dBW', description: `Leistungspegel bezogen auf 1 W. Immer ${oneWattDbm} dB kleiner als der dBm-Wert.` },
-            { term: 'dBµV', description: `Spannungspegel bezogen auf 1 µV. An ${formatNumber(IMPEDANCE_RF_OHM, 0)} Ω gilt dBµV = dBm + ${dbuvOffset}.` },
-            { term: 'dBµV/m', description: 'Feldstärkepegel bezogen auf 1 µV/m — die übliche Einheit in Feldstärkemessungen und Rundfunkversorgungsplänen.' },
-            { term: 'dBi', description: 'Antennengewinn bezogen auf den isotropen Kugelstrahler. Der Bezugswert der Funkplanung.' },
-            { term: 'dBd', description: `Antennengewinn bezogen auf den Halbwellendipol. dBi = dBd + ${dipoleOffset}, weil der Dipol selbst schon ${dipoleOffset} dBi hat.` },
-            { term: 'dBc', description: 'Pegel bezogen auf den Träger (carrier) — üblich für Nebenaussendungen, Oberwellen und Phasenrauschen.' }
+            {
+              term: 'dB',
+              description:
+                'Reines Verhältnis, etwa ein Gewinn oder eine Dämpfung. Kein absoluter Wert.'
+            },
+            {
+              term: 'dBm',
+              description: `Leistungspegel bezogen auf 1 mW. 1 W = ${oneWattDbm} dBm, 1 mW = 0 dBm, 1 µW = −30 dBm.`
+            },
+            {
+              term: 'dBW',
+              description: `Leistungspegel bezogen auf 1 W. Immer ${oneWattDbm} dB kleiner als der dBm-Wert.`
+            },
+            {
+              term: 'dBµV',
+              description: `Spannungspegel bezogen auf 1 µV. An ${formatNumber(IMPEDANCE_RF_OHM, 0)} Ω gilt dBµV = dBm + ${dbuvOffset}.`
+            },
+            {
+              term: 'dBµV/m',
+              description:
+                'Feldstärkepegel bezogen auf 1 µV/m — die übliche Einheit in Feldstärkemessungen und Rundfunkversorgungsplänen.'
+            },
+            {
+              term: 'dBi',
+              description:
+                'Antennengewinn bezogen auf den isotropen Kugelstrahler. Der Bezugswert der Funkplanung.'
+            },
+            {
+              term: 'dBd',
+              description: `Antennengewinn bezogen auf den Halbwellendipol. dBi = dBd + ${dipoleOffset}, weil der Dipol selbst schon ${dipoleOffset} dBi hat.`
+            },
+            {
+              term: 'dBc',
+              description:
+                'Pegel bezogen auf den Träger (carrier) — üblich für Nebenaussendungen, Oberwellen und Phasenrauschen.'
+            }
           ]
         },
         {
@@ -185,7 +213,11 @@ export const dezibelArticle: KnowledgeArticle = {
             { symbol: 'P_rx', meaning: 'Empfangspegel', unit: 'dBm' },
             { symbol: 'P_tx', meaning: 'Sendeleistung', unit: 'dBm' },
             { symbol: 'G', meaning: 'Antennengewinne', unit: 'dBi' },
-            { symbol: 'L_ges', meaning: 'Summe aller Verluste (Kabel, Strecke, Stecker)', unit: 'dB' }
+            {
+              symbol: 'L_ges',
+              meaning: 'Summe aller Verluste (Kabel, Strecke, Stecker)',
+              unit: 'dB'
+            }
           ]
         },
         {
@@ -216,15 +248,19 @@ export const dezibelArticle: KnowledgeArticle = {
           items: [
             '<strong>Falscher Faktor:</strong> 20·log auf eine Leistung angewandt verdoppelt den Pegel. Faustregel: Watt → 10·log, Volt und V/m → 20·log.',
             '<strong>Bezug vergessen:</strong> „−100 dB Empfindlichkeit" ist keine Angabe; gemeint sind fast immer −100 dBm.',
-            '<strong>dBi und dBd verwechselt:</strong> kostet oder schenkt pauschal ' + dipoleOffset + ' dB.',
+            '<strong>dBi und dBd verwechselt:</strong> kostet oder schenkt pauschal ' +
+              dipoleOffset +
+              ' dB.',
             '<strong>Vorzeichen der Dämpfung:</strong> Eine Kabeldämpfung von 3 dB ist ein Beitrag von −3 dB in der Kette. Beides doppelt abgezogen ergibt 6 dB Fehler.',
             '<strong>Effektivwert und Spitzenwert:</strong> dBµV bezieht sich auf den Effektivwert; Spitzenwerte liegen bei sinusförmigen Signalen 3 dB höher.'
           ]
         },
         {
           type: 'question',
-          question: 'Ein Verstärker hat 20 dB Gewinn, das nachfolgende Kabel 6 dB Dämpfung. Wie viel Leistung kommt hinten an, wenn vorne 1 mW anliegt?',
-          answer: '0 dBm + 20 dB − 6 dB = +14 dBm. Das entspricht dem Faktor 10^(14/10) ≈ 25, also rund 25 mW. In Watt gerechnet: 1 mW · 100 / 4 = 25 mW — dieselbe Zahl, nur mühsamer.'
+          question:
+            'Ein Verstärker hat 20 dB Gewinn, das nachfolgende Kabel 6 dB Dämpfung. Wie viel Leistung kommt hinten an, wenn vorne 1 mW anliegt?',
+          answer:
+            '0 dBm + 20 dB − 6 dB = +14 dBm. Das entspricht dem Faktor 10^(14/10) ≈ 25, also rund 25 mW. In Watt gerechnet: 1 mW · 100 / 4 = 25 mW — dieselbe Zahl, nur mühsamer.'
         }
       ]
     },

@@ -20,7 +20,9 @@
     type="button"
     onclick={onToggleSpeedOfLight}
     class="speed-toggle"
-    title={isExactMode ? 'Wechseln zu gerundeter Lichtgeschwindigkeit (3x10^8 m/s)' : 'Wechseln zu exakter Lichtgeschwindigkeit'}
+    title={isExactMode
+      ? 'Wechseln zu gerundeter Lichtgeschwindigkeit (3x10^8 m/s)'
+      : 'Wechseln zu exakter Lichtgeschwindigkeit'}
   >
     <span class:active={isExactMode}>exakt</span>
     <span class="separator">|</span>

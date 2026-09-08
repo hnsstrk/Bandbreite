@@ -33,10 +33,7 @@ const CHAR_MAP: Record<string, string> = {
  * Diakritika (é, à, ç …) werden über die Unicode-Normalform entfernt.
  */
 export function transliterate(input: string): string {
-  const mapped = input.replace(
-    /[äöüÄÖÜßæÆøØåÅ&@°µ₂₃]/g,
-    (char) => CHAR_MAP[char] ?? char
-  );
+  const mapped = input.replace(/[äöüÄÖÜßæÆøØåÅ&@°µ₂₃]/g, (char) => CHAR_MAP[char] ?? char);
   return mapped.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 

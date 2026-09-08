@@ -39,21 +39,15 @@ export const ABSORPTION_PEAK_MARKERS = [
 
 // Absorption peak highlight regions (frequency bands in GHz)
 export const ABSORPTION_REGIONS = [
-  { minFreq: 20, maxFreq: 24, color: COLOR_WATER_VAPOR },   // 22 GHz Wasserdampf
-  { minFreq: 50, maxFreq: 70, color: COLOR_OXYGEN },        // 60 GHz Sauerstoff
-  { minFreq: 115, maxFreq: 122, color: COLOR_OXYGEN },      // 118,75 GHz Sauerstoff
-  { minFreq: 178, maxFreq: 188, color: COLOR_WATER_VAPOR }  // 183 GHz Wasserdampf
+  { minFreq: 20, maxFreq: 24, color: COLOR_WATER_VAPOR }, // 22 GHz Wasserdampf
+  { minFreq: 50, maxFreq: 70, color: COLOR_OXYGEN }, // 60 GHz Sauerstoff
+  { minFreq: 115, maxFreq: 122, color: COLOR_OXYGEN }, // 118,75 GHz Sauerstoff
+  { minFreq: 178, maxFreq: 188, color: COLOR_WATER_VAPOR } // 183 GHz Wasserdampf
 ] as const;
 
 /** Kennung einer Dämpfungskurve. */
 export type AttenuationSeriesId =
-  | 'oxygen'
-  | 'waterVapor'
-  | 'rain'
-  | 'fog'
-  | 'snow'
-  | 'total'
-  | 'totalAll';
+  'oxygen' | 'waterVapor' | 'rain' | 'fog' | 'snow' | 'total' | 'totalAll';
 
 /** Beschreibung einer Kurve: Beschriftung, Farbe, Strichbild und Wertzugriff. */
 export interface AttenuationSeries {

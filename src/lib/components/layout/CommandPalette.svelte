@@ -30,7 +30,9 @@
   const flatItems = $derived(groups.flatMap((group) => group.items));
 
   $effect(() => {
-    // Auswahl zurücksetzen, sobald sich die Eingabe ändert.
+    // Auswahl zurücksetzen, sobald sich die Eingabe ändert. Der bloße Zugriff
+    // auf `query` ist die Abhängigkeit des Effekts — kein toter Ausdruck.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     query;
     activeIndex = 0;
   });
@@ -107,14 +109,7 @@
 
 {#if open}
   <div class="palette-backdrop" role="presentation" onclick={close}></div>
-  <div
-    class="palette"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Suche"
-    tabindex="-1"
-    onkeydown={handleDialogKeydown}
-  >
+  <div class="palette" role="dialog" aria-modal="true" aria-label="Suche" tabindex="-1" onkeydown={handleDialogKeydown}>
     <div class="palette-input-row">
       <Icon name="search" size={18} />
       <input
@@ -130,13 +125,7 @@
         aria-label="Suchbegriff"
         autocomplete="off"
       />
-      <button
-        type="button"
-        class="palette-close"
-        bind:this={closeEl}
-        onclick={close}
-        aria-label="Suche schließen"
-      >
+      <button type="button" class="palette-close" bind:this={closeEl} onclick={close} aria-label="Suche schließen">
         Esc
       </button>
     </div>

@@ -135,11 +135,7 @@
           {#each IONOSPHERIC_LAYERS as layer (layer.id)}
             {@const active = layers.includes(layer)}
             <li class="iono__legend-item" class:is-inactive={!active}>
-              <span
-                class="iono__swatch"
-                style="background: {LAYER_COLORS[layer.id].stroke}"
-                aria-hidden="true"
-              ></span>
+              <span class="iono__swatch" style="background: {LAYER_COLORS[layer.id].stroke}" aria-hidden="true"></span>
               <span>{layer.name} ({layer.altitudeMinKm}–{layer.altitudeMaxKm} km)</span>
               {#if !active}<Badge tone="neutral">nachts inaktiv</Badge>{/if}
             </li>
@@ -147,15 +143,7 @@
         </ul>
       {/snippet}
 
-      <IonosphericScene
-        {frequencyMHz}
-        {isNighttime}
-        {canPropagate}
-        {belowLuf}
-        {reflection}
-        {width}
-        {height}
-      />
+      <IonosphericScene {isNighttime} {canPropagate} {belowLuf} {reflection} {width} {height} />
 
       {#snippet dataTable()}
         <table>
@@ -173,17 +161,16 @@
 
     <div class="iono__notes">
       <Callout tone="info" title="MUF — höchste nutzbare Frequenz">
-        Die höchste Frequenz, die von der Ionosphäre noch zum Boden zurückgeworfen wird. Sie
-        steigt mit der Sonnenaktivität und mit flacherem Einfallswinkel.
+        Die höchste Frequenz, die von der Ionosphäre noch zum Boden zurückgeworfen wird. Sie steigt mit der
+        Sonnenaktivität und mit flacherem Einfallswinkel.
       </Callout>
       <Callout tone="info" title="LUF — niedrigste nutzbare Frequenz">
-        Darunter absorbiert die D-Schicht das Signal, bevor es die reflektierenden Schichten
-        erreicht. Nachts verschwindet die D-Schicht und die LUF sinkt.
+        Darunter absorbiert die D-Schicht das Signal, bevor es die reflektierenden Schichten erreicht. Nachts
+        verschwindet die D-Schicht und die LUF sinkt.
       </Callout>
       <Callout tone="tip" title="Kritische Frequenz foF2">
-        Die Frequenz, die bei senkrechtem Einfall gerade noch reflektiert wird. Bei schrägem
-        Einfall gilt das Sekantengesetz MUF = foF2 · sec φ; über 3000 km liegt die MUF dadurch
-        etwa dreimal höher.
+        Die Frequenz, die bei senkrechtem Einfall gerade noch reflektiert wird. Bei schrägem Einfall gilt das
+        Sekantengesetz MUF = foF2 · sec φ; über 3000 km liegt die MUF dadurch etwa dreimal höher.
       </Callout>
     </div>
   </div>

@@ -46,8 +46,8 @@
   <header class="page-header">
     <h1 class="text-heading-1">Elektromagnetisches Spektrum</h1>
     <p class="header-description">
-      Entdecken Sie das elektromagnetische Spektrum von Radiowellen bis Gammastrahlung.
-      Erkunden Sie Frequenzbänder, deren Eigenschaften und praktische Anwendungen in der Funktechnik.
+      Entdecken Sie das elektromagnetische Spektrum von Radiowellen bis Gammastrahlung. Erkunden Sie Frequenzbänder,
+      deren Eigenschaften und praktische Anwendungen in der Funktechnik.
     </p>
   </header>
 
@@ -55,11 +55,7 @@
   <section class="card">
     <h2 class="text-heading-2">EM-Spektrum Übersicht</h2>
     <p class="spectrum-hint">Klicken Sie auf ein Band für detaillierte Informationen</p>
-    <SpectrumOverview
-      frequencyHz={currentFrequencyHz ?? undefined}
-      onBandClick={handleBandClick}
-      {selectedBandId}
-    />
+    <SpectrumOverview frequencyHz={currentFrequencyHz ?? undefined} onBandClick={handleBandClick} {selectedBandId} />
   </section>
 
   <!-- Dashboard: Tools links, Banddetail rechts -->
@@ -75,41 +71,36 @@
           <div class="intro-card">
             <h4>Frequenz und Wellenlänge</h4>
             <p>
-              Elektromagnetische Wellen breiten sich mit Lichtgeschwindigkeit aus.
-              Frequenz und Wellenlänge sind über die Beziehung <span class="formula">λ = c / f</span> verknüpft.
-              Höhere Frequenzen bedeuten kürzere Wellenlängen.
+              Elektromagnetische Wellen breiten sich mit Lichtgeschwindigkeit aus. Frequenz und Wellenlänge sind über
+              die Beziehung <span class="formula">λ = c / f</span> verknüpft. Höhere Frequenzen bedeuten kürzere Wellenlängen.
             </p>
           </div>
           <div class="intro-card">
             <h4>Ausbreitungseigenschaften</h4>
             <p>
-              Niedrige Frequenzen folgen der Erdkrümmung und durchdringen Hindernisse.
-              Hohe Frequenzen breiten sich geradlinig aus, werden aber von Gebäuden und
-              Vegetation stark gedämpft.
+              Niedrige Frequenzen folgen der Erdkrümmung und durchdringen Hindernisse. Hohe Frequenzen breiten sich
+              geradlinig aus, werden aber von Gebäuden und Vegetation stark gedämpft.
             </p>
           </div>
           <div class="intro-card">
             <h4>Bandbreite und Datenrate</h4>
             <p>
-              Höhere Frequenzbänder bieten mehr Bandbreite für schnellere Datenübertragung.
-              Nach Shannon-Hartley steigt die Kanalkapazität mit der verfügbaren Bandbreite.
+              Höhere Frequenzbänder bieten mehr Bandbreite für schnellere Datenübertragung. Nach Shannon-Hartley steigt
+              die Kanalkapazität mit der verfügbaren Bandbreite.
             </p>
           </div>
           <div class="intro-card">
             <h4>Atmosphärische Dämpfung</h4>
             <p>
-              Die Atmosphäre absorbiert bestimmte Frequenzen stark. Besonders bei 22 GHz
-              (Wasserdampf) und 60 GHz (Sauerstoff) treten Absorptionspeaks auf.
+              Die Atmosphäre absorbiert bestimmte Frequenzen stark. Besonders bei 22 GHz (Wasserdampf) und 60 GHz
+              (Sauerstoff) treten Absorptionspeaks auf.
             </p>
           </div>
         </div>
       </section>
     </div>
     <div class="sidebar-column">
-      <BandDetailSidebar
-        frequencyHz={currentFrequencyHz}
-        selectedBand={selectedSpectrumBand}
-      />
+      <BandDetailSidebar frequencyHz={currentFrequencyHz} selectedBand={selectedSpectrumBand} />
     </div>
   </div>
 

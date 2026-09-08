@@ -51,9 +51,7 @@
    * Beim Prerendern gibt es keine Suchparameter — der Zugriff darauf würde
    * dort einen Fehler auslösen, deshalb der browser-Guard.
    */
-  const initial = browser
-    ? readParams(page.url.searchParams, FSPL_PARAMS)
-    : defaultValues(FSPL_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, FSPL_PARAMS) : defaultValues(FSPL_PARAMS);
 
   let currentFrequencyHz = $state(initial.f);
   let currentDistanceM = $state(initial.d);
@@ -88,18 +86,12 @@
   let canReset = $derived(hasNonDefaults(values, FSPL_PARAMS));
 
   let fsplDb = $derived(
-    currentFrequencyHz > 0 && currentDistanceM > 0
-      ? calculateFSPL(currentDistanceM, currentFrequencyHz)
-      : null
+    currentFrequencyHz > 0 && currentDistanceM > 0 ? calculateFSPL(currentDistanceM, currentFrequencyHz) : null
   );
 
-  let wavelengthM = $derived(
-    currentFrequencyHz > 0 ? frequencyToWavelength(currentFrequencyHz) : null
-  );
+  let wavelengthM = $derived(currentFrequencyHz > 0 ? frequencyToWavelength(currentFrequencyHz) : null);
 
-  let resultHint = $derived(
-    `bei ${formatFrequency(currentFrequencyHz)} über ${formatDistance(currentDistanceM)}`
-  );
+  let resultHint = $derived(`bei ${formatFrequency(currentFrequencyHz)} über ${formatDistance(currentDistanceM)}`);
 
   function handleFrequencyChange(value: number) {
     frequencyUnit = pickFrequencyUnit(value);
@@ -192,19 +184,13 @@
     />
 
     <Callout tone="info" title="Was die Zahl bedeutet" source="ITU-R P.525-4">
-      Die Freiraumdämpfung wächst mit dem Quadrat von Distanz und Frequenz: doppelte Strecke
-      oder doppelte Frequenz kosten jeweils 6 dB. Hindernisse, Reflexionen und Atmosphäre sind
-      darin nicht enthalten.
+      Die Freiraumdämpfung wächst mit dem Quadrat von Distanz und Frequenz: doppelte Strecke oder doppelte Frequenz
+      kosten jeweils 6 dB. Hindernisse, Reflexionen und Atmosphäre sind darin nicht enthalten.
     </Callout>
 
     <div class="fspl__chart-head">
       <h3 class="fspl__chart-title">FSPL über der Distanz</h3>
-      <Button
-        size="sm"
-        variant="ghost"
-        pressed={showMultipleFrequencies}
-        onclick={handleComparisonClick}
-      >
+      <Button size="sm" variant="ghost" pressed={showMultipleFrequencies} onclick={handleComparisonClick}>
         Vergleichskurven
       </Button>
     </div>

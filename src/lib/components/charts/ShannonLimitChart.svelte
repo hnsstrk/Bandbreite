@@ -33,9 +33,7 @@
   let chartWidth = $derived(Math.max(1, width - margin.left - margin.right));
   let chartHeight = $derived(Math.max(1, height - margin.top - margin.bottom));
 
-  let xScale = $derived(
-    scaleLinear().domain([CHART_SNR_MIN_DB, CHART_SNR_MAX_DB]).range([0, chartWidth])
-  );
+  let xScale = $derived(scaleLinear().domain([CHART_SNR_MIN_DB, CHART_SNR_MAX_DB]).range([0, chartWidth]));
   let yScale = $derived(scaleLinear().domain([0, CHART_EFFICIENCY_MAX]).range([chartHeight, 0]));
 
   let lineGenerator = $derived(
@@ -105,13 +103,8 @@
         {@const x1 = xScale(mod.requiredSnrDb)}
         {@const x2 = nextMod ? xScale(nextMod.requiredSnrDb) : chartWidth}
         <rect x={x1} y="0" width={Math.max(0, x2 - x1)} height={chartHeight} fill={mod.token} opacity="0.1" />
-        <text
-          x={(x1 + x2) / 2}
-          y={chartHeight - 10}
-          fill={mod.token}
-          font-size="9"
-          text-anchor="middle"
-          opacity="0.9">{mod.name}</text
+        <text x={(x1 + x2) / 2} y={chartHeight - 10} fill={mod.token} font-size="9" text-anchor="middle" opacity="0.9"
+          >{mod.name}</text
         >
       {/each}
 
@@ -133,13 +126,7 @@
         y2={markerPos.y}
         stroke-dasharray="8,4"
       />
-      <circle
-        class="chart-marker-primary"
-        cx={markerPos.x}
-        cy={markerPos.y}
-        r="10"
-        filter="url(#capacityMarkerGlow)"
-      />
+      <circle class="chart-marker-primary" cx={markerPos.x} cy={markerPos.y} r="10" filter="url(#capacityMarkerGlow)" />
       <circle cx={markerPos.x} cy={markerPos.y} r="5" fill="var(--color-on-solid)" />
 
       <!-- X-Achse -->
@@ -153,9 +140,7 @@
             >
           </g>
         {/each}
-        <text class="chart-axis-label" x={chartWidth / 2} y="48" text-anchor="middle">
-          Störabstand (dB)
-        </text>
+        <text class="chart-axis-label" x={chartWidth / 2} y="48" text-anchor="middle"> Störabstand (dB) </text>
       </g>
 
       <!-- Y-Achse -->
@@ -169,12 +154,8 @@
             </text>
           </g>
         {/each}
-        <text
-          class="chart-axis-label"
-          transform="rotate(-90)"
-          x={-chartHeight / 2}
-          y="-55"
-          text-anchor="middle">Spektrale Effizienz (bit/s/Hz)</text
+        <text class="chart-axis-label" transform="rotate(-90)" x={-chartHeight / 2} y="-55" text-anchor="middle"
+          >Spektrale Effizienz (bit/s/Hz)</text
         >
       </g>
     </g>

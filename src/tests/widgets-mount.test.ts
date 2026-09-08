@@ -21,6 +21,11 @@ import FresnelWidget from '$lib/components/widgets/FresnelWidget.svelte';
 import DecibelPlayground from '$lib/components/widgets/DecibelPlayground.svelte';
 import AttenuationWindowsWidget from '$lib/components/widgets/AttenuationWindowsWidget.svelte';
 import PropagationSandbox from '$lib/components/widgets/PropagationSandbox.svelte';
+import FmcwWidget from '$lib/components/widgets/FmcwWidget.svelte';
+import BlindSpeedWidget from '$lib/components/widgets/BlindSpeedWidget.svelte';
+import SsrInterrogationWidget from '$lib/components/widgets/SsrInterrogationWidget.svelte';
+import EmWaveWidget from '$lib/components/widgets/EmWaveWidget.svelte';
+import FieldStrengthWidget from '$lib/components/widgets/FieldStrengthWidget.svelte';
 import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
 import { radarArticle } from '$lib/content/radar';
 import { mathematikArticle } from '$lib/content/mathematik';
@@ -44,7 +49,12 @@ const WIDGETS: { name: string; component: AnyComponent; sliders: number }[] = [
   { name: 'FresnelWidget', component: FresnelWidget, sliders: 5 },
   { name: 'DecibelPlayground', component: DecibelPlayground, sliders: 6 },
   { name: 'AttenuationWindowsWidget', component: AttenuationWindowsWidget, sliders: 2 },
-  { name: 'PropagationSandbox', component: PropagationSandbox, sliders: 3 }
+  { name: 'PropagationSandbox', component: PropagationSandbox, sliders: 3 },
+  { name: 'FmcwWidget', component: FmcwWidget, sliders: 3 },
+  { name: 'BlindSpeedWidget', component: BlindSpeedWidget, sliders: 3 },
+  { name: 'SsrInterrogationWidget', component: SsrInterrogationWidget, sliders: 1 },
+  { name: 'EmWaveWidget', component: EmWaveWidget, sliders: 2 },
+  { name: 'FieldStrengthWidget', component: FieldStrengthWidget, sliders: 3 }
 ];
 
 describe('Widgets rendern', () => {
@@ -92,11 +102,15 @@ describe('Kapitel rendern', () => {
       const root = renderToDom(ArticleLayout, { article });
       expect(root.querySelector('h1')?.textContent).toContain(article.title);
       expect(root.querySelectorAll('.ui-goals li').length).toBe(article.goals.length);
-      expect(root.querySelectorAll('.ui-toc__link').length).toBeGreaterThanOrEqual(article.sections.length);
+      expect(root.querySelectorAll('.ui-toc__link').length).toBeGreaterThanOrEqual(
+        article.sections.length
+      );
       for (const section of article.sections) {
         expect(root.querySelector(`section#${section.id}`)).not.toBeNull();
       }
-      const levels = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, h6')).map((h) => Number(h.tagName[1]));
+      const levels = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, h6')).map((h) =>
+        Number(h.tagName[1])
+      );
       for (let i = 1; i < levels.length; i++) {
         expect(levels[i] - levels[i - 1]).toBeLessThanOrEqual(1);
       }
@@ -107,7 +121,9 @@ describe('Kapitel rendern', () => {
 
     it(`${article.title}: keine ae/oe/ue/ss-Ersatzschreibweisen im Text`, () => {
       const text = renderToDom(ArticleLayout, { article }).textContent ?? '';
-      expect(text).not.toMatch(/\b(gross|groesser|Groesse|Daempfung|Laenge|Staerke|betraegt|zusaetzlich|Molekuele)\w*/i);
+      expect(text).not.toMatch(
+        /\b(gross|groesser|Groesse|Daempfung|Laenge|Staerke|betraegt|zusaetzlich|Molekuele)\w*/i
+      );
     });
   }
 

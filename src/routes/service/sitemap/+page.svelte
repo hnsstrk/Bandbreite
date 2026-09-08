@@ -7,8 +7,7 @@
 
   function countPlanned(nodes: NavNode[]): number {
     return nodes.reduce(
-      (sum, node) =>
-        sum + (node.status === 'geplant' ? 1 : 0) + countPlanned(node.children ?? []),
+      (sum, node) => sum + (node.status === 'geplant' ? 1 : 0) + countPlanned(node.children ?? []),
       0
     );
   }

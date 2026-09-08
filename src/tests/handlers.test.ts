@@ -189,7 +189,7 @@ describe('createNumericHandler', () => {
 
   it('should apply transform', () => {
     const setter = vi.fn();
-    const handler = createNumericHandler(setter, { transform: v => v * 2 });
+    const handler = createNumericHandler(setter, { transform: (v) => v * 2 });
     handler(createInputEvent('10'));
     expect(setter).toHaveBeenCalledWith(20);
   });

@@ -1,273 +1,260 @@
 <script lang="ts">
-	/**
-	 * Durchsuchbare Datenbank der Frequenzzuweisungen.
-	 *
-	 * Volltextsuche, Kategoriefilter, Frequenzfenster und Sortierung. Eine
-	 * Zeile ist eine Schaltfläche; die Auswahl öffnet die Detailtafel darunter.
-	 */
-	import { untrack } from 'svelte';
-	import Card from '$lib/components/ui/Card.svelte';
-	import Badge from '$lib/components/ui/Badge.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Select from '$lib/components/ui/Select.svelte';
-	import NumberInput from '$lib/components/ui/NumberInput.svelte';
-	import { ALL_APPLICATIONS, CATEGORY_NAMES } from '$lib/data/applications';
-	import type { ApplicationCategory } from '$lib/data/applications';
-	import { FREQUENCY_UNITS } from '$lib/data/units';
-	import { formatFrequency } from '$lib/utils/formatting';
-	import { formatFrequencyRange } from '$lib/data/bands';
-	import ApplicationDetailPanel from './ApplicationDetailPanel.svelte';
-	import { categoryCounts, queryApplications, widthHz, type SortKey } from './applicationFilter.svelte';
+  /**
+   * Durchsuchbare Datenbank der Frequenzzuweisungen.
+   *
+   * Volltextsuche, Kategoriefilter, Frequenzfenster und Sortierung. Eine
+   * Zeile ist eine Schaltfläche; die Auswahl öffnet die Detailtafel darunter.
+   */
+  import { untrack } from 'svelte';
+  import Card from '$lib/components/ui/Card.svelte';
+  import Badge from '$lib/components/ui/Badge.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+  import Select from '$lib/components/ui/Select.svelte';
+  import NumberInput from '$lib/components/ui/NumberInput.svelte';
+  import { ALL_APPLICATIONS, CATEGORY_NAMES } from '$lib/data/applications';
+  import type { ApplicationCategory } from '$lib/data/applications';
+  import { FREQUENCY_UNITS } from '$lib/data/units';
+  import { formatFrequency } from '$lib/utils/formatting';
+  import { formatFrequencyRange } from '$lib/data/bands';
+  import ApplicationDetailPanel from './ApplicationDetailPanel.svelte';
+  import { categoryCounts, queryApplications, widthHz, type SortKey } from './applicationFilter.svelte';
 
-	interface Props {
-		/** Vorbelegter Suchbegriff, etwa aus `?q=` eines Deep-Links */
-		initialQuery?: string;
-		/** Eintrag, dessen Detailtafel sofort offen sein soll */
-		initialSelectedId?: string | null;
-	}
+  interface Props {
+    /** Vorbelegter Suchbegriff, etwa aus `?q=` eines Deep-Links */
+    initialQuery?: string;
+    /** Eintrag, dessen Detailtafel sofort offen sein soll */
+    initialSelectedId?: string | null;
+  }
 
-	let { initialQuery = '', initialSelectedId = null }: Props = $props();
+  let { initialQuery = '', initialSelectedId = null }: Props = $props();
 
-	// `untrack`: die Startwerte werden einmal übernommen. Ändert sich der
-	// Deep-Link, baut die Seite die Datenbank per `{#key}` ohnehin neu auf.
-	let query = $state(untrack(() => initialQuery));
-	let category = $state('alle');
-	let minHz = $state(0);
-	let minUnit = $state('MHz');
-	let maxHz = $state(0);
-	let maxUnit = $state('MHz');
-	let sortKey = $state<SortKey>('frequenz');
-	let sortDir = $state<'asc' | 'desc'>('asc');
-	let selectedId = $state<string | null>(untrack(() => initialSelectedId));
+  // `untrack`: die Startwerte werden einmal übernommen. Ändert sich der
+  // Deep-Link, baut die Seite die Datenbank per `{#key}` ohnehin neu auf.
+  let query = $state(untrack(() => initialQuery));
+  let category = $state('alle');
+  let minHz = $state(0);
+  let minUnit = $state('MHz');
+  let maxHz = $state(0);
+  let maxUnit = $state('MHz');
+  let sortKey = $state<SortKey>('frequenz');
+  let sortDir = $state<'asc' | 'desc'>('asc');
+  let selectedId = $state<string | null>(untrack(() => initialSelectedId));
 
-	const searchId = $props.id();
+  const searchId = $props.id();
 
-	const categoryOptions = [
-		{ value: 'alle', label: `Alle Kategorien (${ALL_APPLICATIONS.length})` },
-		...categoryCounts().map((entry) => ({
-			value: entry.id,
-			label: `${entry.label} (${entry.count})`
-		}))
-	];
+  const categoryOptions = [
+    { value: 'alle', label: `Alle Kategorien (${ALL_APPLICATIONS.length})` },
+    ...categoryCounts().map((entry) => ({
+      value: entry.id,
+      label: `${entry.label} (${entry.count})`
+    }))
+  ];
 
-	const sortOptions: { value: SortKey; label: string }[] = [
-		{ value: 'frequenz', label: 'Frequenz' },
-		{ value: 'name', label: 'Bezeichnung' },
-		{ value: 'kategorie', label: 'Kategorie' },
-		{ value: 'breite', label: 'Bandbreite' }
-	];
+  const sortOptions: { value: SortKey; label: string }[] = [
+    { value: 'frequenz', label: 'Frequenz' },
+    { value: 'name', label: 'Bezeichnung' },
+    { value: 'kategorie', label: 'Kategorie' },
+    { value: 'breite', label: 'Bandbreite' }
+  ];
 
-	const rows = $derived(
-		queryApplications(
-			{ query, category: category as ApplicationCategory | 'alle', minHz, maxHz },
-			sortKey,
-			sortDir
-		)
-	);
-	const selected = $derived(rows.find((app) => app.id === selectedId) ?? null);
+  const rows = $derived(
+    queryApplications({ query, category: category as ApplicationCategory | 'alle', minHz, maxHz }, sortKey, sortDir)
+  );
+  const selected = $derived(rows.find((app) => app.id === selectedId) ?? null);
 
-	function reset() {
-		query = '';
-		category = 'alle';
-		minHz = 0;
-		maxHz = 0;
-		sortKey = 'frequenz';
-		sortDir = 'asc';
-		selectedId = null;
-	}
+  function reset() {
+    query = '';
+    category = 'alle';
+    minHz = 0;
+    maxHz = 0;
+    sortKey = 'frequenz';
+    sortDir = 'asc';
+    selectedId = null;
+  }
 </script>
 
 <Card title="Frequenzzuweisungen durchsuchen" subtitle="Volltext, Kategorie, Frequenzfenster und Sortierung">
-	{#snippet actions()}
-		<Badge tone="info">{rows.length} von {ALL_APPLICATIONS.length}</Badge>
-	{/snippet}
+  {#snippet actions()}
+    <Badge tone="info">{rows.length} von {ALL_APPLICATIONS.length}</Badge>
+  {/snippet}
 
-	<div class="filters">
-		<div class="field">
-			<label for={searchId}>Suche</label>
-			<input
-				id={searchId}
-				type="search"
-				bind:value={query}
-				placeholder="z. B. WLAN, Radar, GSM"
-				autocomplete="off"
-			/>
-		</div>
-		<Select label="Kategorie" bind:value={category} options={categoryOptions} />
-		<NumberInput
-			label="Von Frequenz"
-			bind:value={minHz}
-			bind:unit={minUnit}
-			units={FREQUENCY_UNITS}
-			min={0}
-			hint="0 lässt die Untergrenze offen"
-		/>
-		<NumberInput
-			label="Bis Frequenz"
-			bind:value={maxHz}
-			bind:unit={maxUnit}
-			units={FREQUENCY_UNITS}
-			min={0}
-			hint="0 lässt die Obergrenze offen"
-		/>
-		<Select
-			label="Sortieren nach"
-			bind:value={() => sortKey as string, (next: string) => (sortKey = next as SortKey)}
-			options={sortOptions.map((option) => ({ value: option.value, label: option.label }))}
-		/>
-		<div class="field field--action">
-			<Button
-				icon="filter"
-				onclick={() => (sortDir = sortDir === 'asc' ? 'desc' : 'asc')}
-				title="Sortierrichtung umkehren"
-			>
-				{sortDir === 'asc' ? 'aufsteigend' : 'absteigend'}
-			</Button>
-			<Button icon="reset" variant="ghost" onclick={reset}>Zurücksetzen</Button>
-		</div>
-	</div>
+  <div class="filters">
+    <div class="field">
+      <label for={searchId}>Suche</label>
+      <input id={searchId} type="search" bind:value={query} placeholder="z. B. WLAN, Radar, GSM" autocomplete="off" />
+    </div>
+    <Select label="Kategorie" bind:value={category} options={categoryOptions} />
+    <NumberInput
+      label="Von Frequenz"
+      bind:value={minHz}
+      bind:unit={minUnit}
+      units={FREQUENCY_UNITS}
+      min={0}
+      hint="0 lässt die Untergrenze offen"
+    />
+    <NumberInput
+      label="Bis Frequenz"
+      bind:value={maxHz}
+      bind:unit={maxUnit}
+      units={FREQUENCY_UNITS}
+      min={0}
+      hint="0 lässt die Obergrenze offen"
+    />
+    <Select
+      label="Sortieren nach"
+      bind:value={() => sortKey as string, (next: string) => (sortKey = next as SortKey)}
+      options={sortOptions.map((option) => ({ value: option.value, label: option.label }))}
+    />
+    <div class="field field--action">
+      <Button
+        icon="filter"
+        onclick={() => (sortDir = sortDir === 'asc' ? 'desc' : 'asc')}
+        title="Sortierrichtung umkehren"
+      >
+        {sortDir === 'asc' ? 'aufsteigend' : 'absteigend'}
+      </Button>
+      <Button icon="reset" variant="ghost" onclick={reset}>Zurücksetzen</Button>
+    </div>
+  </div>
 
-	<p class="count" role="status">
-		{rows.length}
-		{rows.length === 1 ? 'Eintrag' : 'Einträge'} gefunden.
-	</p>
+  <p class="count" role="status">
+    {rows.length}
+    {rows.length === 1 ? 'Eintrag' : 'Einträge'} gefunden.
+  </p>
 
-	{#if selected}
-		<ApplicationDetailPanel application={selected} />
-	{/if}
+  {#if selected}
+    <ApplicationDetailPanel application={selected} />
+  {/if}
 
-	<ul class="rows">
-		{#each rows as app (app.id)}
-			<li>
-				<button
-					type="button"
-					class="row"
-					class:row--selected={selectedId === app.id}
-					aria-pressed={selectedId === app.id}
-					onclick={() => (selectedId = selectedId === app.id ? null : app.id)}
-				>
-					<span class="row__name">{app.nameDE}</span>
-					<span class="row__range">{formatFrequencyRange(app.minHz, app.maxHz)}</span>
-					<span class="row__meta">{CATEGORY_NAMES[app.category]?.nameDE ?? app.category}</span>
-					<span class="row__meta">{formatFrequency(widthHz(app), 0)} breit</span>
-				</button>
-			</li>
-		{/each}
-	</ul>
+  <ul class="rows">
+    {#each rows as app (app.id)}
+      <li>
+        <button
+          type="button"
+          class="row"
+          class:row--selected={selectedId === app.id}
+          aria-pressed={selectedId === app.id}
+          onclick={() => (selectedId = selectedId === app.id ? null : app.id)}
+        >
+          <span class="row__name">{app.nameDE}</span>
+          <span class="row__range">{formatFrequencyRange(app.minHz, app.maxHz)}</span>
+          <span class="row__meta">{CATEGORY_NAMES[app.category]?.nameDE ?? app.category}</span>
+          <span class="row__meta">{formatFrequency(widthHz(app), 0)} breit</span>
+        </button>
+      </li>
+    {/each}
+  </ul>
 
-	{#if rows.length === 0}
-		<p class="empty">
-			Kein Eintrag passt zu dieser Auswahl. Suchbegriff kürzen oder das Frequenzfenster
-			erweitern.
-		</p>
-	{/if}
+  {#if rows.length === 0}
+    <p class="empty">Kein Eintrag passt zu dieser Auswahl. Suchbegriff kürzen oder das Frequenzfenster erweitern.</p>
+  {/if}
 </Card>
 
 <style>
-	.filters {
-		display: grid;
-		gap: 1rem;
-		margin-bottom: 1rem;
-	}
+  .filters {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
 
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: 0.375rem;
-	}
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
 
-	.field--action {
-		flex-direction: row;
-		align-items: flex-end;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-	}
+  .field--action {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
 
-	label {
-		font-size: var(--font-size-sm);
-		font-weight: var(--font-weight-medium);
-		color: var(--color-ink);
-	}
+  label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-ink);
+  }
 
-	input {
-		min-height: 2.75rem;
-		padding: 0.5rem 0.75rem;
-		font-size: var(--font-size-sm);
-		color: var(--color-ink);
-		background-color: var(--color-input);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-control);
-	}
+  input {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink);
+    background-color: var(--color-input);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-control);
+  }
 
-	.count {
-		margin: 0 0 1rem;
-		font-size: var(--font-size-sm);
-		color: var(--color-ink-muted);
-	}
+  .count {
+    margin: 0 0 1rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-muted);
+  }
 
-	.rows {
-		list-style: none;
-		margin: 1rem 0 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
+  .rows {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 
-	.row {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 0.125rem 1rem;
-		width: 100%;
-		padding: 0.625rem 0.75rem;
-		text-align: left;
-		background-color: var(--color-surface);
-		border: 1px solid var(--color-line-subtle);
-		border-radius: var(--radius-control);
-		cursor: pointer;
-	}
+  .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.125rem 1rem;
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line-subtle);
+    border-radius: var(--radius-control);
+    cursor: pointer;
+  }
 
-	.row:hover {
-		background-color: var(--color-hover);
-	}
+  .row:hover {
+    background-color: var(--color-hover);
+  }
 
-	.row--selected {
-		border-color: var(--color-brand);
-		background-color: var(--color-brand-soft);
-	}
+  .row--selected {
+    border-color: var(--color-brand);
+    background-color: var(--color-brand-soft);
+  }
 
-	.row__name {
-		font-size: var(--font-size-sm);
-		font-weight: var(--font-weight-semibold);
-		color: var(--color-ink);
-	}
+  .row__name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
+  }
 
-	.row__range {
-		font-family: var(--font-mono);
-		font-size: var(--font-size-sm);
-		color: var(--color-ink-muted);
-	}
+  .row__range {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-muted);
+  }
 
-	.row__meta {
-		font-size: var(--font-size-xs);
-		color: var(--color-ink-subtle);
-	}
+  .row__meta {
+    font-size: var(--font-size-xs);
+    color: var(--color-ink-subtle);
+  }
 
-	.empty {
-		margin: 1rem 0 0;
-		font-size: var(--font-size-sm);
-		color: var(--color-ink-subtle);
-	}
+  .empty {
+    margin: 1rem 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
+  }
 
-	@media (min-width: 48rem) {
-		.filters {
-			grid-template-columns: repeat(3, 1fr);
-			align-items: end;
-		}
+  @media (min-width: 48rem) {
+    .filters {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: end;
+    }
 
-		.row {
-			grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.8fr);
-			align-items: baseline;
-		}
-	}
+    .row {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.8fr);
+      align-items: baseline;
+    }
+  }
 </style>

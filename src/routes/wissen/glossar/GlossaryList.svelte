@@ -7,12 +7,7 @@
    */
   import Badge from '$lib/components/ui/Badge.svelte';
   import { findNode } from '$lib/data/navigation';
-  import {
-    categoryLabel,
-    findGlossaryEntry,
-    groupByLetter,
-    type GlossaryEntry
-  } from '$lib/data/glossary';
+  import { categoryLabel, findGlossaryEntry, groupByLetter, type GlossaryEntry } from '$lib/data/glossary';
 
   interface Props {
     entries: GlossaryEntry[];
@@ -33,8 +28,7 @@
 
 {#if entries.length === 0}
   <p class="glossary__empty">
-    Kein Begriff passt zu dieser Suche. Andere Schreibweise probieren oder den
-    Filter zurücksetzen.
+    Kein Begriff passt zu dieser Suche. Andere Schreibweise probieren oder den Filter zurücksetzen.
   </p>
 {:else}
   {#each groups as group (group.letter)}
@@ -64,8 +58,9 @@
                 <p class="glossary__related">
                   <span class="glossary__related-label">Verwandt:</span>
                   {#each entry.related as href, index (href)}
-                    <a {href}>{relatedLabel(href)}</a
-                    >{#if index < entry.related.length - 1}<span aria-hidden="true">·</span>{/if}
+                    <a {href}>{relatedLabel(href)}</a>{#if index < entry.related.length - 1}<span aria-hidden="true"
+                        >·</span
+                      >{/if}
                   {/each}
                 </p>
               {/if}

@@ -28,12 +28,7 @@ import {
   serializeChain,
   voltageParts
 } from '$lib/components/calculators/decibelCalculator.svelte';
-import {
-  IMPEDANCE_RF_OHM,
-  chainTotalDbm,
-  dbmToDbuv,
-  levelsFromDbm
-} from '$lib/utils/decibel';
+import { IMPEDANCE_RF_OHM, chainTotalDbm, dbmToDbuv, levelsFromDbm } from '$lib/utils/decibel';
 import { wattToDbm } from '$lib/utils/conversions';
 
 describe('Referenzpunkt 1 Watt', () => {
@@ -106,9 +101,7 @@ describe('Kette in der Adresszeile', () => {
     const roh = serializeChain(DEFAULT_LEVEL_CHAIN);
     expect(roh).toBe('20,-3,12,-100,12,-2');
     const zurueck = parseChain(roh);
-    expect(zurueck.map((stage) => stage.db)).toEqual(
-      DEFAULT_LEVEL_CHAIN.map((stage) => stage.db)
-    );
+    expect(zurueck.map((stage) => stage.db)).toEqual(DEFAULT_LEVEL_CHAIN.map((stage) => stage.db));
     expect(zurueck.map((stage) => stage.id)).toEqual(DEFAULT_LEVEL_CHAIN.map((s) => s.id));
   });
 

@@ -34,9 +34,7 @@
   /** Nur die Anfrage steht in der Adresszeile; der Typfilter bleibt lokal. */
   const SEARCH_PARAMS = { q: { default: '' } } satisfies ParamSpecs;
 
-  const initial = browser
-    ? readParams(page.url.searchParams, SEARCH_PARAMS)
-    : defaultValues(SEARCH_PARAMS);
+  const initial = browser ? readParams(page.url.searchParams, SEARCH_PARAMS) : defaultValues(SEARCH_PARAMS);
 
   let query = $state(initial.q);
   let type = $state<SearchEntryType | null>(null);
@@ -83,9 +81,8 @@
 
     {#if empty}
       <Callout tone="info" title="Keine Treffer">
-        Zu „{query}“ gibt es keinen Eintrag. Andere Schreibweise versuchen, einen kürzeren Begriff
-        eingeben oder eine Frequenz wie <strong>2,4 GHz</strong> eintippen — dann führt die Suche
-        direkt in Spektrum, Bänderdatenbank und Rechner.
+        Zu „{query}“ gibt es keinen Eintrag. Andere Schreibweise versuchen, einen kürzeren Begriff eingeben oder eine
+        Frequenz wie <strong>2,4 GHz</strong> eintippen — dann führt die Suche direkt in Spektrum, Bänderdatenbank und Rechner.
       </Callout>
     {/if}
 
@@ -103,8 +100,8 @@
           {/each}
         </ul>
         <p class="suggestions__hint suggestions__hint--block">
-          Die Suche lässt sich überall mit <kbd>Strg</kbd>+<kbd>K</kbd> oder <kbd>/</kbd> öffnen.
-          Vollständig aufgelistet sind alle Seiten in der
+          Die Suche lässt sich überall mit <kbd>Strg</kbd>+<kbd>K</kbd> oder <kbd>/</kbd> öffnen. Vollständig
+          aufgelistet sind alle Seiten in der
           <a href="/service/sitemap/">Sitemap</a>.
         </p>
       </section>

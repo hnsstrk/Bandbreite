@@ -8,11 +8,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import {
-  INTERACTIVE_TILES,
-  portalAreas,
-  toolTiles
-} from '$lib/components/portal/portalContent';
+import { INTERACTIVE_TILES, portalAreas, toolTiles } from '$lib/components/portal/portalContent';
 import { findNode, NAV_GROUPS } from '$lib/data/navigation';
 import { getRelatedTopics } from '$lib/data/relations';
 import { isIconName } from '$lib/components/ui/icons';

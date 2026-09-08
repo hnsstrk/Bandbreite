@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { FrequencyBand } from "$lib/data/bands";
-  import SpectrumControls from "./SpectrumControls.svelte";
-  import SpectrumCursor from "./SpectrumCursor.svelte";
-  import SpectrumTooltip from "./SpectrumTooltip.svelte";
-  import SpectrumLegend from "./SpectrumLegend.svelte";
-  import SpectrumWavelengthAxis from "./SpectrumWavelengthAxis.svelte";
-  import SpectrumFrequencyAxis from "./SpectrumFrequencyAxis.svelte";
-  import SpectrumRows from "./SpectrumRows.svelte";
-  import SpectrumMarker from "./SpectrumMarker.svelte";
-  import { createSpectrumState, MARGIN } from "./spectrumState.svelte";
+  import type { FrequencyBand } from '$lib/data/bands';
+  import SpectrumControls from './SpectrumControls.svelte';
+  import SpectrumCursor from './SpectrumCursor.svelte';
+  import SpectrumTooltip from './SpectrumTooltip.svelte';
+  import SpectrumLegend from './SpectrumLegend.svelte';
+  import SpectrumWavelengthAxis from './SpectrumWavelengthAxis.svelte';
+  import SpectrumFrequencyAxis from './SpectrumFrequencyAxis.svelte';
+  import SpectrumRows from './SpectrumRows.svelte';
+  import SpectrumMarker from './SpectrumMarker.svelte';
+  import { createSpectrumState, MARGIN } from './spectrumState.svelte';
 
   interface Props {
     frequencyHz?: number;
@@ -17,12 +17,7 @@
     selectedBandId?: string | null;
   }
 
-  let {
-    frequencyHz,
-    showLabels = true,
-    onBandClick,
-    selectedBandId = null,
-  }: Props = $props();
+  let { frequencyHz, showLabels = true, onBandClick, selectedBandId = null }: Props = $props();
 
   // Create reactive state
   const spectrumState = createSpectrumState();
@@ -43,9 +38,7 @@
   let bottomAxisY = $derived(MARGIN.top + spectrumState.bandRowsHeight + AXIS_OFFSET);
 
   // Safe wavelength display for control bar
-  let wavelengthDisplay = $derived(
-    frequencyHz ? spectrumState.safeFormatWavelength(frequencyHz) : "",
-  );
+  let wavelengthDisplay = $derived(frequencyHz ? spectrumState.safeFormatWavelength(frequencyHz) : '');
 
   // ResizeObserver for responsive width
   $effect(() => {
@@ -91,7 +84,7 @@
 
 <div
   bind:this={containerElement}
-  class="w-full rounded-lg p-4 relative"
+  class="relative w-full rounded-lg p-4"
   style="background-color: var(--color-chart-bg)"
   role="img"
   aria-label="Elektromagnetisches Spektrum - von ELF bis Gammastrahlung"
@@ -124,13 +117,7 @@
     onmouseleave={handleSvgMouseLeave}
   >
     <defs>
-      <linearGradient
-        id="visibleLightGradient"
-        x1="0%"
-        y1="0%"
-        x2="100%"
-        y2="0%"
-      >
+      <linearGradient id="visibleLightGradient" x1="0%" y1="0%" x2="100%" y2="0%">
         {#each spectrumState.visibleLightGradientStops as stop (stop.offset)}
           <stop offset={stop.offset} stop-color={stop.color} />
         {/each}
@@ -202,7 +189,7 @@
 
   <!-- Zoom hint -->
   {#if spectrumState.zoomLevel > 1}
-    <div class="absolute bottom-2 left-2 text-slate-500 text-xs">
+    <div class="absolute bottom-2 left-2 text-xs text-slate-500">
       Nutzen Sie die Buttons oben zum Zoomen und Verschieben
     </div>
   {/if}

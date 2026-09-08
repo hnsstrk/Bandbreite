@@ -16,7 +16,14 @@ import { render, screen, fireEvent } from '@testing-library/svelte';
 import { flushSync } from 'svelte';
 import PowerConverter from '$lib/components/converters/PowerConverter.svelte';
 import { createBindableHost } from './helpers/bindableHost.svelte';
-import { wattToDbm, wattToDbW, dbmToWatt, dbWToWatt, convertToWatt, convertFromWatt } from '$lib/utils/conversions';
+import {
+  wattToDbm,
+  wattToDbW,
+  dbmToWatt,
+  dbWToWatt,
+  convertToWatt,
+  convertFromWatt
+} from '$lib/utils/conversions';
 
 const START_W = 1;
 const EXTERN_W = 0.002;

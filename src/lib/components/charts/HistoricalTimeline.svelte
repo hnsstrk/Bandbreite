@@ -46,7 +46,7 @@
   let selectedId = $state<string | null>(null);
   let showOnlyMajor = $state(false);
 
-  let ticks = decadeTicks();
+  const ticks = decadeTicks();
 
   let filteredEvents = $derived(filterEvents(selectedCategories, showOnlyMajor));
 
@@ -75,14 +75,11 @@
     showOnlyMajor = !showOnlyMajor;
     selectedId = null;
   }
-
 </script>
 
 <Card title="Zeitstrahl der Funktechnik" subtitle="{HISTORICAL_EVENTS.length} Meilensteine" icon="clock">
   {#snippet actions()}
-    <Button size="sm" variant="ghost" icon="reset" onclick={handleAllCategoriesClick}>
-      Alle Kategorien
-    </Button>
+    <Button size="sm" variant="ghost" icon="reset" onclick={handleAllCategoriesClick}>Alle Kategorien</Button>
   {/snippet}
 
   <div class="timeline">
@@ -118,8 +115,7 @@
         <ul class="timeline__legend">
           {#each CATEGORY_ENTRIES as entry (entry.id)}
             <li class="timeline__legend-item">
-              <span class="timeline__swatch" style="background: {entry.token}" aria-hidden="true"
-              ></span>
+              <span class="timeline__swatch" style="background: {entry.token}" aria-hidden="true"></span>
               <span>{entry.label}</span>
             </li>
           {/each}
@@ -152,7 +148,7 @@
           {#each ticks as year (year)}
             {@const x = xScale(year)}
             <line class="chart-axis-line" x1={x} y1={chartHeight + 15} x2={x} y2={chartHeight + 25} />
-            <text class="chart-axis-text" x={x} y={chartHeight + 40} text-anchor="middle">
+            <text class="chart-axis-text" {x} y={chartHeight + 40} text-anchor="middle">
               {year}
             </text>
           {/each}
@@ -219,12 +215,7 @@
       {/snippet}
     </ChartFrame>
 
-    <TimelineEventDetails
-      events={filteredEvents}
-      {selectedId}
-      onselect={(id) => (selectedId = id)}
-    />
-
+    <TimelineEventDetails events={filteredEvents} {selectedId} onselect={(id) => (selectedId = id)} />
   </div>
 </Card>
 
@@ -263,15 +254,4 @@
     display: inline-block;
     flex: none;
   }
-
-
-
-
-
-
-
-
-
-
-
 </style>

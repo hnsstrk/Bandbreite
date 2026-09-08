@@ -108,7 +108,7 @@ describe('Feldstärke', () => {
   it('rechnet Feldstärke und Leistungsdichte verlustfrei hin und zurück', () => {
     const dichte = powerDensityFromField(5.48);
     expect(fieldStrengthFromDensity(dichte)).toBeCloseTo(5.48, 9);
-    expect(dichte).toBeCloseTo(5.48 * 5.48 / FREE_SPACE_IMPEDANCE, 12);
+    expect(dichte).toBeCloseTo((5.48 * 5.48) / FREE_SPACE_IMPEDANCE, 12);
   });
 
   it('koppelt E und H über den Feldwellenwiderstand', () => {
@@ -171,10 +171,7 @@ describe('computeFieldStrength', () => {
     expect(ergebnis.eirpW).toBeCloseTo(10 * Math.pow(10, 0.8), 6);
     expect(ergebnis.eirpDbm).toBeCloseTo(40 + 8, 6);
     expect(ergebnis.erpDbm).toBeCloseTo(ergebnis.eirpDbm - GAIN_DIPOLE_DBI, 9);
-    expect(ergebnis.powerDensityW).toBeCloseTo(
-      powerDensityWattPerM2(ergebnis.eirpW, 100),
-      12
-    );
+    expect(ergebnis.powerDensityW).toBeCloseTo(powerDensityWattPerM2(ergebnis.eirpW, 100), 12);
     expect(ergebnis.fieldDbuvPerM).toBeCloseTo(fieldStrengthDbuvPerM(ergebnis.fieldVPerM), 12);
     expect(ergebnis.receivedW).toBeCloseTo(ergebnis.powerDensityW * ergebnis.apertureM2, 15);
   });

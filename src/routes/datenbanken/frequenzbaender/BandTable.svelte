@@ -1,9 +1,6 @@
 <script lang="ts">
   /** Tabelle der Bänder eines Bandsystems. */
-  import {
-    getPropagationModeDescriptionDE,
-    type FrequencyBandDetail
-  } from '$lib/data/frequencyBands';
+  import { getPropagationModeDescriptionDE, type FrequencyBandDetail } from '$lib/data/frequencyBands';
   import Icon from '$lib/components/ui/Icon.svelte';
   import { PROPAGATION_CONFIG, bandRange } from './bandCategories.svelte';
 
@@ -46,8 +43,7 @@
               aria-pressed={selectedId === band.id}
               onclick={() => handleRowClick(band)}
             >
-              <span class="bands__dot" style="background-color: {band.color}" aria-hidden="true"
-              ></span>
+              <span class="bands__dot" style="background-color: {band.color}" aria-hidden="true"></span>
               {band.nameDE}
             </button>
           </th>

@@ -33,9 +33,7 @@
   }
 
   // Derived values for display
-  let wattDisplay = $derived(
-    powerWatt !== null ? convertFromWatt(powerWatt, wattUnit) : null
-  );
+  let wattDisplay = $derived(powerWatt !== null ? convertFromWatt(powerWatt, wattUnit) : null);
 
   let dbDisplay = $derived.by(() => {
     if (powerWatt === null || powerWatt <= 0) return null;
@@ -80,9 +78,7 @@
   <div class="converter-row">
     <!-- Watt Input -->
     <div class="input-group">
-      <label for="power-watt" class="input-label">
-        Leistung
-      </label>
+      <label for="power-watt" class="input-label"> Leistung </label>
       <input
         type="number"
         id="power-watt"
@@ -119,12 +115,7 @@
         step="any"
         aria-label="Leistung in dB"
       />
-      <select
-        value={dbUnit}
-        onchange={handleDbUnitChange}
-        class="select-field"
-        aria-label="Leistungseinheit (dB)"
-      >
+      <select value={dbUnit} onchange={handleDbUnitChange} class="select-field" aria-label="Leistungseinheit (dB)">
         {#each POWER_UNITS_DB as unit (unit.id)}
           <option value={unit.id}>{unit.symbol}</option>
         {/each}

@@ -64,13 +64,12 @@
   </section>
 
   <Callout tone="info" title="Quellen und Haftungsausschluss">
-    Alle Zahlen stammen aus benannten Quellen — ITU-R-Empfehlungen, BNetzA-Verfügungen, IARU-
-    Bandpläne, 3GPP-Spezifikationen und Standardwerke der Radartechnik. Herkunft, Stand und die
-    ausdrücklich unsicheren Angaben stehen unter
+    Alle Zahlen stammen aus benannten Quellen — ITU-R-Empfehlungen, BNetzA-Verfügungen, IARU- Bandpläne,
+    3GPP-Spezifikationen und Standardwerke der Radartechnik. Herkunft, Stand und die ausdrücklich unsicheren Angaben
+    stehen unter
     <a href="/service/quellen/">Quellen &amp; Stand</a>. Bandbreite ist eine Lernanwendung und
-    <strong>kein amtliches Dokument</strong>: Für Frequenzzuteilungen, Not- und Sicherheitsverkehr
-    sowie jede rechtlich verbindliche Auskunft gelten allein die Veröffentlichungen der zuständigen
-    Verwaltungen.
+    <strong>kein amtliches Dokument</strong>: Für Frequenzzuteilungen, Not- und Sicherheitsverkehr sowie jede rechtlich
+    verbindliche Auskunft gelten allein die Veröffentlichungen der zuständigen Verwaltungen.
   </Callout>
 </div>
 

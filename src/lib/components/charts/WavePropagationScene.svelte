@@ -32,8 +32,6 @@
   const ANTENNA_INSET = 60;
   const MAST_HEIGHT = 40;
   const GROUND_OFFSET = 10;
-  /** Breite der toten Zone im Raumwellenbild. */
-  const DEAD_ZONE_WIDTH = 80;
 
   let chartWidth = $derived(Math.max(1, width - margin.left - margin.right));
   let chartHeight = $derived(Math.max(1, height - margin.top - margin.bottom));
@@ -71,19 +69,11 @@
   }
 </script>
 
-<svg
-  class="wave-scene"
-  viewBox="0 0 {width} {height}"
-  preserveAspectRatio="xMidYMid meet"
-  aria-hidden="true"
->
+<svg class="wave-scene" viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
   <defs>
     <linearGradient id="{uid}-sky" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color={isNighttime ? 'var(--sky-night-top)' : 'var(--sky-day-top)'} />
-      <stop
-        offset="100%"
-        stop-color={isNighttime ? 'var(--sky-night-bottom)' : 'var(--sky-day-bottom)'}
-      />
+      <stop offset="100%" stop-color={isNighttime ? 'var(--sky-night-bottom)' : 'var(--sky-day-bottom)'} />
     </linearGradient>
     <linearGradient id="{uid}-earth" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="var(--earth-top)" />
@@ -91,13 +81,7 @@
     </linearGradient>
   </defs>
 
-  <rect
-    x={margin.left}
-    y={margin.top}
-    width={chartWidth}
-    height={chartHeight}
-    fill="url(#{uid}-sky)"
-  />
+  <rect x={margin.left} y={margin.top} width={chartWidth} height={chartHeight} fill="url(#{uid}-sky)" />
 
   {#if isNighttime}
     {#each stars as star (star.id)}
@@ -191,32 +175,16 @@
     {/if}
 
     <!-- Antennen -->
-    <line
-      x1={txX}
-      y1={groundY}
-      x2={txX}
-      y2={groundY - MAST_HEIGHT}
-      stroke="var(--color-series-6)"
-      stroke-width="3"
-    />
+    <line x1={txX} y1={groundY} x2={txX} y2={groundY - MAST_HEIGHT} stroke="var(--color-series-6)" stroke-width="3" />
     <polygon
-      points="{txX - 8},{groundY - MAST_HEIGHT} {txX},{groundY - MAST_HEIGHT - 15} {txX +
-        8},{groundY - MAST_HEIGHT}"
+      points="{txX - 8},{groundY - MAST_HEIGHT} {txX},{groundY - MAST_HEIGHT - 15} {txX + 8},{groundY - MAST_HEIGHT}"
       fill="var(--color-series-6)"
     />
     <text class="chart-axis-label" x={txX} y={groundY + 15} text-anchor="middle">TX</text>
 
-    <line
-      x1={rxX}
-      y1={groundY}
-      x2={rxX}
-      y2={groundY - MAST_HEIGHT}
-      stroke="var(--color-series-2)"
-      stroke-width="3"
-    />
+    <line x1={rxX} y1={groundY} x2={rxX} y2={groundY - MAST_HEIGHT} stroke="var(--color-series-2)" stroke-width="3" />
     <polygon
-      points="{rxX - 8},{groundY - MAST_HEIGHT} {rxX},{groundY - MAST_HEIGHT - 15} {rxX +
-        8},{groundY - MAST_HEIGHT}"
+      points="{rxX - 8},{groundY - MAST_HEIGHT} {rxX},{groundY - MAST_HEIGHT - 15} {rxX + 8},{groundY - MAST_HEIGHT}"
       fill="var(--color-series-2)"
     />
     <text class="chart-axis-label" x={rxX} y={groundY + 15} text-anchor="middle">RX</text>
@@ -235,23 +203,12 @@
     <!-- Höhenachse -->
     {#each ALTITUDE_TICKS_KM as alt (alt)}
       <line class="chart-axis-line" x1="0" y1={y(alt)} x2="-5" y2={y(alt)} />
-      <text
-        class="chart-axis-text"
-        x="-10"
-        y={y(alt)}
-        text-anchor="end"
-        dominant-baseline="middle">{alt} km</text
-      >
+      <text class="chart-axis-text" x="-10" y={y(alt)} text-anchor="end" dominant-baseline="middle">{alt} km</text>
     {/each}
-    <text
-      class="chart-axis-label"
-      transform="rotate(-90)"
-      x={-(chartHeight / 2)}
-      y="-45"
-      text-anchor="middle">Höhe (km)</text
+    <text class="chart-axis-label" transform="rotate(-90)" x={-(chartHeight / 2)} y="-45" text-anchor="middle"
+      >Höhe (km)</text
     >
   </g>
-
 </svg>
 
 <style>

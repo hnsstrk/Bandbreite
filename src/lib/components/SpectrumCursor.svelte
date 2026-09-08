@@ -16,9 +16,7 @@
   const LABEL_PADDING_X = 8;
 
   // Clamp für Labels am linken und rechten Rand
-  let clampedLabelX = $derived(
-    Math.max(LABEL_WIDTH / 2 + 4, Math.min(cursorX, innerWidth - LABEL_WIDTH / 2 - 4))
-  );
+  let clampedLabelX = $derived(Math.max(LABEL_WIDTH / 2 + 4, Math.min(cursorX, innerWidth - LABEL_WIDTH / 2 - 4)));
 </script>
 
 <!-- Cursor group - nicht klickbar -->
@@ -36,22 +34,10 @@
   />
 
   <!-- Kleiner Kreis oben -->
-  <circle
-    cx={cursorX}
-    cy={topY}
-    r="3"
-    fill="#94a3b8"
-    opacity="0.7"
-  />
+  <circle cx={cursorX} cy={topY} r="3" fill="#94a3b8" opacity="0.7" />
 
   <!-- Kleiner Kreis unten -->
-  <circle
-    cx={cursorX}
-    cy={bottomY}
-    r="3"
-    fill="#94a3b8"
-    opacity="0.7"
-  />
+  <circle cx={cursorX} cy={bottomY} r="3" fill="#94a3b8" opacity="0.7" />
 
   <!-- Wellenlängen-Label (oben) -->
   {#if wavelengthLabel}

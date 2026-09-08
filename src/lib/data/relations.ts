@@ -211,7 +211,10 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
     { id: 'datenbanken.frequenzbaender', reason: 'Amateurfunkbänder im Detail' },
     { id: 'rechner.fspl', reason: 'Reichweite einer Verbindung abschätzen' },
     { id: 'konverter.frequenz', reason: 'Bandname und Wellenlänge umrechnen' },
-    { id: 'wissen.funktechnik.funkdienste', reason: 'Primär oder sekundär — der Status des Bandes' },
+    {
+      id: 'wissen.funktechnik.funkdienste',
+      reason: 'Primär oder sekundär — der Status des Bandes'
+    },
     { id: 'wissen.wellenausbreitung', reason: 'Boden-, Raum- und Sichtwelle im Überblick' }
   ],
   'wissen.funktechnik.mobilfunk': [
@@ -231,7 +234,10 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
     { id: 'datenbanken.historie', reason: 'Vom Rundfunkbeginn bis DVB-T2' }
   ],
   'wissen.funktechnik.seefunk': [
-    { id: 'wissen.funktechnik.notfrequenzen', reason: 'Alle Not- und Anruffrequenzen auf einen Blick' },
+    {
+      id: 'wissen.funktechnik.notfrequenzen',
+      reason: 'Alle Not- und Anruffrequenzen auf einen Blick'
+    },
     { id: 'wissen.funktechnik.satellitenfunk', reason: 'Inmarsat und Iridium im Seegebiet A3' },
     { id: 'rechner.radiohorizont', reason: 'Wie weit die UKW-Reichweite über See trägt' },
     { id: 'wissen.wellenausbreitung', reason: 'Warum die Grenzwelle über den Horizont kommt' },
@@ -245,7 +251,10 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
     { id: 'datenbanken.funkdienste', reason: 'Zuweisungen der Luftfahrt nachschlagen' }
   ],
   'wissen.funktechnik.bos': [
-    { id: 'wissen.funktechnik.notfrequenzen', reason: 'Notruf- und Sicherheitsfrequenzen nachschlagen' },
+    {
+      id: 'wissen.funktechnik.notfrequenzen',
+      reason: 'Notruf- und Sicherheitsfrequenzen nachschlagen'
+    },
     { id: 'wissen.funktechnik.mobilfunk', reason: 'Der Notruf 112 über das Mobilfunknetz' },
     { id: 'rechner.fspl', reason: '4-m- und 2-m-Band in der Reichweite vergleichen' },
     { id: 'datenbanken.historie', reason: 'Der Funk im Lauf der Fernmeldegeschichte' },

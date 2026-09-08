@@ -152,7 +152,10 @@ describe('Blindgeschwindigkeiten', () => {
 
   it('v_b = n·λ·PRF/2: 10 GHz, 1 kHz → 15,0 m/s, Vielfache linear', () => {
     expect(calculateBlindSpeed(1, lambdaX, 1000)).toBeCloseTo(14.99, 1);
-    expect(calculateBlindSpeed(3, lambdaX, 1000)).toBeCloseTo(3 * calculateBlindSpeed(1, lambdaX, 1000), 9);
+    expect(calculateBlindSpeed(3, lambdaX, 1000)).toBeCloseTo(
+      3 * calculateBlindSpeed(1, lambdaX, 1000),
+      9
+    );
   });
 
   it('erste Blindgeschwindigkeit ist das Doppelte der eindeutigen Geschwindigkeit', () => {

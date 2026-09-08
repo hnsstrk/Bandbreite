@@ -204,7 +204,10 @@ import { findNode } from '$lib/data/navigation';
 import { getRelatedTopics } from '$lib/data/relations';
 import { sectionIds } from '$lib/content/funktechnik/types';
 import { articleSections } from '$lib/content/funktechnik/adapt';
-import { LEARNING_GOALS as PAGE_GOALS_FLUGFUNK, SECTIONS as PAGE_SECTIONS_FLUGFUNK } from '$lib/content/funktechnik/flugfunk';
+import {
+  LEARNING_GOALS as PAGE_GOALS_FLUGFUNK,
+  SECTIONS as PAGE_SECTIONS_FLUGFUNK
+} from '$lib/content/funktechnik/flugfunk';
 
 const PAGE_HREF_FLUGFUNK = '/wissen/funktechnik/flugfunk/';
 
@@ -254,6 +257,14 @@ describe('Seite /wissen/funktechnik/flugfunk/', () => {
 
   it('enthält die Abschnitte, auf die die Route zugreift', () => {
     const ids = sectionIds(PAGE_SECTIONS_FLUGFUNK);
-    for (const id of ['sprechfunk', 'kanalabstand', 'notfrequenzen', 'navigation', 'ueberwachung', 'daten-und-hf']) expect(ids, id).toContain(id);
+    for (const id of [
+      'sprechfunk',
+      'kanalabstand',
+      'notfrequenzen',
+      'navigation',
+      'ueberwachung',
+      'daten-und-hf'
+    ])
+      expect(ids, id).toContain(id);
   });
 });

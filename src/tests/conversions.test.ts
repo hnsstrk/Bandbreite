@@ -326,7 +326,7 @@ describe('dBm to dBW relationship', () => {
 
   it('should work for various power levels', () => {
     const testWatts = [0.001, 0.01, 0.1, 1, 10, 100];
-    testWatts.forEach(watt => {
+    testWatts.forEach((watt) => {
       const dbm = wattToDbm(watt);
       const dbw = wattToDbW(watt);
       expect(dbm - dbw).toBeCloseTo(30, 5);

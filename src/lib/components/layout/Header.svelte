@@ -17,7 +17,7 @@
   let mobileMenuOpen = $state(false);
   let activeGroup = $state<string | null>(null);
   let headerElement = $state<HTMLElement | null>(null);
-  let panels = $state<Record<string, MegaMenu | undefined>>({});
+  const panels = $state<Record<string, MegaMenu | undefined>>({});
 
   function closeGroup(returnFocus = false) {
     const id = activeGroup;
@@ -77,14 +77,7 @@
 <header class="header safe-area-top" bind:this={headerElement} onfocusout={handleFocusOut}>
   <div class="header-content">
     <a href="/" class="logo" onclick={closeMobileMenu}>
-      <svg
-        class="logo-icon"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-      >
+      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M2 12h2M6 12h2M10 12h2M14 12h2M18 12h2M22 12h2" />
         <circle cx="12" cy="12" r="3" />
         <path d="M12 5v2M12 17v2" />
@@ -120,12 +113,7 @@
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </button>
-            <MegaMenu
-              bind:this={panels[group.id]}
-              {group}
-              open={activeGroup === group.id}
-              onclose={closeGroup}
-            />
+            <MegaMenu bind:this={panels[group.id]} {group} open={activeGroup === group.id} onclose={closeGroup} />
           </li>
         {/each}
       </ul>
@@ -152,7 +140,6 @@
       </button>
     </div>
   </div>
-
 </header>
 
 <!-- Außerhalb des <header>: dessen backdrop-filter würde sonst zum Containing Block
@@ -170,7 +157,9 @@
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--color-line);
     box-shadow: var(--shadow-sm);
-    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+    transition:
+      background-color var(--transition-normal),
+      border-color var(--transition-normal);
   }
 
   .header-content {
@@ -234,7 +223,9 @@
     border: none;
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
   }
 
   .nav-link:hover,

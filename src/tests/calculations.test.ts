@@ -3,7 +3,7 @@
  * Testing FSPL, range, and wavelength calculations
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 // Speed of light constant for calculations
 const SPEED_OF_LIGHT = 299792458;

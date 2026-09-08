@@ -31,7 +31,7 @@ export const DEFAULT_FREQUENCY_UNIT = 'MHz';
 export const DEFAULT_WAVELENGTH_UNIT = 'm';
 
 // Power unit interfaces
-export interface PowerUnitWatt extends ScaledUnit {}
+export type PowerUnitWatt = ScaledUnit;
 
 export interface PowerUnitDb extends UnitDefinition {
   reference: number;
@@ -42,20 +42,20 @@ export const POWER_UNITS_WATT: PowerUnitWatt[] = [
   { id: 'uw', label: 'Mikrowatt', symbol: 'µW', factor: 1e-6 },
   { id: 'mw', label: 'Milliwatt', symbol: 'mW', factor: 1e-3 },
   { id: 'w', label: 'Watt', symbol: 'W', factor: 1 },
-  { id: 'kw', label: 'Kilowatt', symbol: 'kW', factor: 1e3 },
+  { id: 'kw', label: 'Kilowatt', symbol: 'kW', factor: 1e3 }
 ];
 
 // Power units in dB scale
 export const POWER_UNITS_DB: PowerUnitDb[] = [
   { id: 'dbm', label: 'dBm', symbol: 'dBm', reference: 1e-3 }, // Ref: 1 mW
-  { id: 'dbw', label: 'dBW', symbol: 'dBW', reference: 1 },    // Ref: 1 W
+  { id: 'dbw', label: 'dBW', symbol: 'dBW', reference: 1 } // Ref: 1 W
 ];
 
 export const DEFAULT_POWER_UNIT_WATT = 'w';
 export const DEFAULT_POWER_UNIT_DB = 'dbm';
 
 // Distance unit interface
-export interface DistanceUnit extends ScaledUnit {}
+export type DistanceUnit = ScaledUnit;
 
 // Distance units for FSPL and range calculations
 export const DISTANCE_UNITS: DistanceUnit[] = [
@@ -64,7 +64,7 @@ export const DISTANCE_UNITS: DistanceUnit[] = [
   { id: 'mi', label: 'Meile', symbol: 'mi', factor: 1609.344 },
   { id: 'ft', label: 'Fuß', symbol: 'ft', factor: 0.3048 },
   { id: 'yd', label: 'Yard', symbol: 'yd', factor: 0.9144 },
-  { id: 'nmi', label: 'Seemeile', symbol: 'nmi', factor: 1852 },
+  { id: 'nmi', label: 'Seemeile', symbol: 'nmi', factor: 1852 }
 ];
 
 export const DEFAULT_DISTANCE_UNIT = 'm';
@@ -77,14 +77,14 @@ export interface AttenuationUnit extends UnitDefinition {
 // Attenuation units for atmospheric calculations
 export const ATTENUATION_UNITS: AttenuationUnit[] = [
   { id: 'dB/km', label: 'Dezibel pro Kilometer', symbol: 'dB/km', perKm: true },
-  { id: 'dB/m', label: 'Dezibel pro Meter', symbol: 'dB/m', perKm: false },
+  { id: 'dB/m', label: 'Dezibel pro Meter', symbol: 'dB/m', perKm: false }
 ];
 
 export const DEFAULT_ATTENUATION_UNIT = 'dB/km';
 
 // Helper function to get unit by ID
 export function getUnitById<T extends UnitDefinition>(units: T[], id: string): T | undefined {
-  return units.find(u => u.id === id);
+  return units.find((u) => u.id === id);
 }
 
 // Helper function to get distance factor

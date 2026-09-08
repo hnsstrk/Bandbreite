@@ -127,9 +127,7 @@
 </div>
 
 <div class="radar-inputs__presets">
-  <span class="radar-inputs__preset-label" id="rcs-preset-label">
-    Radarquerschnitt aus der Referenztabelle
-  </span>
+  <span class="radar-inputs__preset-label" id="rcs-preset-label"> Radarquerschnitt aus der Referenztabelle </span>
   <PresetChips
     label="Radarquerschnitt-Voreinstellungen"
     presets={RCS_PRESETS}

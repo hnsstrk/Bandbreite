@@ -1,9 +1,6 @@
 <script lang="ts">
   /** Niederschlagsparameter nach ITU-R P.838 (Regen) und P.840 (Nebel). */
-  import {
-    atmosphericParameters,
-    type Polarization
-  } from '$lib/stores/atmosphericParameters.svelte';
+  import { atmosphericParameters, type Polarization } from '$lib/stores/atmosphericParameters.svelte';
   import PresetChips from '$lib/components/calculators/PresetChips.svelte';
   import type { PresetChip } from '$lib/components/calculators/presetChips.svelte';
   import Button from '$lib/components/ui/Button.svelte';
@@ -65,10 +62,7 @@
   <div class="precip__group">
     <NumberInput
       label="Regenrate"
-      bind:value={
-        () => atmosphericParameters.rainRateMmH,
-        (value) => atmosphericParameters.setRainRateMmH(value)
-      }
+      bind:value={() => atmosphericParameters.rainRateMmH, (value) => atmosphericParameters.setRainRateMmH(value)}
       units={[{ id: 'mmh', symbol: 'mm/h', factor: 1 }]}
       min={RAIN_MIN_MMH}
       max={RAIN_MAX_MMH}
@@ -87,10 +81,7 @@
   <div class="precip__group">
     <NumberInput
       label="Nebeldichte"
-      bind:value={
-        () => atmosphericParameters.fogDensityGM3,
-        (value) => atmosphericParameters.setFogDensityGM3(value)
-      }
+      bind:value={() => atmosphericParameters.fogDensityGM3, (value) => atmosphericParameters.setFogDensityGM3(value)}
       units={[{ id: 'gm3', symbol: 'g/m³', factor: 1 }]}
       min={FOG_MIN_GM3}
       max={FOG_MAX_GM3}
@@ -109,10 +100,7 @@
   <div class="precip__group">
     <NumberInput
       label="Schneerate"
-      bind:value={
-        () => atmosphericParameters.snowRateMmH,
-        (value) => atmosphericParameters.setSnowRateMmH(value)
-      }
+      bind:value={() => atmosphericParameters.snowRateMmH, (value) => atmosphericParameters.setSnowRateMmH(value)}
       units={[{ id: 'mmh', symbol: 'mm/h', factor: 1 }]}
       min={SNOW_MIN_MMH}
       max={SNOW_MAX_MMH}
@@ -141,15 +129,12 @@
     <Button size="sm" variant="ghost" icon="reset" onclick={handleResetPrecipitationClick}>
       Niederschlag zurücksetzen
     </Button>
-    <Button size="sm" variant="ghost" icon="reset" onclick={handleResetAllClick}>
-      Alles zurücksetzen
-    </Button>
+    <Button size="sm" variant="ghost" icon="reset" onclick={handleResetAllClick}>Alles zurücksetzen</Button>
   </div>
 
   <Callout tone="info" title="Einordnung der Raten" source="ITU-R P.838-3 / P.840-9">
-    Nieselregen 0,25 bis 1 mm/h, leichter Regen 1 bis 4 mm/h, mäßiger Regen 4 bis 16 mm/h,
-    starker Regen 16 bis 50 mm/h, Wolkenbruch über 100 mm/h. Nebel wird über die
-    Flüssigwasserdichte beschrieben, Schnee über sein Wasseräquivalent.
+    Nieselregen 0,25 bis 1 mm/h, leichter Regen 1 bis 4 mm/h, mäßiger Regen 4 bis 16 mm/h, starker Regen 16 bis 50 mm/h,
+    Wolkenbruch über 100 mm/h. Nebel wird über die Flüssigwasserdichte beschrieben, Schnee über sein Wasseräquivalent.
   </Callout>
 </div>
 

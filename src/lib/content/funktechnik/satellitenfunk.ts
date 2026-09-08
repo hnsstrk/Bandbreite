@@ -38,8 +38,16 @@ export const SECTIONS: ArticleSection[] = [
         number: '(1)',
         variables: [
           { symbol: 'T', meaning: 'Umlaufzeit', unit: 's' },
-          { symbol: 'r', meaning: 'Bahnradius vom Erdmittelpunkt, also Erdradius plus Höhe', unit: 'm' },
-          { symbol: 'µ', meaning: 'geozentrische Gravitationskonstante, 3,986 004 418 · 10¹⁴', unit: 'm³/s²' }
+          {
+            symbol: 'r',
+            meaning: 'Bahnradius vom Erdmittelpunkt, also Erdradius plus Höhe',
+            unit: 'm'
+          },
+          {
+            symbol: 'µ',
+            meaning: 'geozentrische Gravitationskonstante, 3,986 004 418 · 10¹⁴',
+            unit: 'm³/s²'
+          }
         ]
       },
       {
@@ -51,10 +59,30 @@ export const SECTIONS: ArticleSection[] = [
         caption: 'Die vier Bahnklassen im Vergleich',
         head: ['Bahn', 'Typische Höhe', 'Umlaufzeit', 'Charakteristik'],
         rows: [
-          ['LEO', '300 bis 2000 km', '90 bis 120 min', 'kurze Laufzeit, starker Doppler, wenige Minuten sichtbar'],
-          ['MEO', '2000 bis 35 000 km', '4 bis 12 h', 'Bahn der Navigationssysteme, große Ausleuchtzone'],
-          ['GEO', '35 786 km', '23 h 56 min', 'steht still, deckt fast ein Drittel der Erde ab, rund 240 ms Laufzeit hin und zurück'],
-          ['HEO', 'stark elliptisch', '12 bis 24 h', 'lange Verweildauer über hohen Breiten, Polargebiete']
+          [
+            'LEO',
+            '300 bis 2000 km',
+            '90 bis 120 min',
+            'kurze Laufzeit, starker Doppler, wenige Minuten sichtbar'
+          ],
+          [
+            'MEO',
+            '2000 bis 35 000 km',
+            '4 bis 12 h',
+            'Bahn der Navigationssysteme, große Ausleuchtzone'
+          ],
+          [
+            'GEO',
+            '35 786 km',
+            '23 h 56 min',
+            'steht still, deckt fast ein Drittel der Erde ab, rund 240 ms Laufzeit hin und zurück'
+          ],
+          [
+            'HEO',
+            'stark elliptisch',
+            '12 bis 24 h',
+            'lange Verweildauer über hohen Breiten, Polargebiete'
+          ]
         ]
       },
       {
@@ -140,8 +168,16 @@ export const SECTIONS: ArticleSection[] = [
         number: '(3)',
         variables: [
           { symbol: 'G/T', meaning: 'Antennengüte', unit: 'dB/K' },
-          { symbol: 'G_dBi', meaning: 'Antennengewinn gegenüber dem isotropen Strahler', unit: 'dBi' },
-          { symbol: 'T_sys', meaning: 'Systemrauschtemperatur aus Antenne, Speiseleitung und Empfänger', unit: 'K' }
+          {
+            symbol: 'G_dBi',
+            meaning: 'Antennengewinn gegenüber dem isotropen Strahler',
+            unit: 'dBi'
+          },
+          {
+            symbol: 'T_sys',
+            meaning: 'Systemrauschtemperatur aus Antenne, Speiseleitung und Empfänger',
+            unit: 'K'
+          }
         ]
       },
       {
@@ -179,7 +215,11 @@ export const SECTIONS: ArticleSection[] = [
         variables: [
           { symbol: 'Δf', meaning: 'Frequenzverschiebung', unit: 'Hz' },
           { symbol: 'f', meaning: 'Sendefrequenz', unit: 'Hz' },
-          { symbol: 'v', meaning: 'radiale Geschwindigkeit zwischen Sender und Empfänger', unit: 'm/s' },
+          {
+            symbol: 'v',
+            meaning: 'radiale Geschwindigkeit zwischen Sender und Empfänger',
+            unit: 'm/s'
+          },
           { symbol: 'c', meaning: 'Lichtgeschwindigkeit', unit: 'm/s' }
         ]
       },

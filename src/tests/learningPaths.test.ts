@@ -28,9 +28,7 @@ const ROUTE_FILES = new Set([
   ...Object.keys(import.meta.glob('/src/routes/**/+page.ts'))
 ]);
 
-const alleSchritte = LEARNING_PATHS.flatMap((path) =>
-  path.steps.map((step) => ({ path, step }))
-);
+const alleSchritte = LEARNING_PATHS.flatMap((path) => path.steps.map((step) => ({ path, step })));
 
 describe('LEARNING_PATHS', () => {
   it('führt vier Pfade mit eindeutigen IDs', () => {
@@ -119,9 +117,7 @@ describe('resolvePathSteps', () => {
 
   it('nummeriert die aufgelösten Schritte lückenlos ab 1', () => {
     const steps = resolvePathSteps(path);
-    expect(steps.map((step) => step.position)).toEqual(
-      steps.map((_step, index) => index + 1)
-    );
+    expect(steps.map((step) => step.position)).toEqual(steps.map((_step, index) => index + 1));
   });
 
   it('reicht den Navigationsknoten mit durch', () => {

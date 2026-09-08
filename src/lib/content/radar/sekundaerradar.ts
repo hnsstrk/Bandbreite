@@ -33,8 +33,7 @@ export const radarSekundaerArticle: KnowledgeArticle = {
   kicker: 'Wissen · Radartechnik',
   title: 'Sekundärradar, Mode S und ADS-B',
   icon: 'radio',
-  lead:
-    'Das Sekundärradar wartet nicht auf ein Echo, sondern stellt eine Frage: Die Bodenstation fragt auf 1030 MHz, der Transponder im Luftfahrzeug antwortet auf 1090 MHz. Aus diesem Dialog sind Kennung, Flughöhe, die selektive Modus-S-Abfrage und schließlich ADS-B entstanden.',
+  lead: 'Das Sekundärradar wartet nicht auf ein Echo, sondern stellt eine Frage: Die Bodenstation fragt auf 1030 MHz, der Transponder im Luftfahrzeug antwortet auf 1090 MHz. Aus diesem Dialog sind Kennung, Flughöhe, die selektive Modus-S-Abfrage und schließlich ADS-B entstanden.',
   meta: [
     { label: 'Quelle', value: 'ICAO Annex 10 Vol. IV' },
     { label: 'Frequenzen', value: '1030 / 1090 MHz' }
@@ -80,8 +79,7 @@ export const radarSekundaerArticle: KnowledgeArticle = {
         },
         {
           type: 'paragraph',
-          html:
-            'Der Leistungsvorteil folgt direkt aus der Geometrie: Die Abfrage breitet sich einmal aus (1/R²), die Antwort ebenfalls einmal (1/R²) – zusammen also 1/R⁴ in der <em>Leistung zweier getrennter Strecken</em> statt des R⁴-Gesetzes einer einzigen Strecke mit Rückstreuung. Praktisch heißt das: Ein Sekundärradar erreicht mit einigen hundert Watt Spitzenleistung Entfernungen, für die ein Primärradar Megawatt braucht. Der Preis ist die Abhängigkeit von der Bordausrüstung – deshalb betreiben Flugsicherungen beide Systeme nebeneinander, oft auf derselben Antennendrehachse.'
+          html: 'Der Leistungsvorteil folgt direkt aus der Geometrie: Die Abfrage breitet sich einmal aus (1/R²), die Antwort ebenfalls einmal (1/R²) – zusammen also 1/R⁴ in der <em>Leistung zweier getrennter Strecken</em> statt des R⁴-Gesetzes einer einzigen Strecke mit Rückstreuung. Praktisch heißt das: Ein Sekundärradar erreicht mit einigen hundert Watt Spitzenleistung Entfernungen, für die ein Primärradar Megawatt braucht. Der Preis ist die Abhängigkeit von der Bordausrüstung – deshalb betreiben Flugsicherungen beide Systeme nebeneinander, oft auf derselben Antennendrehachse.'
         }
       ]
     },
@@ -208,7 +206,10 @@ export const radarSekundaerArticle: KnowledgeArticle = {
               html: 'Der Modus-S-Transponder sendet unaufgefordert („Extended Squitter", Format DF17) Position, Höhe, Geschwindigkeit und Kennung aus der Bordnavigation. Die Position wird kompakt codiert (Compact Position Reporting, CPR), sodass zwei Nachrichten zur eindeutigen Auflösung nötig sind.',
               facts: [
                 { label: 'Frequenz', value: formatFrequency(SSR_REPLY_HZ, 0) },
-                { label: 'Nachrichtenlänge', value: `${formatNumber(MODE_S_REPLY_BITS.lang, 0)} bit` }
+                {
+                  label: 'Nachrichtenlänge',
+                  value: `${formatNumber(MODE_S_REPLY_BITS.lang, 0)} bit`
+                }
               ]
             },
             {
@@ -230,8 +231,7 @@ export const radarSekundaerArticle: KnowledgeArticle = {
     {
       id: 'kanalbelastung',
       title: 'Kanalbelastung: FRUIT und Garbling',
-      description:
-        'Alle Antworten der Welt teilen sich eine einzige Frequenz. Das hat Folgen.',
+      description: 'Alle Antworten der Welt teilen sich eine einzige Frequenz. Das hat Folgen.',
       blocks: [
         {
           type: 'definitions',

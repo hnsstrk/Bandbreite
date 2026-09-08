@@ -168,7 +168,7 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'Feld ergibt. Dient ausschließlich als Bezugsgröße: alle Gewinnangaben in dBi ' +
       'beziehen sich auf sie.',
     applicationsDE: ['Bezugsgröße für Antennengewinn und EIRP'],
-    source: 'IEEE Std 145',
+    source: 'IEEE Std 145'
   },
   {
     id: 'dipol',
@@ -186,7 +186,7 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'der Drahtenden Nullstellen. Der zweite Bezugswert der Antennentechnik: ' +
       'Angaben in dBd rechnen sich mit 2,15 dB Zuschlag in dBi um.',
     applicationsDE: ['Empfangsantennen', 'Erregerelement in Richtantennen', 'Messantennen'],
-    source: 'IEEE Std 145; Balanis',
+    source: 'IEEE Std 145; Balanis'
   },
   {
     id: 'groundplane',
@@ -204,8 +204,12 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'rund 5,15 dBi, weil die gesamte Leistung in den oberen Halbraum geht. ' +
       'Reale Radials, oft schräg abgewinkelt, senken den Gewinn und heben die ' +
       'Fußpunktimpedanz in Richtung 50 Ohm an.',
-    applicationsDE: ['Mobilfunk- und Betriebsfunkantennen', 'CB-Funk', 'Basisstationen im Amateurfunk'],
-    source: 'Balanis; IEEE Std 145',
+    applicationsDE: [
+      'Mobilfunk- und Betriebsfunkantennen',
+      'CB-Funk',
+      'Basisstationen im Amateurfunk'
+    ],
+    source: 'Balanis; IEEE Std 145'
   },
   {
     id: 'yagi',
@@ -223,8 +227,12 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'Anschluss; die übrigen werden vom Feld angeregt und formen durch ihre ' +
       'Phasenlage eine ausgeprägte Hauptkeule. Gewinn und Bandbreite stehen im ' +
       'Zielkonflikt: je schärfer die Abstimmung, desto schmaler der nutzbare Bereich.',
-    applicationsDE: ['Fernsehempfang', 'UKW-Weitverkehr im Amateurfunk', 'Richtstrecken auf VHF/UHF'],
-    source: 'Balanis; IEEE Std 145',
+    applicationsDE: [
+      'Fernsehempfang',
+      'UKW-Weitverkehr im Amateurfunk',
+      'Richtstrecken auf VHF/UHF'
+    ],
+    source: 'Balanis; IEEE Std 145'
   },
   {
     id: 'logper',
@@ -241,8 +249,12 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'gehorchen. Je nach Frequenz ist ein anderer Teil der Struktur aktiv, wodurch ' +
       'sich Gewinn und Fußpunktimpedanz über ein sehr breites Band kaum ändern. ' +
       'Der Preis ist ein deutlich geringerer Gewinn als bei einer gleich langen Yagi.',
-    applicationsDE: ['Messtechnik und EMV-Prüfungen', 'Breitband-Empfangsanlagen', 'Funküberwachung'],
-    source: 'Balanis; IEEE Std 145',
+    applicationsDE: [
+      'Messtechnik und EMV-Prüfungen',
+      'Breitband-Empfangsanlagen',
+      'Funküberwachung'
+    ],
+    source: 'Balanis; IEEE Std 145'
   },
   {
     id: 'parabol',
@@ -262,7 +274,7 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'Der Flächenwirkungsgrad η liegt praktisch bei 0,5 bis 0,7, weil Erregerabschattung, ' +
       'Randüberstrahlung und Oberflächenfehler Leistung kosten.',
     applicationsDE: ['Satellitenempfang', 'Richtfunk', 'Radioastronomie', 'Radaranlagen'],
-    source: 'ITU-R F.699; Balanis',
+    source: 'ITU-R F.699; Balanis'
   },
   {
     id: 'horn',
@@ -279,8 +291,12 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'freien Raum anpasst. Sehr gut berechenbar, verlustarm und breitbandig; ' +
       'deshalb als Gewinnnormal in der Messtechnik und als Erreger im Brennpunkt ' +
       'von Parabolspiegeln.',
-    applicationsDE: ['Erreger für Parabolantennen', 'Gewinnnormale in der Messtechnik', 'Füllstandradar'],
-    source: 'Balanis; IEEE Std 149',
+    applicationsDE: [
+      'Erreger für Parabolantennen',
+      'Gewinnnormale in der Messtechnik',
+      'Füllstandradar'
+    ],
+    source: 'Balanis; IEEE Std 149'
   },
   {
     id: 'patch',
@@ -298,8 +314,13 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'dafür schmalbandig. Durch Speisung an zwei um 90 Grad versetzten Punkten ' +
       'lässt sich zirkulare Polarisation erzeugen, wie sie die Satellitennavigation ' +
       'benötigt.',
-    applicationsDE: ['GNSS-Empfänger', 'WLAN-Module', 'Mobilfunkendgeräte', 'Bauelemente in Gruppenantennen'],
-    source: 'Balanis; IEEE Std 145',
+    applicationsDE: [
+      'GNSS-Empfänger',
+      'WLAN-Module',
+      'Mobilfunkendgeräte',
+      'Bauelemente in Gruppenantennen'
+    ],
+    source: 'Balanis; IEEE Std 145'
   },
   {
     id: 'helix',
@@ -318,7 +339,7 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'Ausrichtung des Satelliten dann keine Rolle mehr spielt und der Faradaydrehung ' +
       'in der Ionosphäre begegnet wird.',
     applicationsDE: ['Satellitenfunk', 'Telemetrie von Raketen', 'GNSS-Referenzstationen'],
-    source: 'Balanis; IEEE Std 145',
+    source: 'Balanis; IEEE Std 145'
   },
   {
     id: 'phased-array',
@@ -336,9 +357,14 @@ export const ANTENNA_TYPES: AntennaType[] = [
       'dass sich etwas bewegt — mit Umschaltzeiten im Mikrosekundenbereich. ' +
       'Der Gewinn wächst idealisiert um 3 dB je Verdopplung der Elementzahl. ' +
       'Grundlage moderner Radaranlagen und der Strahlformung im 5G-Mobilfunk.',
-    applicationsDE: ['Militär- und Wetterradar', '5G-Basisstationen', 'Satellitenterminals', 'Radioastronomie'],
-    source: 'IEEE Std 145; 3GPP TR 38.803',
-  },
+    applicationsDE: [
+      'Militär- und Wetterradar',
+      '5G-Basisstationen',
+      'Satellitenterminals',
+      'Radioastronomie'
+    ],
+    source: 'IEEE Std 145; 3GPP TR 38.803'
+  }
 ];
 
 /**

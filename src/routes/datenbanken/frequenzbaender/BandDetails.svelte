@@ -1,9 +1,6 @@
 <script lang="ts">
   /** Detailtafel eines ausgewählten Frequenzbandes. */
-  import {
-    getPropagationModeDescriptionDE,
-    type FrequencyBandDetail
-  } from '$lib/data/frequencyBands';
+  import { getPropagationModeDescriptionDE, type FrequencyBandDetail } from '$lib/data/frequencyBands';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Button from '$lib/components/ui/Button.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
@@ -23,19 +20,18 @@
 
 <Card title={band.nameDE} subtitle={band.name} level={2}>
   {#snippet actions()}
-    <Button
-      size="sm"
-      variant="ghost"
-      iconOnly
-      icon="close"
-      label="Details schließen"
-      onclick={onclose}
-    />
+    <Button size="sm" variant="ghost" iconOnly icon="close" label="Details schließen" onclick={onclose} />
   {/snippet}
 
   <dl class="bd">
-    <div><dt>Frequenzbereich</dt><dd class="bd__mono">{bandRange(band)}</dd></div>
-    <div><dt>Wellenlänge</dt><dd class="bd__mono">{band.wavelength}</dd></div>
+    <div>
+      <dt>Frequenzbereich</dt>
+      <dd class="bd__mono">{bandRange(band)}</dd>
+    </div>
+    <div>
+      <dt>Wellenlänge</dt>
+      <dd class="bd__mono">{band.wavelength}</dd>
+    </div>
     <div>
       <dt>System</dt>
       <dd><Badge tone="brand">{band.category.toUpperCase()}</Badge></dd>

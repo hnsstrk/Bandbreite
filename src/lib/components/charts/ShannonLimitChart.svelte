@@ -3,7 +3,8 @@
    * Spektrale Effizienz über dem Störabstand mit dem Shannon-Limit als
    * Kennlinie und den Modulationsarten als hinterlegte Bereiche.
    */
-  import { line, scaleLinear } from 'd3';
+  import { line } from 'd3-shape';
+  import { scaleLinear } from 'd3-scale';
   import { clamp } from '$lib/utils/handlers';
   import { formatLocaleNumber, formatNumber } from '$lib/utils/formatting';
   import {

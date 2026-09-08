@@ -11,6 +11,11 @@ import {
   calculateUnambiguousRange,
   calculateUnambiguousVelocity,
   calculateRoundTripTime,
+  calculateBandwidthRangeResolution,
+  calculateBeatFrequency,
+  calculateBlindSpeed,
+  calculateCompressionGain,
+  calculateStaggeredBlindSpeed,
   type RadarParameters
 } from '$lib/utils/radar';
 
@@ -105,5 +110,73 @@ describe('Puls-Parameter', () => {
     expect(calculateUnambiguousRange(0)).toBe(0);
     expect(calculateUnambiguousVelocity(0, 0.03)).toBe(0);
     expect(calculateRoundTripTime(-1)).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Ergänzungen für FMCW, Pulskompression und Blindgeschwindigkeiten
+// ---------------------------------------------------------------------------
+
+describe('FMCW und Pulskompression', () => {
+  it('ΔR = c/(2·B): 1 GHz → 15 cm, 4 GHz → 3,7 cm', () => {
+    expect(calculateBandwidthRangeResolution(1e9)).toBeCloseTo(0.1499, 3);
+    expect(calculateBandwidthRangeResolution(4e9)).toBeCloseTo(0.03747, 4);
+  });
+
+  it('f_b = 2·R·B/(c·T): 100 m, 4 GHz, 50 µs → 53,4 MHz', () => {
+    const beat = calculateBeatFrequency(100, 4e9, 50e-6);
+    expect(beat / 1e6).toBeCloseTo(53.37, 1);
+  });
+
+  it('Beat-Frequenz wächst linear mit der Entfernung', () => {
+    const a = calculateBeatFrequency(50, 1e9, 100e-6);
+    const b = calculateBeatFrequency(100, 1e9, 100e-6);
+    expect(b / a).toBeCloseTo(2, 9);
+  });
+
+  it('Kompressionsgewinn B·τ: 1 MHz über 100 µs → 100 (20 dB)', () => {
+    expect(calculateCompressionGain(1e6, 100e-6)).toBeCloseTo(100, 9);
+    expect(10 * Math.log10(calculateCompressionGain(1e6, 100e-6))).toBeCloseTo(20, 9);
+  });
+
+  it('0 bei ungültigen Eingaben', () => {
+    expect(calculateBandwidthRangeResolution(0)).toBe(0);
+    expect(calculateBeatFrequency(100, 0, 50e-6)).toBe(0);
+    expect(calculateBeatFrequency(0, 1e9, 50e-6)).toBe(0);
+    expect(calculateCompressionGain(1e6, 0)).toBe(0);
+  });
+});
+
+describe('Blindgeschwindigkeiten', () => {
+  const lambdaX = wavelength(10e9);
+
+  it('v_b = n·λ·PRF/2: 10 GHz, 1 kHz → 15,0 m/s, Vielfache linear', () => {
+    expect(calculateBlindSpeed(1, lambdaX, 1000)).toBeCloseTo(14.99, 1);
+    expect(calculateBlindSpeed(3, lambdaX, 1000)).toBeCloseTo(3 * calculateBlindSpeed(1, lambdaX, 1000), 9);
+  });
+
+  it('erste Blindgeschwindigkeit ist das Doppelte der eindeutigen Geschwindigkeit', () => {
+    expect(calculateBlindSpeed(1, lambdaX, 1000)).toBeCloseTo(
+      2 * calculateUnambiguousVelocity(1000, lambdaX),
+      9
+    );
+  });
+
+  it('Staffelung 1000/1200 Hz → erste gemeinsame Lücke bei 6·v_b1', () => {
+    const common = calculateStaggeredBlindSpeed(1000, 1200, lambdaX);
+    expect(common).toBeCloseTo(6 * calculateBlindSpeed(1, lambdaX, 1000), 6);
+  });
+
+  it('gleiche PRFs bringen keinen Gewinn', () => {
+    expect(calculateStaggeredBlindSpeed(1000, 1000, lambdaX)).toBeCloseTo(
+      calculateBlindSpeed(1, lambdaX, 1000),
+      9
+    );
+  });
+
+  it('0 bei ungültigen Eingaben', () => {
+    expect(calculateBlindSpeed(0, lambdaX, 1000)).toBe(0);
+    expect(calculateBlindSpeed(1, 0, 1000)).toBe(0);
+    expect(calculateStaggeredBlindSpeed(0, 1200, lambdaX)).toBe(0);
   });
 });

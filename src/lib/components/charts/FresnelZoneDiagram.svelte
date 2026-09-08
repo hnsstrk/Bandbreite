@@ -1,6 +1,7 @@
 <script lang="ts">
   /** Seitenriss einer Funkstrecke mit erster und zweiter Fresnel-Zone. */
-  import { curveLinearClosed, line, scaleLinear } from 'd3';
+  import { curveLinearClosed, line } from 'd3-shape';
+  import { scaleLinear } from 'd3-scale';
   import { FRESNEL_CLEARANCE_FRACTION } from '$lib/utils/calculations';
   import { formatDistance, formatNumber } from '$lib/utils/formatting';
   import {

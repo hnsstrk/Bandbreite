@@ -19,7 +19,12 @@ export type WidgetId =
   | 'attenuation-windows'
   | 'propagation-sandbox'
   | 'wave-propagation-diagram'
-  | 'ionospheric-propagation';
+  | 'ionospheric-propagation'
+  | 'fmcw'
+  | 'blind-speed'
+  | 'ssr-interrogation'
+  | 'em-wave'
+  | 'field-strength';
 
 export interface FormulaVariable {
   symbol: string;

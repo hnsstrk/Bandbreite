@@ -144,10 +144,49 @@ describe('frequencyActions', () => {
   });
 });
 
+describe('Gewichtung der Ergebnistypen', () => {
+  const gleich = (type: SearchEntry['type']) =>
+    scoreEntry(entry({ type, title: 'Fresnel-Zone' }), tokenize('Fresnel-Zone'));
+
+  it('stellt Werkzeug und Seite vor Widget, Widget vor Glossar', () => {
+    expect(gleich('werkzeug')).toBeGreaterThan(gleich('widget'));
+    expect(gleich('seite')).toBeGreaterThan(gleich('widget'));
+    expect(gleich('widget')).toBeGreaterThan(gleich('glossar'));
+  });
+
+  it('lässt „fspl" weiterhin auf dem Rechner landen', () => {
+    expect(searchEntries('fspl')[0].href).toBe('/rechner/fspl/');
+  });
+
+  it('führt das Kapitel vor sein Widget', () => {
+    const treffer = searchEntries('Fresnel');
+    const kapitel = treffer.findIndex((e) => e.type === 'seite' || e.type === 'werkzeug');
+    const widget = treffer.findIndex((e) => e.type === 'widget');
+    expect(kapitel).toBeGreaterThanOrEqual(0);
+    expect(widget).toBeGreaterThan(kapitel);
+  });
+
+  it('findet Widgets über Titel und Kennung', () => {
+    const treffer = searchEntries('Fresnel-Zone und Hindernis');
+    expect(treffer.some((e) => e.type === 'widget' && e.href.includes('?w=fresnel'))).toBe(true);
+  });
+});
+
+describe('searchGrouped mit Widgets', () => {
+  it('führt eine eigene Gruppe „Widgets"', () => {
+    const gruppen = searchGrouped('Fresnel');
+    const widgets = gruppen.find((g) => g.type === 'widget');
+    expect(widgets?.label).toBe('Widgets');
+    expect(widgets?.entries.length).toBeGreaterThan(0);
+  });
+});
+
 describe('SEARCH_INDEX', () => {
   it('enthält alle Quellen', () => {
     const types = new Set(SEARCH_INDEX.map((e) => e.type));
-    expect(types).toEqual(new Set(['seite', 'werkzeug', 'band', 'funkdienst', 'sender', 'glossar']));
+    expect(types).toEqual(
+      new Set(['seite', 'werkzeug', 'widget', 'band', 'funkdienst', 'sender', 'glossar'])
+    );
   });
 
   it('vergibt eindeutige IDs', () => {

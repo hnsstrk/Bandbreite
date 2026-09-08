@@ -41,6 +41,14 @@ export interface NavNode {
   keywords?: string[];
   /** Ob die Seite existiert. */
   status: NavStatus;
+  /**
+   * Aus Menü, Hub-Kacheln, Kapitelnavigation und Suchindex ausblenden.
+   *
+   * Für Seiten, die es gibt und die verlinkt werden dürfen, aber keinen Platz
+   * in der Navigation haben — etwa die Ergebnisseite `/suche/`. Die Sitemap
+   * führt sie weiterhin auf, damit die Übersicht vollständig bleibt.
+   */
+  hidden?: boolean;
   children?: NavNode[];
 }
 
@@ -260,6 +268,109 @@ export const NAV_TREE: NavNode[] = [
       'Lehrtexte zur Funk- und Hochfrequenztechnik — von der Wellenausbreitung über Modulation bis zur Radartechnik.',
     keywords: ['Wissen', 'Grundlagen', 'Lehrtext', 'Nachschlagewerk'],
     children: [
+      {
+        id: 'wissen.lernpfade',
+        label: 'Lernpfade',
+        href: '/wissen/lernpfade/',
+        icon: 'play',
+        status: 'live',
+        description:
+          'Geführte Reihenfolgen durch die Kapitel: vier Pfade mit einem Lernziel je Schritt und einer Fortschrittsanzeige.',
+        keywords: [
+          'Lernpfad',
+          'Kurs',
+          'Reihenfolge',
+          'Einstieg',
+          'Lernziel',
+          'Fortschritt',
+          'geführt'
+        ]
+      },
+      {
+        id: 'wissen.grundlagen',
+        label: 'Grundlagen',
+        href: '/wissen/grundlagen/',
+        icon: 'wave',
+        status: 'live',
+        description:
+          'Einstieg in die Hochfrequenztechnik: elektromagnetische Welle, Dezibel und Pegel, Leistung und Feldstärke.',
+        keywords: [
+          'Grundlagen',
+          'Einstieg',
+          'EM-Welle',
+          'Dezibel',
+          'Pegel',
+          'Feldstärke',
+          'Polarisation'
+        ],
+        children: [
+          {
+            id: 'wissen.grundlagen.em-wellen',
+            label: 'Elektromagnetische Wellen',
+            href: '/wissen/grundlagen/em-wellen/',
+            icon: 'wave',
+            status: 'live',
+            description:
+              'E-Feld und H-Feld, λ = c/f, Nah- und Fernfeld, Polarisation, Feldwellenwiderstand und Photonenenergie.',
+            keywords: [
+              'EM-Welle',
+              'E-Feld',
+              'H-Feld',
+              'Polarisation',
+              'zirkular',
+              'RHCP',
+              'LHCP',
+              'Fernfeld',
+              'Nahfeld',
+              'Feldwellenwiderstand',
+              'Photonenenergie',
+              'ionisierend'
+            ]
+          },
+          {
+            id: 'wissen.grundlagen.dezibel',
+            label: 'Dezibel und Pegel',
+            href: '/wissen/grundlagen/dezibel/',
+            icon: 'calculator',
+            status: 'live',
+            description:
+              'Warum logarithmisch gerechnet wird: 10·log und 20·log, dBm, dBW, dBµV, dBi, dBd, dBc und die Kettenrechnung.',
+            keywords: [
+              'Dezibel',
+              'dB',
+              'dBm',
+              'dBW',
+              'dBµV',
+              'dBi',
+              'dBd',
+              'dBc',
+              'Pegel',
+              'Pegelplan',
+              'Merkregel'
+            ]
+          },
+          {
+            id: 'wissen.grundlagen.leistung-und-pegel',
+            label: 'Leistung, EIRP und Feldstärke',
+            href: '/wissen/grundlagen/leistung-und-pegel/',
+            icon: 'signal',
+            status: 'live',
+            description:
+              'Sendeleistung, Antennengewinn, EIRP und ERP, Leistungsdichte im Abstand d und Feldstärke in V/m und dBµV/m.',
+            keywords: [
+              'EIRP',
+              'ERP',
+              'Sendeleistung',
+              'Antennengewinn',
+              'Leistungsdichte',
+              'Feldstärke',
+              'dBµV/m',
+              'Wirkfläche',
+              'Personenschutz'
+            ]
+          }
+        ]
+      },
       {
         id: 'wissen.wellenausbreitung',
         label: 'Wellenausbreitung',
@@ -520,13 +631,78 @@ export const NAV_TREE: NavNode[] = [
       },
       {
         id: 'wissen.radar',
-        label: 'Radar-Grundlagen',
+        label: 'Radartechnik',
         href: '/wissen/radar/',
         icon: 'radar',
         status: 'live',
         description:
-          'Funktionsprinzip, Radargleichung, Rückstreuquerschnitt und die gängigen Radarverfahren.',
-        keywords: ['Radar', 'Pulsradar', 'Doppler', 'FMCW', 'RCS', 'SAR', 'Sekundärradar']
+          'Kapitel-Hub: Radarprinzip, Radargleichung, Sende- und Auswerteverfahren sowie das kooperative Sekundärradar.',
+        keywords: ['Radar', 'Pulsradar', 'Doppler', 'FMCW', 'RCS', 'SAR', 'Sekundärradar'],
+        children: [
+          {
+            id: 'wissen.radar.grundlagen',
+            label: 'Radar-Grundlagen',
+            href: '/wissen/radar/grundlagen/',
+            icon: 'signal',
+            status: 'live',
+            description:
+              'Laufzeit und Entfernung, Radargleichung, Rückstreuquerschnitt, Auflösung und Mehrdeutigkeit sowie die Radarbänder.',
+            keywords: [
+              'Radargleichung',
+              'RCS',
+              'Rückstreuquerschnitt',
+              'Laufzeit',
+              'Auflösung',
+              'Eindeutigkeit',
+              'PRF',
+              'IEEE-Bänder'
+            ]
+          },
+          {
+            id: 'wissen.radar.verfahren',
+            label: 'Radarverfahren',
+            href: '/wissen/radar/verfahren/',
+            icon: 'wave',
+            status: 'live',
+            description:
+              'Puls und Dauerstrich, Doppler mit MTI und MTD, FMCW, Pulskompression, CFAR, Phased Array, SAR und bistatische Systeme.',
+            keywords: [
+              'Doppler',
+              'MTI',
+              'MTD',
+              'Blindgeschwindigkeit',
+              'FMCW',
+              'Chirp',
+              'Pulskompression',
+              'CFAR',
+              'Phased Array',
+              'SAR',
+              'bistatisch',
+              'Passivradar'
+            ]
+          },
+          {
+            id: 'wissen.radar.sekundaerradar',
+            label: 'Sekundärradar',
+            href: '/wissen/radar/sekundaerradar/',
+            icon: 'radio',
+            status: 'live',
+            description:
+              'Abfrage auf 1030 MHz, Antwort auf 1090 MHz: Modus A und C, Modus S mit 24-Bit-Adresse, ADS-B und TCAS.',
+            keywords: [
+              'Sekundärradar',
+              'SSR',
+              'Transponder',
+              'Squawk',
+              'Mode S',
+              'ADS-B',
+              'TCAS',
+              '1030 MHz',
+              '1090 MHz',
+              'ICAO'
+            ]
+          }
+        ]
       },
       {
         id: 'wissen.glossar',
@@ -640,6 +816,22 @@ export const NAV_TREE: NavNode[] = [
         status: 'live',
         description: 'Herkunft und Stand der verwendeten Daten sowie die verwendeten Normen.',
         keywords: ['Quellen', 'ITU-R', 'BNetzA', 'IARU', '3GPP', 'Stand']
+      },
+      {
+        // Die Ergebnisseite der Suche liegt unter „/suche/" — die ID leitet
+        // sich wie bei jedem Knoten aus dem Pfad ab und heißt deshalb 'suche',
+        // obwohl der Knoten im Baum unter Service hängt. `hidden` hält sie aus
+        // Menü, Kacheln und Suchindex heraus; erreichbar ist sie über die
+        // Command-Palette und jeden geteilten Link.
+        id: 'suche',
+        label: 'Suche',
+        href: '/suche/',
+        icon: 'search',
+        status: 'live',
+        hidden: true,
+        description:
+          'Alle Treffer zu einem Suchbegriff auf einer Seite: Seiten, Werkzeuge, Widgets, Bänder, Funkdienste, Sender und Begriffe.',
+        keywords: ['Suche', 'Suchergebnisse', 'Volltextsuche', 'finden']
       }
     ]
   }
@@ -737,12 +929,27 @@ export const NAV_GROUPS: NavGroup[] = [
       },
       {
         label: 'Technik & Verfahren',
-        itemIds: ['wissen.modulation', 'wissen.antennen', 'wissen.radar']
+        itemIds: [
+          'wissen.modulation',
+          'wissen.antennen',
+          'wissen.radar',
+          'wissen.radar.grundlagen',
+          'wissen.radar.verfahren',
+          'wissen.radar.sekundaerradar'
+        ]
       },
       {
-        label: 'Grundlagen',
-        href: '/wissen/',
-        itemIds: ['wissen.mathematik', 'wissen.glossar']
+        label: 'Grundlagen & Mathematik',
+        href: '/wissen/grundlagen/',
+        itemIds: [
+          'wissen.lernpfade',
+          'wissen.grundlagen',
+          'wissen.grundlagen.em-wellen',
+          'wissen.grundlagen.dezibel',
+          'wissen.grundlagen.leistung-und-pegel',
+          'wissen.mathematik',
+          'wissen.glossar'
+        ]
       }
     ]
   },
@@ -854,12 +1061,15 @@ export function getBreadcrumbs(href: string): BreadcrumbEntry[] {
   return entries;
 }
 
-/** Geschwisterknoten einer Route (ohne die Route selbst). */
+/**
+ * Geschwisterknoten einer Route (ohne die Route selbst). Ausgeblendete Knoten
+ * bleiben außen vor — die Kapitelnavigation soll nicht dorthin blättern.
+ */
 export function getSiblings(href: string): NavNode[] {
   const target = normalizeHref(href);
   const parent = getParent(target);
   const list = parent ? (parent.children ?? []) : NAV_TREE;
-  return list.filter((node) => node.href !== target);
+  return list.filter((node) => node.href !== target && !node.hidden);
 }
 
 /** Elternknoten einer Route. */
@@ -868,9 +1078,12 @@ export function getParent(href: string): NavNode | undefined {
   return flattenNav().find((node) => node.children?.some((child) => child.href === target));
 }
 
-/** Kinder eines Hubs — Grundlage für die Kachelraster der Hub-Seiten. */
+/**
+ * Kinder eines Hubs — Grundlage für die Kachelraster der Hub-Seiten.
+ * Ausgeblendete Knoten (`hidden`) bekommen keine Kachel.
+ */
 export function getHubChildren(href: string): NavNode[] {
-  return findNode(href)?.children ?? [];
+  return (findNode(href)?.children ?? []).filter((node) => !node.hidden);
 }
 
 export interface PageMeta {
@@ -891,9 +1104,9 @@ export function pageMeta(href: string, overrides: Partial<PageMeta> = {}): PageM
   };
 }
 
-/** Nur die existierenden Seiten (z. B. für die Suche). */
+/** Nur die existierenden, nicht ausgeblendeten Seiten (z. B. für die Suche). */
 export function getLiveNodes(): NavNode[] {
-  return flattenNav().filter((node) => node.status === 'live');
+  return flattenNav().filter((node) => node.status === 'live' && !node.hidden);
 }
 
 /** Ist `href` die aktuelle Route oder ein Vorfahre davon? */

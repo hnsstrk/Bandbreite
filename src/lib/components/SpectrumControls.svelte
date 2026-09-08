@@ -1,15 +1,10 @@
 <script lang="ts">
   import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
   import { spectrumExplanations } from "$lib/data/explanations";
-  import {
-    type ViewMode,
-    type RowKey,
-    type VisibleRows,
-    MIN_ZOOM,
-    MAX_ZOOM,
-    formatFrequencyLocal,
-    formatZoom,
-  } from "./spectrumState.svelte";
+  import type { ViewMode } from "./spectrumState.svelte";
+  import { type RowKey, type VisibleRows } from "./spectrumBands";
+  import { MIN_ZOOM, MAX_ZOOM } from "./spectrumZoom";
+  import { formatFrequencyLocal, formatZoom } from "./spectrumFormat";
 
   interface Props {
     visibleRows: VisibleRows;

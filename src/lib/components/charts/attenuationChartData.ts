@@ -6,7 +6,7 @@
  * Pfade. Farben kommen ausschließlich aus den Serien-Tokens.
  */
 
-import { line } from 'd3';
+import { line } from 'd3-shape';
 import { formatExponential, formatFixed } from '$lib/utils/formatting';
 import type { ExtendedCurveDataPoint } from '$lib/utils/atmosphericAttenuation';
 

@@ -139,3 +139,110 @@ export function calculateRoundTripTime(rangeM: number, c: number = speedOfLight.
   if (rangeM <= 0) return 0;
   return safeDivide(2 * rangeM, c, 0);
 }
+
+/**
+ * Entfernungsauflösung eines bandbreitenbegrenzten Radars: ΔR = c / (2·B)
+ *
+ * Gilt für FMCW-Radare und für Pulskompression gleichermaßen: Nicht die
+ * Sendedauer, sondern die belegte Bandbreite bestimmt die Auflösung.
+ * (Skolnik, Introduction to Radar Systems, 3. Aufl., §6.5 „Pulse compression")
+ *
+ * @param bandwidthHz - Signalbandbreite B in Hz
+ * @returns Auflösung in m (0 bei ungültigen Eingaben)
+ */
+export function calculateBandwidthRangeResolution(
+  bandwidthHz: number,
+  c: number = speedOfLight.value
+): number {
+  if (bandwidthHz <= 0) return 0;
+  return safeDivide(c, 2 * bandwidthHz, 0);
+}
+
+/**
+ * Beat-Frequenz eines FMCW-Radars mit linearer Frequenzrampe:
+ *   f_b = 2·R·B / (c·T)   (Rampensteilheit S = B/T, f_b = S·τ, τ = 2R/c)
+ *
+ * (Skolnik, Introduction to Radar Systems, 3. Aufl., §3.3 „FM-CW radar")
+ *
+ * @param rangeM - Zielentfernung in m
+ * @param bandwidthHz - Hub der Rampe B in Hz
+ * @param rampDurationS - Dauer der Rampe T in s
+ * @returns Beat-Frequenz in Hz (0 bei ungültigen Eingaben)
+ */
+export function calculateBeatFrequency(
+  rangeM: number,
+  bandwidthHz: number,
+  rampDurationS: number,
+  c: number = speedOfLight.value
+): number {
+  if (rangeM <= 0 || bandwidthHz <= 0 || rampDurationS <= 0) return 0;
+  const slopeHzPerS = safeDivide(bandwidthHz, rampDurationS, 0);
+  return slopeHzPerS * calculateRoundTripTime(rangeM, c);
+}
+
+/**
+ * n-te Blindgeschwindigkeit eines MTI-Radars: v_b = n·λ·PRF / 2
+ *
+ * Bei diesen Radialgeschwindigkeiten dreht sich die Phase von Impuls zu
+ * Impuls um ein Vielfaches von 2π; der MTI-Filter hält das Ziel für stehend.
+ * (Skolnik, Introduction to Radar Systems, 3. Aufl., §3.2 „Delay-line canceler")
+ *
+ * @param order - Ordnung n (1, 2, 3 …)
+ * @param wavelengthM - Wellenlänge λ in m
+ * @param prfHz - Pulswiederholfrequenz in Hz
+ * @returns Blindgeschwindigkeit in m/s (0 bei ungültigen Eingaben)
+ */
+export function calculateBlindSpeed(order: number, wavelengthM: number, prfHz: number): number {
+  if (order <= 0 || wavelengthM <= 0 || prfHz <= 0) return 0;
+  return (order * wavelengthM * prfHz) / 2;
+}
+
+/**
+ * Kompressionsgewinn (Zeit-Bandbreite-Produkt) eines Chirp-Radars: G_c = B·τ
+ *
+ * Ein Impuls der Dauer τ mit dem Frequenzhub B wird im Empfänger auf etwa
+ * 1/B verkürzt; das Signal-Rausch-Verhältnis steigt um denselben Faktor.
+ * (Skolnik, Introduction to Radar Systems, 3. Aufl., §6.5)
+ *
+ * @param bandwidthHz - Chirp-Bandbreite B in Hz
+ * @param pulseWidthS - Sendeimpulsdauer τ in s
+ * @returns Kompressionsgewinn als linearer Faktor (0 bei ungültigen Eingaben)
+ */
+export function calculateCompressionGain(bandwidthHz: number, pulseWidthS: number): number {
+  if (bandwidthHz <= 0 || pulseWidthS <= 0) return 0;
+  return bandwidthHz * pulseWidthS;
+}
+
+/** Größte geprüfte Ordnung bei der Suche nach der gemeinsamen Blindgeschwindigkeit. */
+export const MAX_BLIND_SPEED_ORDER = 200;
+
+/**
+ * Erste gemeinsame Blindgeschwindigkeit zweier gestaffelter PRFs
+ * („staggered PRF"): Gesucht ist das kleinste n mit n·PRF₁ = m·PRF₂ (m ganz).
+ * Erst dort liegt wieder eine echte Lücke im Geschwindigkeitsbereich —
+ * die Staffelung schiebt die erste Blindgeschwindigkeit also weit nach oben.
+ * (Skolnik, Introduction to Radar Systems, 3. Aufl., §3.3 „Staggered PRF")
+ *
+ * @param prf1Hz - erste Pulswiederholfrequenz in Hz
+ * @param prf2Hz - zweite Pulswiederholfrequenz in Hz
+ * @param wavelengthM - Wellenlänge λ in m
+ * @param maxOrder - höchste geprüfte Ordnung
+ * @returns Geschwindigkeit in m/s, 0 wenn bis `maxOrder` keine gefunden wird
+ */
+export function calculateStaggeredBlindSpeed(
+  prf1Hz: number,
+  prf2Hz: number,
+  wavelengthM: number,
+  maxOrder: number = MAX_BLIND_SPEED_ORDER
+): number {
+  if (prf1Hz <= 0 || prf2Hz <= 0 || wavelengthM <= 0) return 0;
+  const ratio = safeDivide(prf1Hz, prf2Hz, 0);
+  if (ratio <= 0) return 0;
+  for (let n = 1; n <= maxOrder; n++) {
+    const m = n * ratio;
+    if (Math.abs(m - Math.round(m)) < 1e-9 && Math.round(m) >= 1) {
+      return calculateBlindSpeed(n, wavelengthM, prf1Hz);
+    }
+  }
+  return 0;
+}

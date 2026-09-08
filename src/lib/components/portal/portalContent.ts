@@ -90,7 +90,7 @@ export const INTERACTIVE_TILES: PortalTile[] = [
     id: 'radar-impuls',
     title: 'Radar-Impuls',
     text: 'Impulsdauer, Pulswiederholfrequenz und Entfernungsauflösung am laufenden Impuls verfolgen.',
-    href: '/wissen/radar/#grundprinzip',
+    href: '/wissen/radar/grundlagen/#grundprinzip',
     icon: 'signal'
   },
   {

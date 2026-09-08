@@ -16,7 +16,9 @@
 	 *    die Abschnitte setzen, keine eigene Rastergeometrie mehr.
 	 */
 	import type { Snippet } from 'svelte';
+	import { page } from '$app/state';
 	import type { KnowledgeArticle } from '$lib/content/types';
+	import { parseWidgetParam, widgetAnchorId } from '$lib/data/widgets';
 	import type { TocItem } from '$lib/components/ui/TableOfContents.svelte';
 	import type { IconName } from '$lib/components/ui/icons';
 	import PageHero from '$lib/components/ui/PageHero.svelte';
@@ -71,6 +73,27 @@
 	const articleSources = $derived(article?.sources ?? sources ?? []);
 	const pageHref = $derived(article?.href ?? href ?? '');
 
+	let articleEl = $state<HTMLElement | null>(null);
+
+	/**
+	 * Deep-Link `?w=<widgetId>`: nach dem Einhängen zum Widget scrollen und den
+	 * Fokus hineinsetzen. Der Effekt läuft nur im Browser — beim Prerendern
+	 * gibt es keine Suchparameter. Das kurze Aufleuchten des Rahmens besorgt
+	 * der Baustein selbst (`ArticleBlock`).
+	 */
+	$effect(() => {
+		const id = parseWidgetParam(page.url.searchParams);
+		const root = articleEl;
+		if (!id || !root) return;
+
+		const target = root.querySelector<HTMLElement>(`#${CSS.escape(widgetAnchorId(id))}`);
+		if (!target) return;
+
+		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+		target.focus({ preventScroll: true });
+	});
+
 	const tocItems = $derived<TocItem[]>(
 		article
 			? article.sections.flatMap((section) => [
@@ -85,7 +108,7 @@
 	);
 </script>
 
-<article class="article">
+<article class="article" bind:this={articleEl}>
 	<PageHero kicker={heroKicker} title={heroTitle} lead={heroLead} icon={heroIcon} meta={heroMeta} />
 
 	<div class="article__grid">

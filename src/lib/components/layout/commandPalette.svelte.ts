@@ -24,6 +24,28 @@ export interface PaletteGroup {
 export const RECENTS_KEY = 'bandbreite:zuletzt-besucht';
 export const MAX_RECENTS = 5;
 
+/** Kennung des Abschlusseintrags „Alle Ergebnisse zeigen". */
+export const ALL_RESULTS_ID = 'alle-ergebnisse';
+
+/** Pfad der Ergebnisseite für eine Suchanfrage. */
+export function allResultsHref(query: string): string {
+  return `/suche/?q=${encodeURIComponent(query.trim())}`;
+}
+
+/**
+ * Letzter Eintrag der Liste: führt auf `/suche/?q=…`, wo alle Treffer
+ * gruppiert und filterbar stehen. Auch die Eingabetaste landet dort, wenn
+ * kein Eintrag markiert ist.
+ */
+export function allResultsItem(query: string): PaletteItem {
+  return {
+    id: ALL_RESULTS_ID,
+    label: 'Alle Ergebnisse zeigen →',
+    sublabel: 'Suchseite mit Filtern je Ergebnistyp',
+    href: allResultsHref(query)
+  };
+}
+
 export function toPaletteItem(entry: SearchEntry): PaletteItem {
   return {
     id: entry.id,
@@ -94,6 +116,10 @@ export function buildGroups(query: string, recents: PaletteItem[]): PaletteGroup
   for (const group of searchGrouped(query)) {
     groups.push({ label: group.label, items: group.entries.map(toPaletteItem) });
   }
+
+  // Ohne Treffer bleibt die Liste leer; die Palette zeigt dann ihren Hinweis,
+  // und die Eingabetaste führt trotzdem auf die Suchseite.
+  if (groups.length > 0) groups.push({ label: 'Suchseite', items: [allResultsItem(query)] });
 
   return groups;
 }

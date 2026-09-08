@@ -29,6 +29,7 @@ export interface SearchGroupResult {
 const TYPE_BONUS: Record<SearchEntryType, number> = {
   werkzeug: 12,
   seite: 10,
+  widget: 7,
   band: 6,
   funkdienst: 5,
   sender: 4,
@@ -41,10 +42,14 @@ const TYPE_BONUS: Record<SearchEntryType, number> = {
  * Der Zuschlag oben allein reicht nicht: ein Glossarbegriff, dessen Titel mit
  * dem Suchwort beginnt, läge sonst vor der Seite, die den Begriff behandelt.
  * Wer „fspl" sucht, will zuerst den Rechner — die Definition steht danach.
+ *
+ * Widgets liegen zwischen Seite und Glossar: Sie sind ein eigenständiges Ziel
+ * im Kapitel, aber die Kapitelseite selbst bleibt der Haupttreffer.
  */
 const TYPE_WEIGHT: Record<SearchEntryType, number> = {
   werkzeug: 1,
   seite: 1,
+  widget: 0.8,
   band: 0.8,
   funkdienst: 0.8,
   sender: 0.8,

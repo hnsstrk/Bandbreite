@@ -4,12 +4,16 @@
 	 * Textblöcke bleiben in der Lesebreite (`.prose`), Widgets brechen
 	 * über `.article-wide` auf die volle Spaltenbreite aus.
 	 */
+	import { untrack } from 'svelte';
+	import { page } from '$app/state';
 	import type { ArticleBlock } from '$lib/content/types';
 	import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
 	import Callout from '$lib/components/ui/Callout.svelte';
 	import ArticleTable from './ArticleTable.svelte';
 	import ArticleCards from './ArticleCards.svelte';
 	import { WIDGETS } from './widgetRegistry';
+	import { parseWidgetParam, widgetAnchorId } from '$lib/data/widgets';
+	import { setWidgetId } from './widgetContext';
 
 	interface Props {
 		block: ArticleBlock;
@@ -19,6 +23,31 @@
 
 	let { block, level }: Props = $props();
 	const childLevel = $derived((level + 1) as 3 | 4);
+
+	// Der Rahmen im Inneren (`WidgetFrame`) kennt seine Kennung sonst nicht;
+	// darüber blendet er den Knopf „Link zum Widget kopieren“ ein. Der Blocktyp
+	// eines Bausteins wechselt nicht — der Kontext wird einmal gesetzt.
+	untrack(() => {
+		if (block.type === 'widget') setWidgetId(block.id);
+	});
+
+	/** Wie lange der Rahmen nach einem Sprung über `?w=` aufleuchtet (ms). */
+	const HIGHLIGHT_MS = 2500;
+
+	let linked = $state(false);
+
+	// Deep-Link `?w=<id>`: dieses Widget kurz hervorheben. Gescrollt und
+	// fokussiert wird in `ArticleLayout`, das den Artikel als Ganzes kennt.
+	$effect(() => {
+		if (block.type !== 'widget') return;
+		if (parseWidgetParam(page.url.searchParams) !== block.id) return;
+		linked = true;
+		const timer = setTimeout(() => (linked = false), HIGHLIGHT_MS);
+		return () => {
+			clearTimeout(timer);
+			linked = false;
+		};
+	});
 </script>
 
 {#if block.type === 'paragraph'}
@@ -61,7 +90,15 @@
 	<ArticleCards {block} level={childLevel} />
 {:else if block.type === 'widget'}
 	{@const Widget = WIDGETS[block.id]}
-	<div class="article-wide">
+	<!-- Sprungziel des Deep-Links `?w=<id>`; `ArticleLayout` scrollt hierher,
+	     setzt den Fokus und hebt den Rahmen kurz hervor. -->
+	<div
+		class="article-wide"
+		class:article-wide--linked={linked}
+		id={widgetAnchorId(block.id)}
+		data-widget={block.id}
+		tabindex="-1"
+	>
 		<Widget />
 	</div>
 {:else if block.type === 'question'}
@@ -135,5 +172,15 @@
 	.article-wide {
 		width: 100%;
 		max-width: none;
+		scroll-margin-top: 5rem;
+		border-radius: var(--radius-card);
+	}
+
+	/* Kurzes Aufleuchten nach einem Sprung über `?w=<id>`; der Tastaturfokus
+	   bekommt denselben Ring. */
+	.article-wide--linked,
+	.article-wide:focus-visible {
+		outline: 2px solid var(--color-focus-ring);
+		outline-offset: 4px;
 	}
 </style>

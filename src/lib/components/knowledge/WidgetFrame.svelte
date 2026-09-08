@@ -5,7 +5,11 @@
 	 * sr-only-Wertetabelle, Bedienelemente und Ergebniskarten.
 	 */
 	import type { Snippet } from 'svelte';
+	import { page } from '$app/state';
 	import Button from '$lib/components/ui/Button.svelte';
+	import { WIDGET_PARAM } from '$lib/data/widgets';
+	import { copyToClipboard } from '$lib/utils/urlState.svelte';
+	import { getWidgetId } from './widgetContext';
 
 	interface Props {
 		title: string;
@@ -51,24 +55,63 @@
 
 	const headingId = $props.id();
 	const tableId = $derived(`${headingId}-werte`);
+
+	/** Kennung aus dem umgebenden Kapitelblock; außerhalb eines Kapitels leer. */
+	const widgetId = getWidgetId();
+
+	/** Wie lange die Rückmeldung „Link kopiert" stehen bleibt (ms). */
+	const FEEDBACK_MS = 2000;
+
+	let copyState = $state<'idle' | 'copied' | 'failed'>('idle');
+	let copyTimer: ReturnType<typeof setTimeout> | undefined;
+
+	async function handleCopyClick() {
+		if (!widgetId) return;
+		const target = new URL(page.url.href);
+		target.hash = '';
+		target.searchParams.set(WIDGET_PARAM, widgetId);
+		const ok = await copyToClipboard(target.toString());
+		copyState = ok ? 'copied' : 'failed';
+		if (copyTimer) clearTimeout(copyTimer);
+		copyTimer = setTimeout(() => (copyState = 'idle'), FEEDBACK_MS);
+	}
 </script>
 
 <section class="widget {stacked ? 'widget--stacked' : ''} {klass}" aria-labelledby={headingId}>
 	<header class="widget__head">
 		<svelte:element this={`h${level}`} id={headingId} class="widget__title">{title}</svelte:element>
-		{#if playable}
-			<Button
-				size="sm"
-				variant="ghost"
-				icon={playing ? 'pause' : 'play'}
-				pressed={!playing}
-				onclick={ontoggle}
-				title={reducedMotion ? 'Animation ist durch die Systemeinstellung reduziert' : undefined}
-			>
-				{playing ? 'Pause' : 'Abspielen'}
-			</Button>
-		{/if}
+		<div class="widget__actions">
+			{#if playable}
+				<Button
+					size="sm"
+					variant="ghost"
+					icon={playing ? 'pause' : 'play'}
+					pressed={!playing}
+					onclick={ontoggle}
+					title={reducedMotion ? 'Animation ist durch die Systemeinstellung reduziert' : undefined}
+				>
+					{playing ? 'Pause' : 'Abspielen'}
+				</Button>
+			{/if}
+			{#if widgetId}
+				<Button
+					size="sm"
+					variant="ghost"
+					icon="share"
+					iconOnly
+					label="Link zum Widget kopieren"
+					title="Link zum Widget kopieren"
+					onclick={handleCopyClick}
+				/>
+			{/if}
+		</div>
 	</header>
+
+	{#if widgetId}
+		<p class="sr-only" role="status" aria-live="polite">
+			{#if copyState === 'copied'}Link kopiert{:else if copyState === 'failed'}Kopieren nicht möglich{/if}
+		</p>
+	{/if}
 
 	<div class="widget__grid">
 		<div class="widget__stage">
@@ -121,6 +164,13 @@
 		justify-content: space-between;
 		gap: 0.75rem;
 		margin-bottom: 0.75rem;
+	}
+
+	.widget__actions {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		flex-shrink: 0;
 	}
 
 	.widget__title {

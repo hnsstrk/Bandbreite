@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { scaleLog } from 'd3';
+  import { scaleLog } from 'd3-scale';
   import { IEEE_BANDS, NATO_BANDS } from '$lib/data/bands';
   import { POWER_CHART_CATEGORY_COLORS } from '$lib/data/presets';
   import {

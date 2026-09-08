@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { scaleLog } from 'd3';
+  import { scaleLog } from 'd3-scale';
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import { formatLocaleNumber } from '$lib/utils/formatting';
   import {

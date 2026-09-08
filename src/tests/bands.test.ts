@@ -454,29 +454,28 @@ describe('getCivilianBandsForFrequency', () => {
 describe('formatFrequencyRange', () => {
   it('should format same-unit range (GHz)', () => {
     const result = formatFrequencyRange(2e9, 4e9);
-    expect(result).toBe('2-4 GHz');
+    expect(result).toBe('2–4 GHz');
   });
 
   it('should format same-unit range (MHz)', () => {
     const result = formatFrequencyRange(30e6, 300e6);
-    expect(result).toBe('30-300 MHz');
+    expect(result).toBe('30–300 MHz');
   });
 
   it('should format different-unit ranges', () => {
     const result = formatFrequencyRange(300e6, 3e9);
-    // 300 MHz - 3 GHz (different units)
-    expect(result).toContain('MHz');
-    expect(result).toContain('GHz');
+    // 300 MHz – 3 GHz (different units, Gedankenstrich mit Leerzeichen)
+    expect(result).toBe('300 MHz – 3 GHz');
   });
 
   it('should handle Hz range', () => {
     const result = formatFrequencyRange(3, 30);
-    expect(result).toBe('3-30 Hz');
+    expect(result).toBe('3–30 Hz');
   });
 
   it('should handle kHz range', () => {
     const result = formatFrequencyRange(3e3, 30e3);
-    expect(result).toBe('3-30 kHz');
+    expect(result).toBe('3–30 kHz');
   });
 
   it('should handle THz range', () => {

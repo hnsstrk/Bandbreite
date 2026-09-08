@@ -3,7 +3,8 @@
    * Freiraumdämpfung über der Distanz — Vergleichskurven plus Arbeitspunkt.
    * Konstanten und Kurvenberechnung liegen in `fsplChartData.ts`.
    */
-  import { line, scaleLinear, scaleLog } from 'd3';
+  import { line } from 'd3-shape';
+  import { scaleLinear, scaleLog } from 'd3-scale';
   import {
     formatDistance,
     formatFrequency,

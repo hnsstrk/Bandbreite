@@ -4,9 +4,11 @@
   import { FREQUENCY_UNITS, WAVELENGTH_UNITS, DEFAULT_FREQUENCY_UNIT, DEFAULT_WAVELENGTH_UNIT } from '$lib/data/units';
   import { pickBestUnit } from '$lib/components/ui/numberInput.svelte';
   import { speedOfLight } from '$lib/stores/speedOfLight.svelte';
-  import { FREQUENCY_CONVERTER_PRESETS, type FrequencyPreset } from '$lib/data/presets';
+  import { FREQUENCY_CONVERTER_PRESETS } from '$lib/data/presets';
   import { parseNullableNumericInput, parseSelectValue } from '$lib/utils/handlers';
   import { formatPrecisionNumber } from '$lib/utils/formatting';
+  import FrequencyPresets from './FrequencyPresets.svelte';
+  import FrequencyFormula from './FrequencyFormula.svelte';
 
   interface Props {
     frequencyHz?: number | null;
@@ -41,8 +43,14 @@
   // Collapsible formula section state
   let showFormula = $state(false);
 
-  // Quick frequency presets - imported from presets.ts
-  const quickFrequencies = FREQUENCY_CONVERTER_PRESETS;
+  /**
+   * Feldwerte der `<input type="number">`: bewusst mit Dezimalpunkt
+   * (`formatPrecisionNumber`), ein Komma-String würde vom Browser verworfen.
+   * 8 signifikante Stellen, Exponentialform ab 1e9 mit 6 Stellen.
+   */
+  const FIELD_PRECISION = 8;
+  const FIELD_EXP_THRESHOLD = 1e9;
+  const FIELD_EXP_DIGITS = 6;
 
   // Derived values for display - reactive to speed of light changes
   let frequencyDisplay = $derived(
@@ -92,10 +100,6 @@
     showFormula = !showFormula;
   }
 
-  function formatNumber(num: number | null): string {
-    return formatPrecisionNumber(num, 8, 1e9, 6);
-  }
-
   function handleSpeedOfLightToggle() {
     speedOfLight.toggle();
   }
@@ -112,7 +116,7 @@
       <input
         type="number"
         id="frequency"
-        value={frequencyDisplay !== null ? formatNumber(frequencyDisplay) : ''}
+        value={formatPrecisionNumber(frequencyDisplay, FIELD_PRECISION, FIELD_EXP_THRESHOLD, FIELD_EXP_DIGITS)}
         oninput={handleFrequencyInput}
         class="input-field flex-1"
         placeholder="Frequenz"
@@ -141,7 +145,7 @@
       <input
         type="number"
         id="wavelength"
-        value={wavelengthDisplay !== null ? formatNumber(wavelengthDisplay) : ''}
+        value={formatPrecisionNumber(wavelengthDisplay, FIELD_PRECISION, FIELD_EXP_THRESHOLD, FIELD_EXP_DIGITS)}
         oninput={handleWavelengthInput}
         class="input-field flex-1"
         placeholder="Wellenlänge"
@@ -160,53 +164,20 @@
     </div>
   </div>
 
-  <!-- Quick Frequency Buttons -->
-  <div class="quick-actions">
-    <span class="quick-label">Quick:</span>
-    {#each quickFrequencies as preset (preset.label)}
-      <button
-        type="button"
-        onclick={() => setQuickFrequency(preset.hz)}
-        class="btn-preset"
-        title="{preset.label} - {preset.descriptionDE ?? preset.description}"
-      >
-        <span class="preset-value">{preset.label}</span>
-        <span class="preset-desc">({preset.descriptionDE ?? preset.description})</span>
-      </button>
-    {/each}
-
-    <!-- Formula Toggle Button (right-aligned) -->
-    <button
-      type="button"
-      onclick={toggleFormula}
-      class="btn-formula"
-      aria-expanded={showFormula}
-      aria-controls="formula-section"
-    >
-      <span class="formula-arrow" class:rotated={showFormula}>&#9660;</span>
-      <span>Formel</span>
-    </button>
-  </div>
+  <FrequencyPresets
+    presets={FREQUENCY_CONVERTER_PRESETS}
+    {showFormula}
+    onSelect={setQuickFrequency}
+    onToggleFormula={toggleFormula}
+  />
 
   <!-- Collapsible Formula Section -->
   {#if showFormula}
-    <div id="formula-section" class="formula-section">
-      <span class="formula-display">&#955; = c / f</span>
-
-      <!-- Speed of Light Toggle -->
-      <button
-        type="button"
-        onclick={handleSpeedOfLightToggle}
-        class="speed-toggle"
-        title={isExactMode ? 'Wechseln zu gerundeter Lichtgeschwindigkeit (3x10^8 m/s)' : 'Wechseln zu exakter Lichtgeschwindigkeit'}
-      >
-        <span class:active={isExactMode}>exakt</span>
-        <span class="separator">|</span>
-        <span class:active={!isExactMode}>~</span>
-      </button>
-
-      <span class="speed-value">(c = {speedOfLightDisplay} m/s)</span>
-    </div>
+    <FrequencyFormula
+      {speedOfLightDisplay}
+      {isExactMode}
+      onToggleSpeedOfLight={handleSpeedOfLightToggle}
+    />
   {/if}
 </div>
 
@@ -268,113 +239,5 @@
     .arrow {
       display: block;
     }
-  }
-
-  .quick-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.375rem;
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid var(--color-border-default);
-  }
-
-  .quick-label {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-    margin-right: 0.25rem;
-  }
-
-  .preset-value {
-    font-weight: var(--font-weight-medium);
-  }
-
-  .preset-desc {
-    color: var(--color-text-disabled);
-    margin-left: 0.25rem;
-  }
-
-  .btn-formula {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    font-size: var(--font-size-xs);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-default);
-    background-color: var(--color-bg-elevated);
-    color: var(--color-text-tertiary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .btn-formula:hover {
-    border-color: var(--color-border-strong);
-    background-color: var(--color-bg-surface);
-    color: var(--color-text-secondary);
-  }
-
-  .formula-arrow {
-    display: inline-block;
-    transition: transform var(--transition-fast);
-  }
-
-  .formula-arrow.rotated {
-    transform: rotate(180deg);
-  }
-
-  .formula-section {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid var(--color-border-default);
-    font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-  }
-
-  .formula-display {
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-    background-color: var(--color-bg-elevated);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-md);
-  }
-
-  .speed-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-default);
-    background-color: var(--color-bg-elevated);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .speed-toggle:hover {
-    border-color: var(--color-border-strong);
-    background-color: var(--color-bg-surface);
-  }
-
-  .speed-toggle span {
-    color: var(--color-text-disabled);
-  }
-
-  .speed-toggle span.active {
-    color: var(--color-accent-primary);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .separator {
-    color: var(--color-text-disabled);
-  }
-
-  .speed-value {
-    color: var(--color-text-disabled);
   }
 </style>

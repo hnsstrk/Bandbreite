@@ -158,16 +158,16 @@ describe('bands.ts — korrigierte Bandgrenzen', () => {
 describe('formatFrequencyRange — Gleitkomma und Infinity (Befund 15)', () => {
   it('rundet Gleitkomma-Artefakte bei gleicher Einheit weg', () => {
     // 3.3e9 / 1e9 ergibt in IEEE 754 sonst 3.3000000000000003
-    expect(formatFrequencyRange(3.3e9, 3.8e9)).toBe('3.3-3.8 GHz');
+    expect(formatFrequencyRange(3.3e9, 3.8e9)).toBe('3,3–3,8 GHz');
   });
 
   it('behält signifikante Nachkommastellen bei gleicher Einheit', () => {
-    expect(formatFrequencyRange(526.5e3, 999e3)).toBe('526.5-999 kHz');
-    expect(formatFrequencyRange(74.8e6, 75.2e6)).toBe('74.8-75.2 MHz');
+    expect(formatFrequencyRange(526.5e3, 999e3)).toBe('526,5–999 kHz');
+    expect(formatFrequencyRange(74.8e6, 75.2e6)).toBe('74,8–75,2 MHz');
   });
 
   it('fängt Infinity ab', () => {
-    expect(formatFrequencyRange(30e18, Infinity)).toContain('ab');
+    expect(formatFrequencyRange(30e18, Infinity)).toBe('ab 30.000.000 THz');
     expect(formatFrequencyRange(Infinity, Infinity)).toBe('unbegrenzt');
   });
 });

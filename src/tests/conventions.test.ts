@@ -23,16 +23,11 @@ const ROUTES = import.meta.glob('/src/routes/**/*.svelte', {
 }) as Record<string, string>;
 
 /**
- * Komponenten über 300 Zeilen. Beide Ausnahmen stehen unter „Geschützte
- * Kernelemente" in CLAUDE.md und dürfen ohne ausdrückliche Freigabe nicht
- * aufgeteilt werden.
+ * Komponenten über 300 Zeilen. Seit der Aufteilung der geschützten
+ * Kernkomponenten (Bericht 51) gibt es keine; ein Eintrag hier braucht eine
+ * Begründung und die Freigabe des Besitzers.
  */
-const GROESSEN_AUSNAHMEN: Record<string, string> = {
-  '/src/lib/components/SpectrumOverview.svelte':
-    'Geschützte Kernkomponente der Startseite (CLAUDE.md).',
-  '/src/lib/components/converters/FrequencyConverter.svelte':
-    'Geschützte Kernkomponente der Startseite (CLAUDE.md).'
-};
+const GROESSEN_AUSNAHMEN: Record<string, string> = {};
 
 /**
  * Dateien, in denen Hex-Farben zulässig sind: die geschützten
@@ -40,7 +35,8 @@ const GROESSEN_AUSNAHMEN: Record<string, string> = {
  * stehen inzwischen als `--color-scene-*`-Tokens in `app.css`.
  */
 const HEX_AUSNAHMEN: Record<string, string> = {
-  '/src/lib/components/SpectrumOverview.svelte': 'Geschützte Kernkomponente.',
+  '/src/lib/components/SpectrumRows.svelte': 'Geschützte Spektrum-Unterkomponente (Bandrahmen, Auswahl).',
+  '/src/lib/components/SpectrumMarker.svelte': 'Geschützte Spektrum-Unterkomponente (Frequenzmarker).',
   '/src/lib/components/SpectrumCursor.svelte': 'Geschützte Spektrum-Unterkomponente.',
   '/src/lib/components/SpectrumTooltip.svelte': 'Farbverlauf des sichtbaren Lichts.',
   '/src/lib/components/SpectrumLegend.svelte': 'Farbverlauf des sichtbaren Lichts.'

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { calculateFSPL, calculateRange } from '$lib/utils/calculations';
   import { parseNumericInput } from '$lib/utils/handlers';
+  import { formatFixed, formatExponential } from '$lib/utils/formatting';
   import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
   import { TX_POWER, RX_SENSITIVITY, FSPL } from '$lib/data/explanations';
 
@@ -27,22 +28,30 @@
       : null
   );
 
-  // Format range with appropriate unit
-  function formatRange(meters: number | null): { value: string; unit: string } {
+  /** Ab 1000 km Exponentialschreibweise, damit die Zeile nicht umbricht. */
+  const RANGE_EXP_THRESHOLD_KM = 1000;
+  const RANGE_DECIMALS = 2;
+  const FSPL_DECIMALS = 1;
+
+  /**
+   * Reichweite in Zahl und Einheit getrennt (zwei unterschiedlich gesetzte
+   * Spans); Ziffern über die zentralen de-DE-Formatter.
+   */
+  function splitRange(meters: number | null): { value: string; unit: string } {
     if (meters === null || !isFinite(meters)) {
       return { value: '—', unit: '' };
     }
     if (meters >= 1000) {
       const km = meters / 1000;
-      if (km >= 1000) {
-        return { value: km.toExponential(2), unit: 'km' };
+      if (km >= RANGE_EXP_THRESHOLD_KM) {
+        return { value: formatExponential(km, RANGE_DECIMALS), unit: 'km' };
       }
-      return { value: km.toFixed(2), unit: 'km' };
+      return { value: formatFixed(km, RANGE_DECIMALS), unit: 'km' };
     }
-    return { value: meters.toFixed(2), unit: 'm' };
+    return { value: formatFixed(meters, RANGE_DECIMALS), unit: 'm' };
   }
 
-  let formattedRange = $derived(formatRange(rangeMeters));
+  let formattedRange = $derived(splitRange(rangeMeters));
 
   function handleTxPowerInput(e: Event) {
     txPowerDbm = parseNumericInput(e);
@@ -104,7 +113,7 @@
         </span>
         {#if fsplAtRange !== null && isFinite(fsplAtRange)}
           <span class="fspl-info">
-            (FSPL: {fsplAtRange.toFixed(1)} dB)
+            (FSPL: {formatFixed(fsplAtRange, FSPL_DECIMALS)} dB)
           </span>
         {/if}
       {:else}

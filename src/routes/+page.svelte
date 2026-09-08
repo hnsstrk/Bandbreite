@@ -11,6 +11,7 @@
   import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
   import PortalAreas from '$lib/components/portal/PortalAreas.svelte';
   import PortalSearch from '$lib/components/portal/PortalSearch.svelte';
+  import PortalLearningPaths from '$lib/components/portal/PortalLearningPaths.svelte';
   import PortalTiles from '$lib/components/portal/PortalTiles.svelte';
   import { INTERACTIVE_TILES, toolTiles } from '$lib/components/portal/portalContent';
 
@@ -49,6 +50,8 @@
     />
     <PortalTiles items={INTERACTIVE_TILES} label="Interaktive Kapitel" />
   </section>
+
+  <PortalLearningPaths />
 
   <section class="portal-section" aria-labelledby="werkzeuge">
     <SectionHeader

@@ -7,7 +7,7 @@
  * und die Glossareinträge aus `explanations.ts`.
  */
 
-import { flattenNav, type NavNode, type NavStatus } from './navigation';
+import { findNode, flattenNav, type NavNode, type NavStatus } from './navigation';
 import { ALL_FREQUENCY_BANDS, type FrequencyBandCategory } from './frequencyBands';
 import { ALL_APPLICATIONS, CATEGORY_NAMES } from './applications';
 import { ALL_TRANSMITTERS, TYPE_NAMES } from './transmitters';
@@ -20,10 +20,18 @@ import {
   type Explanation
 } from './explanations';
 import { GLOSSARY, GLOSSARY_COVERED_TITLES, categoryLabel } from './glossary';
+import { WIDGET_ENTRIES, widgetHref, type WidgetMeta } from './widgets';
 import { formatFrequency } from '$lib/utils/formatting';
 import { formatFrequencyRange } from '$lib/data/bands';
 
-export type SearchEntryType = 'seite' | 'werkzeug' | 'band' | 'funkdienst' | 'sender' | 'glossar';
+export type SearchEntryType =
+  | 'seite'
+  | 'werkzeug'
+  | 'widget'
+  | 'band'
+  | 'funkdienst'
+  | 'sender'
+  | 'glossar';
 
 export interface SearchEntry {
   id: string;
@@ -42,6 +50,7 @@ export interface SearchEntry {
 export const SEARCH_GROUPS: { type: SearchEntryType; label: string }[] = [
   { type: 'werkzeug', label: 'Werkzeuge' },
   { type: 'seite', label: 'Seiten' },
+  { type: 'widget', label: 'Widgets' },
   { type: 'band', label: 'Frequenzbänder' },
   { type: 'funkdienst', label: 'Funkdienste' },
   { type: 'sender', label: 'Sender' },
@@ -127,6 +136,29 @@ function transmitterEntry(tx: (typeof ALL_TRANSMITTERS)[number]): SearchEntry {
   };
 }
 
+/**
+ * Interaktive Widgets der Wissen-Kapitel. Der Link springt über `?w=<id>` in
+ * das Kapitel und direkt an das Widget (`ArticleLayout` scrollt dorthin).
+ *
+ * Ein Widget, dessen Kapitel (noch) keinen Knoten im Navigationsbaum hat,
+ * gilt als `geplant` und bleibt damit aus dem Live-Index — der Link führte
+ * sonst ins Leere.
+ */
+function widgetEntry(meta: WidgetMeta): SearchEntry {
+  const chapter = findNode(meta.chapterHref);
+  return {
+    id: `widget:${meta.id}`,
+    type: 'widget',
+    title: meta.label,
+    subtitle: chapter ? `Widget · ${chapter.label}` : 'Widget',
+    href: widgetHref(meta),
+    keywords: [meta.id, 'Widget', 'interaktiv', ...meta.keywords, chapter?.label ?? ''].filter(
+      Boolean
+    ),
+    status: chapter ? chapter.status : 'geplant'
+  };
+}
+
 /** Glossarbegriffe mit dem Ort, an dem sie erklärt werden. */
 const GLOSSARY_SOURCES: { entries: Record<string, Explanation>; href: string }[] = [
   { entries: fsplExplanations, href: '/rechner/fspl/' },
@@ -177,7 +209,10 @@ function glossaryTermEntries(): SearchEntry[] {
 
 /** Vollständiger Suchindex. */
 export const SEARCH_INDEX: SearchEntry[] = [
-  ...flattenNav().map(navEntry),
+  ...flattenNav()
+    .filter((node) => !node.hidden)
+    .map(navEntry),
+  ...WIDGET_ENTRIES.map(widgetEntry),
   ...ALL_FREQUENCY_BANDS.map(bandEntry),
   ...ALL_APPLICATIONS.map(applicationEntry),
   ...ALL_TRANSMITTERS.map(transmitterEntry),

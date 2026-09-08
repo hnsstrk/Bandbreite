@@ -3,7 +3,7 @@
    * Frequenzbelegung: welche Dienste welchen Bereich des Spektrums nutzen.
    * Layout und Farben liegen in `applicationOverlayData.ts`.
    */
-  import { scaleLog } from 'd3';
+  import { scaleLog } from 'd3-scale';
   import {
     ALL_APPLICATIONS,
     CATEGORY_NAMES,

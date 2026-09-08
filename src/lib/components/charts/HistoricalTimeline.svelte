@@ -5,7 +5,7 @@
    *
    * Achsen-, Layout- und Farbberechnung liegen in `timelineData.ts`.
    */
-  import { scaleLinear } from 'd3';
+  import { scaleLinear } from 'd3-scale';
   import { CATEGORY_CONFIG, HISTORICAL_EVENTS, type HistoryCategory } from '$lib/data/history';
   import Button from '$lib/components/ui/Button.svelte';
   import Card from '$lib/components/ui/Card.svelte';

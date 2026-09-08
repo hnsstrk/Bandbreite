@@ -72,9 +72,8 @@
     dbUnit = parseSelectValue(e);
   }
 
-  function formatNumber(num: number | null): string {
-    return formatPrecisionNumber(num);
-  }
+  // Feldwerte der `<input type="number">` bewusst mit Dezimalpunkt
+  // (`formatPrecisionNumber`); ein Komma-String würde vom Browser verworfen.
 </script>
 
 <div class="card-compact">
@@ -87,7 +86,7 @@
       <input
         type="number"
         id="power-watt"
-        value={wattDisplay !== null ? formatNumber(wattDisplay) : ''}
+        value={formatPrecisionNumber(wattDisplay)}
         oninput={handleWattInput}
         class="input-field flex-1"
         placeholder="Leistung"
@@ -113,7 +112,7 @@
       <input
         type="number"
         id="power-db"
-        value={dbDisplay !== null ? formatNumber(dbDisplay) : ''}
+        value={formatPrecisionNumber(dbDisplay)}
         oninput={handleDbInput}
         class="input-field flex-1"
         placeholder="dB"

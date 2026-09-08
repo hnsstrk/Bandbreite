@@ -10,6 +10,7 @@ import {
   getBreadcrumbs,
   getSiblings,
   getHubChildren,
+  getLiveNodes,
   getParent,
   isActivePath,
   normalizeHref
@@ -210,7 +211,9 @@ describe('RELATIONS', () => {
   });
 
   it('liefert für jede existierende Seite mindestens drei lebende Verweise', () => {
-    for (const node of allNodes.filter((n) => n.status === 'live')) {
+    // Ausgeblendete Knoten (`hidden`) tragen keinen Themenblock — die
+    // Suchseite verweist über ihre Treffer, nicht über „Verwandte Themen".
+    for (const node of allNodes.filter((n) => n.status === 'live' && !n.hidden)) {
       const topics = getRelatedTopics(node.href);
       expect(topics.length).toBeGreaterThanOrEqual(3);
       expect(topics.every((t) => t.node.status === 'live')).toBe(true);
@@ -221,5 +224,38 @@ describe('RELATIONS', () => {
   it('begrenzt die Anzahl der Verweise', () => {
     expect(getRelatedTopics('/wissen/wellenausbreitung/', { max: 3 })).toHaveLength(3);
     expect(getRelatedTopics('/gibt-es-nicht/')).toEqual([]);
+  });
+});
+
+describe('Ausgeblendete Knoten (hidden)', () => {
+  const suche = findNode('/suche/');
+
+  it('führt die Suchseite als lebenden, aber ausgeblendeten Knoten', () => {
+    expect(suche?.id).toBe('suche');
+    expect(suche?.status).toBe('live');
+    expect(suche?.hidden).toBe(true);
+    expect(suche?.description?.length ?? 0).toBeGreaterThan(20);
+  });
+
+  it('hält sie aus Hub-Kacheln, Kapitelnavigation und Live-Liste heraus', () => {
+    expect(getHubChildren('/service/').some((n) => n.href === '/suche/')).toBe(false);
+    expect(getSiblings('/service/sitemap/').some((n) => n.href === '/suche/')).toBe(false);
+    expect(getLiveNodes().some((n) => n.href === '/suche/')).toBe(false);
+  });
+
+  it('zeigt die übrigen Service-Seiten weiterhin als Kacheln', () => {
+    expect(getHubChildren('/service/').map((n) => n.id)).toEqual([
+      'service.sitemap',
+      'service.quellen'
+    ]);
+  });
+
+  it('nennt sie im Mega-Menü nicht', () => {
+    const ids = NAV_GROUPS.flatMap((group) => group.columns.flatMap((column) => column.itemIds));
+    expect(ids).not.toContain('suche');
+  });
+
+  it('behält sie in der Sitemap, die den ganzen Baum rendert', () => {
+    expect(flattenNav().some((node) => node.href === '/suche/')).toBe(true);
   });
 });

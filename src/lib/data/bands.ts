@@ -3,6 +3,8 @@
  * Used throughout the app for band visualization and frequency lookup.
  */
 
+import { formatLocaleNumber } from '$lib/utils/formatting';
+
 /**
  * Propagation mode for radio waves
  * - groundWave: Surface wave following Earth's curvature (VLF-MF)
@@ -466,12 +468,6 @@ export function getCivilianBandsForFrequency(frequencyHz: number): FrequencyBand
 }
 
 /**
- * Format a frequency range for display.
- * @param minHz - Minimum frequency in Hertz
- * @param maxHz - Maximum frequency in Hertz
- * @returns Formatted string like "2-4 GHz"
- */
-/**
  * Entfernt Gleitkomma-Artefakte (z. B. 3.3000000000000003 -> 3.3), ohne
  * signifikante Stellen zu verlieren (z. B. 526.5 bleibt 526.5).
  * PRECISION_DIGITS: 6 signifikante Stellen reichen für alle Bandgrenzen.
@@ -482,6 +478,20 @@ function trimFloat(value: number): number {
   return Number(value.toPrecision(PRECISION_DIGITS));
 }
 
+/** Bindestrich zwischen zwei Werten derselben Einheit: „3,3–3,8 GHz" (Gedankenstrich). */
+const RANGE_DASH = '\u2013';
+
+/** Zahl im deutschen Format ohne feste Stellenzahl (bis zu 6 signifikante Stellen). */
+function formatRangeValue(value: number): string {
+  return formatLocaleNumber(trimFloat(value), { maxFrac: PRECISION_DIGITS });
+}
+
+/**
+ * Format a frequency range for display (de-DE).
+ * @param minHz - Minimum frequency in Hertz
+ * @param maxHz - Maximum frequency in Hertz
+ * @returns Formatted string like "2–4 GHz" or "300 MHz – 3 GHz"
+ */
 export function formatFrequencyRange(minHz: number, maxHz: number): string {
   const formatValue = (hz: number): { value: number; unit: string } => {
     if (hz >= 1e12) return { value: hz / 1e12, unit: 'THz' };
@@ -494,7 +504,7 @@ export function formatFrequencyRange(minHz: number, maxHz: number): string {
   // Guard: Infinity/NaN (z. B. em-gamma mit maxHz = Infinity)
   if (!isFinite(minHz) || !isFinite(maxHz)) {
     const finite = isFinite(minHz) ? formatValue(minHz) : null;
-    return finite ? `ab ${trimFloat(finite.value)} ${finite.unit}` : 'unbegrenzt';
+    return finite ? `ab ${formatRangeValue(finite.value)} ${finite.unit}` : 'unbegrenzt';
   }
 
   const min = formatValue(minHz);
@@ -503,10 +513,10 @@ export function formatFrequencyRange(minHz: number, maxHz: number): string {
   // Use the larger unit for both if they differ
   if (min.unit === max.unit) {
     // trimFloat entfernt Gleitkomma-Artefakte wie 3.3000000000000003
-    return `${trimFloat(min.value)}-${trimFloat(max.value)} ${min.unit}`;
+    return `${formatRangeValue(min.value)}${RANGE_DASH}${formatRangeValue(max.value)} ${min.unit}`;
   }
 
   // Different units - show both
-  const formatNum = (n: number) => n >= 10 ? Math.round(n) : Number(n.toPrecision(2));
-  return `${formatNum(min.value)} ${min.unit} - ${formatNum(max.value)} ${max.unit}`;
+  const formatNum = (n: number) => (n >= 10 ? Math.round(n) : Number(n.toPrecision(2)));
+  return `${formatRangeValue(formatNum(min.value))} ${min.unit} ${RANGE_DASH} ${formatRangeValue(formatNum(max.value))} ${max.unit}`;
 }

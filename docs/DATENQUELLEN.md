@@ -264,3 +264,24 @@ Ergänzt am 08.09.2026 zusammen mit den Kapiteln `/wissen/funktechnik/seefunk/`,
   Breitbandkonstellationen ändern sich laufend und sind deshalb mit `null` hinterlegt.
   Das S-Band ist als dokumentierte Ausnahme von der Regel „Aufwärtsstrecke über Abwärtsstrecke"
   gekennzeichnet (`uplinkAbove: false`).
+
+### `utils/fieldStrength.ts`, `widgets/EmWaveModel.ts` — Grundlagenkapitel (EIRP/ERP, Feldstärke, EM-Welle)
+
+- **Quelle:** Meinke/Gundlach, *Taschenbuch der Hochfrequenztechnik* (ebene Welle,
+  Feldwellenwiderstand, Strahlungsleistung, Nah- und Fernfeld); Pozar, *Microwave Engineering*
+  (Friis-Gleichung, Wirkfläche, Polarisationsverlustfaktor); IEEE Std 100 (EIRP, ERP, dBµV/m);
+  IEEE Std 145 (Polarisation, RHCP/LHCP, Kreuzpolarisation); ITU-R V.574-5 und IEC 60027-3
+  (Dezibel); CODATA 2018 (NIST) für h, c und Z₀ = 376,730 313 668 Ω
+  (`FREE_SPACE_IMPEDANCE` in `data/constants.ts`); ICNIRP-Leitlinien für die Grenze der
+  nichtionisierenden Strahlung bei 100 nm (`IONIZING_BOUNDARY_WAVELENGTH`).
+- **Modellierung:** Freiraum im Fernfeld — EIRP = P·G, ERP = EIRP/1,64 (2,15 dB Dipolgewinn
+  aus `data/antennas.ts`), S = EIRP/(4π·d²), E = √(S·Z₀). Der Zahlenwert 30 der Schulformel
+  E = √(30·P·G)/d wird als Z₀/(4π) = 29,98 exakt gerechnet, nicht gerundet. Prüfwerte im Test:
+  1 W an 0 dBi in 1 m → 5,48 V/m; EIRP 1 W → ERP 0,61 W; 20 dB Abfall je Abstandsdekade.
+- **Unsicherheiten / Annahmen:** Bodenreflexion, Bewuchs und Mehrwegeausbreitung sind **nicht**
+  enthalten; die Werte gelten erst jenseits der Fernfeldgrenze 2·D²/λ. Die
+  Kreuzpolarisationsentkopplung ist mit 20 dB als konservativer Richtwert angesetzt
+  (`Annahme:` an `CROSS_POLARIZATION_LOSS_DB`) — theoretisch ist der Verlust unendlich, reale
+  Antennen erreichen 20 bis 30 dB. **Grenzwerte des Personenschutzes** (26. BImSchV, ICNIRP)
+  werden im Kapitel nur genannt und verlinkt; es sind bewusst **keine Grenzwerttabellen**
+  hinterlegt, weil die Werte frequenzabhängig sind und fortgeschrieben werden.

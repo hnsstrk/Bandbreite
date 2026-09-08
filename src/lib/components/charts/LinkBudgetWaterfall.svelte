@@ -5,7 +5,7 @@
    *
    * Die Stufenberechnung liegt in `waterfallData.ts`.
    */
-  import { scaleBand, scaleLinear } from 'd3';
+  import { scaleBand, scaleLinear } from 'd3-scale';
   import type { LinkBudgetData } from '$lib/components/calculators/linkBudget.svelte';
   import { formatLocaleNumber, formatPowerDb, formatPowerDbm } from '$lib/utils/formatting';
   import ChartFrame from './ChartFrame.svelte';

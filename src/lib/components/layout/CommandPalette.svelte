@@ -1,7 +1,10 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
+  import Icon from '$lib/components/ui/Icon.svelte';
   import {
+    ALL_RESULTS_ID,
+    allResultsHref,
     buildGroups,
     readRecents,
     rememberRecent,
@@ -49,10 +52,13 @@
     lastFocused?.focus();
   }
 
-  function select(item: PaletteItem) {
-    recents = rememberRecent(item);
+  /** Ziel öffnen; `item` fehlt, wenn nur die Suchseite gemeint ist. */
+  function select(item?: PaletteItem) {
+    // Die Suchseite ist kein besuchtes Ziel — sie gehört nicht in den Verlauf.
+    if (item && item.id !== ALL_RESULTS_ID) recents = rememberRecent(item);
+    const href = item?.href ?? allResultsHref(query);
     close();
-    goto(item.href);
+    goto(href);
   }
 
   function handleWindowKeydown(event: KeyboardEvent) {
@@ -80,10 +86,9 @@
       activeIndex = flatItems.length ? (activeIndex - 1 + flatItems.length) % flatItems.length : 0;
     } else if (event.key === 'Enter') {
       const item = flatItems[activeIndex];
-      if (item) {
-        event.preventDefault();
-        select(item);
-      }
+      if (!item && !query.trim()) return;
+      event.preventDefault();
+      select(item);
     } else if (event.key === 'Tab') {
       // Fokusfalle mit zwei Stationen: Eingabefeld und Schließen-Schaltfläche.
       // Der Tabulator wandert zwischen beiden, in beide Richtungen.
@@ -111,10 +116,7 @@
     onkeydown={handleDialogKeydown}
   >
     <div class="palette-input-row">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <circle cx="11" cy="11" r="7" />
-        <path d="M21 21l-4.35-4.35" />
-      </svg>
+      <Icon name="search" size={18} />
       <input
         bind:this={inputEl}
         bind:value={query}
@@ -208,12 +210,6 @@
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--color-line);
     color: var(--color-ink-subtle);
-  }
-
-  .palette-input-row svg {
-    width: 1.125rem;
-    height: 1.125rem;
-    flex-shrink: 0;
   }
 
   .palette-input {

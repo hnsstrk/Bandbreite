@@ -6,6 +6,7 @@
   import CommandPalette from '$lib/components/layout/CommandPalette.svelte';
   import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
   import Metadata from '$lib/components/ui/Metadata.svelte';
+  import LearningPathBar from '$lib/components/learning/LearningPathBar.svelte';
   import { searchDialog } from '$lib/components/layout/searchDialog.svelte';
 
   let { children } = $props();
@@ -21,6 +22,7 @@
 <div class="app-container">
   <a href="#main-content" class="skip-to-content">Zum Inhalt springen</a>
   <Header onsearch={() => searchDialog.show()} />
+  <LearningPathBar />
 
   {#if showBreadcrumb}
     <div class="breadcrumb-bar">

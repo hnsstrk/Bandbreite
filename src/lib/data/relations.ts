@@ -146,6 +146,43 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
     { id: 'spektrum', reason: 'Alles im Spektrum verorten' },
     { id: 'service.sitemap', reason: 'Alle Kapitel auf einen Blick' }
   ],
+  'wissen.lernpfade': [
+    { id: 'wissen.grundlagen', reason: 'Der erste Pfad beginnt bei den Grundlagen' },
+    { id: 'spektrum', reason: 'Einstieg des Pfads „Vom Spektrum zur Funkverbindung"' },
+    { id: 'rechner', reason: 'Die Rechner, die in den Pfaden vorkommen' },
+    { id: 'wissen.funktechnik', reason: 'Ziel des Pfads „Funkdienste kennenlernen"' },
+    { id: 'wissen.radar', reason: 'Ziel des Pfads „Radar verstehen"' },
+    { id: 'wissen.glossar', reason: 'Begriffe unterwegs nachschlagen' }
+  ],
+  'wissen.grundlagen': [
+    { id: 'wissen.grundlagen.em-wellen', reason: 'Womit alles anfängt: die Welle selbst' },
+    { id: 'wissen.grundlagen.dezibel', reason: 'Die Rechensprache der Funktechnik' },
+    { id: 'wissen.grundlagen.leistung-und-pegel', reason: 'Von Watt zu Feldstärke' },
+    { id: 'spektrum', reason: 'Die Frequenz im Spektrum einordnen' },
+    { id: 'wissen.wellenausbreitung', reason: 'Wie die Welle vom Sender zum Empfänger kommt' },
+    { id: 'wissen.mathematik', reason: 'Die Formeln kompakt nachschlagen' }
+  ],
+  'wissen.grundlagen.em-wellen': [
+    { id: 'konverter.frequenz', reason: 'λ = c/f direkt umrechnen' },
+    { id: 'wissen.grundlagen.leistung-und-pegel', reason: 'Von der Welle zur Feldstärke' },
+    { id: 'wissen.antennen', reason: 'Polarisation und Fernfeld an der Antenne' },
+    { id: 'spektrum', reason: 'Wellenlänge und Frequenz im Spektrum sehen' },
+    { id: 'wissen.wellenausbreitung', reason: 'Was mit der Welle unterwegs passiert' }
+  ],
+  'wissen.grundlagen.dezibel': [
+    { id: 'rechner.dezibel', reason: 'Pegel und Faktoren selbst umrechnen' },
+    { id: 'wissen.grundlagen.leistung-und-pegel', reason: 'Pegel auf Sendeleistung anwenden' },
+    { id: 'rechner.link-budget', reason: 'Die Kettenrechnung an einer echten Strecke' },
+    { id: 'wissen.mathematik', reason: 'Herleitungen und weitere Formeln' },
+    { id: 'wissen.glossar', reason: 'dBm, dBi, dBc und Co. nachschlagen' }
+  ],
+  'wissen.grundlagen.leistung-und-pegel': [
+    { id: 'rechner.link-budget', reason: 'EIRP in eine vollständige Bilanz stellen' },
+    { id: 'rechner.antennengewinn', reason: 'Gewinn, Fläche und Öffnungswinkel umrechnen' },
+    { id: 'wissen.grundlagen.dezibel', reason: 'Die Pegelrechnung dahinter' },
+    { id: 'spektrum.sendeleistungen', reason: 'Typische Sendeleistungen im Vergleich' },
+    { id: 'wissen.antennen', reason: 'Woher der Antennengewinn kommt' }
+  ],
   'wissen.wellenausbreitung': [
     { id: 'wissen.wellenausbreitung.ionosphaere', reason: 'Die Schichten im Detail' },
     { id: 'wissen.wellenausbreitung.daempfung', reason: 'Dämpfung durch die Atmosphäre' },
@@ -257,10 +294,33 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
     { id: 'service.quellen', reason: 'Herkunft der Definitionen' }
   ],
   'wissen.radar': [
+    { id: 'wissen.radar.grundlagen', reason: 'Laufzeit, Radargleichung und RCS' },
+    { id: 'wissen.radar.verfahren', reason: 'Puls, Doppler, FMCW, SAR' },
+    { id: 'wissen.radar.sekundaerradar', reason: 'Transponder statt Echo' },
     { id: 'rechner.radar', reason: 'Reichweite selbst berechnen' },
-    { id: 'wissen.mathematik', reason: 'Radargleichung im Detail' },
     { id: 'wissen.antennen', reason: 'Richtcharakteristik und Gewinn' },
     { id: 'datenbanken.frequenzbaender', reason: 'Radarbänder nachschlagen' }
+  ],
+  'wissen.radar.grundlagen': [
+    { id: 'rechner.radar', reason: 'Die Radargleichung mit eigenen Zahlen lösen' },
+    { id: 'wissen.radar.verfahren', reason: 'Wie diese Grenzen umgangen werden' },
+    { id: 'wissen.mathematik', reason: 'Radargleichung Schritt für Schritt' },
+    { id: 'wissen.antennen', reason: 'Gewinn und Wirkfläche der Radarantenne' },
+    { id: 'datenbanken.frequenzbaender', reason: 'IEEE-Radarbänder nachschlagen' }
+  ],
+  'wissen.radar.verfahren': [
+    { id: 'wissen.radar.grundlagen', reason: 'Die Grundgrößen dahinter' },
+    { id: 'wissen.radar.sekundaerradar', reason: 'Das kooperative Gegenstück' },
+    { id: 'wissen.modulation', reason: 'Chirp, DPSK und Pulspositionsmodulation' },
+    { id: 'rechner.kanalkapazitaet', reason: 'Warum Bandbreite Auflösung bedeutet' },
+    { id: 'wissen.antennen', reason: 'Gruppenantenne und Strahlschwenkung' }
+  ],
+  'wissen.radar.sekundaerradar': [
+    { id: 'wissen.funktechnik.flugfunk', reason: 'Der Funkbetrieb rund um den Transponder' },
+    { id: 'wissen.radar.grundlagen', reason: 'Warum das Echo so viel Leistung kostet' },
+    { id: 'wissen.funktechnik.notfrequenzen', reason: '1030 und 1090 MHz in der Übersicht' },
+    { id: 'datenbanken.funkdienste', reason: 'Zuweisungen der Flugsicherung' },
+    { id: 'wissen.glossar', reason: 'Mode S, Squawk und ADS-B nachschlagen' }
   ],
   datenbanken: [
     { id: 'spektrum', reason: 'Daten im Spektrum verorten' },

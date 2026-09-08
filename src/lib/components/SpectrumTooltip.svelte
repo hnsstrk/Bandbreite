@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatFrequencyRange, type FrequencyBand } from "$lib/data/bands";
-  import { formatWavelengthLocal } from "./spectrumState.svelte";
+  import { formatWavelengthLocal } from "./spectrumFormat";
   import { safeDivide } from "$lib/utils/handlers";
 
   interface Props {
@@ -64,7 +64,7 @@
           >Wellenlänge:</span
         >
         <span class="font-mono" style="color: var(--color-chart-text)">
-          {safeWavelength(band.maxHz)} - {safeWavelength(band.minHz)}
+          {safeWavelength(band.maxHz)} – {safeWavelength(band.minHz)}
         </span>
       </div>
       <div class="flex justify-between">

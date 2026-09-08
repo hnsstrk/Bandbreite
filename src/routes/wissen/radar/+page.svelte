@@ -1,11 +1,11 @@
 <script lang="ts">
   /**
-   * Kapitel „Radar-Grundlagen": Inhalte in $lib/content/radar.ts,
-   * Rendering über den generischen ArticleLayout (Inhaltsverzeichnis, Lernziele,
-   * Abschnitte mit Widgets, Prev/Next, verwandte Themen).
+   * Kapitel-Hub „Radartechnik": Inhalte in $lib/content/radar/index.ts,
+   * Rendering über den generischen ArticleLayout. Die Kacheln der drei
+   * Unterkapitel entstehen dort aus `getHubChildren`.
    */
   import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
-  import { radarArticle } from '$lib/content/radar';
+  import { radarHubArticle } from '$lib/content/radar';
 </script>
 
-<ArticleLayout article={radarArticle} />
+<ArticleLayout article={radarHubArticle} />

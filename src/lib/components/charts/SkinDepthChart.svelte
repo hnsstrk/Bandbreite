@@ -1,6 +1,7 @@
 <script lang="ts">
   /** Skin-Tiefe über der Frequenz für die gängigen Ausbreitungsmedien. */
-  import { line, scaleLog } from 'd3';
+  import { line } from 'd3-shape';
+  import { scaleLog } from 'd3-scale';
   import { clamp } from '$lib/utils/handlers';
   import { formatDistance, formatFrequency, formatLocaleNumber } from '$lib/utils/formatting';
   import {

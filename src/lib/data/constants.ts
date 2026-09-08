@@ -57,6 +57,24 @@ export const VACUUM_PERMITTIVITY = 8.8541878128e-12 as const;
 export const VACUUM_PERMEABILITY = 1.25663706212e-6 as const;
 
 /**
+ * Characteristic impedance of vacuum Z₀ = √(µ₀/ε₀) — the ratio of electric to
+ * magnetic field strength of a plane wave in free space.
+ * Unit: Ω (Ohm)
+ * Source: CODATA 2018 (376.730 313 668(57) Ω)
+ */
+export const FREE_SPACE_IMPEDANCE = 376.730313668 as const;
+
+/**
+ * Upper wavelength boundary of ionizing radiation: shorter waves carry enough
+ * photon energy (≈ 12,4 eV) to ionize atoms. Radio, microwave, infrared,
+ * visible light and the near ultraviolet stay below it.
+ * Unit: m
+ * Source: ICNIRP guidelines (non-ionizing radiation covers 100 nm … 1 mm);
+ *         ICRU Report 85 uses the same optical/ionizing boundary.
+ */
+export const IONIZING_BOUNDARY_WAVELENGTH = 100e-9 as const;
+
+/**
  * Standard atmospheric pressure
  * Unit: Pa (Pascal)
  * Source: ISO 2533:1975

@@ -1,91 +1,52 @@
 <script lang="ts">
-    import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
-    import { linkBudgetExplanations } from "$lib/data/explanations";
+  /** Abschlussergebnisse der Streckenbilanz: Reserven und Tragfähigkeit. */
+  import { formatPowerDb } from '$lib/utils/formatting';
+  import Callout from '$lib/components/ui/Callout.svelte';
+  import ResultCard from '$lib/components/ui/ResultCard.svelte';
 
-    interface Props {
-        linkMarginDb: number;
-        systemMarginDb: number;
-        fadingMarginDb: number;
-        linkViable: boolean;
-    }
+  interface Props {
+    linkMarginDb: number;
+    systemMarginDb: number;
+    fadingMarginDb: number;
+    linkViable: boolean;
+  }
 
-    let { linkMarginDb, systemMarginDb, fadingMarginDb, linkViable }: Props =
-        $props();
+  let { linkMarginDb, systemMarginDb, fadingMarginDb, linkViable }: Props = $props();
 </script>
 
-<div class="mt-6 pt-6 border-t border-default">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Link Margin -->
-        <div class="result-box">
-            <div class="result-label">
-                Link Margin
-                <InfoTooltip
-                    title={linkBudgetExplanations.linkMargin.title}
-                    short={linkBudgetExplanations.linkMargin.short}
-                    detailed={linkBudgetExplanations.linkMargin.detailed}
-                />
-            </div>
-            <div
-                class="text-2xl font-bold {linkMarginDb >= 0
-                    ? 'text-green-600 dark:text-green-400'
-                    : 'text-red-600 dark:text-red-400'}"
-            >
-                {linkMarginDb >= 0 ? "+" : ""}{linkMarginDb.toFixed(1)}
-                <span class="text-lg text-muted">dB</span>
-            </div>
-            <div class="text-xs text-muted mt-1">
-                Pegel über Empfindlichkeit
-            </div>
-        </div>
-
-        <!-- System Margin -->
-        <div class="result-box">
-            <div class="result-label">
-                System Margin
-                <InfoTooltip
-                    title={linkBudgetExplanations.systemGain.title}
-                    short={linkBudgetExplanations.systemGain.short}
-                    detailed={linkBudgetExplanations.systemGain.detailed}
-                />
-            </div>
-            <div
-                class="text-2xl font-bold {systemMarginDb >= 0
-                    ? 'text-green-600 dark:text-green-400'
-                    : 'text-red-600 dark:text-red-400'}"
-            >
-                {systemMarginDb >= 0 ? "+" : ""}{systemMarginDb.toFixed(1)}
-                <span class="text-lg text-muted">dB</span>
-            </div>
-            <div class="text-xs text-muted mt-1">
-                Nach Fading Margin ({fadingMarginDb} dB)
-            </div>
-        </div>
-
-        <!-- Link Status -->
-        <div class="result-box">
-            <div class="result-label">Link Status</div>
-            <div
-                class="text-xl font-bold {linkViable
-                    ? 'text-green-600 dark:text-green-400'
-                    : 'text-red-600 dark:text-red-400'}"
-            >
-                {linkViable ? "VIABLE" : "NICHT VIABLE"}
-            </div>
-            <div
-                class="text-xs {linkViable
-                    ? 'text-green-600 dark:text-green-500'
-                    : 'text-red-600 dark:text-red-500'} mt-1"
-            >
-                {linkViable
-                    ? `Reserve: ${systemMarginDb.toFixed(1)} dB`
-                    : `Fehlt: ${Math.abs(systemMarginDb).toFixed(1)} dB`}
-            </div>
-        </div>
-    </div>
+<div class="lb-results">
+  <ResultCard
+    label="Streckenreserve"
+    value={formatPowerDb(linkMarginDb, 1, true)}
+    secondary="Pegel über der Empfindlichkeit"
+    tone={linkMarginDb >= 0 ? 'success' : 'danger'}
+    emphasis="hero"
+  />
+  <ResultCard
+    label="Systemreserve"
+    value={formatPowerDb(systemMarginDb, 1, true)}
+    secondary={`nach ${formatPowerDb(fadingMarginDb)} Fading-Reserve`}
+    tone={systemMarginDb >= 0 ? 'success' : 'danger'}
+  />
 </div>
 
+{#if linkViable}
+  <Callout tone="tip" title="Strecke trägt">
+    Nach Abzug aller Verluste und der Fading-Reserve bleiben
+    {formatPowerDb(systemMarginDb)} übrig.
+  </Callout>
+{:else}
+  <Callout tone="warning" title="Strecke trägt nicht">
+    Es fehlen {formatPowerDb(Math.abs(systemMarginDb))}. Abhilfe schaffen mehr Antennengewinn,
+    eine kürzere Strecke, eine niedrigere Frequenz oder ein empfindlicherer Empfänger — jede
+    Verdopplung des Antennengewinns bringt 3 dB.
+  </Callout>
+{/if}
+
 <style>
-    .border-default {
-        border-color: var(--color-border-default);
-    }
+  .lb-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 0.75rem;
+  }
 </style>

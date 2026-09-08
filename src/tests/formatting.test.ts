@@ -17,6 +17,7 @@ import {
   formatPowerDbm,
   formatPowerDb,
   formatPowerWatts,
+  formatDataRate,
   formatAttenuation,
   formatAttenuationTotal,
   formatPercentage,
@@ -364,5 +365,49 @@ describe('formatRcs', () => {
     expect(formatRcs(null)).toBe('—');
     expect(formatRcs(NaN)).toBe('—');
     expect(formatRcs(-1)).toBe('—');
+  });
+});
+
+describe('formatDataRate', () => {
+  it('formatiert bit/s', () => {
+    expect(formatDataRate(500)).toBe('500.00 bit/s');
+  });
+
+  it('formatiert kbit/s', () => {
+    expect(formatDataRate(56000)).toBe('56.00 kbit/s');
+  });
+
+  it('formatiert Mbit/s', () => {
+    expect(formatDataRate(94.5e6)).toBe('94.50 Mbit/s');
+  });
+
+  it('formatiert Gbit/s', () => {
+    expect(formatDataRate(2.4e9)).toBe('2.40 Gbit/s');
+  });
+
+  it('formatiert Tbit/s', () => {
+    expect(formatDataRate(1.5e12)).toBe('1.50 Tbit/s');
+  });
+
+  it('respektiert die gewünschte Stellenzahl', () => {
+    expect(formatDataRate(1234567, 1)).toBe('1.2 Mbit/s');
+  });
+
+  it('liefert für ungültige Werte einen Gedankenstrich', () => {
+    expect(formatDataRate(null)).toBe('\u2014');
+    expect(formatDataRate(undefined)).toBe('\u2014');
+    expect(formatDataRate(Number.NaN)).toBe('\u2014');
+    expect(formatDataRate(Infinity)).toBe('\u2014');
+    expect(formatDataRate(-1)).toBe('\u2014');
+  });
+});
+
+describe('formatPowerWatts über Kilowatt', () => {
+  it('formatiert Megawatt', () => {
+    expect(formatPowerWatts(32e6, 1)).toBe('32.0 MW');
+  });
+
+  it('formatiert Gigawatt', () => {
+    expect(formatPowerWatts(2e9, 1)).toBe('2.0 GW');
   });
 });

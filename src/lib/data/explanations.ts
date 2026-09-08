@@ -21,7 +21,7 @@ export const FSPL: Explanation = {
   title: 'Free Space Path Loss (FSPL)',
   short: 'Signalverlust im freien Raum. Steigt quadratisch mit Frequenz und Distanz.',
   detailed: `
-    <p><strong>Physikalischer Hintergrund:</strong> Die Sendeleistung verteilt sich auf eine Kugeloberflaeche (4 pi r^2). Mit zunehmender Distanz wird die Energiedichte pro Flaecheneinheit geringer.</p>
+    <p><strong>Physikalischer Hintergrund:</strong> Die Sendeleistung verteilt sich auf eine Kugeloberfläche (4 pi r^2). Mit zunehmender Distanz wird die Energiedichte pro Flächeneinheit geringer.</p>
     <p><strong>Formel:</strong><br/>
     <code>FSPL(dB) = 20 log10(d) + 20 log10(f) - 147,55</code></p>
     <p><strong>Faustregel:</strong> Verdopplung der Distanz oder Frequenz = +6 dB Verlust.</p>
@@ -30,7 +30,7 @@ export const FSPL: Explanation = {
 
 export const FREQUENCY: Explanation = {
   title: 'Frequenz',
-  short: 'Anzahl der Schwingungen pro Sekunde. Höhere Frequenzen haben kuerzere Wellenlängen.',
+  short: 'Anzahl der Schwingungen pro Sekunde. Höhere Frequenzen haben kürzere Wellenlängen.',
   detailed: `
     <p><strong>Einheit:</strong> Hertz (Hz) = 1/s</p>
     <p><strong>Zusammenhang mit Wellenlänge:</strong><br/>
@@ -141,7 +141,7 @@ export const RX_ANTENNA_GAIN: Explanation = {
   short: 'Empfangsverstärkung durch Richtwirkung der Empfangsantenne.',
   detailed: `
     <p>Der Empfangsgewinn wirkt wie der Sendegewinn - er sammelt mehr Energie aus einer bestimmten Richtung.</p>
-    <p><strong>Reziprozitaet:</strong> Eine Antenne hat beim Senden und Empfangen denselben Gewinn.</p>
+    <p><strong>Reziprozität:</strong> Eine Antenne hat beim Senden und Empfangen denselben Gewinn.</p>
     <p>Hochgewinn-Antennen erfordern präzise Ausrichtung.</p>
   `
 };
@@ -251,9 +251,9 @@ export const BAND_ITU: Explanation = {
 
 export const ATMOSPHERIC_GENERAL: Explanation = {
   title: 'Atmosphärische Dämpfung',
-  short: 'Zusaetzlicher Signalverlust durch Absorption in Gasen (O2, H2O). Frequenzabhängig.',
+  short: 'Zusätzlicher Signalverlust durch Absorption in Gasen (O2, H2O). Frequenzabhängig.',
   detailed: `
-    <p>Neben der Freiraumdämpfung absorbieren Gasmolekuele in der Atmosphäre Funkwellen bei bestimmten Resonanzfrequenzen.</p>
+    <p>Neben der Freiraumdämpfung absorbieren Gasmoleküle in der Atmosphäre Funkwellen bei bestimmten Resonanzfrequenzen.</p>
     <p><strong>Hauptverursacher:</strong></p>
     <p>- Sauerstoff (O2): Peak bei 60 GHz<br/>
     - Wasserdampf (H2O): Peak bei 22 GHz</p>
@@ -263,18 +263,18 @@ export const ATMOSPHERIC_GENERAL: Explanation = {
 
 export const ATMOSPHERIC_22GHZ: Explanation = {
   title: '22 GHz Wasserdampf-Resonanz',
-  short: 'Wassermolekuele absorbieren bei 22 GHz. Etwa 0,2 dB/km bei normaler Luftfeuchte.',
+  short: 'Wassermoleküle absorbieren bei 22 GHz. Etwa 0,2 dB/km bei normaler Luftfeuchte.',
   detailed: `
-    <p><strong>Ursache:</strong> RotationsÜbergang der H2O-Molekuele bei 22,235 GHz.</p>
+    <p><strong>Ursache:</strong> Rotationsübergang der H₂O-Moleküle bei 22,235 GHz.</p>
     <p><strong>Typische Dämpfung:</strong> 0,1-0,2 dB/km</p>
-    <p><strong>Einfluss der Luftfeuchte:</strong> Steigt mit Wasserdampfdichte (g/m^3).</p>
-    <p>Bei Regen kommen zusaetzliche Verluste hinzu.</p>
+    <p><strong>Einfluss der Luftfeuchte:</strong> Steigt mit Wasserdampfdichte (g/m³).</p>
+    <p>Bei Regen kommen zusätzliche Verluste hinzu.</p>
   `
 };
 
 export const ATMOSPHERIC_60GHZ: Explanation = {
   title: '60 GHz Sauerstoff-Resonanz',
-  short: 'Sauerstoff absorbiert stark bei 60 GHz (~15 dB/km). Ideal für kurze, abhoersichere Links.',
+  short: 'Sauerstoff absorbiert stark bei 60 GHz (~15 dB/km). Ideal für kurze, abhörsichere Links.',
   detailed: `
     <p><strong>Ursache:</strong> Magnetische Spin-Resonanz von O2 bei 60 GHz.</p>
     <p><strong>Typische Dämpfung:</strong> 10-15 dB/km (bei Meereshöhe)</p>
@@ -291,10 +291,10 @@ export const RAIN_ATTENUATION: Explanation = {
   short: 'Regen dämpft Funkwellen ab ca. 10 GHz. Starker Einfluss bei mmWave (5G, Satellit).',
   detailed: `
     <p><strong>Mechanismus:</strong> Regentropfen streuen und absorbieren Radiowellen.</p>
-    <p><strong>Typische Werte bei 28 GHz:</strong></p>
-    <p>- Leichter Regen (4 mm/h): 1-2 dB/km<br/>
-    - Starkregen (25 mm/h): 5-10 dB/km<br/>
-    - Wolkenbruch (100 mm/h): 20+ dB/km</p>
+    <p><strong>Typische Werte bei 28 GHz (ITU-R P.838-3, horizontale Polarisation):</strong></p>
+    <p>- Leichter Regen (4 mm/h): ca. 0,8 dB/km<br/>
+    - Starkregen (25 mm/h): ca. 4,6 dB/km<br/>
+    - Wolkenbruch (100 mm/h): ca. 18 dB/km</p>
     <p>Bei Satellitenlinks ist Regendämpfung ein kritischer Planungsfaktor.</p>
   `
 };
@@ -312,7 +312,7 @@ export const EM_SPECTRUM: Explanation = {
     - Infrarot: 300 GHz - 400 THz<br/>
     - Sichtbares Licht: 400-800 THz<br/>
     - Ultraviolett: 800 THz - 30 PHz<br/>
-    - Roentgen: 30 PHz - 30 EHz<br/>
+    - Röntgen: 30 PHz - 30 EHz<br/>
     - Gamma: > 30 EHz</p>
     <p>Funktechnik nutzt den Radiobereich (kHz bis THz).</p>
   `

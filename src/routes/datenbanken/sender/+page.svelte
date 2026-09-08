@@ -1,20 +1,23 @@
 <script lang="ts">
+  import PageHero from '$lib/components/ui/PageHero.svelte';
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import TransmitterDatabase from '$lib/components/ui/TransmitterDatabase.svelte';
+  import { ALL_TRANSMITTERS } from '$lib/data/transmitters';
 </script>
 
 <div class="page-content">
-  <header class="page-header">
-    <h1 class="text-heading-1">Senderdatenbank</h1>
-    <p class="header-description">
-      Durchsuchen Sie die Datenbank bekannter Rundfunk- und Kommunikationssender.
-      Finden Sie Informationen zu Frequenzen, Standorten und Sendeleistungen.
-    </p>
-  </header>
+  <PageHero
+    kicker="Datenbanken"
+    title="Senderdatenbank"
+    icon="antenna"
+    lead="Zeitzeichensender, Rundfunk, Navigation, Amateurfunk-Relais und Forschungsanlagen — mit Frequenz, Standort, Leistung und Prüfstand."
+    meta={[
+      { label: 'Einträge', value: String(ALL_TRANSMITTERS.length) },
+      { label: 'Filter', value: 'Typ, Einordnung, Status' }
+    ]}
+  />
 
-  <section class="database-section">
-    <TransmitterDatabase />
-  </section>
+  <TransmitterDatabase />
 
   <RelatedTopics href="/datenbanken/sender/" />
 </div>
@@ -24,21 +27,5 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 0 1rem;
-  }
-
-  .page-header {
-    margin-bottom: 0;
-  }
-
-  .header-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    margin-top: 0.5rem;
-    line-height: var(--line-height-relaxed);
-  }
-
-  .database-section {
-    width: 100%;
   }
 </style>

@@ -1,31 +1,9 @@
 import { safeLog } from '$lib/utils/handlers';
+import { FREQUENCY_FACTORS, POWER_FACTORS, WAVELENGTH_FACTORS } from '$lib/data/units';
 
-// Frequency conversion factors to Hz
-export const FREQUENCY_FACTORS: Record<string, number> = {
-  Hz: 1,
-  kHz: 1e3,
-  MHz: 1e6,
-  GHz: 1e9,
-  THz: 1e12
-};
-
-// Wavelength conversion factors to meters
-export const WAVELENGTH_FACTORS: Record<string, number> = {
-  km: 1e3,
-  m: 1,
-  cm: 1e-2,
-  mm: 1e-3,
-  μm: 1e-6,
-  nm: 1e-9
-};
-
-// Power conversion factors to Watt
-export const POWER_FACTORS: Record<string, number> = {
-  uw: 1e-6,
-  mw: 1e-3,
-  w: 1,
-  kw: 1e3
-};
+// Die Faktoren-Tabellen leben in `$lib/data/units` und werden hier nur
+// weitergereicht, damit beide historisch gewachsenen Importpfade gelten.
+export { FREQUENCY_FACTORS, WAVELENGTH_FACTORS, POWER_FACTORS } from '$lib/data/units';
 
 export function convertToHz(value: number, unit: string): number {
   return value * (FREQUENCY_FACTORS[unit] ?? 1);

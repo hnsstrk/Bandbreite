@@ -1,4 +1,8 @@
 <script lang="ts">
+  /**
+   * Doppler- und Pulsparameter eines Radars.
+   * Die Formeln liegen in `$lib/utils/radar.ts`.
+   */
   import {
     calculateDopplerShift,
     calculateRangeResolution,
@@ -6,8 +10,9 @@
     calculateUnambiguousVelocity
   } from '$lib/utils/radar';
   import { formatDistance, formatFrequency, formatNumber } from '$lib/utils/formatting';
-  import { parseNumericInput } from '$lib/utils/handlers';
-  import InfoTooltip from '$lib/components/ui/InfoTooltip.svelte';
+  import Callout from '$lib/components/ui/Callout.svelte';
+  import NumberInput from '$lib/components/ui/NumberInput.svelte';
+  import ResultCard from '$lib/components/ui/ResultCard.svelte';
 
   interface Props {
     /** Sendefrequenz in Hz */
@@ -21,6 +26,14 @@
   /** Umrechnung km/h → m/s */
   const KMH_TO_MS = 1 / 3.6;
 
+  /** Reglergrenzen */
+  const VELOCITY_MIN_KMH = -1500;
+  const VELOCITY_MAX_KMH = 1500;
+  const PULSE_MIN_US = 0.01;
+  const PULSE_MAX_US = 100;
+  const PRF_MIN_HZ = 50;
+  const PRF_MAX_HZ = 20000;
+
   // Eingaben
   let radialVelocityKmh = $state(100);
   let pulseWidthUs = $state(1);
@@ -30,97 +43,108 @@
   let rangeResolutionM = $derived(calculateRangeResolution(pulseWidthUs * 1e-6));
   let unambiguousRangeM = $derived(calculateUnambiguousRange(prfHz));
   let unambiguousVelocityMs = $derived(calculateUnambiguousVelocity(prfHz, wavelengthM));
+  let unambiguousVelocityKmh = $derived(unambiguousVelocityMs / KMH_TO_MS);
 
-  function handleVelocityInput(e: Event) {
-    radialVelocityKmh = parseNumericInput(e, 0);
-  }
-  function handlePulseWidthInput(e: Event) {
-    pulseWidthUs = parseNumericInput(e, 1);
-  }
-  function handlePrfInput(e: Event) {
-    prfHz = parseNumericInput(e, 1000);
-  }
+  let velocityAmbiguous = $derived(
+    unambiguousVelocityKmh > 0 && Math.abs(radialVelocityKmh) > unambiguousVelocityKmh
+  );
 </script>
 
-<div class="mt-6">
-  <div class="text-label mb-2">Doppler und Pulsparameter</div>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div class="space-y-2">
-      <label for="radar-velocity" class="text-label">
-        Radialgeschwindigkeit
-        <InfoTooltip
-          title="Doppler-Verschiebung"
-          short="f_d = 2·v·f / c"
-          detailed="Ein sich näherndes Ziel erhöht die Echofrequenz um f_d = 2·v_r·f/c (Skolnik, Kap. 3)."
-        />
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="radar-velocity"
-          type="number"
-          value={radialVelocityKmh}
-          oninput={handleVelocityInput}
-          class="input-field flex-1"
-          step="1"
-        />
-        <span class="text-secondary text-sm w-10">km/h</span>
-      </div>
-      <div class="text-xs text-muted">
-        Doppler: <span class="font-mono">{formatFrequency(Math.abs(dopplerHz), 2)}</span>
-      </div>
-    </div>
+<section class="pulse" aria-labelledby="radar-pulse-heading">
+  <h3 class="pulse__title" id="radar-pulse-heading">Doppler und Pulsparameter</h3>
 
-    <div class="space-y-2">
-      <label for="radar-pulse-width" class="text-label">
-        Pulsdauer (τ)
-        <InfoTooltip
-          title="Entfernungsauflösung"
-          short="ΔR = c·τ / 2"
-          detailed="Zwei Ziele sind trennbar, wenn ihre Echos sich nicht überlappen: ΔR = c·τ/2 (ohne Pulskompression)."
-        />
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="radar-pulse-width"
-          type="number"
-          value={pulseWidthUs}
-          oninput={handlePulseWidthInput}
-          class="input-field flex-1"
-          step="0.1"
-          min="0.001"
-        />
-        <span class="text-secondary text-sm w-10">µs</span>
-      </div>
-      <div class="text-xs text-muted">
-        Auflösung: <span class="font-mono">{rangeResolutionM > 0 ? formatDistance(rangeResolutionM) : '—'}</span>
-      </div>
-    </div>
+  <div class="pulse__inputs">
+    <NumberInput
+      label="Radialgeschwindigkeit"
+      bind:value={radialVelocityKmh}
+      units={[{ id: 'kmh', symbol: 'km/h', factor: 1 }]}
+      min={VELOCITY_MIN_KMH}
+      max={VELOCITY_MAX_KMH}
+      step={1}
+      slider
+      hint="Positiv bedeutet Annäherung: f_d = 2 · v · f / c"
+    />
 
-    <div class="space-y-2">
-      <label for="radar-prf" class="text-label">
-        Pulswiederholfrequenz (PRF)
-        <InfoTooltip
-          title="Eindeutigkeit"
-          short="R_u = c / (2·PRF), v_u = λ·PRF / 4"
-          detailed="Echos jenseits von R_u werden der nächsten Pulsperiode zugeordnet (Entfernungsmehrdeutigkeit). Doppler-Frequenzen über PRF/2 sind mehrdeutig (Geschwindigkeitsmehrdeutigkeit)."
-        />
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="radar-prf"
-          type="number"
-          value={prfHz}
-          oninput={handlePrfInput}
-          class="input-field flex-1"
-          step="100"
-          min="1"
-        />
-        <span class="text-secondary text-sm w-10">Hz</span>
-      </div>
-      <div class="text-xs text-muted">
-        R<sub>u</sub>: <span class="font-mono">{unambiguousRangeM > 0 ? formatDistance(unambiguousRangeM) : '—'}</span>,
-        v<sub>u</sub>: <span class="font-mono">±{formatNumber(unambiguousVelocityMs / KMH_TO_MS, 0)} km/h</span>
-      </div>
-    </div>
+    <NumberInput
+      label="Pulsdauer τ"
+      bind:value={pulseWidthUs}
+      units={[{ id: 'us', symbol: 'µs', factor: 1 }]}
+      min={PULSE_MIN_US}
+      max={PULSE_MAX_US}
+      slider
+      sliderScale="log"
+      hint="Bestimmt die Entfernungsauflösung ΔR = c · τ / 2"
+    />
+
+    <NumberInput
+      label="Pulswiederholfrequenz PRF"
+      bind:value={prfHz}
+      units={[{ id: 'hz', symbol: 'Hz', factor: 1 }]}
+      min={PRF_MIN_HZ}
+      max={PRF_MAX_HZ}
+      slider
+      sliderScale="log"
+      hint="Legt die eindeutige Reichweite R_u = c / (2 · PRF) fest"
+    />
   </div>
-</div>
+
+  <div class="pulse__results">
+    <ResultCard
+      label="Doppler-Verschiebung"
+      value={formatFrequency(Math.abs(dopplerHz), 2)}
+      hint="f_d = 2 · v · f / c"
+    />
+    <ResultCard
+      label="Entfernungsauflösung"
+      value={rangeResolutionM > 0 ? formatDistance(rangeResolutionM) : '—'}
+      hint="ΔR = c · τ / 2, ohne Pulskompression"
+    />
+    <ResultCard
+      label="Eindeutige Reichweite"
+      value={unambiguousRangeM > 0 ? formatDistance(unambiguousRangeM) : '—'}
+      hint="R_u = c / (2 · PRF)"
+    />
+    <ResultCard
+      label="Eindeutige Geschwindigkeit"
+      value={unambiguousVelocityKmh > 0 ? `±${formatNumber(unambiguousVelocityKmh, 0)}` : '—'}
+      unit="km/h"
+      hint="v_u = λ · PRF / 4"
+      tone={velocityAmbiguous ? 'warning' : 'neutral'}
+    />
+  </div>
+
+  {#if velocityAmbiguous}
+    <Callout tone="warning" title="Geschwindigkeitsmehrdeutigkeit">
+      Die eingestellte Radialgeschwindigkeit liegt über der eindeutigen Geschwindigkeit
+      v_u = λ · PRF / 4. Das Radar misst sie gefaltet — eine höhere PRF schafft Abhilfe,
+      verkleinert aber die eindeutige Reichweite.
+    </Callout>
+  {/if}
+</section>
+
+<style>
+  .pulse {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .pulse__title {
+    margin: 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
+  }
+
+  .pulse__inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: 1.25rem;
+  }
+
+  .pulse__results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.75rem;
+  }
+</style>

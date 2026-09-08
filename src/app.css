@@ -548,6 +548,7 @@ body {
 
 /* Tabellen und andere breite Blöcke scrollen in sich selbst. */
 .table-scroll {
+  position: relative; /* fängt absolut positionierte sr-only-Elemente ein */
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

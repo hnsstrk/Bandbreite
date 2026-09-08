@@ -1,12 +1,12 @@
 <script lang="ts">
-  import * as d3 from 'd3';
+  import { scaleLog } from 'd3';
   import { atmosphericParameters } from '$lib/stores/atmosphericParameters.svelte';
   import {
     generateExtendedAttenuationCurve,
-    calculateAllAttenuation,
-    type ExtendedCurveDataPoint
+    calculateAllAttenuation
   } from '$lib/utils/atmosphericAttenuation';
   import {
+    ATTENUATION_SERIES,
     MIN_FREQ,
     MAX_FREQ,
     MIN_ATTENUATION,
@@ -15,107 +15,81 @@
     X_TICK_VALUES,
     Y_TICK_VALUES,
     ABSORPTION_PEAK_MARKERS,
-    ABSORPTION_REGIONS
+    ABSORPTION_REGIONS,
+    createSeriesLine
   } from './attenuationChartData';
+  import AttenuationTable from './AttenuationTable.svelte';
   import AttenuationTooltip from './AttenuationTooltip.svelte';
   import AttenuationLegend from './AttenuationLegend.svelte';
+  import ChartFrame from './ChartFrame.svelte';
 
   interface Props {
     frequencyGHz?: number;
     width?: number;
     height?: number;
     showPrecipitation?: boolean;
+    /** Überschrift des Rahmens; leer lässt den Kopf weg */
+    title?: string;
   }
 
   let {
     frequencyGHz,
-    width = 1100,
+    width = $bindable(1100),
     height = 600,
-    showPrecipitation = true
+    showPrecipitation = true,
+    title = 'Atmosphärische Dämpfung'
   }: Props = $props();
 
+  /** Anzahl der Stützstellen der Kurven */
+  const CURVE_RESOLUTION = 600;
+
   // Computed dimensions
-  let chartWidth = $derived(width - CHART_MARGIN.left - CHART_MARGIN.right);
+  let chartWidth = $derived(Math.max(1, width - CHART_MARGIN.left - CHART_MARGIN.right));
   let chartHeight = $derived(height - CHART_MARGIN.top - CHART_MARGIN.bottom);
 
   // Logarithmic scales using D3
   let xScale = $derived(
-    d3.scaleLog()
-      .domain([MIN_FREQ, MAX_FREQ])
-      .range([0, chartWidth])
-      .clamp(true)
+    scaleLog().domain([MIN_FREQ, MAX_FREQ]).range([0, chartWidth]).clamp(true)
   );
 
   let yScale = $derived(
-    d3.scaleLog()
-      .domain([MIN_ATTENUATION, MAX_ATTENUATION])
-      .range([chartHeight, 0])
-      .clamp(true)
+    scaleLog().domain([MIN_ATTENUATION, MAX_ATTENUATION]).range([chartHeight, 0]).clamp(true)
   );
 
   // Generate extended curve data including precipitation - reactive to all parameters
   let curveData = $derived(
-    generateExtendedAttenuationCurve(atmosphericParameters.allConditions, MIN_FREQ, MAX_FREQ, 600)
-  );
-
-  // Line generators for each curve
-  let oxygenLineGenerator = $derived(
-    d3.line<ExtendedCurveDataPoint>()
-      .x(d => xScale(d.frequencyGHz))
-      .y(d => yScale(Math.max(MIN_ATTENUATION, d.oxygen)))
-  );
-
-  let waterVaporLineGenerator = $derived(
-    d3.line<ExtendedCurveDataPoint>()
-      .x(d => xScale(d.frequencyGHz))
-      .y(d => yScale(Math.max(MIN_ATTENUATION, d.waterVapor)))
-  );
-
-  let totalGasLineGenerator = $derived(
-    d3.line<ExtendedCurveDataPoint>()
-      .x(d => xScale(d.frequencyGHz))
-      .y(d => yScale(Math.max(MIN_ATTENUATION, d.total)))
-  );
-
-  let rainLineGenerator = $derived(
-    d3.line<ExtendedCurveDataPoint>()
-      .x(d => xScale(d.frequencyGHz))
-      .y(d => yScale(Math.max(MIN_ATTENUATION, d.rain || MIN_ATTENUATION)))
-  );
-
-  let fogLineGenerator = $derived(
-    d3.line<ExtendedCurveDataPoint>()
-      .x(d => xScale(d.frequencyGHz))
-      .y(d => yScale(Math.max(MIN_ATTENUATION, d.fog || MIN_ATTENUATION)))
-  );
-
-  let snowLineGenerator = $derived(
-    d3.line<ExtendedCurveDataPoint>()
-      .x(d => xScale(d.frequencyGHz))
-      .y(d => yScale(Math.max(MIN_ATTENUATION, d.snow || MIN_ATTENUATION)))
-  );
-
-  let totalAllLineGenerator = $derived(
-    d3.line<ExtendedCurveDataPoint>()
-      .x(d => xScale(d.frequencyGHz))
-      .y(d => yScale(Math.max(MIN_ATTENUATION, d.totalAll)))
+    generateExtendedAttenuationCurve(
+      atmosphericParameters.allConditions,
+      MIN_FREQ,
+      MAX_FREQ,
+      CURVE_RESOLUTION
+    )
   );
 
   // Check if precipitation is active
   let hasPrecipitation = $derived(
     atmosphericParameters.rainRateMmH > 0 ||
-    atmosphericParameters.fogDensityGM3 > 0 ||
-    atmosphericParameters.snowRateMmH > 0
+      atmosphericParameters.fogDensityGM3 > 0 ||
+      atmosphericParameters.snowRateMmH > 0
   );
+
+  /** Zeigt eine Niederschlagskurve nur, wenn der zugehörige Parameter gesetzt ist. */
+  function isSeriesVisible(id: string): boolean {
+    if (!showPrecipitation) return !['rain', 'fog', 'snow', 'totalAll'].includes(id);
+    if (id === 'rain') return atmosphericParameters.rainRateMmH > 0;
+    if (id === 'fog') return atmosphericParameters.fogDensityGM3 > 0;
+    if (id === 'snow') return atmosphericParameters.snowRateMmH > 0;
+    if (id === 'totalAll') return hasPrecipitation;
+    return true;
+  }
+
+  let visibleSeries = $derived(ATTENUATION_SERIES.filter((series) => isSeriesVisible(series.id)));
 
   // Marker position for current frequency
   let markerData = $derived.by(() => {
     if (!frequencyGHz || frequencyGHz < MIN_FREQ || frequencyGHz > MAX_FREQ) return null;
 
-    const attenuation = calculateAllAttenuation(
-      frequencyGHz,
-      atmosphericParameters.allConditions
-    );
+    const attenuation = calculateAllAttenuation(frequencyGHz, atmosphericParameters.allConditions);
 
     return {
       x: xScale(frequencyGHz),
@@ -136,16 +110,30 @@
       totalAll: attenuation.totalAll
     };
   });
+
+  /** Stützstellen der Datentabelle für Screenreader */
+  const TABLE_FREQUENCIES = [1, 10, 22.235, 35, 60, 94, 118.75, 183.31, 300] as const;
+
+  let tableRows = $derived(
+    TABLE_FREQUENCIES.map((f) => ({
+      frequency: f,
+      ...calculateAllAttenuation(f, atmosphericParameters.allConditions)
+    }))
+  );
 </script>
 
-<div class="attenuation-chart w-full">
-  <svg
-    viewBox="0 0 {width} {height}"
-    class="w-full h-auto"
-    preserveAspectRatio="xMidYMid meet"
-    role="img"
-    aria-label="Atmosphärische Dämpfung Diagramm: Zeigt die spezifische Dämpfung in dB/km über der Frequenz von 1 bis 350 GHz für Sauerstoff, Wasserdampf und Niederschlag"
-  >
+<ChartFrame
+  bind:width
+  {title}
+  description="Spezifische Dämpfung in Dezibel pro Kilometer über der Frequenz von 1 bis 350 Gigahertz, getrennt nach Sauerstoff, Wasserdampf und Niederschlag"
+  minWidth={640}
+  footnote="Nach ITU-R P.676-13 (Gase), P.838-3 (Regen) und P.840-9 (Nebel)"
+>
+  {#snippet legend()}
+    <AttenuationLegend series={visibleSeries} />
+  {/snippet}
+
+  <svg viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
     <defs>
       <filter id="attenuationMarkerGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="4" result="coloredBlur" />
@@ -159,12 +147,10 @@
       </filter>
     </defs>
 
-    <!-- Background -->
-    <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
+    <rect class="chart-background" x="0" y="0" width={width} height={height} />
 
-    <!-- Chart area -->
     <g transform="translate({CHART_MARGIN.left}, {CHART_MARGIN.top})">
-      <!-- Absorption peak highlight regions -->
+      <!-- Absorptionsbereiche -->
       {#each ABSORPTION_REGIONS as region (region.minFreq)}
         <rect
           x={xScale(region.minFreq)}
@@ -176,132 +162,134 @@
         />
       {/each}
 
-      <!-- Grid lines - vertical (frequency) -->
+      <!-- Gitterlinien -->
       {#each X_TICK_VALUES as tickVal (tickVal)}
         <line
-          x1={xScale(tickVal)} y1="0" x2={xScale(tickVal)} y2={chartHeight}
-          style="stroke: var(--color-chart-grid)" stroke-dasharray="4,4" stroke-width="0.5"
+          class="chart-grid-line"
+          x1={xScale(tickVal)}
+          y1="0"
+          x2={xScale(tickVal)}
+          y2={chartHeight}
+          stroke-dasharray="4,4"
         />
       {/each}
-
-      <!-- Grid lines - horizontal (attenuation) -->
       {#each Y_TICK_VALUES as tickVal (tickVal)}
         <line
-          x1="0" y1={yScale(tickVal)} x2={chartWidth} y2={yScale(tickVal)}
-          style="stroke: var(--color-chart-grid)" stroke-dasharray="4,4" stroke-width="0.5"
+          class="chart-grid-line"
+          x1="0"
+          y1={yScale(tickVal)}
+          x2={chartWidth}
+          y2={yScale(tickVal)}
+          stroke-dasharray="4,4"
         />
       {/each}
 
-      <!-- Absorption peak vertical markers -->
+      <!-- Absorptionsspitzen -->
       {#each ABSORPTION_PEAK_MARKERS as peak (peak.freq)}
         {#if peak.freq >= MIN_FREQ && peak.freq <= MAX_FREQ}
           <line
-            x1={xScale(peak.freq)} y1="0" x2={xScale(peak.freq)} y2={chartHeight}
-            stroke={peak.color} stroke-width="1" stroke-dasharray="2,4" opacity="0.5"
+            x1={xScale(peak.freq)}
+            y1="0"
+            x2={xScale(peak.freq)}
+            y2={chartHeight}
+            stroke={peak.color}
+            stroke-width="1"
+            stroke-dasharray="2,4"
+            opacity="0.5"
           />
           <text
-            x={xScale(peak.freq)} y="-8" fill={peak.color}
-            font-size="9" text-anchor="middle" opacity="0.8"
+            x={xScale(peak.freq)}
+            y="-8"
+            fill={peak.color}
+            font-size="9"
+            text-anchor="middle"
+            opacity="0.8">{peak.label}</text
           >
-            {peak.label}
-          </text>
         {/if}
       {/each}
 
-      <!-- Attenuation curves -->
-      <path d={oxygenLineGenerator(curveData)} fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
-      <path d={waterVaporLineGenerator(curveData)} fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" />
+      <!-- Kurven -->
+      {#each visibleSeries as series (series.id)}
+        <path
+          d={createSeriesLine(series, xScale, yScale)(curveData)}
+          fill="none"
+          stroke={series.color}
+          stroke-width={series.strokeWidth}
+          stroke-linecap="round"
+          stroke-dasharray={series.dash ?? undefined}
+        />
+      {/each}
 
-      {#if showPrecipitation && atmosphericParameters.rainRateMmH > 0}
-        <path d={rainLineGenerator(curveData)} fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-dasharray="6,3" />
-      {/if}
-      {#if showPrecipitation && atmosphericParameters.fogDensityGM3 > 0}
-        <path d={fogLineGenerator(curveData)} fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-dasharray="4,4" />
-      {/if}
-      {#if showPrecipitation && atmosphericParameters.snowRateMmH > 0}
-        <path d={snowLineGenerator(curveData)} fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-dasharray="2,4" />
-      {/if}
-
-      <path d={totalGasLineGenerator(curveData)} fill="none" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" />
-
-      {#if showPrecipitation && hasPrecipitation}
-        <path d={totalAllLineGenerator(curveData)} fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" />
-      {/if}
-
-      <!-- X-axis (Frequency) -->
+      <!-- X-Achse -->
       <g transform="translate(0, {chartHeight})">
-        <line x1="0" y1="0" x2={chartWidth} y2="0" style="stroke: var(--color-chart-axis)" stroke-width="1" />
+        <line class="chart-axis-line" x1="0" y1="0" x2={chartWidth} y2="0" />
         {#each X_TICK_VALUES as tickVal (tickVal)}
           <g transform="translate({xScale(tickVal)}, 0)">
-            <line y2="8" style="stroke: var(--color-chart-axis)" />
-            <text y="24" style="fill: var(--color-chart-text-secondary)" text-anchor="middle" font-size="11">
+            <line class="chart-axis-line" y2="8" />
+            <text class="chart-axis-text" y="24" text-anchor="middle">{tickVal}</text>
+          </g>
+        {/each}
+        <text class="chart-axis-label" x={chartWidth / 2} y="52" text-anchor="middle">
+          Frequenz (GHz)
+        </text>
+      </g>
+
+      <!-- Y-Achse -->
+      <g>
+        <line class="chart-axis-line" x1="0" y1="0" x2="0" y2={chartHeight} />
+        {#each Y_TICK_VALUES as tickVal (tickVal)}
+          <g transform="translate(0, {yScale(tickVal)})">
+            <line class="chart-axis-line" x2="-8" />
+            <text class="chart-axis-text" x="-12" text-anchor="end" dominant-baseline="middle">
               {tickVal}
             </text>
           </g>
         {/each}
         <text
-          x={chartWidth / 2} y="52" style="fill: var(--color-chart-text)"
-          text-anchor="middle" font-size="14" font-weight="500"
-        >
-          Frequenz (GHz)
-        </text>
-      </g>
-
-      <!-- Y-axis (Attenuation) -->
-      <g>
-        <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" stroke-width="1" />
-        {#each Y_TICK_VALUES as tickVal (tickVal)}
-          <g transform="translate(0, {yScale(tickVal)})">
-            <line x2="-8" style="stroke: var(--color-chart-axis)" />
-            <text
-              x="-12" style="fill: var(--color-chart-text-secondary)"
-              text-anchor="end" dominant-baseline="middle" font-size="11"
-            >
-              {tickVal >= 1 ? tickVal : tickVal.toString()}
-            </text>
-          </g>
-        {/each}
-        <text
-          transform="rotate(-90)" x={-chartHeight / 2} y="-55"
-          style="fill: var(--color-chart-text)" text-anchor="middle" font-size="14" font-weight="500"
+          class="chart-axis-label"
+          transform="rotate(-90)"
+          x={-chartHeight / 2}
+          y="-55"
+          text-anchor="middle"
         >
           Spezifische Dämpfung (dB/km)
         </text>
       </g>
 
-      <!-- Interactive marker for current frequency -->
+      <!-- Arbeitspunkt -->
       {#if markerData}
+        {@const markerY = hasPrecipitation ? markerData.yTotalAll : markerData.yTotal}
         <line
-          x1={markerData.x} y1="0" x2={markerData.x} y2={chartHeight}
-          class="stroke-amber-400" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.8"
+          class="chart-marker-crosshair"
+          x1={markerData.x}
+          y1="0"
+          x2={markerData.x}
+          y2={chartHeight}
+          stroke-dasharray="8,4"
         />
         <line
-          x1="0" y1={hasPrecipitation ? markerData.yTotalAll : markerData.yTotal}
-          x2={chartWidth} y2={hasPrecipitation ? markerData.yTotalAll : markerData.yTotal}
-          class="stroke-amber-400" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.8"
+          class="chart-marker-crosshair"
+          x1="0"
+          y1={markerY}
+          x2={chartWidth}
+          y2={markerY}
+          stroke-dasharray="8,4"
         />
         <circle
-          cx={markerData.x} cy={hasPrecipitation ? markerData.yTotalAll : markerData.yTotal}
-          r="10" class="fill-amber-400" filter="url(#attenuationMarkerGlow)"
+          class="chart-marker-primary"
+          cx={markerData.x}
+          cy={markerY}
+          r="10"
+          filter="url(#attenuationMarkerGlow)"
         />
-        <circle
-          cx={markerData.x} cy={hasPrecipitation ? markerData.yTotalAll : markerData.yTotal}
-          r="5" class="fill-amber-200"
-        />
+        <circle cx={markerData.x} cy={markerY} r="5" fill="var(--color-on-solid)" />
 
         <AttenuationTooltip {markerData} {hasPrecipitation} {chartWidth} {chartHeight} />
       {/if}
     </g>
-
-    <!-- Legend on the right side -->
-    <g transform="translate({width - CHART_MARGIN.right + 20}, {CHART_MARGIN.top})">
-      <AttenuationLegend {showPrecipitation} {hasPrecipitation} />
-    </g>
   </svg>
-</div>
 
-<style>
-  .attenuation-chart {
-    container-type: inline-size;
-  }
-</style>
+  {#snippet dataTable()}
+    <AttenuationTable rows={tableRows} />
+  {/snippet}
+</ChartFrame>

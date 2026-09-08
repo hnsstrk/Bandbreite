@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as d3 from 'd3';
+  import { scaleLog } from 'd3';
   import { IEEE_BANDS, NATO_BANDS } from '$lib/data/bands';
   import { POWER_CHART_CATEGORY_COLORS } from '$lib/data/presets';
   import {
@@ -9,9 +9,12 @@
     X_TICK_VALUES, X_TICK_LABELS,
     Y_TICK_VALUES, Y_TICK_LABELS, Y_DBM_LABELS,
     COMMUNICATION_POINTS, RADAR_POINTS, SATELLITE_POINTS, IOT_POINTS, INDUSTRIAL_POINTS,
-    freqToWavelength, formatWavelengthLocal,
   } from './powerDbData';
+  import { frequencyToWavelength } from '$lib/utils/calculations';
+  import { formatWavelength } from '$lib/utils/formatting';
+  import ChartFrame from './ChartFrame.svelte';
   import PowerDbControls from './PowerDbControls.svelte';
+  import PowerDbTable from './PowerDbTable.svelte';
   import PowerDbLegend from './PowerDbLegend.svelte';
   import PowerDbTooltip from './PowerDbTooltip.svelte';
 
@@ -20,7 +23,7 @@
     height?: number;
   }
 
-  let { width = 1200, height = 600 }: Props = $props();
+  let { width = $bindable(1200), height = 600 }: Props = $props();
 
   // Tooltip state
   let tooltipVisible = $state(false);
@@ -61,11 +64,11 @@
 
   // Scales
   let xScale = $derived(
-    d3.scaleLog().domain([MIN_FREQ, MAX_FREQ]).range([0, chartWidth])
+    scaleLog().domain([MIN_FREQ, MAX_FREQ]).range([0, chartWidth])
   );
 
   let yScale = $derived(
-    d3.scaleLog().domain([MIN_POWER, MAX_POWER]).range([chartHeight, 0])
+    scaleLog().domain([MIN_POWER, MAX_POWER]).range([chartHeight, 0])
   );
 
   // Filter bands that are in our frequency range
@@ -118,8 +121,7 @@
   }
 </script>
 
-<div class="power-frequency-chart w-full relative" bind:this={containerRef}>
-  <!-- Controls Row -->
+<div class="power-frequency-chart" bind:this={containerRef}>
   <PowerDbControls
     bind:showIEEEBands
     bind:bandMode
@@ -130,7 +132,13 @@
     bind:showIndustrial
   />
 
-  <svg viewBox="0 0 {width} {height}" class="w-full h-auto" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Sendeleistungen im Frequenzspektrum: Zeigt verschiedene Sender und ihre Leistungen über der Frequenz">
+  <ChartFrame
+    bind:width
+    description="Sendeleistungen verschiedener Funksysteme über der Frequenz, beide Achsen logarithmisch, mit Wellenlänge oben und Dezibel-Milliwatt rechts"
+    minWidth={720}
+    footnote="Typische Werte; regulatorische Grenzwerte und Betriebsarten können abweichen."
+  >
+  <svg viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
     <defs>
       <filter id="pointGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="2" result="coloredBlur" />
@@ -155,7 +163,7 @@
           {#if bandWidth > 0}
             <rect x={x1} y="0" width={bandWidth} height={chartHeight} fill={band.color} />
             {#if bandWidth > 30}
-              <text x={x1 + bandWidth / 2} y="20" text-anchor="middle" class="fill-white font-semibold" font-size="13" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">
+              <text x={x1 + bandWidth / 2} y="20" text-anchor="middle" fill="var(--color-on-solid)" font-weight="600" font-size="13">
                 {band.name}
               </text>
             {/if}
@@ -212,10 +220,10 @@
       <g>
         <line x1="0" y1="0" x2={chartWidth} y2="0" style="stroke: var(--color-chart-axis)" stroke-width="1" />
         {#each X_TICK_VALUES as tickVal, i (tickVal)}
-          {@const wavelength = freqToWavelength(tickVal)}
+          {@const wavelength = frequencyToWavelength(tickVal)}
           <g transform="translate({xScale(tickVal)}, 0)">
             <line y2="-8" style="stroke: var(--color-chart-axis)" />
-            <text y="-14" text-anchor="middle" style="fill: var(--color-text-tertiary)" font-size="10">{formatWavelengthLocal(wavelength)}</text>
+            <text y="-14" text-anchor="middle" style="fill: var(--color-text-tertiary)" font-size="10">{formatWavelength(wavelength, 0)}</text>
           </g>
         {/each}
         <text x={chartWidth / 2} y="-36" text-anchor="middle" style="fill: var(--color-text-tertiary)" font-size="12">Wellenlänge (m)</text>
@@ -250,6 +258,11 @@
     </g>
   </svg>
 
+  {#snippet dataTable()}
+    <PowerDbTable points={allPoints} />
+  {/snippet}
+  </ChartFrame>
+
   <!-- Tooltip -->
   <PowerDbTooltip visible={tooltipVisible} x={tooltipX} y={tooltipY} data={tooltipData} />
 </div>
@@ -257,6 +270,11 @@
 <style>
   .power-frequency-chart {
     container-type: inline-size;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
   }
 
   .data-point {

@@ -1,24 +1,23 @@
 <script lang="ts">
-  import * as d3 from 'd3';
-
-  interface LinkBudgetData {
-    txPowerDbm: number;
-    txAntennaGainDbi: number;
-    txCableLossDb: number;
-    eirpDbm: number;
-    fsplDb: number;
-    atmosphericLossDb: number;
-    miscLossDb: number;
-    totalPathLossDb: number;
-    rxAntennaGainDbi: number;
-    rxCableLossDb: number;
-    receivedPowerDbm: number;
-    rxSensitivityDbm: number;
-    linkMarginDb: number;
-    fadingMarginDb: number;
-    systemMarginDb: number;
-    linkViable: boolean;
-  }
+  /**
+   * Wasserfalldiagramm der Streckenbilanz: vom Sendepegel über alle Gewinne
+   * und Verluste bis zur Empfangsleistung, mit der Empfindlichkeit als Linie.
+   *
+   * Die Stufenberechnung liegt in `waterfallData.ts`.
+   */
+  import { scaleBand, scaleLinear } from 'd3';
+  import type { LinkBudgetData } from '$lib/components/calculators/linkBudget.svelte';
+  import { formatPowerDb, formatPowerDbm } from '$lib/utils/formatting';
+  import ChartFrame from './ChartFrame.svelte';
+  import {
+    SENSITIVITY_COLOR,
+    STEP_COLORS,
+    buildWaterfallSteps,
+    stepLabel,
+    waterfallDomain,
+    waterfallTicks,
+    type WaterfallStep
+  } from './waterfallData';
 
   interface Props {
     data: LinkBudgetData | null;
@@ -26,466 +25,265 @@
     height?: number;
   }
 
-  let { data, width = 900, height = 400 }: Props = $props();
+  let { data, width = $bindable(900), height = 400 }: Props = $props();
 
-  // Chart margins
-  const margin = { top: 40, right: 30, bottom: 80, left: 60 };
+  const margin = { top: 30, right: 70, bottom: 80, left: 60 } as const;
 
-  // Derived dimensions
-  let chartWidth = $derived(width - margin.left - margin.right);
-  let chartHeight = $derived(height - margin.top - margin.bottom);
+  /** Ab dieser Balkenhöhe passt die Beschriftung hinein. */
+  const LABEL_MIN_HEIGHT = 20;
+  /** Mindesthöhe, damit auch ein Beitrag von 0 dB sichtbar bleibt. */
+  const MIN_BAR_HEIGHT = 2;
 
-  // Build waterfall steps from data
-  let waterfallSteps = $derived.by(() => {
-    if (!data) return [];
+  let chartWidth = $derived(Math.max(1, width - margin.left - margin.right));
+  let chartHeight = $derived(Math.max(1, height - margin.top - margin.bottom));
 
-    const steps: {
-      label: string;
-      shortLabel: string;
-      value: number;
-      type: 'start' | 'gain' | 'loss' | 'total' | 'reference';
-      cumulative: number;
-      barStart: number;
-      barEnd: number;
-    }[] = [];
+  let steps = $derived(buildWaterfallSteps(data));
+  let yDomain = $derived(waterfallDomain(steps, data?.rxSensitivityDbm ?? -90));
+  let yTicks = $derived(waterfallTicks(yDomain));
 
-    let cumulative = 0;
-
-    // TX Power (starting point)
-    cumulative = data.txPowerDbm;
-    steps.push({
-      label: 'TX Leistung',
-      shortLabel: 'TX',
-      value: data.txPowerDbm,
-      type: 'start',
-      cumulative,
-      barStart: 0,
-      barEnd: cumulative
-    });
-
-    // TX Antenna Gain (gain)
-    steps.push({
-      label: 'TX Ant. Gewinn',
-      shortLabel: '+G_TX',
-      value: data.txAntennaGainDbi,
-      type: 'gain',
-      cumulative: cumulative,
-      barStart: cumulative,
-      barEnd: cumulative + data.txAntennaGainDbi
-    });
-    cumulative += data.txAntennaGainDbi;
-
-    // TX Cable Loss (loss)
-    steps.push({
-      label: 'TX Kabelverlust',
-      shortLabel: '-L_TX',
-      value: data.txCableLossDb,
-      type: 'loss',
-      cumulative: cumulative,
-      barStart: cumulative,
-      barEnd: cumulative - data.txCableLossDb
-    });
-    cumulative -= data.txCableLossDb;
-
-    // FSPL (major loss)
-    steps.push({
-      label: 'Freiraumdämpfung',
-      shortLabel: 'FSPL',
-      value: data.fsplDb,
-      type: 'loss',
-      cumulative: cumulative,
-      barStart: cumulative,
-      barEnd: cumulative - data.fsplDb
-    });
-    cumulative -= data.fsplDb;
-
-    // Atmospheric Loss (if present)
-    if (data.atmosphericLossDb > 0.1) {
-      steps.push({
-        label: 'Atmos. Dämpfung',
-        shortLabel: 'Atmos.',
-        value: data.atmosphericLossDb,
-        type: 'loss',
-        cumulative: cumulative,
-        barStart: cumulative,
-        barEnd: cumulative - data.atmosphericLossDb
-      });
-      cumulative -= data.atmosphericLossDb;
-    }
-
-    // Misc Loss (if present)
-    if (data.miscLossDb > 0.1) {
-      steps.push({
-        label: 'Sonstige Verluste',
-        shortLabel: 'Sonst.',
-        value: data.miscLossDb,
-        type: 'loss',
-        cumulative: cumulative,
-        barStart: cumulative,
-        barEnd: cumulative - data.miscLossDb
-      });
-      cumulative -= data.miscLossDb;
-    }
-
-    // RX Antenna Gain (gain)
-    steps.push({
-      label: 'RX Ant. Gewinn',
-      shortLabel: '+G_RX',
-      value: data.rxAntennaGainDbi,
-      type: 'gain',
-      cumulative: cumulative,
-      barStart: cumulative,
-      barEnd: cumulative + data.rxAntennaGainDbi
-    });
-    cumulative += data.rxAntennaGainDbi;
-
-    // RX Cable Loss (loss)
-    steps.push({
-      label: 'RX Kabelverlust',
-      shortLabel: '-L_RX',
-      value: data.rxCableLossDb,
-      type: 'loss',
-      cumulative: cumulative,
-      barStart: cumulative,
-      barEnd: cumulative - data.rxCableLossDb
-    });
-    cumulative -= data.rxCableLossDb;
-
-    // Received Power (total)
-    steps.push({
-      label: 'Empfangsleistung',
-      shortLabel: 'P_RX',
-      value: data.receivedPowerDbm,
-      type: 'total',
-      cumulative: data.receivedPowerDbm,
-      barStart: 0,
-      barEnd: data.receivedPowerDbm
-    });
-
-    return steps;
-  });
-
-  // Calculate Y-axis range
-  let yDomain = $derived.by(() => {
-    if (!data || waterfallSteps.length === 0) return [-150, 50];
-
-    const allValues = waterfallSteps.flatMap(s => [s.barStart, s.barEnd]);
-    allValues.push(data.rxSensitivityDbm);
-
-    const minVal = Math.min(...allValues);
-    const maxVal = Math.max(...allValues);
-    const padding = (maxVal - minVal) * 0.1;
-
-    return [Math.floor(minVal - padding), Math.ceil(maxVal + padding)];
-  });
-
-  // X scale (categorical for steps)
   let xScale = $derived(
-    d3.scaleBand<number>()
-      .domain(waterfallSteps.map((_, i) => i))
+    scaleBand<number>()
+      .domain(steps.map((_, i) => i))
       .range([0, chartWidth])
       .padding(0.3)
   );
 
-  // Y scale
-  let yScale = $derived(
-    d3.scaleLinear()
-      .domain(yDomain)
-      .range([chartHeight, 0])
+  let yScale = $derived(scaleLinear().domain(yDomain).range([chartHeight, 0]));
+
+  let cumulativePath = $derived(
+    steps
+      .map((step, i) => {
+        const x = (xScale(i) ?? 0) + xScale.bandwidth() / 2;
+        return `${i === 0 ? 'M' : 'L'} ${x} ${yScale(step.barEnd)}`;
+      })
+      .join(' ')
   );
 
-  // Y-axis ticks
-  let yTicks = $derived.by(() => {
-    const [min, max] = yDomain;
-    const step = Math.ceil((max - min) / 10 / 10) * 10;
-    const ticks: number[] = [];
-    for (let v = Math.ceil(min / step) * step; v <= max; v += step) {
-      ticks.push(v);
-    }
-    return ticks;
-  });
+  const LEGEND_ENTRIES = [
+    { id: 'start', label: 'Startpegel', color: STEP_COLORS.start },
+    { id: 'gain', label: 'Gewinn', color: STEP_COLORS.gain },
+    { id: 'loss', label: 'Verlust', color: STEP_COLORS.loss },
+    { id: 'total', label: 'Ergebnis', color: STEP_COLORS.total },
+    { id: 'sens', label: 'Empfindlichkeit', color: SENSITIVITY_COLOR }
+  ];
 
-  // Colors
-  const colors = {
-    start: '#3b82f6',  // Blue
-    gain: '#22c55e',   // Green
-    loss: '#ef4444',   // Red
-    total: '#8b5cf6',  // Purple
-    reference: '#fbbf24' // Amber
-  };
-
-  // Tooltip state
-  let tooltip = $state<{
-    visible: boolean;
-    x: number;
-    y: number;
-    step: typeof waterfallSteps[0] | null;
-  }>({ visible: false, x: 0, y: 0, step: null });
-
-  function showTooltip(event: MouseEvent, step: typeof waterfallSteps[0]) {
-    tooltip = {
-      visible: true,
-      x: event.offsetX,
-      y: event.offsetY,
-      step
-    };
-  }
-
-  function hideTooltip() {
-    tooltip = { ...tooltip, visible: false, step: null };
+  function ariaLabelFor(step: WaterfallStep): string {
+    return `${step.label}: ${stepLabel(step)} dB`;
   }
 </script>
 
-<div class="link-budget-waterfall w-full">
-  {#if data}
-    <svg
-      viewBox="0 0 {width} {height}"
-      class="w-full h-auto"
-      preserveAspectRatio="xMidYMid meet"
-      role="img"
-      aria-label="Link Budget Waterfall Diagramm: Zeigt den Signalpegel in dBm von der Sendeleistung bis zur Empfangsleistung mit allen Gewinnen und Verlusten"
-    >
-      <!-- Background -->
-      <rect x="0" y="0" width={width} height={height} style="fill: var(--color-chart-bg)" />
+{#if data}
+  <ChartFrame
+    bind:width
+    title="Wasserfall der Streckenbilanz"
+    description="Signalpegel in dBm von der Sendeleistung bis zur Empfangsleistung, mit allen Gewinnen und Verlusten als Stufen"
+    minWidth={560}
+    footnote="Grün steht für Gewinne, Rot für Verluste; die orangefarbene Linie markiert die Empfängerempfindlichkeit."
+  >
+    {#snippet legend()}
+      <ul class="wf-legend">
+        {#each LEGEND_ENTRIES as entry (entry.id)}
+          <li class="wf-legend__item">
+            <span class="wf-legend__swatch" style="background: {entry.color}" aria-hidden="true"
+            ></span>
+            <span>{entry.label}</span>
+          </li>
+        {/each}
+      </ul>
+    {/snippet}
 
-      <!-- Chart area -->
+    <svg viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <rect class="chart-background" x="0" y="0" {width} {height} />
+
       <g transform="translate({margin.left}, {margin.top})">
-        <!-- Grid lines -->
         {#each yTicks as tick (tick)}
           <line
+            class="chart-grid-line"
             x1="0"
             y1={yScale(tick)}
             x2={chartWidth}
             y2={yScale(tick)}
-            style="stroke: var(--color-chart-grid)"
             stroke-dasharray="4,4"
-            stroke-width="0.5"
           />
         {/each}
 
-        <!-- Zero line -->
-        <line
-          x1="0"
-          y1={yScale(0)}
-          x2={chartWidth}
-          y2={yScale(0)}
-          style="stroke: var(--color-chart-axis)"
-          stroke-width="1"
-        />
+        <line class="chart-axis-line" x1="0" y1={yScale(0)} x2={chartWidth} y2={yScale(0)} />
 
-        <!-- RX Sensitivity reference line -->
+        <!-- Empfindlichkeitslinie -->
         <line
           x1="0"
           y1={yScale(data.rxSensitivityDbm)}
           x2={chartWidth}
           y2={yScale(data.rxSensitivityDbm)}
-          stroke="#f97316"
+          stroke={SENSITIVITY_COLOR}
           stroke-width="2"
           stroke-dasharray="8,4"
         />
         <text
+          class="chart-axis-text"
           x={chartWidth + 5}
           y={yScale(data.rxSensitivityDbm)}
-          fill="#f97316"
-          font-size="10"
           dominant-baseline="middle"
+          fill={SENSITIVITY_COLOR}
         >
-          RX Sens.
+          S_RX
         </text>
 
-        <!-- Cumulative power line -->
         <path
-          d={waterfallSteps.map((step, i) => {
-            const x = (xScale(i) ?? 0) + (xScale.bandwidth() / 2);
-            const y = yScale(step.type === 'total' ? step.value : (i === 0 ? step.barEnd : step.barEnd));
-            return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-          }).join(' ')}
+          d={cumulativePath}
           fill="none"
-          stroke="#94a3b8"
+          stroke="var(--color-series-8)"
           stroke-width="1.5"
           stroke-dasharray="4,2"
           opacity="0.6"
         />
 
-        <!-- Waterfall bars -->
-        {#each waterfallSteps as step, i (i)}
+        {#each steps as step, i (step.shortLabel)}
           {@const x = xScale(i) ?? 0}
           {@const barWidth = xScale.bandwidth()}
           {@const barY1 = yScale(Math.max(step.barStart, step.barEnd))}
           {@const barY2 = yScale(Math.min(step.barStart, step.barEnd))}
           {@const barHeight = Math.abs(barY2 - barY1)}
 
-          <g
-            class="cursor-pointer"
-            role="button"
-            tabindex="0"
-            aria-label="{step.label}: {step.type === 'gain' ? '+' : step.type === 'loss' ? '-' : ''}{step.value.toFixed(1)} dB"
-            onmouseenter={(e) => showTooltip(e, step)}
-            onmouseleave={hideTooltip}
-            onmousemove={(e) => showTooltip(e, step)}
-            onfocus={(e) => showTooltip(e as unknown as MouseEvent, step)}
-            onblur={hideTooltip}
-          >
-            <!-- Bar -->
+          <g>
+            <title>{ariaLabelFor(step)}</title>
             <rect
               x={x}
               y={barY1}
               width={barWidth}
-              height={Math.max(barHeight, 2)}
-              fill={colors[step.type]}
+              height={Math.max(barHeight, MIN_BAR_HEIGHT)}
+              fill={STEP_COLORS[step.type]}
               opacity="0.9"
               rx="2"
-              class="transition-opacity hover:opacity-70"
             />
 
-            <!-- Connector line to next bar -->
-            {#if i < waterfallSteps.length - 1 && step.type !== 'total'}
+            {#if i < steps.length - 1 && step.type !== 'total'}
               <line
+                class="chart-axis-line"
                 x1={x + barWidth}
                 y1={yScale(step.barEnd)}
-                x2={(xScale(i + 1) ?? 0)}
+                x2={xScale(i + 1) ?? 0}
                 y2={yScale(step.barEnd)}
-                style="stroke: var(--color-chart-axis)"
-                stroke-width="1"
                 stroke-dasharray="2,2"
               />
             {/if}
 
-            <!-- Value label on bar -->
-            {#if barHeight > 20}
+            {#if barHeight > LABEL_MIN_HEIGHT}
               <text
                 x={x + barWidth / 2}
                 y={barY1 + barHeight / 2}
-                class="fill-white font-medium"
+                fill="var(--color-on-solid)"
                 text-anchor="middle"
                 dominant-baseline="middle"
                 font-size="10"
+                font-weight="500"
               >
-                {step.type === 'start' || step.type === 'total'
-                  ? `${step.value.toFixed(1)}`
-                  : `${step.type === 'gain' ? '+' : '-'}${step.value.toFixed(1)}`}
+                {stepLabel(step)}
               </text>
             {/if}
           </g>
         {/each}
 
-        <!-- X-axis labels -->
+        <!-- Beschriftung der X-Achse -->
         <g transform="translate(0, {chartHeight + 10})">
-          {#each waterfallSteps as step, i (i)}
+          {#each steps as step, i (step.shortLabel)}
             {@const x = (xScale(i) ?? 0) + xScale.bandwidth() / 2}
             <text
+              class="chart-axis-text"
               x={x}
               y="0"
-              style="fill: var(--color-chart-text-secondary)"
               text-anchor="middle"
-              font-size="9"
-              transform="rotate(-45 {x} 0)"
+              transform="rotate(-45 {x} 0)">{step.shortLabel}</text
             >
-              {step.shortLabel}
-            </text>
           {/each}
         </g>
 
-        <!-- Y-axis -->
+        <!-- Y-Achse -->
         <g>
-          <line x1="0" y1="0" x2="0" y2={chartHeight} style="stroke: var(--color-chart-axis)" stroke-width="1" />
+          <line class="chart-axis-line" x1="0" y1="0" x2="0" y2={chartHeight} />
           {#each yTicks as tick (tick)}
             <g transform="translate(0, {yScale(tick)})">
-              <line x2="-6" style="stroke: var(--color-chart-axis)" />
-              <text x="-10" style="fill: var(--color-chart-text-secondary)" text-anchor="end" dominant-baseline="middle" font-size="10">
+              <line class="chart-axis-line" x2="-6" />
+              <text class="chart-axis-text" x="-10" text-anchor="end" dominant-baseline="middle">
                 {tick}
               </text>
             </g>
           {/each}
           <text
+            class="chart-axis-label"
             transform="rotate(-90)"
             x={-chartHeight / 2}
             y="-45"
-            style="fill: var(--color-chart-text)"
-            text-anchor="middle"
-            font-size="12"
+            text-anchor="middle">Pegel (dBm)</text
           >
-            Pegel (dBm)
-          </text>
-        </g>
-
-        <!-- Title -->
-        <text
-          x={chartWidth / 2}
-          y="-15"
-          style="fill: var(--color-chart-text)"
-          text-anchor="middle"
-          font-size="14"
-          font-weight="600"
-        >
-          Link Budget Waterfall
-        </text>
-      </g>
-
-      <!-- Legend -->
-      <g transform="translate({width - 100}, {margin.top})">
-        <g transform="translate(0, 0)">
-          <rect x="0" y="-6" width="12" height="12" fill={colors.start} rx="2" />
-          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Start</text>
-        </g>
-        <g transform="translate(0, 18)">
-          <rect x="0" y="-6" width="12" height="12" fill={colors.gain} rx="2" />
-          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Gewinn</text>
-        </g>
-        <g transform="translate(0, 36)">
-          <rect x="0" y="-6" width="12" height="12" fill={colors.loss} rx="2" />
-          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Verlust</text>
-        </g>
-        <g transform="translate(0, 54)">
-          <rect x="0" y="-6" width="12" height="12" fill={colors.total} rx="2" />
-          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Ergebnis</text>
-        </g>
-        <g transform="translate(0, 72)">
-          <line x1="0" y1="0" x2="12" y2="0" stroke="#f97316" stroke-width="2" stroke-dasharray="4,2" />
-          <text x="16" y="3" style="fill: var(--color-text-tertiary)" font-size="9">Sensit.</text>
         </g>
       </g>
-
-      <!-- Tooltip -->
-      {#if tooltip.visible && tooltip.step}
-        {@const tipX = Math.min(tooltip.x + 15, width - 160)}
-        {@const tipY = Math.max(10, Math.min(tooltip.y - 60, height - 80))}
-        <g transform="translate({tipX}, {tipY})">
-          <rect
-            x="0"
-            y="0"
-            width="150"
-            height="65"
-            rx="4"
-            style="fill: var(--color-chart-tooltip-bg); stroke: var(--color-chart-tooltip-border)"
-            stroke-width="1"
-          />
-          <text x="8" y="18" style="fill: var(--color-chart-text)" font-weight="500" font-size="11">
-            {tooltip.step.label}
-          </text>
-          <text x="8" y="36" style="fill: var(--color-text-tertiary)" font-size="10">
-            Wert: <tspan fill={colors[tooltip.step.type]} class="font-mono">
-              {tooltip.step.type === 'gain' ? '+' : tooltip.step.type === 'loss' ? '-' : ''}
-              {tooltip.step.value.toFixed(1)} dB
-            </tspan>
-          </text>
-          <text x="8" y="52" style="fill: var(--color-text-tertiary)" font-size="10">
-            Kumulativ: <tspan style="fill: var(--color-chart-text)" class="font-mono">
-              {tooltip.step.barEnd.toFixed(1)} dBm
-            </tspan>
-          </text>
-        </g>
-      {/if}
     </svg>
-  {:else}
-    <div class="flex items-center justify-center h-64 rounded-lg" style="background: var(--color-chart-bg)">
-      <p style="color: var(--color-text-tertiary)">Keine Link Budget Daten verfügbar</p>
-    </div>
-  {/if}
-</div>
+
+    {#snippet dataTable()}
+      <table>
+        <caption>Stufen der Streckenbilanz</caption>
+        <thead>
+          <tr>
+            <th scope="col">Stufe</th>
+            <th scope="col">Beitrag</th>
+            <th scope="col">Pegel danach</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each steps as step (step.shortLabel)}
+            <tr>
+              <th scope="row">{step.label}</th>
+              <td>{stepLabel(step)} dB</td>
+              <td>{formatPowerDbm(step.barEnd)}</td>
+            </tr>
+          {/each}
+          <tr>
+            <th scope="row">Empfindlichkeit</th>
+            <td>—</td>
+            <td>{formatPowerDbm(data.rxSensitivityDbm)}</td>
+          </tr>
+          <tr>
+            <th scope="row">Streckenreserve</th>
+            <td>{formatPowerDb(data.linkMarginDb, 1, true)}</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    {/snippet}
+  </ChartFrame>
+{:else}
+  <p class="wf-empty">Keine Daten für die Streckenbilanz verfügbar.</p>
+{/if}
 
 <style>
-  .link-budget-waterfall {
-    container-type: inline-size;
+  .wf-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .wf-legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .wf-legend__swatch {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .wf-empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--color-ink-subtle);
+    background: var(--color-sunken);
+    border-radius: var(--radius-card);
   }
 </style>

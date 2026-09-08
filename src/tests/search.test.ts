@@ -138,6 +138,6 @@ describe('SEARCH_INDEX', () => {
 
   it('schließt geplante Seiten aus dem Live-Index aus', () => {
     expect(LIVE_SEARCH_INDEX.every((e) => e.status === 'live')).toBe(true);
-    expect(LIVE_SEARCH_INDEX.length).toBeLessThan(SEARCH_INDEX.length);
+    expect(LIVE_SEARCH_INDEX.length).toBeLessThanOrEqual(SEARCH_INDEX.length);
   });
 });

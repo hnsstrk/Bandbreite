@@ -1,321 +1,243 @@
 <script lang="ts">
+  /**
+   * Rechner für die Freiraumdämpfung (Free Space Path Loss).
+   *
+   * Eingaben laufen über `NumberInput` (Zahlenfeld, Einheit, logarithmischer
+   * Regler und Presets), Ergebnisse über `ResultCard`. Der Zustand steht in
+   * der Adresszeile (`?f=…&d=…`) und ist damit teilbar.
+   */
+  import { browser } from '$app/environment';
+  import { page } from '$app/state';
+  import { calculateFSPL, frequencyToWavelength } from '$lib/utils/calculations';
+  import { formatDistance, formatFrequency, formatWavelength } from '$lib/utils/formatting';
   import {
-    calculateFSPL,
-    calculateRange,
-    frequencyToWavelength,
-  } from "$lib/utils/calculations";
-  import { convertToHz } from "$lib/utils/conversions";
-  import { FREQUENCY_UNITS, DISTANCE_UNITS } from "$lib/data/units";
+    UrlStateSync,
+    buildShareLink,
+    defaultValues,
+    hasNonDefaults,
+    readParams
+  } from '$lib/utils/urlState.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+  import Callout from '$lib/components/ui/Callout.svelte';
+  import Card from '$lib/components/ui/Card.svelte';
+  import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
+  import NumberInput from '$lib/components/ui/NumberInput.svelte';
+  import ResultCard from '$lib/components/ui/ResultCard.svelte';
+  import FSPLChart from '$lib/components/charts/FSPLChart.svelte';
+  import CalculatorActions from './CalculatorActions.svelte';
   import {
-    formatFrequency,
-    formatDistance,
-    formatWavelength,
-    formatPowerDb,
-  } from "$lib/utils/formatting";
-  import {
-    parseNumericInput,
-    parseSelectValue,
-    safeDivide,
-  } from "$lib/utils/handlers";
-  import InfoTooltip from "$lib/components/ui/InfoTooltip.svelte";
-  import { fsplExplanations } from "$lib/data/explanations";
-  import {
-    FSPL_FREQUENCY_PRESETS,
-    FSPL_CHART_FREQUENCIES,
-    DISTANCE_PRESETS_METERS,
-    type FrequencyPreset,
-    type ChartFrequency,
-  } from "$lib/data/presets";
-  import { CHART_DISTANCE_RANGES, CHART_FSPL_RANGES } from "$lib/data/spectrum";
-  import FSPLChart from "$lib/components/charts/FSPLChart.svelte";
+    DISTANCE_MAX_M,
+    DISTANCE_MIN_M,
+    DISTANCE_PRESETS,
+    DISTANCE_UNIT_OPTIONS,
+    FREQUENCY_MAX_HZ,
+    FREQUENCY_MIN_HZ,
+    FREQUENCY_PRESETS,
+    FREQUENCY_UNIT_OPTIONS,
+    FSPL_PARAMS,
+    pickDistanceUnit,
+    pickFrequencyUnit
+  } from './fspl.svelte';
 
   interface Props {
-    frequencyHz?: number | null;
-    width?: number;
+    /** Höhe des Diagramms in Pixeln */
     height?: number;
   }
 
-  let { frequencyHz = null, width = 900, height = 450 }: Props = $props();
+  let { height = 450 }: Props = $props();
 
-  // Chart margins
-  const margin = { top: 40, right: 100, bottom: 60, left: 70 };
+  /**
+   * Beim Prerendern gibt es keine Suchparameter — der Zugriff darauf würde
+   * dort einen Fehler auslösen, deshalb der browser-Guard.
+   */
+  const initial = browser
+    ? readParams(page.url.searchParams, FSPL_PARAMS)
+    : defaultValues(FSPL_PARAMS);
 
-  // Input state
-  let inputFrequency = $state(2.4);
-  let inputFrequencyUnit = $state("GHz");
-  let inputDistance = $state(100);
-  let inputDistanceUnit = $state("m");
-  let showMultipleFrequencies = $state(true);
+  let currentFrequencyHz = $state(initial.f);
+  let currentDistanceM = $state(initial.d);
+  let showMultipleFrequencies = $state(initial.multi);
+  let frequencyUnit = $state(pickFrequencyUnit(initial.f));
+  let distanceUnit = $state(pickDistanceUnit(initial.d));
 
-  // Use centralized DISTANCE_UNITS from units.ts (imported above)
-  // Helper to get factor from DISTANCE_UNITS
-  function getDistanceFactor(unitId: string): number {
-    const unit = DISTANCE_UNITS.find((u) => u.id === unitId);
-    return unit?.factor ?? 1;
-  }
+  const sync = new UrlStateSync(FSPL_PARAMS);
 
-  // Quick frequency presets - imported from presets.ts
-  const frequencyPresets = FSPL_FREQUENCY_PRESETS;
+  let values = $derived({
+    f: currentFrequencyHz,
+    d: currentDistanceM,
+    multi: showMultipleFrequencies
+  });
 
-  // Reference frequencies for multi-line chart - imported from presets.ts
-  const chartFrequencies = FSPL_CHART_FREQUENCIES;
+  $effect(() => {
+    sync.push(values);
+    return () => sync.cancel();
+  });
 
-  // Derived frequency in Hz
-  let currentFrequencyHz = $derived(
-    frequencyHz ?? convertToHz(inputFrequency, inputFrequencyUnit),
-  );
+  let shareLink = $derived(buildShareLink(page.url.pathname, values, FSPL_PARAMS));
+  let canReset = $derived(hasNonDefaults(values, FSPL_PARAMS));
 
-  // Derived distance in meters
-  let currentDistanceM = $derived(
-    inputDistance * getDistanceFactor(inputDistanceUnit),
-  );
-
-  // Calculated FSPL
   let fsplDb = $derived(
     currentFrequencyHz > 0 && currentDistanceM > 0
       ? calculateFSPL(currentDistanceM, currentFrequencyHz)
-      : null,
+      : null
   );
 
-  // Wavelength
   let wavelengthM = $derived(
-    currentFrequencyHz > 0 ? frequencyToWavelength(currentFrequencyHz) : null,
+    currentFrequencyHz > 0 ? frequencyToWavelength(currentFrequencyHz) : null
   );
 
-  // Chart dimensions
-  let chartWidth = $derived(width - margin.left - margin.right);
-  let chartHeight = $derived(height - margin.top - margin.bottom);
+  let resultHint = $derived(
+    `bei ${formatFrequency(currentFrequencyHz)} über ${formatDistance(currentDistanceM)}`
+  );
 
-  // Note: formatFrequency, formatDistance, formatWavelength are imported from $lib/utils/formatting
-
-  // Event handlers using centralized utilities
-  function handleFrequencyInput(e: Event) {
-    inputFrequency = parseNumericInput(e, 0);
+  function handleFrequencyChange(value: number) {
+    frequencyUnit = pickFrequencyUnit(value);
   }
 
-  function handleFrequencyUnitChange(e: Event) {
-    inputFrequencyUnit = parseSelectValue(e);
+  function handleDistanceChange(value: number) {
+    distanceUnit = pickDistanceUnit(value);
   }
 
-  function handleDistanceInput(e: Event) {
-    inputDistance = parseNumericInput(e, 0);
+  function handleComparisonClick() {
+    showMultipleFrequencies = !showMultipleFrequencies;
   }
 
-  function handleDistanceUnitChange(e: Event) {
-    inputDistanceUnit = parseSelectValue(e);
+  function handleReset() {
+    currentFrequencyHz = FSPL_PARAMS.f.default;
+    currentDistanceM = FSPL_PARAMS.d.default;
+    showMultipleFrequencies = FSPL_PARAMS.multi.default;
+    frequencyUnit = pickFrequencyUnit(FSPL_PARAMS.f.default);
+    distanceUnit = pickDistanceUnit(FSPL_PARAMS.d.default);
   }
-
-  function setPresetFrequency(hz: number) {
-    inputFrequency = hz / 1e9;
-    inputFrequencyUnit = "GHz";
-  }
-
-  // Sync with external frequencyHz prop
-  $effect(() => {
-    if (frequencyHz !== null && frequencyHz !== undefined && frequencyHz > 0) {
-      // Update internal state to match external prop
-      if (frequencyHz >= 1e9) {
-        inputFrequency = frequencyHz / 1e9;
-        inputFrequencyUnit = "GHz";
-      } else if (frequencyHz >= 1e6) {
-        inputFrequency = frequencyHz / 1e6;
-        inputFrequencyUnit = "MHz";
-      } else if (frequencyHz >= 1e3) {
-        inputFrequency = frequencyHz / 1e3;
-        inputFrequencyUnit = "kHz";
-      } else {
-        inputFrequency = frequencyHz;
-        inputFrequencyUnit = "Hz";
-      }
-    }
-  });
 </script>
 
-<div class="card">
-  <h3 class="text-heading-3 mb-4">Free Space Path Loss (FSPL) Kalkulator</h3>
+<Card title="Freiraumdämpfung" subtitle="Friis-Gleichung für die freie Strecke" icon="wave">
+  {#snippet actions()}
+    <CalculatorActions {shareLink} {canReset} onreset={handleReset} />
+  {/snippet}
 
-  <!-- Input Section -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-    <!-- Frequency Input -->
-    <div class="space-y-2">
-      <label for="fspl-frequency-input" class="text-label">
-        Frequenz
-        <InfoTooltip
-          title={fsplExplanations.frequency.title}
-          short={fsplExplanations.frequency.short}
-          detailed={fsplExplanations.frequency.detailed}
-        />
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="fspl-frequency-input"
-          type="number"
-          value={inputFrequency}
-          oninput={handleFrequencyInput}
-          class="input-field flex-1"
-          placeholder="Frequenz"
-          step="any"
-          min="0"
-          aria-describedby="fspl-frequency-desc"
-        />
-        <select
-          id="fspl-frequency-unit"
-          value={inputFrequencyUnit}
-          onchange={handleFrequencyUnitChange}
-          class="select-field"
-          aria-label="Frequenzeinheit"
-        >
-          {#each FREQUENCY_UNITS as unit (unit.id)}
-            <option value={unit.id}>{unit.symbol}</option>
-          {/each}
-        </select>
-      </div>
-      <span id="fspl-frequency-desc" class="sr-only"
-        >Geben Sie die Frequenz ein und waehlen Sie die Einheit</span
-      >
-      <!-- Quick Presets -->
-      <div class="flex flex-wrap gap-1 mt-2">
-        {#each frequencyPresets as preset (preset.label)}
-          <button
-            type="button"
-            onclick={() => setPresetFrequency(preset.hz)}
-            class="btn-chip"
-            title={preset.descriptionDE ?? preset.description}
-          >
-            {preset.label}
-          </button>
-        {/each}
-      </div>
-    </div>
-
-    <!-- Distance Input -->
-    <div class="space-y-2">
-      <label for="fspl-distance-input" class="text-label">
-        Distanz
-        <InfoTooltip
-          title={fsplExplanations.distance.title}
-          short={fsplExplanations.distance.short}
-          detailed={fsplExplanations.distance.detailed}
-        />
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          id="fspl-distance-input"
-          type="number"
-          value={inputDistance}
-          oninput={handleDistanceInput}
-          class="input-field flex-1"
-          placeholder="Distanz"
-          step="any"
-          min="0"
-        />
-        <select
-          id="fspl-distance-unit"
-          value={inputDistanceUnit}
-          onchange={handleDistanceUnitChange}
-          class="select-field"
-          aria-label="Distanzeinheit"
-        >
-          {#each DISTANCE_UNITS as unit (unit.id)}
-            <option value={unit.id}>{unit.symbol}</option>
-          {/each}
-        </select>
-      </div>
-      <!-- Quick Distance Presets - from presets.ts -->
-      <div class="flex flex-wrap gap-1 mt-2">
-        {#each DISTANCE_PRESETS_METERS as dist (dist)}
-          <button
-            type="button"
-            onclick={() => {
-              inputDistance = dist;
-              inputDistanceUnit = "m";
-            }}
-            class="btn-chip"
-          >
-            {dist >= 1000 ? `${dist / 1000} km` : `${dist} m`}
-          </button>
-        {/each}
-      </div>
-    </div>
-  </div>
-
-  <!-- Results Section -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <!-- FSPL Result -->
-    <div class="result-box">
-      <div class="result-label">
-        FSPL
-        <InfoTooltip
-          title={fsplExplanations.fspl.title}
-          short={fsplExplanations.fspl.short}
-          detailed={fsplExplanations.fspl.detailed}
-        />
-      </div>
-      <div class="text-2xl font-bold text-blue-500 dark:text-blue-400">
-        {fsplDb !== null ? fsplDb.toFixed(2) : "—"}
-        <span class="text-lg result-label">dB</span>
-      </div>
-    </div>
-
-    <!-- Wavelength -->
-    <div class="result-box">
-      <div class="result-label">
-        Wellenlänge
-        <InfoTooltip
-          title={fsplExplanations.wavelength.title}
-          short={fsplExplanations.wavelength.short}
-          detailed={fsplExplanations.wavelength.detailed}
-        />
-      </div>
-      <div class="text-2xl font-bold text-green-600 dark:text-green-400">
-        {wavelengthM !== null ? formatWavelength(wavelengthM) : "—"}
-      </div>
-    </div>
-
-    <!-- Effective Distance -->
-    <div class="result-box">
-      <div class="result-label">Distanz</div>
-      <div class="text-2xl font-bold text-amber-600 dark:text-amber-400">
-        {currentDistanceM > 0 ? formatDistance(currentDistanceM) : "—"}
-      </div>
-    </div>
-  </div>
-
-  <!-- Formula Display -->
-  <div class="formula-box">
-    <div class="text-xs text-muted mb-1">Formel:</div>
-    <div class="font-mono text-sm text-primary text-center">
-      FSPL(dB) = 20·log<sub>10</sub>(d) + 20·log<sub>10</sub>(f) + 20·log<sub
-        >10</sub
-      >(4&#960;/c) = 20·log<sub>10</sub>(d) + 20·log<sub>10</sub>(f) - 147,55
-    </div>
-  </div>
-
-  <!-- Chart Toggle -->
-  <div class="flex items-center justify-between mb-4">
-    <h4 class="text-label">FSPL vs. Distanz</h4>
-    <label
-      class="flex items-center gap-2 text-sm text-secondary cursor-pointer"
-    >
-      <input
-        type="checkbox"
-        bind:checked={showMultipleFrequencies}
-        class="checkbox"
+  <div class="fspl">
+    <div class="fspl__inputs">
+      <NumberInput
+        label="Frequenz"
+        bind:value={currentFrequencyHz}
+        bind:unit={frequencyUnit}
+        units={FREQUENCY_UNIT_OPTIONS}
+        min={FREQUENCY_MIN_HZ}
+        max={FREQUENCY_MAX_HZ}
+        slider
+        sliderScale="log"
+        presets={FREQUENCY_PRESETS}
+        hint="1 kHz bis 300 GHz"
+        onchange={handleFrequencyChange}
       />
-      Vergleichskurven anzeigen
-    </label>
-  </div>
 
-  <!-- Chart -->
-  <div class="w-full overflow-x-auto">
+      <NumberInput
+        label="Distanz"
+        bind:value={currentDistanceM}
+        bind:unit={distanceUnit}
+        units={DISTANCE_UNIT_OPTIONS}
+        min={DISTANCE_MIN_M}
+        max={DISTANCE_MAX_M}
+        slider
+        sliderScale="log"
+        presets={DISTANCE_PRESETS}
+        hint="1 m bis 1000 km"
+        onchange={handleDistanceChange}
+      />
+    </div>
+
+    <div class="fspl__results">
+      <ResultCard
+        label="Freiraumdämpfung"
+        value={fsplDb !== null ? fsplDb.toFixed(2) : '—'}
+        unit="dB"
+        secondary={resultHint}
+        emphasis="hero"
+      />
+      <ResultCard
+        label="Wellenlänge"
+        value={wavelengthM !== null ? formatWavelength(wavelengthM) : '—'}
+        hint="λ = c / f"
+      />
+      <ResultCard
+        label="Strecke"
+        value={currentDistanceM > 0 ? formatDistance(currentDistanceM) : '—'}
+        hint="Sichtverbindung ohne Hindernisse"
+      />
+    </div>
+
+    <FormulaBlock
+      formula="FSPL(dB) = 20 · log₁₀(d) + 20 · log₁₀(f) + 20 · log₁₀(4π/c) = 20 · log₁₀(d) + 20 · log₁₀(f) − 147,55"
+      alt="FSPL in Dezibel gleich 20 mal Logarithmus zur Basis 10 von d plus 20 mal Logarithmus zur Basis 10 von f minus 147,55"
+      label="Freiraumdämpfung nach Friis"
+      number="(1)"
+      variables={[
+        { symbol: 'FSPL', meaning: 'Freiraumdämpfung', unit: 'dB' },
+        { symbol: 'd', meaning: 'Streckenlänge', unit: 'm' },
+        { symbol: 'f', meaning: 'Frequenz', unit: 'Hz' },
+        { symbol: 'c', meaning: 'Lichtgeschwindigkeit', unit: 'm/s' }
+      ]}
+    />
+
+    <Callout tone="info" title="Was die Zahl bedeutet" source="ITU-R P.525-4">
+      Die Freiraumdämpfung wächst mit dem Quadrat von Distanz und Frequenz: doppelte Strecke
+      oder doppelte Frequenz kosten jeweils 6 dB. Hindernisse, Reflexionen und Atmosphäre sind
+      darin nicht enthalten.
+    </Callout>
+
+    <div class="fspl__chart-head">
+      <h3 class="fspl__chart-title">FSPL über der Distanz</h3>
+      <Button
+        size="sm"
+        variant="ghost"
+        pressed={showMultipleFrequencies}
+        onclick={handleComparisonClick}
+      >
+        Vergleichskurven
+      </Button>
+    </div>
+
     <FSPLChart
-      {width}
       {height}
       frequencyHz={currentFrequencyHz}
       distanceM={currentDistanceM}
       {fsplDb}
       {showMultipleFrequencies}
-      {chartFrequencies}
     />
   </div>
-</div>
+</Card>
+
+<style>
+  .fspl {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .fspl__inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 1.25rem;
+  }
+
+  .fspl__results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.75rem;
+  }
+
+  .fspl__chart-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .fspl__chart-title {
+    margin: 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
+  }
+</style>

@@ -127,29 +127,47 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
     { id: 'datenbanken.frequenzbaender', reason: 'Bänder der Dienste nachschlagen' },
     { id: 'spektrum.anwendungen', reason: 'Dienste im Spektrum sehen' },
     { id: 'wissen.modulation', reason: 'Wie die Dienste übertragen' },
-    { id: 'wissen.wellenausbreitung', reason: 'Physik hinter den Funkdiensten' }
+    { id: 'wissen.wellenausbreitung', reason: 'Physik hinter den Funkdiensten' },
+    { id: 'wissen.funktechnik.notfrequenzen', reason: 'Not- und Sicherheitsfunk nachschlagen' }
   ],
   'wissen.funktechnik.funkdienste': [
-    { id: 'datenbanken.funkdienste', reason: 'Zuweisungen filtern' },
+    { id: 'datenbanken.funkdienste', reason: 'Zuweisungen filtern und durchsuchen' },
     { id: 'datenbanken.frequenzbaender', reason: 'Bandgrenzen nachschlagen' },
-    { id: 'spektrum.anwendungen', reason: 'Dienste im Spektrum sehen' }
+    { id: 'spektrum.anwendungen', reason: 'Dienste im Spektrum sehen' },
+    { id: 'wissen.funktechnik.amateurfunk', reason: 'Ein Dienst im Detail' },
+    { id: 'wissen.funktechnik.notfrequenzen', reason: 'Geschützte Frequenzen der Sicherheit' },
+    { id: 'service.quellen', reason: 'Herkunft und Stand der Zuweisungen' }
   ],
   'wissen.funktechnik.amateurfunk': [
-    { id: 'datenbanken.frequenzbaender', reason: 'Amateurfunkbänder im Detail' },
     { id: 'spektrum.ionosphaere', reason: 'Wann welches Band offen ist' },
-    { id: 'rechner.fspl', reason: 'Reichweite abschätzen' }
+    { id: 'datenbanken.frequenzbaender', reason: 'Amateurfunkbänder im Detail' },
+    { id: 'rechner.fspl', reason: 'Reichweite einer Verbindung abschätzen' },
+    { id: 'konverter.frequenz', reason: 'Bandname und Wellenlänge umrechnen' },
+    { id: 'wissen.funktechnik.funkdienste', reason: 'Primär oder sekundär — der Status des Bandes' },
+    { id: 'wissen.wellenausbreitung', reason: 'Boden-, Raum- und Sichtwelle im Überblick' }
   ],
   'wissen.funktechnik.mobilfunk': [
-    { id: 'rechner.link-budget', reason: 'Zellplanung nachrechnen' },
     { id: 'rechner.kanalkapazitaet', reason: 'Datenrate aus Bandbreite und SNR' },
+    { id: 'rechner.link-budget', reason: 'Zellplanung nachrechnen' },
+    { id: 'rechner.fspl', reason: 'Warum 26 GHz nicht weit trägt' },
     { id: 'wissen.modulation', reason: 'OFDM und QAM verstehen' },
-    { id: 'datenbanken.funkdienste', reason: 'Alle Mobilfunkbänder ansehen' }
+    { id: 'datenbanken.funkdienste', reason: 'Alle Mobilfunkbänder ansehen' },
+    { id: 'wissen.funktechnik.funkdienste', reason: 'Wie die Bänder vergeben wurden' }
   ],
   'wissen.funktechnik.rundfunk': [
     { id: 'datenbanken.sender', reason: 'Reale Sender nachschlagen' },
     { id: 'spektrum.sendeleistungen', reason: 'Sendeleistungen vergleichen' },
     { id: 'wissen.modulation', reason: 'AM, FM und DAB im Vergleich' },
-    { id: 'datenbanken.frequenzbaender', reason: 'Rundfunkbänder im Detail' }
+    { id: 'datenbanken.frequenzbaender', reason: 'Rundfunkbänder im Detail' },
+    { id: 'spektrum.ionosphaere', reason: 'Warum Kurzwelle nachts weiter reicht' },
+    { id: 'datenbanken.historie', reason: 'Vom Rundfunkbeginn bis DVB-T2' }
+  ],
+  'wissen.funktechnik.notfrequenzen': [
+    { id: 'wissen.funktechnik.funkdienste', reason: 'Warum diese Frequenzen geschützt sind' },
+    { id: 'datenbanken.funkdienste', reason: 'Umgebende Zuweisungen nachschlagen' },
+    { id: 'datenbanken.sender', reason: 'Zeitzeichen- und Bakensender' },
+    { id: 'spektrum.anwendungen', reason: 'Die Frequenzen im Spektrum sehen' },
+    { id: 'service.quellen', reason: 'Welche Regelwerke gelten' }
   ],
   'wissen.modulation': [
     { id: 'rechner.kanalkapazitaet', reason: 'Bandbreite gegen Datenrate' },
@@ -191,7 +209,10 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
   'datenbanken.funkdienste': [
     { id: 'spektrum.anwendungen', reason: 'Dienste grafisch im Spektrum' },
     { id: 'wissen.funktechnik.funkdienste', reason: 'Systematik der Zuweisungen' },
-    { id: 'datenbanken.frequenzbaender', reason: 'Zugehörige Bänder' }
+    { id: 'datenbanken.frequenzbaender', reason: 'Zugehörige Bänder' },
+    { id: 'wissen.funktechnik.mobilfunk', reason: 'Mobilfunkbänder im Zusammenhang' },
+    { id: 'rechner.fspl', reason: 'Reichweite zu einer Frequenz rechnen' },
+    { id: 'service.quellen', reason: 'Herkunft und Stand der Daten' }
   ],
   'datenbanken.sender': [
     { id: 'spektrum.sendeleistungen', reason: 'Leistungen im Spektrum' },
@@ -210,8 +231,15 @@ export const RELATIONS: Record<string, RelatedRef[]> = {
     { id: 'rechner', reason: 'Zu den Rechnern' },
     { id: 'datenbanken', reason: 'Zu den Datenbanken' }
   ],
+  'service.quellen': [
+    { id: 'wissen.funktechnik.funkdienste', reason: 'Wie die Regelwerke zusammenspielen' },
+    { id: 'datenbanken.funkdienste', reason: 'Die Daten selbst durchsuchen' },
+    { id: 'datenbanken.frequenzbaender', reason: 'Bandschemata nach ITU, IEEE und NATO' },
+    { id: 'service.sitemap', reason: 'Alle Seiten auf einen Blick' }
+  ],
   service: [
     { id: 'service.sitemap', reason: 'Alle Seiten auf einen Blick' },
+    { id: 'service.quellen', reason: 'Quellenlage und Stand der Daten' },
     { id: 'spektrum', reason: 'Zurück zum Spektrum' },
     { id: 'wissen', reason: 'Zum Nachschlagewerk' }
   ]

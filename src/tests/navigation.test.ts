@@ -74,7 +74,9 @@ describe('findNode', () => {
   });
 
   it('findet Knoten per ID', () => {
-    expect(findNodeById('wissen.funktechnik.mobilfunk')?.status).toBe('geplant');
+    expect(findNodeById('wissen.funktechnik.mobilfunk')?.href).toBe(
+      '/wissen/funktechnik/mobilfunk/'
+    );
     expect(getNodesByIds(['rechner.fspl', 'unbekannt']).map((n) => n.id)).toEqual(['rechner.fspl']);
   });
 });

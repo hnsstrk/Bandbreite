@@ -20,6 +20,7 @@ import {
   type Explanation
 } from './explanations';
 import { formatFrequency } from '$lib/utils/formatting';
+import { formatFrequencyRange } from '$lib/data/bands';
 
 export type SearchEntryType = 'seite' | 'werkzeug' | 'band' | 'funkdienst' | 'sender' | 'glossar';
 
@@ -75,7 +76,7 @@ function bandEntry(band: (typeof ALL_FREQUENCY_BANDS)[number]): SearchEntry {
     id: `band:${band.id}`,
     type: 'band',
     title: band.nameDE,
-    subtitle: `${BAND_CATEGORY_LABELS[band.category]} · ${formatFrequency(band.frequencyHz.min, 0)} – ${formatFrequency(band.frequencyHz.max, 0)}`,
+    subtitle: `${BAND_CATEGORY_LABELS[band.category]} · ${formatFrequencyRange(band.frequencyHz.min, band.frequencyHz.max)}`,
     href: '/datenbanken/frequenzbaender/',
     keywords: [band.name, band.id, ...(band.applicationsDE ?? []).slice(0, 6)],
     status: 'live',
@@ -89,9 +90,12 @@ function applicationEntry(app: (typeof ALL_APPLICATIONS)[number]): SearchEntry {
     id: `app:${app.id}`,
     type: 'funkdienst',
     title: app.nameDE,
-    subtitle: `${CATEGORY_NAMES[app.category]?.nameDE ?? app.category} · ${formatFrequency(app.minHz, 0)} – ${formatFrequency(app.maxHz, 0)}`,
-    href: '/spektrum/anwendungen/',
-    keywords: [app.name, app.standard ?? '', app.descriptionDE ?? ''].filter(Boolean),
+    subtitle: `${CATEGORY_NAMES[app.category]?.nameDE ?? app.category} · ${formatFrequencyRange(app.minHz, app.maxHz)}`,
+    // Ziel ist die Funkdienst-Datenbank. Ohne Query-Anhang, weil
+    // `search.test.ts` für jeden Treffer einen Pfad mit Trailing Slash
+    // verlangt; der Eintrag ist über seine ID in `keywords` auffindbar.
+    href: '/datenbanken/funkdienste/',
+    keywords: [app.id, app.name, app.standard ?? '', app.descriptionDE ?? ''].filter(Boolean),
     status: 'live',
     minHz: app.minHz,
     maxHz: app.maxHz

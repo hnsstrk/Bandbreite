@@ -253,7 +253,7 @@ export const NAV_TREE: NavNode[] = [
             label: 'Funkdienste & Frequenzplan',
             href: '/wissen/funktechnik/funkdienste/',
             icon: 'list',
-            status: 'geplant',
+            status: 'live',
             description:
               'Das Ordnungssystem hinter den Frequenzen: ITU-Funkdienste, Regionen, primäre und sekundäre Zuweisung.',
             keywords: ['ITU', 'Funkdienst', 'Frequenzplan', 'Zuweisung', 'Regionen', 'BNetzA']
@@ -263,7 +263,7 @@ export const NAV_TREE: NavNode[] = [
             label: 'Amateurfunk',
             href: '/wissen/funktechnik/amateurfunk/',
             icon: 'radio-tower',
-            status: 'geplant',
+            status: 'live',
             description:
               'Bandplan, Zeugnisklassen, Betriebsarten und Rufzeichensystematik des Amateurfunkdienstes.',
             keywords: ['Amateurfunk', 'Bandplan', 'IARU', 'CW', 'SSB', 'FT8', 'Locator', 'QSL']
@@ -273,7 +273,7 @@ export const NAV_TREE: NavNode[] = [
             label: 'Mobilfunk',
             href: '/wissen/funktechnik/mobilfunk/',
             icon: 'smartphone',
-            status: 'geplant',
+            status: 'live',
             description:
               'Von GSM bis 5G NR: Zellprinzip, Zugriffsverfahren, Duplex und die Bandnummern in Deutschland.',
             keywords: ['GSM', 'LTE', '5G', 'NR', 'n78', 'FDD', 'TDD', 'OFDMA', 'MIMO', 'mmWave']
@@ -283,10 +283,33 @@ export const NAV_TREE: NavNode[] = [
             label: 'Rundfunk',
             href: '/wissen/funktechnik/rundfunk/',
             icon: 'broadcast',
-            status: 'geplant',
+            status: 'live',
             description:
               'Rundfunk von Langwelle bis DVB-T2: Kanalraster, Modulation und Gleichwellennetze.',
             keywords: ['Langwelle', 'Mittelwelle', 'Kurzwelle', 'UKW', 'FM', 'DAB+', 'DVB-T2', 'RDS']
+          },
+          {
+            id: 'wissen.funktechnik.notfrequenzen',
+            label: 'Not- und Sicherheitsfrequenzen',
+            href: '/wissen/funktechnik/notfrequenzen/',
+            icon: 'warning',
+            status: 'live',
+            description:
+              'Not-, Anruf- und Sicherheitsfrequenzen von See-, Flug- und Landfunk als filterbare Nachschlagehilfe.',
+            keywords: [
+              'Notruf',
+              'GMDSS',
+              'Kanal 16',
+              'DSC',
+              '121,5 MHz',
+              '406 MHz',
+              'Cospas-Sarsat',
+              'BOS',
+              'PMR446',
+              'CB-Funk',
+              'EPIRB',
+              'NAVTEX'
+            ]
           }
         ]
       },
@@ -295,7 +318,7 @@ export const NAV_TREE: NavNode[] = [
         label: 'Modulation',
         href: '/wissen/modulation/',
         icon: 'activity',
-        status: 'geplant',
+        status: 'live',
         description:
           'Analoge und digitale Modulationsverfahren: AM, FM, SSB, PSK, QAM und OFDM.',
         keywords: ['AM', 'FM', 'SSB', 'ASK', 'FSK', 'PSK', 'QAM', 'OFDM', 'Konstellation']
@@ -305,7 +328,7 @@ export const NAV_TREE: NavNode[] = [
         label: 'Antennen',
         href: '/wissen/antennen/',
         icon: 'antenna',
-        status: 'geplant',
+        status: 'live',
         description:
           'Gewinn, Richtcharakteristik, Wirkfläche und Anpassung — vom Dipol bis zur Gruppenantenne.',
         keywords: ['Dipol', 'Yagi', 'Parabol', 'Patch', 'Phased Array', 'dBi', 'SWR', 'EIRP']
@@ -377,7 +400,7 @@ export const NAV_TREE: NavNode[] = [
         label: 'Funkdienste',
         href: '/datenbanken/funkdienste/',
         icon: 'list',
-        status: 'geplant',
+        status: 'live',
         description:
           'Frequenzzuweisungen nach Dienst und Kategorie, filterbar nach Frequenzbereich, Region und Standard.',
         keywords: ['Funkdienst', 'Zuweisung', 'Kategorie', 'ISM', 'PMR', 'Seefunk', 'Flugfunk']
@@ -427,7 +450,7 @@ export const NAV_TREE: NavNode[] = [
         label: 'Quellen & Stand',
         href: '/service/quellen/',
         icon: 'file-text',
-        status: 'geplant',
+        status: 'live',
         description: 'Herkunft und Stand der verwendeten Daten sowie die verwendeten Normen.',
         keywords: ['Quellen', 'ITU-R', 'BNetzA', 'IARU', '3GPP', 'Stand']
       }
@@ -510,7 +533,8 @@ export const NAV_GROUPS: NavGroup[] = [
           'wissen.funktechnik.funkdienste',
           'wissen.funktechnik.amateurfunk',
           'wissen.funktechnik.mobilfunk',
-          'wissen.funktechnik.rundfunk'
+          'wissen.funktechnik.rundfunk',
+          'wissen.funktechnik.notfrequenzen'
         ]
       },
       {

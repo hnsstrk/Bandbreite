@@ -4,30 +4,34 @@ export interface UnitDefinition {
   symbol: string;
 }
 
-export const FREQUENCY_UNITS: UnitDefinition[] = [
-  { id: 'Hz', label: 'Hertz', symbol: 'Hz' },
-  { id: 'kHz', label: 'Kilohertz', symbol: 'kHz' },
-  { id: 'MHz', label: 'Megahertz', symbol: 'MHz' },
-  { id: 'GHz', label: 'Gigahertz', symbol: 'GHz' },
-  { id: 'THz', label: 'Terahertz', symbol: 'THz' }
+/** Einheit mit Umrechnungsfaktor in die Basiseinheit. */
+export interface ScaledUnit extends UnitDefinition {
+  /** Basiswert = Anzeigewert × factor */
+  factor: number;
+}
+
+export const FREQUENCY_UNITS: ScaledUnit[] = [
+  { id: 'Hz', label: 'Hertz', symbol: 'Hz', factor: 1 },
+  { id: 'kHz', label: 'Kilohertz', symbol: 'kHz', factor: 1e3 },
+  { id: 'MHz', label: 'Megahertz', symbol: 'MHz', factor: 1e6 },
+  { id: 'GHz', label: 'Gigahertz', symbol: 'GHz', factor: 1e9 },
+  { id: 'THz', label: 'Terahertz', symbol: 'THz', factor: 1e12 }
 ];
 
-export const WAVELENGTH_UNITS: UnitDefinition[] = [
-  { id: 'km', label: 'Kilometer', symbol: 'km' },
-  { id: 'm', label: 'Meter', symbol: 'm' },
-  { id: 'cm', label: 'Zentimeter', symbol: 'cm' },
-  { id: 'mm', label: 'Millimeter', symbol: 'mm' },
-  { id: 'μm', label: 'Mikrometer', symbol: 'μm' },
-  { id: 'nm', label: 'Nanometer', symbol: 'nm' }
+export const WAVELENGTH_UNITS: ScaledUnit[] = [
+  { id: 'km', label: 'Kilometer', symbol: 'km', factor: 1e3 },
+  { id: 'm', label: 'Meter', symbol: 'm', factor: 1 },
+  { id: 'cm', label: 'Zentimeter', symbol: 'cm', factor: 1e-2 },
+  { id: 'mm', label: 'Millimeter', symbol: 'mm', factor: 1e-3 },
+  { id: 'μm', label: 'Mikrometer', symbol: 'μm', factor: 1e-6 },
+  { id: 'nm', label: 'Nanometer', symbol: 'nm', factor: 1e-9 }
 ];
 
 export const DEFAULT_FREQUENCY_UNIT = 'MHz';
 export const DEFAULT_WAVELENGTH_UNIT = 'm';
 
 // Power unit interfaces
-export interface PowerUnitWatt extends UnitDefinition {
-  factor: number;
-}
+export interface PowerUnitWatt extends ScaledUnit {}
 
 export interface PowerUnitDb extends UnitDefinition {
   reference: number;
@@ -51,9 +55,7 @@ export const DEFAULT_POWER_UNIT_WATT = 'w';
 export const DEFAULT_POWER_UNIT_DB = 'dbm';
 
 // Distance unit interface
-export interface DistanceUnit extends UnitDefinition {
-  factor: number; // Factor to convert to meters
-}
+export interface DistanceUnit extends ScaledUnit {}
 
 // Distance units for FSPL and range calculations
 export const DISTANCE_UNITS: DistanceUnit[] = [
@@ -90,3 +92,25 @@ export function getDistanceFactor(unitId: string): number {
   const unit = getUnitById(DISTANCE_UNITS, unitId);
   return unit?.factor ?? 1;
 }
+
+// ---------------------------------------------------------------------------
+// Faktoren-Tabellen — einzige Quelle, abgeleitet aus den Einheitenlisten oben.
+// `utils/conversions.ts` re-exportiert sie, damit beide Importpfade gelten.
+// ---------------------------------------------------------------------------
+
+/** Baut eine `id → factor`-Tabelle aus einer Einheitenliste. */
+function toFactorMap(units: ScaledUnit[]): Record<string, number> {
+  return Object.fromEntries(units.map((unit) => [unit.id, unit.factor]));
+}
+
+/** Umrechnungsfaktoren in Hertz. */
+export const FREQUENCY_FACTORS: Record<string, number> = toFactorMap(FREQUENCY_UNITS);
+
+/** Umrechnungsfaktoren in Meter (Wellenlänge). */
+export const WAVELENGTH_FACTORS: Record<string, number> = toFactorMap(WAVELENGTH_UNITS);
+
+/** Umrechnungsfaktoren in Watt. */
+export const POWER_FACTORS: Record<string, number> = toFactorMap(POWER_UNITS_WATT);
+
+/** Umrechnungsfaktoren in Meter (Distanz). */
+export const DISTANCE_FACTORS: Record<string, number> = toFactorMap(DISTANCE_UNITS);

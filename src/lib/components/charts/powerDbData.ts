@@ -1,12 +1,13 @@
 /**
- * PowerDbChart - Daten, Typen und Hilfsfunktionen
+ * PowerDbChart — Daten, Typen und Konstanten
  *
- * Enthält alle statischen Datenpunkte, Tick-Werte und Formatierungsfunktionen
- * für das Sendeleistungs-Frequenz-Diagramm.
+ * Enthält die statischen Datenpunkte und Tick-Werte für das
+ * Sendeleistungs-Frequenz-Diagramm. Formatierung und λ = c / f kommen
+ * aus `$lib/utils/formatting` bzw. `$lib/utils/calculations` — hier
+ * standen bis zuletzt vier lokale Kopien davon.
  */
 
 import { wattToDbm } from '$lib/utils/conversions';
-import { SPEED_OF_LIGHT } from '$lib/data/constants';
 import { CHART_FREQUENCY_RANGES, CHART_POWER_RANGES } from '$lib/data/spectrum';
 
 // ============================================================================
@@ -96,45 +97,3 @@ export const IOT_POINTS: DataPoint[] = [
 export const INDUSTRIAL_POINTS: DataPoint[] = [
   { name: 'Microwave Oven', nameDE: 'Mikrowellenherd', frequencyHz: 2.45e9, powerWatt: 1000, category: 'industrial', labelOffset: { x: 0, y: 28 } },
 ];
-
-// ============================================================================
-// Formatierungsfunktionen
-// ============================================================================
-
-/** Frequenz mit SI-Präfix formatieren */
-export function formatFrequencyLocal(hz: number): string {
-  if (hz >= 1e12) return `${(hz / 1e12).toFixed(1)} THz`;
-  if (hz >= 1e9) return `${(hz / 1e9).toFixed(0)} GHz`;
-  if (hz >= 1e6) return `${(hz / 1e6).toFixed(0)} MHz`;
-  if (hz >= 1e3) return `${(hz / 1e3).toFixed(0)} kHz`;
-  return `${hz.toFixed(0)} Hz`;
-}
-
-/** Wellenlänge mit SI-Präfix formatieren */
-export function formatWavelengthLocal(m: number): string {
-  if (m >= 1e3) return `${(m / 1e3).toFixed(0)} km`;
-  if (m >= 1) return `${m.toFixed(0)} m`;
-  if (m >= 1e-2) return `${(m * 100).toFixed(0)} cm`;
-  if (m >= 1e-3) return `${(m * 1000).toFixed(1)} mm`;
-  return `${(m * 1e6).toFixed(0)} \u03BCm`;
-}
-
-/** Leistung mit SI-Präfix formatieren */
-export function formatPower(watt: number): string {
-  if (watt >= 1e6) return `${(watt / 1e6).toFixed(1)} MW`;
-  if (watt >= 1e3) return `${(watt / 1e3).toFixed(0)} kW`;
-  if (watt >= 1) return `${watt.toFixed(1)} W`;
-  if (watt >= 1e-3) return `${(watt * 1000).toFixed(0)} mW`;
-  return `${(watt * 1e6).toFixed(0)} \u03BCW`;
-}
-
-/** dBm formatieren */
-export function formatDbm(watt: number): string {
-  const dbm = wattToDbm(watt);
-  return `${dbm.toFixed(0)} dBm`;
-}
-
-/** Frequenz zu Wellenlänge berechnen */
-export function freqToWavelength(freqHz: number): number {
-  return SPEED_OF_LIGHT / freqHz;
-}

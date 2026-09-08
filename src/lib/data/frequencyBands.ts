@@ -16,7 +16,8 @@
  * - Wikipedia: Frequenzbänder
  */
 
-import { SPEED_OF_LIGHT } from './constants';
+import { frequencyToWavelength } from '$lib/utils/calculations';
+import { formatWavelength } from '$lib/utils/formatting';
 
 // ============================================================================
 // Frequenzkonstanten (benannte Werte statt Magic Numbers)
@@ -1348,43 +1349,31 @@ export function getBandById(id: string): FrequencyBandDetail | undefined {
 }
 
 /**
- * Berechnet die Wellenlänge für eine Frequenz
+ * Berechnet die Wellenlänge für eine Frequenz.
+ * Dünne Weiterleitung an die zentrale Implementierung — die Formel λ = c / f
+ * steht ausschließlich in `$lib/utils/calculations`.
+ *
  * @param frequencyHz - Frequenz in Hertz
  * @returns Wellenlänge in Metern
  */
 export function calculateWavelength(frequencyHz: number): number {
-  if (frequencyHz <= 0 || !isFinite(frequencyHz)) {
-    return 0;
-  }
-  return SPEED_OF_LIGHT / frequencyHz;
+  return frequencyToWavelength(frequencyHz);
 }
 
 /**
- * Formatiert eine Wellenlänge mit passender Einheit
+ * Formatiert eine Wellenlänge mit passender Einheit.
+ * Weiterleitung an `formatWavelength` aus `$lib/utils/formatting`;
+ * ungültige Werte werden hier zu „0 m", weil Bandtabellen keine
+ * Gedankenstriche vertragen.
+ *
  * @param wavelengthMeters - Wellenlänge in Metern
  * @returns Formatierter String mit Einheit
  */
 export function formatWavelengthWithUnit(wavelengthMeters: number): string {
-  if (wavelengthMeters <= 0 || !isFinite(wavelengthMeters)) {
+  if (!isFinite(wavelengthMeters) || wavelengthMeters <= 0) {
     return '0 m';
   }
-
-  if (wavelengthMeters >= 1000) {
-    return `${(wavelengthMeters / 1000).toFixed(2)} km`;
-  }
-  if (wavelengthMeters >= 1) {
-    return `${wavelengthMeters.toFixed(2)} m`;
-  }
-  if (wavelengthMeters >= 0.01) {
-    return `${(wavelengthMeters * 100).toFixed(2)} cm`;
-  }
-  if (wavelengthMeters >= 0.001) {
-    return `${(wavelengthMeters * 1000).toFixed(2)} mm`;
-  }
-  if (wavelengthMeters >= 1e-6) {
-    return `${(wavelengthMeters * 1e6).toFixed(2)} \u00B5m`;
-  }
-  return `${(wavelengthMeters * 1e9).toFixed(2)} nm`;
+  return formatWavelength(wavelengthMeters);
 }
 
 /**

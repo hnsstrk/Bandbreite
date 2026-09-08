@@ -300,6 +300,8 @@ export function formatPowerWatts(
   }
 
   if (watts === 0) return '0 W';
+  if (watts >= 1e9) return `${(watts / 1e9).toFixed(decimals)} GW`;
+  if (watts >= 1e6) return `${(watts / 1e6).toFixed(decimals)} MW`;
   if (watts >= 1000) return `${(watts / 1000).toFixed(decimals)} kW`;
   if (watts >= 1) return `${watts.toFixed(decimals)} W`;
   if (watts >= 0.001) return `${(watts * 1000).toFixed(decimals)} mW`;
@@ -343,6 +345,38 @@ export function formatAttenuationTotal(
     return '—';
   }
   return `${db.toFixed(decimals)} dB`;
+}
+
+// ============================================================================
+// Data Rate Formatting
+// ============================================================================
+
+/**
+ * Format a data rate in bit/s with automatic unit selection.
+ * Selects bit/s, kbit/s, Mbit/s, Gbit/s or Tbit/s.
+ *
+ * @param bitsPerSecond - Data rate in bit/s
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Formatted string with unit
+ */
+export function formatDataRate(
+  bitsPerSecond: number | null | undefined,
+  decimals: number = 2
+): string {
+  if (
+    bitsPerSecond === null ||
+    bitsPerSecond === undefined ||
+    !Number.isFinite(bitsPerSecond) ||
+    bitsPerSecond < 0
+  ) {
+    return '—';
+  }
+
+  if (bitsPerSecond >= 1e12) return `${(bitsPerSecond / 1e12).toFixed(decimals)} Tbit/s`;
+  if (bitsPerSecond >= 1e9) return `${(bitsPerSecond / 1e9).toFixed(decimals)} Gbit/s`;
+  if (bitsPerSecond >= 1e6) return `${(bitsPerSecond / 1e6).toFixed(decimals)} Mbit/s`;
+  if (bitsPerSecond >= 1e3) return `${(bitsPerSecond / 1e3).toFixed(decimals)} kbit/s`;
+  return `${bitsPerSecond.toFixed(decimals)} bit/s`;
 }
 
 // ============================================================================

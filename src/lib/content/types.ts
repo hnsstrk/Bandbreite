@@ -69,6 +69,11 @@ export interface TableBlock {
 export interface DefinitionBlock {
   type: 'definitions';
   items: { term: string; description: string }[];
+  /**
+   * `symbol` (Standard) setzt kurze Formelzeichen in Monospace,
+   * `term` ist für ausgeschriebene Fachbegriffe gedacht.
+   */
+  variant?: 'symbol' | 'term';
 }
 
 export interface CardItem {
@@ -112,6 +117,8 @@ export interface ArticleSection {
   /** Anker-ID ohne Umlaute (landet in der URL) */
   id: string;
   title: string;
+  /** Kleine Zeile über der Überschrift */
+  eyebrow?: string;
   /** Kurze Einleitung unter der Überschrift */
   description?: string;
   blocks: ArticleBlock[];

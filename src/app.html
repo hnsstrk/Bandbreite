@@ -5,6 +5,10 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
+		<!-- Muss vor dem Anti-FOUC-Skript stehen: das Skript setzt den Wert
+		     passend zum Theme und findet das Element sonst nicht. -->
+		<meta name="theme-color" content="#f8fafc" />
+
 		<!--
 			Anti-FOUC: setzt die .dark-Klasse noch vor dem ersten Rendern.
 			Muss blockierend und vor allen Stylesheets stehen, sonst blitzt
@@ -30,7 +34,6 @@
 		</script>
 
 		<!-- PWA Meta Tags -->
-		<meta name="theme-color" content="#f8fafc" />
 		<link rel="manifest" href="%sveltekit.assets%/manifest.json" />
 
 		<!-- Apple PWA Meta Tags -->

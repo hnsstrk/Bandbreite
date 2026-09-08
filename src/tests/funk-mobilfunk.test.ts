@@ -11,9 +11,9 @@ import {
   barGeometry,
   dataRateBps,
   filterBands,
-  formatDataRate,
   technologyOptions
 } from '$lib/components/funk/mobileBands.svelte';
+import { formatDataRate } from '$lib/utils/formatting';
 import { MOBILE_BANDS } from '$lib/data/mobileNetworks';
 
 const band = (id: string) => {
@@ -109,15 +109,15 @@ describe('dataRateBps', () => {
   });
 });
 
-describe('formatDataRate', () => {
+describe('formatDataRate (deutsche Schreibweise)', () => {
   it('wählt die passende Einheit', () => {
-    expect(formatDataRate(2e9)).toBe('2,0 Gbit/s');
-    expect(formatDataRate(500e6)).toBe('500,0 Mbit/s');
-    expect(formatDataRate(9600, 0)).toBe('10 kbit/s');
+    expect(formatDataRate(2e9, 1, { locale: true })).toBe('2,0 Gbit/s');
+    expect(formatDataRate(500e6, 1, { locale: true })).toBe('500,0 Mbit/s');
+    expect(formatDataRate(9600, 0, { locale: true })).toBe('10 kbit/s');
   });
 
   it('meldet unbrauchbare Werte mit Gedankenstrich', () => {
-    expect(formatDataRate(0)).toBe('—');
-    expect(formatDataRate(Number.NaN)).toBe('—');
+    expect(formatDataRate(0, 1, { locale: true })).toBe('—');
+    expect(formatDataRate(Number.NaN, 1, { locale: true })).toBe('—');
   });
 });

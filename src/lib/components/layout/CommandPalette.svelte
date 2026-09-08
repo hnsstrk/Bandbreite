@@ -19,6 +19,7 @@
   let query = $state('');
   let activeIndex = $state(0);
   let inputEl = $state<HTMLInputElement | null>(null);
+  let closeEl = $state<HTMLButtonElement | null>(null);
   let recents = $state<PaletteItem[]>([]);
   let lastFocused: HTMLElement | null = null;
 
@@ -84,9 +85,11 @@
         select(item);
       }
     } else if (event.key === 'Tab') {
-      // Fokusfalle: der Fokus bleibt im Dialog.
+      // Fokusfalle mit zwei Stationen: Eingabefeld und Schließen-Schaltfläche.
+      // Der Tabulator wandert zwischen beiden, in beide Richtungen.
       event.preventDefault();
-      inputEl?.focus();
+      const atInput = document.activeElement === inputEl;
+      (atInput ? closeEl : inputEl)?.focus();
     }
   }
 
@@ -125,7 +128,13 @@
         aria-label="Suchbegriff"
         autocomplete="off"
       />
-      <button type="button" class="palette-close" onclick={close} aria-label="Suche schließen">
+      <button
+        type="button"
+        class="palette-close"
+        bind:this={closeEl}
+        onclick={close}
+        aria-label="Suche schließen"
+      >
         Esc
       </button>
     </div>
@@ -184,8 +193,8 @@
     max-height: 70vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border-default);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     z-index: 91;
@@ -197,8 +206,8 @@
     align-items: center;
     gap: 0.625rem;
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--color-border-default);
-    color: var(--color-text-tertiary);
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink-subtle);
   }
 
   .palette-input-row svg {
@@ -213,7 +222,7 @@
     border: none;
     background: transparent;
     font-size: var(--font-size-base);
-    color: var(--color-text-primary);
+    color: var(--color-ink);
   }
 
   .palette-input:focus {
@@ -223,9 +232,9 @@
   .palette-close {
     padding: 0.25rem 0.5rem;
     font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-    background-color: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-default);
+    color: var(--color-ink-subtle);
+    background-color: var(--color-elevated);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
     cursor: pointer;
   }
@@ -241,7 +250,7 @@
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
   }
 
   .palette-item {
@@ -252,21 +261,21 @@
   }
 
   .palette-item.active {
-    background-color: var(--color-bg-elevated);
+    background-color: var(--color-elevated);
   }
 
   .palette-item-label {
     display: block;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    color: var(--color-text-primary);
+    color: var(--color-ink);
   }
 
   .palette-item-sub {
     display: block;
     margin-top: 0.0625rem;
     font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
   }
 
   .palette-empty {
@@ -274,7 +283,7 @@
     padding: 1.25rem 0.75rem;
     text-align: center;
     font-size: var(--font-size-sm);
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
   }
 
   .palette-hint {
@@ -282,8 +291,8 @@
     gap: 1rem;
     margin: 0;
     padding: 0.5rem 1rem;
-    border-top: 1px solid var(--color-border-default);
+    border-top: 1px solid var(--color-line);
     font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
   }
 </style>

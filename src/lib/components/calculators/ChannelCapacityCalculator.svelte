@@ -18,7 +18,8 @@
     buildShareLink,
     defaultValues,
     hasNonDefaults,
-    readParams
+    readParams,
+    syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import Card from '$lib/components/ui/Card.svelte';
@@ -54,6 +55,12 @@
   let snrDb = $state(initial.snr);
 
   const sync = new UrlStateSync(CAPACITY_PARAMS);
+
+  // Gleiche Route, andere Parameter: Zustand aus der URL nachziehen.
+  syncParamsOnNavigate(CAPACITY_PARAMS, sync, (next) => {
+    bandwidthHz = next.b;
+    snrDb = next.snr;
+  });
 
   let values = $derived({ b: bandwidthHz, snr: snrDb });
 

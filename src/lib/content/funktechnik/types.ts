@@ -4,7 +4,8 @@
  * Die Seiten unter `/wissen/funktechnik/` halten ihren Text nicht im Markup,
  * sondern hier als Daten. Das hält die Routen-Dateien klein, macht die Texte
  * prüfbar (Tests über Struktur und Anker) und erlaubt es, jeden Abschnitt mit
- * derselben Komponente zu rendern (`components/funk/ContentSection.svelte`).
+ * derselben Komponente zu rendern: `components/knowledge/ArticleSection.svelte`,
+ * gespeist über die Übersetzung in `adapt.ts`.
  */
 
 /** Legendeneintrag eines Formelblocks. */

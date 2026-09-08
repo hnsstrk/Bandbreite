@@ -1,10 +1,37 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
+  import { page } from '$app/state';
   import Callout from '$lib/components/ui/Callout.svelte';
   import Card from '$lib/components/ui/Card.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import PageHero from '$lib/components/ui/PageHero.svelte';
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
+  import { SPECTRUM_MIN_HZ, SPECTRUM_MAX_GAMMA_HZ } from '$lib/data/spectrum';
+
+  /**
+   * Startfrequenz aus `?f=<Hertz>` — darauf zeigt „Wellenlänge berechnen" in
+   * der Befehlspalette. Der Konverter selbst ist eine geschützte
+   * Kernkomponente; gesetzt wird deshalb nur sein Startwert hier im Wrapper.
+   * Beim Prerendern sind Suchparameter gesperrt, daher der `browser`-Zweig.
+   */
+  const DEFAULT_FREQUENCY_HZ = 100e6;
+
+  function frequencyFromSearch(search: string): number {
+    const raw = new URLSearchParams(search).get('f');
+    if (!raw) return DEFAULT_FREQUENCY_HZ;
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value < SPECTRUM_MIN_HZ || value > SPECTRUM_MAX_GAMMA_HZ) {
+      return DEFAULT_FREQUENCY_HZ;
+    }
+    return value;
+  }
+
+  // Der Schlüssel baut den Konverter neu auf, wenn dieselbe Route mit einer
+  // anderen Frequenz angesteuert wird; er ändert sich sonst nie.
+  let startFrequencyHz = $derived(
+    browser ? frequencyFromSearch(page.url.search) : DEFAULT_FREQUENCY_HZ
+  );
 </script>
 
 <div class="page-content">
@@ -17,7 +44,9 @@
   />
 
   <Card padding="md">
-    <FrequencyConverter />
+    {#key startFrequencyHz}
+      <FrequencyConverter frequencyHz={startFrequencyHz} />
+    {/key}
   </Card>
 
   <FormulaBlock

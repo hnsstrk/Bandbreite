@@ -3,6 +3,8 @@
    * Frequenzbänder aller fünf Systeme mit Frequenzsuche und Detailtafel.
    * Tabelle, Detailtafel und Kategoriedaten liegen in eigenen Dateien daneben.
    */
+  import { browser } from '$app/environment';
+  import { page } from '$app/state';
   import {
     getAllBandsForFrequency,
     getPropagationModeDescriptionDE,
@@ -10,6 +12,8 @@
     type PropagationModeType
   } from '$lib/data/frequencyBands';
   import { formatFrequency } from '$lib/utils/formatting';
+  import { clamp } from '$lib/utils/handlers';
+  import { pickBestUnit } from '$lib/components/ui/numberInput.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Button from '$lib/components/ui/Button.svelte';
   import Card from '$lib/components/ui/Card.svelte';
@@ -29,10 +33,49 @@
     SEARCH_UNITS
   } from './bandCategories.svelte';
 
+  /** Standardfrequenz der Suche, wenn die URL nichts vorgibt. */
+  const DEFAULT_SEARCH_HZ = 100e6;
+
+  /**
+   * `?f=<Hertz>` aus Befehlspalette und Suchindex. Beim Prerendern sind
+   * Suchparameter gesperrt, deshalb der `browser`-Zweig; unlesbare Werte
+   * werden verworfen, zu große auf den Suchbereich begrenzt.
+   */
+  function frequencyFromSearch(search: string): number | null {
+    const raw = new URLSearchParams(search).get('f');
+    if (!raw) return null;
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value <= 0) return null;
+    return clamp(value, SEARCH_MIN_HZ, SEARCH_MAX_HZ);
+  }
+
+  /** Passende Anzeigeeinheit zu einer Frequenz. */
+  function unitFor(hz: number): string {
+    return pickBestUnit(hz, SEARCH_UNITS)?.id ?? 'MHz';
+  }
+
+  const initialSearchHz = (browser ? frequencyFromSearch(page.url.search) : null) ?? DEFAULT_SEARCH_HZ;
+
   let activeTab = $state<string>('ieee');
-  let searchFrequencyHz = $state(100e6);
-  let searchUnit = $state('MHz');
+  let searchFrequencyHz = $state(initialSearchHz);
+  let searchUnit = $state(unitFor(initialSearchHz));
   let selectedId = $state<string | null>(null);
+
+  /**
+   * Auch bei einer Navigation auf dieselbe Route (Palette, interne Links,
+   * Vor/Zurück) die Suchfrequenz nachziehen — sonst zeigt die Adresszeile
+   * etwas anderes als das Feld.
+   */
+  let appliedSearch = browser ? page.url.search : '';
+  $effect(() => {
+    const search = page.url.search;
+    if (search === appliedSearch) return;
+    appliedSearch = search;
+    const next = frequencyFromSearch(search);
+    if (next === null) return;
+    searchFrequencyHz = next;
+    searchUnit = unitFor(next);
+  });
 
   let tabItems = $derived(
     BAND_TABS.map((tab) => ({ id: tab.id, label: tab.label, badge: String(tab.bands.length) }))

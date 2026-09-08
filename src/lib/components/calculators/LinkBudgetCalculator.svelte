@@ -20,7 +20,8 @@
     buildShareLink,
     defaultValues,
     hasNonDefaults,
-    readParams
+    readParams,
+    syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
   import Card from '$lib/components/ui/Card.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
@@ -69,6 +70,27 @@
   let presetId = $state<string | null>(null);
 
   const sync = new UrlStateSync(LINK_BUDGET_PARAMS);
+
+  /** Übernimmt einen vollständigen Parametersatz (URL-Sprung oder Reset). */
+  function applyValues(next: typeof initial) {
+    txPowerDbm = next.pt;
+    txAntennaGainDbi = next.gt;
+    txCableLossDb = next.lt;
+    pathLengthM = next.d;
+    pathFrequencyHz = next.f;
+    rxAntennaGainDbi = next.gr;
+    rxCableLossDb = next.lr;
+    rxSensitivityDbm = next.s;
+    fadingMarginDb = next.fade;
+    miscLossDb = next.misc;
+    includeAtmosphericLoss = next.atm;
+    pathType = next.path as PathType;
+    elevationAngleDeg = next.el;
+    presetId = null;
+  }
+
+  // Gleiche Route, andere Parameter: Zustand aus der URL nachziehen.
+  syncParamsOnNavigate(LINK_BUDGET_PARAMS, sync, applyValues);
 
   let values = $derived({
     pt: txPowerDbm,
@@ -180,22 +202,9 @@
   }
 
   function handleReset() {
-    txPowerDbm = LINK_BUDGET_PARAMS.pt.default;
-    txAntennaGainDbi = LINK_BUDGET_PARAMS.gt.default;
-    txCableLossDb = LINK_BUDGET_PARAMS.lt.default;
-    pathLengthM = LINK_BUDGET_PARAMS.d.default;
-    pathFrequencyHz = LINK_BUDGET_PARAMS.f.default;
-    rxAntennaGainDbi = LINK_BUDGET_PARAMS.gr.default;
-    rxCableLossDb = LINK_BUDGET_PARAMS.lr.default;
-    rxSensitivityDbm = LINK_BUDGET_PARAMS.s.default;
-    fadingMarginDb = LINK_BUDGET_PARAMS.fade.default;
-    miscLossDb = LINK_BUDGET_PARAMS.misc.default;
-    includeAtmosphericLoss = LINK_BUDGET_PARAMS.atm.default;
-    pathType = LINK_BUDGET_PARAMS.path.default as PathType;
-    elevationAngleDeg = LINK_BUDGET_PARAMS.el.default;
+    applyValues(defaultValues(LINK_BUDGET_PARAMS));
     pathLengthUnit = 'm';
     pathFrequencyUnit = 'GHz';
-    presetId = null;
   }
 
   /** Kein Chip ist aktiv, solange kein Preset gewählt wurde. */

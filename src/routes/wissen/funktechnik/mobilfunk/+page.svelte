@@ -1,12 +1,13 @@
 <script lang="ts">
-	import ArticleLayout from '$lib/components/funk/ArticleLayout.svelte';
-	import ContentSection from '$lib/components/funk/ContentSection.svelte';
+	import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
+	import ArticleSection from '$lib/components/knowledge/ArticleSection.svelte';
 	import MobileGenerations from '$lib/components/funk/MobileGenerations.svelte';
 	import MobileBandTable from '$lib/components/funk/MobileBandTable.svelte';
 	import DataRateCalculator from '$lib/components/funk/DataRateCalculator.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
 	import { LEARNING_GOALS, SECTIONS } from '$lib/content/funktechnik/mobilfunk';
-	import { findSection, tocItems } from '$lib/content/funktechnik/types';
+	import { tocItems } from '$lib/content/funktechnik/types';
+	import { articleSection } from '$lib/content/funktechnik/adapt';
 
 	const toc = tocItems(SECTIONS, [
 		{ id: 'generationen', label: 'Generationen im Zeitstrahl', after: 'zugriffsverfahren' },
@@ -14,10 +15,11 @@
 		{ id: 'datenraten-rechner', label: 'Datenraten-Rechner', after: 'bandtabelle' }
 	]);
 
-	const section = (id: string) => findSection(SECTIONS, id)!;
+	const section = (id: string) => articleSection(SECTIONS, id);
 </script>
 
 <ArticleLayout
+	kicker="Funk & Fernmeldetechnik"
 	title="Mobilfunk"
 	icon="signal"
 	lead="Vom analogen C-Netz bis 5G NR: Zellprinzip, Zugriffsverfahren, Duplex und die Frage, wie viel Datenrate in einer bestimmten Bandbreite steckt."
@@ -27,12 +29,12 @@
 	]}
 	goals={LEARNING_GOALS}
 	{toc}
-	relatedHref="/wissen/funktechnik/mobilfunk/"
+	href="/wissen/funktechnik/mobilfunk/"
 >
-	<ContentSection section={section('zellprinzip')} />
-	<ContentSection section={section('zugriffsverfahren')} />
+	<ArticleSection section={section('zellprinzip')} />
+	<ArticleSection section={section('zugriffsverfahren')} />
 
-	<section class="widget" aria-labelledby="generationen">
+	<section aria-labelledby="generationen">
 		<SectionHeader
 			title="Generationen im Zeitstrahl"
 			id="generationen"
@@ -41,10 +43,10 @@
 		<MobileGenerations />
 	</section>
 
-	<ContentSection section={section('duplex')} />
-	<ContentSection section={section('baender-de')} />
+	<ArticleSection section={section('duplex')} />
+	<ArticleSection section={section('baender-de')} />
 
-	<section class="widget" aria-labelledby="bandtabelle">
+	<section aria-labelledby="bandtabelle">
 		<SectionHeader
 			title="Bandtabelle"
 			id="bandtabelle"
@@ -53,7 +55,7 @@
 		<MobileBandTable />
 	</section>
 
-	<section class="widget" aria-labelledby="datenraten-rechner">
+	<section aria-labelledby="datenraten-rechner">
 		<SectionHeader
 			title="Datenraten-Rechner"
 			id="datenraten-rechner"
@@ -62,13 +64,5 @@
 		<DataRateCalculator />
 	</section>
 
-	<ContentSection section={section('mimo')} />
+	<ArticleSection section={section('mimo')} />
 </ArticleLayout>
-
-<style>
-	.widget {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-</style>

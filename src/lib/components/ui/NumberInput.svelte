@@ -9,24 +9,19 @@
 	 */
 	import {
 		SLIDER_RESOLUTION,
+		applyFieldInput,
 		clampToRange,
 		formatFieldValue,
 		fromBaseValue,
 		positionToValue,
 		roundToStep,
-		toBaseValue,
 		validateValue,
 		valueToPosition,
+		type NumberPreset,
 		type ScaleMode,
 		type UnitOption
 	} from './numberInput.svelte';
-
-	interface Preset {
-		label: string;
-		/** Wert in der Basiseinheit */
-		value: number;
-		hint?: string;
-	}
+	import NumberInputPresets from './NumberInputPresets.svelte';
 
 	interface Props {
 		label: string;
@@ -42,12 +37,17 @@
 		/** Schieberegler unter dem Feld einblenden */
 		slider?: boolean;
 		sliderScale?: ScaleMode;
-		presets?: Preset[];
+		presets?: NumberPreset[];
 		hint?: string;
 		/** Erzwungene Fehlermeldung; sonst wird selbst geprüft */
 		error?: string;
 		disabled?: boolean;
 		id?: string;
+		/**
+		 * Wird beim Bestätigen gemeldet — Verlassen des Feldes, Eingabetaste,
+		 * Schieberegler oder Preset —, nicht bei jedem Tastendruck. Der
+		 * gebundene Wert folgt der Eingabe trotzdem sofort.
+		 */
 		onchange?: (value: number) => void;
 		class?: string;
 	}
@@ -85,7 +85,9 @@
 
 	const displayValue = $derived(draft ?? formatFieldValue(fromBaseValue(value, factor)));
 
-	const validation = $derived(validateValue(value, { min, max, unitSymbol: activeUnit?.symbol }));
+	const validation = $derived(
+		validateValue(value, { min, max, unitSymbol: activeUnit?.symbol, factor })
+	);
 	const message = $derived(error ?? validation.message);
 	const invalid = $derived(Boolean(message));
 
@@ -99,17 +101,29 @@
 		onchange?.(bounded);
 	}
 
+	/**
+	 * Jeder Tastendruck führt nur den gebundenen Wert nach. `onchange` bleibt
+	 * dem Bestätigen vorbehalten, sonst wechselt die aufrufende Komponente die
+	 * Einheit mitten in einer mehrstelligen Eingabe (aus „2400" in MHz würde
+	 * sonst beim nächsten Zeichen ein Wert in GHz).
+	 */
 	function handleInput(event: Event) {
 		const target = event.currentTarget as HTMLInputElement;
 		draft = target.value;
-		const parsed = Number.parseFloat(target.value.replace(',', '.'));
-		if (Number.isFinite(parsed)) {
-			value = toBaseValue(parsed, factor);
-			onchange?.(value);
-		}
+		const result = applyFieldInput(target.value, factor, 'typing');
+		if (result.value !== null) value = result.value;
 	}
 
 	function handleBlur() {
+		draft = null;
+		commit(value);
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key !== 'Enter') return;
+		const target = event.currentTarget as HTMLInputElement;
+		const result = applyFieldInput(target.value, factor, 'commit');
+		if (result.value !== null) value = result.value;
 		draft = null;
 		commit(value);
 	}
@@ -127,7 +141,7 @@
 		commit(sliderScale === 'log' ? raw : roundToStep(raw, step, sliderMin));
 	}
 
-	function applyPreset(preset: Preset) {
+	function applyPreset(preset: NumberPreset) {
 		draft = null;
 		commit(preset.value);
 	}
@@ -137,20 +151,7 @@
 	<div class="ui-number__top">
 		<label class="ui-number__label" for={fieldId}>{label}</label>
 		{#if presets.length > 0}
-			<div class="ui-number__presets" role="group" aria-label="Voreinstellungen für {label}">
-				{#each presets as preset (preset.label)}
-					<button
-						type="button"
-						class="btn-chip ui-number__preset"
-						aria-pressed={value === preset.value}
-						title={preset.hint}
-						{disabled}
-						onclick={() => applyPreset(preset)}
-					>
-						{preset.label}
-					</button>
-				{/each}
-			</div>
+			<NumberInputPresets {label} {presets} {value} {disabled} onselect={applyPreset} />
 		{/if}
 	</div>
 
@@ -167,6 +168,7 @@
 			aria-describedby={message || hint ? messageId : undefined}
 			oninput={handleInput}
 			onblur={handleBlur}
+			onkeydown={handleKeydown}
 		/>
 		{#if units.length > 1}
 			<label class="sr-only" for={unitId}>Einheit für {label}</label>
@@ -202,7 +204,12 @@
 	{/if}
 
 	{#if message}
-		<p class="ui-number__message ui-number__message--error" id={messageId} role="alert">
+		<p
+			class="ui-number__message ui-number__message--error"
+			id={messageId}
+			role="status"
+			aria-live="polite"
+		>
 			{message}
 		</p>
 	{:else if hint}
@@ -229,20 +236,6 @@
 		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-medium);
 		color: var(--color-ink-muted);
-	}
-
-	.ui-number__presets {
-		display: flex;
-		gap: 0.25rem;
-		flex-wrap: wrap;
-	}
-
-	/* Basis kommt aus der globalen .btn-chip-Regel in app.css,
-	   inklusive des aria-pressed-Zustands. */
-	.ui-number__preset {
-		font-family: inherit;
-		font-size: var(--text-2xs);
-		border-radius: var(--radius-pill);
 	}
 
 	.ui-number__row {

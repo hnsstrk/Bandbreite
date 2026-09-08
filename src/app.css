@@ -121,6 +121,26 @@
   --color-grid: #e2e8f0;
   --color-axis: #64748b;
 
+  /* ----------------------------------------
+     Szenenfarben der Illustrationen
+     (Himmel, Boden, Erde in den Ausbreitungs-Szenen).
+     Keine Datenfarben — sie stehen hier, damit auch die Szenen ohne
+     Hex-Werte in der Komponente auskommen.
+     ---------------------------------------- */
+  --color-scene-sky-day-top: #87ceeb;
+  --color-scene-sky-day-bottom: #4a90c2;
+  --color-scene-sky-night-top: #1e3a5f;
+  --color-scene-sky-night-bottom: #0a1929;
+  --color-scene-ground-top: #8b4513;
+  --color-scene-ground-bottom: #654321;
+  --color-scene-horizon-top: #7dd3fc;
+  --color-scene-horizon-bottom: #bae6fd;
+  --color-scene-night-top: #0f172a;
+  --color-scene-night-bottom: #1e3a5f;
+  --color-scene-earth-top: #16a34a;
+  --color-scene-earth-bottom: #15803d;
+  --color-scene-earth-edge: #166534;
+
   /* Kategorie-Textfarben — lesbar auf --color-surface (>= 4,5:1),
      als Beschriftung neben den Serienfarben gedacht. */
   --color-cat-blue: #2563eb;
@@ -347,6 +367,21 @@
   /* Datenserien */
   --color-grid: #334155;
   --color-axis: #94a3b8;
+
+  /* Szenenfarben der Illustrationen */
+  --color-scene-sky-day-top: #3b6a94;
+  --color-scene-sky-day-bottom: #24486b;
+  --color-scene-sky-night-top: #0f1f36;
+  --color-scene-sky-night-bottom: #05101c;
+  --color-scene-ground-top: #5c2f0d;
+  --color-scene-ground-bottom: #3d2113;
+  --color-scene-horizon-top: #38618c;
+  --color-scene-horizon-bottom: #4a7ba7;
+  --color-scene-night-top: #020617;
+  --color-scene-night-bottom: #0f2440;
+  --color-scene-earth-top: #15803d;
+  --color-scene-earth-bottom: #14532d;
+  --color-scene-earth-edge: #052e16;
 
   /* Kategorie-Textfarben */
   --color-cat-blue: #60a5fa;

@@ -55,7 +55,13 @@
 	interactive
 >
 	<div class="rcs-chart" role="listbox" aria-label="Objekt auswählen" tabindex="0" onkeydown={handleKeydown}>
-		<svg viewBox="0 0 {W} {H}">
+		<!--
+			`presentation` statt `img`: Die Grafik ist die Auswahlliste selbst.
+			Ein Bild-Rollen-Name würde die enthaltenen `option`-Elemente aus
+			dem Baum nehmen; so bleibt die Liste bedienbar und das SVG selbst
+			taucht nicht als namenloses Grafikobjekt auf.
+		-->
+		<svg viewBox="0 0 {W} {H}" role="presentation">
 			{#each AXIS_TICKS as tick (tick)}
 				{@const x = BAR_X0 + rcsScaleFraction(tick) * BAR_W}
 				<line x1={x} y1="8" x2={x} y2={H - 30} class="chart-grid-line" />

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
+  import { page } from '$app/state';
   import SpectrumOverview from '$lib/components/SpectrumOverview.svelte';
   import FrequencyConverter from '$lib/components/converters/FrequencyConverter.svelte';
   import PowerConverter from '$lib/components/converters/PowerConverter.svelte';
@@ -6,9 +8,25 @@
   import BandDetailSidebar from '$lib/components/BandDetailSidebar.svelte';
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import { getHubChildren } from '$lib/data/navigation';
+  import { SPECTRUM_MIN_HZ, SPECTRUM_MAX_GAMMA_HZ } from '$lib/data/spectrum';
   import type { FrequencyBand } from '$lib/data/bands';
 
-  let currentFrequencyHz = $state<number | null>(null);
+  /**
+   * Startfrequenz aus `?f=<Hertz>` — darauf zeigt „Im Spektrum öffnen" in der
+   * Befehlspalette und in den Datenbanken. Beim Prerendern ist `searchParams`
+   * gesperrt, deshalb der `browser`-Zweig; unplausible Werte werden verworfen.
+   */
+  function frequencyFromUrl(): number | null {
+    if (!browser) return null;
+    const raw = page.url.searchParams.get('f');
+    if (!raw) return null;
+    const value = parseFloat(raw);
+    if (!Number.isFinite(value)) return null;
+    if (value < SPECTRUM_MIN_HZ || value > SPECTRUM_MAX_GAMMA_HZ) return null;
+    return value;
+  }
+
+  let currentFrequencyHz = $state<number | null>(frequencyFromUrl());
   let currentPowerWatt = $state<number | null>(1);
   let selectedSpectrumBand = $state<FrequencyBand | null>(null);
   let selectedBandId = $state<string | null>(null);

@@ -49,7 +49,7 @@
 {:else if block.type === 'table'}
 	<ArticleTable {block} />
 {:else if block.type === 'definitions'}
-	<dl class="prose definitions">
+	<dl class="prose definitions definitions--{block.variant ?? 'symbol'}">
 		{#each block.items as item (item.term)}
 			<div class="definition">
 				<dt>{@html item.term}</dt>
@@ -80,8 +80,8 @@
 
 	.definition {
 		display: grid;
-		grid-template-columns: 8rem minmax(0, 1fr);
-		gap: 0.75rem;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.25rem 0.75rem;
 		padding: 0.5rem 0;
 		border-bottom: 1px solid var(--color-line-subtle);
 	}
@@ -90,6 +90,22 @@
 		font-family: var(--font-mono);
 		font-weight: var(--font-weight-semibold);
 		color: var(--color-ink);
+	}
+
+	/* Ausgeschriebene Fachbegriffe stehen im Fließtextschnitt und brauchen
+	   mehr Platz als kurze Formelzeichen. */
+	.definitions--term .definition dt {
+		font-family: inherit;
+	}
+
+	@media (min-width: 40rem) {
+		.definitions--symbol .definition {
+			grid-template-columns: 8rem minmax(0, 1fr);
+		}
+
+		.definitions--term .definition {
+			grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr);
+		}
 	}
 
 	.definition dd {

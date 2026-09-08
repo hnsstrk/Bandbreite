@@ -15,7 +15,8 @@
     buildShareLink,
     defaultValues,
     hasNonDefaults,
-    readParams
+    readParams,
+    syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
   import Button from '$lib/components/ui/Button.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
@@ -61,6 +62,16 @@
   let distanceUnit = $state(pickDistanceUnit(initial.d));
 
   const sync = new UrlStateSync(FSPL_PARAMS);
+
+  // Gleiche Route, andere Parameter (Palette, interne Links, Vor/Zurück):
+  // Zustand nachziehen, damit Adresszeile und Felder übereinstimmen.
+  syncParamsOnNavigate(FSPL_PARAMS, sync, (next) => {
+    currentFrequencyHz = next.f;
+    currentDistanceM = next.d;
+    showMultipleFrequencies = next.multi;
+    frequencyUnit = pickFrequencyUnit(next.f);
+    distanceUnit = pickDistanceUnit(next.d);
+  });
 
   let values = $derived({
     f: currentFrequencyHz,

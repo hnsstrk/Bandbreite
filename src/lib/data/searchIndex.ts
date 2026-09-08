@@ -71,13 +71,23 @@ function navEntry(node: NavNode): SearchEntry {
   };
 }
 
+/**
+ * Mittenfrequenz eines Bandes für den Sprung in die Datenbank.
+ * Geometrisch gemittelt, weil Bänder über Dekaden laufen — das arithmetische
+ * Mittel läge sonst am oberen Rand.
+ */
+function bandCenterHz(minHz: number, maxHz: number): number {
+  return Math.round(Math.sqrt(Math.max(minHz, 1) * Math.max(maxHz, 1)));
+}
+
 function bandEntry(band: (typeof ALL_FREQUENCY_BANDS)[number]): SearchEntry {
   return {
     id: `band:${band.id}`,
     type: 'band',
     title: band.nameDE,
     subtitle: `${BAND_CATEGORY_LABELS[band.category]} · ${formatFrequencyRange(band.frequencyHz.min, band.frequencyHz.max)}`,
-    href: '/datenbanken/frequenzbaender/',
+    // Die Frequenzsuche der Datenbank startet in der Mitte des Bandes.
+    href: `/datenbanken/frequenzbaender/?f=${bandCenterHz(band.frequencyHz.min, band.frequencyHz.max)}`,
     keywords: [band.name, band.id, ...(band.applicationsDE ?? []).slice(0, 6)],
     status: 'live',
     minHz: band.frequencyHz.min,
@@ -91,10 +101,9 @@ function applicationEntry(app: (typeof ALL_APPLICATIONS)[number]): SearchEntry {
     type: 'funkdienst',
     title: app.nameDE,
     subtitle: `${CATEGORY_NAMES[app.category]?.nameDE ?? app.category} · ${formatFrequencyRange(app.minHz, app.maxHz)}`,
-    // Ziel ist die Funkdienst-Datenbank. Ohne Query-Anhang, weil
-    // `search.test.ts` für jeden Treffer einen Pfad mit Trailing Slash
-    // verlangt; der Eintrag ist über seine ID in `keywords` auffindbar.
-    href: '/datenbanken/funkdienste/',
+    // Die Funkdienst-Datenbank übernimmt `?q=` als Suchbegriff und findet
+    // damit genau diesen Eintrag.
+    href: `/datenbanken/funkdienste/?q=${encodeURIComponent(app.id)}`,
     keywords: [app.id, app.name, app.standard ?? '', app.descriptionDE ?? ''].filter(Boolean),
     status: 'live',
     minHz: app.minHz,
@@ -108,7 +117,8 @@ function transmitterEntry(tx: (typeof ALL_TRANSMITTERS)[number]): SearchEntry {
     type: 'sender',
     title: tx.nameDE,
     subtitle: `${TYPE_NAMES[tx.type]?.nameDE ?? tx.type} · ${formatFrequency(tx.frequencyHz, 1)} · ${tx.location.name}`,
-    href: '/datenbanken/sender/',
+    // Die Senderdatenbank öffnet die Detailtafel des Eintrags über `?id=`.
+    href: `/datenbanken/sender/?id=${encodeURIComponent(tx.id)}`,
     keywords: [tx.name, tx.location.country, tx.operator ?? ''].filter(Boolean),
     status: 'live',
     minHz: tx.frequencyHz,

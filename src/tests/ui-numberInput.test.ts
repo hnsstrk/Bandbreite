@@ -9,10 +9,12 @@
 import { describe, it, expect } from 'vitest';
 import {
 	SLIDER_RESOLUTION,
+	applyFieldInput,
 	canUseLogScale,
 	clampToRange,
 	formatFieldValue,
 	fromBaseValue,
+	parseFieldInput,
 	pickBestUnit,
 	positionToValue,
 	roundToStep,
@@ -141,6 +143,42 @@ describe('Einheitenumrechnung', () => {
 	});
 });
 
+describe('applyFieldInput', () => {
+	const MHZ = 1e6;
+	const GHZ = 1e9;
+
+	it('liest deutsche und englische Schreibweise', () => {
+		expect(parseFieldInput('2,4', GHZ)).toBeCloseTo(2.4e9, 3);
+		expect(parseFieldInput('2.4', GHZ)).toBeCloseTo(2.4e9, 3);
+	});
+
+	it('meldet Zwischenzustände als unlesbar', () => {
+		expect(parseFieldInput('', MHZ)).toBeNull();
+		expect(parseFieldInput('-', MHZ)).toBeNull();
+		expect(parseFieldInput('abc', MHZ)).toBeNull();
+	});
+
+	it('bestätigt nur beim Abschluss', () => {
+		expect(applyFieldInput('24', MHZ, 'typing')).toEqual({ value: 24e6, commit: false });
+		expect(applyFieldInput('24', MHZ, 'commit')).toEqual({ value: 24e6, commit: true });
+		// Ohne Angabe gilt die Eingabe als noch nicht bestätigt.
+		expect(applyFieldInput('24', MHZ).commit).toBe(false);
+	});
+
+	it('lässt die Einheit während einer mehrstelligen Eingabe in Ruhe', () => {
+		// „24000" in MHz: kein Zwischenschritt darf einen Einheitenwechsel
+		// auslösen, sonst wird die nächste Ziffer in GHz gedeutet (P1-1).
+		const schritte = ['2', '24', '240', '2400', '24000'];
+		for (const schritt of schritte) {
+			expect(applyFieldInput(schritt, MHZ, 'typing').commit, schritt).toBe(false);
+		}
+		// Erst der Abschluss meldet den Wert — 24 000 MHz = 24 GHz.
+		const abschluss = applyFieldInput('24000', MHZ, 'commit');
+		expect(abschluss.commit).toBe(true);
+		expect(abschluss.value).toBeCloseTo(24e9, 3);
+	});
+});
+
 describe('validateValue', () => {
 	it('akzeptiert Werte im Bereich', () => {
 		expect(validateValue(5, { min: 0, max: 10 })).toEqual({ valid: true, message: null });
@@ -160,6 +198,17 @@ describe('validateValue', () => {
 
 	it('meldet ungültige Zahlen', () => {
 		expect(validateValue(Number.NaN).message).toBe('Bitte eine gültige Zahl eingeben.');
+	});
+
+	it('nennt die Grenze in der Anzeigeeinheit, nicht in der Basiseinheit', () => {
+		// 300 GHz als Obergrenze, angezeigt wird in GHz.
+		const result = validateValue(4e11, {
+			min: 1e3,
+			max: 3e11,
+			unitSymbol: 'GHz',
+			factor: 1e9
+		});
+		expect(result.message).toBe('Wert darf höchstens 300 GHz betragen.');
 	});
 });
 

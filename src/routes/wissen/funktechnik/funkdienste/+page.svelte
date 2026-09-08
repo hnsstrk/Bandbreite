@@ -1,19 +1,21 @@
 <script lang="ts">
-	import ArticleLayout from '$lib/components/funk/ArticleLayout.svelte';
-	import ContentSection from '$lib/components/funk/ContentSection.svelte';
+	import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
+	import ArticleSection from '$lib/components/knowledge/ArticleSection.svelte';
 	import ServiceSpectrumBar from '$lib/components/funk/ServiceSpectrumBar.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
 	import { LEARNING_GOALS, SECTIONS } from '$lib/content/funktechnik/funkdienste';
-	import { findSection, tocItems } from '$lib/content/funktechnik/types';
+	import { tocItems } from '$lib/content/funktechnik/types';
+	import { articleSection } from '$lib/content/funktechnik/adapt';
 
 	const toc = tocItems(SECTIONS, [
 		{ id: 'spektrumleiste', label: 'Dienste im Spektrum', after: 'primaer-sekundaer' }
 	]);
 
-	const section = (id: string) => findSection(SECTIONS, id)!;
+	const section = (id: string) => articleSection(SECTIONS, id);
 </script>
 
 <ArticleLayout
+	kicker="Funk & Fernmeldetechnik"
 	title="Funkdienste & Frequenzplan"
 	icon="radio"
 	lead="Warum eine Frequenz jemandem „gehört“: die Systematik der ITU-Funkdienste, der Unterschied zwischen primärer und sekundärer Zuweisung und der Weg von der Vollzugsordnung bis zur einzelnen Zuteilung."
@@ -23,13 +25,13 @@
 	]}
 	goals={LEARNING_GOALS}
 	{toc}
-	relatedHref="/wissen/funktechnik/funkdienste/"
+	href="/wissen/funktechnik/funkdienste/"
 >
-	<ContentSection section={section('begriff')} />
-	<ContentSection section={section('regionen')} />
-	<ContentSection section={section('primaer-sekundaer')} />
+	<ArticleSection section={section('begriff')} />
+	<ArticleSection section={section('regionen')} />
+	<ArticleSection section={section('primaer-sekundaer')} />
 
-	<section class="widget" aria-labelledby="spektrumleiste">
+	<section aria-labelledby="spektrumleiste">
 		<SectionHeader
 			title="Dienste im Spektrum"
 			id="spektrumleiste"
@@ -38,15 +40,7 @@
 		<ServiceSpectrumBar />
 	</section>
 
-	<ContentSection section={section('vom-vertrag-zur-zuteilung')} />
-	<ContentSection section={section('frequenzplan')} />
-	<ContentSection section={section('lesen')} />
+	<ArticleSection section={section('vom-vertrag-zur-zuteilung')} />
+	<ArticleSection section={section('frequenzplan')} />
+	<ArticleSection section={section('lesen')} />
 </ArticleLayout>
-
-<style>
-	.widget {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-</style>

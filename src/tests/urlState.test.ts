@@ -4,10 +4,12 @@ import {
 	buildUrl,
 	defaultValues,
 	hasNonDefaults,
+	isExternalUrlChange,
 	parseParam,
 	readParams,
 	serializeNumber,
 	serializeParam,
+	UrlStateSync,
 	type ParamSpecs
 } from '$lib/utils/urlState.svelte';
 
@@ -160,5 +162,56 @@ describe('defaultValues und hasNonDefaults', () => {
 	it('erkennt abweichende Werte', () => {
 		expect(hasNonDefaults(defaultValues(FSPL_SPECS), FSPL_SPECS)).toBe(false);
 		expect(hasNonDefaults({ ...defaultValues(FSPL_SPECS), d: 1 }, FSPL_SPECS)).toBe(true);
+	});
+});
+
+describe('isExternalUrlChange', () => {
+	const basis = {
+		type: 'goto',
+		toPathname: '/rechner/fspl/',
+		fromPathname: '/rechner/fspl/',
+		search: '?f=5e9',
+		lastSearch: 'f=1e9'
+	};
+
+	it('erkennt eine fremde Änderung auf derselben Route', () => {
+		expect(isExternalUrlChange(basis)).toBe(true);
+		expect(isExternalUrlChange({ ...basis, type: 'popstate' })).toBe(true);
+		expect(isExternalUrlChange({ ...basis, type: 'link' })).toBe(true);
+	});
+
+	it('ignoriert den Erstaufbau der Seite', () => {
+		expect(isExternalUrlChange({ ...basis, type: 'enter', fromPathname: undefined })).toBe(false);
+	});
+
+	it('ignoriert die eigene Aktualisierung des Entprellers', () => {
+		expect(isExternalUrlChange({ ...basis, search: '?f=1e9' })).toBe(false);
+		// Ohne Query und ohne bisher geschriebenen Stand bleibt alles ruhig.
+		expect(isExternalUrlChange({ ...basis, search: '', lastSearch: null })).toBe(false);
+		expect(isExternalUrlChange({ ...basis, search: '', lastSearch: '' })).toBe(false);
+	});
+
+	it('ignoriert Navigationen auf eine andere Route', () => {
+		expect(isExternalUrlChange({ ...basis, fromPathname: '/rechner/radar/' })).toBe(false);
+		expect(isExternalUrlChange({ ...basis, toPathname: undefined })).toBe(false);
+	});
+});
+
+describe('UrlStateSync.adopt', () => {
+	it('übernimmt einen von außen gesetzten Query-String', () => {
+		const sync = new UrlStateSync(FSPL_SPECS);
+		expect(sync.search).toBeNull();
+		sync.adopt('?f=5e9');
+		expect(sync.search).toBe('f=5e9');
+		// Danach gilt genau dieser Stand als der eigene.
+		expect(
+			isExternalUrlChange({
+				type: 'goto',
+				toPathname: '/rechner/fspl/',
+				fromPathname: '/rechner/fspl/',
+				search: '?f=5e9',
+				lastSearch: sync.search
+			})
+		).toBe(false);
 	});
 });

@@ -109,6 +109,60 @@ export function fromBaseValue(baseValue: number, factor: number): number {
 	return safeDivide(baseValue, factor, 0);
 }
 
+/** Ein Voreinstellungs-Chip unter dem Feldnamen. */
+export interface NumberPreset {
+	label: string;
+	/** Wert in der Basiseinheit */
+	value: number;
+	hint?: string;
+}
+
+/**
+ * Zeitpunkt einer Eingabe.
+ *
+ * `typing` ist jeder Tastendruck im Zahlenfeld: Der gebundene Wert wird
+ * mitgeführt, damit die Ergebnisse live folgen, aber es gilt noch nicht als
+ * bestätigt. `commit` ist der Abschluss — Verlassen des Feldes, Eingabetaste,
+ * Schieberegler oder Preset. Nur dort darf die aufrufende Komponente
+ * Folgeentscheidungen treffen (etwa die Anzeigeeinheit wechseln), sonst
+ * springt die Einheit mitten in einer mehrstelligen Eingabe um.
+ */
+export type InputPhase = 'typing' | 'commit';
+
+/** Ergebnis einer Feldeingabe. */
+export interface FieldInputResult {
+	/** Wert in der Basiseinheit, oder `null` bei (noch) unlesbarer Eingabe */
+	value: number | null;
+	/** Gilt die Eingabe als bestätigt? Nur dann ist ein Einheitenwechsel erlaubt. */
+	commit: boolean;
+}
+
+/**
+ * Liest den Feldtext als Zahl in der Basiseinheit.
+ * Deutsche Dezimalkommata sind erlaubt; Zwischenzustände wie „", „-" oder
+ * „2," liefern `null`.
+ */
+export function parseFieldInput(raw: string, factor: number): number | null {
+	const parsed = Number.parseFloat(raw.replace(',', '.'));
+	if (!Number.isFinite(parsed)) return null;
+	return toBaseValue(parsed, factor);
+}
+
+/**
+ * Verarbeitet eine Feldeingabe je nach {@link InputPhase}.
+ *
+ * Während des Tippens wird nur der Wert nachgeführt (`commit: false`), beim
+ * Abschluss zusätzlich die Bestätigung gemeldet.
+ */
+export function applyFieldInput(
+	raw: string,
+	factor: number,
+	phase: InputPhase = 'typing'
+): FieldInputResult {
+	const value = parseFieldInput(raw, factor);
+	return { value, commit: phase === 'commit' };
+}
+
 /** Ergebnis der Eingabeprüfung. */
 export interface ValidationResult {
 	valid: boolean;
@@ -122,19 +176,22 @@ export interface ValidationResult {
  */
 export function validateValue(
 	value: number,
-	options: { min?: number; max?: number; unitSymbol?: string } = {}
+	options: { min?: number; max?: number; unitSymbol?: string; factor?: number } = {}
 ): ValidationResult {
-	const { min, max, unitSymbol } = options;
+	const { min, max, unitSymbol, factor = 1 } = options;
 	const suffix = unitSymbol ? ` ${unitSymbol}` : '';
+	// Verglichen wird in der Basiseinheit, gemeldet in der Anzeigeeinheit —
+	// sonst stünde die Grenze in Hertz neben dem Symbol „THz".
+	const inUnit = (limit: number) => formatFieldValue(fromBaseValue(limit, factor));
 
 	if (!Number.isFinite(value)) {
 		return { valid: false, message: 'Bitte eine gültige Zahl eingeben.' };
 	}
 	if (Number.isFinite(min as number) && value < (min as number)) {
-		return { valid: false, message: `Wert muss mindestens ${min}${suffix} betragen.` };
+		return { valid: false, message: `Wert muss mindestens ${inUnit(min as number)}${suffix} betragen.` };
 	}
 	if (Number.isFinite(max as number) && value > (max as number)) {
-		return { valid: false, message: `Wert darf höchstens ${max}${suffix} betragen.` };
+		return { valid: false, message: `Wert darf höchstens ${inUnit(max as number)}${suffix} betragen.` };
 	}
 	return { valid: true, message: null };
 }

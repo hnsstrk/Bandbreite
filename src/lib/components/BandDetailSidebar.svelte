@@ -8,15 +8,19 @@
     type FrequencyBand,
     type ITUBand
   } from '$lib/data/bands';
-  import {
-    getApplicationsForFrequency,
-    ALL_APPLICATIONS,
-    CATEGORY_NAMES,
-    type RFApplication
-  } from '$lib/data/applications';
   import PropagationModeIndicator from '$lib/components/ui/PropagationModeIndicator.svelte';
+  import BandTagGroups from '$lib/components/BandTagGroups.svelte';
+  import BandServiceList from '$lib/components/BandServiceList.svelte';
   import { formatWavelength } from '$lib/utils/formatting';
   import { speedOfLight } from '$lib/stores/speedOfLight.svelte';
+  import {
+    MAX_SIDEBAR_APPLICATIONS,
+    applicationsFor,
+    bandsAt,
+    lookupFrequency,
+    pickPrimaryBand,
+    resolveSelectedBand
+  } from '$lib/components/bandDetail';
 
   interface Props {
     frequencyHz?: number | null;
@@ -31,71 +35,29 @@
     return band.category === 'itu';
   }
 
-  // If selected band no longer matches frequency, ignore it
-  let effectiveSelectedBand = $derived.by(() => {
-    if (!selectedBand) return null;
-    if (frequencyHz && (frequencyHz < selectedBand.minHz || frequencyHz > selectedBand.maxHz)) {
-      return null;
-    }
-    return selectedBand;
-  });
+  let effectiveSelectedBand = $derived(resolveSelectedBand(selectedBand, frequencyHz));
+  let lookupFrequencyHz = $derived(lookupFrequency(effectiveSelectedBand, frequencyHz));
 
-  let lookupFrequencyHz = $derived.by(() => {
-    if (effectiveSelectedBand) return Math.sqrt(effectiveSelectedBand.minHz * effectiveSelectedBand.maxHz);
-    return frequencyHz;
-  });
+  let ituBands = $derived(bandsAt(ITU_BANDS, lookupFrequencyHz));
+  let ieeeBands = $derived(bandsAt(IEEE_BANDS, lookupFrequencyHz));
+  let natoBands = $derived(bandsAt(NATO_BANDS, lookupFrequencyHz));
+  let civilianBands = $derived(bandsAt(CIVILIAN_BANDS, lookupFrequencyHz));
 
-  // Find bands at the current frequency
-  let ituBands = $derived(
-    lookupFrequencyHz && lookupFrequencyHz > 0
-      ? ITU_BANDS.filter(b => lookupFrequencyHz! >= b.minHz && lookupFrequencyHz! <= b.maxHz)
-      : []
-  );
-
-  let ieeeBands = $derived(
-    lookupFrequencyHz && lookupFrequencyHz > 0
-      ? IEEE_BANDS.filter(b => lookupFrequencyHz! >= b.minHz && lookupFrequencyHz! <= b.maxHz)
-      : []
-  );
-
-  let natoBands = $derived(
-    lookupFrequencyHz && lookupFrequencyHz > 0
-      ? NATO_BANDS.filter(b => lookupFrequencyHz! >= b.minHz && lookupFrequencyHz! <= b.maxHz)
-      : []
-  );
-
-  let civilianBands = $derived(
-    lookupFrequencyHz && lookupFrequencyHz > 0
-      ? CIVILIAN_BANDS.filter(b => lookupFrequencyHz! >= b.minHz && lookupFrequencyHz! <= b.maxHz)
-      : []
-  );
-
-  // Primary ITU band for header
   let primaryItuBand = $derived(ituBands.length > 0 ? ituBands[0] : null);
+  let primaryBand = $derived(
+    pickPrimaryBand({
+      selected: effectiveSelectedBand,
+      ieee: ieeeBands,
+      itu: ituBands,
+      nato: natoBands,
+      civilian: civilianBands
+    })
+  );
 
-  // Primary display band
-  let primaryBand = $derived.by(() => {
-    if (effectiveSelectedBand) return effectiveSelectedBand;
-    if (ieeeBands.length > 0) return ieeeBands[0];
-    if (primaryItuBand) return primaryItuBand as FrequencyBand;
-    if (natoBands.length > 0) return natoBands[0];
-    if (civilianBands.length > 0) return civilianBands[0];
-    return null;
-  });
-
-  // Applications — range-based for selected band, point-based for frequency
-  let applications = $derived.by(() => {
-    if (effectiveSelectedBand) {
-      return ALL_APPLICATIONS.filter(
-        app => app.minHz < effectiveSelectedBand!.maxHz && app.maxHz > effectiveSelectedBand!.minHz
-      );
-    }
-    if (!lookupFrequencyHz || lookupFrequencyHz <= 0) return [] as RFApplication[];
-    return getApplicationsForFrequency(lookupFrequencyHz);
-  });
-
-  const MAX_APPS = 15;
-  let hasMoreApps = $derived(applications.length > MAX_APPS);
+  let applications = $derived(applicationsFor(effectiveSelectedBand, lookupFrequencyHz));
+  let hasBandTags = $derived(
+    ituBands.length > 0 || ieeeBands.length > 0 || natoBands.length > 0 || civilianBands.length > 0
+  );
 </script>
 
 <aside class="sidebar" aria-label="Bandinformationen">
@@ -108,17 +70,15 @@
       <p>Band im Spektrum anklicken oder Frequenz eingeben</p>
     </div>
   {:else}
-    <!-- Header -->
     {#if primaryBand}
       <div class="sidebar-header">
-        <span class="color-dot" style="background-color: {primaryBand.color === 'visible' ? '#22c55e' : primaryBand.color}"></span>
+        <span class="color-dot" style="background-color: {primaryBand.color === 'visible' ? 'var(--color-series-2)' : primaryBand.color}"></span>
         <div class="header-text">
           <h3 class="band-name">{primaryBand.nameDE}</h3>
           <span class="band-freq">{formatFrequencyRange(primaryBand.minHz, primaryBand.maxHz)}</span>
         </div>
       </div>
 
-      <!-- Wavelength -->
       <div class="info-row">
         <span class="info-label">Wellenlänge</span>
         <span class="info-value font-mono">
@@ -127,56 +87,18 @@
       </div>
     {/if}
 
-    <!-- Propagation -->
-    {#if lookupFrequencyHz}
-      <div class="sidebar-section">
-        <span class="section-label">Ausbreitung</span>
-        <PropagationModeIndicator frequencyHz={lookupFrequencyHz} size="sm" />
-      </div>
-    {/if}
+    <div class="sidebar-section">
+      <span class="section-label">Ausbreitung</span>
+      <PropagationModeIndicator frequencyHz={lookupFrequencyHz} size="sm" />
+    </div>
 
-    <!-- Band Tags -->
-    {#if ituBands.length > 0 || ieeeBands.length > 0 || natoBands.length > 0 || civilianBands.length > 0}
+    {#if hasBandTags}
       <div class="sidebar-section">
         <span class="section-label">Bänder</span>
-        <div class="band-tags-container">
-          {#if ituBands.length > 0}
-            <div class="tag-group">
-              <span class="tag-label">ITU</span>
-              {#each ituBands as band (band.id)}
-                <span class="band-tag" style="background-color: {band.color}">{band.name}</span>
-              {/each}
-            </div>
-          {/if}
-          {#if ieeeBands.length > 0}
-            <div class="tag-group">
-              <span class="tag-label">IEEE</span>
-              {#each ieeeBands as band (band.id)}
-                <span class="band-tag" style="background-color: {band.color}">{band.name}</span>
-              {/each}
-            </div>
-          {/if}
-          {#if natoBands.length > 0}
-            <div class="tag-group">
-              <span class="tag-label">NATO</span>
-              {#each natoBands as band (band.id)}
-                <span class="band-tag" style="background-color: {band.color}">{band.name}</span>
-              {/each}
-            </div>
-          {/if}
-          {#if civilianBands.length > 0}
-            <div class="tag-group">
-              <span class="tag-label">Zivil</span>
-              {#each civilianBands as band (band.id)}
-                <span class="band-tag" style="background-color: {band.color}">{band.nameDE}</span>
-              {/each}
-            </div>
-          {/if}
-        </div>
+        <BandTagGroups itu={ituBands} ieee={ieeeBands} nato={natoBands} civilian={civilianBands} />
       </div>
     {/if}
 
-    <!-- ITU-specific: Typical applications -->
     {#if primaryItuBand && isItuBand(primaryItuBand) && primaryItuBand.applications.length > 0}
       <div class="sidebar-section">
         <span class="section-label">Typische Nutzung</span>
@@ -188,25 +110,13 @@
       </div>
     {/if}
 
-    <!-- RF Applications from database -->
     {#if applications.length > 0}
       <div class="sidebar-section">
         <span class="section-label">Dienste ({applications.length})</span>
-        <div class="services-list">
-          {#each applications.slice(0, MAX_APPS) as app (app.id)}
-            <div class="service-item">
-              <span class="service-name">{app.nameDE}</span>
-              <span class="service-freq">{formatFrequencyRange(app.minHz, app.maxHz)}</span>
-            </div>
-          {/each}
-        </div>
-        {#if hasMoreApps}
-          <span class="more-count">+ {applications.length - MAX_APPS} weitere Dienste</span>
-        {/if}
+        <BandServiceList {applications} max={MAX_SIDEBAR_APPLICATIONS} />
       </div>
     {/if}
 
-    <!-- Notes -->
     {#if primaryItuBand && isItuBand(primaryItuBand) && primaryItuBand.notes}
       <div class="sidebar-section notes-section">
         <span class="section-label">Hinweis</span>
@@ -310,35 +220,6 @@
     letter-spacing: 0.05em;
   }
 
-  .band-tags-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
-
-  .tag-group {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-  }
-
-  .tag-label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-disabled);
-    min-width: 2.5rem;
-  }
-
-  .band-tag {
-    padding: 0.125rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: white;
-    box-shadow: var(--shadow-sm);
-  }
-
   .app-tags {
     display: flex;
     flex-wrap: wrap;
@@ -351,45 +232,6 @@
     border-radius: var(--radius-sm);
     font-size: var(--font-size-xs);
     color: var(--color-text-secondary);
-  }
-
-  .services-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .service-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 0.25rem 0.5rem;
-    background: var(--color-bg-elevated);
-    border-radius: var(--radius-sm);
-    gap: 0.5rem;
-  }
-
-  .service-name {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .service-freq {
-    font-size: 0.65rem;
-    font-family: var(--font-mono);
-    color: var(--color-text-muted);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .more-count {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    padding-left: 0.5rem;
   }
 
   .notes-section {

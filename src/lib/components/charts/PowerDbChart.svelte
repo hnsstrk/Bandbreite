@@ -190,16 +190,16 @@
         <g class="data-point" onmouseenter={(e) => handleMouseEnter(e, point)} onmousemove={handleMouseMove} onmouseleave={handleMouseLeave} role="button" tabindex="0">
           <circle cx={cx} cy={cy} r="12" fill="transparent" class="cursor-pointer" />
           {#if point.category === 'communication'}
-            <circle cx={cx} cy={cy} r="5" fill={color} stroke="#1e293b" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
+            <circle cx={cx} cy={cy} r="5" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
           {:else if point.category === 'radar'}
-            <rect x={cx - 5} y={cy - 5} width="10" height="10" rx="1.5" fill={color} stroke="#1e293b" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
+            <rect x={cx - 5} y={cy - 5} width="10" height="10" rx="1.5" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
           {:else if point.category === 'satellite'}
-            <polygon points="{cx},{cy - 6} {cx + 5},{cy + 4} {cx - 5},{cy + 4}" fill={color} stroke="#1e293b" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
+            <polygon points="{cx},{cy - 6} {cx + 5},{cy + 4} {cx - 5},{cy + 4}" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
           {:else if point.category === 'iot'}
-            <polygon points="{cx},{cy - 5} {cx + 5},{cy} {cx},{cy + 5} {cx - 5},{cy}" fill={color} stroke="#1e293b" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
+            <polygon points="{cx},{cy - 5} {cx + 5},{cy} {cx},{cy + 5} {cx - 5},{cy}" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
           {:else if point.category === 'industrial'}
-            <circle cx={cx} cy={cy} r="6" fill={color} stroke="#1e293b" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
-            <circle cx={cx} cy={cy} r="2" fill="#1e293b" class="pointer-events-none" />
+            <circle cx={cx} cy={cy} r="6" fill={color} stroke="var(--color-surface)" stroke-width="1.5" filter="url(#pointGlow)" class="pointer-events-none" />
+            <circle cx={cx} cy={cy} r="2" fill="var(--color-surface)" class="pointer-events-none" />
           {/if}
         </g>
       {/each}

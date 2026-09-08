@@ -198,28 +198,20 @@
 
 <style>
   /*
-   * Illustrative Himmels- und Bodentöne — keine Datenfarben, deshalb lokal
-   * statt im globalen Token-Satz, aber mit eigener Fassung für Dunkel.
+   * Illustrative Himmels- und Bodentöne. Die Werte stehen als Szenen-Tokens
+   * in app.css (mit eigener Fassung für das dunkle Theme); hier werden sie
+   * nur auf die kurzen Namen der Verläufe abgebildet.
    */
   .iono-scene {
-    --sky-day-top: #87ceeb;
-    --sky-day-bottom: #4a90c2;
-    --sky-night-top: #1e3a5f;
-    --sky-night-bottom: #0a1929;
-    --ground-top: #8b4513;
-    --ground-bottom: #654321;
+    --sky-day-top: var(--color-scene-sky-day-top);
+    --sky-day-bottom: var(--color-scene-sky-day-bottom);
+    --sky-night-top: var(--color-scene-sky-night-top);
+    --sky-night-bottom: var(--color-scene-sky-night-bottom);
+    --ground-top: var(--color-scene-ground-top);
+    --ground-bottom: var(--color-scene-ground-bottom);
     display: block;
     width: 100%;
     height: auto;
-  }
-
-  :global(.dark) .iono-scene {
-    --sky-day-top: #3b6a94;
-    --sky-day-bottom: #24486b;
-    --sky-night-top: #0f1f36;
-    --sky-night-bottom: #05101c;
-    --ground-top: #5c2f0d;
-    --ground-bottom: #3d2113;
   }
 
   .iono-path {

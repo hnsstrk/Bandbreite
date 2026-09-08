@@ -93,11 +93,44 @@ export function messageSample(kind: ModulationKind, timeS: number, params: Wavef
 }
 
 /**
+ * Integral der Nachricht ∫₀ᵗ m(τ) dτ in Sekunden.
+ *
+ * Es bestimmt die Phase der frequenzmodulierten Verfahren:
+ * φ(t) = 2π·(f_c·t + Δf·∫m). Weil das Integral geschlossen vorliegt, ist die
+ * Phase auch dann stetig, wenn die Laufanimation das Fenster verschiebt —
+ * eine Integration ab dem Fensteranfang würde bei jedem Bild anders beginnen.
+ *
+ * Analog (Sinus): ∫₀ᵗ sin(ωτ)dτ = (1 − cos(ωt)) / ω.
+ * Digital (NRZ ±1, Symboldauer T): vollständige Symbolpaare heben sich auf,
+ * es bleiben das angebrochene Symbol und ein halbes Paar.
+ */
+export function messageIntegral(
+  kind: ModulationKind,
+  timeS: number,
+  params: WaveformParams
+): number {
+  if (!Number.isFinite(timeS) || params.messageHz <= 0) return 0;
+
+  if (isDigitalKind(kind)) {
+    const symbolS = safeDivide(1, params.messageHz, 0);
+    if (symbolS <= 0) return 0;
+    const completed = Math.floor(safeDivide(timeS, symbolS, 0));
+    const rest = timeS - completed * symbolS;
+    // Symbol k trägt +1 für gerades k, sonst −1.
+    const sign = completed % 2 === 0 ? 1 : -1;
+    return (Math.abs(completed % 2) === 1 ? symbolS : 0) + sign * rest;
+  }
+
+  const omega = TWO_PI * params.messageHz;
+  return safeDivide(1 - Math.cos(omega * timeS), omega, 0);
+}
+
+/**
  * Erzeugt die drei Spuren des Zeitbereichs.
  *
- * Für FM und FSK wird die Phase numerisch integriert, damit der Übergang
- * zwischen zwei Frequenzen stetig bleibt; alle übrigen Verfahren nutzen die
- * geschlossene Form.
+ * Für FM und FSK folgt die Phase der geschlossenen Form
+ * φ(t) = 2π·(f_c·t + Δf·∫₀ᵗ m), damit sie über Framegrenzen hinweg stetig
+ * bleibt; alle übrigen Verfahren nutzen ohnehin die geschlossene Form.
  *
  * @param kind Modulationsart
  * @param params Signalparameter
@@ -120,8 +153,6 @@ export function generateWaveform(
   const modulated: number[] = new Array(count);
 
   const dt = safeDivide(durationS, count - 1, 0);
-  // Anfangsphase des integrierten Zweigs, damit die Laufanimation stetig bleibt
-  let phase = TWO_PI * params.carrierHz * startS;
 
   for (let index = 0; index < count; index += 1) {
     const t = startS + index * dt;
@@ -146,8 +177,10 @@ export function generateWaveform(
       case 'fm':
       case 'fsk':
       default: {
-        const instantaneous = params.carrierHz + params.deviationHz * msg;
-        phase += TWO_PI * instantaneous * dt;
+        // Absolute Phase statt Aufsummierung: kein Versatz zum Träger und
+        // stetig, egal wo das Fenster beginnt.
+        const phase =
+          TWO_PI * (params.carrierHz * t + params.deviationHz * messageIntegral(kind, t, params));
         modulated[index] = Math.sin(phase);
         break;
       }
@@ -243,9 +276,12 @@ export function spectrumLines(kind: ModulationKind, params: WaveformParams): Spe
       ];
     }
     case 'ask': {
+      // Unipolares NRZ (0/1, Tastverhältnis 50 %): ½ + Σ 2/(πn)·sin(nωt) für
+      // die Nachricht, nach der Mischung also 1/(πn) je Seitenlinie — halb so
+      // viel wie bei BPSK mit seinem bipolaren Signal.
       const lines: SpectrumLine[] = [{ offsetHz: 0, amplitude: 0.5, label: 'Träger' }];
       for (let n = 1; n <= SQUARE_HARMONICS * 2; n += 2) {
-        const amplitude = Math.abs(safeDivide(1, Math.PI * n, 0)) * 2;
+        const amplitude = Math.abs(safeDivide(1, Math.PI * n, 0));
         lines.push({ offsetHz: -n * fm, amplitude, label: `${n}. Seitenlinie unten` });
         lines.push({ offsetHz: n * fm, amplitude, label: `${n}. Seitenlinie oben` });
       }

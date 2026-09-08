@@ -33,28 +33,39 @@ export function toPaletteItem(entry: SearchEntry): PaletteItem {
   };
 }
 
-/** Aktionen des Frequenz-Modus für eine erkannte Frequenz. */
+/**
+ * Aktionen des Frequenz-Modus für eine erkannte Frequenz.
+ *
+ * Jede Aktion trägt die Frequenz als `?f=<Hertz>` mit; alle vier Zielseiten
+ * lesen den Parameter und stellen sich darauf ein.
+ */
 export function frequencyActions(hz: number): PaletteItem[] {
   const label = formatFrequency(hz, 3);
+  const f = Math.round(hz);
   return [
     {
       id: 'freq:baender',
       label: `Bänder für ${label} anzeigen`,
       sublabel: 'Frequenzbänder-Datenbank',
-      href: '/datenbanken/frequenzbaender/'
+      href: `/datenbanken/frequenzbaender/?f=${f}`
     },
-    { id: 'freq:spektrum', label: 'Im Spektrum öffnen', sublabel: 'Spektrum-Dashboard', href: '/spektrum/' },
+    {
+      id: 'freq:spektrum',
+      label: 'Im Spektrum öffnen',
+      sublabel: 'Spektrum-Dashboard',
+      href: `/spektrum/?f=${f}`
+    },
     {
       id: 'freq:wellenlaenge',
       label: 'Wellenlänge berechnen',
       sublabel: 'Frequenz ↔ Wellenlänge',
-      href: '/konverter/frequenz/'
+      href: `/konverter/frequenz/?f=${f}`
     },
     {
       id: 'freq:fspl',
       label: 'FSPL-Rechner mit dieser Frequenz',
       sublabel: 'Freiraumdämpfung berechnen',
-      href: `/rechner/fspl/?f=${Math.round(hz)}`
+      href: `/rechner/fspl/?f=${f}`
     }
   ];
 }

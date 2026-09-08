@@ -15,7 +15,8 @@
     buildShareLink,
     defaultValues,
     hasNonDefaults,
-    readParams
+    readParams,
+    syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import Card from '$lib/components/ui/Card.svelte';
@@ -40,6 +41,17 @@
   let rcsPresetId = $state<string | null>(null);
 
   const sync = new UrlStateSync(RADAR_PARAMS);
+
+  // Gleiche Route, andere Parameter: Zustand aus der URL nachziehen.
+  syncParamsOnNavigate(RADAR_PARAMS, sync, (next) => {
+    frequencyHz = next.f;
+    txPowerW = next.pt;
+    antennaGainDbi = next.g;
+    rcsM2 = next.rcs;
+    rxSensitivityDbm = next.smin;
+    systemLossDb = next.l;
+    rcsPresetId = null;
+  });
 
   let values = $derived({
     f: frequencyHz,

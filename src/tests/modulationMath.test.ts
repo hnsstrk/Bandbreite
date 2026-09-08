@@ -8,6 +8,7 @@ import {
   constellationPoints,
   gaussianFrom,
   generateWaveform,
+  messageIntegral,
   grayEncode,
   idealSpectralEfficiency,
   isDigitalKind,
@@ -95,6 +96,38 @@ describe('Zeitbereich', () => {
     expect(offSamples.every((value) => value === 0)).toBe(true);
   });
 
+  it('setzt die Phase über Framegrenzen hinweg stetig fort', () => {
+    // Die Laufanimation zeichnet Fenster hintereinander; das letzte Sample
+    // des ersten Fensters muss zum ersten des nächsten passen (P2-2).
+    const params = { ...BASE, deviationHz: 40 };
+    const fenster = 0.05;
+    const erstes = generateWaveform('fm', params, 501, fenster, 0);
+    const zweites = generateWaveform('fm', params, 501, fenster, fenster);
+    const letzter = erstes.modulated.length - 1;
+    // Beide Fenster stoßen bei t = fenster aneinander: gleicher Zeitpunkt,
+    // gleicher Wert — die Phase läuft durch, statt je Bild neu zu beginnen.
+    expect(zweites.time[0]).toBeCloseTo(erstes.time[letzter], 12);
+    expect(zweites.modulated[0]).toBeCloseTo(erstes.modulated[letzter], 10);
+    // Auch das Fenster nach dem nächsten passt noch (kein Aufsummieren).
+    const drittes = generateWaveform('fm', params, 501, fenster, 2 * fenster);
+    expect(drittes.modulated[0]).toBeCloseTo(zweites.modulated[letzter], 10);
+  });
+
+  it('integriert die Nachricht geschlossen', () => {
+    // Analog: ∫₀ᵗ sin(ωτ)dτ = (1 − cos ωt)/ω, nach einer vollen Periode 0.
+    expect(messageIntegral('fm', 1 / BASE.messageHz, BASE)).toBeCloseTo(0, 12);
+    // Digital: nach einem Symbolpaar hebt sich +1 und −1 auf.
+    const symbolS = 1 / BASE.messageHz;
+    expect(messageIntegral('fsk', 2 * symbolS, BASE)).toBeCloseTo(0, 12);
+    expect(messageIntegral('fsk', symbolS, BASE)).toBeCloseTo(symbolS, 12);
+    expect(messageIntegral('fsk', symbolS / 2, BASE)).toBeCloseTo(symbolS / 2, 12);
+  });
+
+  it('startet die FSK-Phase ohne Versatz zum Träger', () => {
+    const wave = generateWaveform('fsk', { ...BASE, deviationHz: 40 }, 128, 0.05);
+    expect(wave.modulated[0]).toBeCloseTo(0, 12);
+  });
+
   it('hält die Hüllkurve der Frequenzmodulation konstant', () => {
     const wave = generateWaveform('fm', { ...BASE, deviationHz: 30 }, 2000, 0.5);
     const peak = Math.max(...wave.modulated.map(Math.abs));
@@ -118,6 +151,19 @@ describe('Besselreihe und Spektrum', () => {
     const carrier = lines.find((line) => line.offsetHz === 0);
     expect(carrier?.amplitude).toBe(1);
     expect(lines[0].amplitude).toBeCloseTo(0.3, 10);
+  });
+
+  it('gibt bei ASK halb so große Seitenlinien wie bei BPSK aus', () => {
+    // Unipolares NRZ: 1/(πn) statt 2/(πn) — der Gleichanteil steckt im Träger.
+    const ask = spectrumLines('ask', BASE);
+    const bpsk = spectrumLines('bpsk', BASE);
+    const erste = (lines: typeof ask, offset: number) =>
+      lines.find((line) => line.offsetHz === offset)?.amplitude ?? 0;
+    expect(erste(ask, BASE.messageHz)).toBeCloseTo(1 / Math.PI, 12);
+    expect(erste(ask, 3 * BASE.messageHz)).toBeCloseTo(1 / (3 * Math.PI), 12);
+    expect(erste(ask, BASE.messageHz)).toBeCloseTo(erste(bpsk, BASE.messageHz) / 2, 12);
+    // Der Träger bleibt bei ASK erhalten.
+    expect(erste(ask, 0)).toBeCloseTo(0.5, 12);
   });
 
   it('lässt bei BPSK den Träger weg', () => {

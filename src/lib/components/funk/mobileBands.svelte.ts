@@ -91,22 +91,9 @@ export function dataRateBps(
   return bandwidthInHz * efficiencyBpsPerHz * Math.floor(layers);
 }
 
-/** Datenrate mit passender Einheit, z. B. „1,2 Gbit/s“. */
-export function formatDataRate(bitsPerSecond: number, decimals = 1): string {
-  if (!Number.isFinite(bitsPerSecond) || bitsPerSecond <= 0) return '—';
-  const units = [
-    { factor: 1e9, symbol: 'Gbit/s' },
-    { factor: 1e6, symbol: 'Mbit/s' },
-    { factor: 1e3, symbol: 'kbit/s' }
-  ];
-  const unit = units.find((candidate) => bitsPerSecond >= candidate.factor);
-  if (!unit) return `${bitsPerSecond.toFixed(0)} bit/s`;
-  const value = safeDivide(bitsPerSecond, unit.factor, 0);
-  return `${value.toLocaleString('de-DE', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  })} ${unit.symbol}`;
-}
+// Die Datenrate wird mit `formatDataRate` aus `$lib/utils/formatting`
+// ausgegeben (Option `locale` für die deutsche Schreibweise) — eine zweite
+// Fassung an dieser Stelle wäre eine Dublette.
 
 /** Ein Voreinstellungspunkt für die spektrale Effizienz. */
 export interface EfficiencyPreset {

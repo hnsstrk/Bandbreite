@@ -8,6 +8,7 @@ import {
   entriesForFrequency
 } from '$lib/utils/search';
 import { SEARCH_INDEX, LIVE_SEARCH_INDEX, type SearchEntry } from '$lib/data/searchIndex';
+import { frequencyActions } from '$lib/components/layout/commandPalette.svelte';
 
 const entry = (over: Partial<SearchEntry> = {}): SearchEntry => ({
   id: 'test',
@@ -122,6 +123,23 @@ describe('entriesForFrequency', () => {
   });
 });
 
+describe('frequencyActions', () => {
+  it('reicht die Frequenz an jede Zielseite weiter', () => {
+    const actions = frequencyActions(2.4e9);
+    expect(actions).toHaveLength(4);
+    for (const action of actions) {
+      const url = new URL(action.href, 'https://example.org');
+      expect(url.pathname.endsWith('/'), action.href).toBe(true);
+      expect(url.searchParams.get('f'), action.href).toBe('2400000000');
+    }
+  });
+
+  it('rundet gebrochene Frequenzen auf ganze Hertz', () => {
+    const [erste] = frequencyActions(433.925e6 + 0.4);
+    expect(erste.href).toContain('f=433925000');
+  });
+});
+
 describe('SEARCH_INDEX', () => {
   it('enthält alle Quellen', () => {
     const types = new Set(SEARCH_INDEX.map((e) => e.type));
@@ -132,8 +150,26 @@ describe('SEARCH_INDEX', () => {
     expect(new Set(SEARCH_INDEX.map((e) => e.id)).size).toBe(SEARCH_INDEX.length);
   });
 
-  it('verlinkt ausschließlich mit Trailing Slash', () => {
-    expect(SEARCH_INDEX.every((e) => e.href.endsWith('/'))).toBe(true);
+  it('verlinkt ausschließlich mit Trailing Slash (Query-Anhang erlaubt)', () => {
+    for (const entry of SEARCH_INDEX) {
+      const [pfad] = entry.href.split('?');
+      expect(pfad.endsWith('/'), `${entry.id}: ${entry.href}`).toBe(true);
+    }
+  });
+
+  it('gibt Bändern, Diensten und Sendern einen Parameter mit', () => {
+    const band = SEARCH_INDEX.find((e) => e.type === 'band');
+    expect(band?.href).toMatch(/^\/datenbanken\/frequenzbaender\/\?f=\d+$/);
+    // Die Mittenfrequenz liegt im Band selbst.
+    const mitte = Number(new URL(band!.href, 'https://example.org').searchParams.get('f'));
+    expect(mitte).toBeGreaterThanOrEqual(band!.minHz!);
+    expect(mitte).toBeLessThanOrEqual(band!.maxHz!);
+
+    const dienst = SEARCH_INDEX.find((e) => e.type === 'funkdienst');
+    expect(dienst?.href).toMatch(/^\/datenbanken\/funkdienste\/\?q=.+/);
+
+    const sender = SEARCH_INDEX.find((e) => e.type === 'sender');
+    expect(sender?.href).toMatch(/^\/datenbanken\/sender\/\?id=.+/);
   });
 
   it('schließt geplante Seiten aus dem Live-Index aus', () => {

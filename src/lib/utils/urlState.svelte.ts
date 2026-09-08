@@ -12,6 +12,7 @@
  */
 
 import { browser } from '$app/environment';
+import { afterNavigate } from '$app/navigation';
 import { clamp } from '$lib/utils/handlers';
 
 /** Entprellzeit in Millisekunden, bevor die Adresszeile nachgeführt wird. */
@@ -212,6 +213,14 @@ export class UrlStateSync<S extends ParamSpecs> {
 		}, this.#delay);
 	}
 
+	/**
+	 * Merkt sich einen von außen gesetzten Query-String, damit die nächste
+	 * eigene Aktualisierung nicht als fremde Änderung missdeutet wird.
+	 */
+	adopt(search: string): void {
+		this.#lastSearch = search.startsWith('?') ? search.slice(1) : search;
+	}
+
 	/** Bricht eine geplante Aktualisierung ab (Aufräumen im `$effect`). */
 	cancel(): void {
 		if (this.#timer !== undefined) {
@@ -219,6 +228,77 @@ export class UrlStateSync<S extends ParamSpecs> {
 			this.#timer = undefined;
 		}
 	}
+}
+
+/**
+ * Beschreibung einer Navigation, reduziert auf das, was für die Entscheidung
+ * „von außen geändert?" nötig ist. Hält {@link isExternalUrlChange} DOM-frei
+ * und damit prüfbar.
+ */
+export interface NavigationSnapshot {
+	/** Art der Navigation: `enter`, `link`, `goto`, `popstate`, … */
+	type: string;
+	/** Pfad des Ziels */
+	toPathname?: string;
+	/** Pfad der Herkunft, sofern es eine gibt */
+	fromPathname?: string;
+	/** Query-String des Ziels, mit oder ohne führendes `?` */
+	search: string;
+	/** Zuletzt selbst geschriebener Query-String (ohne `?`) */
+	lastSearch: string | null;
+}
+
+/**
+ * Entscheidet, ob eine Navigation den Zustand einer bereits laufenden
+ * Rechnerinstanz überschreiben soll.
+ *
+ * Wahr nur, wenn dieselbe Route mit einem anderen Query-String angesteuert
+ * wurde — also bei Palette-Treffern, internen Links und Vor/Zurück. Der
+ * Erstaufbau (`enter`) ist ausgenommen, weil der Zustand dort bereits aus der
+ * URL stammt; die eigenen `replaceState`-Aktualisierungen des Entprellers
+ * ebenfalls, weil sie denselben Query-String tragen.
+ */
+export function isExternalUrlChange(navigation: NavigationSnapshot): boolean {
+	if (!navigation.toPathname) return false;
+	if (navigation.type === 'enter') return false;
+	if (navigation.fromPathname && navigation.fromPathname !== navigation.toPathname) return false;
+	const search = navigation.search.startsWith('?')
+		? navigation.search.slice(1)
+		: navigation.search;
+	return search !== (navigation.lastSearch ?? '');
+}
+
+/**
+ * Zieht den Zustand nach, wenn dieselbe Route mit anderen Suchparametern
+ * angesteuert wird. Muss beim Initialisieren einer Komponente aufgerufen
+ * werden (`afterNavigate` bindet sich an deren Lebenszyklus); serverseitig
+ * ist der Aufruf ein No-Op.
+ *
+ * @param specs Beschreibung der Suchparameter
+ * @param sync Der Entpreller derselben Komponente — verhindert, dass die
+ *   eigene Aktualisierung als fremde Änderung gilt
+ * @param apply Übernimmt die gelesenen Werte in den Komponentenzustand
+ */
+export function syncParamsOnNavigate<S extends ParamSpecs>(
+	specs: S,
+	sync: UrlStateSync<S>,
+	apply: (values: ParamValues<S>) => void
+): void {
+	if (!browser) return;
+	afterNavigate((navigation) => {
+		const target = navigation.to?.url;
+		if (!target) return;
+		const changed = isExternalUrlChange({
+			type: navigation.type,
+			toPathname: target.pathname,
+			fromPathname: navigation.from?.url.pathname,
+			search: target.search,
+			lastSearch: sync.search
+		});
+		if (!changed) return;
+		sync.adopt(target.search);
+		apply(readParams(target.searchParams, specs));
+	});
 }
 
 /** Schreibt den Query-String ohne neuen Verlaufseintrag. */

@@ -62,6 +62,9 @@ export function matchesQuery(app: RFApplication, query: string): boolean {
   const needle = query.trim().toLowerCase();
   if (needle.length === 0) return true;
   const haystack = [
+    // Die ID steht mit im Heuhaufen, damit ein Deep-Link `?q=<id>` aus der
+    // Befehlspalette genau diesen Eintrag findet.
+    app.id,
     app.nameDE,
     app.name,
     app.descriptionDE,

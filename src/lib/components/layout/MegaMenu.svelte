@@ -160,8 +160,8 @@
     min-width: 20rem;
     max-width: min(56rem, calc(100vw - 2rem));
     padding: 0.75rem;
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border-default);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     z-index: 50;
@@ -191,26 +191,26 @@
     padding: 0.625rem 0.75rem;
     margin-bottom: 0.5rem;
     border-radius: var(--radius-md);
-    background-color: var(--color-bg-elevated);
+    background-color: var(--color-elevated);
     text-decoration: none;
   }
 
   .mega-overview:hover {
-    background-color: var(--color-bg-hover);
+    background-color: var(--color-hover);
   }
 
   .mega-overview-label {
     display: block;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
+    color: var(--color-ink);
   }
 
   .mega-overview-desc {
     display: block;
     margin-top: 0.125rem;
     font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
   }
 
   .mega-columns {
@@ -226,13 +226,13 @@
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
     text-decoration: none;
     display: block;
   }
 
   a.mega-column-title:hover {
-    color: var(--color-text-accent);
+    color: var(--color-brand);
     text-decoration: underline;
   }
 
@@ -250,7 +250,7 @@
     padding: 0.5rem 0.75rem;
     border-radius: var(--radius-md);
     text-decoration: none;
-    color: var(--color-text-secondary);
+    color: var(--color-ink-muted);
     transition:
       background-color var(--transition-fast),
       color var(--transition-fast);
@@ -259,8 +259,8 @@
   a.mega-item:hover,
   a.mega-item:focus-visible,
   a.mega-item.active {
-    background-color: var(--color-bg-elevated);
-    color: var(--color-text-primary);
+    background-color: var(--color-elevated);
+    color: var(--color-ink);
   }
 
   .mega-item-label {
@@ -275,7 +275,7 @@
     margin-top: 0.125rem;
     font-size: var(--font-size-xs);
     line-height: 1.4;
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
   }
 
   .mega-item.planned {
@@ -283,7 +283,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-    color: var(--color-text-disabled);
+    color: var(--color-ink-faint);
     cursor: default;
   }
 
@@ -292,7 +292,7 @@
     padding: 0.0625rem 0.375rem;
     font-size: 0.6875rem;
     border-radius: var(--radius-full);
-    border: 1px solid var(--color-border-strong);
-    color: var(--color-text-tertiary);
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-ink-subtle);
   }
 </style>

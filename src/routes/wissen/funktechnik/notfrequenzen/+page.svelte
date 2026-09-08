@@ -1,20 +1,22 @@
 <script lang="ts">
-	import ArticleLayout from '$lib/components/funk/ArticleLayout.svelte';
-	import ContentSection from '$lib/components/funk/ContentSection.svelte';
+	import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
+	import ArticleSection from '$lib/components/knowledge/ArticleSection.svelte';
 	import EmergencyTable from '$lib/components/funk/EmergencyTable.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
 	import Callout from '$lib/components/ui/Callout.svelte';
 	import { LEARNING_GOALS, SECTIONS } from '$lib/content/funktechnik/notfrequenzen';
-	import { findSection, tocItems } from '$lib/content/funktechnik/types';
+	import { tocItems } from '$lib/content/funktechnik/types';
+	import { articleSection } from '$lib/content/funktechnik/adapt';
 
 	const toc = tocItems(SECTIONS, [
 		{ id: 'frequenztabelle', label: 'Frequenztabelle', after: 'grundidee' }
 	]);
 
-	const section = (id: string) => findSection(SECTIONS, id)!;
+	const section = (id: string) => articleSection(SECTIONS, id);
 </script>
 
 <ArticleLayout
+	kicker="Funk & Fernmeldetechnik"
 	title="Not- und Sicherheitsfrequenzen"
 	icon="warning"
 	lead="Not-, Anruf- und Sicherheitsfrequenzen von See-, Flug- und Landfunk — als Nachschlagehilfe zum Lernen, ausdrücklich nicht als Betriebsdokument."
@@ -24,7 +26,7 @@
 	]}
 	goals={LEARNING_GOALS}
 	{toc}
-	relatedHref="/wissen/funktechnik/notfrequenzen/"
+	href="/wissen/funktechnik/notfrequenzen/"
 >
 	<Callout tone="warning" title="Keine amtliche Quelle, kein Betriebsdokument">
 		Diese Zusammenstellung dient der Ausbildung und der Einordnung. Für den realen Not- und
@@ -33,9 +35,9 @@
 		Aussendungen auf Notfrequenzen ohne Notfall sind strafbar.
 	</Callout>
 
-	<ContentSection section={section('grundidee')} />
+	<ArticleSection section={section('grundidee')} />
 
-	<section class="widget" aria-labelledby="frequenztabelle">
+	<section aria-labelledby="frequenztabelle">
 		<SectionHeader
 			title="Frequenztabelle"
 			id="frequenztabelle"
@@ -44,15 +46,7 @@
 		<EmergencyTable />
 	</section>
 
-	<ContentSection section={section('see')} />
-	<ContentSection section={section('luft')} />
-	<ContentSection section={section('land')} />
+	<ArticleSection section={section('see')} />
+	<ArticleSection section={section('luft')} />
+	<ArticleSection section={section('land')} />
 </ArticleLayout>
-
-<style>
-	.widget {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-</style>

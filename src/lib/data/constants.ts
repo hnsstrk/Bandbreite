@@ -492,7 +492,7 @@ export const RAIN_RATES = {
   /** Light rain */
   light: { mmPerHour: 2.5, description: 'Light rain', descriptionDE: 'Leichter Regen' },
   /** Moderate rain */
-  moderate: { mmPerHour: 12.5, description: 'Moderate rain', descriptionDE: 'Maessiger Regen' },
+  moderate: { mmPerHour: 12.5, description: 'Moderate rain', descriptionDE: 'Mäßiger Regen' },
   /** Heavy rain */
   heavy: { mmPerHour: 25, description: 'Heavy rain', descriptionDE: 'Starker Regen' },
   /** Very heavy rain */

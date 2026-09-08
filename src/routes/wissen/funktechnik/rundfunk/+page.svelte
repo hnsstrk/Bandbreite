@@ -1,21 +1,23 @@
 <script lang="ts">
-	import ArticleLayout from '$lib/components/funk/ArticleLayout.svelte';
-	import ContentSection from '$lib/components/funk/ContentSection.svelte';
+	import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
+	import ArticleSection from '$lib/components/knowledge/ArticleSection.svelte';
 	import ChannelConverter from '$lib/components/funk/ChannelConverter.svelte';
 	import ShortwaveTable from '$lib/components/funk/ShortwaveTable.svelte';
 	import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
 	import { LEARNING_GOALS, SECTIONS } from '$lib/content/funktechnik/rundfunk';
-	import { findSection, tocItems } from '$lib/content/funktechnik/types';
+	import { tocItems } from '$lib/content/funktechnik/types';
+	import { articleSection } from '$lib/content/funktechnik/adapt';
 
 	const toc = tocItems(SECTIONS, [
 		{ id: 'kurzwellenbaender', label: 'Kurzwellenbänder', after: 'am-bereiche' },
 		{ id: 'kanalrechner', label: 'Kanal-Umrechner', after: 'dvbt2' }
 	]);
 
-	const section = (id: string) => findSection(SECTIONS, id)!;
+	const section = (id: string) => articleSection(SECTIONS, id);
 </script>
 
 <ArticleLayout
+	kicker="Funk & Fernmeldetechnik"
 	title="Rundfunk"
 	icon="radio"
 	lead="Von der Langwelle bis DVB-T2: Ausbreitung und Raster der klassischen Rundfunkbereiche, das UKW-Multiplexsignal, DAB+ im Gleichwellennetz und der Weg des Satellitensignals ins Kabel."
@@ -25,11 +27,11 @@
 	]}
 	goals={LEARNING_GOALS}
 	{toc}
-	relatedHref="/wissen/funktechnik/rundfunk/"
+	href="/wissen/funktechnik/rundfunk/"
 >
-	<ContentSection section={section('am-bereiche')} />
+	<ArticleSection section={section('am-bereiche')} />
 
-	<section class="widget" aria-labelledby="kurzwellenbaender">
+	<section aria-labelledby="kurzwellenbaender">
 		<SectionHeader
 			title="Kurzwellenbänder"
 			id="kurzwellenbaender"
@@ -38,11 +40,11 @@
 		<ShortwaveTable />
 	</section>
 
-	<ContentSection section={section('ukw')} />
-	<ContentSection section={section('dab')} />
-	<ContentSection section={section('dvbt2')} />
+	<ArticleSection section={section('ukw')} />
+	<ArticleSection section={section('dab')} />
+	<ArticleSection section={section('dvbt2')} />
 
-	<section class="widget" aria-labelledby="kanalrechner">
+	<section aria-labelledby="kanalrechner">
 		<SectionHeader
 			title="Kanal-Umrechner"
 			id="kanalrechner"
@@ -51,13 +53,5 @@
 		<ChannelConverter />
 	</section>
 
-	<ContentSection section={section('wandel')} />
+	<ArticleSection section={section('wandel')} />
 </ArticleLayout>
-
-<style>
-	.widget {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-</style>

@@ -5,6 +5,7 @@
    * Filter- und Sortierlogik liegen in `transmitterDatabase.svelte.ts`,
    * die Detailtafel in `TransmitterDetails.svelte`.
    */
+  import { untrack } from 'svelte';
   import {
     ALL_TRANSMITTERS,
     type Transmitter,
@@ -26,9 +27,11 @@
 
   interface Props {
     onSelectFrequency?: (hz: number) => void;
+    /** Sender, dessen Detailtafel sofort offen sein soll (Deep-Link `?id=`) */
+    initialSelectedId?: string | null;
   }
 
-  let { onSelectFrequency }: Props = $props();
+  let { onSelectFrequency, initialSelectedId = null }: Props = $props();
 
   let query = $state('');
   let group = $state<GroupFilter>('all');
@@ -36,7 +39,9 @@
   let sortKey = $state<SortKey>('frequency');
   let ascending = $state(true);
   let onlyActive = $state(false);
-  let selectedId = $state<string | null>(null);
+  // `untrack`: einmaliger Startwert; ein neuer Deep-Link baut die Liste über
+  // `{#key}` in der Seite ohnehin neu auf.
+  let selectedId = $state<string | null>(untrack(() => initialSelectedId));
 
   let filtered = $derived(
     filterTransmitters({ query, group, subtype, onlyActive, sortKey, ascending })

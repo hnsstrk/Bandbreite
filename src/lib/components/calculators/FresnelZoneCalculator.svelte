@@ -19,7 +19,8 @@
     buildShareLink,
     defaultValues,
     hasNonDefaults,
-    readParams
+    readParams,
+    syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import Card from '$lib/components/ui/Card.svelte';
@@ -62,6 +63,13 @@
   let obstaclePositionM = $derived(clampObstaclePosition(obstacleRawM, totalDistanceM));
 
   const sync = new UrlStateSync(FRESNEL_PARAMS);
+
+  // Gleiche Route, andere Parameter: Zustand aus der URL nachziehen.
+  syncParamsOnNavigate(FRESNEL_PARAMS, sync, (next) => {
+    frequencyHz = next.f;
+    totalDistanceM = next.d;
+    obstacleRawM = next.o;
+  });
 
   let values = $derived({ f: frequencyHz, d: totalDistanceM, o: obstaclePositionM });
 

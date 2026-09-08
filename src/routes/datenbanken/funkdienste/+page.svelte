@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { page } from '$app/state';
 	import PageHero from '$lib/components/ui/PageHero.svelte';
 	import Callout from '$lib/components/ui/Callout.svelte';
 	import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
@@ -7,6 +9,18 @@
 	import { categoryCounts } from '$lib/components/funk/applicationFilter.svelte';
 
 	const categories = categoryCounts();
+
+	/**
+	 * `?q=<Begriff oder ID>` aus der Befehlspalette belegt die Volltextsuche
+	 * vor und öffnet bei einer bekannten ID gleich die Detailtafel. Beim
+	 * Prerendern sind Suchparameter gesperrt, deshalb der `browser`-Zweig.
+	 */
+	let deepLinkQuery = $derived(
+		browser ? (page.url.searchParams.get('q') ?? '').trim().slice(0, 100) : ''
+	);
+	let deepLinkId = $derived(
+		ALL_APPLICATIONS.some((app) => app.id === deepLinkQuery) ? deepLinkQuery : null
+	);
 </script>
 
 <PageHero
@@ -30,7 +44,11 @@
 		<a href="/wissen/funktechnik/funkdienste/">Funkdienste &amp; Frequenzplan</a>.
 	</p>
 
-	<ApplicationDatabase />
+	<!-- Der Schlüssel setzt die Datenbank neu auf, wenn dieselbe Route mit
+	     einem anderen Suchbegriff angesteuert wird. -->
+	{#key deepLinkQuery}
+		<ApplicationDatabase initialQuery={deepLinkQuery} initialSelectedId={deepLinkId} />
+	{/key}
 
 	<Callout tone="warning" title="Stand und Verbindlichkeit">
 		Die Zuweisungen sind für Europa und Deutschland zusammengetragen und dienen der Orientierung.

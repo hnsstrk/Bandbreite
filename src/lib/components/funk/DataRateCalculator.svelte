@@ -12,8 +12,8 @@
 	import ResultCard from '$lib/components/ui/ResultCard.svelte';
 	import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
 	import { FREQUENCY_UNITS } from '$lib/data/units';
-	import { formatFrequency } from '$lib/utils/formatting';
-	import { EFFICIENCY_PRESETS, dataRateBps, formatDataRate } from './mobileBands.svelte';
+	import { formatDataRate, formatFrequency } from '$lib/utils/formatting';
+	import { EFFICIENCY_PRESETS, dataRateBps } from './mobileBands.svelte';
 
 	const BANDWIDTH_UNITS = FREQUENCY_UNITS.filter((unit) =>
 		['kHz', 'MHz', 'GHz'].includes(unit.id)
@@ -77,7 +77,7 @@
 	<div class="results">
 		<ResultCard
 			label="Theoretische Datenrate"
-			value={formatDataRate(rate)}
+			value={formatDataRate(rate, 1, { locale: true })}
 			emphasis="hero"
 			secondary="{formatFrequency(bandwidth, 0)} · {efficiency.value.toLocaleString(
 				'de-DE'
@@ -85,7 +85,7 @@
 		/>
 		<ResultCard
 			label="Je Strom"
-			value={formatDataRate(singleLayerRate)}
+			value={formatDataRate(singleLayerRate, 1, { locale: true })}
 			hint="Ohne MIMO-Gewinn"
 		/>
 	</div>

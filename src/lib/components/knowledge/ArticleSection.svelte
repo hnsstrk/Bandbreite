@@ -17,7 +17,14 @@
 </script>
 
 <section class="article-section article-section--l{level}" id={section.id} aria-labelledby="{section.id}-heading">
-	<SectionHeader title={section.title} {level} id="{section.id}-heading" description={section.description} class="prose" />
+	<SectionHeader
+		title={section.title}
+		{level}
+		id="{section.id}-heading"
+		eyebrow={section.eyebrow}
+		description={section.description}
+		class="prose"
+	/>
 	<div class="article-section__body">
 		{#each section.blocks as block, i (i)}
 			<ArticleBlock {block} {level} />

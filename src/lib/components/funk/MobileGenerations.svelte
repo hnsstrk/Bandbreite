@@ -9,9 +9,8 @@
 	import Card from '$lib/components/ui/Card.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { MOBILE_GENERATIONS } from '$lib/data/mobileNetworks';
-	import { formatFrequency } from '$lib/utils/formatting';
+	import { formatDataRate, formatFrequency } from '$lib/utils/formatting';
 	import { clamp, safeDivide } from '$lib/utils/handlers';
-	import { formatDataRate } from './mobileBands.svelte';
 
 	const FIRST_YEAR = 1980;
 	const LAST_YEAR = 2032;
@@ -85,8 +84,8 @@
 						<td>
 							{gen.channelBandwidthsHz.map((hz) => formatFrequency(hz, 0)).join(', ')}
 						</td>
-						<td>{gen.typicalDownlinkBps > 0 ? formatDataRate(gen.typicalDownlinkBps) : '—'}</td>
-						<td>{formatDataRate(gen.peakDownlinkBps)}</td>
+						<td>{formatDataRate(gen.typicalDownlinkBps, 1, { locale: true })}</td>
+						<td>{formatDataRate(gen.peakDownlinkBps, 1, { locale: true })}</td>
 						<td>{gen.latencyMs} ms</td>
 					</tr>
 				{/each}

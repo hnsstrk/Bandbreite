@@ -5,6 +5,7 @@
 	 * Volltextsuche, Kategoriefilter, Frequenzfenster und Sortierung. Eine
 	 * Zeile ist eine Schaltfläche; die Auswahl öffnet die Detailtafel darunter.
 	 */
+	import { untrack } from 'svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -18,7 +19,18 @@
 	import ApplicationDetailPanel from './ApplicationDetailPanel.svelte';
 	import { categoryCounts, queryApplications, widthHz, type SortKey } from './applicationFilter.svelte';
 
-	let query = $state('');
+	interface Props {
+		/** Vorbelegter Suchbegriff, etwa aus `?q=` eines Deep-Links */
+		initialQuery?: string;
+		/** Eintrag, dessen Detailtafel sofort offen sein soll */
+		initialSelectedId?: string | null;
+	}
+
+	let { initialQuery = '', initialSelectedId = null }: Props = $props();
+
+	// `untrack`: die Startwerte werden einmal übernommen. Ändert sich der
+	// Deep-Link, baut die Seite die Datenbank per `{#key}` ohnehin neu auf.
+	let query = $state(untrack(() => initialQuery));
 	let category = $state('alle');
 	let minHz = $state(0);
 	let minUnit = $state('MHz');
@@ -26,7 +38,7 @@
 	let maxUnit = $state('MHz');
 	let sortKey = $state<SortKey>('frequenz');
 	let sortDir = $state<'asc' | 'desc'>('asc');
-	let selectedId = $state<string | null>(null);
+	let selectedId = $state<string | null>(untrack(() => initialSelectedId));
 
 	const searchId = $props.id();
 

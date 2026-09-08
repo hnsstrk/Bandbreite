@@ -4,7 +4,8 @@
   import MobileMenu from './MobileMenu.svelte';
   import MegaMenu from './MegaMenu.svelte';
   import SearchTrigger from './SearchTrigger.svelte';
-  import { NAV_GROUPS, getNodesByIds, isActivePath, type NavGroup } from '$lib/data/navigation';
+  import { NAV_GROUPS } from '$lib/data/navigation';
+  import { focusLeaves, isActiveGroup, watchDesktopWidth } from './header.svelte';
 
   interface Props {
     /** Öffnet die Command-Palette. */
@@ -17,13 +18,6 @@
   let activeGroup = $state<string | null>(null);
   let headerElement = $state<HTMLElement | null>(null);
   let panels = $state<Record<string, MegaMenu | undefined>>({});
-
-  function isActiveGroup(group: NavGroup): boolean {
-    if (group.href && isActivePath(group.href, page.url.pathname)) return true;
-    return group.columns
-      .flatMap((column) => getNodesByIds(column.itemIds))
-      .some((node) => isActivePath(node.href, page.url.pathname));
-  }
 
   function closeGroup(returnFocus = false) {
     const id = activeGroup;
@@ -40,23 +34,23 @@
   }
 
   function handleTriggerKeydown(event: KeyboardEvent, id: string) {
-    if (event.key === 'Escape') {
-      closeGroup();
-    } else if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      activeGroup = id;
-      queueMicrotask(() => panels[id]?.focusFirst());
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      activeGroup = id;
-      queueMicrotask(() => panels[id]?.focusLast());
-    }
+    if (event.key === 'Escape') return closeGroup();
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    activeGroup = id;
+    const first = event.key === 'ArrowDown';
+    queueMicrotask(() => (first ? panels[id]?.focusFirst() : panels[id]?.focusLast()));
   }
 
   function handleClickOutside(event: MouseEvent) {
     if (activeGroup && headerElement && !headerElement.contains(event.target as Node)) {
       activeGroup = null;
     }
+  }
+
+  /** Tabulator aus dem Kopfbereich heraus schließt das Mega-Menü. */
+  function handleFocusOut(event: FocusEvent) {
+    if (activeGroup && focusLeaves(headerElement, event.relatedTarget)) activeGroup = null;
   }
 
   $effect(() => {
@@ -75,9 +69,12 @@
   function closeMobileMenu() {
     mobileMenuOpen = false;
   }
+
+  // Ab der Desktop-Breite gibt es die Schublade nicht mehr.
+  $effect(() => (mobileMenuOpen ? watchDesktopWidth(closeMobileMenu) : undefined));
 </script>
 
-<header class="header safe-area-top" bind:this={headerElement}>
+<header class="header safe-area-top" bind:this={headerElement} onfocusout={handleFocusOut}>
   <div class="header-content">
     <a href="/spektrum/" class="logo" onclick={closeMobileMenu}>
       <svg
@@ -102,7 +99,7 @@
             <button
               type="button"
               class="nav-link"
-              class:active={isActiveGroup(group)}
+              class:active={isActiveGroup(group, page.url.pathname)}
               class:open={activeGroup === group.id}
               aria-expanded={activeGroup === group.id}
               aria-controls={`megamenu-${group.id}`}
@@ -156,8 +153,11 @@
     </div>
   </div>
 
-  <MobileMenu open={mobileMenuOpen} close={closeMobileMenu} {onsearch} />
 </header>
+
+<!-- Außerhalb des <header>: dessen backdrop-filter würde sonst zum Containing Block
+     für den fixed positionierten Drawer und ihn auf die Headerhöhe beschneiden. -->
+<MobileMenu open={mobileMenuOpen} close={closeMobileMenu} {onsearch} />
 
 <style>
   .header {
@@ -165,10 +165,10 @@
     top: 0;
     z-index: 40;
     padding: 0.75rem clamp(1rem, 3vw, 1.5rem);
-    color: var(--color-text-primary);
-    background-color: color-mix(in srgb, var(--color-bg-surface) 88%, transparent);
+    color: var(--color-ink);
+    background-color: color-mix(in srgb, var(--color-surface) 88%, transparent);
     backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-border-default);
+    border-bottom: 1px solid var(--color-line);
     box-shadow: var(--shadow-sm);
     transition: background-color var(--transition-normal), border-color var(--transition-normal);
   }
@@ -190,12 +190,12 @@
     font-size: 1.125rem;
     font-weight: var(--font-weight-bold);
     letter-spacing: -0.025em;
-    color: var(--color-text-primary);
+    color: var(--color-ink);
     text-decoration: none;
   }
 
   .logo:hover {
-    color: var(--color-accent-primary);
+    color: var(--color-brand);
   }
 
   .logo-icon {
@@ -229,7 +229,7 @@
     padding: 0.5rem 0.75rem;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    color: var(--color-text-secondary);
+    color: var(--color-ink-muted);
     background: transparent;
     border: none;
     border-radius: var(--radius-md);
@@ -240,12 +240,12 @@
   .nav-link:hover,
   .nav-link.active,
   .nav-link.open {
-    color: var(--color-text-primary);
-    background-color: var(--color-bg-elevated);
+    color: var(--color-ink);
+    background-color: var(--color-elevated);
   }
 
   .nav-link:focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
   }
 
@@ -272,7 +272,7 @@
     width: 44px;
     height: 44px;
     padding: 0.5rem;
-    color: var(--color-text-secondary);
+    color: var(--color-ink-muted);
     background: transparent;
     border: none;
     border-radius: var(--radius-md);
@@ -280,7 +280,7 @@
   }
 
   .mobile-menu-btn:hover {
-    background-color: var(--color-bg-elevated);
+    background-color: var(--color-elevated);
   }
 
   .mobile-menu-btn svg {

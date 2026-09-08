@@ -359,24 +359,41 @@ export function formatAttenuationTotal(
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted string with unit
  */
+export interface DataRateOptions {
+  /** Deutsche Schreibweise mit Dezimalkomma und Tausenderpunkt */
+  locale?: boolean;
+}
+
 export function formatDataRate(
   bitsPerSecond: number | null | undefined,
-  decimals: number = 2
+  decimals: number = 2,
+  options: DataRateOptions = {}
 ): string {
   if (
     bitsPerSecond === null ||
     bitsPerSecond === undefined ||
     !Number.isFinite(bitsPerSecond) ||
-    bitsPerSecond < 0
+    bitsPerSecond <= 0
   ) {
     return '—';
   }
 
-  if (bitsPerSecond >= 1e12) return `${(bitsPerSecond / 1e12).toFixed(decimals)} Tbit/s`;
-  if (bitsPerSecond >= 1e9) return `${(bitsPerSecond / 1e9).toFixed(decimals)} Gbit/s`;
-  if (bitsPerSecond >= 1e6) return `${(bitsPerSecond / 1e6).toFixed(decimals)} Mbit/s`;
-  if (bitsPerSecond >= 1e3) return `${(bitsPerSecond / 1e3).toFixed(decimals)} kbit/s`;
-  return `${bitsPerSecond.toFixed(decimals)} bit/s`;
+  const units: { factor: number; symbol: string }[] = [
+    { factor: 1e12, symbol: 'Tbit/s' },
+    { factor: 1e9, symbol: 'Gbit/s' },
+    { factor: 1e6, symbol: 'Mbit/s' },
+    { factor: 1e3, symbol: 'kbit/s' },
+    { factor: 1, symbol: 'bit/s' }
+  ];
+  const unit = units.find((candidate) => bitsPerSecond >= candidate.factor) ?? units[units.length - 1];
+  const value = bitsPerSecond / unit.factor;
+  const text = options.locale
+    ? value.toLocaleString('de-DE', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      })
+    : value.toFixed(decimals);
+  return `${text} ${unit.symbol}`;
 }
 
 // ============================================================================

@@ -15,7 +15,8 @@
     buildShareLink,
     defaultValues,
     hasNonDefaults,
-    readParams
+    readParams,
+    syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import Card from '$lib/components/ui/Card.svelte';
@@ -54,6 +55,13 @@
   let relativePermittivity = $state(initial.eps);
 
   const sync = new UrlStateSync(SKIN_PARAMS);
+
+  // Gleiche Route, andere Parameter: Zustand aus der URL nachziehen.
+  syncParamsOnNavigate(SKIN_PARAMS, sync, (next) => {
+    frequencyHz = next.f;
+    conductivity = next.sigma;
+    relativePermittivity = next.eps;
+  });
 
   let values = $derived({ f: frequencyHz, sigma: conductivity, eps: relativePermittivity });
 

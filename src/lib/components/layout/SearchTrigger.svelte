@@ -44,10 +44,10 @@
     gap: 0.5rem;
     min-height: 44px;
     padding: 0.375rem 0.5rem 0.375rem 0.75rem;
-    background-color: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-default);
+    background-color: var(--color-elevated);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-md);
-    color: var(--color-text-tertiary);
+    color: var(--color-ink-subtle);
     font-size: var(--font-size-sm);
     cursor: pointer;
     transition:
@@ -56,12 +56,12 @@
   }
 
   .search-trigger:hover {
-    border-color: var(--color-border-strong);
-    color: var(--color-text-primary);
+    border-color: var(--color-line-strong);
+    color: var(--color-ink);
   }
 
   .search-trigger:focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
   }
 
@@ -88,9 +88,9 @@
     padding: 0.125rem 0.375rem;
     font-family: inherit;
     font-size: var(--font-size-xs);
-    color: var(--color-text-tertiary);
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border-default);
+    color: var(--color-ink-subtle);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
     white-space: nowrap;
   }

@@ -256,30 +256,20 @@
 
 <style>
   /*
-   * Illustrative Himmels- und Erdtöne. Sie sind keine Datenfarben und stehen
-   * deshalb als lokale Variablen hier statt im globalen Token-Satz — mit
-   * eigener Fassung für das dunkle Theme.
+   * Illustrative Himmels- und Erdtöne. Die Werte stehen als Szenen-Tokens in
+   * app.css (mit eigener Fassung für das dunkle Theme); hier werden sie nur
+   * auf die kurzen Namen der Verläufe abgebildet.
    */
   .wave-scene {
-    --sky-day-top: #7dd3fc;
-    --sky-day-bottom: #bae6fd;
-    --sky-night-top: #0f172a;
-    --sky-night-bottom: #1e3a5f;
-    --earth-top: #16a34a;
-    --earth-bottom: #15803d;
-    --earth-edge: #166534;
+    --sky-day-top: var(--color-scene-horizon-top);
+    --sky-day-bottom: var(--color-scene-horizon-bottom);
+    --sky-night-top: var(--color-scene-night-top);
+    --sky-night-bottom: var(--color-scene-night-bottom);
+    --earth-top: var(--color-scene-earth-top);
+    --earth-bottom: var(--color-scene-earth-bottom);
+    --earth-edge: var(--color-scene-earth-edge);
     display: block;
     width: 100%;
     height: auto;
-  }
-
-  :global(.dark) .wave-scene {
-    --sky-day-top: #38618c;
-    --sky-day-bottom: #4a7ba7;
-    --sky-night-top: #020617;
-    --sky-night-bottom: #0f2440;
-    --earth-top: #15803d;
-    --earth-bottom: #14532d;
-    --earth-edge: #052e16;
   }
 </style>

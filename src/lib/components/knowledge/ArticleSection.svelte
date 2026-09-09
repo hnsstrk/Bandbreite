@@ -6,6 +6,7 @@
   import type { ArticleSection } from '$lib/content/types';
   import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
   import ArticleBlock from './ArticleBlock.svelte';
+  import { groupBlocks } from './articleColumns';
   import Self from './ArticleSection.svelte';
 
   interface Props {
@@ -14,6 +15,13 @@
   }
 
   let { section, level = 2 }: Props = $props();
+
+  /**
+   * Zusammenhängender Fließtext (Absätze, Listen) wird zu einer Gruppe
+   * gebündelt; ab 96 rem läuft sie zweispaltig (`.prose-columns`). Alle
+   * anderen Blöcke bleiben einzeln und einspaltig über die volle Breite.
+   */
+  const groups = $derived(groupBlocks(section.blocks));
 </script>
 
 <section class="article-section article-section--l{level}" id={section.id} aria-labelledby="{section.id}-heading">
@@ -26,8 +34,18 @@
     class="prose"
   />
   <div class="article-section__body">
-    {#each section.blocks as block, i (i)}
-      <ArticleBlock {block} {level} />
+    {#each groups as group (group.key)}
+      {#if group.columns}
+        <div class="prose-columns">
+          {#each group.blocks as block, i (group.key + i)}
+            <ArticleBlock {block} {level} />
+          {/each}
+        </div>
+      {:else}
+        {#each group.blocks as block, i (group.key + i)}
+          <ArticleBlock {block} {level} />
+        {/each}
+      {/if}
     {/each}
   </div>
   {#if section.children?.length && level === 2}

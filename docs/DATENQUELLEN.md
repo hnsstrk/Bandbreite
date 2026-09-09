@@ -26,7 +26,7 @@ Diese Seite dokumentiert für jeden Datensatz und jedes Rechenmodell der Anwendu
 | Frequenzplan nach § 90 TKG | Bundesnetzagentur | Nationale Zuweisungen und Nutzungsbestimmungen |
 | Allgemeinzuteilungen (PMR446, Freenet, CB-Funk, SRD) | Bundesnetzagentur | Leistungsgrenzen und Kanäle des Jedermannfunks |
 | ECC-Beschlüsse, European Common Allocation Table | CEPT / ECC | Europaweit harmonisierte Nutzungen |
-| Amateurfunkgesetz und Amateurfunkverordnung (AFuV), **Anlage 1, Fundstelle BGBl. 2024 I Nr. 175, S. 1–4**, in Kraft seit 24.06.2024 | Bundesrepublik Deutschland | Zeugnisklassen, Bandgrenzen, Leistungs- und Statusangaben je Band (verifiziert 2026-09-08) |
+| Amateurfunkgesetz und Amateurfunkverordnung (AFuV), **Anlage 1, Fundstelle BGBl. 2024 I Nr. 175, S. 1–4**, in Kraft seit 24.06.2024 | Bundesrepublik Deutschland | Zeugnisklassen, Bandgrenzen, Leistungs- und Statusangaben je Band (lfd. Nrn. 1–44, verifiziert 2026-09-09) |
 | HF- und VHF/UHF/Mikrowellen-Bandpläne (Stand Generalkonferenz Novi Sad 2023) | IARU Region 1 | Betriebsartensegmente im Amateurfunk |
 | Genfer Wellenpläne GE75 (LW/MW), GE84 (UKW), GE06 (T-DAB, DVB-T) | ITU | Raster und Bereiche des Rundfunks |
 | SOLAS Kapitel IV, GMDSS-Regelwerk | IMO | Seenot- und Sicherheitsfunk, Seegebiete A1–A4 |
@@ -79,19 +79,31 @@ Die Lichtgeschwindigkeit ist seit der Neudefinition des Meters (1983) keine Mess
 - **Stand:** WRC-23.
 - **Unsicherheiten:** Die Frequenzbereiche sind bewusst **repräsentative Hauptbereiche**, keine vollständige Abbildung des Frequenznutzungsplans — ein Funkdienst hat in der VO Funk typischerweise mehrere Dutzend getrennte Zuweisungen. Der Normalfrequenz- und Zeitzeichendienst wurde gegenüber der ursprünglichen Vorlage korrigiert (Zuweisungen der Breite 0 durch die tatsächlichen ITU-Bänder ersetzt).
 
-### `data/amateurBands.ts` — Amateurfunk (22 Bänder, 91 Segmente)
+### `data/amateurBands.ts` — Amateurfunk (27 Bänder, 101 Segmente)
 
-- **Quelle:** **AFuV Anlage 1, Buchstabe A (Tabellarische Übersicht) und B (Zusätzliche Nutzungsbestimmungen), Fundstelle BGBl. 2024 I Nr. 175, S. 1–4**, in Kraft seit 24.06.2024 — <https://www.gesetze-im-internet.de/afuv_2005/anlage_1.html>, abgerufen **2026-09-08**. Segmente aus den IARU-R1-Bandplänen HF und VHF/UHF/Mikrowellen (Novi Sad 2023); 4-m-Band aus den BNetzA-Amtsblattmitteilungen zur Duldungsregelung 70 MHz.
-- **Stand:** AFuV in der Fassung vom 24.06.2024; Duldungsregelungen mit Stand 2026-09-08.
+- **Quelle:** **AFuV Anlage 1, Buchstabe A (Tabellarische Übersicht) und B (Zusätzliche Nutzungsbestimmungen), Fundstelle BGBl. 2024 I Nr. 175, S. 1–4**, in Kraft seit 24.06.2024 — <https://www.gesetze-im-internet.de/afuv_2005/anlage_1.html>, abgerufen **2026-09-09**. Segmente aus den IARU-R1-Bandplänen HF, VHF/UHF/Mikrowellen und µWave (Novi Sad 2023); 4-m-Band aus den BNetzA-Amtsblattmitteilungen zur Duldungsregelung 70 MHz.
+- **Stand:** AFuV in der Fassung vom 24.06.2024; Duldungsregelungen mit Stand 2026-09-08. **Alle 44 Frequenzbereiche der Anlage 1 mit Status- und Leistungsangabe sind abgebildet** (135,7 kHz bis 250 GHz).
 - **Verifiziert am 2026-09-08** (Primärquelle, gegengeprüft an der englischen BNetzA-Fassung von Anlage 1 sowie an 12db.de, alsor.de und dd1go.de):
   - Zulässige Zeugnisklassen und Leistungsgrenzen **je Band und Klasse** (Felder `powerLimits`, `licenseClasses`), einschließlich der Staffelung der Klasse E (100 W PEP auf Kurzwelle, 75 W PEP auf 2 m bis 23 cm, 5 W PEP ab 13 cm) und der Klasse N (10 W ERP auf 10 m, 6,1 W ERP ≙ 10 W EIRP auf 2 m und 70 cm).
   - Der **Status** (Spalte 3 der Anlage 1) für jedes Band. Er gibt die **nationale** Zuweisung wieder und kann vom ITU-Status abweichen — 430–440 MHz führt die AFuV als primär, die VO Funk weist dem Amateurfunkdienst dort sekundären Status zu.
   - Die **160-m-Sonderregelungen** sind jetzt modelliert: 1810–1850 kHz 750/100 W PEP, 1850–1890 kHz je 75 W PEP, 1890–2000 kHz je 10 W PEP, an Wochenenden durchgehend 750/100 W PEP (Nutzungsbestimmung 15). Ebenso 6 m oberhalb 50,4 MHz (25 W PEP) und 1247–1263 MHz (3,05 W ERP, Schutz von Galileo E6).
   - **9-cm-Obergrenze 3475 MHz:** belegt (lfd. Nr. 24), keine Annahme mehr. Der IARU-R1-Plan behandelt nur 3400–3410 MHz — das betrifft die Segmente, nicht die Bandgrenze.
+- **Ergänzt und verifiziert am 2026-09-09** (Primärquelle Anlage 1 Buchstabe A, lfd. Nrn. 35 bis 44; gegengeprüft an der Synopse der Änderung vom 24.06.2024 auf buzer.de, an umwelt-online.de und an der englischen BNetzA-Fassung): die fünf Millimeterbänder oberhalb 24,25 GHz.
+
+  | Band | Bereich | lfd. Nr. | Status | Klasse A | Klasse E | Nutzungsbestimmungen |
+  |---|---|---|---|---|---|---|
+  | 6 mm | 47–47,2 GHz | 35 | primär | 75 W PEP | 5 W PEP | 13, 17 |
+  | 4 mm | 76–81 GHz | 36–39 | sekundär | 75 W PEP | 5 W PEP | 9, 13, 17 |
+  | 2,5 mm | 122,25–123 GHz | 40 | sekundär | 75 W PEP | 5 W PEP | 9, 17 |
+  | 2 mm | 134–141 GHz | 41, 42 | 134–136 GHz primär, 136–141 GHz sekundär | 75 W PEP | 5 W PEP | 9, 13, 17 |
+  | 1,2 mm | 241–250 GHz | 43, 44 | 241–248 GHz sekundär, 248–250 GHz primär | 75 W PEP | 5 W PEP | 13, 17 |
+
+  Die Klasse N hat in keinem dieser Bereiche Zugang. **Nutzungsbestimmung 13** weist den Amateurfunkdienst über Satelliten in 47–47,2 GHz, 134–136 GHz und 248–250 GHz als **primären**, in 76–81 GHz, 136–141 GHz und 241–248 GHz als **sekundären** Funkdienst aus; 122,25–123 GHz ist dort nicht genannt und kennt daher keinen Satellitenbetrieb. Die vier Zeilen 36 bis 39 (76–77,5, 77,5–78, 78–79, 79–81 GHz) tragen denselben Status und dieselben Grenzen und sind deshalb zu einem Band zusammengefasst; ebenso die Zeilenpaare 41/42 und 43/44 mit `status: 'gemischt'`.
 - **Unsicherheiten / bewusste Auslassungen:**
   - **4-m-Band:** kein Band der AFuV, sondern eine jahrweise verlängerte Duldungsregelung (zuletzt 70,150–70,210 MHz, 25 W ERP, 12 kHz, horizontale Polarisation, nur Klasse A) — befristet bis **31.12.2025**. Eine Fortführung war am 2026-09-08 nicht veröffentlicht; im Datensatz als `Annahme:` gekennzeichnet, `status: 'duldung'`.
   - **6-m-Band, Klasse E:** Die Duldungsregelung (BNetzA-Verfügung 105/2024, gültig bis 31.12.2025) wurde nicht verlängert; der Datensatz führt 6 m deshalb nur für die Klasse A.
-  - **Nicht aufgenommen:** die Frequenzbereiche oberhalb 24,25 GHz (lfd. Nrn. 35–45: 47–47,2 GHz, 76–81 GHz, 122,25–123 GHz, 134–141 GHz, 241–250 GHz, > 275 GHz). Der Dateikopf nennt die Lücke.
+  - **Nicht aufgenommen:** allein die lfd. Nr. 45 („> 275 GHz“). Die Anlage 1 weist dort weder Status noch Leistungsgrenze aus; Nutzungsbestimmung 14 nennt die Teilbereiche 444–453 GHz, 510–546 GHz, 711–730 GHz, 909–926 GHz, 945–951 GHz und Frequenzen oberhalb von 956 GHz, in denen der Amateurfunkdienst keinen Störungsschutz beanspruchen kann. Der Dateikopf nennt diese Auslassung.
+  - **Segmente der Millimeterbänder:** Der IARU-R1-µWave-Bandplan war über den Proxy nur in Ausschnitten zu beschaffen. Belegt übernommen sind das Schmalband-Aktivitätszentrum 47 088,000 MHz (6 mm) und das Schmalbandsegment 134,928–134,930 GHz mit höchstens 2,7 kHz Bandbreite (2 mm); für 4 mm, 2,5 mm und 1,2 mm führt der Datensatz je ein Sammelsegment „alle Betriebsarten“ statt erfundener Anruffrequenzen.
   - **Nutzungsbestimmungen Buchstabe B:** Im Feld `sourceRef` stehen nur die Nummern, nicht der Wortlaut. Wer den Wortlaut braucht, liest ihn in der Primärquelle nach.
   - **Segmentgrenzen** innerhalb der Bänder stammen aus den IARU-Bandplänen; sie sind eine Empfehlung und rechtlich nicht bindend.
 

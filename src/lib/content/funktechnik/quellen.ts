@@ -187,7 +187,7 @@ export const SECTIONS: ArticleSection[] = [
           ],
           [
             'Amateurfunkbänder',
-            '22 Bänder mit Betriebsartensegmenten',
+            '27 Bänder mit Betriebsartensegmenten',
             'AFuV Anlage 1, IARU-R1-Bandpläne'
           ],
           [

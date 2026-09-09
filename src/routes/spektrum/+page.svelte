@@ -8,7 +8,7 @@
   import BandDetailSidebar from '$lib/components/BandDetailSidebar.svelte';
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import { getHubChildren } from '$lib/data/navigation';
-  import { SPECTRUM_MIN_HZ, SPECTRUM_MAX_GAMMA_HZ } from '$lib/data/spectrum';
+  import { SPECTRUM_DEFAULT_FREQUENCY_HZ, SPECTRUM_MIN_HZ, SPECTRUM_MAX_GAMMA_HZ } from '$lib/data/spectrum';
   import type { FrequencyBand } from '$lib/data/bands';
 
   /**
@@ -26,7 +26,12 @@
     return value;
   }
 
-  let currentFrequencyHz = $state<number | null>(frequencyFromUrl());
+  /**
+   * Ohne `?f=` startet die Seite auf 100 MHz (`SPECTRUM_DEFAULT_FREQUENCY_HZ`):
+   * Marker, Frequenzkonverter und Bandseitenleiste zeigen sofort einen
+   * sinnvollen Arbeitspunkt im VHF-Band. Ein gültiges `?f=` hat Vorrang.
+   */
+  let currentFrequencyHz = $state<number | null>(frequencyFromUrl() ?? SPECTRUM_DEFAULT_FREQUENCY_HZ);
   let currentPowerWatt = $state<number | null>(1);
   let selectedSpectrumBand = $state<FrequencyBand | null>(null);
   let selectedBandId = $state<string | null>(null);

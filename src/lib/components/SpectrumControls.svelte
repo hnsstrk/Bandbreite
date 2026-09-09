@@ -53,48 +53,53 @@
       />
     </span>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.em
-        ? 'bg-series-1-solid text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip"
+      class:chip--on={visibleRows.em}
+      style="--chip-dot: var(--color-series-1); --chip-ink: var(--color-cat-blue)"
       onclick={() => onToggleRow('em')}
       aria-pressed={visibleRows.em}
     >
+      <span class="chip__dot" aria-hidden="true"></span>
       EM-Spektrum
     </button>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.itu
-        ? 'bg-series-5-solid text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip"
+      class:chip--on={visibleRows.itu}
+      style="--chip-dot: var(--color-series-5); --chip-ink: var(--color-cat-cyan)"
       onclick={() => onToggleRow('itu')}
       aria-pressed={visibleRows.itu}
     >
+      <span class="chip__dot" aria-hidden="true"></span>
       ITU
     </button>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.ieee
-        ? 'bg-series-4-solid text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip"
+      class:chip--on={visibleRows.ieee}
+      style="--chip-dot: var(--color-series-4); --chip-ink: var(--color-cat-violet)"
       onclick={() => onToggleRow('ieee')}
       aria-pressed={visibleRows.ieee}
     >
+      <span class="chip__dot" aria-hidden="true"></span>
       IEEE
     </button>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.nato
-        ? 'bg-series-6-solid text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip"
+      class:chip--on={visibleRows.nato}
+      style="--chip-dot: var(--color-series-6); --chip-ink: var(--color-cat-red)"
       onclick={() => onToggleRow('nato')}
       aria-pressed={visibleRows.nato}
     >
+      <span class="chip__dot" aria-hidden="true"></span>
       NATO
     </button>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.civilian
-        ? 'bg-series-2-solid text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip"
+      class:chip--on={visibleRows.civilian}
+      style="--chip-dot: var(--color-series-2); --chip-ink: var(--color-cat-green)"
       onclick={() => onToggleRow('civilian')}
       aria-pressed={visibleRows.civilian}
     >
+      <span class="chip__dot" aria-hidden="true"></span>
       Zivil
     </button>
   </div>
@@ -103,26 +108,26 @@
   <div class="flex flex-wrap items-center gap-1">
     <span class="text-ink-subtle text-sm">Ansicht:</span>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {viewMode === 'rf'
-        ? 'bg-warning text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip chip--view"
+      class:chip--on={viewMode === 'rf'}
       onclick={() => onSetViewMode('rf')}
+      aria-pressed={viewMode === 'rf'}
     >
       RF (3 Hz - 3 THz)
     </button>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {viewMode === 'visible'
-        ? 'bg-warning text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip chip--view"
+      class:chip--on={viewMode === 'visible'}
       onclick={() => onSetViewMode('visible')}
+      aria-pressed={viewMode === 'visible'}
     >
       RF + Licht (bis 1 PHz)
     </button>
     <button
-      class="rounded px-2 py-1 text-sm transition-colors {viewMode === 'full'
-        ? 'bg-warning text-on-solid'
-        : 'bg-elevated text-ink-subtle hover:bg-hover'}"
+      class="chip chip--view"
+      class:chip--on={viewMode === 'full'}
       onclick={() => onSetViewMode('full')}
+      aria-pressed={viewMode === 'full'}
     >
       Gesamt (bis Gamma)
     </button>
@@ -218,3 +223,58 @@
     </div>
   {/if}
 </div>
+
+<style>
+  /*
+   * Umriss-Schalter im Datenblatt-Stil (Entscheidung des Besitzers,
+   * Bericht 74): 1-px-Rahmen, keine Füllung, ein farbiger Punkt in der
+   * Reihenfarbe vor dem Text. Aktiv färben sich Rahmen, Punkt und Text;
+   * inaktiv bleiben Rahmen `--color-line`, Text gedämpft und der Punkt grau.
+   * Die Farben kommen je Schalter als `--chip-dot` (Reihenfarbe) und
+   * `--chip-ink` (lesbare Textfassung derselben Reihe) aus dem Markup.
+   */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-control);
+    background-color: transparent;
+    color: var(--color-ink-subtle);
+    font-size: var(--font-size-sm);
+    line-height: 1.25;
+    cursor: pointer;
+    transition:
+      border-color 150ms ease,
+      color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .chip:hover {
+    background-color: var(--color-hover);
+    color: var(--color-ink);
+  }
+
+  .chip__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: none;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-ink-faint);
+  }
+
+  .chip--on {
+    border-color: var(--chip-ink);
+    color: var(--chip-ink);
+  }
+
+  .chip--on .chip__dot {
+    background-color: var(--chip-dot);
+  }
+
+  /* Ansicht-Schalter tragen keine Reihenfarbe, sondern das Akzentblau. */
+  .chip--view {
+    --chip-ink: var(--color-brand);
+  }
+</style>

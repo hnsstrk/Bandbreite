@@ -11,6 +11,7 @@
  *   kein Messwert; siehe SPEED_OF_LIGHT in constants.ts)
  */
 
+import { convertToHz } from '$lib/utils/conversions';
 import { SPEED_OF_LIGHT } from './constants';
 
 // ============================================================================
@@ -40,6 +41,14 @@ export const SPECTRUM_MAX_VISIBLE_HZ = 1e15 as const;
  * Unit: Hz (30 EHz)
  */
 export const SPECTRUM_MAX_GAMMA_HZ = 3e19 as const;
+
+/**
+ * Startfrequenz der Spektrumsseite ohne `?f=` (Entscheidung des Besitzers,
+ * Bericht 74): 100 MHz — UKW-Rundfunk, mitten im VHF-Band und damit ein
+ * vertrauter Anker für Marker, Konverter und Bandseitenleiste.
+ * Unit: Hz
+ */
+export const SPECTRUM_DEFAULT_FREQUENCY_HZ = convertToHz(100, 'MHz');
 
 // ============================================================================
 // Sichtbares Licht

@@ -5,17 +5,17 @@
 Eine Web-Anwendung rund um das elektromagnetische Spektrum: interaktive Visualisierungen, Rechner für die Hochfrequenztechnik, Lehrtexte zur Funk- und Fernmeldetechnik und durchsuchbare Frequenzdatenbanken. Entwickelt für Ingenieure, Techniker, Funkamateure und alle, die wissen wollen, wer welche Frequenz nutzt und warum.
 
 ![Elektromagnetisches Spektrum](static/screenshot-spectrum.png)
-*Das Spektrum-Dashboard: alle Bänder von ELF bis Gammastrahlung, logarithmisch, mit ITU-, IEEE- und NATO-Bandbezeichnungen, Zoom und Frequenzmarker*
+*Das Spektrum-Dashboard: alle Bänder von ELF bis Gammastrahlung, logarithmisch, mit ITU-, IEEE- und NATO-Bandbezeichnungen, Zoom und Frequenzmarker — schlicht wie ein Datenblatt und über die volle Fensterbreite*
 
 ## Features
 
 ### Portal
 
-- **Startseite `/`** — Einstieg mit Suchfeld, fünf Bereichskacheln, den vier Lernpfaden, den interaktiven Kapiteln und der vollständigen Werkzeugliste
+- **Startseite `/`** — Einstieg mit Suchfeld über die volle Breite, den fünf Bereichen als Linkzeilen, den vier Lernpfaden, den interaktiven Kapiteln und der vollständigen Werkzeugliste — alles als dichte Listen mit Trennlinien, keine Kachelraster
 
 ### Spektrum
 
-- **Spektrum-Dashboard** — das gesamte EM-Spektrum von ELF bis Gammastrahlung, logarithmisch, mit Zoom, Frequenz-/Wellenlängen-Cursor und Banddetail-Seitenleiste; ein Klick auf ein Band setzt die Frequenz für alle Werkzeuge darunter
+- **Spektrum-Dashboard** — das gesamte EM-Spektrum von ELF bis Gammastrahlung, logarithmisch, mit Zoom, Frequenz-/Wellenlängen-Cursor und Banddetail-Seitenleiste; das Diagramm steht ohne Rahmen direkt unter der Überschrift und nutzt die volle Fensterbreite, ein Klick auf ein Band setzt die Frequenz für alle Werkzeuge darunter
 - **Anwendungen im Spektrum** — welcher Dienst nutzt welches Band: Rundfunk, Mobilfunk, Radar, Satellit, WLAN
 - **Sendeleistungen** — typische Sendeleistungen über der Frequenz aufgetragen
 
@@ -35,7 +35,7 @@ Alle neun Rechner halten ihren Zustand in der URL (`?f=…&d=…`) und bieten �
 - **Konverter** — Frequenz ↔ Wellenlänge mit Bandzuordnung, dazu Leistungsumrechnung (W ↔ mW ↔ dBm ↔ dBW) und Reichweitenschätzung auf dem Dashboard
 
 ![FSPL-Rechner](static/screenshot-rechner.png)
-*Jeder Rechner zeigt Eingabe, Ergebnis und Formel auf einer Seite — der Zustand steht in der URL und lässt sich teilen*
+*Jeder Rechner zeigt Eingabe, Ergebnis und Formel auf einer Seite, ohne Rahmen um die Abschnitte — der Zustand steht in der URL und lässt sich teilen*
 
 ### Wissen
 
@@ -78,13 +78,26 @@ Alle Zahlenbeispiele in den Texten werden aus denselben Utilities berechnet wie 
 - **Hell / Dunkel / System** als Farbschema
 - **Tastaturbedienbar**, mit Sprunglink, Fokusring und Textalternativen zu allen Diagrammen
 
+### Erscheinungsbild
+
+Die Oberfläche ist bewusst **schlicht wie ein technisches Datenblatt**: keine Schatten, Ecken von 2 px
+(Rahmen um Flächen höchstens 4 px), Gliederung allein über 1-px-Linien, ein einziges Akzentblau für
+Links und aktive Zustände. Farbig sind nur die Daten — Bandreihen, Diagrammserien und der
+Frequenzmarker.
+
+Jede Seite nutzt die **volle Fensterbreite**: Kopfbereich (≤ 3 rem hoch, ohne Weichzeichner),
+Brotkrumen als schlichte Textzeile, Inhalt und Fuß haben keine `max-width` mehr, seitlich bleiben
+0,75 rem Rand. Das gilt ausdrücklich auch für Fließtext in den Wissen-Kapiteln — dort steht das
+Inhaltsverzeichnis als schmale Spalte daneben, der Text füllt den Rest. Der Umschalter für das
+Farbschema ist eine einzelne Schaltfläche, die hell → dunkel → System durchschaltet.
+
 <p>
   <img src="static/screenshot-suche.png" alt="Command-Palette mit Frequenzsuche" width="520">
   <img src="static/screenshot-mobile.png" alt="Portalseite auf dem Smartphone" width="180">
   <img src="static/screenshot-spectrum-dark.png" alt="Spektrum im dunklen Farbschema" width="520">
 </p>
 
-*Frequenzsuche in der Command-Palette, das Portal auf 390 px Breite und das Spektrum im dunklen Farbschema*
+*Frequenzsuche in der Command-Palette, das Portal auf 390 px Breite und das Spektrum im dunklen Farbschema — alle Aufnahmen zeigen den aktuellen Datenblatt-Stil*
 
 ## Installation
 
@@ -160,10 +173,11 @@ src/
 │   │   ├── converters/   # Frequenz-, Leistungs-, Reichweitenkonverter, Bandzuordnung
 │   │   ├── charts/       # Diagramme (d3-scale/d3-shape), alle in ChartFrame
 │   │   ├── funk/         # Bandpläne, Kanalumrechner, Orbit-Rechner, Funkdienst-Datenbank
+│   │   │                 #   Panel.svelte = flacher Abschnittsrahmen dieser Bausteine
 │   │   ├── knowledge/    # Kapitel-Renderer, Widget-Rahmen, Animationsschleife
 │   │   ├── widgets/      # interaktive Widgets + reine Rechenmodelle
-│   │   ├── portal/       # Bausteine der Startseite
-│   │   ├── learning/     # Lernpfad-Leiste, Kacheln, Fortschritt
+│   │   ├── portal/       # Bausteine der Startseite; HubList.svelte = Linkliste aller Hubs
+│   │   ├── learning/     # Lernpfad-Leiste, Pfad- und Schrittlisten, Fortschritt
 │   │   └── Spectrum*     # das Spektrum-Diagramm und seine Teilkomponenten
 │   ├── content/          # Kapiteltexte als Daten (kein Markup), inkl. radar/ und grundlagen/
 │   ├── data/             # Frequenz- und Banddaten, Navigation, Glossar, Lernpfade, Widgets

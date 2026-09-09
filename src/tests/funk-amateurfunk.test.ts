@@ -49,7 +49,7 @@ describe('bandsForClass', () => {
     expect(bandsForClass('A').length).toBeGreaterThanOrEqual(bandsForClass('E').length);
   });
 
-  it('lässt der Klasse E nur die zwölf Bänder der AFuV Anlage 1', () => {
+  it('lässt der Klasse E nur die siebzehn Bänder der AFuV Anlage 1', () => {
     const namen = bandsForClass('E').map((entry) => entry.nameDE);
     expect(namen).toEqual([
       '160 m',
@@ -63,7 +63,12 @@ describe('bandsForClass', () => {
       '9 cm',
       '6 cm',
       '3 cm',
-      '1,2 cm'
+      '1,2 cm',
+      '6 mm',
+      '4 mm',
+      '2,5 mm',
+      '2 mm',
+      '1,2 mm'
     ]);
   });
 });
@@ -181,5 +186,12 @@ describe('Bandkennzahlen', () => {
   it('nennt für tiefe Bänder die Nacht und für hohe die Sichtverbindung', () => {
     expect(openingHint(band('band-80m'))).toMatch(/Nacht/i);
     expect(openingHint(band('band-70cm'))).toMatch(/Sicht|quasioptisch/i);
+    expect(openingHint(band('band-1_2mm'))).toMatch(/Sicht|quasioptisch/i);
+  });
+
+  it('beschriftet die Millimeterbänder mit Wellenlängen im Millimeterbereich', () => {
+    expect(bandWavelengthM(band('band-6mm'))).toBeCloseTo(0.00637, 4);
+    expect(bandWavelengthM(band('band-1_2mm'))).toBeCloseTo(0.00122, 4);
+    expect(bandWidthHz(band('band-4mm'))).toBe(5e9);
   });
 });

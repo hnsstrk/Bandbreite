@@ -95,7 +95,7 @@ Namen aus den Tabellen unten.
 | Token | Utility | Light | Dark | Verwendung |
 | --- | --- | --- | --- | --- |
 | `--color-base` | `bg-base` | `#f8fafc` | `#0f172a` | Seitenhintergrund |
-| `--color-surface` | `bg-surface` | `#ffffff` | `#1e293b` | Karten, Panels |
+| `--color-surface` | `bg-surface` | `#ffffff` | `#1e293b` | umrandete Flächen (Karten, Panels, Kopf- und Pfadleiste) |
 | `--color-elevated` | `bg-elevated` | `#f1f5f9` | `#334155` | Erhöhte Flächen, Chips |
 | `--color-sunken` | `bg-sunken` | `#f1f5f9` | `#1e293b` | Formel- und Ergebnisboxen |
 | `--color-input` | `bg-input` | `#ffffff` | `#334155` | Eingabefelder |
@@ -166,7 +166,8 @@ Für **Flächen mit heller Schrift** existiert zu jeder Serie eine gesättigte
 Variante `--color-series-N-solid` (z. B. `#2563eb` statt `#3b82f6`).
 Für **Beschriftungen neben einer Serienfarbe** gibt es themenbewusste
 Kategorie-Textfarben: `--color-cat-blue`, `--color-cat-green`,
-`--color-cat-orange`, `--color-cat-violet`, `--color-cat-pink`.
+`--color-cat-orange`, `--color-cat-violet`, `--color-cat-pink`,
+`--color-cat-cyan`, `--color-cat-red` (alle ≥ 4,5:1 auf Fläche, hell und dunkel).
 
 ### Typografie, Radien, Schatten, Breiten
 
@@ -180,9 +181,13 @@ Kategorie-Textfarben: `--color-cat-blue`, `--color-cat-green`,
 | `--radius-pill` | `9999px` | **nur** runde Punkte und Reglergriffe |
 | `--shadow-card` | `none` | — es gibt keine Schatten |
 | `--shadow-popover` | `none` | — Menüs und Overlays tragen einen 1-px-Rahmen |
-| `--container-prose` | `none` | keine Lesebreite mehr |
-| `--container-page` | `none` | keine Seitenbreite mehr |
-| `--container-wide` | `none` | keine Bühnenbreite mehr |
+| `--container-prose` | `none` | **nicht mehr verwendet** — keine Lesebreite |
+| `--container-page` | `none` | **nicht mehr verwendet** — keine Seitenbreite |
+| `--container-wide` | `none` | **nicht mehr verwendet** — keine Bühnenbreite |
+
+Die drei `--container-*`-Tokens stehen nur noch als `none` im Theme, damit alter
+Code nicht bricht; **keine Komponente liest sie**. Neuer Code setzt keine
+`max-width` — die Breite regelt allein `--page-gutter`.
 
 Weiter im `:root`-Block: `--shadow-sm|md|lg` = `none`;
 `--radius-sm|md` = `0.125rem`, `--radius-lg|xl` = `0.25rem`;
@@ -231,10 +236,10 @@ richtige Schema verwenden.
 
 | Klasse | Wirkung |
 | --- | --- |
-| `.page-container` | volle Breite, seitliches Padding `--page-gutter`. Keine `max-width`, keine Zentrierung. Nicht zusätzlich zum `main`-Padding verschachteln — das verdoppelt den Rand. |
-| `.page-container--wide` | deckungsgleich; bleibt als Alias bestehen |
+| `.page-container` | **nicht mehr verwendet** (keine Fundstelle in `src/`). Bleibt als Andockpunkt in `app.css`: volle Breite, seitliches Padding `--page-gutter`, keine `max-width`, keine Zentrierung. Neuer Code braucht sie nicht — `main` setzt den Rand bereits; verschachtelt verdoppelt sie ihn. |
+| `.page-container--wide` | **nicht mehr verwendet**; deckungsgleicher Alias |
 | `.prose` | Typografie für `h2`–`h4`, `p`, Listen, Tabellen, `code`, `pre`, `blockquote` — **ohne** Lesebreite |
-| `.bleed` | wirkungsneutral (`width: 100%`); früher der Ausbruch aus der Lesebreite |
+| `.bleed` | **nicht mehr verwendet**, wirkungsneutral (`width: 100%`); früher der Ausbruch aus der Lesebreite |
 | `.card` / `.card-compact` | 1-px-Linie, 4 px Radius, `0.75rem` Polster, kein Schatten. Verschachtelte Karten (`.card .card`, `.ui-card .ui-card`) rendern flach: ohne Rahmen, ohne Polster. |
 | `.table-scroll` | horizontaler Scroll-Container für breite Tabellen |
 | `.chart-container` | Scroll-Container für Diagramme; die Mindestbreite liegt am **inneren** Element |
@@ -279,9 +284,10 @@ nicht an den Scroll-Container.
 
 ## Komponentenbibliothek
 
-Alle Komponenten liegen in `src/lib/components/ui/` (Ausnahme: `ChartFrame`
-unter `src/lib/components/charts/`), nutzen Svelte-5-Runes, `$props()`,
-`$bindable()` und Snippets statt Slots. Jede akzeptiert ein `class`-Passthrough.
+Alle Komponenten liegen in `src/lib/components/ui/` (Ausnahmen: `ChartFrame`
+unter `charts/`, `HubList` unter `portal/`, `Panel` unter `funk/`), nutzen
+Svelte-5-Runes, `$props()`, `$bindable()` und Snippets statt Slots. Jede
+akzeptiert ein `class`-Passthrough.
 
 ### Icon
 
@@ -652,28 +658,71 @@ Linkwüste wird.
 | `id` | `string` | ID des Glossareintrags |
 | `label` | `string` | abweichender Anzeigetext (Standard: der Begriff selbst) |
 
-### Portal-Bausteine (`components/portal/`)
+### Portal- und Hub-Bausteine (`components/portal/`)
 
-Nur auf der Startseite verwendet, alle unter 120 Zeilen und ohne eigene Farben:
+Auf der Startseite und in allen Hubs verwendet, alle unter 120 Zeilen und ohne
+eigene Farben. Es gibt **keine Kacheln mehr** — jede dieser Komponenten rendert
+eine dichte Liste über die volle Breite, gegliedert durch 1-px-Trennlinien:
 
 | Komponente | Zweck |
 | --- | --- |
-| `PortalSearch.svelte` | großes Suchfeld; öffnet über `layout/searchDialog.svelte.ts` dieselbe Command-Palette wie Lupe und `Strg + K` |
-| `PortalAreas.svelte` | fünf Bereichskacheln aus `NAV_GROUPS` mit je drei bis vier Direkteinstiegen |
-| `PortalTiles.svelte` | Kachelraster („Interaktiv lernen", „Werkzeuge"), Daten aus `portalContent.ts` |
-| `PortalLearningPaths.svelte` | Kachelreihe der Lernpfade mit Fortschrittsbalken |
+| `PortalSearch.svelte` | Suchfeld über die volle Breite; öffnet über `layout/searchDialog.svelte.ts` dieselbe Command-Palette wie Lupe und `Strg + K` |
+| `PortalAreas.svelte` | die fünf Bereiche aus `NAV_GROUPS` als Zeilen: Bereichsname links, Direkteinstiege punktgetrennt daneben |
+| `PortalTiles.svelte` | Definitionsliste („Interaktiv lernen", „Werkzeuge"), ab 64 rem zweispaltig, Daten aus `portalContent.ts` |
+| `PortalLearningPaths.svelte` | Lernpfade als Liste: Stufe, Schrittzahl und Dauer in einer Zeile |
+| `HubList.svelte` | **Einstiegsliste eines Hubs** (siehe unten) |
 
-Die Kacheldaten stammen aus `portalContent.ts` (abgeleitet aus `NAV_GROUPS` und
+Die Listendaten stammen aus `portalContent.ts` (abgeleitet aus `NAV_GROUPS` und
 `getHubChildren()`) — auf der Seite steht keine zweite Linkliste.
+
+#### HubList
+
+Gemeinsame Einstiegsliste aller Hubs — verwendet auf `/rechner/`, `/konverter/`,
+`/wissen/`, `/datenbanken/`, `/service/` und `/wissen/funktechnik/`. Rendert eine
+`<dl>`: Name als Link (`<dt>`), Beschreibung daneben (`<dd>`), 1-px-Linie je
+Zeile, ab 40 rem zweispaltig im Zeilenaufbau, ab 64 rem zweispaltig im Raster.
+Knoten mit `status: 'geplant'` erscheinen ohne Link und mit dem Vermerk
+„geplant". **Für Hub-Einstiege keine `Card` mehr verwenden.**
+
+| Prop | Typ | Bedeutung |
+| --- | --- | --- |
+| `items` | `NavNode[]` | meist `getHubChildren('/…/')` |
+| `label` | `string` | `aria-label` der Liste (Pflicht) |
+| `class` | `string` | Passthrough |
+
+```svelte
+<HubList items={getHubChildren('/rechner/')} label="Rechner" />
+```
+
+### Panel (`components/funk/`)
+
+Flacher Abschnittsrahmen der Funk-Bausteine: Titel, optionaler Untertitel und
+Aktionen in einer Kopfzeile mit Trennlinie — **ohne** Karte und **ohne**
+Innenabstand, damit Tabellen die volle Breite nutzen. 14 Bausteine in `funk/`
+verwenden ihn anstelle von `ui/Card`.
+
+| Prop | Typ | Bedeutung |
+| --- | --- | --- |
+| `title` | `string` | Überschrift (`h2`, per `$props.id()` verknüpft) |
+| `subtitle` | `string` | eine Zeile neben dem Titel |
+| `actions` | `Snippet` | rechts in der Kopfzeile, etwa eine Trefferzahl |
+| `footer` | `Snippet` | Fußnote unter dem Inhalt (`--font-size-xs`) |
+
+```svelte
+<Panel title="Amateurfunk-Bandplan" subtitle="AFuV Anlage 1">
+  {#snippet actions()}<span>22 Bänder</span>{/snippet}
+  <table>…</table>
+</Panel>
+```
 
 ### Lernpfad-Bausteine (`components/learning/`)
 
 | Komponente | Zweck | Hinweise |
 | --- | --- | --- |
 | `LearningMeter.svelte` | Fortschrittsbalken | `role="progressbar"` mit `aria-valuenow`/`aria-valuetext` |
-| `LearningPathBar.svelte` | Leiste unter dem Header: „Schritt 3 von 7", Lernziel, Zurück/Weiter/Erledigt/Verlassen | `<nav aria-label="Lernpfad …">`, sticky ab 48 rem (`top: 3.5rem`, `z-index: 30`), Innenraum in voller Breite mit `--page-gutter` |
-| `LearningPathCard.svelte` | Kachel je Pfad: Stufe (`Badge`-Ton aus `LEVEL_TONES`), Dauer, Balken, Starten/Fortsetzen | Dauer ist eine gekennzeichnete Annahme |
-| `LearningPathSteps.svelte` | nummerierte Schrittliste mit Status und Abhaken | optionale Schritte sind als solche ausgewiesen |
+| `LearningPathBar.svelte` | flache Leiste unter dem Kopfbereich: „Schritt 3 von 7", Lernziel, Zurück/Weiter/Erledigt/Verlassen | `<nav aria-label="Lernpfad …">`, sticky ab 48 rem (`top: 2.875rem` — direkt unter dem 45-px-Kopf —, `z-index: 30`), Innenraum in voller Breite mit `--page-gutter`, darunter statisch |
+| `LearningPathCard.svelte` | Datenzeile je Pfad (keine Karte): Titel und Lead links, Stufe/Schritte/Dauer darunter, Balken und Starten/Fortsetzen rechts | Dauer ist eine gekennzeichnete Annahme |
+| `LearningPathSteps.svelte` | Schrittzeilen mit 1-px-Linie, Nummer in Monospace (keine Pille), Status und Abhaken | optionale Schritte sind als solche ausgewiesen |
 
 Der Fortschritt liegt in `learningProgress.svelte.ts` (Runes-Klasse,
 `localStorage`) und wird erst in einem `$effect` gelesen — sonst wiche das

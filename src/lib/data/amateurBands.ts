@@ -12,9 +12,10 @@
  *   (Tabellarische Übersicht) und Buchstabe B (Zusätzliche
  *   Nutzungsbestimmungen), Fundstelle BGBl. 2024 I Nr. 175, S. 1–4,
  *   in Kraft seit 24.06.2024 (Einführung der Klasse N).
- *   https://www.gesetze-im-internet.de/afuv_2005/anlage_1.html — abgerufen 2026-09-08
+ *   https://www.gesetze-im-internet.de/afuv_2005/anlage_1.html — abgerufen 2026-09-09
  * - IARU Region 1 HF Band Plan (Stand Generalkonferenz Novi Sad 2023)
- * - IARU Region 1 VHF/UHF/Microwave Band Plan (50 MHz – 250 GHz)
+ * - IARU Region 1 VHF/UHF/Microwave Band Plan (50 MHz – 250 GHz), darin der
+ *   µWave-Bandplan für 47 GHz, 76 GHz, 122 GHz, 134 GHz und 245 GHz
  * - BNetzA-Allgemeinzuteilungen und Duldungsregelungen für 70 MHz (4 m)
  *
  * Status, Zeugnisklassen und Leistungsgrenzen stammen Zeile für Zeile aus der
@@ -25,9 +26,13 @@
  * innerhalb der Bänder (IARU-Empfehlung, rechtlich nicht bindend) und der Stand
  * der befristeten 4-m-Regelung (siehe `band-4m`).
  *
- * Nicht modelliert: die Frequenzbereiche oberhalb 24,25 GHz (47 GHz, 76–81 GHz,
- * 122,25–123 GHz, 134–141 GHz, 241–250 GHz und > 275 GHz), die AFuV Anlage 1
- * unter den lfd. Nrn. 35 bis 45 ebenfalls führt.
+ * Vollständig abgebildet sind die lfd. Nrn. 1 bis 44 der Anlage 1, also alle
+ * Frequenzbereiche von 135,7 kHz bis 250 GHz. Nicht als Band modelliert ist
+ * allein die lfd. Nr. 45 („> 275 GHz“): dort weist die Anlage weder einen
+ * Status noch eine Leistungsgrenze aus. Nutzungsbestimmung 14 nennt für diesen
+ * Bereich die Teilbereiche 444–453 GHz, 510–546 GHz, 711–730 GHz,
+ * 909–926 GHz, 945–951 GHz und Frequenzen oberhalb von 956 GHz; dort kann der
+ * Amateurfunkdienst keinen Schutz vor Störungen beanspruchen.
  */
 
 // ============================================================================
@@ -1063,6 +1068,194 @@ export const AMATEUR_BANDS: AmateurBand[] = [
       'Klasse A, 5 W PEP für die Klasse E.',
     source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 Microwave Band Plan',
     sourceRef: 'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 33 und 34; Nutzungsbestimmungen 9, 13 und 17'
+  },
+
+  // ==========================================================================
+  // EHF — Millimeterwellen
+  // ==========================================================================
+  {
+    id: 'band-6mm',
+    nameDE: '6 mm',
+    minHz: 47e9,
+    maxHz: 47.2e9,
+    status: 'primaer',
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
+    powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' }
+    },
+    segments: [
+      { minHz: 47e9, maxHz: 47.088e9, mode: 'allmode', labelDE: 'Breitbandanwendungen' },
+      {
+        minHz: 47.088e9,
+        maxHz: 47.09e9,
+        mode: 'cw',
+        labelDE: 'Schmalbandsegment, Aktivitätszentrum 47 088,000 MHz'
+      },
+      {
+        minHz: 47.09e9,
+        maxHz: 47.2e9,
+        mode: 'allmode',
+        labelDE: 'Breitbandanwendungen und Satellitenbetrieb'
+      }
+    ],
+    notesDE:
+      'Erstes Millimeterwellenband des Amateurfunkdienstes und eines der wenigen mit ' +
+      'primärem Status. Es liegt im Ausbreitungsfenster zwischen der Wasserdampflinie ' +
+      'bei 22 GHz und dem Sauerstoffband um 60 GHz; Verbindungen laufen quasioptisch ' +
+      'über wenige Kilometer, meist mit Selbstbau-Transvertern und kleinen Spiegeln.',
+    licenseNote:
+      'Primärer Status. 75 W PEP für die Klasse A, 5 W PEP für die Klasse E. Der ganze ' +
+      'Bereich darf auch für den Amateurfunkdienst über Satelliten genutzt werden; dieser ' +
+      'ist dort primärer Funkdienst.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 µWave-Bandplan',
+    sourceRef: 'AFuV Anlage 1 Buchstabe A, lfd. Nr. 35; Nutzungsbestimmungen 13 und 17'
+  },
+  {
+    id: 'band-4mm',
+    nameDE: '4 mm',
+    minHz: 76e9,
+    maxHz: 81e9,
+    status: 'sekundaer',
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
+    powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' }
+    },
+    segments: [
+      {
+        minHz: 76e9,
+        maxHz: 81e9,
+        mode: 'allmode',
+        labelDE: 'Alle Betriebsarten; Schmalband- und Breitbandbetrieb'
+      }
+    ],
+    notesDE:
+      'Mit 5 GHz Breite der größte zusammenhängende Frequenzbereich des Amateurfunks. ' +
+      'Die AFuV führt ihn in vier Zeilen mit gleichem Status und gleichen Grenzen. ' +
+      'Denselben Bereich belegen die Abstands- und Nahbereichsradare von Kraftfahrzeugen, ' +
+      'weshalb der Amateurfunkdienst hier durchgehend sekundär bleibt.',
+    licenseNote:
+      'Sekundärer Status im gesamten Bereich. 75 W PEP für die Klasse A, 5 W PEP für die ' +
+      'Klasse E. Der Amateurfunkdienst über Satelliten darf den Bereich sekundär mitnutzen.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 µWave-Bandplan',
+    sourceRef: 'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 36 bis 39; Nutzungsbestimmungen 9, 13 und 17'
+  },
+  {
+    id: 'band-2_5mm',
+    nameDE: '2,5 mm',
+    minHz: 122.25e9,
+    maxHz: 123e9,
+    status: 'sekundaer',
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
+    powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' }
+    },
+    segments: [
+      {
+        minHz: 122.25e9,
+        maxHz: 123e9,
+        mode: 'allmode',
+        labelDE: 'Alle Betriebsarten; Schmalband- und Breitbandbetrieb'
+      }
+    ],
+    notesDE:
+      'Der Bereich liegt im ISM-Bereich 122–123 GHz der Vollzugsordnung für den Funkdienst ' +
+      'und damit neben industriellen und medizinischen Anwendungen. Kurz darunter dämpft ' +
+      'die Sauerstofflinie bei 118,75 GHz; erreichbar sind in der Praxis wenige Kilometer ' +
+      'bei freier Sicht.',
+    licenseNote:
+      'Sekundärer Status. 75 W PEP für die Klasse A, 5 W PEP für die Klasse E. Nutzungs' +
+      'bestimmung 13 nennt diesen Bereich nicht — Satellitenbetrieb ist hier nicht vorgesehen.',
+    source:
+      'AFuV Anlage 1 (Fassung 24.06.2024); VO Funk Fußnote 5.138 (ISM); IARU R1 µWave-Bandplan',
+    sourceRef: 'AFuV Anlage 1 Buchstabe A, lfd. Nr. 40; Nutzungsbestimmungen 9 und 17'
+  },
+  {
+    id: 'band-2mm',
+    nameDE: '2 mm',
+    minHz: 134e9,
+    maxHz: 141e9,
+    status: 'gemischt',
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
+    powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' }
+    },
+    segments: [
+      { minHz: 134e9, maxHz: 134.928e9, mode: 'allmode', labelDE: 'Breitbandanwendungen' },
+      {
+        minHz: 134.928e9,
+        maxHz: 134.93e9,
+        mode: 'cw',
+        labelDE: 'Schmalbandsegment (höchstens 2,7 kHz Bandbreite)'
+      },
+      {
+        minHz: 134.93e9,
+        maxHz: 141e9,
+        mode: 'allmode',
+        labelDE: 'Breitbandanwendungen und Satellitenbetrieb'
+      }
+    ],
+    notesDE:
+      'Zwei Zeilen der Anlage 1 mit unterschiedlichem Status bilden zusammen das 2-mm-Band. ' +
+      'Es liegt im Ausbreitungsfenster zwischen der Sauerstofflinie bei 118,75 GHz und der ' +
+      'Wasserdampflinie bei 183,3 GHz und wird vom Radioastronomiefunkdienst mitgenutzt.',
+    licenseNote:
+      '134–136 GHz ist primär, 136–141 GHz sekundär zugewiesen. 75 W PEP für die Klasse A, ' +
+      '5 W PEP für die Klasse E. Über Satelliten ist der Amateurfunk in 134–136 GHz primär, ' +
+      'in 136–141 GHz sekundär.',
+    source: 'AFuV Anlage 1 (Fassung 24.06.2024); IARU R1 µWave-Bandplan',
+    sourceRef: 'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 41 und 42; Nutzungsbestimmungen 9, 13 und 17'
+  },
+  {
+    id: 'band-1_2mm',
+    nameDE: '1,2 mm',
+    minHz: 241e9,
+    maxHz: 250e9,
+    status: 'gemischt',
+    licenseClasses: ['A', 'E'],
+    maxPowerClassAW: POWER_MICROWAVE_CLASS_A_W,
+    powerLimitType: 'pep',
+    powerLimits: {
+      A: { watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' },
+      E: { watt: POWER_CLASS_E_SHF_W, type: 'pep' }
+    },
+    segments: [
+      {
+        minHz: 241e9,
+        maxHz: 248e9,
+        mode: 'allmode',
+        labelDE: 'Alle Betriebsarten; Satellitenbetrieb sekundär'
+      },
+      {
+        minHz: 248e9,
+        maxHz: 250e9,
+        mode: 'satellit',
+        labelDE: 'Alle Betriebsarten; Satellitenbetrieb primär'
+      }
+    ],
+    notesDE:
+      'Höchstes Band, dem die Anlage 1 einen Status und eine Leistungsgrenze zuweist. ' +
+      'Der Teilbereich 244–246 GHz ist zugleich ISM-Bereich der Vollzugsordnung für den ' +
+      'Funkdienst. Verbindungen sind Experimente über wenige hundert Meter bis Kilometer; ' +
+      'Feuchte in der Luft dämpft stark.',
+    licenseNote:
+      '241–248 GHz ist sekundär, 248–250 GHz primär zugewiesen. 75 W PEP für die Klasse A, ' +
+      '5 W PEP für die Klasse E. Über Satelliten ist der Amateurfunk in 241–248 GHz ' +
+      'sekundär, in 248–250 GHz primär.',
+    source:
+      'AFuV Anlage 1 (Fassung 24.06.2024); VO Funk Fußnote 5.138 (ISM); IARU R1 µWave-Bandplan',
+    sourceRef: 'AFuV Anlage 1 Buchstabe A, lfd. Nrn. 43 und 44; Nutzungsbestimmungen 13 und 17'
   }
 ];
 

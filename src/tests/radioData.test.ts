@@ -186,6 +186,19 @@ describe('AMATEUR_BANDS', () => {
     }
   });
 
+  // AFuV Anlage 1 Buchstabe A, lfd. Nrn. 1 bis 44 (Nr. 45 „> 275 GHz“ ohne Status)
+  it('bildet alle 27 Bänder von 135,7 kHz bis 250 GHz ab', () => {
+    expect(AMATEUR_BANDS).toHaveLength(27);
+    expect(AMATEUR_BANDS[0].minHz).toBe(135.7e3);
+    expect(AMATEUR_BANDS[AMATEUR_BANDS.length - 1].maxHz).toBe(250e9);
+  });
+
+  it('lässt die Bänder einander nicht überlappen', () => {
+    for (let i = 0; i < AMATEUR_BANDS.length - 1; i++) {
+      expect(AMATEUR_BANDS[i].maxHz).toBeLessThan(AMATEUR_BANDS[i + 1].minHz);
+    }
+  });
+
   it('hat für jedes Band minHz < maxHz, positive Leistung und Quelle', () => {
     for (const band of AMATEUR_BANDS) {
       expect(band.minHz).toBeGreaterThan(0);
@@ -291,7 +304,19 @@ describe('AMATEUR_BANDS', () => {
         type: 'pep'
       });
     }
-    for (const id of ['band-13cm', 'band-9cm', 'band-6cm', 'band-3cm', 'band-1_2cm']) {
+    const mikrowelle = [
+      'band-13cm',
+      'band-9cm',
+      'band-6cm',
+      'band-3cm',
+      'band-1_2cm',
+      'band-6mm',
+      'band-4mm',
+      'band-2_5mm',
+      'band-2mm',
+      'band-1_2mm'
+    ];
+    for (const id of mikrowelle) {
       const band = AMATEUR_BANDS.find((b) => b.id === id)!;
       expect(band.powerLimits.E).toEqual({ watt: POWER_CLASS_E_SHF_W, type: 'pep' });
       expect(band.maxPowerClassAW).toBe(POWER_MICROWAVE_CLASS_A_W);
@@ -313,6 +338,55 @@ describe('AMATEUR_BANDS', () => {
     expect(band.minHz).toBe(3400e6);
     expect(band.maxHz).toBe(3475e6);
     expect(band.maxPowerClassAW).toBe(POWER_MICROWAVE_CLASS_A_W);
+  });
+
+  // AFuV Anlage 1, lfd. Nrn. 35 bis 44
+  it('führt die fünf Millimeterbänder oberhalb 24,25 GHz', () => {
+    const namen = AMATEUR_BANDS.filter((b) => b.minHz > 24.25e9).map((b) => b.nameDE);
+    expect(namen).toEqual(['6 mm', '4 mm', '2,5 mm', '2 mm', '1,2 mm']);
+  });
+
+  // AFuV Anlage 1, lfd. Nr. 35: 47–47,2 GHz, primär, 75 W PEP / 5 W PEP
+  it('führt das 6-mm-Band mit 47-47,2 GHz als primär zugewiesen', () => {
+    const band = AMATEUR_BANDS.find((b) => b.id === 'band-6mm')!;
+    expect(band.minHz).toBe(47e9);
+    expect(band.maxHz).toBe(47.2e9);
+    expect(band.status).toBe('primaer');
+    expect(band.licenseClasses).toEqual(['A', 'E']);
+    expect(band.powerLimits.A).toEqual({ watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' });
+    expect(band.powerLimits.E).toEqual({ watt: POWER_CLASS_E_SHF_W, type: 'pep' });
+  });
+
+  // AFuV Anlage 1, lfd. Nrn. 36 bis 39: 76–81 GHz durchgehend sekundär
+  it('fasst 76-81 GHz zum sekundären 4-mm-Band zusammen', () => {
+    const band = AMATEUR_BANDS.find((b) => b.id === 'band-4mm')!;
+    expect(band.minHz).toBe(76e9);
+    expect(band.maxHz).toBe(81e9);
+    expect(band.status).toBe('sekundaer');
+  });
+
+  // AFuV Anlage 1, lfd. Nr. 40 bzw. Nrn. 41 und 42
+  it('führt 122,25-123 GHz sekundär und 134-141 GHz gemischt', () => {
+    const zweiKomma5 = AMATEUR_BANDS.find((b) => b.id === 'band-2_5mm')!;
+    expect(zweiKomma5.minHz).toBe(122.25e9);
+    expect(zweiKomma5.maxHz).toBe(123e9);
+    expect(zweiKomma5.status).toBe('sekundaer');
+    const zwei = AMATEUR_BANDS.find((b) => b.id === 'band-2mm')!;
+    expect(zwei.minHz).toBe(134e9);
+    expect(zwei.maxHz).toBe(141e9);
+    expect(zwei.status).toBe('gemischt');
+  });
+
+  // AFuV Anlage 1, lfd. Nrn. 43 und 44: 241–248 GHz sekundär, 248–250 GHz primär
+  it('führt das 1,2-mm-Band mit 241-250 GHz und einem Satellitensegment', () => {
+    const band = AMATEUR_BANDS.find((b) => b.id === 'band-1_2mm')!;
+    expect(band.minHz).toBe(241e9);
+    expect(band.maxHz).toBe(250e9);
+    expect(band.status).toBe('gemischt');
+    expect(band.powerLimits.A).toEqual({ watt: POWER_MICROWAVE_CLASS_A_W, type: 'pep' });
+    const satellit = band.segments.find((segment) => segment.mode === 'satellit')!;
+    expect(satellit.minHz).toBe(248e9);
+    expect(satellit.maxHz).toBe(250e9);
   });
 
   // AFuV Anlage 1, lfd. Nrn. 3 bis 5 bzw. 15 und 16

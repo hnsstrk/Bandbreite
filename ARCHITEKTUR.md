@@ -2,7 +2,7 @@
 
 Gemeinsame Referenz zur eindeutigen Identifikation aller Elemente. Jedes Element hat eine **ID** in eckigen Klammern (z. B. `[C-FSPL]`), die wir zur Kommunikation verwenden. Bestehende IDs bleiben stabil, auch wenn eine Datei umgebaut oder aufgeteilt wurde.
 
-**Stand:** September 2026, nach dem Rework in sechs Wellen (siehe `docs/REWORK-2026-09.md`).
+**Stand:** September 2026, nach dem Rework in sieben Wellen (siehe `docs/REWORK-2026-09.md`); Welle 7 hat das Erscheinungsbild auf den Datenblatt-Stil und volle Seitenbreite umgestellt.
 
 **Keine Zeilenzahlen mehr.** Sie waren nie länger als bis zum nächsten Formatierungslauf gültig. Stattdessen gilt die Regel „**max. 300 Zeilen je Komponente**", und `[T-CONV-RULES]` (`src/tests/conventions.test.ts`) setzt sie maschinell durch — zusammen mit „nur Tokens, keine Hex-Farben" und „Trailing Slash in der Navigations-Registry".
 
@@ -35,7 +35,7 @@ Quelle der Wahrheit ist `NAV_TREE` in `[D-NAV]` (`src/lib/data/navigation.ts`). 
 ```
 bandbreite.online-resources.de
 │
-├── /                              Portalseite (Einstieg, Suche, Kacheln)  [R-HOME]
+├── /                              Portalseite (Einstieg, Suche, Listen)   [R-HOME]
 │
 ├── /spektrum/                     Spektrum-Dashboard (Kernseite)          [R-SPEK]
 │   ├── /anwendungen/              Anwendungen im Spektrum                 [R-SPEK-APP]
@@ -100,7 +100,7 @@ bandbreite.online-resources.de
     └── /suche/                    Ergebnisseite (hidden)                  [R-SUCHE]
 ```
 
-`[R-SUCHE]` trägt im Knoten das Flag `hidden: true`: die Seite existiert, ist verlinkbar und prerendert, bleibt aber aus Mega-Menü, Hub-Kacheln, Kapitelnavigation und Suchindex heraus. In `[R-SERV-MAP]` erscheint sie, damit die Übersicht vollständig bleibt.
+`[R-SUCHE]` trägt im Knoten das Flag `hidden: true`: die Seite existiert, ist verlinkbar und prerendert, bleibt aber aus Mega-Menü, Hub-Listen, Kapitelnavigation und Suchindex heraus. In `[R-SERV-MAP]` erscheint sie, damit die Übersicht vollständig bleibt.
 
 `[R-WISS-LERN-DET]` sind bewusst **keine** Navigationsknoten: die vier Detailseiten entstehen über `entries()` aus `LEARNING_PATHS` (`[D-LEARN]`), damit Mega-Menü und Kapitelblättern nicht mit vier weiteren Einträgen überladen werden.
 
@@ -117,9 +117,11 @@ bandbreite.online-resources.de
 
 **`[R-SPEK]` Spektrum-Dashboard** — Kernseite: `[C-SPECTRUM]`, `[C-FREQCONV]`, `[C-POWCONV]`, `[C-RANGE]`, `[C-BANDSIDE]`, `[C-RELTOP]`. Klick auf ein Band setzt die Frequenz für **alle** Werkzeuge (seit E3 auch für den Frequenzkonverter).
 
-**`[R-HOME]` Portalseite** — Einstieg unter `/` (E1): `[C-HERO]`, Suchfeld (öffnet die Command-Palette über `layout/searchDialog.svelte.ts`), fünf Bereichskacheln aus `NAV_GROUPS`, „Interaktiv lernen" mit Sprungmarken in die Kapitel, die Lernpfad-Kacheln `[C-PORTPATHS]`, Werkzeugkacheln aus `getHubChildren()` und ein Hinweis auf Quellen und Haftungsausschluss. Kein zweites Dashboard — `[R-SPEK]` bleibt unverändert.
+Aufbau seit Welle 7 (von oben nach unten): `h1` „Elektromagnetisches Spektrum", ein `sr-only`-Hinweis zum Bandklick, dann **direkt** `[C-SPECTRUM]` — ohne Kartenrahmen, ohne Zwischenüberschrift und ohne Beschreibungsabsatz. Darunter das zweispaltige Raster (ab 64 rem 55/45): links die Werkzeugspalte `[C-FREQCONV]`, `[C-POWCONV]`, `[C-RANGE]`, rechts `[C-BANDSIDE]` (ohne Frequenz nur eine einzeilige Aufforderung statt eines großen Platzhalters). Abgeschlossen wird die Seite von einer einzeiligen Weiter-Zeile mit den Unterseiten aus `getHubChildren('/spektrum/')` und `[C-RELTOP]`. Die früheren Grundlagen-Kacheln und Linkkarten sind entfallen; Abstände durchgehend 0,75 rem.
 
-**Hub-Seiten** (`[R-RECH]`, `[R-KONV]`, `[R-WISS]`, `[R-DB]`, `[R-SERV]`, `[R-WISS-FUNK]`, `[R-WISS-GRUND]`, `[R-WISS-RAD]`) — Kachelraster aus `getHubChildren()`; die Kacheln stammen direkt aus `[D-NAV]` und laufen nie auseinander. Die beiden Kapitel-Hubs `[R-WISS-GRUND]` und `[R-WISS-RAD]` ergänzen Lernziele und Einordnung.
+**`[R-HOME]` Portalseite** — Einstieg unter `/` (E1): `h1` mit einem Satz Lead (kein `[C-HERO]` mehr), Suchfeld über die volle Breite (öffnet die Command-Palette über `layout/searchDialog.svelte.ts`), die fünf Bereiche aus `NAV_GROUPS` als Linkzeilen `[C-PORTAREAS]`, „Interaktiv lernen" und „Werkzeuge" als Definitionslisten `[C-PORTTILES]`, die Lernpfade als Liste `[C-PORTPATHS]` und ein einzeiliger Fußtext zu Quellen und Haftungsausschluss. **Keine Kacheln** — alles sind dichte Listen mit 1-px-Trennlinien. Kein zweites Dashboard — `[R-SPEK]` bleibt unverändert.
+
+**Hub-Seiten** (`[R-RECH]`, `[R-KONV]`, `[R-WISS]`, `[R-DB]`, `[R-SERV]`, `[R-WISS-FUNK]`, `[R-WISS-GRUND]`, `[R-WISS-RAD]`) — **Linklisten** aus `getHubChildren()`: `[C-HUBLIST]` rendert Name und Beschreibung je Zeile, getrennt durch 1-px-Linien, ab 64 rem zweispaltig. Die Einträge stammen direkt aus `[D-NAV]` und laufen nie auseinander. `[R-WISS]` ergänzt eine Schnellreferenz aus vier Datenblatt-Tabellen, `[R-WISS-GRUND]` eine nummerierte Schrittliste, `[R-WISS-RAD]` Lernziele und Einordnung.
 
 **Rechnerseiten** — jeweils `[C-HERO]` + Rechnerkomponente + `[C-RELTOP]`. Der Rechner hält seinen Zustand in der URL (`?f=…`), siehe `[U-URL]`.
 
@@ -190,7 +192,7 @@ Regel: Diese Komponenten verwenden **nur Tokens**, keine festen Farbwerte.
 | `[C-ICONS]` | `ui/icons.ts` | Icon-Katalog (Pfaddaten), Typ `IconName` | — |
 | `[C-BTN]` | `ui/Button.svelte` | Schaltfläche oder Link | `variant?`, `size?`, `href?`, `icon?`, `iconOnly?`, `pressed?`, `loading?` |
 | `[C-BADGE]` | `ui/Badge.svelte` | Statusetikett | `tone?`, `variant?`, `dot?`, `icon?` |
-| `[C-CARD]` | `ui/Card.svelte` | Karte, optional verlinkt | `title?`, `subtitle?`, `href?`, `icon?`, `tone?`, `muted?` |
+| `[C-CARD]` | `ui/Card.svelte` | flache Karte (1-px-Linie, kein Schatten; verschachtelt rahmenlos), optional verlinkt | `title?`, `subtitle?`, `href?`, `icon?`, `tone?`, `muted?` |
 | `[C-SECHEAD]` | `ui/SectionHeader.svelte` | Abschnittsüberschrift mit Anker | `title`, `level?`, `id?`, `eyebrow?`, `description?` |
 | `[C-CALLOUT]` | `ui/Callout.svelte` | Hinweis-, Warn-, Formelkasten | `tone?`, `title?`, `source?`, `collapsible?` |
 | `[C-SELECT]` | `ui/Select.svelte` | Auswahlfeld | `label?`, `value`, `options`, `error?`, `onchange?` |
@@ -201,10 +203,10 @@ Regel: Diese Komponenten verwenden **nur Tokens**, keine festen Farbwerte.
 | `[C-TABS]` | `ui/Tabs.svelte` | Reiterleiste mit Panel-Snippet | `tabs`, `active`, `panel`, `variant?` |
 | `[C-RESULT]` | `ui/ResultCard.svelte` | Ergebnisanzeige mit Kopierfunktion | `label`, `value`, `unit?`, `tone?`, `emphasis?`, `copyable?` |
 | `[C-FORMULA]` | `ui/FormulaBlock.svelte` | Formel als Unicode oder MathML, mit Zeichenlegende | `formula?`, `math?`, `alt?`, `variables?` |
-| `[C-HERO]` | `ui/PageHero.svelte` | Seitenkopf: Kicker, Titel, Lead, Metadaten, Aktionen | `title`, `lead?`, `kicker?`, `icon?`, `meta?` |
+| `[C-HERO]` | `ui/PageHero.svelte` | Seitenkopf: `h1`, eine Zeile Lead, kleine Meta-Zeile — `kicker`, `icon`, `badge` und Aktionen bleiben als Props gültig, aber wirkungslos | `title`, `lead?`, `meta?` |
 | `[C-TOC]` | `ui/TableOfContents.svelte` | Sticky-Inhaltsverzeichnis mit Scrollspy | `items`, `sticky?`, `compactBelow?` |
 | `[C-GOALS]` | `ui/LearningGoals.svelte` | Lernziel-Block eines Kapitels | `goals`, `title?`, `level?` |
-| `[C-RELLINK]` | `ui/RelatedLinks.svelte` | Freie Linkliste als Karten oder Liste | `items`, `layout?`, `columns?` |
+| `[C-RELLINK]` | `ui/RelatedLinks.svelte` | Freie Linkliste mit Trennlinien (keine Karten; `layout`/`columns` wirkungslos) | `items`, `layout?`, `columns?` |
 | `[C-RELTOP]` | `ui/RelatedTopics.svelte` | „Verwandte Themen" aus `[D-REL]` — kein Handpflege-Markup | `href`, `title?`, `max?` |
 | `[C-BREAD]` | `ui/Breadcrumb.svelte` | Brotkrümel aus `getBreadcrumbs()`, Startknoten ist `/` | `currentPath` |
 | `[C-META]` | `ui/Metadata.svelte` | Einzige Stelle für `<head>`: Titel, Description, canonical, og/twitter, JSON-LD-Breadcrumbs | `title?`, `description?`, `image?` |
@@ -267,7 +269,7 @@ Unterkomponenten: `[C-LBTX]` `LinkBudgetTxSection`, `[C-LBPATH]` `LinkBudgetPath
 `d3-scale` und `d3-shape` (kein `d3`-Metapaket, kein Chart.js) plus eigenes SVG. Alle Diagramme sitzen in `[C-CHARTFRAME]`, messen ihre Breite selbst und liefern eine `sr-only`-Datentabelle. Serienfarben kommen aus Tokens, nicht aus Hex-Werten. Die Datenaufbereitung liegt jeweils in einem `*Data.ts` neben der Komponente und ist ohne DOM testbar.
 
 - **`[C-CHARTFRAME]`** — `charts/ChartFrame.svelte`
-  Rahmen für alle Diagramme: Titel, Legende, horizontales Scrollen unter `minWidth`, Fußnote, Datentabelle für Screenreader.
+  Rahmen für alle Diagramme, ohne Karte: Titel als kleine Caption, 1-px-Rahmen nur um die Zeichenfläche, Legende, horizontales Scrollen unter `minWidth`, Fußnote, Datentabelle für Screenreader.
   Props: `title?`, `level?`, `description` (Pflicht), `width?` (`$bindable`), `minWidth?`, `legend?`, `dataTable?`, `footnote?`, `actions?`
 - **`[C-ATTEN]`** — `charts/AttenuationChart.svelte` · `attenuationChartData.ts`
   Atmosphärische Dämpfung nach ITU-R P.676-13 (line-by-line), P.838-3, P.840. Legende `[C-ATTLEG]`, Tabelle `[C-ATTTAB]`, Tooltip `[C-ATTTIP]`.
@@ -287,7 +289,7 @@ Unterkomponenten: `[C-LBTX]` `LinkBudgetTxSection`, `[C-LBPATH]` `LinkBudgetPath
 
 Unterkomponenten: `[C-ATTLEG]` `AttenuationLegend`, `[C-ATTTAB]` `AttenuationTable`, `[C-ATTTIP]` `AttenuationTooltip`, `[C-POWCTRL]` `PowerDbControls`, `[C-POWLEG]` `PowerDbLegend`, `[C-POWTAB]` `PowerDbTable`, `[C-POWTIP]` `PowerDbTooltip`, `[C-APPDET]` `ApplicationDetails`, `[C-IONOSCENE]` `IonosphericScene`, `[C-WPCTRL]` `WavePropagationControls`, `[C-WPSCENE]` `WavePropagationScene`, `[C-WPPATH]` `WavePropagationPaths`, `[C-WPLEG]` `WavePropagationLegend`, `[C-TIMEDET]` `TimelineEventDetails`.
 
-### Funk & Fernmeldetechnik (25 Komponenten + 8 Logikmodule)
+### Funk & Fernmeldetechnik (26 Komponenten + 8 Logikmodule)
 
 Fachliche Bausteine der Kapitel unter `[R-WISS-FUNK]` und der Funkdienst-Datenbank. Alle Balkendarstellungen sind **HTML/CSS statt SVG**: Die Segmente sind echte `<button>`-Elemente mit `aria-pressed` und vorgelesenem Frequenzbereich. Die Filter- und Skalenlogik liegt in `.svelte.ts`-Modulen und ist ohne DOM getestet.
 
@@ -316,21 +318,23 @@ Fachliche Bausteine der Kapitel unter `[R-WISS-FUNK]` und der Funkdienst-Datenba
 - **`[C-APPPANEL]`** — `funk/ApplicationDetailPanel.svelte` — Props: `application`
 - **`[C-MODELEG]`** — `funk/ModeLegend.svelte` — Legende der Betriebsarten.
 - **`[C-ORBITSCENE]`** — `funk/OrbitScene.svelte` — Bahnszene zum Orbit-Rechner.
+- **`[C-PANEL]`** — `funk/Panel.svelte` — flacher Abschnittsrahmen dieser Bausteine: Titel, Untertitel und Aktionen in einer Kopfzeile mit Trennlinie, **ohne** Karte und ohne Innenabstand, damit Tabellen die volle Breite nutzen. 14 Bausteine verwenden ihn seit Welle 7 statt `ui/Card`. Props: `title`, `subtitle?`, `actions?`, `footer?`.
 
 > Die früheren Zweitfassungen `funk/ArticleLayout.svelte` und `funk/ContentSection.svelte` sind entfallen: Die Funktechnik-Kapitel werden von den Kapitelkomponenten unter `knowledge/` gerendert, `content/funktechnik/adapt.ts` übersetzt ihr Blockmodell auf das kanonische Modell aus `content/types.ts`. In `funk/` liegen ausschließlich fachliche Bausteine.
 
-### Portal (4 Komponenten + 1 Modul)
+### Portal und Hubs (5 Komponenten + 1 Modul)
 
-- **`[C-PORTSEARCH]`** — `portal/PortalSearch.svelte` — Suchfeld der Startseite; öffnet über `[C-SEARCHDLG]` dieselbe Palette wie Lupe und Strg + K.
-- **`[C-PORTAREAS]`** — `portal/PortalAreas.svelte` — fünf Bereichskacheln mit je drei bis vier Direkteinstiegen.
-- **`[C-PORTTILES]`** — `portal/PortalTiles.svelte` — Kachelraster für „Interaktiv lernen" und „Werkzeuge".
-- **`[C-PORTPATHS]`** — `portal/PortalLearningPaths.svelte` — Kachelreihe der vier Lernpfade mit Fortschritt.
-- **`[C-PORTCONTENT]`** — `portal/portalContent.ts` — leitet Bereichs- und Werkzeugkacheln aus `NAV_GROUPS`/`getHubChildren()` ab; nur die Anker der interaktiven Kapitel stehen als Daten darin.
+- **`[C-PORTSEARCH]`** — `portal/PortalSearch.svelte` — Suchfeld der Startseite über die volle Breite; öffnet über `[C-SEARCHDLG]` dieselbe Palette wie Lupe und Strg + K.
+- **`[C-PORTAREAS]`** — `portal/PortalAreas.svelte` — die fünf Bereiche als Zeilen: Bereichsname links, drei bis vier Direkteinstiege punktgetrennt daneben.
+- **`[C-PORTTILES]`** — `portal/PortalTiles.svelte` — Definitionsliste für „Interaktiv lernen" und „Werkzeuge", ab 64 rem zweispaltig.
+- **`[C-PORTPATHS]`** — `portal/PortalLearningPaths.svelte` — die vier Lernpfade als Liste mit Stufe, Schrittzahl, Dauer und Fortschritt.
+- **`[C-HUBLIST]`** — `portal/HubList.svelte` — gemeinsame Einstiegsliste **aller Hubs** (`/rechner/`, `/konverter/`, `/wissen/`, `/datenbanken/`, `/service/`, `/wissen/funktechnik/`): `<dl>` mit Name als Link, Beschreibung daneben, 1-px-Trennlinien, volle Breite, ab 64 rem zweispaltig; `status: 'geplant'` erscheint ohne Link mit Vermerk. Props: `items`, `label`, `class?`.
+- **`[C-PORTCONTENT]`** — `portal/portalContent.ts` — leitet Bereichs- und Werkzeugeinträge aus `NAV_GROUPS`/`getHubChildren()` ab; nur die Anker der interaktiven Kapitel stehen als Daten darin.
 
 ### Lernpfade (4 Komponenten + 1 Modul)
 
 - **`[C-LEARNBAR]`** — `learning/LearningPathBar.svelte` — Pfad-Leiste unter dem Header (`+layout.svelte`); sichtbar nur, wenn ein Pfad aktiv **und** die aktuelle Route ein Schritt dieses Pfads ist: „Schritt 3 von 7", Lernziel, Balken, Zurück/Weiter/Erledigt/Verlassen.
-- **`[C-LEARNCARD]`** — `learning/LearningPathCard.svelte` — Kachel je Pfad (Stufe, Dauer, Fortschritt, Starten/Fortsetzen).
+- **`[C-LEARNCARD]`** — `learning/LearningPathCard.svelte` — Datenzeile je Pfad statt Kachel (Titel, Lead, Stufe/Schritte/Dauer, Fortschrittsbalken, Starten/Fortsetzen).
 - **`[C-LEARNSTEPS]`** — `learning/LearningPathSteps.svelte` — nummerierte Schrittliste mit Lernziel, Status und Abhaken.
 - **`[C-LEARNMETER]`** — `learning/LearningMeter.svelte` — Fortschrittsbalken (`role="progressbar"`, `aria-valuetext`).
 - **`[C-LEARNPROG]`** — `learning/learningProgress.svelte.ts` — Runes-Klasse plus Singleton `learningProgress`; versioniertes `localStorage`-Schema `bandbreite:lernpfad`, alle Zugriffe in `try/catch`, Laden erst im `$effect` (sonst wiche das Client-Markup vom prerenderten ab).
@@ -340,7 +344,7 @@ Fachliche Bausteine der Kapitel unter `[R-WISS-FUNK]` und der Funkdienst-Datenba
 Generischer Renderer für alle Kapitel. Der Inhalt ist Daten (`src/lib/content`), nicht Markup.
 
 - **`[C-ARTLAY]`** — `knowledge/ArticleLayout.svelte`
-  Kapitelrahmen: `[C-HERO]`, `[C-GOALS]`, Sticky-`[C-TOC]`, Abschnitte, Quellen, `[C-ARTPAG]`, `[C-RELTOP]`. Wertet `?w=<widgetId>` aus: scrollt zum Widget (bei `prefers-reduced-motion` ohne Animation) und setzt den Fokus.
+  Kapitelrahmen ohne äußere Karte und **ohne Lesebreite**: `[C-HERO]`, `[C-GOALS]`, Sticky-`[C-TOC]` (13 rem breite Spalte), Abschnitte, Quellen, `[C-ARTPAG]`, `[C-RELTOP]`. Wertet `?w=<widgetId>` aus: scrollt zum Widget (bei `prefers-reduced-motion` ohne Animation) und setzt den Fokus.
   Zwei Betriebsarten: **Datenbetrieb** mit `article` oder **Markup-Betrieb** mit `children` + `toc`.
   Props: `article?`, `children?`, `href?`, `title?`, `kicker?`, `lead?`, `icon?`, `meta?`, `goals?`, `toc?`, `sources?`, `pagination?`
 - **`[C-ARTSEC]`** — `knowledge/ArticleSection.svelte` — ein Abschnitt samt Unterabschnitten. Props: `section`, `level?`
@@ -349,7 +353,7 @@ Generischer Renderer für alle Kapitel. Der Inhalt ist Daten (`src/lib/content`)
 - **`[C-ARTCARDS]`** — `knowledge/ArticleCards.svelte` — Kartenblock. Props: `block`, `level`
 - **`[C-ARTPAG]`** — `knowledge/ArticlePagination.svelte` — Zurück/Weiter aus den Geschwisterknoten in `[D-NAV]`. Props: `href`
 - **`[C-WIDGFRAME]`** — `knowledge/WidgetFrame.svelte`
-  Einheitlicher Rahmen für alle interaktiven Widgets: Bühne, Reglerspalte, Ergebnisspalte, Play/Pause, Hinweis bei reduzierter Bewegung, `sr-only`-Datentabelle, Fußnote und — bei bekanntem Kontext — „Link zum Widget kopieren".
+  Einheitlicher Rahmen für alle interaktiven Widgets — Titel als Caption, 1-px-Rahmen nur um die Bühne, keine Karte: Bühne, Reglerspalte, Ergebnisspalte, Play/Pause, Hinweis bei reduzierter Bewegung, `sr-only`-Datentabelle, Fußnote und — bei bekanntem Kontext — „Link zum Widget kopieren".
   Props: `title`, `description`, `playable?`, `playing?`, `reducedMotion?`, `ontoggle?`, `controls?`, `results?`, `dataTable?`, `footnote?`, `stacked?`, `interactive?`
 - **`[C-WIDGREG]`** — `knowledge/widgetRegistry.ts` — `WIDGETS: Record<WidgetId, Component>` (14 als Content-Block gerenderte Widgets); re-exportiert den Metadatenkatalog `[D-WIDGETS]`. Inhalte referenzieren nur die ID.
 - **`[C-WIDGCTX]`** — `knowledge/widgetContext.ts` — `setWidgetId`/`getWidgetId` über den Svelte-Kontext; dadurch muss für Deep-Links keine Widget-Komponente angefasst werden.
@@ -524,7 +528,7 @@ Eingabe → [U-HAND] parst → [U-CALC] / [U-CONV] / [U-ATMO] / [U-RADAR] / [U-D
                                   [U-URL] schreibt ?f=… in die Adresszeile
 ```
 
-**Navigation:** `[D-NAV]` → `[C-HEADER]`/`[C-MEGA]`/`[C-MOBILE]`, `[C-BREAD]`, `[C-ARTPAG]`, Hub-Kacheln, `[R-SERV-MAP]`, `[C-PORTCONTENT]` · `[D-SEARCH]` → `[C-PALETTE]`, `[R-SUCHE]` · `[D-REL]` → `[C-RELTOP]` · `pageMeta()` → `+page.ts` → `[C-META]`.
+**Navigation:** `[D-NAV]` → `[C-HEADER]`/`[C-MEGA]`/`[C-MOBILE]`, `[C-BREAD]`, `[C-ARTPAG]`, `[C-HUBLIST]`, `[R-SERV-MAP]`, `[C-PORTCONTENT]` · `[D-SEARCH]` → `[C-PALETTE]`, `[R-SUCHE]` · `[D-REL]` → `[C-RELTOP]` · `pageMeta()` → `+page.ts` → `[C-META]`.
 
 **Widgets:** `[D-WIDGETS]` → Suchindex und `?w=`-Deep-Links · `[C-WIDGREG]` → Komponente · `[C-WIDGCTX]` → `[C-WIDGFRAME]` („Link zum Widget kopieren").
 
@@ -569,7 +573,7 @@ Eingabe → [U-HAND] parst → [U-CALC] / [U-CONV] / [U-ATMO] / [U-RADAR] / [U-D
 | `[T-PRESETS]` | `presets.test.ts` | `[D-PRESETS]` |
 | `[T-PROP]` | `propagation.test.ts` | `[D-PROP]` |
 | `[T-NAV]` | `navigation.test.ts` | `[D-NAV]` — Trailing Slash, eindeutige IDs, Baumkonsistenz, `hidden`-Regel |
-| `[T-PORTAL]` | `portal.test.ts` | `[R-HOME]` — Bereichskacheln, Anker, Icons |
+| `[T-PORTAL]` | `portal.test.ts` | `[R-HOME]` — Bereichs- und Werkzeugdaten, Anker, Icons |
 | `[T-MEGA]` | `layout-megaMenu.test.ts` | `[C-HEADERLOGIC]` — aktive Gruppe, Fokusaustritt, Tastaturführung im Mega-Menü |
 | `[T-LEARN]` | `learningPaths.test.ts` | `[D-LEARN]` — jeder Schritt ist ein lebender Knoten |
 | `[T-LEARNPROG]` | `learningProgress.test.ts` | `[C-LEARNPROG]` — Schema, Fremdwerte, Fortschrittsrechnung |
@@ -611,9 +615,9 @@ Eingabe → [U-HAND] parst → [U-CALC] / [U-CONV] / [U-ATMO] / [U-RADAR] / [U-D
 
 ### 1. `navigation.ts` ist die einzige Quelle für Seiten
 
-Jede neue Seite braucht **zuerst** einen Knoten in `NAV_TREE` (`[D-NAV]`): `id`, `label`, `href` **mit** Trailing Slash, `description`, `icon`, `keywords`, `status`. Daraus ziehen automatisch: Mega-Menü, Mobile-Menü, Breadcrumb, Hub-Kacheln, Sitemap-Seite, Suchindex, Kapitel-Blättern und Seitentitel. Es gibt **keine** zweite Label- oder Kachelliste.
+Jede neue Seite braucht **zuerst** einen Knoten in `NAV_TREE` (`[D-NAV]`): `id`, `label`, `href` **mit** Trailing Slash, `description`, `icon`, `keywords`, `status`. Daraus ziehen automatisch: Mega-Menü, Mobile-Menü, Breadcrumb, Hub-Listen (`[C-HUBLIST]`), Sitemap-Seite, Suchindex, Kapitel-Blättern und Seitentitel. Es gibt **keine** zweite Label- oder Linkliste.
 
-`status: 'geplant'` markiert angekündigte Seiten: sie erscheinen ausgegraut und werden nicht verlinkt. `hidden: true` markiert Seiten, die es gibt, die aber keinen Platz in der Navigation haben (`[R-SUCHE]`): kein Menüeintrag, keine Hub-Kachel, kein Suchindexeintrag, aber weiterhin in der Sitemap.
+`status: 'geplant'` markiert angekündigte Seiten: sie erscheinen ausgegraut und werden nicht verlinkt. `hidden: true` markiert Seiten, die es gibt, die aber keinen Platz in der Navigation haben (`[R-SUCHE]`): kein Menüeintrag, keine Hub-Zeile, kein Suchindexeintrag, aber weiterhin in der Sitemap.
 
 ### 2. `pageMeta()` statt `<svelte:head>`
 
@@ -677,6 +681,8 @@ Ein Pfad in `[D-LEARN]` ist eine Liste von Schritten mit `href`, Lernziel und op
 ### 11. UI und Styling
 
 Nur Tokens aus `[S-CSS]`, keine Hex-Farben in Komponenten; Icons über `[C-ICON]`, keine Emoji; Fokusring und Kontraste kommen aus dem Design-System. Details: `STYLE_GUIDE.md`.
+
+**Layout-Konvention seit Welle 7: keine `max-width`, volle Breite, Gutter 0,75 rem.** `main`, Kopfbereich, Brotkrumenzeile, `[C-LEARNBAR]` und Fuß laufen über die ganze Viewportbreite; der einzige seitliche Rand ist `--page-gutter` = `0.75rem` auf allen Breiten. `--container-prose|page|wide` stehen auf `none`, `.page-container` und `.bleed` haben keine Fundstelle mehr in `src/`. Auch Fließtext hat keine Lesebreite: `[C-ARTLAY]` und `.prose` füllen die Spalte neben dem 13 rem breiten Inhaltsverzeichnis. Eine Route setzt **keinen** eigenen Seitenrand zusätzlich zu `main` — das verdoppelt den Gutter. Erscheinungsbild: keine Schatten, Radius 2 px (Flächen höchstens 4 px), Gliederung über 1-px-Linien, keine verschachtelten Karten.
 
 `[T-CONV-RULES]` prüft diese Regeln maschinell: Komponentengröße, Hex-Farben und Trailing Slash. Nach dem Kern-Refactor ist die Größenausnahmeliste **leer**; die fünf verbliebenen Hex-Ausnahmen liegen bei `SpectrumRows`, `SpectrumMarker`, `SpectrumCursor` (theme-invariante Markerfarben) sowie `SpectrumTooltip` und `SpectrumLegend` (Farbverlauf des sichtbaren Lichts).
 

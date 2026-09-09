@@ -1,139 +1,41 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'bandbreite-v1';
-const STATIC_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/icons/icon.svg'
-];
+/**
+ * Kill-Switch statt Cache (Entscheidung des Besitzers, Bericht 74).
+ *
+ * Der frühere Service Worker hat Seiten und Assets zwischengespeichert und
+ * damit veraltete Stände ausgeliefert. Diese Fassung speichert nichts mehr:
+ * Sie meldet sich beim Aktivieren selbst ab, löscht **alle** Caches und lädt
+ * alle offenen Fenster neu, damit sie sofort wieder direkt vom Server lesen.
+ * `fetch` wird bewusst **nicht** abgefangen — der Worker steht in keinem
+ * Netzwerkpfad.
+ *
+ * Die Registrierung in `src/app.html` bleibt vorerst bestehen, sonst erreicht
+ * der Kill-Switch die Altinstallationen nie. Sobald davon auszugehen ist, dass
+ * alle Besucher einmal geladen haben (Faustregel: einige Monate nach dem
+ * Rollout), können Registrierung **und** diese Datei ersatzlos entfallen.
+ */
 
-// Dynamic cache for runtime assets
-const RUNTIME_CACHE = 'bandbreite-runtime-v1';
-
-// Install event - cache static assets
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Caching static assets');
-      return cache.addAll(STATIC_ASSETS);
-    })
-  );
-  // Activate immediately
+// Sofort übernehmen, ohne auf das Schließen alter Tabs zu warten.
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
-          .map((name) => {
-            console.log('[SW] Deleting old cache:', name);
-            return caches.delete(name);
-          })
-      );
-    })
+    (async () => {
+      // 1. Alle Caches löschen — auch die der früheren Versionen.
+      const names = await caches.keys();
+      await Promise.all(names.map((name) => caches.delete(name)));
+
+      // 2. Selbst abmelden: danach kontrolliert kein Worker mehr die Seite.
+      await self.registration.unregister();
+
+      // 3. Offene Fenster neu laden, damit sie ohne Worker weiterarbeiten.
+      const clients = await self.clients.matchAll({ type: 'window' });
+      for (const client of clients) {
+        client.navigate(client.url);
+      }
+    })()
   );
-  // Take control of all clients immediately
-  self.clients.claim();
-});
-
-// Fetch event - network first, fallback to cache
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
-
-  // Skip external requests
-  if (url.origin !== self.location.origin) {
-    return;
-  }
-
-  // Skip __data.json requests (SvelteKit navigation)
-  if (url.pathname.includes('__data.json')) {
-    return;
-  }
-
-  // Network first strategy for HTML pages
-  if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          // Clone response for caching
-          const responseClone = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => {
-            cache.put(request, responseClone);
-          });
-          return response;
-        })
-        .catch(() => {
-          // Fallback to cache
-          return caches.match(request).then((cached) => {
-            return cached || caches.match('/');
-          });
-        })
-    );
-    return;
-  }
-
-  // Cache first strategy for static assets
-  if (
-    url.pathname.startsWith('/_app/') ||
-    url.pathname.startsWith('/icons/') ||
-    url.pathname.endsWith('.js') ||
-    url.pathname.endsWith('.css') ||
-    url.pathname.endsWith('.png') ||
-    url.pathname.endsWith('.svg') ||
-    url.pathname.endsWith('.woff2')
-  ) {
-    event.respondWith(
-      caches.match(request).then((cached) => {
-        if (cached) {
-          // Update cache in background
-          fetch(request).then((response) => {
-            caches.open(RUNTIME_CACHE).then((cache) => {
-              cache.put(request, response);
-            });
-          });
-          return cached;
-        }
-
-        // Fetch and cache
-        return fetch(request).then((response) => {
-          const responseClone = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => {
-            cache.put(request, responseClone);
-          });
-          return response;
-        });
-      })
-    );
-    return;
-  }
-
-  // Default: network with cache fallback
-  event.respondWith(
-    fetch(request)
-      .then((response) => {
-        const responseClone = response.clone();
-        caches.open(RUNTIME_CACHE).then((cache) => {
-          cache.put(request, responseClone);
-        });
-        return response;
-      })
-      .catch(() => caches.match(request))
-  );
-});
-
-// Handle messages from clients
-self.addEventListener('message', (event) => {
-  if (event.data?.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
 });

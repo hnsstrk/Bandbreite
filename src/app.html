@@ -51,18 +51,20 @@
   <body data-sveltekit-preload-data="hover">
     <div style="display: contents">%sveltekit.body%</div>
 
-    <!-- Service Worker Registration -->
+    <!--
+      Service Worker: nur noch Kill-Switch (Bericht 74). Der Worker in
+      `static/service-worker.js` cacht nichts mehr, sondern löscht alle Caches,
+      meldet sich selbst ab und lädt offene Fenster neu. Die Registrierung
+      bleibt bewusst bestehen — ohne sie erreicht der Kill-Switch die
+      Altinstallationen nie. In einer späteren Version können dieses Skript und
+      die Worker-Datei ersatzlos entfernt werden.
+    -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker
-            .register('/service-worker.js')
-            .then((registration) => {
-              console.log('SW registered:', registration.scope);
-            })
-            .catch((error) => {
-              console.log('SW registration failed:', error);
-            });
+          navigator.serviceWorker.register('/service-worker.js').catch(() => {
+            // Ohne Worker ist alles in Ordnung — es gibt nichts abzuschalten.
+          });
         });
       }
     </script>

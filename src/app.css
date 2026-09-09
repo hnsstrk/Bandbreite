@@ -148,6 +148,8 @@
   --color-cat-orange: #c2410c;
   --color-cat-violet: #7c3aed;
   --color-cat-pink: #be185d;
+  --color-cat-cyan: #0e7490; /* zu --color-series-5 */
+  --color-cat-red: #b91c1c; /* zu --color-series-6 */
 
   /* ----------------------------------------
      Typografie
@@ -396,6 +398,8 @@
   --color-cat-orange: #fdba74;
   --color-cat-violet: #c4b5fd;
   --color-cat-pink: #f9a8d4;
+  --color-cat-cyan: #67e8f9;
+  --color-cat-red: #fca5a5;
 
   /* Schatten: auch im Dunkelmodus keine — nur Linien. */
   --shadow-sm: none;
@@ -581,6 +585,49 @@ body {
   border: 0;
   border-top: 1px solid var(--color-line);
   margin-block: 1rem;
+}
+
+/* Zweispaltiger Fließtext auf sehr breiten Monitoren (Entscheidung des
+   Besitzers, Bericht 74). `ArticleSection` bündelt zusammenhängende Absätze
+   und Listen in `.prose-columns`; ab 96 rem (1536 px) laufen sie in zwei
+   Spalten mit schmaler Spaltenlinie. Tabellen, Widgets, Formelblöcke, Karten,
+   Definitionslisten und Überschriften bleiben einspaltig über die volle
+   Breite — sie stehen außerhalb des Wrappers. Unter 96 rem und auf
+   Mobilgeräten gibt es keine Spalten. */
+.prose-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+@media (min-width: 96rem) {
+  .prose-columns {
+    display: block;
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--color-line);
+    orphans: 2;
+    widows: 2;
+  }
+
+  .prose-columns > * + * {
+    margin-top: 0.625rem;
+  }
+
+  /* Nichts, was als Einheit gelesen wird, darf über die Spaltengrenze
+     zerfallen. */
+  .prose-columns li,
+  .prose-columns .ui-callout,
+  .prose-columns .ui-formula,
+  .prose-columns table,
+  .prose-columns figure {
+    break-inside: avoid;
+  }
+
+  /* Sicherheitsnetz: Überschriften im Textfluss überspannen beide Spalten. */
+  .prose-columns :is(h2, h3, h4) {
+    column-span: all;
+  }
 }
 
 /* Früher der Ausbruch aus der Lesebreite. Ohne Lesebreite ist jeder Block

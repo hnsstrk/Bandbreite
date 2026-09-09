@@ -10,7 +10,6 @@
    */
   import { browser } from '$app/environment';
   import { page } from '$app/state';
-  import Card from '$lib/components/ui/Card.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
@@ -113,11 +112,11 @@
   }
 </script>
 
-<Card title="Parabolantenne" subtitle="Gewinn, Keulenbreite und Fernfeld" icon="antenna">
-  {#snippet actions()}
+<div class="calc">
+  <div class="calc__bar">
+    <p class="calc__sub">Gewinn, Keulenbreite und Fernfeld</p>
     <CalculatorActions {shareLink} {canReset} onreset={handleReset} />
-  {/snippet}
-
+  </div>
   <div class="gain">
     <PresetChips
       label="Beispielantennen übernehmen"
@@ -217,19 +216,19 @@
       Zugleich halbiert sich die Keulenbreite — große Spiegel müssen entsprechend genau ausgerichtet werden.
     </Callout>
   </div>
-</Card>
+</div>
 
 <style>
   .gain {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
 
   .gain__inputs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: 1.25rem;
+    gap: 0.75rem;
     align-items: end;
   }
 
@@ -241,8 +240,30 @@
 
   .gain__reverse-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.75rem;
     align-items: end;
+  }
+
+  .calc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .calc__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .calc__sub {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
   }
 </style>

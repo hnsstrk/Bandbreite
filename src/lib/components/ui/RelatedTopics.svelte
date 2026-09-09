@@ -4,9 +4,9 @@
   interface Props {
     /** Pfad der aktuellen Seite. */
     href: string;
-    /** Überschrift der Kartenreihe. */
+    /** Überschrift der Liste. */
     title?: string;
-    /** Höchstzahl der Karten. */
+    /** Höchstzahl der Einträge. */
     max?: number;
   }
 
@@ -16,16 +16,13 @@
 </script>
 
 {#if topics.length > 0}
-  <section class="related card" aria-labelledby="verwandte-themen">
-    <h2 class="text-heading-2" id="verwandte-themen">{title}</h2>
-    <ul class="related-grid">
+  <section class="related" aria-labelledby="verwandte-themen">
+    <h2 class="related__title" id="verwandte-themen">{title}</h2>
+    <ul class="related__list">
       {#each topics as topic (topic.node.id)}
-        <li>
-          <a class="related-card" href={topic.node.href}>
-            <span class="related-title">{topic.node.label}</span>
-            <span class="related-reason">{topic.reason}</span>
-            <span class="related-arrow" aria-hidden="true">→</span>
-          </a>
+        <li class="related__row">
+          <a class="related__link" href={topic.node.href}>{topic.node.label}</a>
+          <span class="related__reason">{topic.reason}</span>
         </li>
       {/each}
     </ul>
@@ -33,58 +30,46 @@
 {/if}
 
 <style>
-  .related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-    gap: 0.75rem;
+  /* Überschrift plus Linkliste mit Trennlinien — keine Karten. */
+  .related {
+    margin-top: 1rem;
+  }
+
+  .related__title {
+    margin: 0 0 0.25rem;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink-subtle);
+  }
+
+  .related__list {
     list-style: none;
     margin: 0;
     padding: 0;
+    border-top: 1px solid var(--color-line-subtle);
   }
 
-  .related-card {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 0.25rem 0.75rem;
-    height: 100%;
-    padding: 0.875rem 1rem;
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    transition:
-      border-color var(--transition-fast),
-      transform var(--transition-fast);
+  .related__row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid var(--color-line-subtle);
   }
 
-  .related-card:hover {
-    border-color: var(--color-accent-primary);
-    transform: translateY(-2px);
-  }
-
-  .related-title {
+  .related__link {
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
+    color: var(--color-brand);
+    text-decoration: none;
   }
 
-  .related-reason {
-    grid-column: 1;
+  .related__link:hover {
+    text-decoration: underline;
+  }
+
+  .related__reason {
     font-size: var(--font-size-xs);
-    line-height: 1.4;
-    color: var(--color-text-secondary);
-  }
-
-  .related-arrow {
-    grid-row: 1 / span 2;
-    grid-column: 2;
-    color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
-  }
-
-  .related-card:hover .related-arrow {
-    transform: translateX(3px);
-    color: var(--color-accent-primary);
+    color: var(--color-ink-subtle);
   }
 </style>

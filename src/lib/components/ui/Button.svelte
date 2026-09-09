@@ -115,11 +115,12 @@
 {/if}
 
 <style>
+  /* Flach, 1-px-Rahmen, 2 px Radius, Höhe 2 rem. */
   .ui-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.375rem;
     border: 1px solid transparent;
     border-radius: var(--radius-control);
     font-family: inherit;
@@ -141,21 +142,21 @@
 
   /* Größen */
   .ui-btn--sm {
-    min-height: 2rem;
-    padding: 0.25rem 0.625rem;
+    min-height: 1.75rem;
+    padding: 0.125rem 0.5rem;
     font-size: var(--font-size-xs);
   }
 
   .ui-btn--md {
-    min-height: 2.75rem;
-    padding: 0.5rem 1rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.625rem;
     font-size: var(--font-size-sm);
   }
 
   .ui-btn--lg {
-    min-height: 3rem;
-    padding: 0.75rem 1.25rem;
-    font-size: var(--font-size-base);
+    min-height: 2.25rem;
+    padding: 0.25rem 0.75rem;
+    font-size: var(--font-size-sm);
   }
 
   .ui-btn--icon-only {
@@ -164,15 +165,15 @@
   }
 
   .ui-btn--icon-only.ui-btn--sm {
-    width: 2rem;
+    width: 1.75rem;
   }
 
   .ui-btn--icon-only.ui-btn--md {
-    width: 2.75rem;
+    width: 2rem;
   }
 
   .ui-btn--icon-only.ui-btn--lg {
-    width: 3rem;
+    width: 2.25rem;
   }
 
   .ui-btn--full {
@@ -192,13 +193,14 @@
   }
 
   .ui-btn--secondary {
-    background-color: var(--color-surface);
+    background-color: transparent;
     border-color: var(--color-line-strong);
     color: var(--color-ink);
   }
 
   .ui-btn--secondary:hover:not(:disabled) {
-    background-color: var(--color-elevated);
+    border-color: var(--color-brand);
+    color: var(--color-brand);
   }
 
   .ui-btn--ghost {
@@ -207,18 +209,20 @@
   }
 
   .ui-btn--ghost:hover:not(:disabled) {
-    background-color: var(--color-elevated);
-    color: var(--color-ink);
+    color: var(--color-brand);
+    text-decoration: underline;
   }
 
   .ui-btn--danger {
-    background-color: var(--color-danger);
+    background-color: transparent;
     border-color: var(--color-danger);
-    color: var(--color-on-solid);
+    color: var(--color-danger-ink);
   }
 
   .ui-btn--danger:hover:not(:disabled) {
-    filter: brightness(0.92);
+    background-color: transparent;
+    border-color: var(--color-danger);
+    color: var(--color-danger);
   }
 
   /* Gedrückter Zustand (Chips, Umschalter) */

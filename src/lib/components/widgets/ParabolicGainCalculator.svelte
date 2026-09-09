@@ -152,7 +152,7 @@
   .calculator {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .presets {
@@ -164,7 +164,7 @@
   .fields {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 1rem;
+    gap: 0.75rem;
     align-items: end;
   }
 

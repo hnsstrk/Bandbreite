@@ -17,7 +17,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Rundfunk"
   icon="radio"
   lead="Von der Langwelle bis DVB-T2: Ausbreitung und Raster der klassischen Rundfunkbereiche, das UKW-Multiplexsignal, DAB+ im Gleichwellennetz und der Weg des Satellitensignals ins Kabel."

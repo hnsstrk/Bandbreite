@@ -19,7 +19,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Satellitenfunk"
   icon="satellite"
   lead="Von der Bahnhöhe zur Funkverbindung: Umlaufzeit und Latenz, die Bandbuchstaben L bis Ka mit ihrer Auf- und Abwärtskonvention, Transponder, EIRP und G/T — und die Systeme von Inmarsat bis QO-100."

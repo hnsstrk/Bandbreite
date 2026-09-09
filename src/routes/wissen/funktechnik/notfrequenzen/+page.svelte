@@ -14,7 +14,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Not- und Sicherheitsfrequenzen"
   icon="warning"
   lead="Not-, Anruf- und Sicherheitsfrequenzen von See-, Flug- und Landfunk — als Nachschlagehilfe zum Lernen, ausdrücklich nicht als Betriebsdokument."

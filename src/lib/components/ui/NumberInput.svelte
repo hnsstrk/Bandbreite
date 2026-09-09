@@ -208,7 +208,7 @@
   .ui-number {
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
+    gap: 0.25rem;
     min-width: 0;
   }
 
@@ -233,8 +233,8 @@
 
   .ui-number__field,
   .ui-number__unit {
-    min-height: 2.75rem;
-    padding: 0.5rem 0.75rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.5rem;
     background-color: var(--color-input);
     color: var(--color-ink);
     border: 1px solid var(--color-line-strong);

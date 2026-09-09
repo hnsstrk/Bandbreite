@@ -132,9 +132,10 @@
   }
 
   .badge {
-    padding: 0.0625rem 0.375rem;
-    font-size: 0.6875rem;
-    border: 1px solid var(--color-line-strong);
-    border-radius: var(--radius-full);
+    padding: 0 0.25rem;
+    font-size: var(--text-2xs);
+    color: var(--color-ink-faint);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
   }
 </style>

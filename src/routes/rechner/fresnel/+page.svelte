@@ -6,7 +6,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Fresnel-Zone"
     icon="wave"
     lead="Wie viel Platz eine Funkstrecke seitlich braucht — der Radius der ersten Fresnel-Zone und die 60-Prozent-Regel für hindernisfreie Verbindungen."
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

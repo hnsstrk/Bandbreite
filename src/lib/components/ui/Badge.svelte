@@ -42,110 +42,53 @@
 </span>
 
 <style>
+  /* Datenblatt-Etikett: 1-px-Rahmen, keine Farbfläche.
+     Die Semantik trägt allein die Textfarbe; `variant` (soft/solid/outline)
+     bleibt als Prop gültig, sieht aber überall gleich aus. */
   .ui-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.3em;
-    border: 1px solid transparent;
-    border-radius: var(--radius-pill);
-    font-weight: var(--font-weight-medium);
+    background-color: transparent;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-muted);
+    font-weight: var(--font-weight-normal);
     line-height: 1.4;
     white-space: nowrap;
   }
 
   .ui-badge--sm {
-    padding: 0.0625rem 0.5rem;
+    padding: 0 0.3125rem;
     font-size: var(--font-size-xs);
   }
 
   .ui-badge--md {
-    padding: 0.1875rem 0.6875rem;
+    padding: 0.0625rem 0.375rem;
     font-size: var(--font-size-sm);
   }
 
   .ui-badge__dot {
-    width: 0.4375rem;
-    height: 0.4375rem;
+    width: 0.375rem;
+    height: 0.375rem;
     border-radius: var(--radius-pill);
     background-color: currentColor;
   }
 
-  /* Weiche Fläche (Standard) */
-  .ui-badge--soft.ui-badge--neutral {
-    background-color: var(--color-neutral-soft);
-    color: var(--color-neutral-ink);
-  }
-  .ui-badge--soft.ui-badge--brand {
-    background-color: var(--color-brand-soft);
-    color: var(--color-brand-ink);
-  }
-  .ui-badge--soft.ui-badge--success {
-    background-color: var(--color-success-soft);
-    color: var(--color-success-ink);
-  }
-  .ui-badge--soft.ui-badge--warning {
-    background-color: var(--color-warning-soft);
-    color: var(--color-warning-ink);
-  }
-  .ui-badge--soft.ui-badge--danger {
-    background-color: var(--color-danger-soft);
-    color: var(--color-danger-ink);
-  }
-  .ui-badge--soft.ui-badge--info {
-    background-color: var(--color-info-soft);
-    color: var(--color-info-ink);
-  }
-
-  /* Gefüllt */
-  .ui-badge--solid {
-    color: var(--color-on-solid);
-  }
-  .ui-badge--solid.ui-badge--neutral {
-    background-color: var(--color-ink-muted);
-  }
-  .ui-badge--solid.ui-badge--brand {
-    background-color: var(--color-brand);
-    color: var(--color-brand-on);
-  }
-  .ui-badge--solid.ui-badge--success {
-    background-color: var(--color-success-ink);
-  }
-  .ui-badge--solid.ui-badge--warning {
-    background-color: var(--color-warning-ink);
-  }
-  .ui-badge--solid.ui-badge--danger {
-    background-color: var(--color-danger-ink);
-  }
-  .ui-badge--solid.ui-badge--info {
-    background-color: var(--color-info-ink);
-  }
-
-  /* Umrandet */
-  .ui-badge--outline {
-    background-color: transparent;
-    border-color: var(--color-line-strong);
-  }
-  .ui-badge--outline.ui-badge--neutral {
-    color: var(--color-ink-muted);
-  }
-  .ui-badge--outline.ui-badge--brand {
+  /* Semantik ausschließlich über die Textfarbe. */
+  .ui-badge--brand {
     color: var(--color-brand);
-    border-color: var(--color-brand);
   }
-  .ui-badge--outline.ui-badge--success {
+  .ui-badge--success {
     color: var(--color-success-ink);
-    border-color: var(--color-success);
   }
-  .ui-badge--outline.ui-badge--warning {
+  .ui-badge--warning {
     color: var(--color-warning-ink);
-    border-color: var(--color-warning);
   }
-  .ui-badge--outline.ui-badge--danger {
+  .ui-badge--danger {
     color: var(--color-danger-ink);
-    border-color: var(--color-danger);
   }
-  .ui-badge--outline.ui-badge--info {
+  .ui-badge--info {
     color: var(--color-info-ink);
-    border-color: var(--color-info);
   }
 </style>

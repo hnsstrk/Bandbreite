@@ -3,7 +3,7 @@
    * Frequenzbänder der Erde-Weltraum-Strecke mit Auf- und Abwärtsstrecke.
    * Die Daten stehen in `data/satelliteSystems.ts`.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import { SATELLITE_BANDS } from '$lib/data/satelliteSystems';
   import { formatFrequencyRange } from '$lib/data/bands';
@@ -12,7 +12,7 @@
   const RAIN_CRITICAL_HZ = 10e9;
 </script>
 
-<Card
+<Panel
   title="Bänder der Erde-Weltraum-Strecke"
   subtitle="Aufwärts liegt stets höher als abwärts — der Satellit bekommt die günstigere Frequenz"
 >
@@ -60,7 +60,7 @@
     niedrigere, schwächer gedämpfte Frequenz für den Abwärtsweg. Die Erdfunkstelle kann dagegen mit großer Antenne und
     viel Leistung arbeiten und übernimmt den schwierigeren Aufwärtsweg.
   </p>
-</Card>
+</Panel>
 
 <style>
   .table-scroll {
@@ -82,7 +82,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);

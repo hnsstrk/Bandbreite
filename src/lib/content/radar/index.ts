@@ -5,7 +5,7 @@
  * führt in die drei Unterkapitel. Die Kacheln entstehen aus der Navigations-
  * Registry (`getHubChildren`) — es gibt keine zweite Liste.
  */
-import type { CardItem, KnowledgeArticle } from '../types';
+import type { KnowledgeArticle } from '../types';
 import { getHubChildren } from '$lib/data/navigation';
 import { formatFrequency, formatNumber } from '$lib/utils/formatting';
 import { calculateRoundTripTime } from '$lib/utils/radar';
@@ -15,12 +15,12 @@ import { SSR_INTERROGATION_HZ, SSR_REPLY_HZ } from '$lib/components/widgets/SsrM
 const ONE_KILOMETRE_M = 1000;
 const microsecondsPerKm = formatNumber(calculateRoundTripTime(ONE_KILOMETRE_M) * 1e6, 2);
 
-const chapterCards: CardItem[] = getHubChildren('/wissen/radar/').map((node) => ({
-  title: node.label,
-  html: `${node.description ?? ''} <a href="${node.href}">Zum Unterkapitel</a>`,
-  facts: node.keywords?.length
-    ? [{ label: 'Themen', value: node.keywords.slice(0, 4).join(' · ') }]
-    : undefined
+/** Die Unterkapitel als Definitionsliste — Name als Link, Kurztext daneben. */
+const chapterItems = getHubChildren('/wissen/radar/').map((node) => ({
+  term: `<a href="${node.href}">${node.label}</a>`,
+  description: node.keywords?.length
+    ? `${node.description ?? ''} Themen: ${node.keywords.slice(0, 4).join(' · ')}`
+    : (node.description ?? '')
 }));
 
 export const radarHubArticle: KnowledgeArticle = {
@@ -80,7 +80,7 @@ export const radarHubArticle: KnowledgeArticle = {
       id: 'unterkapitel',
       title: 'Die drei Unterkapitel',
       description: 'Aufeinander aufbauend zu lesen, einzeln aber verständlich.',
-      blocks: [{ type: 'cards', items: chapterCards }]
+      blocks: [{ type: 'definitions', variant: 'term', items: chapterItems }]
     },
     {
       id: 'werkzeuge',

@@ -62,9 +62,9 @@
 <style>
   .picker {
     margin: 0;
-    padding: 0.625rem 0.75rem 0.75rem;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-control);
+    padding: 0 0 0.5rem;
+    border: 0;
+    border-bottom: 1px solid var(--color-line-subtle);
   }
 
   .picker__legend {

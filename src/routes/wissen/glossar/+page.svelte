@@ -64,7 +64,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Wissen"
     title="Glossar"
     icon="book"
     lead="Die Fachbegriffe dieser Anwendung in kurzen Definitionen — von Dezibel über Fresnel-Zone bis Zeitzeichensender, mit Formel, Einheit und Weiterverweis."
@@ -94,7 +93,7 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .glossary {

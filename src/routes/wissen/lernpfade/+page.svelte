@@ -28,14 +28,9 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Wissen"
     title="Lernpfade"
     icon="book"
-    lead="Geführte Reihenfolgen durch die Kapitel: Jeder Pfad nennt für jeden Schritt sein Lernziel und merkt sich, wie weit du gekommen bist."
-    meta={[
-      { label: 'Pfade', value: `${LEARNING_PATHS.length}` },
-      { label: 'Fortschritt', value: 'nur in diesem Browser' }
-    ]}
+    lead="Geführte Reihenfolgen durch die Kapitel — mit Lernziel je Schritt und gerätelokalem Fortschritt."
   />
 
   {#if active}
@@ -47,37 +42,22 @@
   {/if}
 
   <section class="page-section" aria-labelledby="alle-pfade">
-    <SectionHeader
-      title="Alle Pfade"
-      level={2}
-      id="alle-pfade"
-      description="Vom Einstieg bis zur Vertiefung — Schritte lassen sich einzeln abhaken, optionale Schritte sind gekennzeichnet."
-    />
+    <SectionHeader title="Alle Pfade" level={2} id="alle-pfade" />
 
-    <ul class="path-grid">
+    <ul class="path-list">
       {#each LEARNING_PATHS as path (path.id)}
-        <li class="path-grid__cell">
+        <li>
           <LearningPathCard {path} level={3} />
         </li>
       {/each}
     </ul>
   </section>
 
-  <section class="page-section" aria-labelledby="fortschritt">
-    <SectionHeader
-      title="Wo der Fortschritt liegt"
-      level={2}
-      id="fortschritt"
-      description="Bandbreite kennt keine Anmeldung."
-    />
-    <Callout tone="info" title="Nur in diesem Browser gespeichert">
-      Aktiver Pfad und abgehakte Schritte liegen im lokalen Speicher dieses Browsers. Sie werden nicht übertragen und
-      stehen auf anderen Geräten nicht zur Verfügung; ein geleerter Browserspeicher setzt sie zurück.
-      <span class="page-section__action">
-        <Button size="sm" variant="secondary" icon="reset" onclick={handleResetClick}>Fortschritt zurücksetzen</Button>
-      </span>
-    </Callout>
-  </section>
+  <p class="progress-note">
+    Aktiver Pfad und abgehakte Schritte liegen nur im lokalen Speicher dieses Browsers — sie werden nicht übertragen und
+    stehen auf anderen Geräten nicht zur Verfügung.
+    <Button size="sm" variant="ghost" icon="reset" onclick={handleResetClick}>Fortschritt zurücksetzen</Button>
+  </p>
 
   <RelatedTopics href={HREF} />
 </div>
@@ -86,35 +66,31 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .page-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.25rem;
   }
 
-  .page-section__action {
-    display: block;
-    margin-top: 0.75rem;
-  }
-
-  .path-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
-    grid-auto-rows: 1fr;
-    gap: 1rem;
+  .path-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    border-top: 1px solid var(--color-line-subtle);
   }
 
-  .path-grid__cell {
+  .progress-note {
     display: flex;
-  }
-
-  .path-grid__cell :global(.path-card) {
-    width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-line-subtle);
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
   }
 </style>

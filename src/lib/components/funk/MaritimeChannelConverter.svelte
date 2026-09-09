@@ -6,7 +6,7 @@
    * Die Kanaltabelle und die Nachschlagefunktionen stehen in
    * `data/maritimeChannels.ts`; hier sitzt nur die Bedienung.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
@@ -78,7 +78,7 @@
   );
 </script>
 
-<Card title="Seefunk-Kanal und Frequenz umrechnen" subtitle="UKW-Seefunkband nach VO Funk Appendix 18">
+<Panel title="Seefunk-Kanal und Frequenz umrechnen" subtitle="UKW-Seefunkband nach VO Funk Appendix 18">
   {#snippet actions()}
     <Badge tone="info">{filtered.length} Kanäle</Badge>
   {/snippet}
@@ -134,14 +134,14 @@
   </div>
 
   <MaritimeChannelTable rows={filtered} highlight={channel?.channel} />
-</Card>
+</Panel>
 
 <style>
   .fields,
   .results {
     display: grid;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .note {
@@ -152,7 +152,7 @@
   }
 
   .actions {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   @media (min-width: 48rem) {

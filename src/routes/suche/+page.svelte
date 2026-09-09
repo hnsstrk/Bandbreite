@@ -68,7 +68,6 @@
 
 <div class="page">
   <PageHero
-    kicker="Service"
     title="Suche"
     icon="search"
     lead="Alle Treffer auf einen Blick: Seiten und Werkzeuge, interaktive Widgets, Frequenzbänder, Funkdienste, Sender und Begriffe. Eine Frequenzeingabe wie „2,4 GHz“ öffnet zusätzlich die passenden Sprünge."

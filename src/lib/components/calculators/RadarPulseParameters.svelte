@@ -123,7 +123,7 @@
   .pulse {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .pulse__title {
@@ -136,12 +136,12 @@
   .pulse__inputs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: 1.25rem;
+    gap: 0.75rem;
   }
 
   .pulse__results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
     gap: 0.75rem;
   }
 </style>

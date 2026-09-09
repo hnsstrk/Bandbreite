@@ -1,4 +1,12 @@
 <script lang="ts">
+  /**
+   * Auslöser der Command-Palette.
+   *
+   * Datenblatt-Stil: ein schlichtes Feld mit 1-px-Rahmen. Beschriftung und
+   * Tastenkürzel erscheinen ausschließlich auf Zeigergeräten ab 64 rem
+   * (`@media (hover: hover) and (min-width: 64rem)`) — auf Touch und schmalen
+   * Anzeigen bleibt nur die Lupe als Icon-Schaltfläche.
+   */
   import { browser } from '$app/environment';
 
   interface Props {
@@ -41,13 +49,16 @@
   .search-trigger {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    min-height: 44px;
-    padding: 0.375rem 0.5rem 0.375rem 0.75rem;
-    background-color: var(--color-elevated);
+    justify-content: center;
+    gap: 0.375rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background-color: transparent;
     border: 1px solid var(--color-line);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     color: var(--color-ink-subtle);
+    font-family: inherit;
     font-size: var(--font-size-sm);
     cursor: pointer;
     transition:
@@ -60,50 +71,43 @@
     color: var(--color-ink);
   }
 
-  .search-trigger:focus-visible {
-    outline: 2px solid var(--color-focus-ring);
-    outline-offset: 2px;
-  }
-
   .search-trigger svg {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: 1rem;
+    height: 1rem;
     flex-shrink: 0;
   }
 
-  .search-label {
+  /* Beschriftung und Kürzel nur dort, wo eine Tastatur zu erwarten ist. */
+  .search-label,
+  .search-kbd {
     display: none;
-  }
-
-  @media (min-width: 900px) {
-    .search-label {
-      display: inline;
-      min-width: 6rem;
-      text-align: left;
-    }
   }
 
   .search-kbd {
-    display: none;
-    padding: 0.125rem 0.375rem;
+    padding: 0 0.25rem;
     font-family: inherit;
     font-size: var(--font-size-xs);
     color: var(--color-ink-subtle);
-    background-color: var(--color-surface);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
     white-space: nowrap;
   }
 
-  @media (min-width: 900px) {
-    .search-kbd {
+  @media (hover: hover) and (min-width: 64rem) {
+    .search-trigger:not(.compact) {
+      width: auto;
+      justify-content: flex-start;
+      padding: 0 0.375rem 0 0.5rem;
+    }
+
+    .search-trigger:not(.compact) .search-label {
+      display: inline;
+      min-width: 4rem;
+      text-align: left;
+    }
+
+    .search-trigger:not(.compact) .search-kbd {
       display: inline-block;
     }
-  }
-
-  .search-trigger.compact {
-    width: 44px;
-    padding: 0;
-    justify-content: center;
   }
 </style>

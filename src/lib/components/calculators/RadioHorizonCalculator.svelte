@@ -10,7 +10,6 @@
   import { browser } from '$app/environment';
   import { page } from '$app/state';
   import Callout from '$lib/components/ui/Callout.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
   import Slider from '$lib/components/ui/Slider.svelte';
@@ -96,11 +95,11 @@
   }
 </script>
 
-<Card title="Radiohorizont" subtitle="Sichtweite über die gekrümmte Erde" icon="globe">
-  {#snippet actions()}
+<div class="calc">
+  <div class="calc__bar">
+    <p class="calc__sub">Sichtweite über die gekrümmte Erde</p>
     <CalculatorActions {shareLink} {canReset} onreset={handleReset} />
-  {/snippet}
-
+  </div>
   <div class="horizon">
     <div class="horizon__inputs">
       <div class="horizon__field">
@@ -192,19 +191,19 @@
       möglich.
     </Callout>
   </div>
-</Card>
+</div>
 
 <style>
   .horizon {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
 
   .horizon__inputs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-    gap: 1.25rem;
+    gap: 0.75rem;
     align-items: start;
   }
 
@@ -213,5 +212,27 @@
     flex-direction: column;
     gap: 0.625rem;
     min-width: 0;
+  }
+
+  .calc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .calc__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .calc__sub {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
   }
 </style>

@@ -93,11 +93,11 @@
 <style>
   .path-bar {
     position: sticky;
-    /* Direkt unter dem klebenden Kopfbereich (Höhe 44 px + Innenabstand). */
-    top: 3.5rem;
+    /* Direkt unter dem klebenden Kopfbereich (Höhe <= 3 rem). */
+    top: 2.875rem;
     z-index: 30;
     border-bottom: 1px solid var(--color-line);
-    background-color: var(--color-elevated);
+    background-color: var(--color-surface);
   }
 
   .path-bar__inner {
@@ -109,8 +109,8 @@
       'text actions'
       'meter meter';
     align-items: center;
-    gap: 0.5rem 1rem;
-    padding-block: 0.5rem;
+    gap: 0.25rem 0.75rem;
+    padding-block: 0.25rem;
   }
 
   .path-bar__text {
@@ -123,9 +123,9 @@
   .path-bar__title {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: 0.25rem;
     color: var(--color-ink);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     text-decoration: none;
   }
@@ -150,7 +150,7 @@
     grid-area: actions;
     display: flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: 0.25rem;
     flex-wrap: wrap;
     justify-content: flex-end;
   }

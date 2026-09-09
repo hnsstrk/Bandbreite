@@ -6,7 +6,7 @@
    * knappe Größe ist: die spektrale Effizienz lässt sich nur begrenzt
    * steigern, die Anzahl der räumlichen Ströme ebenfalls.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import ResultCard from '$lib/components/ui/ResultCard.svelte';
@@ -37,7 +37,7 @@
   }));
 </script>
 
-<Card title="Bandbreite → Datenrate" subtitle="Brutto-Abschätzung ohne Protokoll- und Signalisierungsanteile">
+<Panel title="Bandbreite → Datenrate" subtitle="Brutto-Abschätzung ohne Protokoll- und Signalisierungsanteile">
   <div class="grid">
     <NumberInput
       label="Kanalbandbreite"
@@ -91,7 +91,7 @@
     Die obere Schranke liefert Shannon: η ist durch log₂(1 + SNR) begrenzt. Reale Netze bleiben darunter, weil
     Kanalkodierung, Referenzsignale, Steuerkanäle und Schutzintervalle Anteile der Übertragung belegen.
   </p>
-</Card>
+</Panel>
 
 <style>
   .grid {

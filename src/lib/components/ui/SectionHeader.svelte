@@ -51,20 +51,23 @@
 </div>
 
 <style>
+  /* Nur Text. Ebene 2 bekommt eine dünne Unterlinie, mehr nicht. */
   .ui-section-header {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .ui-section-header--l2 {
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-line-subtle);
   }
 
   .ui-section-header--l3 {
-    margin-top: 1.75rem;
+    margin-top: 1rem;
   }
 
   .ui-section-header__text {
@@ -72,19 +75,17 @@
   }
 
   .ui-section-header__eyebrow {
-    margin: 0 0 0.25rem;
+    margin: 0 0 0.125rem;
     font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-brand);
+    font-weight: var(--font-weight-normal);
+    color: var(--color-ink-subtle);
   }
 
   .ui-section-header__title {
     margin: 0;
     color: var(--color-ink);
     line-height: var(--line-height-tight);
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 3.5rem;
   }
 
   .ui-section-header--l2 .ui-section-header__title {
@@ -95,6 +96,10 @@
   .ui-section-header--l3 .ui-section-header__title {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
+  }
+
+  .ui-section-header__title:target {
+    color: var(--color-brand);
   }
 
   .ui-section-header__anchor {
@@ -112,10 +117,10 @@
   }
 
   .ui-section-header__description {
-    margin: 0.375rem 0 0;
+    margin: 0.25rem 0 0;
     font-size: var(--font-size-sm);
     color: var(--color-ink-muted);
-    max-width: var(--container-prose);
+    max-width: none;
   }
 
   .ui-section-header__actions {

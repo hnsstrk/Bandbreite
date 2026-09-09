@@ -10,7 +10,6 @@
   import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import ModulationVisualizer from '$lib/components/widgets/ModulationVisualizer.svelte';
   import ConstellationDiagram from '$lib/components/widgets/ConstellationDiagram.svelte';
   import CarsonCalculator from '$lib/components/widgets/CarsonCalculator.svelte';
@@ -35,7 +34,6 @@
 {/snippet}
 
 <ArticleLayout
-  kicker="Wissen"
   title="Modulation"
   icon="wave"
   lead="Wie eine Nachricht auf einen Träger kommt — von der Amplitudenmodulation des Mittelwellenrundfunks bis zu den Konstellationen des Mobilfunks."
@@ -72,13 +70,12 @@
       tabindex="-1"
       class="widget-anchor"
     >
-      <Card title="Modulations-Visualisierer" level={3} padding="md">
-        <p class="card-intro">
-          Verfahren umschalten, Regler bewegen und beobachten, was mit Zeitverlauf und Spektrum geschieht. Alle Kurven
-          werden im Browser berechnet.
-        </p>
-        <ModulationVisualizer initialKind="am" />
-      </Card>
+      <h3 class="widget-title">Modulations-Visualisierer</h3>
+      <p class="card-intro">
+        Verfahren umschalten, Regler bewegen und beobachten, was mit Zeitverlauf und Spektrum geschieht. Alle Kurven
+        werden im Browser berechnet.
+      </p>
+      <ModulationVisualizer initialKind="am" />
     </div>
 
     <SectionHeader title="Amplitudenmodulation, DSB und SSB" id="amplitudenmodulation" level={3} />
@@ -96,9 +93,8 @@
 
     <!-- Sprungziel des Widget-Deep-Links `?w=carson` (siehe data/widgets.ts). -->
     <div id={widgetAnchorId('carson')} data-widget="carson" tabindex="-1" class="widget-anchor">
-      <Card title="Carson-Rechner" level={3} tone="sunken" padding="md">
-        <CarsonCalculator />
-      </Card>
+      <h3 class="widget-title">Carson-Rechner</h3>
+      <CarsonCalculator />
     </div>
   </section>
 
@@ -111,12 +107,11 @@
 
     <!-- Sprungziel des Widget-Deep-Links `?w=constellation` (siehe data/widgets.ts). -->
     <div id={widgetAnchorId('constellation')} data-widget="constellation" tabindex="-1" class="widget-anchor">
-      <Card title="Konstellation mit Rauschen" level={3} padding="md">
-        <p class="card-intro">
-          Der Regler verschlechtert den Störabstand. Bei welchem Wert berühren sich die Wolken benachbarter Symbole?
-        </p>
-        <ConstellationDiagram initialScheme="qpsk" />
-      </Card>
+      <h3 class="widget-title">Konstellation mit Rauschen</h3>
+      <p class="card-intro">
+        Der Regler verschlechtert den Störabstand. Bei welchem Wert berühren sich die Wolken benachbarter Symbole?
+      </p>
+      <ConstellationDiagram initialScheme="qpsk" />
     </div>
 
     <SectionHeader title="Symbolrate, Bitrate, spektrale Effizienz" id="symbolrate-und-bitrate" level={3} />
@@ -193,5 +188,12 @@
     margin: 0 0 1rem;
     font-size: var(--font-size-sm);
     color: var(--color-ink-muted);
+  }
+
+  .widget-title {
+    margin: 0 0 0.5rem;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
   }
 </style>

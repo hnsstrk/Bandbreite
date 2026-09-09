@@ -27,7 +27,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Spektrum"
     title="Sendeleistungen im Spektrum"
     icon="antenna"
     lead="Zwölf Zehnerpotenzen Leistung über sechs Zehnerpotenzen Frequenz: wo Bluetooth, Mobilfunk, Rundfunk und Radar im Diagramm liegen."
@@ -62,7 +61,7 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .info {

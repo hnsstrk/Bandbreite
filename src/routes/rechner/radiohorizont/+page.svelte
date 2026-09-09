@@ -6,7 +6,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Radiohorizont"
     icon="globe"
     lead="Wie weit eine Sichtverbindung über die gekrümmte Erde reicht — Horizontdistanz aus der Antennenhöhe, mit einstellbarem k-Faktor der Refraktion."
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

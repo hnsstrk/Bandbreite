@@ -6,10 +6,9 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Dezibel und Pegel"
     icon="sliders"
-    lead="Watt, dBm, dBW, Spannung und dBµV sind derselbe Arbeitspunkt in anderen Worten — hier stehen alle Umrechnungen nebeneinander, dazu Merkregeln und eine Kettenrechnung."
+    lead="Watt, dBm, dBW, Spannung und dBµV nebeneinander — mit Merkregeln und Kettenrechnung."
     meta={[
       { label: 'Quelle', value: 'ITU-R V.574-5' },
       { label: 'Bezug', value: '1 mW · 1 W · 1 µV' }
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

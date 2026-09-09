@@ -6,7 +6,7 @@
    * in beide Richtungen eindeutig. Die Rechenregeln stehen in
    * `broadcastChannels.svelte.ts`, die Kanaltabellen in `data/broadcast.ts`.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Tabs from '$lib/components/ui/Tabs.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
@@ -61,7 +61,7 @@
   const fmHit = $derived(fmNearestRaster(fmFrequency));
 </script>
 
-<Card title="Kanal und Frequenz umrechnen" subtitle="DAB+, DVB-T2 und das UKW-Kanalraster">
+<Panel title="Kanal und Frequenz umrechnen" subtitle="DAB+, DVB-T2 und das UKW-Kanalraster">
   <Tabs {tabs} bind:active label="Rundfunksystem">
     {#snippet panel(id)}
       {#if id === 'dab'}
@@ -175,13 +175,13 @@
       {/if}
     {/snippet}
   </Tabs>
-</Card>
+</Panel>
 
 <style>
   .pane {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 0.75rem;
     padding-top: 1rem;
   }
 

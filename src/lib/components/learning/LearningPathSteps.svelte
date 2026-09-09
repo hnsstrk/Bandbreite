@@ -79,39 +79,35 @@
   .steps {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0;
     margin: 0;
     padding: 0;
     list-style: none;
     counter-reset: none;
+    border-top: 1px solid var(--color-line-subtle);
   }
 
   .steps__item {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: start;
-    gap: 0.875rem;
-    padding: 0.875rem 1rem;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-card);
-    background-color: var(--color-surface);
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-line-subtle);
   }
 
-  .steps__item--done {
-    background-color: var(--color-sunken);
+  .steps__item--done .steps__link {
+    color: var(--color-ink-subtle);
   }
 
   .steps__marker {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: var(--radius-pill);
-    background-color: var(--color-brand-soft);
-    color: var(--color-brand-ink);
+    min-width: 1.5rem;
+    font-family: var(--font-mono);
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink-subtle);
   }
 
   .steps__body {
@@ -120,7 +116,7 @@
 
   .steps__head {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin: 0;
@@ -138,14 +134,14 @@
   }
 
   .steps__goal {
-    margin: 0.25rem 0 0;
+    margin: 0;
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--line-height-normal);
     color: var(--color-ink-muted);
   }
 
   .steps__meta {
-    margin: 0.25rem 0 0;
+    margin: 0;
     font-size: var(--font-size-xs);
     color: var(--color-ink-subtle);
   }

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { getNodesByIds, findNode, type NavGroup, type NavNode } from '$lib/data/navigation';
+  import { getNodesByIds, type NavGroup, type NavNode } from '$lib/data/navigation';
   import { megaMenuKeydown } from './header.svelte';
 
   interface Props {
@@ -27,8 +27,6 @@
       nodes: getNodesByIds(column.itemIds)
     }))
   );
-
-  const hub = $derived(group.href ? findNode(group.href) : undefined);
 
   function linkElements(): HTMLAnchorElement[] {
     return panel ? Array.from(panel.querySelectorAll<HTMLAnchorElement>('a[href]')) : [];
@@ -59,15 +57,6 @@
   aria-hidden={!open}
   role="presentation"
 >
-  {#if hub}
-    <a class="mega-overview" href={hub.href} onclick={() => onclose(false)} tabindex={open ? 0 : -1}>
-      <span class="mega-overview-label">Übersicht: {hub.label}</span>
-      {#if hub.description}
-        <span class="mega-overview-desc">{hub.description}</span>
-      {/if}
-    </a>
-  {/if}
-
   <div class="mega-columns">
     {#each columns as column, columnIndex (column.label)}
       <div class="mega-column" data-column={columnIndex}>
@@ -95,9 +84,6 @@
                   onclick={() => onclose(false)}
                 >
                   <span class="mega-item-label">{node.label}</span>
-                  {#if node.description}
-                    <span class="mega-item-desc">{node.description}</span>
-                  {/if}
                 </a>
               {/if}
             </li>
@@ -113,14 +99,13 @@
     position: absolute;
     top: 100%;
     left: 0;
-    margin-top: 0.375rem;
-    min-width: 20rem;
-    max-width: min(56rem, calc(100vw - 2rem));
-    padding: 0.75rem;
+    margin-top: 0;
+    min-width: 16rem;
+    max-width: min(48rem, calc(100vw - 1.5rem));
+    padding: 0.5rem;
     background-color: var(--color-surface);
     border: 1px solid var(--color-line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-sm);
     z-index: 50;
     /* Geschlossen ohne Layoutfläche: absolut positionierte Elemente zählen zur
        Scrollhöhe des Dokuments, `visibility: hidden` genügt also nicht. */
@@ -149,45 +134,18 @@
   }
 
   .mega-menu.multi {
-    min-width: 36rem;
-  }
-
-  .mega-overview {
-    display: block;
-    padding: 0.625rem 0.75rem;
-    margin-bottom: 0.5rem;
-    border-radius: var(--radius-md);
-    background-color: var(--color-elevated);
-    text-decoration: none;
-  }
-
-  .mega-overview:hover {
-    background-color: var(--color-hover);
-  }
-
-  .mega-overview-label {
-    display: block;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-ink);
-  }
-
-  .mega-overview-desc {
-    display: block;
-    margin-top: 0.125rem;
-    font-size: var(--font-size-xs);
-    color: var(--color-ink-subtle);
+    min-width: 30rem;
   }
 
   .mega-columns {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
     gap: 0.75rem;
   }
 
   .mega-column-title {
-    margin: 0 0 0.375rem 0;
-    padding: 0 0.75rem;
+    margin: 0 0 0.25rem 0;
+    padding: 0 0.375rem;
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.05em;
@@ -213,35 +171,24 @@
 
   .mega-item {
     display: block;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-md);
+    padding: 0.1875rem 0.375rem;
+    border-radius: 0;
     text-decoration: none;
     color: var(--color-ink-muted);
-    transition:
-      background-color var(--transition-fast),
-      color var(--transition-fast);
+    transition: color var(--transition-fast);
   }
 
   a.mega-item:hover,
   a.mega-item:focus-visible,
   a.mega-item.active {
-    background-color: var(--color-elevated);
-    color: var(--color-ink);
+    color: var(--color-brand);
   }
 
   .mega-item-label {
     display: block;
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-normal);
     color: inherit;
-  }
-
-  .mega-item-desc {
-    display: block;
-    margin-top: 0.125rem;
-    font-size: var(--font-size-xs);
-    line-height: 1.4;
-    color: var(--color-ink-subtle);
   }
 
   .mega-item.planned {
@@ -255,10 +202,7 @@
 
   .badge {
     flex-shrink: 0;
-    padding: 0.0625rem 0.375rem;
-    font-size: 0.6875rem;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--color-line-strong);
-    color: var(--color-ink-subtle);
+    font-size: var(--text-2xs);
+    color: var(--color-ink-faint);
   }
 </style>

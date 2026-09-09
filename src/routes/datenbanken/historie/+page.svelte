@@ -7,7 +7,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Datenbanken"
     title="Geschichte der Funktechnik"
     icon="clock"
     lead="Von Maxwells Gleichungen über Hertz' Funkenstrecke bis zu 5G und Satelliteninternet — die Meilensteine, geordnet nach Jahr und Kategorie."
@@ -26,6 +25,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

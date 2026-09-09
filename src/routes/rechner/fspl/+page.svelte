@@ -12,7 +12,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Freiraumdämpfung"
     icon="wave"
     lead="Wie viel Signal auf dem Weg zwischen zwei Antennen verloren geht — allein durch die Ausbreitung im freien Raum, ohne Hindernisse, Reflexionen oder Atmosphäre."
@@ -31,6 +30,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

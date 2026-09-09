@@ -128,7 +128,9 @@
     scrollbar-width: thin;
   }
 
-  .ui-tabs--underline .ui-tabs__list {
+  /* Beide Varianten sehen gleich aus: Unterstrich. `pill` bleibt als Prop
+     gültig, rendert aber keine Pillen mehr. */
+  .ui-tabs__list {
     border-bottom: 1px solid var(--color-line);
   }
 
@@ -137,10 +139,12 @@
     align-items: center;
     gap: 0.4rem;
     flex: none;
-    min-height: 2.75rem;
-    padding: 0.5rem 0.875rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.625rem;
     background: none;
-    border: 1px solid transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
     font-family: inherit;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
@@ -162,40 +166,19 @@
     color: var(--color-ink);
   }
 
-  /* Unterstrichene Variante */
-  .ui-tabs--underline .ui-tabs__tab {
-    border-bottom-width: 2px;
-    margin-bottom: -1px;
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  }
-
-  .ui-tabs--underline .ui-tabs__tab[aria-selected='true'] {
+  .ui-tabs__tab[aria-selected='true'] {
     color: var(--color-brand);
     border-bottom-color: var(--color-brand);
   }
 
-  /* Pillen-Variante */
-  .ui-tabs--pill .ui-tabs__tab {
-    border-radius: var(--radius-pill);
-    border-color: var(--color-line);
-  }
-
-  .ui-tabs--pill .ui-tabs__tab[aria-selected='true'] {
-    background-color: var(--color-brand);
-    border-color: var(--color-brand);
-    color: var(--color-brand-on);
-  }
-
   .ui-tabs__badge {
     font-size: var(--text-2xs);
-    padding: 0 0.35rem;
-    border-radius: var(--radius-pill);
-    background-color: var(--color-elevated);
-    color: var(--color-ink-muted);
+    color: var(--color-ink-faint);
+    font-variant-numeric: tabular-nums;
   }
 
   .ui-tabs__panel {
-    padding-top: 1rem;
+    padding-top: 0.75rem;
     min-width: 0;
   }
 </style>

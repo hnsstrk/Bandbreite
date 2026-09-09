@@ -63,7 +63,7 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
     padding: 0 1rem;
   }
 

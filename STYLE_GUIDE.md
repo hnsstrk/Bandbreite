@@ -35,6 +35,37 @@ automatisch Utilities erzeugt. Alle Komponenten halten sich daran.
    Dateinamen bleiben ohne.
 5. **Keine Emoji als Icons.** Alle Symbole kommen aus `Icon.svelte`.
 
+---
+
+## Zielbild: Datenblatt (verbindlich seit Bericht 71)
+
+Der Besitzer hat entschieden: **„Schlichtes Design. Nutzung der gesamten
+Breite. Für alle Seiten."** — Stilrichtung: *technisch, wie ein Datenblatt*.
+Daraus folgen sieben Regeln, die jeder neuen Komponente vorgehen:
+
+1. **Volle Breite überall.** `main`, Kopfbereich, Brotkrümel, Fuß und
+   Lernpfad-Leiste nutzen die Viewportbreite; einziger Rand ist
+   `--page-gutter` = `0.75rem`. Es gibt **keine** `max-width` mehr —
+   `--container-prose|page|wide` stehen auf `none`. Auch Fließtext hat keine
+   Lesebreite: `ArticleLayout` und `.prose` füllen die Spalte neben dem
+   Inhaltsverzeichnis (13 rem). Dass lange Zeilen die Lesbarkeit mindern, ist
+   bekannt und ausdrücklich so entschieden.
+2. **Kein Schatten.** Alle `--shadow-*` stehen auf `none`. Tiefe entsteht
+   ausschließlich durch 1-px-Linien in `--color-line`.
+3. **Eckenradius 2 px** (`--radius-sm|md`, `--radius-control`), **höchstens
+   4 px** (`--radius-lg|xl`, `--radius-card`). `--radius-pill` bleibt nur für
+   runde Punkte und Reglergriffe.
+4. **Flächen sind `--color-surface` oder `--color-bg`** — keine getönten
+   Semantikflächen. Semantik trägt die Textfarbe oder eine 2-px-Kante.
+5. **Ein Akzentblau** (`--color-brand`) für Links und aktive Zustände, sonst
+   Grau- und Schwarztöne. Diagramm- und Bandfarben bleiben unverändert.
+6. **Enge Abstände:** `--spacing-xl` `1.25rem`, `--spacing-2xl` `1.5rem`,
+   Abschnittsabstand in Seiten `1rem`.
+7. **Weniger Fettdruck:** `semibold` statt `bold`; `h1` `1.5rem`,
+   `h2` `1.25rem`, `h3` `1.05rem`, Body `0.9375rem`.
+
+Der Dunkelmodus folgt denselben Regeln — nur die Farben wechseln.
+
 ### Migrationsregeln (alt → neu)
 
 | Alt | Neu |
@@ -144,18 +175,20 @@ Kategorie-Textfarben: `--color-cat-blue`, `--color-cat-green`,
 | `--font-sans` | System-Stack | Fließtext und UI |
 | `--font-mono` | `ui-monospace, …` | Formeln, Messwerte, Zahlenfelder |
 | `--text-2xs` | `0.6875rem` | Chart- und Achsenbeschriftung |
-| `--radius-control` | `0.5rem` | Buttons, Inputs, Chips |
-| `--radius-card` | `1rem` | Karten |
-| `--radius-pill` | `9999px` | Badges, Regler-Griffe |
-| `--shadow-card` | zweistufig | Karten |
-| `--shadow-popover` | – | Menüs, Overlays |
-| `--container-prose` | `68ch` | Lesebreite |
-| `--container-page` | `80rem` | Breite des Header-Inhalts und optionaler `.page-container`-Blöcke (nicht des Seitenlayouts) |
-| `--container-wide` | `96rem` | Bühnen-Widgets |
+| `--radius-control` | `0.125rem` | Buttons, Inputs, Chips (2 px) |
+| `--radius-card` | `0.25rem` | Karten (4 px) |
+| `--radius-pill` | `9999px` | **nur** runde Punkte und Reglergriffe |
+| `--shadow-card` | `none` | — es gibt keine Schatten |
+| `--shadow-popover` | `none` | — Menüs und Overlays tragen einen 1-px-Rahmen |
+| `--container-prose` | `none` | keine Lesebreite mehr |
+| `--container-page` | `none` | keine Seitenbreite mehr |
+| `--container-wide` | `none` | keine Bühnenbreite mehr |
 
-Die Skalen `--font-size-*`, `--spacing-*`, `--radius-sm|md|lg|xl|full`,
-`--line-height-*`, `--font-weight-*` und `--transition-*` bleiben unverändert
-im `:root`-Block.
+Weiter im `:root`-Block: `--shadow-sm|md|lg` = `none`;
+`--radius-sm|md` = `0.125rem`, `--radius-lg|xl` = `0.25rem`;
+`--spacing-md|lg|xl|2xl` = `0.75|1|1.25|1.5rem`;
+`--font-size-xs|sm|base|lg|xl|2xl|3xl` = `0.75|0.875|0.9375|1.05|1.125|1.25|1.5rem`;
+`--page-gutter` = `0.75rem` auf **allen** Breiten.
 
 ---
 
@@ -177,10 +210,12 @@ direkt nach dem Tailwind-Import.
 das `.dark` und `color-scheme` setzt, bevor gerendert wird. Am `<html>`-Element
 steht **keine** feste `class="dark"` mehr.
 
-### Drei Zustände
+### Drei Zustände, eine Schaltfläche
 
-`ThemeToggle.svelte` bietet **hell / dunkel / System** als Schaltflächengruppe
-mit `aria-pressed`. Gespeichert wird unter `localStorage['theme']` als
+`ThemeToggle.svelte` ist **eine** Icon-Schaltfläche, die reihum weiterschaltet:
+hell → dunkel → System → hell. Das Icon zeigt den aktuellen Zustand,
+`aria-label` und `title` nennen ihn samt dem Ziel des nächsten Klicks.
+Gespeichert wird unter `localStorage['theme']` als
 `'light' | 'dark' | 'system'`. Bei `'system'` folgt die Anzeige der
 Systemeinstellung live (`matchMedia`-Listener).
 
@@ -196,27 +231,34 @@ richtige Schema verwenden.
 
 | Klasse | Wirkung |
 | --- | --- |
-| `.page-container` | `max-width: 80rem`, zentriert, seitliches Padding (`--page-gutter`). **Nur für einzelne Blöcke** — das Seitenlayout (`main`) ist bewusst unbegrenzt, damit Spektrum und Datenbanken die volle Viewportbreite nutzen; Lesebreite regeln `ArticleLayout` und `.prose`. |
-| `.page-container--wide` | wie oben, aber `max-width: 96rem` |
-| `.prose` | Lesebreite `68ch` plus Typografie für `h2`–`h4`, `p`, Listen, Tabellen, `code`, `pre`, `blockquote` |
-| `.bleed` | Ausbruch aus der Lesebreite auf volle Breite (für Diagramme und Widgets) |
+| `.page-container` | volle Breite, seitliches Padding `--page-gutter`. Keine `max-width`, keine Zentrierung. Nicht zusätzlich zum `main`-Padding verschachteln — das verdoppelt den Rand. |
+| `.page-container--wide` | deckungsgleich; bleibt als Alias bestehen |
+| `.prose` | Typografie für `h2`–`h4`, `p`, Listen, Tabellen, `code`, `pre`, `blockquote` — **ohne** Lesebreite |
+| `.bleed` | wirkungsneutral (`width: 100%`); früher der Ausbruch aus der Lesebreite |
+| `.card` / `.card-compact` | 1-px-Linie, 4 px Radius, `0.75rem` Polster, kein Schatten. Verschachtelte Karten (`.card .card`, `.ui-card .ui-card`) rendern flach: ohne Rahmen, ohne Polster. |
 | `.table-scroll` | horizontaler Scroll-Container für breite Tabellen |
 | `.chart-container` | Scroll-Container für Diagramme; die Mindestbreite liegt am **inneren** Element |
 
 ```svelte
-<div class="page-container">
-  <div class="prose">
-    <p>Fließtext in Lesebreite …</p>
-    <div class="bleed">
-      <!-- Diagramm über die volle Breite -->
-    </div>
-  </div>
+<div class="prose">
+  <p>Fließtext über die volle Spaltenbreite …</p>
 </div>
 ```
 
 **Overflow-Regel:** Überbreite Inhalte scrollen in ihrem eigenen Container,
 niemals die Seite. `min-width` gehört an das SVG bzw. an `.chart-inner`,
 nicht an den Scroll-Container.
+
+### Kopf, Brotkrümel, Fuß
+
+| Baustein | Regel |
+| --- | --- |
+| `Header` | Höhe ≤ 3 rem (gemessen 45 px), kein Blur, kein Schatten, nur 1-px-Unterlinie. Inhalt über die volle Breite, Rand `--page-gutter`. Aktive Gruppe = Akzentfarbe plus 2-px-Unterstrich. |
+| `SearchTrigger` | schlichtes Feld mit 1-px-Rahmen. Beschriftung und `<kbd>Strg K</kbd>` nur bei `@media (hover: hover) and (min-width: 64rem)`; sonst reine Icon-Schaltfläche. |
+| `MegaMenu` | flach, 1-px-Rahmen, 2 px Radius. Nur Links, **keine** Beschreibungstexte, **keine** Hub-Übersichtszeile. |
+| `Breadcrumb` | eine Textzeile direkt unter dem Kopf, ohne Hintergrundleiste, `0.25rem` Polster vertikal. |
+| `LearningPathBar` | volle Breite, `--color-surface`, klebt bei `top: 2.875rem` unter dem Kopf. |
+| `Footer` | eine Zeile, `--font-size-xs`, 1-px-Oberlinie. |
 
 ---
 
@@ -285,6 +327,10 @@ play pause`.
 
 ### Badge
 
+Text in `--color-ink-muted` mit 1-px-Rahmen — **keine** Farbflächen.
+`variant` (`soft|solid|outline`) bleibt als Prop gültig, sieht aber überall
+gleich aus; die Semantik trägt allein die Textfarbe.
+
 | Prop | Typ | Standard |
 | --- | --- | --- |
 | `tone` | `'neutral' \| 'brand' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'neutral'` |
@@ -299,6 +345,11 @@ play pause`.
 ```
 
 ### Card
+
+1-px-Rahmen, 4 px Radius, `0.75rem` Polster, kein Schatten, kein Anheben beim
+Überfahren. `padding` (`sm|md|lg`) unterscheidet nur noch `0.5rem` von
+`0.75rem`; `none` bleibt. `tone` `sunken` und `outline` rendern gleich
+(transparent mit Linie). Eine Karte in einer Karte rendert flach.
 
 | Prop | Typ | Standard |
 | --- | --- | --- |
@@ -342,6 +393,9 @@ Inhaltsverzeichnis.
 ```
 
 ### Callout
+
+Linke 2-px-Linie in der Semantikfarbe, **kein** Hintergrund,
+Polster `0.5rem 0.75rem`.
 
 | Prop | Typ | Standard |
 | --- | --- | --- |
@@ -425,7 +479,8 @@ Die Rechenlogik (Reglerabbildung, Begrenzung, Umrechnung, Validierung) liegt in
 ### Tabs
 
 Vollständiges WAI-ARIA-Tabs-Muster mit Roving Tabindex, Pfeiltasten sowie
-Pos1/Ende.
+Pos1/Ende. Es gibt nur noch die **Unterstrich**-Darstellung; `variant="pill"`
+bleibt als Prop gültig, rendert aber keine Pillen mehr.
 
 | Prop | Typ | Standard |
 | --- | --- | --- |
@@ -445,6 +500,10 @@ Pos1/Ende.
 
 ### ResultCard
 
+1-px-Rahmen mit farbiger 2-px-Kante links, keine Fläche; Wert `1.25rem`
+(`--font-size-2xl`), Beschriftung klein. `emphasis="hero"` vergrößert nicht
+mehr.
+
 | Prop | Typ | Standard |
 | --- | --- | --- |
 | `label` | `string` | – |
@@ -460,6 +519,10 @@ Pos1/Ende.
 
 ### RelatedLinks
 
+Eine Zeile Überschrift plus Linkliste mit Trennlinien — **keine** Karten.
+`layout` und `columns` bleiben als Props gültig, wirken aber nicht mehr.
+`RelatedTopics` (Registry-getrieben) rendert nach demselben Muster.
+
 | Prop | Typ | Standard |
 | --- | --- | --- |
 | `items` | `{ href, label, description?, icon? }[]` | – |
@@ -474,22 +537,25 @@ Externe Ziele (`http(s)://`) erhalten automatisch `target="_blank"`,
 ### PageHero
 
 Seitenkopf **ohne** Breadcrumb — die Brotkrumen liegen im Layout darüber.
+Gerendert werden nur noch `h1` (1,5 rem, semibold), eine Zeile `lead` und
+`meta` als kleine Textzeile („Quelle: … · Gültig: …"). **Icon-Kachel, Kicker,
+Etikett und Aktionen erscheinen nicht mehr** — die Props bleiben aus
+Kompatibilität gültig und laufen wirkungslos mit. Abstand nach unten
+`0.75rem`.
 
-| Prop | Typ | Standard |
-| --- | --- | --- |
-| `title` | `string` | – |
-| `lead` / `kicker` / `badge` | `string` | – |
-| `badgeTone` | wie `Badge.tone` | `'brand'` |
-| `icon` | `IconName` | – |
-| `meta` | `{ label, value }[]` | `[]` |
-| `children` | `Snippet` | – (Aktionen) |
+| Prop | Typ | Standard | Wirkung |
+| --- | --- | --- | --- |
+| `title` | `string` | – | `h1` |
+| `lead` | `string` | – | eine Zeile Normaltext, `--color-ink-muted` |
+| `meta` | `{ label, value }[]` | `[]` | eine kleine Textzeile, mit `·` verbunden |
+| `kicker` / `badge` / `badgeTone` / `icon` / `children` | – | – | ohne Wirkung |
 
 ```svelte
-<PageHero kicker="Rechner" title="Freiraumdämpfung" icon="wave"
-          lead="Dämpfung einer Funkstrecke im freien Raum."
-          meta={[{ label: 'Quelle', value: 'ITU-R P.525' }]}>
-  <Button icon="share" size="sm">Link kopieren</Button>
-</PageHero>
+<PageHero
+  title="Freiraumdämpfung"
+  lead="Dämpfung einer Funkstrecke im freien Raum."
+  meta={[{ label: 'Quelle', value: 'ITU-R P.525' }]}
+/>
 ```
 
 ### TableOfContents
@@ -501,15 +567,20 @@ Seitenkopf **ohne** Breadcrumb — die Brotkrumen liegen im Layout darüber.
 | `sticky` | `boolean` | `true` |
 | `compactBelow` | `number` | `1280` (darunter als `<details>`) |
 
-Scroll-Spy per `IntersectionObserver`; der aktive Eintrag trägt
-`aria-current="location"`.
+Reine Textliste ohne Rahmen und ohne Balken; der aktive Eintrag wird nur durch
+die Akzentfarbe markiert. Scroll-Spy per `IntersectionObserver`; der aktive
+Eintrag trägt `aria-current="location"`. Spaltenbreite im `ArticleLayout`:
+13 rem.
 
 ### LearningGoals
+
+Kompakte Aufzählung unter der Überschrift „Lernziele" — kein Kasten, keine
+Fläche, keine Häkchen-Icons.
 
 | Prop | Typ | Standard |
 | --- | --- | --- |
 | `goals` | `string[]` | – |
-| `title` | `string` | `'Nach diesem Kapitel kannst du …'` |
+| `title` | `string` | `'Lernziele'` |
 | `level` | `2 \| 3` | `2` |
 
 ### FormulaBlock
@@ -539,6 +610,12 @@ Ohne zusätzliche Abhängigkeit: entweder fertiges **MathML** oder
 ```
 
 ### ChartFrame (`components/charts/`)
+
+Keine äußere Karte: der Titel steht als kleine Caption (`--font-size-xs`,
+semibold, `--color-ink-subtle`) über dem Diagramm, der 1-px-Rahmen liegt allein
+um die Zeichenfläche (`.ui-chart__scroller`). `WidgetFrame` und `ArticleLayout`
+folgen demselben Muster; `ArticlePagination` rendert Prev/Next als schlichte
+Textlinks.
 
 Gemeinsamer Rahmen für alle Diagramme.
 

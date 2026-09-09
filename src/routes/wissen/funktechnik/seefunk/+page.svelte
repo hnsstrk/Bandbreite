@@ -20,7 +20,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Seefunk und GMDSS"
   icon="wave"
   lead="Wie ein Notruf auf See eine Rettungsleitstelle erreicht: die vier GMDSS-Seegebiete, das UKW-Kanalraster nach Appendix 18, digitaler Selektivruf, NAVTEX, AIS und die Seenotfunkbake."

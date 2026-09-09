@@ -49,9 +49,9 @@
   .cards {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.875rem;
+    gap: 0.5rem;
     list-style: none;
-    margin: 1.25rem 0;
+    margin: 0.75rem 0;
     padding: 0;
   }
 
@@ -69,10 +69,10 @@
   }
 
   .card-item {
-    padding: 0.875rem 1rem;
+    padding: 0.5rem 0.75rem;
     border: 1px solid var(--color-line);
     border-radius: var(--radius-control);
-    background-color: var(--color-surface);
+    background-color: transparent;
   }
 
   .card-item__title {

@@ -1,14 +1,14 @@
 <script lang="ts">
   /**
-   * Theme-Umschalter mit drei Zuständen: hell, dunkel, System.
+   * Theme-Umschalter — eine einzige Icon-Schaltfläche.
+   *
+   * Ein Klick schaltet reihum weiter: hell → dunkel → System → hell.
+   * Das Icon zeigt den aktuellen Zustand, `aria-label` und `title` nennen
+   * ihn im Klartext samt dem, was der nächste Klick bewirkt.
    *
    * Die Klasse `.dark` wird bereits vom Inline-Skript in `app.html`
    * gesetzt, bevor die Seite gerendert wird — diese Komponente liest
    * den gespeicherten Wert nur noch aus und schreibt Änderungen zurück.
-   *
-   * Bedienung: eine Gruppe aus drei Schaltflächen mit `aria-pressed`,
-   * jede einzeln per Tabulator erreichbar und mit Leertaste/Enter
-   * auslösbar (natives `<button>`).
    */
   import { browser } from '$app/environment';
   import Icon from '../ui/Icon.svelte';
@@ -16,11 +16,20 @@
 
   type ThemeChoice = 'light' | 'dark' | 'system';
 
-  const OPTIONS: { value: ThemeChoice; label: string; icon: IconName }[] = [
-    { value: 'light', label: 'Hell', icon: 'sun' },
-    { value: 'dark', label: 'Dunkel', icon: 'moon' },
-    { value: 'system', label: 'System', icon: 'monitor' }
-  ];
+  /** Reihenfolge des Durchschaltens. */
+  const ORDER: ThemeChoice[] = ['light', 'dark', 'system'];
+
+  const LABELS: Record<ThemeChoice, string> = {
+    light: 'Hell',
+    dark: 'Dunkel',
+    system: 'System'
+  };
+
+  const ICONS: Record<ThemeChoice, IconName> = {
+    light: 'sun',
+    dark: 'moon',
+    system: 'monitor'
+  };
 
   const STORAGE_KEY = 'theme';
 
@@ -41,10 +50,13 @@
 
   let choice = $state<ThemeChoice>('system');
 
+  const next = $derived(ORDER[(ORDER.indexOf(choice) + 1) % ORDER.length]);
+  const label = $derived(`Farbschema: ${LABELS[choice]} — weiter zu ${LABELS[next]}`);
+
   /** Wendet die Wahl auf das Dokument an und aktualisiert die Statusleisten-Farbe. */
-  function applyChoice(next: ThemeChoice) {
+  function applyChoice(value: ThemeChoice) {
     if (!browser) return;
-    const dark = next === 'dark' || (next === 'system' && prefersDark());
+    const dark = value === 'dark' || (value === 'system' && prefersDark());
     const root = document.documentElement;
     root.classList.toggle('dark', dark);
     root.style.colorScheme = dark ? 'dark' : 'light';
@@ -55,15 +67,19 @@
     if (meta && background) meta.setAttribute('content', background);
   }
 
-  function setChoice(next: ThemeChoice) {
-    choice = next;
+  function setChoice(value: ThemeChoice) {
+    choice = value;
     if (!browser) return;
     try {
-      localStorage.setItem(STORAGE_KEY, next);
+      localStorage.setItem(STORAGE_KEY, value);
     } catch {
       /* Ohne Speicher bleibt die Wahl nur für diese Sitzung bestehen */
     }
-    applyChoice(next);
+    applyChoice(value);
+  }
+
+  function handleToggleClick() {
+    setChoice(next);
   }
 
   $effect(() => {
@@ -82,55 +98,29 @@
   });
 </script>
 
-<div class="theme-toggle" role="group" aria-label="Farbschema">
-  {#each OPTIONS as option (option.value)}
-    <button
-      type="button"
-      class="theme-toggle__button"
-      aria-pressed={choice === option.value}
-      aria-label="Farbschema: {option.label}"
-      title="Farbschema: {option.label}"
-      onclick={() => setChoice(option.value)}
-    >
-      <Icon name={option.icon} size={18} />
-    </button>
-  {/each}
-</div>
+<button type="button" class="theme-toggle" aria-label={label} title={label} onclick={handleToggleClick}>
+  <Icon name={ICONS[choice]} size={16} />
+</button>
 
 <style>
   .theme-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.125rem;
-    padding: 0.125rem;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-control);
-    background-color: var(--color-surface);
-  }
-
-  .theme-toggle__button {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
     background-color: transparent;
     color: var(--color-ink-subtle);
     cursor: pointer;
     transition:
-      background-color var(--transition-fast),
+      border-color var(--transition-fast),
       color var(--transition-fast);
   }
 
-  .theme-toggle__button:hover {
-    background-color: var(--color-elevated);
+  .theme-toggle:hover {
+    border-color: var(--color-line-strong);
     color: var(--color-ink);
-  }
-
-  .theme-toggle__button[aria-pressed='true'] {
-    background-color: var(--color-brand-soft);
-    color: var(--color-brand-ink);
   }
 </style>

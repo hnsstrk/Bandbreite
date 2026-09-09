@@ -10,7 +10,6 @@
   import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import AntennaPolarPattern from '$lib/components/widgets/AntennaPolarPattern.svelte';
   import ParabolicGainCalculator from '$lib/components/widgets/ParabolicGainCalculator.svelte';
   import SwrWidget from '$lib/components/widgets/SwrWidget.svelte';
@@ -41,7 +40,6 @@
 {/snippet}
 
 <ArticleLayout
-  kicker="Wissen"
   title="Antennen"
   icon="antenna"
   lead="Gewinn, Richtwirkung, Polarisation und Anpassung — was eine Antenne wirklich tut und wie man ihre Kennwerte selbst ausrechnet."
@@ -79,13 +77,12 @@
 
     <!-- Sprungziel des Widget-Deep-Links `?w=antenna-pattern` (siehe data/widgets.ts). -->
     <div id={widgetAnchorId('antenna-pattern')} data-widget="antenna-pattern" tabindex="-1" class="widget-anchor">
-      <Card title="Polardiagramm-Generator" level={3} padding="md">
-        <p class="card-intro">
-          Bauform wählen und die Kennwerte mitlesen. Bei der linearen Gruppe zeigen die Regler, wie Elementzahl, Abstand
-          und Phasenschub die Keule formen und schwenken.
-        </p>
-        <AntennaPolarPattern initialType="dipol" />
-      </Card>
+      <h3 class="widget-title">Polardiagramm-Generator</h3>
+      <p class="card-intro">
+        Bauform wählen und die Kennwerte mitlesen. Bei der linearen Gruppe zeigen die Regler, wie Elementzahl, Abstand
+        und Phasenschub die Keule formen und schwenken.
+      </p>
+      <AntennaPolarPattern initialType="dipol" />
     </div>
 
     <Callout tone="tip" title="Was der Phasenschub bewirkt">
@@ -107,9 +104,8 @@
 
     <!-- Sprungziel des Widget-Deep-Links `?w=swr` (siehe data/widgets.ts). -->
     <div id={widgetAnchorId('swr')} data-widget="swr" tabindex="-1" class="widget-anchor">
-      <Card title="Anpassung im Zusammenhang" level={3} tone="sunken" padding="md">
-        <SwrWidget />
-      </Card>
+      <h3 class="widget-title">Anpassung im Zusammenhang</h3>
+      <SwrWidget />
     </div>
   </section>
 
@@ -121,13 +117,12 @@
 
     <!-- Sprungziel des Widget-Deep-Links `?w=parabolic-gain` (siehe data/widgets.ts). -->
     <div id={widgetAnchorId('parabolic-gain')} data-widget="parabolic-gain" tabindex="-1" class="widget-anchor">
-      <Card title="Parabolantennen-Rechner" level={3} padding="md">
-        <p class="card-intro">
-          Durchmesser, Frequenz und Wirkungsgrad eingeben — Gewinn, Öffnungswinkel, Wirkfläche und Fernfeldbeginn folgen
-          daraus.
-        </p>
-        <ParabolicGainCalculator />
-      </Card>
+      <h3 class="widget-title">Parabolantennen-Rechner</h3>
+      <p class="card-intro">
+        Durchmesser, Frequenz und Wirkungsgrad eingeben — Gewinn, Öffnungswinkel, Wirkfläche und Fernfeldbeginn folgen
+        daraus.
+      </p>
+      <ParabolicGainCalculator />
     </div>
 
     <Callout tone="info" title="Weiterrechnen">
@@ -196,5 +191,12 @@
     margin: 0 0 1rem;
     font-size: var(--font-size-sm);
     color: var(--color-ink-muted);
+  }
+
+  .widget-title {
+    margin: 0 0 0.5rem;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
   }
 </style>

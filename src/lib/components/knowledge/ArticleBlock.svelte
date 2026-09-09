@@ -111,8 +111,8 @@
 <style>
   .definitions {
     display: grid;
-    gap: 0.5rem;
-    margin: 1rem 0;
+    gap: 0.25rem;
+    margin: 0.75rem 0;
   }
 
   .definition {
@@ -151,12 +151,12 @@
   }
 
   .question {
-    margin: 1.25rem 0;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--color-line);
-    border-left: 3px solid var(--color-brand);
-    border-radius: var(--radius-control);
-    background-color: var(--color-surface);
+    margin: 0.75rem 0;
+    padding: 0.25rem 0 0.25rem 0.75rem;
+    border: 0;
+    border-left: 2px solid var(--color-brand);
+    border-radius: 0;
+    background-color: transparent;
   }
 
   .question__summary {
@@ -172,7 +172,7 @@
   .article-wide {
     width: 100%;
     max-width: none;
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 3.5rem;
     border-radius: var(--radius-card);
   }
 

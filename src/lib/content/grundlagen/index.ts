@@ -33,26 +33,23 @@ export const grundlagenHub: KnowledgeArticle = {
         'Die drei Kapitel bauen aufeinander auf — je nachdem, was dich hergeführt hat, lohnt sich aber ein anderer Einstieg.',
       blocks: [
         {
-          type: 'cards',
-          columns: 3,
+          type: 'definitions',
+          variant: 'term',
           items: [
             {
-              title: 'Ganz von vorn',
-              subtitle: 'Empfohlene Reihenfolge',
-              html: 'Elektromagnetische Wellen → Dezibel und Pegel → Leistung, EIRP und Feldstärke. Jedes Kapitel braucht nur das vorherige.',
-              facts: [{ label: 'Dauer', value: 'rund 45 Minuten' }]
+              term: 'Ganz von vorn — Empfohlene Reihenfolge',
+              description:
+                'Elektromagnetische Wellen → Dezibel und Pegel → Leistung, EIRP und Feldstärke. Jedes Kapitel braucht nur das vorherige. Dauer: rund 45 Minuten'
             },
             {
-              title: 'Mir fehlt nur das dB',
-              subtitle: 'Kurzer Weg',
-              html: 'Wer weiß, was eine Welle ist, aber bei dBm, dBi und dBµV ins Grübeln kommt, fängt direkt bei <a href="/wissen/grundlagen/dezibel/">Dezibel und Pegel</a> an.',
-              facts: [{ label: 'Dauer', value: 'rund 15 Minuten' }]
+              term: 'Mir fehlt nur das dB — Kurzer Weg',
+              description:
+                'Wer weiß, was eine Welle ist, aber bei dBm, dBi und dBµV ins Grübeln kommt, fängt direkt bei <a href="/wissen/grundlagen/dezibel/">Dezibel und Pegel</a> an. Dauer: rund 15 Minuten'
             },
             {
-              title: 'Ich plane eine Anlage',
-              subtitle: 'Praxisweg',
-              html: '<a href="/wissen/grundlagen/leistung-und-pegel/">Leistung, EIRP und Feldstärke</a> liefert die Größen, die in Standortbescheinigung und <a href="/rechner/link-budget/">Link-Budget</a> stehen.',
-              facts: [{ label: 'Dauer', value: 'rund 20 Minuten' }]
+              term: 'Ich plane eine Anlage — Praxisweg',
+              description:
+                '<a href="/wissen/grundlagen/leistung-und-pegel/">Leistung, EIRP und Feldstärke</a> liefert die Größen, die in Standortbescheinigung und <a href="/rechner/link-budget/">Link-Budget</a> stehen. Dauer: rund 20 Minuten'
             }
           ]
         },

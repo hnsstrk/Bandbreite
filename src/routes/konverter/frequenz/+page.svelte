@@ -2,7 +2,6 @@
   import { browser } from '$app/environment';
   import { page } from '$app/state';
   import Callout from '$lib/components/ui/Callout.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import PageHero from '$lib/components/ui/PageHero.svelte';
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
@@ -52,7 +51,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Konverter"
     title="Frequenz und Wellenlänge"
     icon="wave"
     lead="Zwei Zahlen für dieselbe Welle: Wer eine kennt, kennt die andere — die Lichtgeschwindigkeit verbindet sie."
@@ -60,15 +58,16 @@
   />
 
   <div class="converter-grid">
-    <Card padding="md">
+    <div class="converter-grid__cell">
       {#key startFrequencyHz}
         <FrequencyConverter bind:frequencyHz />
       {/key}
-    </Card>
+    </div>
 
-    <Card title="Bandzuordnung" subtitle="In welchen Bändern die eingestellte Frequenz liegt" level={2} padding="md">
+    <section class="converter-grid__cell" aria-labelledby="bandzuordnung">
+      <h2 id="bandzuordnung" class="converter-grid__title">Bandzuordnung</h2>
       <BandInfo {frequencyHz} />
-    </Card>
+    </section>
   </div>
 
   <FormulaBlock
@@ -89,9 +88,8 @@
   </Callout>
 
   <Callout tone="info" title="Im Medium wird es kürzer">
-    Die Formel gilt für das Vakuum. In einem Medium mit der relativen Permittivität εᵣ läuft die Welle langsamer, die
-    Wellenlänge verkürzt sich um den Faktor 1/√εᵣ — deshalb ist ein λ/4-Element auf einer Leiterplatte deutlich kürzer
-    als in Luft.
+    Die Formel gilt für das Vakuum; in einem Medium verkürzt sich die Wellenlänge um 1/√εᵣ. Hintergrund im Kapitel
+    <a href="/wissen/grundlagen/em-wellen/">Elektromagnetische Wellen</a>.
   </Callout>
 
   <RelatedTopics href="/konverter/frequenz/" />
@@ -101,7 +99,7 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   /* Auf schmalen Viewports untereinander, ab 1024 px nebeneinander. */
@@ -112,9 +110,20 @@
     align-items: start;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 64rem) {
     .converter-grid {
       grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     }
+  }
+
+  .converter-grid__cell {
+    min-width: 0;
+  }
+
+  .converter-grid__title {
+    margin: 0 0 0.5rem;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
   }
 </style>

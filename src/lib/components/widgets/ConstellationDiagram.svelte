@@ -171,7 +171,7 @@
   .widget {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .schemes {
@@ -184,7 +184,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .controls :global(.ui-slider) {

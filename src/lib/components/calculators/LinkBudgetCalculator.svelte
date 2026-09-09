@@ -20,7 +20,6 @@
     readParams,
     syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import LinkBudgetWaterfall from '$lib/components/charts/LinkBudgetWaterfall.svelte';
   import CalculatorActions from './CalculatorActions.svelte';
@@ -193,11 +192,11 @@
   let presetValue = $derived(presetId ? (presetChips.find((chip) => chip.id === presetId)?.value ?? -1) : -1);
 </script>
 
-<Card title="Streckenbilanz" subtitle="Link Budget vom Sender bis zur Reserve" icon="antenna">
-  {#snippet actions()}
+<div class="calc">
+  <div class="calc__bar">
+    <p class="calc__sub">Link Budget vom Sender bis zur Reserve</p>
     <CalculatorActions {shareLink} {canReset} onreset={handleReset} />
-  {/snippet}
-
+  </div>
   <div class="lb">
     <PresetChips
       label="Szenarien"
@@ -252,18 +251,40 @@
 
     <LinkBudgetWaterfall data={linkBudgetData} />
   </div>
-</Card>
+</div>
 
 <style>
   .lb {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
 
   .lb__columns {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: 1.5rem;
+    gap: 0.75rem;
+  }
+
+  .calc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .calc__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .calc__sub {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
   }
 </style>

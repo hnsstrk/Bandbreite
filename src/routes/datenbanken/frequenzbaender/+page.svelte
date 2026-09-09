@@ -16,7 +16,6 @@
   import { pickBestUnit } from '$lib/components/ui/numberInput.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Button from '$lib/components/ui/Button.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import Icon from '$lib/components/ui/Icon.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
   import PageHero from '$lib/components/ui/PageHero.svelte';
@@ -89,17 +88,17 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Datenbanken"
     title="Frequenzbänder"
     icon="spectrum"
-    lead="Von ELF bis THF: die Bänder der ITU, die Radarbänder nach IEEE, die NATO-Einteilung sowie Amateurfunk- und Rundfunkbänder — mit Ausbreitungsverhalten und typischen Anwendungen."
+    lead="Von ELF bis THF: ITU-, IEEE-, NATO-, Amateurfunk- und Rundfunkbänder mit Ausbreitungsverhalten."
     meta={[
       { label: 'Systeme', value: '5' },
       { label: 'Bänder', value: String(totalBands) }
     ]}
   />
 
-  <Card title="Frequenzsuche" subtitle="Welche Bänder decken eine Frequenz ab?" icon="search">
+  <section class="search-section" aria-labelledby="frequenzsuche">
+    <h2 id="frequenzsuche" class="search-section__title">Frequenzsuche</h2>
     <div class="search">
       <NumberInput
         label="Frequenz"
@@ -139,7 +138,7 @@
         {/if}
       </div>
     </div>
-  </Card>
+  </section>
 
   <Tabs tabs={tabItems} bind:active={activeTab} label="Bandsysteme">
     {#snippet panel()}
@@ -176,13 +175,26 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
+  }
+
+  .search-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .search-section__title {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
   }
 
   .search {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-    gap: 1.25rem;
+    gap: 0.75rem;
     align-items: start;
   }
 
@@ -210,13 +222,13 @@
   .legend {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.25rem;
   }
 
   .legend__list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 0.25rem 1rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -226,10 +238,9 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    background: var(--color-sunken);
+    padding: 0.25rem 0 0.25rem 0.5rem;
     border-inline-start: 3px solid var(--mode-color);
-    border-radius: var(--radius-control);
+    font-size: var(--font-size-sm);
     color: var(--color-ink-muted);
   }
 </style>

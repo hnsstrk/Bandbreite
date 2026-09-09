@@ -43,7 +43,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Wellenausbreitung"
     title="Atmosphärische Dämpfung"
     icon="wave"
     lead="Wie stark Luft, Wasserdampf und Niederschlag ein Funksignal schwächen — Frequenz für Frequenz, von 1 bis 350 GHz."
@@ -95,7 +94,7 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .info {

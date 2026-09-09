@@ -74,11 +74,11 @@
 
 <style>
   .ui-formula {
-    margin: 1.25rem 0;
-    padding: 1rem 1.125rem;
+    margin: 0.75rem 0;
+    padding: 0.5rem 0.75rem;
     border: 1px solid var(--color-line);
     border-radius: var(--radius-control);
-    background-color: var(--color-sunken);
+    background-color: transparent;
   }
 
   .ui-formula__body {
@@ -91,8 +91,8 @@
     flex: 1 1 auto;
     min-width: 0;
     overflow-x: auto;
-    text-align: center;
-    font-size: var(--font-size-lg);
+    text-align: left;
+    font-size: var(--font-size-base);
     color: var(--color-ink);
   }
 
@@ -117,9 +117,9 @@
   .ui-formula__legend {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    margin: 0.875rem 0 0;
-    padding-top: 0.75rem;
+    gap: 0.125rem;
+    margin: 0.5rem 0 0;
+    padding-top: 0.375rem;
     border-top: 1px solid var(--color-line-subtle);
     font-size: var(--font-size-sm);
   }
@@ -149,9 +149,9 @@
   }
 
   .ui-formula__caption {
-    margin-top: 0.75rem;
+    margin-top: 0.375rem;
     font-size: var(--font-size-xs);
     color: var(--color-ink-subtle);
-    text-align: center;
+    text-align: left;
   }
 </style>

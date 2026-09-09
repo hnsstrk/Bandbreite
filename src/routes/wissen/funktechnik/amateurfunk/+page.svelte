@@ -16,7 +16,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Amateurfunk"
   icon="antenna"
   lead="Bandplan der IARU-Region 1, die deutschen Zeugnisklassen A, E und N, Betriebsarten von Telegrafie bis FT8 und die Frage, welches Band zu welcher Tageszeit trägt."

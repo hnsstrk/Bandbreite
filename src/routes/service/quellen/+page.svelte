@@ -10,7 +10,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Service"
   title="Quellen & Stand"
   icon="book"
   lead="Woher die Daten dieser Anwendung stammen, welche Regelwerke und Normen zugrunde liegen und welche Angaben ausdrücklich unsicher sind."

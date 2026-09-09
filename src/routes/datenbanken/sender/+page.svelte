@@ -20,7 +20,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Datenbanken"
     title="Senderdatenbank"
     icon="antenna"
     lead="Zeitzeichensender, Rundfunk, Navigation, Amateurfunk-Relais und Forschungsanlagen — mit Frequenz, Standort, Leistung und Prüfstand."
@@ -43,6 +42,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

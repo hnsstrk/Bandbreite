@@ -39,20 +39,20 @@
 
 <style>
   .article-section {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 3.5rem;
   }
 
   .article-section--l2 {
-    margin-top: 2.5rem;
+    margin-top: 1rem;
   }
 
   .article-section--l3 {
-    margin-top: 1.75rem;
+    margin-top: 0.75rem;
   }
 
   .article-section__body {
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
+    gap: 0.625rem;
   }
 </style>

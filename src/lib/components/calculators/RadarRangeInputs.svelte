@@ -141,7 +141,7 @@
   .radar-inputs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: 1.25rem;
+    gap: 0.75rem;
   }
 
   .radar-inputs__presets {

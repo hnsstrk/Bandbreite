@@ -9,7 +9,6 @@
   import { browser } from '$app/environment';
   import { page } from '$app/state';
   import Callout from '$lib/components/ui/Callout.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
   import Select from '$lib/components/ui/Select.svelte';
@@ -77,11 +76,11 @@
   }
 </script>
 
-<Card title="Pegelrechner" subtitle="Leistung, Spannung und Dezibel" icon="sliders">
-  {#snippet actions()}
+<div class="calc">
+  <div class="calc__bar">
+    <p class="calc__sub">Leistung, Spannung und Dezibel</p>
     <CalculatorActions {shareLink} {canReset} onreset={handleReset} />
-  {/snippet}
-
+  </div>
   <div class="db">
     <div class="db__impedance">
       <Select
@@ -142,13 +141,13 @@
       <DecibelChain bind:stages />
     </section>
   </div>
-</Card>
+</div>
 
 <style>
   .db {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
 
   .db__impedance {
@@ -158,7 +157,29 @@
   .db__ratio {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-    gap: 1.5rem;
+    gap: 0.75rem;
     align-items: start;
+  }
+
+  .calc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .calc__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .calc__sub {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
   }
 </style>

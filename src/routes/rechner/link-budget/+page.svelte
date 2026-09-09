@@ -6,10 +6,9 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Streckenbilanz"
     icon="antenna"
-    lead="Ob eine Funkstrecke trägt: alle Gewinne und Verluste vom Sender bis zum Empfänger, inklusive Freiraumdämpfung, Atmosphäre und Reserve für Schwund."
+    lead="Alle Gewinne und Verluste vom Sender bis zum Empfänger — mit Freiraumdämpfung, Atmosphäre und Schwundreserve."
     meta={[
       { label: 'Quelle', value: 'ITU-R P.525, P.676' },
       { label: 'Ergebnis', value: 'Systemreserve in dB' }
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

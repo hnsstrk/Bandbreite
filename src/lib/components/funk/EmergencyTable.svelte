@@ -5,7 +5,7 @@
    * Suchfeld, Bereichs- und Zweckfilter; die Zeilen sind nach Frequenz
    * sortiert. Ausdrücklich eine Lernhilfe, kein Betriebsdokument.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import Button from '$lib/components/ui/Button.svelte';
@@ -23,7 +23,8 @@
   let domain = $state('alle');
   let purpose = $state('alle');
 
-  const searchId = $props.id();
+  const uid = $props.id();
+  const searchId = `${uid}-suche`;
 
   const domainOptions = [
     { value: 'alle', label: 'Alle Bereiche' },
@@ -56,7 +57,7 @@
   }
 </script>
 
-<Card title="Not-, Anruf- und Sicherheitsfrequenzen" subtitle="Suchen und nach Bereich oder Zweck filtern">
+<Panel title="Not-, Anruf- und Sicherheitsfrequenzen" subtitle="Suchen und nach Bereich oder Zweck filtern">
   {#snippet actions()}
     <Badge tone="info">{rows.length} von {EMERGENCY_FREQUENCIES.length}</Badge>
   {/snippet}
@@ -115,13 +116,13 @@
   {#if rows.length === 0}
     <p class="empty">Kein Eintrag passt zu dieser Auswahl. Suchbegriff oder Filter ändern.</p>
   {/if}
-</Card>
+</Panel>
 
 <style>
   .filters {
     display: grid;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .field {
@@ -141,8 +142,8 @@
   }
 
   input {
-    min-height: 2.75rem;
-    padding: 0.5rem 0.75rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 0.5rem;
     font-size: var(--font-size-sm);
     color: var(--color-ink);
     background-color: var(--color-input);
@@ -171,7 +172,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);

@@ -111,76 +111,70 @@
 {/if}
 
 <style>
+  /* Datenblatt-Karte: 1-px-Linie, 2 px Radius, 0,75 rem Polster,
+     kein Schatten, kein Anheben beim Überfahren. */
   .ui-card {
     display: flex;
     flex-direction: column;
     position: relative;
     border-radius: var(--radius-card);
     background-color: var(--color-surface);
-    border: 1px solid transparent;
-    box-shadow: var(--shadow-card);
-    transition:
-      border-color var(--transition-fast),
-      box-shadow var(--transition-fast),
-      background-color var(--transition-normal);
-  }
-
-  :global(.dark) .ui-card {
-    border-color: var(--color-line);
-  }
-
-  .ui-card--sunken {
-    background-color: var(--color-sunken);
+    border: 1px solid var(--color-line);
     box-shadow: none;
-    border-color: var(--color-line-subtle);
+    transition: border-color var(--transition-fast);
   }
 
+  .ui-card--sunken,
   .ui-card--outline {
     background-color: transparent;
     box-shadow: none;
     border-color: var(--color-line);
   }
 
+  /* Die Polsterstufen liegen dicht beieinander — ein Datenblatt hat einen
+     Innenabstand, keine drei. `none` bleibt erhalten. */
   .ui-card--pad-none {
     padding: 0;
   }
   .ui-card--pad-sm {
-    padding: 0.75rem;
+    padding: 0.5rem;
   }
   .ui-card--pad-md {
-    padding: 1.25rem;
+    padding: 0.75rem;
   }
   .ui-card--pad-lg {
-    padding: 1.75rem;
+    padding: 0.75rem;
   }
 
   .ui-card--muted {
     opacity: 0.72;
   }
 
-  /* Anklickbare Karte */
+  /* Anklickbare Karte — Akzent und Unterstreichung, kein Anheben. */
   .ui-card--interactive {
     text-decoration: none;
     color: inherit;
-    padding-right: 2.75rem;
+    padding-right: 1.75rem;
   }
 
   .ui-card--interactive:hover {
     border-color: var(--color-brand);
-    box-shadow: var(--shadow-popover);
+  }
+
+  .ui-card--interactive:hover .ui-card__title {
+    color: var(--color-brand);
+    text-decoration: underline;
   }
 
   .ui-card__chevron {
     position: absolute;
-    right: 1rem;
-    top: 1.25rem;
-    color: var(--color-ink-subtle);
-    transition: transform var(--transition-fast);
+    right: 0.5rem;
+    top: 0.75rem;
+    color: var(--color-ink-faint);
   }
 
   .ui-card--interactive:hover .ui-card__chevron {
     color: var(--color-brand);
-    transform: translateX(2px);
   }
 
   /* Kopf */
@@ -188,8 +182,8 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .ui-card__titles {
@@ -199,9 +193,9 @@
   .ui-card__title {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.375rem;
     margin: 0;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
     color: var(--color-ink);
@@ -225,8 +219,8 @@
   }
 
   .ui-card__footer {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
     border-top: 1px solid var(--color-line-subtle);
     font-size: var(--font-size-sm);
     color: var(--color-ink-subtle);

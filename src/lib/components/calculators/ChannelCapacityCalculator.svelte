@@ -18,7 +18,6 @@
     syncParamsOnNavigate
   } from '$lib/utils/urlState.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import FormulaBlock from '$lib/components/ui/FormulaBlock.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
   import ShannonLimitChart from '$lib/components/charts/ShannonLimitChart.svelte';
@@ -78,11 +77,11 @@
   }
 </script>
 
-<Card title="Kanalkapazität" subtitle="Shannon-Hartley-Theorem" icon="signal">
-  {#snippet actions()}
+<div class="calc">
+  <div class="calc__bar">
+    <p class="calc__sub">Shannon-Hartley-Theorem</p>
     <CalculatorActions {shareLink} {canReset} onreset={handleReset} />
-  {/snippet}
-
+  </div>
   <div class="capacity">
     <div class="capacity__inputs">
       <NumberInput
@@ -132,18 +131,40 @@
 
     <ShannonLimitChart {snrDb} {spectralEfficiency} {height} />
   </div>
-</Card>
+</div>
 
 <style>
   .capacity {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
 
   .capacity__inputs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-    gap: 1.25rem;
+    gap: 0.75rem;
+  }
+
+  .calc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .calc__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .calc__sub {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
   }
 </style>

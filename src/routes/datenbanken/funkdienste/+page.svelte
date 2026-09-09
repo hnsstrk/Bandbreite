@@ -20,10 +20,9 @@
 </script>
 
 <PageHero
-  kicker="Datenbanken"
   title="Funkdienste"
   icon="database"
-  lead="Alle erfassten Frequenzzuweisungen dieser Anwendung — durchsuchbar, nach Kategorie und Frequenzfenster filterbar und mit Bandzuordnung nach ITU und IEEE."
+  lead="Alle erfassten Frequenzzuweisungen — durchsuchbar, filterbar und mit Bandzuordnung nach ITU und IEEE."
   meta={[
     { label: 'Einträge', value: String(ALL_APPLICATIONS.length) },
     { label: 'Kategorien', value: String(categories.length) },
@@ -33,9 +32,7 @@
 
 <div class="page">
   <p class="intro">
-    Jeder Eintrag beschreibt eine Funkanwendung mit ihrem Frequenzbereich, der Kategorie und einer kurzen Einordnung.
-    Ein Klick auf eine Zeile öffnet die Detailtafel mit Mittenfrequenz, Wellenlänge, ITU- und IEEE-Band sowie Verweisen
-    in das Spektrum und in die Rechner. Die Systematik hinter den Zuweisungen erklärt das Kapitel
+    Ein Klick auf eine Zeile öffnet die Detailtafel. Die Systematik hinter den Zuweisungen erklärt das Kapitel
     <a href="/wissen/funktechnik/funkdienste/">Funkdienste &amp; Frequenzplan</a>.
   </p>
 
@@ -46,9 +43,8 @@
   {/key}
 
   <Callout tone="warning" title="Stand und Verbindlichkeit">
-    Die Zuweisungen sind für Europa und Deutschland zusammengetragen und dienen der Orientierung. Verbindlich sind der
-    Frequenzplan der Bundesnetzagentur und die Vollzugsordnung für den Funkdienst. Die Herkunft der Daten steht unter
-    <a href="/service/quellen/">Quellen &amp; Stand</a>.
+    Orientierungswerte für Europa und Deutschland. Verbindlich sind der Frequenzplan der Bundesnetzagentur und die
+    Vollzugsordnung für den Funkdienst; Herkunft und Stand unter <a href="/service/quellen/">Quellen &amp; Stand</a>.
   </Callout>
 
   <RelatedTopics href="/datenbanken/funkdienste/" />
@@ -58,15 +54,14 @@
   .page {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
   }
 
   .intro {
     margin: 0;
-    max-width: var(--container-prose, 68ch);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
     color: var(--color-ink-muted);
   }
 

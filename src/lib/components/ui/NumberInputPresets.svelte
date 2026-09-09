@@ -43,9 +43,10 @@
     flex-wrap: wrap;
   }
 
+  /* Keine Pillen: die Vorgaben sind kleine, eckige Schaltflächen. */
   .ui-number__preset {
     font-family: inherit;
     font-size: var(--text-2xs);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-sm);
   }
 </style>

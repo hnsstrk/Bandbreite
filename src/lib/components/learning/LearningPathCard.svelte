@@ -1,26 +1,19 @@
 <script lang="ts">
   /**
-   * Kachel eines Lernpfads: Stufe, Dauer, Schrittzahl, Fortschritt und der
+   * Zeile eines Lernpfads: Stufe, Dauer, Schrittzahl, Fortschritt und der
    * Einstieg. „Starten" führt zum ersten offenen Schritt und setzt den Pfad
    * zugleich aktiv; „Fortsetzen" erscheint, sobald Fortschritt vorliegt.
+   * Bewusst ohne Karte — eine Datenzeile mit Trennlinie.
    */
   import { goto } from '$app/navigation';
-  import Badge from '$lib/components/ui/Badge.svelte';
   import Button from '$lib/components/ui/Button.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import LearningMeter from './LearningMeter.svelte';
   import { learningProgress } from './learningProgress.svelte';
-  import {
-    LEVEL_LABELS,
-    LEVEL_TONES,
-    learningPathHref,
-    resolvePathSteps,
-    type LearningPath
-  } from '$lib/data/learningPaths';
+  import { LEVEL_LABELS, learningPathHref, resolvePathSteps, type LearningPath } from '$lib/data/learningPaths';
 
   interface Props {
     path: LearningPath;
-    /** Überschriftenebene der Kachel. */
+    /** Überschriftenebene der Zeile. */
     level?: 2 | 3;
   }
 
@@ -39,85 +32,82 @@
   }
 </script>
 
-<Card title={path.title} {level} icon={path.icon} class="path-card">
-  {#snippet actions()}
-    <Badge tone={LEVEL_TONES[path.level]} srPrefix="Stufe">{LEVEL_LABELS[path.level]}</Badge>
-  {/snippet}
+<div class="path-row">
+  <div class="path-row__main">
+    <svelte:element this={`h${level}`} class="path-row__title">
+      <a href={learningPathHref(path.id)}>{path.title}</a>
+    </svelte:element>
+    <p class="path-row__lead">{path.lead}</p>
+    <p class="path-row__meta">
+      {LEVEL_LABELS[path.level]} · {steps.length} Schritte · rund {path.durationMin} Minuten
+    </p>
+  </div>
 
-  <p class="path-card__lead">{path.lead}</p>
-
-  <dl class="path-card__meta">
-    <div>
-      <dt>Dauer</dt>
-      <dd>rund {path.durationMin} Minuten</dd>
+  <div class="path-row__side">
+    <LearningMeter done={progress.done} total={steps.length} showCount />
+    <div class="path-row__actions">
+      <Button size="sm" variant="primary" icon="play" onclick={handleStartClick}>
+        {progress.started ? 'Fortsetzen' : 'Starten'}
+      </Button>
+      <Button size="sm" variant="ghost" href={learningPathHref(path.id)}>Alle Schritte</Button>
     </div>
-    <div>
-      <dt>Schritte</dt>
-      <dd>{steps.length}</dd>
-    </div>
-  </dl>
-
-  {#snippet footer()}
-    <div class="path-card__footer">
-      <LearningMeter done={progress.done} total={steps.length} showCount />
-      <div class="path-card__actions">
-        <Button size="sm" variant="primary" icon="play" onclick={handleStartClick}>
-          {progress.started ? 'Fortsetzen' : 'Starten'}
-        </Button>
-        <Button size="sm" variant="ghost" href={learningPathHref(path.id)}>Alle Schritte</Button>
-      </div>
-    </div>
-  {/snippet}
-</Card>
+  </div>
+</div>
 
 <style>
-  /* Gleich hohe Kacheln: der Fuß mit Balken und Aktionen sitzt unten. */
-  :global(.path-card) {
-    height: 100%;
+  .path-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem 1.5rem;
+    width: 100%;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-line-subtle);
   }
 
-  :global(.path-card > .ui-card__body) {
-    flex: 1 1 auto;
+  @media (min-width: 48rem) {
+    .path-row {
+      grid-template-columns: minmax(0, 1fr) minmax(12rem, 16rem);
+      align-items: start;
+    }
   }
 
-  .path-card__lead {
+  .path-row__title {
     margin: 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
+  }
+
+  .path-row__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .path-row__title a:hover {
+    color: var(--color-brand);
+    text-decoration: underline;
+  }
+
+  .path-row__lead {
+    margin: 0.125rem 0 0;
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--line-height-normal);
     color: var(--color-ink-muted);
   }
 
-  .path-card__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 0.75rem 0 0;
+  .path-row__meta {
+    margin: 0.125rem 0 0;
     font-size: var(--font-size-xs);
-  }
-
-  .path-card__meta div {
-    display: flex;
-    align-items: baseline;
-    gap: 0.35rem;
-  }
-
-  .path-card__meta dt {
     color: var(--color-ink-subtle);
   }
 
-  .path-card__meta dd {
-    margin: 0;
-    color: var(--color-ink);
-    font-weight: var(--font-weight-medium);
-  }
-
-  .path-card__footer {
+  .path-row__side {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
-  .path-card__actions {
+  .path-row__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;

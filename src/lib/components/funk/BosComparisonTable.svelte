@@ -3,11 +3,11 @@
    * Gegenüberstellung des analogen BOS-Funks und des TETRA-Digitalfunks.
    * Die Zeilen stehen in `BosTimelineModel.ts`.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import { BOS_COMPARISON } from './BosTimelineModel';
 </script>
 
-<Card title="Analog und digital im Vergleich" subtitle="Was sich mit dem Digitalfunk geändert hat">
+<Panel title="Analog und digital im Vergleich" subtitle="Was sich mit dem Digitalfunk geändert hat">
   <div class="table-scroll">
     <table>
       <caption>
@@ -32,7 +32,7 @@
       </tbody>
     </table>
   </div>
-</Card>
+</Panel>
 
 <style>
   .table-scroll {
@@ -54,7 +54,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);

@@ -3,7 +3,7 @@
    * Frequenzbereiche des Flugfunks und der Flugnavigation, nach Aufgabe
    * filterbar. Die Daten stehen in `data/aviationBands.ts`.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import { formatFrequencyRange } from '$lib/data/bands';
@@ -32,7 +32,7 @@
   }
 </script>
 
-<Card title="Frequenzbereiche der Luftfahrt" subtitle="Sprechfunk, Navigation, Überwachung und Datenverbindungen">
+<Panel title="Frequenzbereiche der Luftfahrt" subtitle="Sprechfunk, Navigation, Überwachung und Datenverbindungen">
   {#snippet actions()}
     <Badge tone="info">{rows.length} Bereiche</Badge>
   {/snippet}
@@ -73,12 +73,12 @@
       </tbody>
     </table>
   </div>
-</Card>
+</Panel>
 
 <style>
   .filter {
     max-width: 22rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .table-scroll {
@@ -100,7 +100,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);

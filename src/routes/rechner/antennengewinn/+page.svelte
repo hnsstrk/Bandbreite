@@ -6,10 +6,9 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Antennengewinn"
     icon="antenna"
-    lead="Was ein Parabolspiegel aus der Sendeleistung macht: Gewinn in dBi und dBd, Halbwertsbreite, Wirkfläche und der Abstand, ab dem das Fernfeld beginnt."
+    lead="Gewinn in dBi und dBd, Halbwertsbreite, Wirkfläche und Fernfeldabstand eines Parabolspiegels."
     meta={[
       { label: 'Quelle', value: 'Balanis, Antenna Theory' },
       { label: 'Gültig', value: 'Kreisapertur, D ≫ λ' }
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

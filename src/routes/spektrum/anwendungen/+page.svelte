@@ -7,7 +7,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Spektrum"
     title="Anwendungen nach Frequenzband"
     icon="signal"
     lead="Wer wo funkt: die typischen Dienste und Anwendungen über dem Spektrum — von Langwellen-Rundfunk über Mobilfunk bis zu Radar und Satellitenstrecken."
@@ -24,6 +23,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

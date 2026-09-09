@@ -154,21 +154,21 @@
 </section>
 
 <style>
+  /* Keine äußere Karte: der Rahmen sitzt allein um die Bühne. */
   .widget {
-    margin: 1.5rem 0;
-    padding: 1rem 1.125rem 0.875rem;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-card);
-    background-color: var(--color-surface);
-    box-shadow: var(--shadow-card);
+    margin: 0.75rem 0;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    box-shadow: none;
   }
 
   .widget__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
   }
 
   .widget__actions {
@@ -178,17 +178,18 @@
     flex-shrink: 0;
   }
 
+  /* Titel als kleine Caption über der Bühne. */
   .widget__title {
     margin: 0;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-ink);
+    color: var(--color-ink-subtle);
   }
 
   .widget__grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   @media (min-width: 900px) {
@@ -198,8 +199,9 @@
   }
 
   .widget__figure {
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-control);
-    background-color: var(--color-base);
+    background-color: var(--color-surface);
     overflow: hidden;
   }
 
@@ -212,24 +214,24 @@
   .widget__side {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
     min-width: 0;
   }
 
   .widget__controls {
     display: flex;
     flex-direction: column;
-    gap: 0.625rem;
+    gap: 0.5rem;
   }
 
   .widget__results {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    gap: 0.5rem;
+    gap: 0.375rem;
   }
 
   .widget__footnote {
-    margin: 0.75rem 0 0;
+    margin: 0.375rem 0 0;
     font-size: var(--font-size-xs);
     color: var(--color-ink-subtle);
   }

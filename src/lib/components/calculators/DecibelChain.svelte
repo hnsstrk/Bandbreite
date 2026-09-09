@@ -160,18 +160,18 @@
   .chain {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .chain__controls {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
     gap: 0.75rem 1.25rem;
   }
 
   .chain__results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
     gap: 0.75rem;
   }
 </style>

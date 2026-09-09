@@ -1,47 +1,35 @@
 <footer class="footer">
-  <div class="footer-content">
-    <p>Bandbreite - RF-Frequenzrechner für Ingenieure und Funktechnik-Enthusiasten</p>
-    <p class="footer-links">
-      <a href="https://github.com/hnsstrk/Bandbreite" target="_blank" rel="noopener noreferrer"> GitHub Repository </a>
-    </p>
-  </div>
+  <p class="footer-line">
+    Bandbreite — HF-Rechner und Wissen zur Funktechnik ·
+    <a href="https://github.com/hnsstrk/Bandbreite" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </p>
 </footer>
 
 <style>
+  /* Eine Zeile, eine Linie — mehr braucht der Fuß eines Datenblatts nicht. */
   .footer {
+    margin-top: auto;
+    padding: 0.375rem var(--page-gutter);
     background-color: var(--color-bg-surface);
     color: var(--color-text-tertiary);
-    padding: 1rem 1.5rem;
-    margin-top: auto;
     border-top: 1px solid var(--color-border-default);
     transition:
       background-color var(--transition-normal),
       border-color var(--transition-normal);
   }
 
-  .footer-content {
-    max-width: 80rem;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 0.875rem;
-  }
-
-  .footer-content p {
+  .footer-line {
     margin: 0;
+    font-size: var(--font-size-xs);
   }
 
-  .footer-links {
-    margin-top: 0.5rem;
-  }
-
-  .footer-links a {
+  .footer-line a {
     color: var(--color-text-secondary);
     text-decoration: none;
-    transition: color var(--transition-normal);
   }
 
-  .footer-links a:hover {
-    color: var(--color-text-primary);
+  .footer-line a:hover {
+    color: var(--color-text-accent);
     text-decoration: underline;
   }
 </style>

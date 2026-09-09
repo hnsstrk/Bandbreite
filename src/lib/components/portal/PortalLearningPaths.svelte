@@ -1,21 +1,9 @@
 <script lang="ts">
   /**
-   * Kachelreihe „Lernpfade" auf der Portalseite.
-   *
-   * Jede Kachel führt auf die Detailseite eines Pfads; Stufe, Dauer und
-   * Schrittzahl stehen als Etikett und Kurzangabe darunter. Der Fortschritt
-   * selbst steht auf der Übersicht `/wissen/lernpfade/`.
+   * Lernpfade auf der Portalseite als dichte Liste: Titel, Stufe, Schrittzahl
+   * und Dauer in einer Zeile. Der Fortschritt steht auf `/wissen/lernpfade/`.
    */
-  import Badge from '$lib/components/ui/Badge.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
-  import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
-  import {
-    LEARNING_PATHS,
-    LEVEL_LABELS,
-    LEVEL_TONES,
-    learningPathHref,
-    resolvePathSteps
-  } from '$lib/data/learningPaths';
+  import { LEARNING_PATHS, LEVEL_LABELS, learningPathHref, resolvePathSteps } from '$lib/data/learningPaths';
 
   const paths = LEARNING_PATHS.map((path) => ({
     ...path,
@@ -24,68 +12,91 @@
   }));
 </script>
 
-<section class="portal-paths" aria-labelledby="lernpfade">
-  <SectionHeader
-    title="Lernpfade"
-    level={2}
-    id="lernpfade"
-    description="Geführte Reihenfolgen über mehrere Kapitel — mit Lernziel je Schritt und Fortschrittsanzeige."
-  />
+<section class="paths" aria-labelledby="lernpfade">
+  <h2 id="lernpfade" class="paths__heading">Lernpfade</h2>
+  <p class="paths__lead">Geführte Reihenfolgen über mehrere Kapitel — mit Lernziel je Schritt.</p>
 
-  <ul class="portal-paths__grid" aria-label="Lernpfade">
+  <dl class="paths__list" aria-label="Lernpfade">
     {#each paths as path (path.id)}
-      <li class="portal-paths__cell">
-        <Card href={path.href} title={path.title} level={3} icon={path.icon} class="portal-paths__card">
-          {#snippet actions()}
-            <Badge tone={LEVEL_TONES[path.level]} srPrefix="Stufe">
-              {LEVEL_LABELS[path.level]}
-            </Badge>
-          {/snippet}
-          <p class="portal-paths__text">{path.lead}</p>
-          <p class="portal-paths__meta">
-            {path.steps} Schritte · rund {path.durationMin} Minuten
-          </p>
-        </Card>
-      </li>
+      <div class="paths__row">
+        <dt class="paths__term"><a href={path.href}>{path.title}</a></dt>
+        <dd class="paths__text">
+          {path.lead}
+          <span class="paths__meta">
+            {LEVEL_LABELS[path.level]} · {path.steps} Schritte · rund {path.durationMin} Minuten
+          </span>
+        </dd>
+      </div>
     {/each}
-  </ul>
+  </dl>
 </section>
 
 <style>
-  .portal-paths {
+  .paths {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.25rem;
   }
 
-  .portal-paths__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-    grid-auto-rows: 1fr;
-    gap: 1rem;
-    list-style: none;
+  .paths__heading {
     margin: 0;
-    padding: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
   }
 
-  .portal-paths__cell {
-    display: flex;
-  }
-
-  .portal-paths__cell :global(.portal-paths__card) {
-    width: 100%;
-  }
-
-  .portal-paths__text {
-    margin: 0;
+  .paths__lead {
+    margin: 0 0 0.25rem;
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-relaxed);
     color: var(--color-ink-muted);
   }
 
-  .portal-paths__meta {
-    margin: 0.5rem 0 0;
-    font-size: var(--font-size-xs);
+  .paths__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line-subtle);
+  }
+
+  .paths__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.125rem 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-line-subtle);
+  }
+
+  @media (min-width: 40rem) {
+    .paths__row {
+      grid-template-columns: minmax(9rem, 14rem) minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+
+  .paths__term {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .paths__term a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .paths__term a:hover {
+    color: var(--color-brand);
+    text-decoration: underline;
+  }
+
+  .paths__text {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-ink-muted);
+  }
+
+  .paths__meta {
     color: var(--color-ink-subtle);
   }
 </style>

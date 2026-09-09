@@ -89,51 +89,48 @@
 {/if}
 
 <style>
+  /* Reine Textliste. Die aktive Position wird allein durch die Akzentfarbe
+     markiert — kein Balken, kein Rahmen, keine Fläche. */
   .ui-toc {
     font-size: var(--font-size-sm);
   }
 
   .ui-toc--sticky {
     position: sticky;
-    top: 5rem;
-    max-height: calc(100vh - 7rem);
+    top: 3.5rem;
+    max-height: calc(100vh - 5rem);
     overflow-y: auto;
   }
 
   .ui-toc--compact {
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-control);
-    background-color: var(--color-surface);
-    padding: 0.5rem 0.875rem;
+    border-bottom: 1px solid var(--color-line-subtle);
+    padding-bottom: 0.25rem;
   }
 
   .ui-toc__title,
   .ui-toc__summary {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.25rem;
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
     color: var(--color-ink-subtle);
   }
 
   .ui-toc__summary {
     cursor: pointer;
-    min-height: 2.25rem;
+    min-height: 1.5rem;
     display: flex;
     align-items: center;
     margin-bottom: 0;
   }
 
   .ui-toc--compact[open] .ui-toc__summary {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
   }
 
   .ui-toc__list {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-left: 1px solid var(--color-line);
   }
 
   .ui-toc__entry--l3 {
@@ -142,24 +139,19 @@
 
   .ui-toc__link {
     display: block;
-    padding: 0.25rem 0.75rem;
-    margin-left: -1px;
-    border-left: 2px solid transparent;
+    padding: 0.0625rem 0;
     color: var(--color-ink-subtle);
     text-decoration: none;
     line-height: var(--line-height-normal);
-    transition:
-      color var(--transition-fast),
-      border-color var(--transition-fast);
+    transition: color var(--transition-fast);
   }
 
   .ui-toc__link:hover {
     color: var(--color-ink);
+    text-decoration: underline;
   }
 
   .ui-toc__link[aria-current='location'] {
     color: var(--color-brand);
-    border-left-color: var(--color-brand);
-    font-weight: var(--font-weight-medium);
   }
 </style>

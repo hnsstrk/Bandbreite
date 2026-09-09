@@ -1,20 +1,19 @@
 <script lang="ts">
   /**
-   * Lernziele eines Kapitels — „Nach diesem Kapitel kannst du …".
-   * Rein informativ; die Liste ist eine gewöhnliche Aufzählung mit
-   * Häkchen-Icons, die für Screenreader ausgeblendet sind.
+   * Lernziele eines Kapitels — kompakte Liste unter der Überschrift
+   * „Lernziele". Kein Kasten, keine Fläche, keine Icons: nur eine
+   * Aufzählung im Datenblatt-Stil.
    */
-  import Icon from './Icon.svelte';
-
   interface Props {
     goals: string[];
+    /** Überschrift der Liste */
     title?: string;
     /** Überschriftenebene des Blocktitels */
     level?: 2 | 3;
     class?: string;
   }
 
-  let { goals, title = 'Nach diesem Kapitel kannst du …', level = 2, class: klass = '' }: Props = $props();
+  let { goals, title = 'Lernziele', level = 2, class: klass = '' }: Props = $props();
 
   const headingId = $props.id();
 </script>
@@ -25,51 +24,32 @@
   </svelte:element>
   <ul class="ui-goals__list">
     {#each goals as goal (goal)}
-      <li class="ui-goals__item">
-        <span class="ui-goals__icon" aria-hidden="true"><Icon name="check" size={16} /></span>
-        <span>{goal}</span>
-      </li>
+      <li class="ui-goals__item">{goal}</li>
     {/each}
   </ul>
 </section>
 
 <style>
   .ui-goals {
-    padding: 1rem 1.125rem;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-control);
-    background-color: var(--color-sunken);
+    margin: 0;
   }
 
   .ui-goals__title {
-    margin: 0 0 0.625rem;
-    font-size: var(--font-size-sm);
+    margin: 0 0 0.25rem;
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-ink);
+    color: var(--color-ink-subtle);
   }
 
   .ui-goals__list {
-    list-style: none;
+    list-style: disc;
     margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
+    padding-left: 1.125rem;
   }
 
   .ui-goals__item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
     font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);
     color: var(--color-ink-muted);
-  }
-
-  .ui-goals__icon {
-    display: inline-flex;
-    flex: none;
-    margin-top: 0.1rem;
-    color: var(--color-success);
   }
 </style>

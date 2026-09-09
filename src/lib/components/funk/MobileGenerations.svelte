@@ -6,7 +6,7 @@
    * Deutschland linear auf; die Auswahl einer Marke hebt die zugehörige
    * Tabellenzeile hervor und zeigt die Einordnung darunter.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import { MOBILE_GENERATIONS } from '$lib/data/mobileNetworks';
   import { formatDataRate, formatFrequency } from '$lib/utils/formatting';
@@ -25,7 +25,7 @@
   const decades = [1980, 1990, 2000, 2010, 2020, 2030];
 </script>
 
-<Card title="Generationen 1G bis 6G" subtitle="Erste kommerzielle Netze in Deutschland">
+<Panel title="Generationen 1G bis 6G" subtitle="Erste kommerzielle Netze in Deutschland">
   <div class="timeline">
     <ul class="scale" aria-hidden="true">
       {#each decades as year (year)}
@@ -99,11 +99,11 @@
       6G ist nicht standardisiert; die Werte geben die Ziele des ITU-Rahmens IMT-2030 wieder.
     </span>
   {/snippet}
-</Card>
+</Panel>
 
 <style>
   .timeline {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     padding-top: 1.25rem;
   }
 
@@ -171,7 +171,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);

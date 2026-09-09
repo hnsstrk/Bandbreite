@@ -160,24 +160,29 @@
   --text-2xs: 0.6875rem; /* Chart- und Achsenbeschriftung */
 
   /* ----------------------------------------
-     Radien
+     Radien — Datenblatt-Stil: 2 px, höchstens 4 px.
+     `--radius-pill` bleibt für runde Punkte und
+     Reglerknöpfe, nicht für Flächen.
      ---------------------------------------- */
-  --radius-control: 0.5rem;
-  --radius-card: 1rem;
+  --radius-control: 0.125rem;
+  --radius-card: 0.25rem;
   --radius-pill: 9999px;
 
   /* ----------------------------------------
-     Schatten
+     Schatten — es gibt keine. Tiefe entsteht
+     ausschließlich über 1-px-Linien.
      ---------------------------------------- */
-  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px -4px rgb(15 23 42 / 0.08);
-  --shadow-popover: 0 8px 24px -6px rgb(15 23 42 / 0.18);
+  --shadow-card: none;
+  --shadow-popover: none;
 
   /* ----------------------------------------
-     Layout-Breiten
+     Layout-Breiten — keine. Jede Seite nutzt die
+     volle Viewportbreite, begrenzt nur durch
+     `--page-gutter`.
      ---------------------------------------- */
-  --container-prose: 68ch;
-  --container-page: 80rem;
-  --container-wide: 96rem;
+  --container-prose: none;
+  --container-page: none;
+  --container-wide: none;
 }
 
 /* ============================================
@@ -246,34 +251,34 @@
   --color-chart-tooltip-bg: var(--color-surface);
   --color-chart-tooltip-border: var(--color-line);
 
-  /* ---- Schatten (Legacy-Namen, überschreiben Tailwind-Defaults) ---- */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  /* ---- Schatten: keine (überschreibt auch die Tailwind-Defaults) ---- */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
 
-  /* ---- Spacing ---- */
+  /* ---- Spacing (Datenblatt: eng) ---- */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.25rem;
+  --spacing-2xl: 1.5rem;
 
-  /* ---- Radien (Legacy-Namen) ---- */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  /* ---- Radien (Legacy-Namen): 2 px, höchstens 4 px ---- */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.25rem;
   --radius-full: 9999px;
 
-  /* ---- Typografie-Skala ---- */
+  /* ---- Typografie-Skala: h1 1,5 · h2 1,25 · h3 1,05 · Body 0,9375 ---- */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg: 1.05rem;
+  --font-size-xl: 1.125rem;
+  --font-size-2xl: 1.25rem;
+  --font-size-3xl: 1.5rem;
 
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
@@ -299,7 +304,7 @@
   --chart-height-lg: 600px;
 
   /* ---- Layout ---- */
-  --page-gutter: 1rem;
+  --page-gutter: 0.75rem;
 }
 
 /* ============================================
@@ -392,12 +397,12 @@
   --color-cat-violet: #c4b5fd;
   --color-cat-pink: #f9a8d4;
 
-  /* Schatten */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35), 0 4px 16px -4px rgb(0 0 0 / 0.45);
-  --shadow-popover: 0 8px 24px -6px rgb(0 0 0 / 0.55);
+  /* Schatten: auch im Dunkelmodus keine — nur Linien. */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-card: none;
+  --shadow-popover: none;
 }
 
 /* ============================================
@@ -430,25 +435,27 @@ body {
    Layout-Container
    ============================================ */
 
-/* Standard-Seitenbreite, deckungsgleich mit dem Header. */
+/* Seitenbreite = Viewportbreite. Begrenzt wird nur durch den Seitenrand.
+   `--container-page` ist `none`; die Klasse bleibt als Andockpunkt bestehen. */
 .page-container {
   width: 100%;
-  max-width: var(--container-page);
-  margin-inline: auto;
+  max-width: none;
+  margin-inline: 0;
   padding-inline: var(--page-gutter);
 }
 
-/* Breite Variante für Bühnen-Widgets und Spektrum-Karten. */
+/* Historische Variante — deckungsgleich, da es keine Breitenbegrenzung mehr gibt. */
 .page-container--wide {
-  max-width: var(--container-wide);
+  max-width: none;
 }
 
-/* Lesebreite für Fließtext. */
+/* Fließtext ohne Lesebreite: ausdrückliche Entscheidung des Besitzers,
+   der Text füllt die Spalte neben dem Inhaltsverzeichnis. */
 .prose {
-  max-width: var(--container-prose);
+  max-width: none;
   color: var(--color-ink-muted);
   font-size: var(--font-size-base);
-  line-height: var(--line-height-relaxed);
+  line-height: var(--line-height-normal);
 }
 
 .prose > * + * {
@@ -456,23 +463,23 @@ body {
 }
 
 .prose h2 {
-  margin-top: 2.5rem;
-  margin-bottom: 0.75rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   color: var(--color-ink);
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 3.5rem;
 }
 
 .prose h3 {
-  margin-top: 1.75rem;
-  margin-bottom: 0.5rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.375rem;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   color: var(--color-ink);
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 3.5rem;
 }
 
 .prose h4 {
@@ -573,16 +580,17 @@ body {
 .prose hr {
   border: 0;
   border-top: 1px solid var(--color-line);
-  margin-block: 2rem;
+  margin-block: 1rem;
 }
 
-/* Ausbruch aus der Lesebreite für Diagramme und Widgets. */
+/* Früher der Ausbruch aus der Lesebreite. Ohne Lesebreite ist jeder Block
+   ohnehin so breit wie seine Spalte — die Klasse bleibt wirkungsneutral. */
 .bleed {
-  width: min(var(--container-wide), 100vw - 2 * var(--page-gutter));
+  width: 100%;
   max-width: none;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  position: static;
+  left: auto;
+  transform: none;
 }
 
 /* Tabellen und andere breite Blöcke scrollen in sich selbst. */
@@ -599,7 +607,7 @@ body {
 
 .text-heading-1 {
   font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   color: var(--color-ink);
 }
@@ -664,47 +672,41 @@ body {
    Component Utility Classes
    ============================================ */
 
-/* Cards */
-.card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-card);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-lg);
-  transition:
-    background-color var(--transition-normal),
-    box-shadow var(--transition-normal);
-}
-
+/* Karten — Datenblatt: 1-px-Linie, 2 px Radius, enges Polster, kein Schatten. */
+.card,
 .card-compact {
   background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  box-shadow: var(--shadow-md);
-  transition:
-    background-color var(--transition-normal),
-    box-shadow var(--transition-normal);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  padding: 0.75rem;
+  box-shadow: none;
+  transition: border-color var(--transition-fast);
 }
 
-/* Im Dark-Theme trägt ein Schatten keine Tiefe — eine Kante schon.
-   Als Inset-Shadow, damit sich die Boxmasse nicht ändern. */
-.dark .card {
-  box-shadow:
-    var(--shadow-lg),
-    inset 0 0 0 1px var(--color-line);
-}
-
-.dark .card-compact {
-  box-shadow:
-    var(--shadow-md),
-    inset 0 0 0 1px var(--color-line);
+/* Verschachtelte Karten rendern flach: eine Linie in einer Linie ist Zierrat.
+   Gilt für die Utility-Klasse wie für die Card-Komponente (`.ui-card`). */
+.card .card,
+.card .card-compact,
+.card .ui-card,
+.card-compact .card,
+.card-compact .ui-card,
+.ui-card .card,
+.ui-card .card-compact,
+.ui-card .ui-card {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
+  box-shadow: none;
 }
 
 /* Input Fields */
 .input-field {
   background-color: var(--color-input);
   border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  min-height: 2rem;
+  padding: 0.25rem 0.5rem;
   font-size: var(--font-size-sm);
   color: var(--color-ink);
   transition:
@@ -724,8 +726,9 @@ body {
 .select-field {
   background-color: var(--color-input);
   border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  min-height: 2rem;
+  padding: 0.25rem 0.5rem;
   font-size: var(--font-size-sm);
   color: var(--color-ink);
   cursor: pointer;
@@ -738,19 +741,23 @@ body {
   border-color: var(--color-focus-ring);
 }
 
-/* Buttons */
+/* Buttons — flach, 1-px-Rahmen, 2 px Radius, Höhe 2 rem. */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
+  gap: 0.375rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.625rem;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .btn-primary {
@@ -766,14 +773,13 @@ body {
 
 .btn-secondary {
   background-color: transparent;
-  color: var(--color-ink-muted);
+  color: var(--color-ink);
   border-color: var(--color-line-strong);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-elevated);
-  border-color: var(--color-line-strong);
-  color: var(--color-ink);
+  border-color: var(--color-brand);
+  color: var(--color-brand);
 }
 
 .btn-ghost {
@@ -783,33 +789,35 @@ body {
 }
 
 .btn-ghost:hover {
-  background-color: var(--color-elevated);
-  color: var(--color-ink);
+  color: var(--color-brand);
+  text-decoration: underline;
 }
 
 /* Quick Action Buttons (Presets) */
 .btn-preset {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: 0.125rem 0.5rem;
   font-size: var(--font-size-xs);
-  background-color: var(--color-elevated);
+  background-color: transparent;
   color: var(--color-ink-muted);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .btn-preset:hover {
   border-color: var(--color-brand);
   color: var(--color-brand);
-  background-color: var(--color-surface);
 }
 
 /* Result Displays */
 .result-box {
-  background-color: var(--color-sunken);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  text-align: center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
 }
 
 .result-label {
@@ -820,7 +828,7 @@ body {
 
 .result-value {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
 
@@ -832,32 +840,34 @@ body {
 
 /* Formula Display */
 .formula-box {
-  background-color: var(--color-sunken);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
   color: var(--color-ink);
-  text-align: center;
+  text-align: left;
 }
 
 /* Chip Buttons (Quick Presets) */
 .btn-chip {
   padding: 0.125rem 0.5rem;
   font-size: var(--font-size-xs);
-  background-color: var(--color-elevated);
+  background-color: transparent;
   color: var(--color-ink-muted);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .btn-chip:hover {
   border-color: var(--color-brand);
   color: var(--color-brand);
-  background-color: var(--color-surface);
 }
 
 /* Aktiver Chip-Zustand — bisher hat ihn jede Komponente selbst erfunden. */
@@ -923,15 +933,15 @@ input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 1.5rem;
+  height: 1.25rem;
   background: transparent;
   cursor: pointer;
   accent-color: var(--color-brand);
 }
 
 input[type='range']::-webkit-slider-runnable-track {
-  height: 0.375rem;
-  border-radius: var(--radius-pill);
+  height: 0.25rem;
+  border-radius: 0;
   background-color: var(--color-elevated);
   border: 1px solid var(--color-line);
 }
@@ -939,34 +949,29 @@ input[type='range']::-webkit-slider-runnable-track {
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 1.125rem;
-  height: 1.125rem;
-  margin-top: -0.4375rem;
-  border-radius: var(--radius-pill);
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-top: -0.375rem;
+  border-radius: var(--radius-sm);
   background-color: var(--color-brand);
-  border: 2px solid var(--color-surface);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast);
-}
-
-input[type='range']:hover::-webkit-slider-thumb {
-  transform: scale(1.1);
+  border: 1px solid var(--color-brand);
+  box-shadow: none;
 }
 
 input[type='range']::-moz-range-track {
-  height: 0.375rem;
-  border-radius: var(--radius-pill);
+  height: 0.25rem;
+  border-radius: 0;
   background-color: var(--color-elevated);
   border: 1px solid var(--color-line);
 }
 
 input[type='range']::-moz-range-thumb {
-  width: 1.125rem;
-  height: 1.125rem;
-  border-radius: var(--radius-pill);
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: var(--radius-sm);
   background-color: var(--color-brand);
-  border: 2px solid var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-brand);
+  box-shadow: none;
 }
 
 input[type='range']:disabled {
@@ -1023,7 +1028,7 @@ input[type='range']:disabled {
 
 .chart-title {
   fill: var(--color-ink);
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -1103,15 +1108,14 @@ input[type='range']:disabled {
   color: var(--color-info-ink);
 }
 
+/* Trennlinie zwischen gestapelten Zeilen — ersetzt Karten in Listen. */
+.divider-list > * + * {
+  border-top: 1px solid var(--color-line-subtle);
+}
+
 /* ============================================
    Responsive Adjustments
    ============================================ */
-
-@media (min-width: 640px) {
-  :root {
-    --page-gutter: 1.5rem;
-  }
-}
 
 /* Medium screens (md: 768px - 1023px) */
 @media (max-width: 1023px) {
@@ -1124,33 +1128,21 @@ input[type='range']:disabled {
 @media (max-width: 767px) {
   :root {
     --chart-min-width: 600px;
-    --font-size-3xl: 1.5rem;
-    --font-size-2xl: 1.25rem;
-    --font-size-xl: 1.125rem;
+    --font-size-3xl: 1.375rem;
+    --font-size-2xl: 1.125rem;
+    --font-size-xl: 1.05rem;
   }
 
-  .card {
-    padding: var(--spacing-md);
-    border-radius: var(--radius-lg);
-  }
-
-  /* Improve touch targets */
+  /* Touch-Ziele: kompakt, aber noch gut treffbar. */
   .btn,
   .btn-preset,
   .btn-chip {
-    min-height: 44px;
-    min-width: 44px;
-    padding: var(--spacing-sm) var(--spacing-md);
-  }
-
-  .btn-chip {
-    padding: 0.5rem 0.75rem;
-    font-size: var(--font-size-sm);
+    min-height: 2.25rem;
   }
 
   .input-field,
   .select-field {
-    min-height: 44px;
+    min-height: 2.25rem;
     font-size: 16px; /* Verhindert iOS-Zoom beim Fokussieren */
   }
 
@@ -1177,25 +1169,20 @@ input[type='range']:disabled {
 @media (max-width: 639px) {
   :root {
     --chart-min-width: 500px;
-    --spacing-lg: 1rem;
-    --spacing-xl: 1.5rem;
-  }
-
-  .card {
-    padding: var(--spacing-md);
-    border-radius: var(--radius-lg);
+    --spacing-lg: 0.875rem;
+    --spacing-xl: 1rem;
   }
 
   .text-heading-1 {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
   }
 
   .text-heading-2 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   .text-heading-3 {
-    font-size: 1.125rem;
+    font-size: 1.05rem;
   }
 
   .btn-mobile-full {
@@ -1291,7 +1278,7 @@ input[type='range']:disabled {
     font-size: 0.75rem;
     min-width: 64px;
     min-height: 44px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     transition:
       color var(--transition-fast),
       background-color var(--transition-fast);

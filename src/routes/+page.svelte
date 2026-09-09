@@ -4,11 +4,9 @@
    *
    * Der Einstieg in alle fünf Bereiche — bewusst kein zweites Spektrum-
    * Dashboard: `/spektrum/` behält seine Kernkomponenten unverändert.
-   * Bereichskacheln und Werkzeugliste stammen aus der Navigations-Registry.
+   * Bereiche, Werkzeuge und Lernpfade stehen als dichte Linklisten, nicht als
+   * Kachelraster; die Daten stammen aus der Navigations-Registry.
    */
-  import Callout from '$lib/components/ui/Callout.svelte';
-  import PageHero from '$lib/components/ui/PageHero.svelte';
-  import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
   import PortalAreas from '$lib/components/portal/PortalAreas.svelte';
   import PortalSearch from '$lib/components/portal/PortalSearch.svelte';
   import PortalLearningPaths from '$lib/components/portal/PortalLearningPaths.svelte';
@@ -19,12 +17,13 @@
 </script>
 
 <div class="page-content">
-  <PageHero
-    kicker="Bandbreite"
-    title="Das elektromagnetische Spektrum verstehen, rechnen, nachschlagen"
-    icon="spectrum"
-    lead="Von 3 Hz bis in den Gammabereich: interaktive Visualisierungen, Rechner für die Hochfrequenztechnik und ein Nachschlagewerk zur Funk- und Fernmeldetechnik — alles in einer Anwendung, ohne Anmeldung."
-  />
+  <header class="portal-head">
+    <h1 class="text-heading-1">Bandbreite</h1>
+    <p class="portal-head__lead">
+      Das elektromagnetische Spektrum von 3 Hz bis in den Gammabereich: Visualisierungen, Rechner und ein
+      Nachschlagewerk zur Funk- und Fernmeldetechnik.
+    </p>
+  </header>
 
   <section class="portal-section" aria-labelledby="suche">
     <h2 id="suche" class="sr-only">Suche</h2>
@@ -32,57 +31,64 @@
   </section>
 
   <section class="portal-section" aria-labelledby="bereiche">
-    <SectionHeader
-      title="Bereiche"
-      level={2}
-      id="bereiche"
-      description="Fünf Einstiege — vom Spektrum über die Werkzeuge bis zu den Datensätzen."
-    />
+    <h2 id="bereiche" class="portal-section__heading">Bereiche</h2>
     <PortalAreas />
   </section>
 
   <section class="portal-section" aria-labelledby="interaktiv-lernen">
-    <SectionHeader
-      title="Interaktiv lernen"
-      level={2}
-      id="interaktiv-lernen"
-      description="Kapitel mit Reglern und Bühne: Jede Kachel springt direkt zum Widget."
-    />
+    <h2 id="interaktiv-lernen" class="portal-section__heading">Interaktiv lernen</h2>
     <PortalTiles items={INTERACTIVE_TILES} label="Interaktive Kapitel" />
+  </section>
+
+  <section class="portal-section" aria-labelledby="werkzeuge">
+    <h2 id="werkzeuge" class="portal-section__heading">Werkzeuge</h2>
+    <PortalTiles items={tools} label="Rechner und Konverter" />
   </section>
 
   <PortalLearningPaths />
 
-  <section class="portal-section" aria-labelledby="werkzeuge">
-    <SectionHeader
-      title="Werkzeuge"
-      level={2}
-      id="werkzeuge"
-      description="Eingabe, Formel, Ergebnis — jeder Rechner hält seinen Zustand in der URL und lässt sich als Link teilen."
-    />
-    <PortalTiles items={tools} label="Rechner und Konverter" />
-  </section>
-
-  <Callout tone="info" title="Quellen und Haftungsausschluss">
-    Alle Zahlen stammen aus benannten Quellen — ITU-R-Empfehlungen, BNetzA-Verfügungen, IARU- Bandpläne,
-    3GPP-Spezifikationen und Standardwerke der Radartechnik. Herkunft, Stand und die ausdrücklich unsicheren Angaben
-    stehen unter
-    <a href="/service/quellen/">Quellen &amp; Stand</a>. Bandbreite ist eine Lernanwendung und
-    <strong>kein amtliches Dokument</strong>: Für Frequenzzuteilungen, Not- und Sicherheitsverkehr sowie jede rechtlich
-    verbindliche Auskunft gelten allein die Veröffentlichungen der zuständigen Verwaltungen.
-  </Callout>
+  <p class="portal-note">
+    Alle Zahlen stammen aus benannten Quellen (ITU-R, BNetzA, IARU, 3GPP); Herkunft und Stand stehen unter
+    <a href="/service/quellen/">Quellen &amp; Stand</a>. Bandbreite ist eine Lernanwendung und kein amtliches Dokument.
+  </p>
 </div>
 
 <style>
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.25rem;
+  }
+
+  .portal-head__lead {
+    margin: 0.25rem 0 0;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: var(--color-ink-muted);
   }
 
   .portal-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.25rem;
+  }
+
+  .portal-section__heading {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
+  }
+
+  .portal-note {
+    margin: 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-line-subtle);
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-subtle);
+  }
+
+  .portal-note a {
+    color: var(--color-brand);
   }
 </style>

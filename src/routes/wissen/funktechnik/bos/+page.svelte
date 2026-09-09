@@ -18,7 +18,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="BOS- und Behördenfunk"
   icon="radio"
   lead="Vom analogen 4-m- und 2-m-Band zum bundesweiten TETRA-Digitalfunk: wie Polizei, Feuerwehr und Rettungsdienste in Deutschland funken — und was am Notruf 112 heute anders ist."

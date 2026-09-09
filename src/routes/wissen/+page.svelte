@@ -1,101 +1,85 @@
 <script lang="ts">
   import { findNode, getHubChildren } from '$lib/data/navigation';
-  import Badge from '$lib/components/ui/Badge.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
+  import HubList from '$lib/components/portal/HubList.svelte';
   import PageHero from '$lib/components/ui/PageHero.svelte';
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import SectionHeader from '$lib/components/ui/SectionHeader.svelte';
-  import { isIconName } from '$lib/components/ui/icons';
 
   const HUB_HREF = '/wissen/';
 
   const hub = findNode(HUB_HREF);
   const items = getHubChildren(HUB_HREF);
 
-  /** Nur Namen aus dem Katalog dürfen an `Icon` — sonst kein Icon. */
-  function iconFor(name: string | undefined) {
-    return name && isIconName(name) ? name : undefined;
-  }
+  /** Schnellreferenz als reine Datenblatt-Tabellen — vier Spalten, keine Karten. */
+  const QUICK_REF: { title: string; rows: [string, string][] }[] = [
+    {
+      title: 'Frequenzbereiche',
+      rows: [
+        ['ELF', '3–30 Hz'],
+        ['VLF', '3–30 kHz'],
+        ['LF', '30–300 kHz'],
+        ['MF', '300 kHz – 3 MHz'],
+        ['HF', '3–30 MHz'],
+        ['VHF', '30–300 MHz'],
+        ['UHF', '300 MHz – 3 GHz'],
+        ['SHF', '3–30 GHz'],
+        ['EHF', '30–300 GHz']
+      ]
+    },
+    {
+      title: 'Wichtige Formeln',
+      rows: [
+        ['Wellenlänge', 'λ = c / f'],
+        ['Freiraumdämpfung', '20·log₁₀(d) + 20·log₁₀(f) + K'],
+        ['Radiohorizont', 'd = √(2·k·R·h)'],
+        ['Shannon', 'C = B·log₂(1 + SNR)']
+      ]
+    },
+    {
+      title: 'Physikalische Konstanten',
+      rows: [
+        ['Lichtgeschwindigkeit', '299.792.458 m/s'],
+        ['Erdradius', '6.371 km'],
+        ['Refraktionsfaktor k', '≈ 4/3'],
+        ['Boltzmann-Konstante', '1,38 · 10⁻²³ J/K']
+      ]
+    },
+    {
+      title: 'Dezibel im Kopf',
+      rows: [
+        ['3 dB', '× 2 (Leistung)'],
+        ['6 dB', '× 4 (Leistung)'],
+        ['10 dB', '× 10 (Leistung)'],
+        ['20 dB', '× 100 (Leistung)'],
+        ['30 dB', '× 1000 (Leistung)']
+      ]
+    }
+  ];
 </script>
 
 <div class="page-content">
   <PageHero
-    kicker="Grundlagen"
     title={hub?.label ?? 'Wissen'}
     icon="book"
     lead={hub?.description ?? 'Die Physik hinter den Zahlen — von der Wellenausbreitung über Radar bis zur Modulation.'}
   />
 
-  <ul class="hub-grid">
-    {#each items as item (item.id)}
-      <li class="hub-grid__cell">
-        {#if item.status === 'geplant'}
-          <Card title={item.label} level={2} icon={iconFor(item.icon)} muted class="hub-card">
-            {#snippet actions()}<Badge tone="neutral">geplant</Badge>{/snippet}
-            {item.description ?? ''}
-          </Card>
-        {:else}
-          <Card href={item.href} title={item.label} level={2} icon={iconFor(item.icon)} class="hub-card">
-            {item.description ?? ''}
-          </Card>
-        {/if}
-      </li>
-    {/each}
-  </ul>
+  <HubList {items} label="Kapitel" />
 
   <section class="quick-ref" aria-labelledby="schnellreferenz">
     <SectionHeader title="Schnellreferenz" level={2} id="schnellreferenz" />
 
     <div class="quick-ref__grid">
-      <Card title="Frequenzbereiche" level={3} tone="sunken">
+      {#each QUICK_REF as block (block.title)}
         <table class="ref-table">
+          <caption>{block.title}</caption>
           <tbody>
-            <tr><th scope="row">ELF</th><td>3–30 Hz</td></tr>
-            <tr><th scope="row">VLF</th><td>3–30 kHz</td></tr>
-            <tr><th scope="row">LF</th><td>30–300 kHz</td></tr>
-            <tr><th scope="row">MF</th><td>300 kHz – 3 MHz</td></tr>
-            <tr><th scope="row">HF</th><td>3–30 MHz</td></tr>
-            <tr><th scope="row">VHF</th><td>30–300 MHz</td></tr>
-            <tr><th scope="row">UHF</th><td>300 MHz – 3 GHz</td></tr>
-            <tr><th scope="row">SHF</th><td>3–30 GHz</td></tr>
-            <tr><th scope="row">EHF</th><td>30–300 GHz</td></tr>
+            {#each block.rows as row (row[0])}
+              <tr><th scope="row">{row[0]}</th><td>{row[1]}</td></tr>
+            {/each}
           </tbody>
         </table>
-      </Card>
-
-      <Card title="Wichtige Formeln" level={3} tone="sunken">
-        <table class="ref-table">
-          <tbody>
-            <tr><th scope="row">Wellenlänge</th><td>λ = c / f</td></tr>
-            <tr><th scope="row">Freiraumdämpfung</th><td>20·log₁₀(d) + 20·log₁₀(f) + K</td></tr>
-            <tr><th scope="row">Radiohorizont</th><td>d = √(2·k·R·h)</td></tr>
-            <tr><th scope="row">Shannon</th><td>C = B·log₂(1 + SNR)</td></tr>
-          </tbody>
-        </table>
-      </Card>
-
-      <Card title="Physikalische Konstanten" level={3} tone="sunken">
-        <table class="ref-table">
-          <tbody>
-            <tr><th scope="row">Lichtgeschwindigkeit</th><td>299.792.458 m/s</td></tr>
-            <tr><th scope="row">Erdradius</th><td>6.371 km</td></tr>
-            <tr><th scope="row">Refraktionsfaktor k</th><td>≈ 4/3</td></tr>
-            <tr><th scope="row">Boltzmann-Konstante</th><td>1,38 · 10⁻²³ J/K</td></tr>
-          </tbody>
-        </table>
-      </Card>
-
-      <Card title="Dezibel im Kopf" level={3} tone="sunken">
-        <table class="ref-table">
-          <tbody>
-            <tr><th scope="row">3 dB</th><td>× 2 (Leistung)</td></tr>
-            <tr><th scope="row">6 dB</th><td>× 4 (Leistung)</td></tr>
-            <tr><th scope="row">10 dB</th><td>× 10 (Leistung)</td></tr>
-            <tr><th scope="row">20 dB</th><td>× 100 (Leistung)</td></tr>
-            <tr><th scope="row">30 dB</th><td>× 1000 (Leistung)</td></tr>
-          </tbody>
-        </table>
-      </Card>
+      {/each}
     </div>
   </section>
 
@@ -106,38 +90,19 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-  }
-
-  .hub-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-    grid-auto-rows: 1fr;
     gap: 1rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Gleich hohe Kacheln: die Karte füllt ihre Zelle vollständig aus. */
-  .hub-grid__cell {
-    display: flex;
-  }
-
-  .hub-grid__cell :global(.hub-card) {
-    width: 100%;
   }
 
   .quick-ref {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .quick-ref__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: 0.75rem 2rem;
   }
 
   .ref-table {
@@ -146,16 +111,25 @@
     font-size: var(--font-size-sm);
   }
 
+  .ref-table caption {
+    text-align: left;
+    padding-bottom: 0.25rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-line);
+  }
+
   .ref-table th,
   .ref-table td {
-    padding: 0.25rem 0;
+    padding: 0.125rem 0;
     text-align: left;
     vertical-align: top;
+    border-bottom: 1px solid var(--color-line-subtle);
   }
 
   .ref-table th {
     color: var(--color-ink-muted);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-normal);
     padding-right: 0.75rem;
   }
 

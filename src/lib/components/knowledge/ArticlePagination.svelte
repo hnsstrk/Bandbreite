@@ -55,29 +55,30 @@
 {/if}
 
 <style>
+  /* Schlichte Textlinks, durch eine Linie vom Kapitel getrennt. */
   .pagination {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
     gap: 0.75rem;
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--color-line);
+    margin-top: 1.25rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-line-subtle);
   }
 
   .pagination__link {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 0.875rem;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-control);
-    background-color: var(--color-surface);
-    color: var(--color-ink);
+    gap: 0.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-brand);
     text-decoration: none;
+    font-size: var(--font-size-sm);
   }
 
   .pagination__link:hover {
-    background-color: var(--color-hover);
+    text-decoration: underline;
   }
 
   .pagination__link--next {
@@ -97,6 +98,6 @@
   }
 
   .pagination__label {
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-normal);
   }
 </style>

@@ -44,14 +44,12 @@
     align-items: center;
     gap: 0.75rem;
     width: 100%;
-    max-width: var(--container-prose);
-    min-height: 3.25rem;
-    padding: 0.75rem 1rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
     text-align: left;
     background-color: var(--color-surface);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-control);
-    box-shadow: var(--shadow-card);
     color: var(--color-ink-subtle);
     font-size: var(--font-size-base);
     cursor: pointer;
@@ -102,7 +100,7 @@
   }
 
   .portal-search__hint {
-    margin: 0.5rem 0 0;
+    margin: 0.25rem 0 0;
     font-size: var(--font-size-sm);
     color: var(--color-ink-subtle);
   }

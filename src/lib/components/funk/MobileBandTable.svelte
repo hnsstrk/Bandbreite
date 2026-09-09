@@ -6,7 +6,7 @@
    * Bereichs. Bei TDD fallen beide Richtungen zusammen; das macht den
    * Unterschied zwischen gepaartem und ungepaartem Spektrum sichtbar.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import { MOBILE_BANDS } from '$lib/data/mobileNetworks';
@@ -31,7 +31,7 @@
   const bands = $derived(filterBands({ technology, duplex }));
 </script>
 
-<Card title="Bänder in Deutschland und der EU" subtitle="3GPP-Bandnummern mit Uplink und Downlink">
+<Panel title="Bänder in Deutschland und der EU" subtitle="3GPP-Bandnummern mit Uplink und Downlink">
   {#snippet actions()}
     <Badge tone="info">{bands.length} von {MOBILE_BANDS.length}</Badge>
   {/snippet}
@@ -100,13 +100,13 @@
   {#if bands.length === 0}
     <p class="empty">Keine Bänder passen zu dieser Kombination aus Technologie und Duplexverfahren.</p>
   {/if}
-</Card>
+</Panel>
 
 <style>
   .filters {
     display: grid;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .legend {
@@ -154,7 +154,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);

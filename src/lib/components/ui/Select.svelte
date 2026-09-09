@@ -147,14 +147,14 @@
   }
 
   .ui-select--sm {
-    min-height: 2rem;
-    padding: 0.25rem 0.5rem;
+    min-height: 1.75rem;
+    padding: 0.125rem 0.375rem;
     font-size: var(--font-size-xs);
   }
 
   .ui-select--md {
-    min-height: 2.75rem;
-    padding: 0.5rem 0.75rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.5rem;
     font-size: var(--font-size-sm);
   }
 

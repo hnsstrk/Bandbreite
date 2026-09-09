@@ -81,7 +81,7 @@
 
   .bands th,
   .bands td {
-    padding: 0.5rem 0.625rem;
+    padding: 0.25rem 0.5rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);
@@ -131,9 +131,6 @@
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.125rem 0.5rem;
-    border: 1px solid var(--mode-color);
-    border-radius: var(--radius-pill);
     color: var(--mode-color);
     white-space: nowrap;
   }

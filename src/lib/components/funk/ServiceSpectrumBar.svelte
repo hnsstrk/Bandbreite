@@ -8,8 +8,8 @@
    * Frequenzzeiger markiert eine eingegebene Frequenz und hebt alle dort
    * zuständigen Dienste hervor.
    */
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
   import { FREQUENCY_UNITS } from '$lib/data/units';
@@ -52,7 +52,7 @@
   }
 </script>
 
-<Card title="Funkdienste im Spektrum" subtitle="Logarithmische Achse von 9 kHz bis 100 GHz">
+<Panel title="Funkdienste im Spektrum" subtitle="Logarithmische Achse von 9 kHz bis 100 GHz">
   {#snippet actions()}
     <Badge tone="info">{rows.length} Dienste</Badge>
   {/snippet}
@@ -126,13 +126,13 @@
   {:else}
     <p class="hint">Eine Zeile auswählen, um Zuweisungen und Beispiele zu sehen.</p>
   {/if}
-</Card>
+</Panel>
 
 <style>
   .controls {
     display: grid;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .hits {

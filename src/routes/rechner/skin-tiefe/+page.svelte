@@ -6,7 +6,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Skin-Tiefe"
     icon="wave"
     lead="Wie tief ein hochfrequentes Feld in einen Leiter eindringt — die Grundlage für Abschirmung, Leiterquerschnitte und HF-Verluste."
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

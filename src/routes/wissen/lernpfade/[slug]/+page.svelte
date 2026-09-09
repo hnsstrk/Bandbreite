@@ -43,7 +43,6 @@
 {#if path}
   <div class="page-content">
     <PageHero
-      kicker="Lernpfad"
       title={path.title}
       icon={path.icon}
       lead={path.lead}

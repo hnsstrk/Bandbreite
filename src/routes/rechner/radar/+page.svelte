@@ -6,7 +6,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Radar-Reichweite"
     icon="radio"
     lead="Wie weit ein Radar ein Ziel erkennt — aus Sendeleistung, Antennengewinn, Radarquerschnitt und Empfängerempfindlichkeit."
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

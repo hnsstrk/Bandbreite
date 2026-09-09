@@ -6,7 +6,7 @@
    * etwa 10 MHz dominiert nachts die Raumwelle, oberhalb tagsüber. Er ersetzt
    * keine Ausbreitungsvorhersage.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import { SHORTWAVE_BANDS } from '$lib/data/broadcast';
   import { formatFrequencyRange } from '$lib/data/bands';
@@ -20,7 +20,7 @@
   }
 </script>
 
-<Card title="Kurzwellen-Rundfunkbänder" subtitle="Bänder nach VO Funk Artikel 5 mit Faustregel zur Tageszeit">
+<Panel title="Kurzwellen-Rundfunkbänder" subtitle="Bänder nach VO Funk Artikel 5 mit Faustregel zur Tageszeit">
   <div class="table-scroll">
     <table>
       <caption>
@@ -57,7 +57,7 @@
     Der Kanalabstand beträgt 5 kHz. Weil sich die nutzbare Frequenz mit Tageszeit und Sonnenstand ändert, senden
     Auslandsdienste dieselbe Sendung häufig gleichzeitig in mehreren Bändern.
   </p>
-</Card>
+</Panel>
 
 <style>
   table {
@@ -75,7 +75,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     border-bottom: 1px solid var(--color-line-subtle);
     color: var(--color-ink-muted);

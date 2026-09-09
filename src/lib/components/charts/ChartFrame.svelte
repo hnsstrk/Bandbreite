@@ -111,11 +111,12 @@
 </figure>
 
 <style>
+  /* Keine äußere Karte: kleine Caption, 1-px-Rahmen nur um die Zeichenfläche. */
   .ui-chart {
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
     min-width: 0;
   }
 
@@ -128,9 +129,9 @@
 
   .ui-chart__title {
     margin: 0;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-ink);
+    color: var(--color-ink-subtle);
   }
 
   .ui-chart__actions {
@@ -154,6 +155,8 @@
     max-width: 100%;
     overflow-x: auto;
     position: relative;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-control);
     -webkit-overflow-scrolling: touch;
   }
 

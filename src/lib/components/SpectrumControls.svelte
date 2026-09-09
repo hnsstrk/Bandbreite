@@ -41,9 +41,9 @@
   }: Props = $props();
 </script>
 
-<div class="mb-4 flex flex-wrap items-center gap-4">
+<div class="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1">
   <!-- Band row selector -->
-  <div class="flex flex-wrap items-center gap-2">
+  <div class="flex flex-wrap items-center gap-1">
     <span class="text-ink-subtle mr-1 text-sm">
       Bänder:
       <InfoTooltip
@@ -53,7 +53,7 @@
       />
     </span>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.em
+      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.em
         ? 'bg-series-1-solid text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onToggleRow('em')}
@@ -62,7 +62,7 @@
       EM-Spektrum
     </button>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.itu
+      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.itu
         ? 'bg-series-5-solid text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onToggleRow('itu')}
@@ -71,7 +71,7 @@
       ITU
     </button>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.ieee
+      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.ieee
         ? 'bg-series-4-solid text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onToggleRow('ieee')}
@@ -80,7 +80,7 @@
       IEEE
     </button>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.nato
+      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.nato
         ? 'bg-series-6-solid text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onToggleRow('nato')}
@@ -89,7 +89,7 @@
       NATO
     </button>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {visibleRows.civilian
+      class="rounded px-2 py-1 text-sm transition-colors {visibleRows.civilian
         ? 'bg-series-2-solid text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onToggleRow('civilian')}
@@ -100,10 +100,10 @@
   </div>
 
   <!-- View mode toggle -->
-  <div class="flex items-center gap-2">
+  <div class="flex flex-wrap items-center gap-1">
     <span class="text-ink-subtle text-sm">Ansicht:</span>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {viewMode === 'rf'
+      class="rounded px-2 py-1 text-sm transition-colors {viewMode === 'rf'
         ? 'bg-warning text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onSetViewMode('rf')}
@@ -111,7 +111,7 @@
       RF (3 Hz - 3 THz)
     </button>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {viewMode === 'visible'
+      class="rounded px-2 py-1 text-sm transition-colors {viewMode === 'visible'
         ? 'bg-warning text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onSetViewMode('visible')}
@@ -119,7 +119,7 @@
       RF + Licht (bis 1 PHz)
     </button>
     <button
-      class="rounded px-3 py-1.5 text-sm transition-colors {viewMode === 'full'
+      class="rounded px-2 py-1 text-sm transition-colors {viewMode === 'full'
         ? 'bg-warning text-on-solid'
         : 'bg-elevated text-ink-subtle hover:bg-hover'}"
       onclick={() => onSetViewMode('full')}
@@ -129,18 +129,22 @@
   </div>
 
   <!-- Zoom and pan controls -->
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-1">
     <button
-      class="from-series-6 via-series-7 via-series-2 to-series-4 text-on-solid rounded bg-gradient-to-r px-2 py-1 text-sm hover:opacity-80"
+      class="bg-elevated text-ink-muted hover:bg-hover inline-flex items-center gap-1.5 rounded px-2 py-1 text-sm"
       onclick={onJumpToVisibleLight}
       aria-label="Sichtbares Licht anzeigen"
       title="Sichtbares Licht anzeigen"
     >
+      <span
+        class="from-series-6 via-series-7 via-series-2 to-series-4 inline-block h-3 w-3 rounded-sm bg-gradient-to-r"
+        aria-hidden="true"
+      ></span>
       Sichtbar
     </button>
-    <span class="text-ink-subtle ml-2 text-sm">Zoom:</span>
+    <span class="text-ink-subtle ml-1 text-sm">Zoom:</span>
     <button
-      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-7 w-7 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onPanLeft}
       disabled={zoomLevel <= MIN_ZOOM}
       aria-label="Nach links verschieben"
@@ -151,7 +155,7 @@
       </svg>
     </button>
     <button
-      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-7 w-7 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onZoomOut}
       disabled={zoomLevel <= MIN_ZOOM}
       aria-label="Herauszoomen"
@@ -163,7 +167,7 @@
     </button>
     <span class="text-ink-muted min-w-[3.5rem] text-center font-mono text-sm">{formatZoom(zoomLevel)}</span>
     <button
-      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-7 w-7 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onZoomIn}
       disabled={zoomLevel >= MAX_ZOOM}
       aria-label="Hineinzoomen"
@@ -174,7 +178,7 @@
       </svg>
     </button>
     <button
-      class="bg-elevated text-ink-muted hover:bg-hover flex h-8 w-8 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
+      class="bg-elevated text-ink-muted hover:bg-hover flex h-7 w-7 items-center justify-center rounded disabled:cursor-not-allowed disabled:opacity-50"
       onclick={onPanRight}
       disabled={zoomLevel <= MIN_ZOOM}
       aria-label="Nach rechts verschieben"

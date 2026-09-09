@@ -6,8 +6,6 @@
    * Zeile ist eine Schaltfläche; die Auswahl öffnet die Detailtafel darunter.
    */
   import { untrack } from 'svelte';
-  import Card from '$lib/components/ui/Card.svelte';
-  import Badge from '$lib/components/ui/Badge.svelte';
   import Button from '$lib/components/ui/Button.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import NumberInput from '$lib/components/ui/NumberInput.svelte';
@@ -73,11 +71,7 @@
   }
 </script>
 
-<Card title="Frequenzzuweisungen durchsuchen" subtitle="Volltext, Kategorie, Frequenzfenster und Sortierung">
-  {#snippet actions()}
-    <Badge tone="info">{rows.length} von {ALL_APPLICATIONS.length}</Badge>
-  {/snippet}
-
+<section class="appdb" aria-label="Frequenzzuweisungen durchsuchen">
   <div class="filters">
     <div class="field">
       <label for={searchId}>Suche</label>
@@ -118,8 +112,8 @@
   </div>
 
   <p class="count" role="status">
-    {rows.length}
-    {rows.length === 1 ? 'Eintrag' : 'Einträge'} gefunden.
+    {rows.length} von {ALL_APPLICATIONS.length}
+    {rows.length === 1 ? 'Eintrag' : 'Einträgen'}
   </p>
 
   {#if selected}
@@ -139,7 +133,7 @@
           <span class="row__name">{app.nameDE}</span>
           <span class="row__range">{formatFrequencyRange(app.minHz, app.maxHz)}</span>
           <span class="row__meta">{CATEGORY_NAMES[app.category]?.nameDE ?? app.category}</span>
-          <span class="row__meta">{formatFrequency(widthHz(app), 0)} breit</span>
+          <span class="row__meta row__meta--right">{formatFrequency(widthHz(app), 0)} breit</span>
         </button>
       </li>
     {/each}
@@ -148,19 +142,27 @@
   {#if rows.length === 0}
     <p class="empty">Kein Eintrag passt zu dieser Auswahl. Suchbegriff kürzen oder das Frequenzfenster erweitern.</p>
   {/if}
-</Card>
+</section>
 
 <style>
+  .appdb {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .filters {
     display: grid;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: 0.5rem 0.75rem;
+    align-items: end;
+    margin: 0;
   }
 
   .field {
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
+    gap: 0.25rem;
   }
 
   .field--action {
@@ -177,8 +179,8 @@
   }
 
   input {
-    min-height: 2.75rem;
-    padding: 0.5rem 0.75rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 0.5rem;
     font-size: var(--font-size-sm);
     color: var(--color-ink);
     background-color: var(--color-input);
@@ -187,30 +189,31 @@
   }
 
   .count {
-    margin: 0 0 1rem;
-    font-size: var(--font-size-sm);
-    color: var(--color-ink-muted);
+    margin: 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-ink-subtle);
   }
 
   .rows {
     list-style: none;
-    margin: 1rem 0 0;
+    margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0;
+    border-top: 1px solid var(--color-line-subtle);
   }
 
   .row {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.125rem 1rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0 0.75rem;
     width: 100%;
-    padding: 0.625rem 0.75rem;
+    padding: 0.25rem 0.25rem;
     text-align: left;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-line-subtle);
-    border-radius: var(--radius-control);
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-line-subtle);
     cursor: pointer;
   }
 
@@ -219,13 +222,12 @@
   }
 
   .row--selected {
-    border-color: var(--color-brand);
     background-color: var(--color-brand-soft);
   }
 
   .row__name {
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-medium);
     color: var(--color-ink);
   }
 
@@ -240,21 +242,24 @@
     color: var(--color-ink-subtle);
   }
 
+  .row__meta--right {
+    text-align: right;
+  }
+
   .empty {
-    margin: 1rem 0 0;
+    margin: 0.75rem 0 0;
     font-size: var(--font-size-sm);
     color: var(--color-ink-subtle);
   }
 
   @media (min-width: 48rem) {
-    .filters {
-      grid-template-columns: repeat(3, 1fr);
-      align-items: end;
-    }
-
     .row {
       grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.8fr);
       align-items: baseline;
+    }
+
+    .row__meta--right {
+      text-align: left;
     }
   }
 </style>

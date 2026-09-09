@@ -13,7 +13,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Funkdienste & Frequenzplan"
   icon="radio"
   lead="Warum eine Frequenz jemandem „gehört“: die Systematik der ITU-Funkdienste, der Unterschied zwischen primärer und sekundärer Zuweisung und der Weg von der Vollzugsordnung bis zur einzelnen Zuteilung."

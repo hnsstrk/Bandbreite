@@ -18,7 +18,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Flugfunk und Flugnavigation"
   icon="signal"
   lead="Vom amplitudenmodulierten Sprechfunk über das 8,33-kHz-Kanalraster bis zu VOR, ILS, DME und ADS-B: die Funkwege, auf denen der Luftverkehr geführt wird."

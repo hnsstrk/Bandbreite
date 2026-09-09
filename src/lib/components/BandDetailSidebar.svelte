@@ -62,13 +62,7 @@
 
 <aside class="sidebar" aria-label="Bandinformationen">
   {#if !lookupFrequencyHz || lookupFrequencyHz <= 0}
-    <div class="empty-state">
-      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="11" cy="11" r="8" />
-        <path d="m21 21-4.3-4.3" />
-      </svg>
-      <p>Band im Spektrum anklicken oder Frequenz eingeben</p>
-    </div>
+    <p class="empty-state">Band im Spektrum anklicken oder Frequenz eingeben.</p>
   {:else}
     {#if primaryBand}
       <div class="sidebar-header">
@@ -145,20 +139,10 @@
   }
 
   .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 2rem 1rem;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
     color: var(--color-text-disabled);
-    text-align: center;
     font-size: var(--font-size-sm);
-  }
-
-  .empty-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    opacity: 0.5;
   }
 
   .sidebar-header {

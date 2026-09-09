@@ -83,14 +83,16 @@
 </div>
 
 <style>
+  /* 1-px-Rahmen, keine Fläche; der Ton färbt nur die linke Kante. */
   .ui-result {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
-    padding: 0.875rem 1rem;
-    border-radius: var(--radius-control);
-    background-color: var(--color-sunken);
-    border-left: 3px solid var(--result-accent, var(--color-line-strong));
+    gap: 0.0625rem;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid var(--color-line);
+    border-left: 2px solid var(--result-accent, var(--color-line-strong));
+    border-radius: var(--radius-sm);
+    background-color: transparent;
   }
 
   .ui-result--success {
@@ -112,9 +114,7 @@
 
   .ui-result__label {
     font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    font-weight: var(--font-weight-normal);
     color: var(--color-ink-subtle);
   }
 
@@ -122,21 +122,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.25rem;
+    height: 1.25rem;
     border: none;
     border-radius: var(--radius-sm);
     background: none;
     color: var(--color-ink-faint);
     cursor: pointer;
-    transition:
-      color var(--transition-fast),
-      background-color var(--transition-fast);
+    transition: color var(--transition-fast);
   }
 
   .ui-result__copy:hover {
     color: var(--color-brand);
-    background-color: var(--color-elevated);
   }
 
   .ui-result__value {
@@ -148,16 +145,16 @@
 
   .ui-result__number {
     font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-semibold);
   }
 
   .ui-result--hero .ui-result__number {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
   }
 
   .ui-result__unit {
     margin-left: 0.3em;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
     color: var(--color-ink-subtle);
   }
@@ -170,7 +167,7 @@
   }
 
   .ui-result__hint {
-    margin: 0.25rem 0 0;
+    margin: 0.125rem 0 0;
     font-size: var(--font-size-xs);
     color: var(--color-ink-subtle);
   }

@@ -2,7 +2,7 @@
   /**
    * Kanonischer Renderer eines Wissen-Kapitels (Bericht 05, §4.3):
    *
-   *   [ TableOfContents 15rem, klebrig ] [ Inhalt: Lesebreite 68ch, Widgets volle Spalte ]
+   *   [ TableOfContents 13rem, klebrig ] [ Inhalt: volle Spaltenbreite ]
    *
    * Ab < 1280 px wandert das Inhaltsverzeichnis als <details> unter den Hero.
    * Kopf: PageHero + LearningGoals; Fuß: Quellen, Prev/Next, RelatedTopics.
@@ -151,24 +151,26 @@
 </article>
 
 <style>
+  /* Keine äußere Karte, kein zusätzlicher Seitenrand: der Artikel füllt die
+     Spalte, die das Layout ihm gibt. */
   .article {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 0 0.5rem;
+    gap: 0.75rem;
+    padding: 0;
   }
 
   .article__grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
+    gap: 0.75rem;
     align-items: start;
   }
 
   @media (min-width: 1280px) {
     .article__grid {
-      grid-template-columns: 15rem minmax(0, 1fr);
-      gap: 3rem;
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: 1.5rem;
     }
   }
 
@@ -185,14 +187,14 @@
   .article__body--flow {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .article__body--flow > :global(section) {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    scroll-margin-top: 5rem;
+    gap: 0.75rem;
+    scroll-margin-top: 3.5rem;
   }
 
   /* Den Abstand setzt hier der Flex-Zwischenraum, nicht der Abschnitt selbst. */
@@ -200,12 +202,14 @@
     margin-top: 0;
   }
 
+  /* Keine Lesebreite mehr — der Inhalt füllt die Spalte neben dem
+     Inhaltsverzeichnis (ausdrückliche Entscheidung des Besitzers). */
   .article__body :global(.article__goals) {
-    max-width: var(--container-prose);
+    max-width: none;
   }
 
   .article__sources {
-    margin-top: 2.5rem;
+    margin-top: 1.25rem;
   }
 
   .article__sources h2 {

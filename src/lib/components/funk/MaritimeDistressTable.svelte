@@ -3,7 +3,7 @@
    * Not- und Sicherheitsfrequenzen des GMDSS auf Grenz- und Kurzwelle,
    * nach Band gruppiert. Daten aus `data/maritimeChannels.ts`.
    */
-  import Card from '$lib/components/ui/Card.svelte';
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import { formatFrequency } from '$lib/utils/formatting';
   import { MARITIME_HF_FREQUENCIES, type MaritimeHfMode } from '$lib/data/maritimeChannels';
@@ -35,7 +35,7 @@
   );
 </script>
 
-<Card
+<Panel
   title="Not- und Sicherheitsfrequenzen unterhalb des UKW-Bandes"
   subtitle="Grenz- und Kurzwelle nach VO Funk Appendix 15"
 >
@@ -69,7 +69,7 @@
       </tbody>
     </table>
   </div>
-</Card>
+</Panel>
 
 <style>
   .table-scroll {
@@ -91,7 +91,7 @@
 
   th,
   td {
-    padding: 0.5rem 0.75rem 0.5rem 0;
+    padding: 0.25rem 0.75rem 0.25rem 0;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-line-subtle);

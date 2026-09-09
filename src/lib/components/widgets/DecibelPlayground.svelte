@@ -187,7 +187,7 @@
   .db-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   @media (min-width: 720px) {

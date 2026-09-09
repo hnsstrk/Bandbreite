@@ -51,17 +51,18 @@
       color var(--transition-normal);
   }
 
+  /* Eine Textzeile direkt unter dem Kopfbereich, ohne eigene Leiste. */
   .breadcrumb-bar {
     width: 100%;
-    padding: 0.75rem var(--page-gutter) 0;
+    padding: 0.25rem var(--page-gutter);
   }
 
-  /* Bewusst ohne max-width: das Spektrum und die Datenbanken nutzen die volle
-     Viewportbreite; Lesebreite regeln die Seiten selbst (ArticleLayout, .prose). */
+  /* Volle Viewportbreite, Seitenrand nur `--page-gutter` (0,75 rem).
+     Es gibt keine Lesebreite mehr — ausdrückliche Entscheidung des Besitzers. */
   .main-content {
     flex-grow: 1;
     width: 100%;
-    padding: 1.5rem var(--page-gutter) 2rem;
+    padding: 0.5rem var(--page-gutter) 1.5rem;
   }
 
   .skip-to-content {
@@ -80,14 +81,13 @@
     left: 0.5rem;
     width: auto;
     height: auto;
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem;
     background-color: var(--color-bg-surface);
     color: var(--color-text-primary);
     border: 2px solid var(--color-border-focus);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
-    box-shadow: var(--shadow-lg);
     z-index: 100;
   }
 </style>

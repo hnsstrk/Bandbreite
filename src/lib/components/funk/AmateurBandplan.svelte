@@ -7,9 +7,9 @@
    * die einer Zeugnisklasse nicht offenstehen, und rechnet die Leistungsgrenze
    * um. Segmente sind Schaltflächen; die Auswahl erscheint in der Tafel unten.
    */
+  import Panel from './Panel.svelte';
   import Badge from '$lib/components/ui/Badge.svelte';
   import Button from '$lib/components/ui/Button.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
   import ModeLegend from './ModeLegend.svelte';
   import { formatFrequency, formatLocaleNumber, formatWavelength } from '$lib/utils/formatting';
   import { formatFrequencyRange } from '$lib/data/bands';
@@ -56,7 +56,7 @@
   }
 </script>
 
-<Card title="Bandplan Region 1" subtitle="Bänder, Segmente und Leistungsgrenzen nach Zeugnisklasse">
+<Panel title="Bandplan Region 1" subtitle="Bänder, Segmente und Leistungsgrenzen nach Zeugnisklasse">
   {#snippet actions()}
     <Badge tone="info">{bands.length} Bänder</Badge>
   {/snippet}
@@ -154,7 +154,7 @@
       <p class="detail__hint">Ein Segment auswählen, um Betriebsart, Grenzen und eine Ausbreitungsregel zu sehen.</p>
     {/if}
   </div>
-</Card>
+</Panel>
 
 <style>
   .toolbar {

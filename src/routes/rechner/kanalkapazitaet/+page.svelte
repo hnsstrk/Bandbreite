@@ -6,7 +6,6 @@
 
 <div class="page-content">
   <PageHero
-    kicker="Rechner"
     title="Kanalkapazität"
     icon="signal"
     lead="Die theoretisch höchste fehlerfreie Datenrate eines Kanals — nach Shannon und Hartley, aus Bandbreite und Störabstand."
@@ -25,6 +24,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 </style>

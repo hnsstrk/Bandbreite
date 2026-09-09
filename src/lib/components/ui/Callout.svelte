@@ -81,40 +81,33 @@
 {/if}
 
 <style>
+  /* Nur eine linke 2-px-Linie in der Semantikfarbe — keine Fläche. */
   .ui-callout {
     display: block;
-    border: 1px solid var(--callout-line);
-    border-left-width: 3px;
-    border-radius: var(--radius-control);
-    background-color: var(--callout-bg);
-    color: var(--callout-ink);
-    padding: 0.875rem 1rem;
+    border: 0;
+    border-left: 2px solid var(--callout-line);
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--color-ink-muted);
+    padding: 0.5rem 0.75rem;
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--line-height-normal);
   }
 
   .ui-callout--info {
-    --callout-bg: var(--color-info-soft);
     --callout-line: var(--color-info);
-    --callout-ink: var(--color-info-ink);
   }
 
   .ui-callout--warning {
-    --callout-bg: var(--color-warning-soft);
     --callout-line: var(--color-warning);
-    --callout-ink: var(--color-warning-ink);
   }
 
   .ui-callout--tip {
-    --callout-bg: var(--color-success-soft);
     --callout-line: var(--color-success);
-    --callout-ink: var(--color-success-ink);
   }
 
   .ui-callout--formula {
-    --callout-bg: var(--color-sunken);
     --callout-line: var(--color-line-strong);
-    --callout-ink: var(--color-ink);
     font-family: var(--font-mono);
   }
 
@@ -122,7 +115,8 @@
   .ui-callout__summary {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.375rem;
+    color: var(--color-ink);
     font-weight: var(--font-weight-semibold);
   }
 
@@ -147,7 +141,7 @@
 
   .ui-callout__head:not(:empty) + .ui-callout__body,
   .ui-callout__summary + .ui-callout__body {
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
   }
 
   .ui-callout__body :global(p) {
@@ -159,7 +153,7 @@
   }
 
   .ui-callout__body :global(a) {
-    color: inherit;
+    color: var(--color-brand);
     text-decoration: underline;
   }
 

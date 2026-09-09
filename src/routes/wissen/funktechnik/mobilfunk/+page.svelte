@@ -19,7 +19,6 @@
 </script>
 
 <ArticleLayout
-  kicker="Funk & Fernmeldetechnik"
   title="Mobilfunk"
   icon="signal"
   lead="Vom analogen C-Netz bis 5G NR: Zellprinzip, Zugriffsverfahren, Duplex und die Frage, wie viel Datenrate in einer bestimmten Bandbreite steckt."

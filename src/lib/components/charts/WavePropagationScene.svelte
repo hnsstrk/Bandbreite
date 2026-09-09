@@ -31,7 +31,8 @@
   /** Abstände der Antennen vom Rand und ihre Masthöhe. */
   const ANTENNA_INSET = 60;
   const MAST_HEIGHT = 40;
-  const GROUND_OFFSET = 10;
+  /** Wölbung der schematischen Erdkrümmung unter der Bodenlinie in Pixeln. */
+  const EARTH_BULGE = 40;
 
   let chartWidth = $derived(Math.max(1, width - margin.left - margin.right));
   let chartHeight = $derived(Math.max(1, height - margin.top - margin.bottom));
@@ -62,11 +63,12 @@
 
   let txX = $derived(ANTENNA_INSET);
   let rxX = $derived(chartWidth - ANTENNA_INSET);
-  let groundY = $derived(chartHeight - GROUND_OFFSET);
-
   function y(altitudeKm: number): number {
     return altitudeToY(altitudeKm, chartHeight);
   }
+
+  /** Bodenlinie = Höhe 0 km der Höhenachse, damit Schichten und Boden zusammenpassen. */
+  let groundY = $derived(y(0));
 </script>
 
 <svg class="wave-scene" viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -96,13 +98,20 @@
   {/if}
 
   <g transform="translate({margin.left}, {margin.top})">
-    <!-- Erdkrümmung -->
+    <!-- Boden (Höhe 0 km) mit schematischer Erdscheibe darunter -->
     <path
-      d="M 0 {chartHeight} Q {chartWidth / 2} {chartHeight + 40} {chartWidth} {chartHeight}"
+      d="M 0 {groundY} L {chartWidth} {groundY} L {chartWidth} {chartHeight} L 0 {chartHeight} Z"
       fill="url(#{uid}-earth)"
-      stroke="var(--earth-edge)"
-      stroke-width="2"
     />
+    <path
+      d="M 0 {groundY} Q {chartWidth / 2} {groundY + EARTH_BULGE} {chartWidth} {groundY}"
+      fill="none"
+      stroke="var(--earth-edge)"
+      stroke-width="1"
+      opacity="0.5"
+    />
+    <line x1="0" y1={groundY} x2={chartWidth} y2={groundY} stroke="var(--earth-edge)" stroke-width="2" />
+    <text class="chart-axis-text" x="-10" y={groundY} text-anchor="end" dominant-baseline="middle">0 km</text>
 
     <!-- Ionosphärenschichten -->
     {#if isNighttime}

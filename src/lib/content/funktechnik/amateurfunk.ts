@@ -174,7 +174,12 @@ export const SECTIONS: ArticleSection[] = [
           { symbol: 'T', meaning: 'Rauschtemperatur', unit: 'K' },
           { symbol: 'B', meaning: 'Rauschbandbreite', unit: 'Hz' }
         ]
-      }
+      },
+      {
+        kind: 'p',
+        text: 'Im Maßstab nebeneinandergelegt wird der Unterschied greifbar: Neben einem FM-Kanal ist eine FT8-Aussendung ein Strich — und genau dieser Faktor steht am Ende als Störabstand zur Verfügung.'
+      },
+      { kind: 'widget', id: 'mode-bandwidth' }
     ]
   },
   {

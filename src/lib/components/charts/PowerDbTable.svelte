@@ -1,5 +1,5 @@
 <script lang="ts">
-  /** Textalternative des Sendeleistungs-Diagramms f\u00fcr Screenreader. */
+  /** Textalternative des Sendeleistungs-Diagramms für Screenreader. */
   import { formatFrequency, formatPowerWatts } from '$lib/utils/formatting';
   import type { DataPoint } from './powerDbData';
 
@@ -11,7 +11,7 @@
 </script>
 
 <table>
-  <caption>Sendeleistungen ausgew\u00e4hlter Systeme</caption>
+  <caption>Sendeleistungen ausgewählter Systeme</caption>
   <thead>
     <tr>
       <th scope="col">System</th>

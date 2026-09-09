@@ -110,12 +110,27 @@ describe('toArticleSection', () => {
   });
 
   it.each(ALLE)('%s: erzeugt nur bekannte Blocktypen', (_name, sections) => {
-    const erlaubt = new Set(['paragraph', 'list', 'formula', 'callout', 'table', 'definitions']);
+    const erlaubt = new Set([
+      'paragraph',
+      'list',
+      'formula',
+      'callout',
+      'table',
+      'definitions',
+      'widget'
+    ]);
     for (const section of articleSections(sections)) {
       for (const block of section.blocks) {
         expect(erlaubt.has(block.type), `${section.id}: ${block.type}`).toBe(true);
       }
     }
+  });
+
+  it('reicht Widget-Bausteine unverändert weiter', () => {
+    expect(toArticleBlock({ kind: 'widget', id: 'cell-reuse' })).toEqual({
+      type: 'widget',
+      id: 'cell-reuse'
+    });
   });
 
   it('übernimmt die Zeile über der Überschrift', () => {

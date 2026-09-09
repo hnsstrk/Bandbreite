@@ -31,14 +31,18 @@
   const CYCLE_MS = 3200;
   const SAMPLES = 121;
   const W = 800;
-  const H = 260;
+  const H = 270;
   const AXIS_X0 = 60;
   const AXIS_X1 = 560;
   const AXIS_Y = 130;
   const AMP = 62;
-  /** Projektion der Tiefenachse z auf den Bildschirm (schräg nach rechts oben) */
-  const DEPTH_X = 0.62;
-  const DEPTH_Y = 0.42;
+  /**
+   * Projektion der Tiefenachse +z auf den Bildschirm: schräg nach links unten,
+   * also auf den Betrachter zu. Nur so bilden x (nach rechts), y (nach oben)
+   * und z ein Rechtssystem — E × H zeigt dann sichtbar in Ausbreitungsrichtung.
+   */
+  const DEPTH_X = -0.62;
+  const DEPTH_Y = -0.42;
   /** Frontansicht rechts */
   const FRONT_CX = 690;
   const FRONT_R = 66;
@@ -104,7 +108,7 @@
 
 <WidgetFrame
   title="E-Feld, H-Feld und Polarisation"
-  description="Eine ebene Welle läuft nach rechts: das elektrische Feld schwingt senkrecht, das magnetische Feld senkrecht dazu in die Tiefe. Rechts zeigt die Frontansicht den E-Vektor in der Querebene."
+  description="Eine ebene Welle läuft nach rechts: das elektrische Feld schwingt senkrecht, das magnetische Feld senkrecht dazu in die Tiefe. Rechts zeigt die Frontansicht den E-Vektor in der Querebene, gesehen von der Antenne aus in Ausbreitungsrichtung — rechtsdrehend heißt dort im Uhrzeigersinn."
   playable
   playing={loop.playing}
   reducedMotion={loop.reducedMotion}
@@ -170,7 +174,7 @@
       <text x="168" y="4" class="chart-legend-text">H-Feld (A/m)</text>
     </g>
 
-    <!-- Frontansicht: Blick entgegen der Ausbreitungsrichtung -->
+    <!-- Frontansicht: Blick von der Antenne aus in Ausbreitungsrichtung (+z nach rechts, +y nach oben) -->
     <circle cx={FRONT_CX} cy={AXIS_Y} r={FRONT_R} fill="none" class="chart-grid-line" />
     <line x1={FRONT_CX - FRONT_R} y1={AXIS_Y} x2={FRONT_CX + FRONT_R} y2={AXIS_Y} class="chart-grid-line" />
     <line x1={FRONT_CX} y1={AXIS_Y - FRONT_R} x2={FRONT_CX} y2={AXIS_Y + FRONT_R} class="chart-grid-line" />
@@ -183,9 +187,14 @@
       stroke-width="3"
     />
     <circle cx={FRONT_CX + front.ez * FRONT_R} cy={AXIS_Y - front.ey * FRONT_R} r="4" fill="var(--color-chart-red)" />
-    <text x={FRONT_CX} y={AXIS_Y + FRONT_R + 22} text-anchor="middle" class="chart-axis-text">
-      Frontansicht · {POLARIZATION_LABELS[polarization]}
+    <text x={FRONT_CX} y={AXIS_Y + FRONT_R + 20} text-anchor="middle" class="chart-axis-text">
+      Blick von der Antenne aus
     </text>
+    <text x={FRONT_CX} y={AXIS_Y + FRONT_R + 34} text-anchor="middle" class="chart-axis-text">
+      {POLARIZATION_LABELS[polarization]}
+    </text>
+    <text x={FRONT_CX + FRONT_R + 4} y={AXIS_Y + 4} class="chart-axis-text">z</text>
+    <text x={FRONT_CX + 4} y={AXIS_Y - FRONT_R - 4} class="chart-axis-text">y</text>
   </svg>
 
   {#snippet dataTable()}

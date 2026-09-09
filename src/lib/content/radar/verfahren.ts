@@ -256,6 +256,11 @@ export const radarVerfahrenArticle: KnowledgeArticle = {
             ' – bei unveränderter Sendeenergie.'
         },
         {
+          type: 'paragraph',
+          html: 'Im Widget stehen Sendeimpuls und Filterausgang auf derselben Zeitachse: Der lange Chirp oben wird unten zu einem Impuls von etwa 1/B – mit den Nebenzipfeln, die dabei entstehen.'
+        },
+        { type: 'widget', id: 'pulse-compression' },
+        {
           type: 'callout',
           tone: 'warning',
           title: 'Der Preis: Nebenzipfel',

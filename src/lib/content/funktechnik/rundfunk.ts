@@ -76,7 +76,12 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'p',
         text: 'Mit 75 kHz Hub und 15 kHz Modulationsfrequenz ergeben sich rund 180 kHz belegte Bandbreite. Das Kanalraster beträgt zwar nur 100 kHz, doch am selben Standort halten Sender mehrere Rasterplätze Abstand, damit sich die Spektren nicht überlappen.'
-      }
+      },
+      {
+        kind: 'p',
+        text: 'Das Widget zerlegt das Multiplexsignal in seine vier Anteile und rechnet daraus die belegte Bandbreite — Mono, Stereo und Stereo mit RDS im direkten Vergleich.'
+      },
+      { kind: 'widget', id: 'fm-multiplex' }
     ]
   },
   {
@@ -91,6 +96,11 @@ export const SECTIONS: ArticleSection[] = [
         kind: 'p',
         text: 'Der eigentliche Gewinn liegt im Gleichwellennetz: Alle Sender einer Region strahlen denselben Block mit demselben Inhalt zeitsynchron ab. Solange die Laufzeitunterschiede innerhalb des Schutzintervalls bleiben, addieren sich die Signale konstruktiv, statt sich zu stören. Ein analoger UKW-Sender bräuchte dagegen für jeden Standort eine eigene Frequenz.'
       },
+      {
+        kind: 'p',
+        text: 'Wo genau diese Grenze liegt, zeigt das Widget: Es stellt den Laufzeitunterschied zweier Sender dem Schutzintervall des gewählten Übertragungsmodus gegenüber.'
+      },
+      { kind: 'widget', id: 'dab-sfn' },
       {
         kind: 'dl',
         items: [

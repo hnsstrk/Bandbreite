@@ -103,7 +103,7 @@ export const mathematikArticle: KnowledgeArticle = {
   kicker: 'Wissen · Grundlagen',
   title: 'HF-Mathematik',
   icon: 'calculator',
-  lead: 'Die sechs Formeln, ohne die in der Hochfrequenztechnik nichts geht: Wellenlänge, Freiraumdämpfung, Radargleichung, Shannon-Kapazität, Dezibel und Radiohorizont – mit Herleitung, berechneten Beispielen und Reglern zum Ausprobieren.',
+  lead: 'Die sechs Formeln, ohne die in der Hochfrequenztechnik nichts geht: Wellenlänge, Freiraumdämpfung, Radargleichung, Shannon-Kapazität, Dezibel und Radiohorizont – mit Herleitung, berechneten Beispielen und Reglern zum Ausprobieren. Davor stehen die beiden Werkzeuge, auf denen alles aufbaut: das Zeigerdiagramm und die Fourier-Reihe.',
   meta: [{ label: 'Lichtgeschwindigkeit', value: `${SPEED_OF_LIGHT_EXACT_DISPLAY} m/s` }],
   goals: [
     'Frequenz und Wellenlänge über λ = c/f ineinander umrechnen und Größenordnungen (m, cm, mm) sicher zuordnen',
@@ -111,7 +111,8 @@ export const mathematikArticle: KnowledgeArticle = {
     'das R⁴-Gesetz der Radargleichung aus zwei Kugelwellen herleiten',
     'die Shannon-Kapazität aus Bandbreite und SNR bestimmen und SNR zwischen dB und linear umrechnen',
     'mit dB rechnen: Faktor 10 vs. 20, dBm/dBW, Kettenrechnung durch Addition',
-    'den Radiohorizont mit dem 4/3-Erde-Modell abschätzen'
+    'den Radiohorizont mit dem 4/3-Erde-Modell abschätzen',
+    'Schwingungen als Zeiger darstellen, sie addieren und ein Signal in seine Harmonischen zerlegen'
   ],
   sections: [
     {
@@ -155,6 +156,59 @@ export const mathematikArticle: KnowledgeArticle = {
       ]
     },
     {
+      id: 'zeiger-und-spektrum',
+      title: 'Zeiger und Spektrum',
+      description:
+        'Zwei Werkzeuge stecken hinter fast jeder HF-Rechnung: die Darstellung einer Schwingung als rotierender Zeiger und die Zerlegung eines Signals in Harmonische.',
+      blocks: [
+        {
+          type: 'formula',
+          formula: 'u(t) = Û · sin(ω·t + φ)',
+          alt: 'u von t gleich U Dach mal Sinus von Omega t plus Phi',
+          label: 'Sinusschwingung mit Amplitude und Phase',
+          number: '(2)',
+          variables: [
+            { symbol: 'Û', meaning: 'Scheitelwert (Länge des Zeigers)', unit: 'V' },
+            { symbol: 'ω', meaning: 'Kreisfrequenz, ω = 2π·f', unit: 'rad/s' },
+            { symbol: 'φ', meaning: 'Nullphasenwinkel (Vordrehung des Zeigers)', unit: 'rad' }
+          ]
+        },
+        {
+          type: 'paragraph',
+          html: 'Eine Schwingung lässt sich als Zeiger der Länge Û darstellen, der mit ω rotiert; ihr Momentanwert ist seine senkrechte Projektion. Der Nutzen zeigt sich beim Addieren: Zwei Schwingungen <strong>gleicher Frequenz</strong> überlagern sich wie Vektoren. Bei φ = 0° addieren sich die Amplituden, bei 90° ergibt sich das √2-fache, bei 180° löschen sie sich aus. Genau so entstehen Mehrwegeschwund, die Nullstellen einer Antennengruppe und die Seitenbänder einer Modulation.'
+        },
+        { type: 'widget', id: 'phasor' },
+        {
+          type: 'paragraph',
+          html: 'Umgekehrt lässt sich jedes periodische Signal als Summe von Sinusschwingungen ganzzahliger Vielfacher der Grundfrequenz schreiben — das ist die Fourier-Reihe. Für die Funktechnik heißt das: Ein Rechtecksignal ist nie schmalbandig. Je steiler die Flanke, desto mehr Harmonische, desto breiter das belegte Spektrum. Deshalb werden Tastsignale verschliffen und Schaltnetzteile gefiltert.'
+        },
+        {
+          type: 'formula',
+          formula: 'u(t) = Σ aₙ · sin(n·ω₀·t),  aₙ = 4/(n·π) für ungerade n (Rechteck)',
+          alt: 'u von t gleich Summe a n mal Sinus von n Omega null t, mit a n gleich vier durch n Pi für ungerade n',
+          label: 'Fourier-Reihe der Rechteckschwingung',
+          number: '(3)',
+          variables: [
+            { symbol: 'aₙ', meaning: 'Amplitude der n-ten Harmonischen', unit: '—' },
+            {
+              symbol: 'n',
+              meaning: 'Ordnungszahl der Harmonischen (n = 1: Grundwelle)',
+              unit: '—'
+            },
+            { symbol: 'ω₀', meaning: 'Kreisfrequenz der Grundwelle', unit: 'rad/s' }
+          ]
+        },
+        { type: 'widget', id: 'fourier-synthesis' },
+        {
+          type: 'callout',
+          tone: 'info',
+          title: 'Gibbssches Phänomen',
+          html: 'An einer Sprungstelle bleibt auch mit sehr vielen Harmonischen ein Überschwinger von rund 9 % der Sprunghöhe stehen — er wird nur schmaler, nicht kleiner. Ein ideales Rechteck ist mit endlicher Bandbreite nicht zu haben.',
+          source: 'Bronstein/Semendjajew, Taschenbuch der Mathematik'
+        }
+      ]
+    },
+    {
       id: 'fspl',
       title: 'Freiraumdämpfung (FSPL)',
       description:
@@ -165,7 +219,7 @@ export const mathematikArticle: KnowledgeArticle = {
           formula: 'FSPL = 20·log₁₀(d) + 20·log₁₀(f) + 20·log₁₀(4π/c)',
           alt: 'FSPL gleich 20 log d plus 20 log f plus 20 log 4 Pi durch c',
           label: `Freiraumdämpfung in dB; die Konstante 20·log₁₀(4π/c) beträgt ${formatNumber(getFsplConstant(), 3)} dB`,
-          number: '(2)',
+          number: '(4)',
           variables: [
             { symbol: 'd', meaning: 'Distanz', unit: 'm' },
             { symbol: 'f', meaning: 'Frequenz', unit: 'Hz' },
@@ -210,7 +264,7 @@ export const mathematikArticle: KnowledgeArticle = {
           formula: 'P_r = P_t · G² · λ² · σ / ((4π)³ · R⁴)',
           alt: 'P r gleich P t mal G Quadrat mal Lambda Quadrat mal Sigma, geteilt durch 4 Pi hoch 3 mal R hoch 4',
           label: 'Radargleichung (ohne Verluste)',
-          number: '(3)',
+          number: '(5)',
           variables: [
             { symbol: 'P_r', meaning: 'Empfangene Leistung', unit: 'W' },
             { symbol: 'P_t', meaning: 'Sendeleistung', unit: 'W' },
@@ -257,7 +311,7 @@ export const mathematikArticle: KnowledgeArticle = {
           formula: 'C = B · log₂(1 + SNR)',
           alt: 'C gleich B mal Logarithmus zur Basis 2 von 1 plus SNR',
           label: 'Kanalkapazität',
-          number: '(4)',
+          number: '(6)',
           variables: [
             {
               symbol: 'C',
@@ -273,7 +327,7 @@ export const mathematikArticle: KnowledgeArticle = {
           formula: 'SNR = 10^(SNR_dB / 10)',
           alt: 'SNR linear gleich 10 hoch SNR in dB geteilt durch 10',
           label: `SNR-Umrechnung: ${SNR_EXAMPLE_DB} dB entsprechen SNR = ${formatNumber(snrDbToLinear(SNR_EXAMPLE_DB), 0)}`,
-          number: '(5)'
+          number: '(7)'
         },
         {
           type: 'paragraph',
@@ -305,7 +359,7 @@ export const mathematikArticle: KnowledgeArticle = {
           formula: 'dB = 10·log₁₀(P₂/P₁)   |   dB = 20·log₁₀(U₂/U₁)',
           alt: 'dB gleich 10 log P2 durch P1 für Leistungen, beziehungsweise 20 log U2 durch U1 für Spannungen',
           label: 'Leistungs- und Spannungsverhältnis in dB',
-          number: '(6)'
+          number: '(8)'
         },
         {
           type: 'callout',
@@ -363,7 +417,7 @@ export const mathematikArticle: KnowledgeArticle = {
           formula: 'd = √(2 · k · R · h)',
           alt: 'd gleich Wurzel aus 2 mal k mal R mal h',
           label: 'Radiohorizont einer Antenne',
-          number: '(7)',
+          number: '(9)',
           variables: [
             { symbol: 'd', meaning: 'Distanz zum Horizont', unit: 'km' },
             {
@@ -385,7 +439,7 @@ export const mathematikArticle: KnowledgeArticle = {
           formula: 'd_max = √(2·k·R·h₁) + √(2·k·R·h₂)',
           alt: 'd max gleich Wurzel aus 2 k R h1 plus Wurzel aus 2 k R h2',
           label: 'Maximale Sichtverbindung zwischen zwei Antennen',
-          number: '(8)'
+          number: '(10)'
         },
         {
           type: 'table',

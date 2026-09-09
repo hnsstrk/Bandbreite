@@ -50,6 +50,8 @@ export function toArticleBlock(block: ContentBlock): ArticleBlock {
         columns: block.head,
         rows: block.rows
       };
+    case 'widget':
+      return { type: 'widget', id: block.id };
   }
 }
 

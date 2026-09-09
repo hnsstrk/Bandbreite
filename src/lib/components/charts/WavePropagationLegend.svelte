@@ -1,5 +1,5 @@
 <script lang="ts">
-  /** Legende zum gew\u00e4hlten Ausbreitungsmodus \u2014 als HTML neben dem Diagramm. */
+  /** Legende zum gewählten Ausbreitungsmodus — als HTML neben dem Diagramm. */
   import { formatFrequency, formatNumber } from '$lib/utils/formatting';
   import { modeById, shortCharacteristic } from './wavePropagationData';
 
@@ -23,13 +23,13 @@
     <div>
       <dt>Frequenzbereich</dt>
       <dd>
-        {formatFrequency(mode.frequencyRangeHz.min)} \u2013 {formatFrequency(mode.frequencyRangeHz.max)}
+        {formatFrequency(mode.frequencyRangeHz.min)} – {formatFrequency(mode.frequencyRangeHz.max)}
       </dd>
     </div>
     <div>
       <dt>Typische Reichweite</dt>
       <dd>
-        {formatNumber(mode.typicalRangeKm.min, 0)} \u2013 {formatNumber(mode.typicalRangeKm.max, 0)} km
+        {formatNumber(mode.typicalRangeKm.min, 0)} – {formatNumber(mode.typicalRangeKm.max, 0)} km
       </dd>
     </div>
   </dl>

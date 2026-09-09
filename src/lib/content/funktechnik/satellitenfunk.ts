@@ -121,7 +121,12 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'p',
         text: 'Die zweite Folge der Entfernung ist die Signallaufzeit. Zum geostationären Satelliten und zurück vergehen rund 240 Millisekunden; für ein Frage-Antwort-Spiel im Internet verdoppelt sich das auf fast eine halbe Sekunde. Bei einem Satelliten in 550 km Höhe sind es dagegen nur wenige Millisekunden — der eigentliche Grund, warum die neuen Breitbandkonstellationen in niedrige Bahnen gegangen sind.'
-      }
+      },
+      {
+        kind: 'p',
+        text: 'Eine niedrige Bahn bringt kurze Wege, aber auch Bewegung: Elevation, Entfernung und Dopplerverschiebung ändern sich während eines Überflugs binnen Minuten. Das Widget zeichnet einen vollständigen Durchgang nach.'
+      },
+      { kind: 'widget', id: 'leo-pass' }
     ]
   },
   {

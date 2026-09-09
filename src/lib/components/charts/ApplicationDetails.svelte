@@ -38,7 +38,7 @@
     </li>
   {/each}
   {#if applications.length === 0}
-    <li class="ao-empty">Keine Dienste in den gew\u00e4hlten Kategorien.</li>
+    <li class="ao-empty">Keine Dienste in den gewählten Kategorien.</li>
   {/if}
 </ul>
 
@@ -77,8 +77,8 @@
   </Card>
 {:else}
   <p class="ao-hint">
-    {applications.length} Dienste sichtbar. Ein Klick auf einen Eintrag zeigt die Einzelheiten. \u00dcberlappungen sind normal
-    \u2014 B\u00e4nder werden oft prim\u00e4r und sekund\u00e4r zugewiesen oder regional unterschiedlich genutzt.
+    {applications.length} Dienste sichtbar. Ein Klick auf einen Eintrag zeigt die Einzelheiten. Überlappungen sind normal
+    — Bänder werden oft primär und sekundär zugewiesen oder regional unterschiedlich genutzt.
   </p>
 {/if}
 

@@ -12,7 +12,7 @@
   import ResultCard from '$lib/components/ui/ResultCard.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
   import SsrCodePicker from './SsrCodePicker.svelte';
-  import { formatDistance, formatFrequency, formatNumber } from '$lib/utils/formatting';
+  import { formatDistance, formatNumber } from '$lib/utils/formatting';
   import {
     computeSsrTiming,
     interrogationPulses,
@@ -74,12 +74,14 @@
   /** Fortschritt der Laufzeitmarke auf der Verbindung (0 … 1) */
   const travel = $derived((loop.elapsedMs % SWEEP_MS) / SWEEP_MS);
   const modeOptions = SSR_MODES.map((entry) => ({ value: entry.id, label: entry.label }));
+  /** Abfrage- und Antwortfrequenz in MHz — `formatFrequency` würde beide auf „1 GHz" runden. */
+  const megahertz = (hz: number) => `${formatNumber(hz / 1e6, 0)} MHz`;
   const modeInfo = $derived(SSR_MODES.find((entry) => entry.id === mode) ?? SSR_MODES[0]);
 </script>
 
 <WidgetFrame
   title="Sekundärradar: Abfrage und Antwort"
-  description="Zeitdiagramm einer Sekundärradar-Abfrage: oben die Impulse der Bodenstation auf 1030 MHz, unten die Transponderantwort auf 1090 MHz, dazwischen die Signallaufzeit."
+  description="Zeitdiagramm einer Sekundärradar-Abfrage: oben die Impulse der Bodenstation auf 1030 MHz, unten die Transponderantwort auf 1090 MHz, dazwischen die Signallaufzeit. Der Zwischenraum ist nicht maßstäblich."
   playable
   playing={loop.playing}
   reducedMotion={loop.reducedMotion}
@@ -91,8 +93,8 @@
   )} µs aus Laufzeit und Transponderverzögerung und ist stark verkürzt. Datenblöcke sind in der Breite begrenzt."
 >
   <svg viewBox="0 0 {W} {H}" aria-hidden="true">
-    <text x="8" y={TX_Y - 52} class="chart-legend-text">Bodenstation → {formatFrequency(SSR_INTERROGATION_HZ, 0)}</text>
-    <text x="8" y={RX_Y - 52} class="chart-legend-text">Transponder → {formatFrequency(SSR_REPLY_HZ, 0)}</text>
+    <text x="8" y={TX_Y - 52} class="chart-legend-text">Bodenstation → {megahertz(SSR_INTERROGATION_HZ)}</text>
+    <text x="8" y={RX_Y - 52} class="chart-legend-text">Transponder → {megahertz(SSR_REPLY_HZ)}</text>
     <line x1={X0 - 10} y1={TX_Y} x2={W - 12} y2={TX_Y} class="chart-axis-line" />
     <line x1={X0 - 10} y1={RX_Y} x2={W - 12} y2={RX_Y} class="chart-axis-line" />
 
@@ -118,15 +120,15 @@
     {#if mode !== 's'}
       <line
         x1={X0}
-        y1={TX_Y - PULSE_H - 12}
+        y1={TX_Y - PULSE_H - 26}
         x2={X0 + interrogationSpacingUs(mode) * PX_PER_US}
-        y2={TX_Y - PULSE_H - 12}
+        y2={TX_Y - PULSE_H - 26}
         stroke="var(--color-series-3)"
         stroke-width="1.5"
       />
       <text
         x={X0 + (interrogationSpacingUs(mode) * PX_PER_US) / 2}
-        y={TX_Y - PULSE_H - 18}
+        y={TX_Y - PULSE_H - 32}
         text-anchor="middle"
         class="chart-legend-text"
       >
@@ -177,15 +179,15 @@
     {#if mode !== 's'}
       <line
         x1={rxX0}
-        y1={RX_Y - PULSE_H - 12}
+        y1={RX_Y - PULSE_H - 26}
         x2={rxX0 + REPLY_FRAME_US * PX_PER_US}
-        y2={RX_Y - PULSE_H - 12}
+        y2={RX_Y - PULSE_H - 26}
         stroke="var(--color-series-3)"
         stroke-width="1.5"
       />
       <text
         x={rxX0 + (REPLY_FRAME_US * PX_PER_US) / 2}
-        y={RX_Y - PULSE_H - 18}
+        y={RX_Y - PULSE_H - 32}
         text-anchor="middle"
         class="chart-legend-text"
       >
@@ -200,11 +202,10 @@
       <tbody>
         <tr><th>Modus</th><td>{modeInfo.label} — {modeInfo.purposeDE}</td></tr>
         <tr
-          ><th>Abfrage</th><td
-            >{formatFrequency(SSR_INTERROGATION_HZ, 0)}, Impulse {txPulses.map((p) => p.label).join(', ')}</td
+          ><th>Abfrage</th><td>{megahertz(SSR_INTERROGATION_HZ)}, Impulse {txPulses.map((p) => p.label).join(', ')}</td
           ></tr
         >
-        <tr><th>Antwort</th><td>{formatFrequency(SSR_REPLY_HZ, 0)}</td></tr>
+        <tr><th>Antwort</th><td>{megahertz(SSR_REPLY_HZ)}</td></tr>
         <tr><th>Entfernung</th><td>{formatDistance(rangeKm * 1000, 0)}</td></tr>
         <tr><th>Laufzeit hin und zurück</th><td>{formatNumber(timing.roundTripUs, 1)} µs</td></tr>
         <tr><th>Abfrage bis Antwortbeginn</th><td>{formatNumber(timing.totalUs, 1)} µs</td></tr>
@@ -275,7 +276,7 @@
     />
     <Callout tone="info" title="Warum zwei Frequenzen?">
       Die Antwort kommt nicht als schwaches Echo zurück, sondern als eigene Aussendung auf
-      {formatFrequency(SSR_REPLY_HZ, 0)}. Deshalb gilt für jede Richtung nur ein 1/R²-Gesetz statt des R⁴-Gesetzes des
+      {megahertz(SSR_REPLY_HZ)}. Deshalb gilt für jede Richtung nur ein 1/R²-Gesetz statt des R⁴-Gesetzes des
       Primärradars — Sekundärradar kommt mit erheblich weniger Leistung aus.
     </Callout>
   {/snippet}

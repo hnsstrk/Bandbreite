@@ -82,7 +82,7 @@
       class="chart-axis-label"
       transform="rotate(-90, 14, {M.top + PLOT_H / 2})">dB/km</text
     >
-    {#each WINDOW_MARKERS as marker (marker.id)}
+    {#each WINDOW_MARKERS as marker, index (marker.id)}
       <line
         x1={xOf(marker.frequencyGHz)}
         y1={M.top}
@@ -93,9 +93,10 @@
         stroke-dasharray={marker.kind === 'peak' ? '3,3' : '6,3'}
         opacity="0.6"
       />
+      <!-- Beschriftungen versetzt in zwei Zeilen, damit sie sich auf der Log-Achse nicht überdecken -->
       <text
         x={xOf(marker.frequencyGHz)}
-        y={marker.kind === 'peak' ? M.top - 8 : M.top + 12}
+        y={marker.kind === 'peak' ? M.top - 8 - (index % 2) * 12 : M.top + 12 + (index % 2) * 12}
         text-anchor="middle"
         class="chart-legend-text"
         fill={marker.kind === 'peak' ? 'var(--color-danger-ink)' : 'var(--color-success-ink)'}>{marker.label}</text
@@ -121,7 +122,7 @@
         stroke-width="1.5"
       />
     {/if}
-    <g transform="translate({M.left + 10}, {M.top + PLOT_H - 44})">
+    <g transform="translate({M.left + 10}, {M.top + 40})">
       <line x1="0" y1="0" x2="18" y2="0" stroke="var(--color-series-3)" stroke-width="2.5" /><text
         x="24"
         y="4"

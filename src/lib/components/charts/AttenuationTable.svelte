@@ -1,5 +1,5 @@
 <script lang="ts">
-  /** Textalternative des D\u00e4mpfungsdiagramms f\u00fcr Screenreader. */
+  /** Textalternative des Dämpfungsdiagramms für Screenreader. */
   import { formatAttenuation, formatLocaleNumber } from '$lib/utils/formatting';
 
   interface Row {
@@ -18,7 +18,7 @@
 </script>
 
 <table>
-  <caption>Spezifische D\u00e4mpfung an ausgew\u00e4hlten Frequenzen</caption>
+  <caption>Spezifische Dämpfung an ausgewählten Frequenzen</caption>
   <thead>
     <tr>
       <th scope="col">Frequenz</th>

@@ -26,6 +26,26 @@ import BlindSpeedWidget from '$lib/components/widgets/BlindSpeedWidget.svelte';
 import SsrInterrogationWidget from '$lib/components/widgets/SsrInterrogationWidget.svelte';
 import EmWaveWidget from '$lib/components/widgets/EmWaveWidget.svelte';
 import FieldStrengthWidget from '$lib/components/widgets/FieldStrengthWidget.svelte';
+import NearFarFieldWidget from '$lib/components/widgets/NearFarFieldWidget.svelte';
+import PolarizationLossWidget from '$lib/components/widgets/PolarizationLossWidget.svelte';
+import LogLinearWidget from '$lib/components/widgets/LogLinearWidget.svelte';
+import InverseSquareWidget from '$lib/components/widgets/InverseSquareWidget.svelte';
+import PhasorWidget from '$lib/components/widgets/PhasorWidget.svelte';
+import FourierSynthesisWidget from '$lib/components/widgets/FourierSynthesisWidget.svelte';
+import TwoRayWidget from '$lib/components/widgets/TwoRayWidget.svelte';
+import IonosphereDayNightWidget from '$lib/components/widgets/IonosphereDayNightWidget.svelte';
+import DipoleCurrentWidget from '$lib/components/widgets/DipoleCurrentWidget.svelte';
+import OfdmWidget from '$lib/components/widgets/OfdmWidget.svelte';
+import CellReuseWidget from '$lib/components/widgets/CellReuseWidget.svelte';
+import FmMultiplexWidget from '$lib/components/widgets/FmMultiplexWidget.svelte';
+import DabSfnWidget from '$lib/components/widgets/DabSfnWidget.svelte';
+import ModeBandwidthWidget from '$lib/components/widgets/ModeBandwidthWidget.svelte';
+import VorWidget from '$lib/components/widgets/VorWidget.svelte';
+import LeoPassWidget from '$lib/components/widgets/LeoPassWidget.svelte';
+import MaritimeDuplexWidget from '$lib/components/widgets/MaritimeDuplexWidget.svelte';
+import RadarRangeWidget from '$lib/components/widgets/RadarRangeWidget.svelte';
+import PulseCompressionWidget from '$lib/components/widgets/PulseCompressionWidget.svelte';
+import ModeSFrameWidget from '$lib/components/widgets/ModeSFrameWidget.svelte';
 import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
 import { radarArticle } from '$lib/content/radar';
 import { mathematikArticle } from '$lib/content/mathematik';
@@ -54,7 +74,27 @@ const WIDGETS: { name: string; component: AnyComponent; sliders: number }[] = [
   { name: 'BlindSpeedWidget', component: BlindSpeedWidget, sliders: 3 },
   { name: 'SsrInterrogationWidget', component: SsrInterrogationWidget, sliders: 1 },
   { name: 'EmWaveWidget', component: EmWaveWidget, sliders: 2 },
-  { name: 'FieldStrengthWidget', component: FieldStrengthWidget, sliders: 3 }
+  { name: 'FieldStrengthWidget', component: FieldStrengthWidget, sliders: 3 },
+  { name: 'NearFarFieldWidget', component: NearFarFieldWidget, sliders: 3 },
+  { name: 'PolarizationLossWidget', component: PolarizationLossWidget, sliders: 1 },
+  { name: 'LogLinearWidget', component: LogLinearWidget, sliders: 2 },
+  { name: 'InverseSquareWidget', component: InverseSquareWidget, sliders: 3 },
+  { name: 'PhasorWidget', component: PhasorWidget, sliders: 3 },
+  { name: 'FourierSynthesisWidget', component: FourierSynthesisWidget, sliders: 1 },
+  { name: 'TwoRayWidget', component: TwoRayWidget, sliders: 4 },
+  { name: 'IonosphereDayNightWidget', component: IonosphereDayNightWidget, sliders: 2 },
+  { name: 'DipoleCurrentWidget', component: DipoleCurrentWidget, sliders: 1 },
+  { name: 'OfdmWidget', component: OfdmWidget, sliders: 2 },
+  { name: 'CellReuseWidget', component: CellReuseWidget, sliders: 3 },
+  { name: 'FmMultiplexWidget', component: FmMultiplexWidget, sliders: 1 },
+  { name: 'DabSfnWidget', component: DabSfnWidget, sliders: 2 },
+  { name: 'ModeBandwidthWidget', component: ModeBandwidthWidget, sliders: 0 },
+  { name: 'VorWidget', component: VorWidget, sliders: 2 },
+  { name: 'LeoPassWidget', component: LeoPassWidget, sliders: 3 },
+  { name: 'MaritimeDuplexWidget', component: MaritimeDuplexWidget, sliders: 0 },
+  { name: 'RadarRangeWidget', component: RadarRangeWidget, sliders: 4 },
+  { name: 'PulseCompressionWidget', component: PulseCompressionWidget, sliders: 2 },
+  { name: 'ModeSFrameWidget', component: ModeSFrameWidget, sliders: 0 }
 ];
 
 describe('Widgets rendern', () => {
@@ -73,7 +113,15 @@ describe('Widgets rendern', () => {
   }
 
   it('Animierte Widgets haben einen Pause-Button mit aria-pressed', () => {
-    for (const component of [RadarPulseWidget, DopplerWidget]) {
+    for (const component of [
+      RadarPulseWidget,
+      DopplerWidget,
+      LogLinearWidget,
+      InverseSquareWidget,
+      PhasorWidget,
+      IonosphereDayNightWidget,
+      DipoleCurrentWidget
+    ]) {
       const root = renderToDom(component);
       expect(root.querySelector('button[aria-pressed]')).not.toBeNull();
     }

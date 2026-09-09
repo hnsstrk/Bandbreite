@@ -188,7 +188,12 @@ export const radarSekundaerArticle: KnowledgeArticle = {
         {
           type: 'paragraph',
           html: 'Der Ablauf ist zweistufig: Im <strong>Allruf</strong> meldet sich ein neu auftauchendes Luftfahrzeug einmal mit seiner Adresse. Danach fragt die Bodenstation es gezielt und zu einem selbst gewählten Zeitpunkt ab („selective interrogation") und trägt es in eine Sperrliste ein, damit es auf weitere Allrufe schweigt. Das entlastet den Kanal erheblich — genau darum ging es bei der Einführung.'
-        }
+        },
+        {
+          type: 'paragraph',
+          html: 'Wie eine solche Antwort aufgebaut ist, zeigt das Bitfeld der ADS-B-Aussendung DF17: acht Mikrosekunden Preambel und danach 112 Bit, aufgeteilt in Formatkennung, Fähigkeitskennung, Adresse, Nachricht und Prüfsumme.'
+        },
+        { type: 'widget', id: 'mode-s-frame' }
       ]
     },
     {

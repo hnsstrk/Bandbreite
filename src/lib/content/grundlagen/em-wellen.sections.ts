@@ -80,6 +80,11 @@ export const EM_WELLEN_SECTIONS_TAIL: ArticleSection[] = [
         html: `Zwei linear polarisierte Antennen verlieren bei einer Verdrehung um den Winkel α den Faktor cos²α an Leistung, also −20·log₁₀(cos α) in Dezibel. Bei 90° ist der Verlust theoretisch unendlich; reale Antennen erreichen eine Kreuzpolarisationsentkopplung von ${crossPolLoss} bis 30 dB. Der Übergang linear ↔ zirkular kostet dagegen immer ${circularLoss} dB — die Hälfte der Leistung steckt in der falschen Komponente und lässt sich nicht zurückholen.`
       },
       {
+        type: 'paragraph',
+        html: 'Wie steil der Verlust mit dem Winkel wächst, zeigt das folgende Widget: Bis 30° bleibt er unter 1,3 dB, bei 45° sind es genau 3 dB, und ab 80° wird es schnell dramatisch.'
+      },
+      { type: 'widget', id: 'polarization-loss' },
+      {
         type: 'callout',
         tone: 'tip',
         title: 'Warum Satelliten zirkular senden',

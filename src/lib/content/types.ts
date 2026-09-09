@@ -24,7 +24,25 @@ export type WidgetId =
   | 'blind-speed'
   | 'ssr-interrogation'
   | 'em-wave'
-  | 'field-strength';
+  | 'field-strength'
+  | 'near-far-field'
+  | 'polarization-loss'
+  | 'log-linear'
+  | 'inverse-square'
+  | 'phasor'
+  | 'fourier-synthesis'
+  | 'two-ray'
+  | 'ionosphere-day-night'
+  | 'cell-reuse'
+  | 'fm-multiplex'
+  | 'dab-sfn'
+  | 'mode-bandwidth'
+  | 'vor-radial'
+  | 'leo-pass'
+  | 'maritime-duplex'
+  | 'radar-range'
+  | 'pulse-compression'
+  | 'mode-s-frame';
 
 /**
  * Widgets, die in einer Kapitel**seite** direkt im Markup stehen — die Kapitel
@@ -38,7 +56,9 @@ export type MarkupWidgetId =
   | 'carson'
   | 'antenna-pattern'
   | 'parabolic-gain'
-  | 'swr';
+  | 'swr'
+  | 'dipole-current'
+  | 'ofdm';
 
 /** Alle Kennungen des Widget-Katalogs (`data/widgets.ts`). */
 export type CatalogWidgetId = WidgetId | MarkupWidgetId;

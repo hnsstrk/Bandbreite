@@ -44,10 +44,14 @@
   const x = (fraction: number) => PAD.left + fraction * PLOT_W;
   const y = (fraction: number) => PAD.top + PLOT_H - fraction * PLOT_H;
 
-  /** Sägezahn: `shift` verschiebt die Rampe nach rechts (Empfang). */
+  /**
+   * Sägezahn: `shift` verschiebt die Rampe nach rechts (Empfang). Eine Rampe
+   * vor dem sichtbaren Bereich sorgt dafür, dass die verzögerte Empfangsrampe
+   * auch links am Rand (Ende der vorigen Rampe) gezeichnet ist.
+   */
   function rampPath(shiftPx: number): string {
     const parts: string[] = [];
-    for (let i = 0; i < RAMPS + 1; i++) {
+    for (let i = -1; i < RAMPS + 1; i++) {
       const x0 = PAD.left + i * rampW + shiftPx;
       parts.push(`M${x0},${y(0)} L${x0 + rampW},${y(1)}`);
     }

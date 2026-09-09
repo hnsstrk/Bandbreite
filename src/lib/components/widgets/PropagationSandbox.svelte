@@ -120,7 +120,9 @@
       />
       <circle cx={reflection.x} cy={reflection.y} r="5" fill="var(--color-series-3)" />
       <text x={skipLanding.x} y={skipLanding.y + 18} text-anchor="middle" class="chart-axis-text"
-        >1. Sprung {formatNumber(scene.skipDistanceKm ?? 0, 0)} km</text
+        >{scene.skipDistanceKm === 0
+          ? 'f ≤ foF2: Reflexion auch bei Steilstrahlung, keine tote Zone'
+          : `1. Sprung ${formatNumber(scene.skipDistanceKm ?? 0, 0)} km`}</text
       >
     {:else if sky}
       <text x={txTop.x + 20} y={txTop.y - 20} class="chart-axis-text" fill="var(--color-danger)"

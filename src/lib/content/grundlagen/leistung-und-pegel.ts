@@ -153,6 +153,11 @@ export const leistungUndPegelArticle: KnowledgeArticle = {
           type: 'paragraph',
           html: 'Die Oberfläche einer Kugel wächst mit d², also sinkt die Leistungsdichte mit 1/d². Doppelter Abstand bedeutet ein Viertel der Leistungsdichte, also −6 dB; zehnfacher Abstand ein Hundertstel, also −20 dB. Genau dieser Term steckt auch in der Freiraumdämpfung.'
         },
+        {
+          type: 'paragraph',
+          html: 'Das folgende Widget macht das Abstandsgesetz sichtbar: Links laufen die Wellenfronten auf immer größere Kugelflächen hinaus, rechts fällt die Leistungsdichte im doppelt-logarithmischen Diagramm als Gerade — 20 dB je Abstandsdekade.'
+        },
+        { type: 'widget', id: 'inverse-square' },
         { type: 'widget', id: 'field-strength' }
       ]
     },

@@ -192,26 +192,40 @@ export interface WaveOptions {
  * Linear: E schwingt in einer festen Ebene, H senkrecht dazu.
  * Zirkular: der E-Vektor rotiert mit fortschreitendem x — die Spitze
  * beschreibt eine Schraubenlinie; die Drehrichtung unterscheidet RHCP und LHCP.
+ *
+ * Drehsinn nach IEEE Std 145: Bei RHCP dreht sich der E-Vektor an einem
+ * festen Ort mit der Zeit im Sinne der rechten Hand um die Ausbreitungs-
+ * richtung (Daumen = +x, Finger von +y nach +z), also
+ *   E_y = cos(ωt − kx), E_z = +sin(ωt − kx).
+ * Von der Antenne aus in Ausbreitungsrichtung gesehen ist das eine Drehung
+ * im Uhrzeigersinn; LHCP dreht gegensinnig (Balanis, Antenna Theory, §2.12).
  */
 export function fieldSamples(options: WaveOptions): FieldSample[] {
   const { cycles, samples, phaseRad, polarization } = options;
   const count = Math.max(2, Math.round(samples));
-  const sense = polarization === 'lhcp' ? -1 : 1;
+  const sense = polarization === 'rhcp' ? 1 : -1;
   const circular = isCircular(polarization);
   const horizontal = polarization === 'linear-h';
 
   return Array.from({ length: count }, (_, index) => {
     const x = index / (count - 1);
+    // theta = kx − ωt; die Welle läuft mit wachsender Phase nach +x.
     const theta = 2 * Math.PI * cycles * x - phaseRad;
     const swing = Math.sin(theta);
     const ey = circular ? Math.cos(theta) : horizontal ? 0 : swing;
-    const ez = circular ? sense * Math.sin(theta) : horizontal ? swing : 0;
-    // H steht senkrecht auf E in der Querebene (E, H, Ausbreitung = Rechtssystem)
+    // sin(ωt − kx) = −sin(theta)
+    const ez = circular ? -sense * Math.sin(theta) : horizontal ? swing : 0;
+    // H = x̂ × E / Z₀ (normiert): E, H, Ausbreitung bilden ein Rechtssystem,
+    // E × H zeigt nach +x.
     return { x, ey, ez, hy: -ez, hz: ey };
   });
 }
 
-/** E-Vektor in der Frontansicht (Blick entgegen der Ausbreitungsrichtung). */
+/**
+ * E-Vektor in der Querebene am Ort x = 0 zum Phasenwinkel ω·t.
+ * Die Bühne zeigt ihn mit Blick von der Antenne aus in Ausbreitungsrichtung
+ * (+y nach oben, +z nach rechts) — RHCP dreht dann im Uhrzeigersinn.
+ */
 export function frontVector(
   phaseRad: number,
   polarization: Polarization

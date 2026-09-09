@@ -96,7 +96,12 @@ export const dezibelArticle: KnowledgeArticle = {
           title: 'Bel und Dezibel',
           html: 'Die Grundeinheit ist das <strong>Bel</strong> — der dekadische Logarithmus des Leistungsverhältnisses. Weil das für die Praxis zu grob ist, rechnet man mit dem zehnten Teil davon, dem Dezibel. Daher der Faktor 10.',
           source: 'IEC 60027-3, ITU-R V.574-5'
-        }
+        },
+        {
+          type: 'paragraph',
+          html: 'Was das in der Darstellung ausmacht, zeigen die beiden Achsen im folgenden Widget: Derselbe Marker macht zweimal denselben Schritt — auf der linearen Achse einmal unsichtbar klein und einmal über die ganze Breite, auf der Dezibel-Achse zweimal als gerade Strecke.'
+        },
+        { type: 'widget', id: 'log-linear' }
       ]
     },
     {

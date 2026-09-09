@@ -21,7 +21,7 @@
   } from './DopplerModel';
 
   const W = 800;
-  const H = 220;
+  const H = 250;
   const RADAR_X = 90;
   const TARGET_X = 700;
   const BEAM_Y = 110;
@@ -29,7 +29,9 @@
   const BASE_SPACING = 34;
   /** Geschwindigkeit der Wellenfront-Animation in px/s */
   const FRONT_SPEED = 60;
-  const SPECTRUM_X0 = 520;
+  /** Spektrum-Inset unterhalb der Szene (überlappt keine Beschriftung) */
+  const SPECTRUM_X0 = 300;
+  const SPECTRUM_Y = 236;
   const SPECTRUM_W = 240;
 
   let velocityMs = $state<number>(DOPPLER_VELOCITY_LIMITS.default);
@@ -41,7 +43,12 @@
   const carrier = $derived(DOPPLER_CARRIERS.find((c) => c.id === carrierId) ?? DOPPLER_CARRIERS[0]);
   const result = $derived(computeDoppler(velocityMs, carrier.frequencyHz));
   const spacing = $derived(BASE_SPACING * visualWavelengthFactor(velocityMs));
-  const travel = $derived(((loop.elapsedMs / 1000) * FRONT_SPEED) % spacing);
+  /**
+   * Fortschritt der Wellenfronten als Bruchteil eines Frontabstands: die
+   * Phase bleibt beim Verstellen des Reglers erhalten, statt beim Wechsel
+   * des Modulo-Teilers zu springen.
+   */
+  const travel = $derived(((((loop.elapsedMs / 1000) * FRONT_SPEED) / BASE_SPACING) % 1) * spacing);
   const fronts = $derived.by(() => {
     const xs: number[] = [];
     for (let x = TARGET_X - 40 - travel; x > RADAR_X + 40; x -= spacing) xs.push(x);
@@ -104,7 +111,7 @@
     </text>
 
     <!-- Spektrum-Inset -->
-    <g transform="translate({SPECTRUM_X0}, 178)">
+    <g transform="translate({SPECTRUM_X0}, {SPECTRUM_Y})">
       <line x1="0" y1="0" x2={SPECTRUM_W} y2="0" class="chart-axis-line" />
       <line x1={SPECTRUM_W / 2} y1="0" x2={SPECTRUM_W / 2} y2="-28" stroke="var(--color-series-1)" stroke-width="2" />
       <line

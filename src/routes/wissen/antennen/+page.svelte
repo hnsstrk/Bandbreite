@@ -13,6 +13,7 @@
   import AntennaPolarPattern from '$lib/components/widgets/AntennaPolarPattern.svelte';
   import ParabolicGainCalculator from '$lib/components/widgets/ParabolicGainCalculator.svelte';
   import SwrWidget from '$lib/components/widgets/SwrWidget.svelte';
+  import DipoleCurrentWidget from '$lib/components/widgets/DipoleCurrentWidget.svelte';
   import { widgetAnchorId } from '$lib/data/widgets';
   import { ANTENNA_TYPES } from '$lib/data/antennas';
   import { formatNumber } from '$lib/utils/formatting';
@@ -101,6 +102,15 @@
     <SectionHeader title="Impedanz, Anpassung und SWR" id="impedanz-und-anpassung" />
     {@render prose(ANTENNA_TEXT.impedanz)}
     <FormulaBlock {...ANTENNA_FORMULAS.swr} />
+
+    <!-- Sprungziel des Widget-Deep-Links `?w=dipole-current` (siehe data/widgets.ts). -->
+    <div id={widgetAnchorId('dipole-current')} data-widget="dipole-current" tabindex="-1" class="widget-anchor">
+      <p class="card-intro">
+        Woher die 73 Ω des Halbwellendipols kommen, zeigt die stehende Welle auf dem Draht: Der Regler ändert die
+        Drahtlänge, und mit ihr wandert der Strombauch vom Speisepunkt weg.
+      </p>
+      <DipoleCurrentWidget />
+    </div>
 
     <!-- Sprungziel des Widget-Deep-Links `?w=swr` (siehe data/widgets.ts). -->
     <div id={widgetAnchorId('swr')} data-widget="swr" tabindex="-1" class="widget-anchor">

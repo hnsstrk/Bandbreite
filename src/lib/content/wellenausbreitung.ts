@@ -231,6 +231,45 @@ export const wellenausbreitungArticle: KnowledgeArticle = {
           title: 'Zum Rechner',
           html: 'Der <a href="/rechner/fresnel/">Fresnel-Zonen-Rechner</a> rechnet mit Erdkrümmung und beliebigen Antennenhöhen.'
         }
+      ],
+      children: [
+        {
+          id: 'mehrwege',
+          title: 'Mehrwegeausbreitung: der Boden strahlt zurück',
+          description:
+            'Über ebenem Gelände erreicht den Empfänger nicht nur die direkte Welle, sondern auch die am Boden reflektierte — beide addieren sich mit ihrer Phase.',
+          blocks: [
+            {
+              type: 'paragraph',
+              html: 'Die reflektierte Welle legt einen längeren Weg zurück; der Unterschied Δ erzeugt eine Phasendifferenz Δφ = 2π·Δ/λ. Bei streifendem Einfall dreht die Reflexion die Phase zusätzlich um 180°, sodass sich beide Wellen in Bodennähe fast auslöschen. Mit wachsendem Abstand wechseln sich deshalb Pegelgipfel (bis zu 6 dB über dem Freiraumwert) und tiefe Einbrüche ab — der klassische <strong>Mehrwegeschwund</strong>.'
+            },
+            {
+              type: 'formula',
+              formula: 'L(d) = 40·log₁₀(d) − 20·log₁₀(h_t · h_r)',
+              alt: 'L von d gleich 40 mal Logarithmus von d minus 20 mal Logarithmus von h t mal h r',
+              label: 'Zweiwege-Dämpfung jenseits der Bruchdistanz d_b = 4·h_t·h_r/λ',
+              number: '(5)',
+              variables: [
+                { symbol: 'L', meaning: 'Pfaddämpfung', unit: 'dB' },
+                { symbol: 'd', meaning: 'Abstand der Antennen', unit: 'm' },
+                { symbol: 'h_t', meaning: 'Höhe der Sendeantenne', unit: 'm' },
+                { symbol: 'h_r', meaning: 'Höhe der Empfangsantenne', unit: 'm' }
+              ]
+            },
+            {
+              type: 'paragraph',
+              html: 'Jenseits der Bruchdistanz d_b = 4·h_t·h_r/λ gibt es keinen Einbruch mehr, und der Pegel fällt mit d⁴ statt mit d² — statt 20 dB je Abstandsdekade sind es 40 dB. Genau dieser Knick begrenzt die Zellgröße im Mobilfunk. Das folgende Widget zeigt beides: den Seitenriss der beiden Wege und die Dämpfungskurve mit Gipfeln, Einbrüchen und Bruchdistanz.'
+            },
+            { type: 'widget', id: 'two-ray' },
+            {
+              type: 'callout',
+              tone: 'tip',
+              title: 'Warum ein halber Meter hilft',
+              html: 'Weil die Einbrüche nur wenige Zentimeter breit sind, genügt oft ein kleiner Versatz der Antenne, um aus einem Loch herauszukommen. Aus demselben Grund arbeiten Mobilfunkbasisstationen mit zwei räumlich getrennten Antennen (Raumdiversität): Beide sind nie gleichzeitig im Einbruch.',
+              source: 'Rappaport, Wireless Communications, Abschnitt 4.6; ITU-R P.530'
+            }
+          ]
+        }
       ]
     },
     {

@@ -22,13 +22,21 @@
 
   /** Breite der toten Zone im Raumwellenbild. */
   const DEAD_ZONE_WIDTH = 80;
-  /** Höhe des Radiohorizonts über dem Boden in Pixeln. */
-  const HORIZON_OFFSET = 100;
   /** Höhe der sporadischen E-Schicht in Kilometern. */
   const SPORADIC_E_ALTITUDE_KM = 110;
+  /** Antennenspitze über dem Boden (Mast plus Spitze in `WavePropagationScene`). */
+  const ANTENNA_TIP = 55;
 
   function y(altitudeKm: number): number {
     return altitudeToY(altitudeKm, chartHeight);
+  }
+
+  /**
+   * Kontrollpunkt einer quadratischen Bézierkurve, deren Scheitel genau auf
+   * `apexY` liegt: Der Scheitel liegt bei ¼·y₀ + ½·y_c + ¼·y₁.
+   */
+  function controlY(apexY: number, y0: number, y1: number): number {
+    return 2 * apexY - (y0 + y1) / 2;
   }
 </script>
 
@@ -36,7 +44,11 @@
 {#if selectedModeId === 'ground-wave'}
   <path
     class="wave-path"
-    d="M {txX} {groundY - 45} Q {chartWidth / 2} {groundY + 20} {rxX} {groundY - 45}"
+    d="M {txX} {groundY - ANTENNA_TIP} Q {chartWidth / 2} {controlY(
+      groundY - 4,
+      groundY - ANTENNA_TIP,
+      groundY - ANTENNA_TIP
+    )} {rxX} {groundY - ANTENNA_TIP}"
     fill="none"
     stroke={color}
     stroke-width="3"
@@ -49,11 +61,13 @@
   {@const reflectionY = y(reflectionHeightKm)}
   {@const hop1X = txX + (rxX - txX) / 3}
   {@const hop2X = txX + ((rxX - txX) * 2) / 3}
+  <!-- Jeder Sprung: Antennenspitze bzw. Bodenreflexion → Scheitel in Reflexionshöhe → Boden -->
   {#each [[txX, hop1X], [hop1X, hop2X], [hop2X, rxX]] as [from, to], index (index)}
+    {@const y0 = index === 0 ? groundY - ANTENNA_TIP : groundY}
+    {@const y1 = index === 2 ? groundY - ANTENNA_TIP : groundY}
     <path
       class="wave-path"
-      d="M {from} {groundY - (index === 0 ? 50 : 20)} Q {(from + to) / 2} {reflectionY - 30} {to} {groundY -
-        (index === 2 ? 50 : 20)}"
+      d="M {from} {y0} Q {(from + to) / 2} {controlY(reflectionY, y0, y1)} {to} {y1}"
       fill="none"
       stroke={color}
       stroke-width="2.5"
@@ -82,19 +96,19 @@
     >
   {/if}
 {:else if selectedModeId === 'line-of-sight'}
-  {@const horizonY = groundY - HORIZON_OFFSET}
   <line
     class="wave-path"
     x1={txX}
-    y1={groundY - 50}
+    y1={groundY - ANTENNA_TIP}
     x2={rxX}
-    y2={groundY - 50}
+    y2={groundY - ANTENNA_TIP}
     stroke={color}
     stroke-width="3"
     stroke-dasharray="10,5"
   />
-  <line class="chart-grid-line" x1="0" y1={horizonY} x2={chartWidth} y2={horizonY} stroke-dasharray="4,4" />
-  <text class="chart-axis-text" x={chartWidth / 2} y={horizonY - 8} text-anchor="middle"> Radiohorizont </text>
+  <text class="chart-axis-text" x={chartWidth / 2} y={groundY - ANTENNA_TIP - 10} text-anchor="middle">
+    direkter Weg von Antenne zu Antenne — Reichweite bis zum Radiohorizont d ≈ 4,12·√h
+  </text>
 {:else if selectedModeId === 'sporadic-e'}
   {@const eLayerY = y(SPORADIC_E_ALTITUDE_KM)}
   <ellipse
@@ -119,8 +133,15 @@
   />
   <path
     class="wave-path"
-    d="M {txX} {groundY - 50} Q {chartWidth * 0.35} {eLayerY - 20} {chartWidth * 0.5} {groundY - 30} Q {chartWidth *
-      0.65} {eLayerY - 20} {rxX} {groundY - 50}"
+    d="M {txX} {groundY - ANTENNA_TIP} Q {chartWidth * 0.35} {controlY(
+      eLayerY,
+      groundY - ANTENNA_TIP,
+      groundY
+    )} {chartWidth * 0.5} {groundY} Q {chartWidth * 0.65} {controlY(
+      eLayerY,
+      groundY,
+      groundY - ANTENNA_TIP
+    )} {rxX} {groundY - ANTENNA_TIP}"
     fill="none"
     stroke={color}
     stroke-width="2.5"

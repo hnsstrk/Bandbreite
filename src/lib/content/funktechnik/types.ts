@@ -7,6 +7,7 @@
  * derselben Komponente zu rendern: `components/knowledge/ArticleSection.svelte`,
  * gespeist über die Übersetzung in `adapt.ts`.
  */
+import type { WidgetId } from '$lib/content/types';
 
 /** Legendeneintrag eines Formelblocks. */
 export interface FormulaVariable {
@@ -43,7 +44,13 @@ export type ContentBlock =
       variables?: FormulaVariable[];
     }
   /** Tabelle mit Beschriftung; erste Spalte ist Zeilenkopf. */
-  | { kind: 'table'; caption: string; head: string[]; rows: string[][] };
+  | { kind: 'table'; caption: string; head: string[]; rows: string[][] }
+  /**
+   * Interaktives Widget aus `knowledge/widgetRegistry.ts`. Die Kennung ist
+   * dieselbe wie im kanonischen Kapitelmodell; `adapt.ts` reicht sie
+   * unverändert weiter, `ArticleBlock.svelte` rendert die Komponente.
+   */
+  | { kind: 'widget'; id: WidgetId };
 
 /** Ein Abschnitt einer Wissensseite. */
 export interface ArticleSection {

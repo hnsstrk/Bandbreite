@@ -124,6 +124,11 @@ export const SECTIONS: ArticleSection[] = [
       },
       {
         kind: 'p',
+        text: 'Der Phasenvergleich lässt sich mitverfolgen: Das Widget zeigt das umlaufende Richtdiagramm, beide 30-Hz-Signale und die Kursablageanzeige, die daraus entsteht.'
+      },
+      { kind: 'widget', id: 'vor-radial' },
+      {
+        kind: 'p',
         text: 'Das Instrumentenlandesystem ILS besteht aus zwei Sendern, die beide dasselbe Verfahren nutzen: Zwei Modulationstöne von 90 und 150 Hz werden so abgestrahlt, dass sie nur auf der Sollinie gleich stark ankommen. Der Landekurssender zwischen 108,1 und 111,975 MHz spannt die Anfluggrundlinie auf, der Gleitwegsender zwischen 328,6 und 335,4 MHz den Anflugwinkel von meist 3°. Beide Frequenzen sind fest gepaart, sodass im Cockpit nur eine eingestellt wird.'
       },
       {

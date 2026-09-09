@@ -33,10 +33,16 @@
   let xScale = $derived(scaleLog().domain([CHART_FREQ_MIN_HZ, CHART_FREQ_MAX_HZ]).range([0, chartWidth]));
   let yScale = $derived(scaleLog().domain([CHART_DEPTH_MIN_M, CHART_DEPTH_MAX_M]).range([chartHeight, 0]));
 
+  /**
+   * Punkte außerhalb des Tiefenbereichs werden ausgelassen statt geklemmt —
+   * sonst entstünde am oberen Rand ein waagerechtes Plateau, das wie eine
+   * physikalische Sättigung aussähe.
+   */
   let lineGenerator = $derived(
     line<DepthPoint>()
+      .defined((d) => d.depth >= CHART_DEPTH_MIN_M && d.depth <= CHART_DEPTH_MAX_M)
       .x((d) => xScale(d.frequency))
-      .y((d) => yScale(clamp(d.depth, CHART_DEPTH_MIN_M, CHART_DEPTH_MAX_M)))
+      .y((d) => yScale(d.depth))
   );
 
   const curves = generateAllCurves();

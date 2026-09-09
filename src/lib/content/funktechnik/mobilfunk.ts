@@ -49,7 +49,12 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'p',
         text: 'Je kleiner die Zelle, desto höher die Kapazität pro Fläche — und desto mehr Standorte sind nötig. Genau darin liegt der Kompromiss, der die Bandwahl bestimmt: tiefe Frequenzen für die Fläche, hohe Frequenzen für die Kapazität in Ballungsräumen.'
-      }
+      },
+      {
+        kind: 'p',
+        text: 'Wie weit zwei Zellen auseinanderliegen müssen, die dieselbe Frequenz nutzen, bestimmt die Größe des Clusters. Im Sechseckraster lässt sich das genau angeben — und mit dem Störabstand verrechnen, der dabei übrig bleibt.'
+      },
+      { kind: 'widget', id: 'cell-reuse' }
     ]
   },
   {

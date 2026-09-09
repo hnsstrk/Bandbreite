@@ -89,6 +89,11 @@ export const SECTIONS: ArticleSection[] = [
       },
       {
         kind: 'p',
+        text: 'Das Widget zeigt für jeden Kanal, wo Schiffs- und Küstenfrequenz im Band liegen — und wer in welcher Betriebsart wann senden darf.'
+      },
+      { kind: 'widget', id: 'maritime-duplex' },
+      {
+        kind: 'p',
         text: 'Die Sendeleistung einer Schiffsfunkstelle beträgt höchstens 25 W. Auf einigen Kanälen ist sie auf 1 W begrenzt: bei den Bordverkehrskanälen 15 und 17, damit das Gespräch an Deck nicht halbe Reviere belegt, und bei den Kanälen 75 und 76, die als Schutzabstand unmittelbar neben dem Notkanal 16 liegen.'
       },
       {

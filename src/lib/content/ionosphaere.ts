@@ -101,7 +101,14 @@ export const ionosphaereArticle: KnowledgeArticle = {
       title: 'Ionosphärische Schichten',
       description:
         'Vier Schichten mit unterschiedlicher Höhe, Ionisation und Wirkung auf die Funkwellen (Daten: IONOSPHERIC_LAYERS).',
-      blocks: [{ type: 'cards', columns: 2, items: layerCards }]
+      blocks: [
+        { type: 'cards', columns: 2, items: layerCards },
+        {
+          type: 'paragraph',
+          html: 'Die vier Schichten sind kein fester Aufbau, sondern das Ergebnis der Sonneneinstrahlung — und sie bilden sich jede Nacht neu zurück. Das folgende Widget fährt einen ganzen Tag ab: Mit der Sonne wächst die Elektronendichte, die D-Schicht entsteht und schluckt die unteren Bänder, F1 und F2 trennen sich; nach Sonnenuntergang bleibt allein die F2-Schicht mit etwa halber Dichte übrig.'
+        },
+        { type: 'widget', id: 'ionosphere-day-night' }
+      ]
     },
     {
       id: 'kenngroessen',

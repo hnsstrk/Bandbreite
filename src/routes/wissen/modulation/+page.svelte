@@ -13,6 +13,7 @@
   import ModulationVisualizer from '$lib/components/widgets/ModulationVisualizer.svelte';
   import ConstellationDiagram from '$lib/components/widgets/ConstellationDiagram.svelte';
   import CarsonCalculator from '$lib/components/widgets/CarsonCalculator.svelte';
+  import OfdmWidget from '$lib/components/widgets/OfdmWidget.svelte';
   import { widgetAnchorId } from '$lib/data/widgets';
   import { MODULATIONS } from '$lib/data/modulation';
   import { formatFrequency, formatNumber } from '$lib/utils/formatting';
@@ -127,6 +128,15 @@
   <section aria-labelledby="mehrtraeger-und-spreizung">
     <SectionHeader title="Mehrträger- und Spreizverfahren" id="mehrtraeger-und-spreizung" />
     {@render prose(MODULATION_TEXT.mehrtraeger)}
+    <!-- Sprungziel des Widget-Deep-Links `?w=ofdm` (siehe data/widgets.ts). -->
+    <div id={widgetAnchorId('ofdm')} data-widget="ofdm" tabindex="-1" class="widget-anchor">
+      <p class="card-intro">
+        Warum sich Hunderte Unterträger überlappen dürfen, ohne sich zu stören: Auf der Mittenfrequenz jedes Trägers
+        haben alle anderen genau eine Nullstelle — solange der Abstand Δf = 1/T_s eingehalten wird.
+      </p>
+      <OfdmWidget />
+    </div>
+
     <FormulaBlock {...MODULATION_FORMULAS.spreading} />
     <Callout tone="info" title="Beispiel GPS" source="IS-GPS-200">
       Der C/A-Code läuft mit 1,023 Mchip/s, die Navigationsdaten mit 50 Bit/s. Daraus folgt ein Prozessgewinn von rund

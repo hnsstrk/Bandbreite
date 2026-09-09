@@ -98,7 +98,7 @@
     <text x={tick.x} y={BASELINE_Y + 20} class="tick">{tick.label}</text>
   {/each}
 
-  <text x={PAD_LEFT} y={TOP_Y - 18} class="axis-label" text-anchor="end">Amplitude</text>
+  <text x={PAD_LEFT + 6} y={TOP_Y - 4} class="axis-label">Amplitude ↑</text>
   <text x={VIEW_WIDTH - PAD_RIGHT} y={VIEW_HEIGHT - 6} class="axis-label" text-anchor="end"> Frequenz → </text>
 </svg>
 

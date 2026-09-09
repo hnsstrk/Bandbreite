@@ -20,7 +20,7 @@
   function frequencyText(event: HistoricalEvent): string | null {
     if (!event.frequencyHz) return null;
     return event.frequencyHzMax
-      ? `${formatFrequency(event.frequencyHz)} \u2013 ${formatFrequency(event.frequencyHzMax)}`
+      ? `${formatFrequency(event.frequencyHz)} – ${formatFrequency(event.frequencyHzMax)}`
       : formatFrequency(event.frequencyHz);
   }
 
@@ -46,13 +46,13 @@
     </li>
   {/each}
   {#if events.length === 0}
-    <li class="tl-empty">Keine Ereignisse in den gew\u00e4hlten Kategorien.</li>
+    <li class="tl-empty">Keine Ereignisse in den gewählten Kategorien.</li>
   {/if}
 </ul>
 
 {#if selected}
   <Card
-    title="{selected.year} \u00b7 {selected.titleDE}"
+    title="{selected.year} · {selected.titleDE}"
     subtitle={CATEGORY_CONFIG[selected.category].nameDE}
     level={3}
     tone="sunken"

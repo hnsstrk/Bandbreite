@@ -136,7 +136,7 @@
             {@const active = layers.includes(layer)}
             <li class="iono__legend-item" class:is-inactive={!active}>
               <span class="iono__swatch" style="background: {LAYER_COLORS[layer.id].stroke}" aria-hidden="true"></span>
-              <span>{layer.name} ({layer.altitudeMinKm}–{layer.altitudeMaxKm} km)</span>
+              <span>{layer.nameDE} ({layer.altitudeMinKm}–{layer.altitudeMaxKm} km)</span>
               {#if !active}<Badge tone="neutral">nachts inaktiv</Badge>{/if}
             </li>
           {/each}

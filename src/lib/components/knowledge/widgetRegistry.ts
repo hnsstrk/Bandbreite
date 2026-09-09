@@ -24,6 +24,24 @@ import BlindSpeedWidget from '$lib/components/widgets/BlindSpeedWidget.svelte';
 import SsrInterrogationWidget from '$lib/components/widgets/SsrInterrogationWidget.svelte';
 import WavePropagationDiagram from '$lib/components/charts/WavePropagationDiagram.svelte';
 import IonosphericPropagation from '$lib/components/charts/IonosphericPropagation.svelte';
+import NearFarFieldWidget from '$lib/components/widgets/NearFarFieldWidget.svelte';
+import PolarizationLossWidget from '$lib/components/widgets/PolarizationLossWidget.svelte';
+import LogLinearWidget from '$lib/components/widgets/LogLinearWidget.svelte';
+import InverseSquareWidget from '$lib/components/widgets/InverseSquareWidget.svelte';
+import PhasorWidget from '$lib/components/widgets/PhasorWidget.svelte';
+import FourierSynthesisWidget from '$lib/components/widgets/FourierSynthesisWidget.svelte';
+import TwoRayWidget from '$lib/components/widgets/TwoRayWidget.svelte';
+import IonosphereDayNightWidget from '$lib/components/widgets/IonosphereDayNightWidget.svelte';
+import CellReuseWidget from '$lib/components/widgets/CellReuseWidget.svelte';
+import FmMultiplexWidget from '$lib/components/widgets/FmMultiplexWidget.svelte';
+import DabSfnWidget from '$lib/components/widgets/DabSfnWidget.svelte';
+import ModeBandwidthWidget from '$lib/components/widgets/ModeBandwidthWidget.svelte';
+import VorWidget from '$lib/components/widgets/VorWidget.svelte';
+import LeoPassWidget from '$lib/components/widgets/LeoPassWidget.svelte';
+import MaritimeDuplexWidget from '$lib/components/widgets/MaritimeDuplexWidget.svelte';
+import RadarRangeWidget from '$lib/components/widgets/RadarRangeWidget.svelte';
+import PulseCompressionWidget from '$lib/components/widgets/PulseCompressionWidget.svelte';
+import ModeSFrameWidget from '$lib/components/widgets/ModeSFrameWidget.svelte';
 
 export const WIDGETS: Record<WidgetId, Component> = {
   'radar-pulse': RadarPulseWidget,
@@ -39,7 +57,25 @@ export const WIDGETS: Record<WidgetId, Component> = {
   'wave-propagation-diagram': WavePropagationDiagram as unknown as Component,
   'ionospheric-propagation': IonosphericPropagation as unknown as Component,
   'em-wave': EmWaveWidget,
-  'field-strength': FieldStrengthWidget
+  'field-strength': FieldStrengthWidget,
+  'near-far-field': NearFarFieldWidget,
+  'polarization-loss': PolarizationLossWidget,
+  'log-linear': LogLinearWidget,
+  'inverse-square': InverseSquareWidget,
+  phasor: PhasorWidget,
+  'fourier-synthesis': FourierSynthesisWidget,
+  'two-ray': TwoRayWidget,
+  'ionosphere-day-night': IonosphereDayNightWidget,
+  'cell-reuse': CellReuseWidget,
+  'fm-multiplex': FmMultiplexWidget,
+  'dab-sfn': DabSfnWidget,
+  'mode-bandwidth': ModeBandwidthWidget,
+  'vor-radial': VorWidget,
+  'leo-pass': LeoPassWidget,
+  'maritime-duplex': MaritimeDuplexWidget,
+  'radar-range': RadarRangeWidget,
+  'pulse-compression': PulseCompressionWidget,
+  'mode-s-frame': ModeSFrameWidget
 };
 
 // Metadaten (Bezeichnung, Kapitel, Stichworte) für Komponenten weiterreichen,

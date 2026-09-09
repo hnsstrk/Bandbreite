@@ -154,6 +154,154 @@ export const WIDGET_META: Partial<Record<CatalogWidgetId, Omit<WidgetMeta, 'id'>
     keywords: ['EIRP', 'ERP', 'Feldstärke', 'Leistungsdichte', 'dBµV/m', 'V/m', 'Sendeleistung'],
     chapterHref: '/wissen/grundlagen/leistung-und-pegel/'
   },
+  'near-far-field': {
+    label: 'Nahfeld, Übergangszone und Fernfeld',
+    description:
+      'Die drei Feldzonen um eine Antenne auf einer logarithmischen Abstandsachse — Grenzen aus λ/2π, 0,62·√(D³/λ) und 2·D²/λ.',
+    keywords: ['Nahfeld', 'Fernfeld', 'Fraunhofer', 'Fresnel-Zone', 'Apertur', 'Messabstand'],
+    chapterHref: '/wissen/grundlagen/em-wellen/'
+  },
+  'polarization-loss': {
+    label: 'Polarisationsverlust bei Verdrehung',
+    description:
+      'Zwei lineare Antennen gegeneinander verdreht: cos²α bestimmt, wie viel Leistung ankommt — mit Verlustkurve bis zur Kreuzpolarisation.',
+    keywords: ['Polarisation', 'Polarisationsverlust', 'cos²', 'Kreuzpolarisation', 'zirkular'],
+    chapterHref: '/wissen/grundlagen/em-wellen/'
+  },
+  'log-linear': {
+    label: 'Linear oder logarithmisch',
+    description:
+      'Dieselben Faktoren auf linearer und auf Dezibel-Skala: aus Multiplikation wird Addition, aus sechs Dekaden werden 60 dB.',
+    keywords: ['Dezibel', 'logarithmisch', 'linear', 'Multiplikation', 'Addition', 'Dekade'],
+    chapterHref: '/wissen/grundlagen/dezibel/'
+  },
+  'inverse-square': {
+    label: 'Kugelausbreitung: warum 1/d²',
+    description:
+      'Die Leistung verteilt sich auf die Kugelfläche 4π·d² — Leistungsdichte und Feldstärke über dem Abstand, 6 dB je Verdopplung.',
+    keywords: ['Leistungsdichte', 'Abstandsgesetz', 'Kugelfläche', 'Feldstärke', 'EIRP', '1/d²'],
+    chapterHref: '/wissen/grundlagen/leistung-und-pegel/'
+  },
+  phasor: {
+    label: 'Zeigerdiagramm: Sinus, Amplitude, Phase',
+    description:
+      'Rotierende Zeiger und die zugehörigen Sinusschwingungen; zwei Zeiger addieren sich zu Amplitude und Phase der Summe.',
+    keywords: ['Zeiger', 'Phasor', 'Sinus', 'Amplitude', 'Phase', 'Interferenz', 'Addition'],
+    chapterHref: '/wissen/mathematik/'
+  },
+  'fourier-synthesis': {
+    label: 'Fourier-Synthese: Signal aus Harmonischen',
+    description:
+      'Rechteck, Dreieck und Sägezahn aus n Harmonischen mit Linienspektrum und dem Gibbsschen Überschwingen.',
+    keywords: ['Fourier', 'Harmonische', 'Oberwelle', 'Spektrum', 'Rechteck', 'Gibbs'],
+    chapterHref: '/wissen/mathematik/'
+  },
+  'two-ray': {
+    label: 'Zweiwege-Ausbreitung und Mehrwegeschwund',
+    description:
+      'Direkte und bodenreflektierte Welle überlagern sich: Gipfel, Einbrüche, Bruchdistanz und der Übergang zum d⁴-Gesetz.',
+    keywords: [
+      'Mehrwege',
+      'Zweiwege',
+      'Two-Ray',
+      'Schwund',
+      'Fading',
+      'Bruchdistanz',
+      'Bodenreflexion'
+    ],
+    chapterHref: '/wissen/wellenausbreitung/'
+  },
+  'ionosphere-day-night': {
+    label: 'Ionosphäre im Tagesgang',
+    description:
+      'D-, E-, F1- und F2-Schicht über 24 Stunden: Elektronendichte, kritische Frequenzen, MUF und die Absorption der D-Schicht.',
+    keywords: ['Ionosphäre', 'D-Schicht', 'F2', 'Tagesgang', 'foF2', 'MUF', 'Absorption'],
+    chapterHref: '/wissen/wellenausbreitung/ionosphaere/'
+  },
+
+  'cell-reuse': {
+    label: 'Zellraster und Frequenzwiederverwendung',
+    description:
+      'Sechseckraster mit wählbarer Clustergröße: Wiederverwendungsabstand D = R·√(3N), Störabstand und Kanäle je Zelle.',
+    keywords: [
+      'Zelle',
+      'Cluster',
+      'Frequenzwiederverwendung',
+      'Handover',
+      'Störabstand',
+      'Mobilfunk'
+    ],
+    chapterHref: '/wissen/funktechnik/mobilfunk/'
+  },
+  'fm-multiplex': {
+    label: 'UKW-Multiplex und Carson-Bandbreite',
+    description:
+      'Basisbandspektrum des UKW-Senders — Summensignal, Pilotton, Differenzsignal und RDS — und die daraus folgende belegte Bandbreite.',
+    keywords: ['UKW', 'MPX', 'Pilotton', 'RDS', 'Stereo', 'Carson', 'Frequenzhub'],
+    chapterHref: '/wissen/funktechnik/rundfunk/'
+  },
+  'dab-sfn': {
+    label: 'DAB-Gleichwellennetz und Schutzintervall',
+    description:
+      'Zwei Sender auf derselben Frequenz: Laufzeitunterschied gegen das Schutzintervall, Gewinn oder Störung.',
+    keywords: ['DAB', 'Gleichwellennetz', 'SFN', 'Schutzintervall', 'COFDM', 'Echo'],
+    chapterHref: '/wissen/funktechnik/rundfunk/'
+  },
+  'mode-bandwidth': {
+    label: 'Betriebsarten im Maßstab',
+    description:
+      'Belegte Bandbreite von FT8 bis ATV im Maßstab, mit der aufgenommenen Rauschleistung N = k·T·B und dem Gewinn gegenüber SSB.',
+    keywords: ['Betriebsart', 'Bandbreite', 'FT8', 'CW', 'SSB', 'Rauschen', 'Amateurfunk'],
+    chapterHref: '/wissen/funktechnik/amateurfunk/'
+  },
+  'vor-radial': {
+    label: 'VOR: Radial aus dem Phasenvergleich',
+    description:
+      'Umlaufendes Richtdiagramm, Referenzsignal und Kursablageanzeige — die Phasendifferenz beider 30-Hz-Signale ist der Radial.',
+    keywords: ['VOR', 'Radial', 'Phasenvergleich', 'Navigation', 'CDI', 'Flugfunk'],
+    chapterHref: '/wissen/funktechnik/flugfunk/'
+  },
+  'leo-pass': {
+    label: 'LEO-Überflug: Elevation und Doppler',
+    description:
+      'Elevation, Schrägentfernung und Dopplerverschiebung über der Zeit eines Satellitendurchgangs.',
+    keywords: ['LEO', 'Überflug', 'Elevation', 'Doppler', 'Sichtbarkeit', 'Satellit'],
+    chapterHref: '/wissen/funktechnik/satellitenfunk/'
+  },
+  'maritime-duplex': {
+    label: 'Seefunk: Ein- und Zweifrequenzbetrieb',
+    description:
+      'Schiffs- und Küstenfrequenz eines UKW-Seefunkkanals mit 4,6 MHz Duplexabstand und dem Zeitbild von Wechsel- und Gegensprechen.',
+    keywords: ['Seefunk', 'Simplex', 'Duplex', 'Kanal', 'Küstenfunkstelle', 'Appendix 18'],
+    chapterHref: '/wissen/funktechnik/seefunk/'
+  },
+  'radar-range': {
+    label: 'Radargleichung: Reichweite über Sendeleistung',
+    description:
+      'Kurve der maximalen Reichweite über der Sendeleistung — die vierte Wurzel macht sechzehnfache Leistung für doppelte Reichweite nötig.',
+    keywords: ['Radargleichung', 'Reichweite', 'Sendeleistung', 'RCS', 'Antennengewinn', 'Skolnik'],
+    chapterHref: '/wissen/radar/grundlagen/'
+  },
+  'pulse-compression': {
+    label: 'Pulskompression: Chirp und angepasstes Filter',
+    description:
+      'Langer Chirp und komprimierter Impuls auf derselben Zeitachse: Kompressionsgewinn B·τ und Auflösung c/(2·B).',
+    keywords: [
+      'Pulskompression',
+      'Chirp',
+      'angepasstes Filter',
+      'Zeit-Bandbreite-Produkt',
+      'Nebenzipfel'
+    ],
+    chapterHref: '/wissen/radar/verfahren/'
+  },
+  'mode-s-frame': {
+    label: 'Modus-S-Antwort DF17 im Bitfeld',
+    description:
+      'Antwortrahmen einer ADS-B-Aussendung: Preambel, Formatkennung, ICAO-Adresse, Nachrichtenfeld und Prüfsumme im Zeitraster.',
+    keywords: ['Mode S', 'DF17', 'ADS-B', 'ICAO-Adresse', 'Bitfeld', 'Pulslagemodulation'],
+    chapterHref: '/wissen/radar/sekundaerradar/'
+  },
 
   // --- Widgets im Markup-Betrieb (Kapitelseiten ohne Inhaltsdaten) ---
   'modulation-visualizer': {
@@ -202,6 +350,29 @@ export const WIDGET_META: Partial<Record<CatalogWidgetId, Omit<WidgetMeta, 'id'>
       'Stehwellenverhältnis, Reflexionsfaktor, Rückflussdämpfung und Fehlanpassungsverlust im Zusammenhang.',
     keywords: ['SWR', 'VSWR', 'Reflexionsfaktor', 'Rückflussdämpfung', 'Anpassung', 'Impedanz'],
     chapterHref: '/wissen/antennen/',
+    embed: 'markup'
+  },
+  'dipole-current': {
+    label: 'Dipol: Strom und Spannung auf dem Draht',
+    description:
+      'Stehende Welle auf dem mittengespeisten Dipol: Strombauch, Stromknoten und was daraus für die Fußpunktimpedanz folgt.',
+    keywords: [
+      'Dipol',
+      'Stromverteilung',
+      'Spannungsverteilung',
+      'stehende Welle',
+      'Speisepunkt',
+      'Fußpunktimpedanz'
+    ],
+    chapterHref: '/wissen/antennen/',
+    embed: 'markup'
+  },
+  ofdm: {
+    label: 'OFDM: orthogonale Unterträger',
+    description:
+      'Si-förmige Trägerspektren im Abstand Δf = 1/T_s: Sie überlappen sich und stören sich trotzdem nicht.',
+    keywords: ['OFDM', 'Unterträger', 'Orthogonalität', 'Symboldauer', 'LTE', 'DVB-T', 'si'],
+    chapterHref: '/wissen/modulation/',
     embed: 'markup'
   }
 };
@@ -307,5 +478,51 @@ export async function widgetLocations(): Promise<Record<string, string[]>> {
       }
     }
   }
+
+  // Die Funktechnik-Kapitel halten ihre Abschnitte im knapperen Blockmodell
+  // (`content/funktechnik/types.ts`) und kennen ihren Pfad nicht selbst — er
+  // steckt im Dateinamen.
+  const funkModules = import.meta.glob<Record<string, unknown>>(
+    '/src/lib/content/funktechnik/*.ts'
+  );
+  for (const [path, load] of Object.entries(funkModules)) {
+    const href = funkChapterHref(path);
+    if (!href) continue;
+    const module = await load();
+    for (const exported of Object.values(module)) {
+      for (const id of widgetIdsInFunkSections(exported)) {
+        const found = (locations[id] ??= []);
+        if (!found.includes(href)) found.push(href);
+      }
+    }
+  }
+
   return locations;
+}
+
+/** Hilfsdateien der Funktechnik-Kapitel, die keine eigene Seite haben. */
+const FUNK_HELPER_FILES = ['types', 'adapt', 'quellen'];
+
+/** Kapitelpfad einer Funktechnik-Datei: `mobilfunk.ts` → `/wissen/funktechnik/mobilfunk/`. */
+export function funkChapterHref(path: string): string | null {
+  const match = /\/content\/funktechnik\/([a-z0-9-]+)\.ts$/.exec(path);
+  if (!match || FUNK_HELPER_FILES.includes(match[1])) return null;
+  return `/wissen/funktechnik/${match[1]}/`;
+}
+
+/** Widget-Kennungen in den Abschnitten eines Funktechnik-Kapitels. */
+export function widgetIdsInFunkSections(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const found: string[] = [];
+  for (const section of value) {
+    const blocks = (section as { blocks?: unknown })?.blocks;
+    if (!Array.isArray(blocks)) continue;
+    for (const block of blocks) {
+      const candidate = block as { kind?: string; id?: string };
+      if (candidate?.kind === 'widget' && candidate.id && !found.includes(candidate.id)) {
+        found.push(candidate.id);
+      }
+    }
+  }
+  return found;
 }

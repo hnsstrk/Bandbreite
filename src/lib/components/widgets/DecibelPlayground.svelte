@@ -93,7 +93,7 @@
       stroke-width="1"
       stroke-dasharray="3,3"
     />
-    <text x={xOf(TYPICAL_RX_SENSITIVITY_DBM) + 4} y="18" class="chart-legend-text" fill="var(--color-danger-ink)"
+    <text x={xOf(TYPICAL_RX_SENSITIVITY_DBM) + 4} y={H - 32} class="chart-legend-text" fill="var(--color-danger-ink)"
       >Empfindlichkeit {TYPICAL_RX_SENSITIVITY_DBM} dBm</text
     >
     <line x1={xOf(total)} y1="8" x2={xOf(total)} y2={H - 26} class="chart-marker-crosshair" />

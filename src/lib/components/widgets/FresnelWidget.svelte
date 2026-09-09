@@ -8,12 +8,18 @@
   import Slider from '$lib/components/ui/Slider.svelte';
   import ResultCard from '$lib/components/ui/ResultCard.svelte';
   import Callout from '$lib/components/ui/Callout.svelte';
-  import { formatDistance, formatFrequency, formatNumber, formatPercentage } from '$lib/utils/formatting';
+  import {
+    formatDistance,
+    formatFrequency,
+    formatNumber,
+    formatPercentage,
+    formatWavelength
+  } from '$lib/utils/formatting';
   import { FRESNEL_CLEARANCE_FRACTION } from '$lib/utils/calculations';
   import { computeFresnelScene, FRESNEL_LIMITS } from './FresnelModel';
 
   const W = 800;
-  const H = 260;
+  const H = 276;
   const X0 = 60;
   const X1 = 740;
   const GROUND_Y = 230;
@@ -108,14 +114,17 @@
       fill={statusColor}
       opacity="0.85"
     />
-    <text x={obstacleX} y={Math.max(14, obstacleTopY - 8)} text-anchor="middle" class="chart-axis-text">
+    <text x={obstacleX} y={GROUND_Y + 36} text-anchor="middle" class="chart-axis-text">
       Hindernis {formatDistance(obstacleHeightM, 0)} · {formatDistance(scene.d1M, 1)} vom Sender
     </text>
     <text x={(X0 + X1) / 2} y={losY - scene.midRadiusM * pxPerM - 6} text-anchor="middle" class="chart-legend-text">
       r₁ (Mitte) = {formatDistance(scene.midRadiusM, 1)}
     </text>
-    <text x={X1} y={H - 6} text-anchor="end" class="chart-axis-text"
-      >Strecke {formatDistance(distanceM, 1)} · {formatFrequency(frequencyHz, 2)}</text
+    <text x={X0} y="16" class="chart-axis-text"
+      >Strecke {formatDistance(distanceM, 1)} · {formatFrequency(frequencyHz, 2)} · λ = {formatWavelength(
+        scene.wavelengthM,
+        2
+      )}</text
     >
   </svg>
 

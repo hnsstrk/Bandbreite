@@ -154,6 +154,11 @@ export const emWellenArticle: KnowledgeArticle = {
           ]
         },
         {
+          type: 'paragraph',
+          html: 'Wo die Grenzen im Einzelfall liegen, hängt allein von Frequenz und Antennengröße ab. Das folgende Diagramm trägt die drei Zonen auf einer logarithmischen Abstandsachse auf — der Marker sagt, in welcher Zone ein Beobachtungspunkt liegt.'
+        },
+        { type: 'widget', id: 'near-far-field' },
+        {
           type: 'callout',
           tone: 'warning',
           title: 'Das trifft die Messtechnik hart',

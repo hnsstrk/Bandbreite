@@ -39,6 +39,8 @@
   let rxX = $derived(chartWidth - ANTENNA_INSET);
   let midX = $derived(chartWidth / 2);
   let groundY = $derived(chartHeight - GROUND_HEIGHT);
+  /** Höhe der Antennenspitze in Pixeln. */
+  let tipY = $derived(groundY - MAST_HEIGHT - 5);
 
   let skipText = $derived.by(() => {
     if (reflection.skipDistance === null) return 'Keine Reflexion — Frequenz über der MUF';
@@ -93,7 +95,7 @@
         text-anchor="end"
         dominant-baseline="middle"
       >
-        {layer.name} ({layer.altitudeMinKm}–{layer.altitudeMaxKm} km)
+        {layer.nameDE} ({layer.altitudeMinKm}–{layer.altitudeMaxKm} km)
       </text>
     {/each}
 
@@ -114,9 +116,10 @@
       <circle cx={rxX} cy={groundY - MAST_HEIGHT - 5} r="5" fill="var(--color-series-2)" />
       <text class="chart-axis-label" x={rxX} y={groundY + 15} text-anchor="middle">RX</text>
 
+      <!-- Kontrollpunkt so gewählt, dass der Scheitel der Bézierkurve genau in Reflexionshöhe liegt -->
       <path
         class="iono-path"
-        d="M {txX} {groundY - MAST_HEIGHT - 5} Q {midX} {reflectionY - 20} {rxX} {groundY - MAST_HEIGHT - 5}"
+        d="M {txX} {tipY} Q {midX} {2 * reflectionY - tipY} {rxX} {tipY}"
         fill="none"
         stroke="var(--color-marker)"
         stroke-width="2"

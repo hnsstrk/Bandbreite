@@ -128,6 +128,11 @@ export const radarGrundlagenArticle: KnowledgeArticle = {
           ]
         },
         {
+          type: 'paragraph',
+          html: 'Wie flach die vierte Wurzel wirklich ist, zeigt die Kurve: Verschiebe die Sendeleistung über drei Zehnerpotenzen und beobachte, wie wenig sich die Reichweite bewegt – und wie viel stärker Antennengewinn und Radarquerschnitt durchschlagen.'
+        },
+        { type: 'widget', id: 'radar-range' },
+        {
           type: 'callout',
           tone: 'tip',
           title: 'Zum Rechner',

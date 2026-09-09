@@ -56,7 +56,7 @@ Kapitel mit Lernzielen, Inhaltsverzeichnis, Formeln und eingebetteten interaktiv
 Alle Zahlenbeispiele in den Texten werden aus denselben Utilities berechnet wie die Rechner — sie können also nicht auseinanderlaufen. Interaktive Widgets respektieren `prefers-reduced-motion`, lassen sich pausieren und liefern zu jeder Grafik eine Datentabelle für Screenreader.
 
 ![Radar-Impulsdiagramm](static/screenshot-wissen.png)
-*20 Widgets sind einzeln verlinkbar: `?w=radar-pulse` springt zum Widget, hebt es hervor und setzt den Fokus hinein*
+*40 Widgets sind einzeln verlinkbar: `?w=radar-pulse` springt zum Widget, hebt es hervor und setzt den Fokus hinein*
 
 ![Amateurfunk-Bandplan](static/screenshot-amateurfunk.png)
 *Der Bandplan-Visualisierer zeigt alle 22 Amateurfunkbänder mit Betriebsartensegmenten und den Leistungsgrenzen der Klassen A, E und N nach AFuV Anlage 1*
@@ -72,7 +72,7 @@ Alle Zahlenbeispiele in den Texten werden aus denselben Utilities berechnet wie 
 
 - **Command-Palette** (`Strg`/`⌘` + `K`) — Volltextsuche über Seiten, Widgets, Bänder, Dienste, Sender und Glossarbegriffe, dazu ein Frequenz-Modus: „2,4 GHz" findet passende Bänder, Dienste und Rechner-Deep-Links
 - **Suchseite `/suche/`** — dieselben Treffer nach Typ gruppiert, mit Filter-Chips und Trefferzählern; die Palette führt am Ende ihrer Liste dorthin
-- **Widget-Deep-Links** — `?w=<widget>` verlinkt jedes der 20 Widgets direkt; „Link zum Widget kopieren" sitzt im Widget-Rahmen
+- **Widget-Deep-Links** — `?w=<widget>` verlinkt jedes der 40 Widgets direkt; „Link zum Widget kopieren" sitzt im Widget-Rahmen
 - **Mega-Menü und Mobile-Schublade** aus einer einzigen Navigations-Registry
 - **Verwandte Themen** am Ende jeder Seite
 - **Hell / Dunkel / System** als Farbschema

@@ -143,11 +143,18 @@ export function tickTextAnchor(
 }
 
 /**
- * Wird der Bandname gezeichnet? In der vollen Darstellung bleibt die bisherige
- * feste Schwelle erhalten (Erscheinungsbild unverändert), schmal entscheidet
- * die geschätzte Textbreite, damit kein Name über sein Band hinausragt.
+ * Wird der Bandname gezeichnet? Der Name muss in sein Band passen (geschätzte
+ * Textbreite); die volle Darstellung behält zusätzlich die alte Mindestbreite.
  */
 export function showBandLabel(bandWidth: number, text: string, metrics: SpectrumMetrics): boolean {
-  if (!metrics.compact) return bandWidth > LEGACY_LABEL_MIN_WIDTH;
+  // Volle Darstellung: feste Mindestbreite wie bisher, zusätzlich muss der Name
+  // in sein Band passen — sonst überlappen bei mittleren Breiten Nachbarn wie
+  // „Mid-IR"/„Near-IR". Bei 1280 px ändert das die Auswahl nicht.
+  if (!metrics.compact) {
+    return (
+      bandWidth > LEGACY_LABEL_MIN_WIDTH &&
+      fitsBandLabel(bandWidth, text, metrics.bandLabelFontSize)
+    );
+  }
   return fitsBandLabel(bandWidth, text, metrics.bandLabelFontSize);
 }

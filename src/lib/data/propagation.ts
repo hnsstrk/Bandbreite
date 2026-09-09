@@ -18,6 +18,7 @@ import {
   EFFECTIVE_EARTH_RADIUS_FACTOR,
   IONOSPHERE_PARAMETERS
 } from './constants';
+import { safeDivide, safeLog } from '$lib/utils/handlers';
 
 // ============================================================================
 // Physikalische Konstanten für Wellenausbreitung
@@ -329,6 +330,17 @@ export const SKIP_ZONE_PARAMS: SkipZoneParameters = {
 };
 
 /**
+ * Kritische Frequenz foF2 für Tag und Nacht in MHz — typische Werte mittlerer
+ * Breiten bei mittlerer Sonnenaktivität.
+ * Quelle: ITU-R P.1239 (Medianwerte), abgeleitet aus
+ * `IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz`.
+ */
+export const FOF2_PRESETS = {
+  day: IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.high * 0.6,
+  night: IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.low
+} as const;
+
+/**
  * Typische MUF-Faktoren M(d) = MUF/foF2 als Orientierung (Sekantengesetz mit h = 300 km).
  * Die Berechnung erfolgt in estimateMUF(); diese Tabelle dient nur der Dokumentation/Anzeige.
  * Quelle: ITU-R P.1239 (M(3000)F2 ≈ 2,5–3,5)
@@ -461,6 +473,46 @@ export function calculateSkipDistance(
   const theta = elevationAngleDeg * (Math.PI / 180);
 
   return 2 * R * (Math.acos((R / (R + h)) * Math.cos(theta)) - theta);
+}
+
+/**
+ * Größter Einfachsprung an einer Schicht der Höhe h: der Grenzfall streifender
+ * Abstrahlung (θ → 0) in {@link calculateSkipDistance}:
+ *
+ * d_max = 2·R·arccos(R/(R+h))
+ *
+ * Prüfwerte: h = 110 km (sporadische E-Schicht) → 2351 km;
+ * h = 300 km (F2-Schicht) → 3836 km.
+ *
+ * Quelle: Davies, Ionospheric Radio, §6 (Spiegelmodell mit Kugelerde)
+ */
+export function maxSingleHopDistanceKm(reflectionHeightKm: number): number {
+  if (reflectionHeightKm <= 0) return 0;
+  const R = EARTH_RADIUS_KM;
+  return 2 * R * Math.acos(safeDivide(R, R + reflectionHeightKm, 1));
+}
+
+/**
+ * Reichweite der Bodenwelle in km als Faustregel: logarithmische Interpolation
+ * zwischen den typischen Grenzwerten des Bodenwellen-Modus (30 kHz → 300 km,
+ * 3 MHz → 30 km, siehe {@link PROPAGATION_GROUND_WAVE}); oberhalb von 3 MHz
+ * setzt sich der Abfall fort.
+ *
+ * Annahme: mittlerer Boden und ausreichende Sendeleistung. Die tatsächliche
+ * Reichweite hängt nach ITU-R P.368 von Bodenleitfähigkeit, Dielektrizitätszahl
+ * und Sendeleistung ab — ein Feldstärkemodell ersetzt diese Faustregel nicht.
+ */
+export function estimateGroundWaveRangeKm(frequencyHz: number): number {
+  const { min: fMin, max: fMax } = PROPAGATION_GROUND_WAVE.frequencyRangeHz;
+  const { min: rMin, max: rMax } = PROPAGATION_GROUND_WAVE.typicalRangeKm;
+  if (frequencyHz <= 0) return 0;
+  const t = safeDivide(
+    safeLog(frequencyHz, 10, 0) - safeLog(fMin, 10, 0),
+    safeLog(fMax, 10, 0) - safeLog(fMin, 10, 0),
+    0
+  );
+  const rangeKm = rMax * Math.pow(safeDivide(rMin, rMax, 1), t);
+  return Math.max(0, rangeKm);
 }
 
 /**
@@ -714,6 +766,8 @@ export const calculations = {
   maxLOSDistance: calculateMaxLOSDistance,
   skipDistance: calculateSkipDistance,
   skipDistanceForFrequency: calculateSkipDistanceForFrequency,
+  maxSingleHopDistance: maxSingleHopDistanceKm,
+  groundWaveRange: estimateGroundWaveRangeKm,
   plasmaFrequency: calculatePlasmaFrequency,
   criticalFrequency: calculateCriticalFrequency,
   estimateMUF

@@ -199,6 +199,11 @@ export const SECTIONS: ArticleSection[] = [
         ]
       },
       {
+        kind: 'p',
+        text: 'Hinter den Faustregeln steht eine einzige Kurve: die höchste nutzbare Frequenz im Tagesverlauf. Sie deckelt die Bänder von oben, während die D-Schicht sie am Tag von unten abschneidet — dazwischen liegt das Fenster.'
+      },
+      { kind: 'widget', id: 'amateur-band-openings' },
+      {
         kind: 'callout',
         tone: 'tip',
         title: 'Erst hören, dann senden',

@@ -19,6 +19,7 @@
     idealSpectralEfficiency,
     noiseSigmaFromSnrDb,
     noisyConstellation,
+    requiredEbN0Db,
     requiredSnrDb,
     schemeBitsPerSymbol,
     type ConstellationScheme
@@ -60,7 +61,9 @@
   const samples = $derived(noisyConstellation(points, snrDb, noiseSeed, SAMPLES_PER_SYMBOL));
   const bits = $derived(schemeBitsPerSymbol(scheme));
   const sigma = $derived(noiseSigmaFromSnrDb(snrDb));
+  /** Erforderliches E_s/N₀ bzw. E_b/N₀ für die Bezugs-Bitfehlerrate 10⁻⁶. */
   const needed = $derived(requiredSnrDb(scheme));
+  const neededEbN0 = $derived(requiredEbN0Db(scheme));
   const tight = $derived(snrDb < needed);
   const showLabels = $derived(SCHEME_STATES[scheme] <= LABEL_LIMIT_STATES);
 
@@ -76,7 +79,8 @@
 
   const description = $derived(
     `Konstellationsdiagramm ${SCHEMES.find((entry) => entry.id === scheme)?.label} mit ` +
-      `${SCHEME_STATES[scheme]} Symbolzuständen bei ${formatNumber(snrDb, 0)} dB Störabstand.`
+      `${SCHEME_STATES[scheme]} Symbolzuständen bei ${formatNumber(snrDb, 1)} dB Störabstand E_s/N_0; ` +
+      `für eine Bitfehlerrate von 10^-6 sind ${formatNumber(needed, 1)} dB nötig.`
   );
 </script>
 
@@ -96,7 +100,7 @@
 
   <div class="controls">
     <Slider
-      label="Störabstand (SNR)"
+      label="Störabstand E_s/N₀"
       bind:value={snrDb}
       min={SNR_MIN_DB}
       max={SNR_MAX_DB}
@@ -114,16 +118,15 @@
       {idealSpectralEfficiency(scheme)} Bit/s/Hz
     </Badge>
     <Badge tone={tight ? 'warning' : 'success'} srPrefix="Bewertung">
-      {tight
-        ? `zu wenig Reserve — rund ${formatNumber(needed, 0)} dB nötig`
-        : `ausreichend — rund ${formatNumber(needed, 0)} dB nötig`}
+      {tight ? 'zu wenig Reserve' : 'ausreichend'} — erforderliches E_s/N₀ für BER 10⁻⁶:
+      {formatNumber(needed, 1)} dB
     </Badge>
   </div>
 
   <ChartFrame
     {description}
     minWidth={320}
-    footnote="Rauschmodell: additives weißes Gaußsches Rauschen, mittlere Symbolleistung auf 1 normiert."
+    footnote="Rauschmodell: additives weißes Gaußsches Rauschen, mittlere Symbolleistung auf 1 normiert; daraus folgt die Streuung je Komponente σ = √(1/(2·E_s/N₀)). Die erforderlichen Störabstände gelten für eine Bitfehlerrate von 10⁻⁶ bei Gray-Codierung (Proakis/Salehi, Digital Communications, 5. Aufl., Gl. 4.3-13 und 4.3-30; Sklar, 2. Aufl., Tab. 4.1)."
   >
     <svg viewBox="0 0 {VIEW_SIZE} {VIEW_SIZE}" class="plot" aria-hidden="true">
       <line x1={PADDING} y1={toY(0)} x2={VIEW_SIZE - PADDING} y2={toY(0)} class="axis" />
@@ -158,8 +161,16 @@
             </tr>
           {/each}
           <tr>
-            <th scope="row">Rauschstreuung je Komponente</th>
-            <td colspan="2">{formatNumber(sigma, 3)}</td>
+            <th scope="row">Rauschstreuung je Komponente σ</th>
+            <td colspan="2">{formatNumber(sigma, 3)} bei {formatNumber(snrDb, 1)} dB E_s/N₀</td>
+          </tr>
+          <tr>
+            <th scope="row">Erforderliches E_s/N₀ für BER 10⁻⁶</th>
+            <td colspan="2">{formatNumber(needed, 1)} dB</td>
+          </tr>
+          <tr>
+            <th scope="row">Erforderliches E_b/N₀ für BER 10⁻⁶</th>
+            <td colspan="2">{formatNumber(neededEbN0, 1)} dB</td>
           </tr>
         </tbody>
       </table>

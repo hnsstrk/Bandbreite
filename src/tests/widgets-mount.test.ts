@@ -46,6 +46,11 @@ import MaritimeDuplexWidget from '$lib/components/widgets/MaritimeDuplexWidget.s
 import RadarRangeWidget from '$lib/components/widgets/RadarRangeWidget.svelte';
 import PulseCompressionWidget from '$lib/components/widgets/PulseCompressionWidget.svelte';
 import ModeSFrameWidget from '$lib/components/widgets/ModeSFrameWidget.svelte';
+import RadioServiceFlowWidget from '$lib/components/widgets/RadioServiceFlowWidget.svelte';
+import BosAlarmChainWidget from '$lib/components/widgets/BosAlarmChainWidget.svelte';
+import CospasSarsatChainWidget from '$lib/components/widgets/CospasSarsatChainWidget.svelte';
+import FddTddWidget from '$lib/components/widgets/FddTddWidget.svelte';
+import AmateurBandOpeningsWidget from '$lib/components/widgets/AmateurBandOpeningsWidget.svelte';
 import ArticleLayout from '$lib/components/knowledge/ArticleLayout.svelte';
 import { radarArticle } from '$lib/content/radar';
 import { mathematikArticle } from '$lib/content/mathematik';
@@ -94,7 +99,12 @@ const WIDGETS: { name: string; component: AnyComponent; sliders: number }[] = [
   { name: 'MaritimeDuplexWidget', component: MaritimeDuplexWidget, sliders: 0 },
   { name: 'RadarRangeWidget', component: RadarRangeWidget, sliders: 4 },
   { name: 'PulseCompressionWidget', component: PulseCompressionWidget, sliders: 2 },
-  { name: 'ModeSFrameWidget', component: ModeSFrameWidget, sliders: 0 }
+  { name: 'ModeSFrameWidget', component: ModeSFrameWidget, sliders: 0 },
+  { name: 'RadioServiceFlowWidget', component: RadioServiceFlowWidget, sliders: 0 },
+  { name: 'BosAlarmChainWidget', component: BosAlarmChainWidget, sliders: 0 },
+  { name: 'CospasSarsatChainWidget', component: CospasSarsatChainWidget, sliders: 1 },
+  { name: 'FddTddWidget', component: FddTddWidget, sliders: 3 },
+  { name: 'AmateurBandOpeningsWidget', component: AmateurBandOpeningsWidget, sliders: 2 }
 ];
 
 describe('Widgets rendern', () => {
@@ -120,11 +130,20 @@ describe('Widgets rendern', () => {
       InverseSquareWidget,
       PhasorWidget,
       IonosphereDayNightWidget,
-      DipoleCurrentWidget
+      DipoleCurrentWidget,
+      BosAlarmChainWidget,
+      CospasSarsatChainWidget
     ]) {
       const root = renderToDom(component);
       expect(root.querySelector('button[aria-pressed]')).not.toBeNull();
     }
+  });
+
+  it('RadioServiceFlowWidget: vier anklickbare Stufen, genau eine ausgewählt', () => {
+    const root = renderToDom(RadioServiceFlowWidget);
+    expect(root.querySelector('[role="listbox"]')).not.toBeNull();
+    expect(root.querySelectorAll('[role="option"]')).toHaveLength(4);
+    expect(root.querySelectorAll('[role="option"][aria-selected="true"]')).toHaveLength(1);
   });
 
   it('RcsComparisonWidget: Listbox mit allen Referenzobjekten', () => {

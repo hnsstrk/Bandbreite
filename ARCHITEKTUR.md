@@ -387,7 +387,7 @@ Jedes Widget besteht aus einem reinen Rechenmodell (`*Model.ts` / `*Options.ts`,
 | `[C-W-PARAB]` | `widgets/ParabolicGainCalculator.svelte` | `[U-ANTMATH]`, `[D-ANT]` | `[R-WISS-ANT]` |
 | `[C-W-SWR]` | `widgets/SwrWidget.svelte` | `[U-ANTMATH]` | `[R-WISS-ANT]` |
 
-**Der Katalog `[D-WIDGETS]` führt 40 Widgets**, alle mit Deep-Link (`?w=`) und Suchtreffer. Zwei Einbauarten, unterschieden über `embed`:
+**Der Katalog `[D-WIDGETS]` führt 45 Widgets**, alle mit Deep-Link (`?w=`) und Suchtreffer. Zwei Einbauarten, unterschieden über `embed`:
 
 - **`content` (14 IDs, in `[C-WIDGREG]` registriert)** — stehen als `widget`-Block in den Kapiteldaten und werden von `[C-ARTBLOCK]` gerendert: `radar-pulse`, `doppler`, `rcs-comparison`, `fmcw`, `blind-speed`, `ssr-interrogation`, `fresnel`, `decibel`, `attenuation-windows`, `propagation-sandbox`, `em-wave`, `field-strength`, `wave-propagation-diagram`, `ionospheric-propagation` (die letzten beiden liegen in `charts/`). Typ: `WidgetId`.
 - **`markup` (6 IDs, Typ `MarkupWidgetId`)** — stehen direkt in den Seitenkomponenten von `[R-WISS-MOD]` und `[R-WISS-ANT]` und tragen ihre Anker-ID (`widgetAnchorId`) dort von Hand: `modulation-visualizer`, `constellation`, `carson`, `antenna-pattern`, `parabolic-gain`, `swr`.
@@ -413,8 +413,8 @@ Statische Daten, Konstanten und Presets. Frequenzen durchgängig als Zahl **in H
 |---|---|---|---|
 | `[D-NAV]` | `navigation.ts` | `NAV_TREE`, `NAV_GROUPS`, `SITE_URL`, `SITE_NAME`, `SITE_DESCRIPTION`, `pageMeta()`, `findNode()`, `getBreadcrumbs()`, `getHubChildren()`, `getSiblings()`, `getLiveNodes()`, `normalizeHref()`, `flattenNav()`, `isActivePath()` | **52 Knoten** (1 `hidden`), 5 Menügruppen mit 9 Spalten |
 | `[D-REL]` | `relations.ts` | `RELATIONS`, `getRelatedTopics()` | **51 Quellseiten** mit je 3–6 Verweisen, Rückverweise zur Laufzeit |
-| `[D-SEARCH]` | `searchIndex.ts` | `SEARCH_INDEX`, `LIVE_SEARCH_INDEX`, `SEARCH_GROUPS` | **409 Einträge in 7 Gruppen** (41 Seiten, 10 Werkzeuge, 40 Widgets, 72 Bänder, 105 Funkdienste, 37 Sender, 104 Glossareinträge) |
-| `[D-WIDGETS]` | `widgets.ts` | `WIDGET_META`, `WIDGET_ENTRIES`, `KNOWN_WIDGET_IDS`, `WIDGET_PARAM`, `widgetAnchorId()`, `widgetHref()`, `parseWidgetParam()`, `widgetLocations()`, `findWidget()` | **40 Widgets** (Schlüssel `CatalogWidgetId`) mit Bezeichnung, Beschreibung, Stichworten und Kapitel — **ohne** Komponentenimporte; `embed: 'markup'` kennzeichnet die sechs Widgets, die direkt in der Seitenkomponente stehen |
+| `[D-SEARCH]` | `searchIndex.ts` | `SEARCH_INDEX`, `LIVE_SEARCH_INDEX`, `SEARCH_GROUPS` | **414 Einträge in 7 Gruppen** (41 Seiten, 10 Werkzeuge, 45 Widgets, 72 Bänder, 105 Funkdienste, 37 Sender, 104 Glossareinträge) |
+| `[D-WIDGETS]` | `widgets.ts` | `WIDGET_META`, `WIDGET_ENTRIES`, `KNOWN_WIDGET_IDS`, `WIDGET_PARAM`, `widgetAnchorId()`, `widgetHref()`, `parseWidgetParam()`, `widgetLocations()`, `findWidget()` | **45 Widgets** (Schlüssel `CatalogWidgetId`) mit Bezeichnung, Beschreibung, Stichworten und Kapitel — **ohne** Komponentenimporte; `embed: 'markup'` kennzeichnet die sechs Widgets, die direkt in der Seitenkomponente stehen |
 | `[D-LEARN]` | `learningPaths.ts` | `LEARNING_PATHS`, `LEVEL_LABELS`, `LEVEL_TONES`, `findLearningPath()`, `learningPathHref()`, `resolvePathSteps()`, `learningPathsForHref()` | **4 Pfade mit 30 Schritten** (8/7/8/7, je einer optional); `durationMin` ist als `Annahme:` gekennzeichnet |
 | `[D-GLOSS]` | `glossary.ts` | `GLOSSARY`, `GLOSSARY_SORTED`, `GLOSSARY_CATEGORIES`, `GLOSSARY_LETTERS`, `GLOSSARY_COVERED_TITLES` | **92 Begriffe in 7 Kategorien**, elf Kurztexte aus `[D-EXPLAIN]` eingebunden statt kopiert |
 | `[D-BANDS]` | `bands.ts` | `ITU_BANDS` (12), `IEEE_BANDS` (12), `NATO_BANDS` (15), `CIVILIAN_BANDS` (43), `DE_ALT_BANDS` (10), `US_ALT_BANDS` (11), `EU_NATO_BANDS` (13), `EM_BANDS` (7), `ALL_BANDS`, `getBandsForFrequency()`, `formatFrequencyRange()` | **123 Bänder** gesamt |

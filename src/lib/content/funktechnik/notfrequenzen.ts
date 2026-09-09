@@ -96,7 +96,8 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'p',
         text: 'Die 406-MHz-Baken des Systems Cospas-Sarsat senden eine kodierte Kennung mit hoher Leistung in kurzen Impulsen. Satelliten empfangen sie, bestimmen die Position über die Dopplerverschiebung oder übernehmen die von der Bake mitgesendete Satellitenposition und leiten die Meldung an die zuständige Rettungsleitstelle weiter. 121,5 MHz dient dabei nur noch als Peilfrequenz für die letzten Kilometer.'
-      }
+      },
+      { kind: 'widget', id: 'cospas-sarsat-chain' }
     ]
   },
   {

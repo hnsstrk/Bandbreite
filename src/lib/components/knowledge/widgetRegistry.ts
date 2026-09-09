@@ -42,6 +42,11 @@ import MaritimeDuplexWidget from '$lib/components/widgets/MaritimeDuplexWidget.s
 import RadarRangeWidget from '$lib/components/widgets/RadarRangeWidget.svelte';
 import PulseCompressionWidget from '$lib/components/widgets/PulseCompressionWidget.svelte';
 import ModeSFrameWidget from '$lib/components/widgets/ModeSFrameWidget.svelte';
+import RadioServiceFlowWidget from '$lib/components/widgets/RadioServiceFlowWidget.svelte';
+import BosAlarmChainWidget from '$lib/components/widgets/BosAlarmChainWidget.svelte';
+import CospasSarsatChainWidget from '$lib/components/widgets/CospasSarsatChainWidget.svelte';
+import FddTddWidget from '$lib/components/widgets/FddTddWidget.svelte';
+import AmateurBandOpeningsWidget from '$lib/components/widgets/AmateurBandOpeningsWidget.svelte';
 
 export const WIDGETS: Record<WidgetId, Component> = {
   'radar-pulse': RadarPulseWidget,
@@ -75,7 +80,12 @@ export const WIDGETS: Record<WidgetId, Component> = {
   'maritime-duplex': MaritimeDuplexWidget,
   'radar-range': RadarRangeWidget,
   'pulse-compression': PulseCompressionWidget,
-  'mode-s-frame': ModeSFrameWidget
+  'mode-s-frame': ModeSFrameWidget,
+  'radio-service-flow': RadioServiceFlowWidget,
+  'bos-alarm-chain': BosAlarmChainWidget,
+  'cospas-sarsat-chain': CospasSarsatChainWidget,
+  'fdd-tdd': FddTddWidget,
+  'amateur-band-openings': AmateurBandOpeningsWidget
 };
 
 // Metadaten (Bezeichnung, Kapitel, Stichworte) für Komponenten weiterreichen,

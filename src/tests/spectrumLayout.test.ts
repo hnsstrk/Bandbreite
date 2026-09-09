@@ -95,8 +95,9 @@ describe('Bandbeschriftung', () => {
     expect(fitsBandLabel(20, 'Radio', 9)).toBe(false);
   });
 
-  it('behält in voller Breite die feste Schwelle', () => {
-    expect(showBandLabel(LEGACY_LABEL_MIN_WIDTH + 1, 'Microwave', DESKTOP_METRICS)).toBe(true);
+  it('behält in voller Breite die feste Mindestbreite und verlangt zusätzlich Platz für den Namen', () => {
+    expect(showBandLabel(200, 'Microwave', DESKTOP_METRICS)).toBe(true);
+    expect(showBandLabel(LEGACY_LABEL_MIN_WIDTH + 1, 'Microwave', DESKTOP_METRICS)).toBe(false);
     expect(showBandLabel(LEGACY_LABEL_MIN_WIDTH, 'HF', DESKTOP_METRICS)).toBe(false);
   });
 
@@ -239,5 +240,17 @@ describe('Sprung zur Banddetail-Spalte', () => {
   it('verzichtet bei prefers-reduced-motion auf die Animation', () => {
     expect(scrollBehaviorFor(true)).toBe('auto');
     expect(scrollBehaviorFor(false)).toBe('smooth');
+  });
+});
+
+describe('showBandLabel in voller Darstellung', () => {
+  it('zeichnet den Namen nur, wenn er in sein Band passt (Mid-IR/Near-IR-Kollision)', async () => {
+    const { showBandLabel, DESKTOP_METRICS, fitsBandLabel } =
+      await import('$lib/components/spectrumLayout');
+    expect(showBandLabel(200, 'Radio', DESKTOP_METRICS)).toBe(true);
+    expect(showBandLabel(20, 'A', DESKTOP_METRICS)).toBe(false); // unter der alten Mindestbreite
+    const narrow = 30; // breiter als die Mindestbreite, aber zu schmal für „Near-IR"
+    expect(fitsBandLabel(narrow, 'Near-IR', DESKTOP_METRICS.bandLabelFontSize)).toBe(false);
+    expect(showBandLabel(narrow, 'Near-IR', DESKTOP_METRICS)).toBe(false);
   });
 });

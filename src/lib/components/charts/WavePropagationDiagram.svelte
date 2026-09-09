@@ -12,7 +12,8 @@
   import WavePropagationControls from './WavePropagationControls.svelte';
   import WavePropagationLegend from './WavePropagationLegend.svelte';
   import WavePropagationScene from './WavePropagationScene.svelte';
-  import { modeById } from './wavePropagationData';
+  import { modeById, sceneDistances } from './wavePropagationData';
+  import { formatNumber } from '$lib/utils/formatting';
 
   interface Props {
     width?: number;
@@ -26,6 +27,13 @@
   let frequencyMHz = $state(14);
 
   let mode = $derived(modeById(selectedModeId));
+  let distances = $derived(sceneDistances(selectedModeId, frequencyMHz, isNighttime));
+  /** Beschreibung der toten Zone für Text und Tabelle. */
+  let deadZoneLabel = $derived.by(() => {
+    if (distances.skipKm === null) return 'keine Reflexion (Frequenz über der MUF)';
+    if (distances.skipKm <= distances.groundWaveKm) return 'keine tote Zone (f ≤ foF2)';
+    return `${formatNumber(distances.groundWaveKm, 0)} bis ${formatNumber(distances.skipKm, 0)} km`;
+  });
 
   /** Kurzbeschreibung der vier Modi für die Erläuterung unter dem Bild. */
   const EXPLANATIONS = [
@@ -37,7 +45,7 @@
     {
       id: 'sky-wave',
       title: 'Raumwelle',
-      text: 'Wird an der Ionosphäre reflektiert und ermöglicht im HF-Bereich weltweite Verbindungen über mehrere Sprünge. Zwischen Boden- und erster Raumwelle liegt die tote Zone.'
+      text: 'Wird an der Ionosphäre reflektiert und ermöglicht im HF-Bereich weltweite Verbindungen über mehrere Sprünge. Zwischen dem Ende der Bodenwelle und dem ersten Aufsetzpunkt der Raumwelle liegt die tote Zone — das Diagramm zeichnet sie aus der Sprungdistanz zur eingestellten Frequenz.'
     },
     {
       id: 'line-of-sight',
@@ -58,15 +66,15 @@
 
     <ChartFrame
       bind:width
-      description="Seitenriss der Erdatmosphäre mit Ionosphärenschichten, Sender und Empfänger sowie dem Signalweg des gewählten Ausbreitungsmodus"
+      description="Seitenriss der Erdatmosphäre mit Ionosphärenschichten, Sender und Empfänger sowie dem Signalweg des gewählten Ausbreitungsmodus; die Entfernungsachse ist maßstäblich, die Höhen sind stark überhöht"
       minWidth={640}
-      footnote="Schichthöhen nach ITU-R P.1239 und P.533"
+      footnote="Schichthöhen nach ITU-R P.1239 und P.533. Entfernungen aus dem Ausbreitungsmodell: Sprungdistanz nach dem Sekantengesetz im sphärischen Spiegelmodell (Davies, Ionospheric Radio, §6), Radiohorizont nach ITU-R P.834 für 30 m und 10 m Antennenhöhe, Bodenwellenreichweite als Faustregel nach ITU-R P.368. Die Höhenachse ist gegenüber der Entfernungsachse stark überhöht."
     >
       {#snippet legend()}
         <WavePropagationLegend {selectedModeId} />
       {/snippet}
 
-      <WavePropagationScene {selectedModeId} {isNighttime} {width} {height} />
+      <WavePropagationScene {selectedModeId} {isNighttime} {frequencyMHz} {width} {height} />
 
       {#snippet dataTable()}
         <table>
@@ -84,6 +92,31 @@
             <tr>
               <th scope="row">Tageszeit</th>
               <td>{isNighttime ? 'Nacht' : 'Tag'}</td>
+            </tr>
+            <tr>
+              <th scope="row">Eingestellte Frequenz</th>
+              <td>{formatNumber(frequencyMHz, 3)} MHz</td>
+            </tr>
+            <tr>
+              <th scope="row">Bodenwellenreichweite</th>
+              <td>{formatNumber(distances.groundWaveKm, 0)} km</td>
+            </tr>
+            <tr>
+              <th scope="row"
+                >Sprungdistanz (foF2 {formatNumber(distances.foF2MHz, 1)} MHz, {formatNumber(
+                  distances.reflectionHeightKm,
+                  0
+                )} km)</th
+              >
+              <td>{distances.skipKm === null ? 'keine Reflexion' : `${formatNumber(distances.skipKm, 0)} km`}</td>
+            </tr>
+            <tr>
+              <th scope="row">Tote Zone</th>
+              <td>{deadZoneLabel}</td>
+            </tr>
+            <tr>
+              <th scope="row">Radiohorizont (30 m und 10 m)</th>
+              <td>{formatNumber(distances.losKm, 1)} km</td>
             </tr>
           </tbody>
         </table>

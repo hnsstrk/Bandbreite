@@ -131,6 +131,43 @@ export function centralAngle(
   return toDeg(Math.acos(argument)) - minElevationDeg;
 }
 
+/**
+ * Elevationswinkel in Grad, unter dem der Satellit von einer Erdfunkstelle aus
+ * erscheint, die um den halben Zentriwinkel γ vom Fußpunkt entfernt liegt:
+ *
+ * tan ε = (cos γ − R/r) / sin γ   mit r = R + h
+ *
+ * Umkehrung von {@link centralAngle}. Prüfwerte (geostationär): γ = 0 → ε = 90°
+ * (Satellit im Zenit), γ = arccos(R/r) = 81,3° → ε = 0° (Satellit am Horizont).
+ *
+ * Quelle: ITU-R S.1257, Anhang 1 (Geometrie der Erde-Weltraum-Strecke).
+ */
+export function elevationFromCentralAngle(altitudeM: number, centralAngleDeg: number): number {
+  const ratio = safeDivide(EARTH_RADIUS_EQUATORIAL, orbitRadius(altitudeM), NaN);
+  if (!Number.isFinite(ratio)) return NaN;
+  const gamma = toRad(centralAngleDeg);
+  return toDeg(Math.atan2(Math.cos(gamma) - ratio, Math.sin(gamma)));
+}
+
+/**
+ * Schrägentfernung in m aus dem halben Zentriwinkel γ — Kosinussatz im Dreieck
+ * Erdmittelpunkt, Erdfunkstelle, Satellit:
+ *
+ * d = √(R² + r² − 2·R·r·cos γ)
+ *
+ * Prüfwerte (geostationär): γ = 0 → 35 786 km (die Bahnhöhe), γ = 81,3° (Rand
+ * der Sichtbarkeit) → 41 679 km.
+ */
+export function slantRangeFromCentralAngle(altitudeM: number, centralAngleDeg: number): number {
+  const R = EARTH_RADIUS_EQUATORIAL;
+  const r = orbitRadius(altitudeM);
+  if (!(r > 0)) return NaN;
+  const gamma = toRad(centralAngleDeg);
+  const radicand = R ** 2 + r ** 2 - 2 * R * r * Math.cos(gamma);
+  if (!(radicand >= 0)) return NaN;
+  return Math.sqrt(radicand);
+}
+
 /** Radius der Ausleuchtzone auf der Erdoberfläche in m (Großkreisbogen). */
 export function footprintRadius(
   altitudeM: number,

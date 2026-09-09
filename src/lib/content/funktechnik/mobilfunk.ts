@@ -103,7 +103,8 @@ export const SECTIONS: ArticleSection[] = [
       {
         kind: 'p',
         text: 'Ein Kuriosum zeigt Band 20: Dort liegt der Downlink mit 791 bis 821 MHz unterhalb des Uplinks mit 832 bis 862 MHz — umgekehrt zur sonst üblichen Anordnung. Der Grund liegt in der Umwidmung ehemaliger Fernsehfrequenzen und der Rücksicht auf benachbarte Nutzungen.'
-      }
+      },
+      { kind: 'widget', id: 'fdd-tdd' }
     ]
   },
   {

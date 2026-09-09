@@ -20,7 +20,12 @@
     formatPowerDb
   } from '$lib/utils/formatting';
   import { calculateFSPL } from '$lib/utils/calculations';
-  import { DEFAULT_MIN_ELEVATION_DEG, maxDopplerShift, summarizeOrbit } from '$lib/utils/orbitMath';
+  import {
+    DEFAULT_MIN_ELEVATION_DEG,
+    elevationFromCentralAngle,
+    maxDopplerShift,
+    summarizeOrbit
+  } from '$lib/utils/orbitMath';
   import {
     GEO_ALTITUDE_M,
     GPS_ALTITUDE_M,
@@ -64,6 +69,8 @@
 
   const orbit = $derived(summarizeOrbit(altitudeM, elevationDeg));
   const fsplDb = $derived(calculateFSPL(orbit.slantRangeM, frequencyHz));
+  /** Elevation am Rand der Ausleuchtzone — Gegenprobe zum eingestellten Mindestwinkel. */
+  const edgeElevationDeg = $derived(elevationFromCentralAngle(altitudeM, orbit.centralAngleDeg));
   const dopplerHz = $derived(maxDopplerShift(frequencyHz, altitudeM));
 
   /** Umlaufzeit als „23 h 56 min" bzw. „93 min". */
@@ -89,8 +96,8 @@
 
 <WidgetFrame
   title="Orbit-Rechner"
-  description="Schnittbild von Erde und Bahnkreis mit Satellit und Ausleuchtzone; der Bahnradius ist logarithmisch aufgetragen."
-  footnote="T = 2π·√(r³/µ) mit µ = 3,986·10¹⁴ m³/s²; Schrägentfernung nach der Kosinusbeziehung der Erde-Weltraum-Geometrie; Freiraumdämpfung nach ITU-R P.525. Die Sichtbarkeitsdauer gilt für einen zentralen Überflug ohne Erddrehung."
+  description="Maßstäbliches Schnittbild von Erde und Bahnkreis mit Satellit, Bodenstation am Rand der Ausleuchtzone, Horizont und Elevationswinkel; Erde und Bahnradius stehen im selben Maßstab."
+  footnote="T = 2π·√(r³/µ) mit µ = 3,986·10¹⁴ m³/s²; Schrägentfernung d = √(R² + r² − 2·R·r·cos γ) und Elevation tan ε = (cos γ − R/r)/sin γ nach ITU-R S.1257; Freiraumdämpfung nach ITU-R P.525. Die Sichtbarkeitsdauer gilt für einen zentralen Überflug ohne Erddrehung."
 >
   <OrbitScene {altitudeM} centralAngleDeg={orbit.centralAngleDeg} labelDE={orbitLabel} />
 
@@ -162,6 +169,8 @@
         <tr><th scope="row">Bahnhöhe</th><td>{formatDistance(altitudeM, 0)}</td></tr>
         <tr><th scope="row">Umlaufzeit</th><td>{periodLabel}</td></tr>
         <tr><th scope="row">Bahngeschwindigkeit</th><td>{formatNumber(orbit.velocityMs / 1000, 2)} km/s</td></tr>
+        <tr><th scope="row">Halber Zentriwinkel</th><td>{formatNumber(orbit.centralAngleDeg, 1)}°</td></tr>
+        <tr><th scope="row">Elevationswinkel der Bodenstation</th><td>{formatNumber(edgeElevationDeg, 1)}°</td></tr>
         <tr><th scope="row">Schrägentfernung</th><td>{formatDistance(orbit.slantRangeM, 0)}</td></tr>
         <tr
           ><th scope="row">Signallaufzeit hin und zurück</th><td

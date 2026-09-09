@@ -140,6 +140,11 @@ export const SECTIONS: ArticleSection[] = [
         ]
       },
       {
+        kind: 'p',
+        text: 'Wie sich diese vier Ebenen auf einen konkreten Bereich auswirken, zeigt das folgende Schaubild: Es legt drei Beispielspuren über die Kette — ein Band ohne Antrag, ein versteigertes Band und den Sonderweg des Amateurfunks.'
+      },
+      { kind: 'widget', id: 'radio-service-flow' },
+      {
         kind: 'table',
         caption: 'Allgemein- und Einzelzuteilung im Vergleich',
         head: ['Merkmal', 'Allgemeinzuteilung', 'Einzelzuteilung'],

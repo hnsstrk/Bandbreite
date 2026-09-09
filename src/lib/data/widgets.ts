@@ -302,6 +302,93 @@ export const WIDGET_META: Partial<Record<CatalogWidgetId, Omit<WidgetMeta, 'id'>
     keywords: ['Mode S', 'DF17', 'ADS-B', 'ICAO-Adresse', 'Bitfeld', 'Pulslagemodulation'],
     chapterHref: '/wissen/radar/sekundaerradar/'
   },
+  'radio-service-flow': {
+    label: 'Von der Zuweisung zur Zuteilung',
+    description:
+      'Vier Ebenen zwischen VO Funk und Betriebserlaubnis — mit Beispielspur für das 2,4-GHz-ISM-Band, den 800-MHz-Mobilfunk und das 2-m-Amateurfunkband.',
+    keywords: [
+      'VO Funk',
+      'Frequenzzuweisung',
+      'Frequenzplan',
+      'Frequenzzuteilung',
+      'Allgemeinzuteilung',
+      'Einzelzuteilung',
+      'Bundesnetzagentur',
+      'primär',
+      'sekundär'
+    ],
+    chapterHref: '/wissen/funktechnik/funkdienste/'
+  },
+  'bos-alarm-chain': {
+    label: 'Alarmierungskette: vom Notruf bis zur Rückmeldung',
+    description:
+      'Notruf 112, Leitstelle, Alarmierung, Einsatzkräfte, Rückmeldung — mit Umschalter zwischen ZVEI-Tonfolge, POCSAG-Funkruf und TETRA-Gruppenruf.',
+    keywords: [
+      'Alarmierung',
+      'Notruf 112',
+      'Leitstelle',
+      'POCSAG',
+      'Funkmeldeempfänger',
+      'ZVEI',
+      'Fünftonruf',
+      'TETRA',
+      'Gruppenruf'
+    ],
+    chapterHref: '/wissen/funktechnik/bos/'
+  },
+  'cospas-sarsat-chain': {
+    label: 'Rettungskette Cospas-Sarsat',
+    description:
+      '406-MHz-Bake, Satellit, Bodenstation, Kontrollzentrum, Rettungsleitstelle und Einsatzmittel — mit Umschalter zwischen LEOSAR, MEOSAR und GEOSAR.',
+    keywords: [
+      'Cospas-Sarsat',
+      '406 MHz',
+      'EPIRB',
+      'ELT',
+      'PLB',
+      'LEOSAR',
+      'MEOSAR',
+      'GEOSAR',
+      'Seenotbake',
+      'Peilfrequenz'
+    ],
+    chapterHref: '/wissen/funktechnik/notfrequenzen/'
+  },
+  'fdd-tdd': {
+    label: 'FDD und TDD im Zeit-Frequenz-Bild',
+    description:
+      'Zwei Blöcke mit Duplexabstand gegen einen Träger mit Slot-Muster: Aufteilung von Up- und Downlink, Schutzzeit und die daraus folgende Zellgrenze.',
+    keywords: [
+      'FDD',
+      'TDD',
+      'Duplex',
+      'Duplexabstand',
+      'Band 20',
+      'n78',
+      'Slot',
+      'DDDSU',
+      'Schutzzeit',
+      'Numerologie'
+    ],
+    chapterHref: '/wissen/funktechnik/mobilfunk/'
+  },
+  'amateur-band-openings': {
+    label: 'Bandöffnungen im Tagesgang',
+    description:
+      'MUF und FOT über 24 Stunden für eine wählbare Sprungdistanz, dazu die acht Kurzwellenbänder mit Zustand offen, gedämpft oder geschlossen.',
+    keywords: [
+      'MUF',
+      'FOT',
+      'LUF',
+      'Bandöffnung',
+      'Kurzwelle',
+      'Tagesgang',
+      'D-Schicht',
+      'Sprungdistanz',
+      'Amateurfunk'
+    ],
+    chapterHref: '/wissen/funktechnik/amateurfunk/'
+  },
 
   // --- Widgets im Markup-Betrieb (Kapitelseiten ohne Inhaltsdaten) ---
   'modulation-visualizer': {

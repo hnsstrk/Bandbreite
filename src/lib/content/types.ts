@@ -42,7 +42,12 @@ export type WidgetId =
   | 'maritime-duplex'
   | 'radar-range'
   | 'pulse-compression'
-  | 'mode-s-frame';
+  | 'mode-s-frame'
+  | 'radio-service-flow'
+  | 'bos-alarm-chain'
+  | 'cospas-sarsat-chain'
+  | 'fdd-tdd'
+  | 'amateur-band-openings';
 
 /**
  * Widgets, die in einer Kapitel**seite** direkt im Markup stehen — die Kapitel

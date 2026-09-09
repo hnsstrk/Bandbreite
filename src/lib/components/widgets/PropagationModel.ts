@@ -7,6 +7,8 @@ import {
   calculateRadioHorizon,
   calculateMaxLOSDistance,
   calculateSkipDistanceForFrequency,
+  estimateGroundWaveRangeKm,
+  FOF2_PRESETS,
   estimateMUF,
   EARTH_RADIUS_KM,
   PROPAGATION_GROUND_WAVE,
@@ -14,7 +16,7 @@ import {
   SKIP_ZONE_PARAMS
 } from '$lib/data/propagation';
 import { IONOSPHERE_PARAMETERS } from '$lib/data/constants';
-import { safeDivide, safeLog } from '$lib/utils/handlers';
+import { safeDivide } from '$lib/utils/handlers';
 
 /** Reglerbereiche des Widgets */
 export const PROPAGATION_LIMITS = {
@@ -22,11 +24,8 @@ export const PROPAGATION_LIMITS = {
   frequencyHz: { min: 30e3, max: 3e9, default: 7.1e6 }
 } as const;
 
-/** Kritische Frequenzen foF2 für Tag und Nacht (typische Werte, ITU-R P.1239) */
-export const FOF2_PRESETS = {
-  day: IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.high * 0.6,
-  night: IONOSPHERE_PARAMETERS.typicalF2CriticalFrequencyMHz.low
-} as const;
+/** Kritische Frequenzen foF2 für Tag und Nacht — Werte aus `$lib/data/propagation`. */
+export { FOF2_PRESETS };
 
 export type PropagationModeId = 'bodenwelle' | 'raumwelle' | 'sichtlinie';
 
@@ -44,22 +43,11 @@ export function classifyMode(frequencyHz: number): PropagationModeId {
 }
 
 /**
- * Schematische Bodenwellenreichweite: logarithmische Interpolation zwischen
- * den typischen Grenzwerten des Bodenwellen-Modus (30 kHz → 300 km, 3 MHz → 30 km).
- * Oberhalb der Bodenwellen-Obergrenze fällt sie weiter ab (Faustregel, kein Modell).
+ * Bodenwellenreichweite als Faustregel — gerechnet wird in
+ * `$lib/data/propagation`; hier nur weitergereicht, damit die bisherigen
+ * Importpfade des Widgets bestehen bleiben.
  */
-export function estimateGroundWaveRangeKm(frequencyHz: number): number {
-  const { min: fMin, max: fMax } = PROPAGATION_GROUND_WAVE.frequencyRangeHz;
-  const { min: rMin, max: rMax } = PROPAGATION_GROUND_WAVE.typicalRangeKm;
-  if (frequencyHz <= 0) return 0;
-  const t = safeDivide(
-    safeLog(frequencyHz, 10, 0) - safeLog(fMin, 10, 0),
-    safeLog(fMax, 10, 0) - safeLog(fMin, 10, 0),
-    0
-  );
-  const rangeKm = rMax * Math.pow(safeDivide(rMin, rMax, 1), t);
-  return Math.max(0, rangeKm);
-}
+export { estimateGroundWaveRangeKm };
 
 export interface PropagationScene {
   mode: PropagationModeId;

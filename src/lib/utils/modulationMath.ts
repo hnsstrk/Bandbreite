@@ -518,15 +518,134 @@ export function idealSpectralEfficiency(scheme: ConstellationScheme): number {
   return schemeBitsPerSymbol(scheme);
 }
 
+// ============================================================================
+// Fehlerwahrscheinlichkeit und benötigter Störabstand
+// ============================================================================
+
 /**
- * Grober Richtwert des benötigten Störabstands für eine Symbolfehlerrate von
- * etwa 10⁻⁵: je Verdopplung der Zustandszahl rund 3 dB, je Verdopplung der
- * Bit je Symbol rund 6 dB.
+ * Bezugs-Bitfehlerrate der Richtwerte: 10⁻⁶. In dieser Größenordnung tabelliert
+ * die Literatur die benötigten Störabstände (Proakis, *Digital Communications*,
+ * 5. Aufl., Kap. 4; Sklar, *Digital Communications*, 2. Aufl., Kap. 4).
  */
-export function requiredSnrDb(scheme: ConstellationScheme): number {
-  const REFERENCE_SNR_DB = 9.6;
-  const DB_PER_BIT = 3;
-  return REFERENCE_SNR_DB + DB_PER_BIT * (schemeBitsPerSymbol(scheme) - 1);
+export const REFERENCE_BER = 1e-6;
+
+/** Ab diesem Argument wird Q(x) über den Kettenbruch statt über die Reihe berechnet. */
+const Q_SERIES_LIMIT = 3;
+/** Zahl der Reihenglieder der Fehlerfunktion bzw. Stufen des Kettenbruchs. */
+const Q_TERMS = 200;
+
+/**
+ * Gaußsches Fehlerintegral Q(x) = P(X > x) für X ~ N(0, 1), also
+ * Q(x) = ½·erfc(x/√2).
+ *
+ * Für kleine Argumente wird die Taylorreihe der Fehlerfunktion ausgewertet,
+ * für x ≥ 3 der Kettenbruch des Mills-Verhältnisses
+ * Q(x) = φ(x) / (x + 1/(x + 2/(x + 3/(x + …)))) — dort verliert die Reihe
+ * durch Auslöschung an Genauigkeit, während der Kettenbruch schnell konvergiert.
+ *
+ * Quelle: Abramowitz/Stegun, *Handbook of Mathematical Functions*, 7.1.5 und 26.2.14.
+ */
+export function qFunction(x: number): number {
+  if (!Number.isFinite(x)) return Number.isNaN(x) ? NaN : x > 0 ? 0 : 1;
+  if (x < 0) return 1 - qFunction(-x);
+
+  if (x < Q_SERIES_LIMIT) {
+    const z = x / Math.SQRT2;
+    let sum = 0;
+    let term = z;
+    for (let n = 0; n < Q_TERMS; n += 1) {
+      sum += term / (2 * n + 1);
+      term *= (-z * z) / (n + 1);
+    }
+    return 0.5 * (1 - (2 / Math.sqrt(Math.PI)) * sum);
+  }
+
+  let fraction = 0;
+  for (let k = Q_TERMS; k >= 1; k -= 1) {
+    fraction = k / (x + fraction);
+  }
+  const density = Math.exp((-x * x) / 2) / Math.sqrt(TWO_PI);
+  return safeDivide(density, x + fraction, 0);
+}
+
+/**
+ * Bitfehlerrate bei additivem weißem Gaußschen Rauschen über dem Verhältnis
+ * E_b/N₀ in dB — Gray-Codierung vorausgesetzt.
+ *
+ * - BPSK und QPSK: P_b = Q(√(2·E_b/N₀)) — beide brauchen dasselbe E_b/N₀
+ * - M-PSK (M ≥ 8): P_b ≈ (2/k)·Q(√(2k·E_b/N₀)·sin(π/M))
+ * - quadratische M-QAM: P_b ≈ (4/k)·(1 − 1/√M)·Q(√(3k/(M−1)·E_b/N₀))
+ *
+ * Quelle: Proakis/Salehi, *Digital Communications*, 5. Aufl., Gl. 4.3-13 (PSK)
+ * und 4.3-30 (QAM); Sklar, 2. Aufl., Tab. 4.1.
+ */
+export function bitErrorRate(scheme: ConstellationScheme, ebN0Db: number): number {
+  const states = SCHEME_STATES[scheme];
+  const bits = schemeBitsPerSymbol(scheme);
+  const gamma = Math.pow(10, ebN0Db / 10);
+  if (!(gamma > 0)) return 0.5;
+
+  if (scheme === 'bpsk' || scheme === 'qpsk') {
+    return qFunction(Math.sqrt(2 * gamma));
+  }
+  if (scheme === 'qam16' || scheme === 'qam64') {
+    const factor = safeDivide(4, bits, 0) * (1 - safeDivide(1, Math.sqrt(states), 0));
+    return factor * qFunction(Math.sqrt(safeDivide(3 * bits * gamma, states - 1, 0)));
+  }
+  return (
+    safeDivide(2, bits, 0) * qFunction(Math.sqrt(2 * bits * gamma) * Math.sin(Math.PI / states))
+  );
+}
+
+/** Suchbereich der Umkehrung in dB. */
+const EBN0_SEARCH_DB = { min: -10, max: 60 } as const;
+/** Halbierungsschritte der Umkehrung — 60 Schritte liefern deutlich mehr als 6 Stellen. */
+const EBN0_SEARCH_STEPS = 60;
+
+/**
+ * Benötigtes E_b/N₀ in dB für eine Ziel-Bitfehlerrate — numerische Umkehrung
+ * von {@link bitErrorRate} durch Intervallhalbierung (die Fehlerrate fällt
+ * streng monoton mit dem Störabstand).
+ *
+ * Prüfwerte für BER = 10⁻⁶: BPSK und QPSK 10,5 dB, 8-PSK 14,0 dB,
+ * 16-QAM 14,4 dB, 64-QAM 18,8 dB (Proakis, Abb. 4.3-4 und 4.3-8).
+ */
+export function requiredEbN0Db(
+  scheme: ConstellationScheme,
+  targetBer: number = REFERENCE_BER
+): number {
+  if (!(targetBer > 0) || targetBer >= 0.5) return NaN;
+  let low: number = EBN0_SEARCH_DB.min;
+  let high: number = EBN0_SEARCH_DB.max;
+  for (let step = 0; step < EBN0_SEARCH_STEPS; step += 1) {
+    const middle = (low + high) / 2;
+    if (bitErrorRate(scheme, middle) > targetBer) low = middle;
+    else high = middle;
+  }
+  return (low + high) / 2;
+}
+
+/**
+ * Umrechnung des Verhältnisses je Bit in das je Symbol:
+ * E_s/N₀ = E_b/N₀ + 10·log₁₀(k) mit k Bit je Symbol.
+ */
+export function esN0FromEbN0Db(ebN0Db: number, bitsPerSymbol: number): number {
+  return ebN0Db + 10 * safeLog(bitsPerSymbol, 10, 0);
+}
+
+/**
+ * Benötigter Störabstand E_s/N₀ in dB für eine Ziel-Bitfehlerrate. Auf das
+ * Symbol bezogen, weil das Konstellationsdiagramm Symbole zeigt und die
+ * Rauschstreuung σ = √(1/(2·E_s/N₀)) daraus folgt.
+ *
+ * Werte für BER = 10⁻⁶: BPSK 10,5 dB, QPSK 13,5 dB, 8-PSK 18,7 dB,
+ * 16-QAM 20,4 dB, 64-QAM 26,6 dB.
+ */
+export function requiredSnrDb(
+  scheme: ConstellationScheme,
+  targetBer: number = REFERENCE_BER
+): number {
+  return esN0FromEbN0Db(requiredEbN0Db(scheme, targetBer), schemeBitsPerSymbol(scheme));
 }
 
 export { carsonBandwidthHz, fmModulationIndex };

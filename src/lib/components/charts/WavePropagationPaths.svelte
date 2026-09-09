@@ -1,10 +1,16 @@
 <script lang="ts">
   /**
-   * Signalweg des gewählten Ausbreitungsmodus.
-   * Aus `WavePropagationScene.svelte` ausgelagert, damit beide Dateien
-   * unter 300 Zeilen bleiben.
+   * Signalweg des gewählten Ausbreitungsmodus — maßstäblich zur
+   * Entfernungsachse der Szene.
+   *
+   * Alle Entfernungen (Bodenwelle, Sprungdistanz, tote Zone, Radiohorizont,
+   * Einfachsprung an der sporadischen E-Schicht) stammen aus
+   * `sceneDistances()` und damit aus `$lib/data/propagation`.
+   * Aus `WavePropagationScene.svelte` ausgelagert, damit beide Dateien unter
+   * 300 Zeilen bleiben.
    */
-  import { altitudeToY } from './wavePropagationData';
+  import { formatNumber } from '$lib/utils/formatting';
+  import { SPORADIC_E_ALTITUDE_KM, altitudeToY, distanceToX, type WaveDistances } from './wavePropagationData';
 
   interface Props {
     selectedModeId: string;
@@ -12,23 +18,24 @@
     color: string;
     chartWidth: number;
     chartHeight: number;
-    txX: number;
-    rxX: number;
     groundY: number;
-    reflectionHeightKm: number;
+    /** Entfernungen aus dem Ausbreitungsmodell */
+    distances: WaveDistances;
   }
 
-  let { selectedModeId, color, chartWidth, chartHeight, txX, rxX, groundY, reflectionHeightKm }: Props = $props();
+  let { selectedModeId, color, chartWidth, chartHeight, groundY, distances }: Props = $props();
 
-  /** Breite der toten Zone im Raumwellenbild. */
-  const DEAD_ZONE_WIDTH = 80;
-  /** Höhe der sporadischen E-Schicht in Kilometern. */
-  const SPORADIC_E_ALTITUDE_KM = 110;
   /** Antennenspitze über dem Boden (Mast plus Spitze in `WavePropagationScene`). */
   const ANTENNA_TIP = 55;
+  /** Höhe des Bandes, mit dem die tote Zone hinterlegt wird. */
+  const DEAD_ZONE_HEIGHT = 46;
 
   function y(altitudeKm: number): number {
     return altitudeToY(altitudeKm, chartHeight);
+  }
+
+  function x(distanceKm: number): number {
+    return distanceToX(distanceKm, distances.spanKm, chartWidth);
   }
 
   /**
@@ -38,94 +45,123 @@
   function controlY(apexY: number, y0: number, y1: number): number {
     return 2 * apexY - (y0 + y1) / 2;
   }
+
+  /** Sprungbogen vom Sender zum Aufsetzpunkt mit Scheitel in Reflexionshöhe. */
+  function hopPath(toKm: number, apexKm: number): string {
+    const y0 = groundY - ANTENNA_TIP;
+    const y1 = groundY - ANTENNA_TIP;
+    return `M ${x(0)} ${y0} Q ${x(toKm / 2)} ${controlY(y(apexKm), y0, y1)} ${x(toKm)} ${y1}`;
+  }
+
+  const groundWaveX = $derived(x(distances.groundWaveKm));
+  const skipKm = $derived(distances.skipKm);
+  /** Tote Zone nur, wenn der erste Aufsetzpunkt hinter der Bodenwelle liegt. */
+  const deadZone = $derived(
+    skipKm !== null && skipKm > distances.groundWaveKm ? { fromKm: distances.groundWaveKm, toKm: skipKm } : null
+  );
 </script>
 
 <!-- Signalweg je Modus -->
 {#if selectedModeId === 'ground-wave'}
   <path
     class="wave-path"
-    d="M {txX} {groundY - ANTENNA_TIP} Q {chartWidth / 2} {controlY(
+    d="M {x(0)} {groundY - ANTENNA_TIP} Q {x(distances.groundWaveKm / 2)} {controlY(
       groundY - 4,
       groundY - ANTENNA_TIP,
       groundY - ANTENNA_TIP
-    )} {rxX} {groundY - ANTENNA_TIP}"
+    )} {groundWaveX} {groundY - ANTENNA_TIP}"
     fill="none"
     stroke={color}
     stroke-width="3"
     stroke-dasharray="8,4"
   />
-  <text x={chartWidth / 2} y={groundY + 5} fill={color} font-size="10" text-anchor="middle">
-    Bodenwelle folgt der Erdoberfläche
+  <text x={groundWaveX / 2} y={groundY - ANTENNA_TIP - 12} fill={color} font-size="10" text-anchor="middle">
+    Bodenwelle folgt der Erdoberfläche bis {formatNumber(distances.groundWaveKm, 0)} km
   </text>
 {:else if selectedModeId === 'sky-wave'}
-  {@const reflectionY = y(reflectionHeightKm)}
-  {@const hop1X = txX + (rxX - txX) / 3}
-  {@const hop2X = txX + ((rxX - txX) * 2) / 3}
-  <!-- Jeder Sprung: Antennenspitze bzw. Bodenreflexion → Scheitel in Reflexionshöhe → Boden -->
-  {#each [[txX, hop1X], [hop1X, hop2X], [hop2X, rxX]] as [from, to], index (index)}
-    {@const y0 = index === 0 ? groundY - ANTENNA_TIP : groundY}
-    {@const y1 = index === 2 ? groundY - ANTENNA_TIP : groundY}
+  <!-- Bodenwelle bis zu ihrer Reichweite -->
+  <line
+    x1={x(0)}
+    y1={groundY - 6}
+    x2={groundWaveX}
+    y2={groundY - 6}
+    stroke="var(--color-series-6)"
+    stroke-width="2.5"
+    stroke-dasharray="6,3"
+  />
+
+  {#if skipKm === null}
+    <text x={chartWidth / 2} y={y(distances.reflectionHeightKm) - 14} fill={color} font-size="11" text-anchor="middle">
+      {formatNumber(distances.foF2MHz, 1)} MHz foF2: Die Frequenz liegt über der MUF — keine Reflexion.
+    </text>
+  {:else}
+    <!-- Erster Sprung: Scheitel in der Reflexionshöhe, Aufsetzpunkt bei der Sprungdistanz -->
     <path
       class="wave-path"
-      d="M {from} {y0} Q {(from + to) / 2} {controlY(reflectionY, y0, y1)} {to} {y1}"
+      d={hopPath(distances.rxKm, distances.reflectionHeightKm)}
       fill="none"
       stroke={color}
       stroke-width="2.5"
       stroke-dasharray="6,3"
     />
-    <circle cx={(from + to) / 2} cy={reflectionY} r="5" fill={color} opacity="0.8" />
-  {/each}
+    <circle cx={x(distances.rxKm / 2)} cy={y(distances.reflectionHeightKm)} r="5" fill={color} opacity="0.8" />
+    <text
+      x={x(distances.rxKm / 2)}
+      y={y(distances.reflectionHeightKm) - 12}
+      fill={color}
+      font-size="10"
+      text-anchor="middle"
+    >
+      Reflexion in {formatNumber(distances.reflectionHeightKm, 0)} km, foF2 {formatNumber(distances.foF2MHz, 1)} MHz
+    </text>
+  {/if}
 
-  {#if true}
+  {#if deadZone}
     <rect
-      x={txX + 30}
-      y={groundY - 60}
-      width={DEAD_ZONE_WIDTH}
-      height="50"
+      x={groundWaveX}
+      y={groundY - DEAD_ZONE_HEIGHT}
+      width={Math.max(x(deadZone.toKm) - groundWaveX, 0)}
+      height={DEAD_ZONE_HEIGHT}
       fill="var(--color-series-6)"
       fill-opacity="0.2"
       stroke="var(--color-series-6)"
       stroke-dasharray="3,3"
     />
     <text
-      x={txX + 30 + DEAD_ZONE_WIDTH / 2}
-      y={groundY - 35}
+      x={(groundWaveX + x(deadZone.toKm)) / 2}
+      y={groundY - DEAD_ZONE_HEIGHT / 2 + 4}
       fill="var(--color-series-6)"
-      font-size="9"
-      text-anchor="middle">Tote Zone</text
+      font-size="10"
+      text-anchor="middle"
     >
+      Tote Zone {formatNumber(deadZone.fromKm, 0)}–{formatNumber(deadZone.toKm, 0)} km
+    </text>
+  {:else if skipKm === 0}
+    <text x={groundWaveX + 8} y={groundY - 18} fill="var(--color-series-6)" font-size="10">
+      f ≤ foF2: Reflexion auch bei Steilstrahlung, keine tote Zone
+    </text>
   {/if}
 {:else if selectedModeId === 'line-of-sight'}
   <line
     class="wave-path"
-    x1={txX}
+    x1={x(0)}
     y1={groundY - ANTENNA_TIP}
-    x2={rxX}
+    x2={x(distances.losKm)}
     y2={groundY - ANTENNA_TIP}
     stroke={color}
     stroke-width="3"
     stroke-dasharray="10,5"
   />
-  <text class="chart-axis-text" x={chartWidth / 2} y={groundY - ANTENNA_TIP - 10} text-anchor="middle">
-    direkter Weg von Antenne zu Antenne — Reichweite bis zum Radiohorizont d ≈ 4,12·√h
+  <text class="chart-axis-text" x={x(distances.losKm / 2)} y={groundY - ANTENNA_TIP - 10} text-anchor="middle">
+    direkter Weg bis zum Radiohorizont: {formatNumber(distances.losKm, 1)} km bei 30 m und 10 m Antennenhöhe
   </text>
 {:else if selectedModeId === 'sporadic-e'}
   {@const eLayerY = y(SPORADIC_E_ALTITUDE_KM)}
   <ellipse
-    cx={chartWidth * 0.35}
+    cx={x(distances.rxKm / 2)}
     cy={eLayerY}
-    rx="40"
+    rx="42"
     ry="12"
-    fill="var(--color-series-4)"
-    fill-opacity="0.4"
-    stroke="var(--color-series-4)"
-    stroke-width="1"
-  />
-  <ellipse
-    cx={chartWidth * 0.65}
-    cy={eLayerY}
-    rx="35"
-    ry="10"
     fill="var(--color-series-4)"
     fill-opacity="0.4"
     stroke="var(--color-series-4)"
@@ -133,23 +169,15 @@
   />
   <path
     class="wave-path"
-    d="M {txX} {groundY - ANTENNA_TIP} Q {chartWidth * 0.35} {controlY(
-      eLayerY,
-      groundY - ANTENNA_TIP,
-      groundY
-    )} {chartWidth * 0.5} {groundY} Q {chartWidth * 0.65} {controlY(
-      eLayerY,
-      groundY,
-      groundY - ANTENNA_TIP
-    )} {rxX} {groundY - ANTENNA_TIP}"
+    d={hopPath(distances.rxKm, SPORADIC_E_ALTITUDE_KM)}
     fill="none"
     stroke={color}
     stroke-width="2.5"
     stroke-dasharray="6,3"
   />
-  <text x={chartWidth * 0.35} y={eLayerY - 18} fill="var(--color-series-4)" font-size="9" text-anchor="middle"
-    >Es-Wolke</text
-  >
+  <text x={x(distances.rxKm / 2)} y={eLayerY - 18} fill="var(--color-series-4)" font-size="10" text-anchor="middle">
+    Es-Wolke in {SPORADIC_E_ALTITUDE_KM} km — größter Einfachsprung {formatNumber(distances.rxKm, 0)} km
+  </text>
 {/if}
 
 <style>

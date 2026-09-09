@@ -130,6 +130,11 @@ export const SECTIONS: ArticleSection[] = [
       },
       {
         kind: 'p',
+        text: 'Vom Notruf bis zur Rückmeldung ist es eine Kette, in der jedes Glied auf das vorige wartet. Nur ein einziges davon hat eine Dauer, die sich aus einer Norm ausrechnen lässt — die Aussendung des Alarmierungstelegramms selbst.'
+      },
+      { kind: 'widget', id: 'bos-alarm-chain' },
+      {
+        kind: 'p',
         text: 'In der Gegenrichtung steht der Notruf. In Deutschland führen 112 zur Feuerwehr- und Rettungsleitstelle und 110 zur Polizei; 112 ist zugleich der europaweit einheitliche Notruf und in jedem Mobilfunknetz erreichbar. Zwei Erweiterungen haben die Ortung entscheidend verbessert: Advanced Mobile Location übermittelt seit Oktober 2019 beim Wählen der 112 automatisch die Position des Mobiltelefons an die Leitstelle — deutlich genauer als die Funkzelle allein. Und eCall setzt seit dem 31. März 2018 in neu typgenehmigten Pkw bei einem Unfall selbsttätig einen 112-Anruf ab und überträgt dabei Ort, Fahrtrichtung und Fahrzeugdaten.'
       },
       {

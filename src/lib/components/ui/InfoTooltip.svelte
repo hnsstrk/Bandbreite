@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { InfoTooltipState } from './infoTooltip.svelte';
+
   interface Props {
     /** Title shown in the tooltip header */
     title: string;
@@ -12,71 +14,38 @@
 
   let { title, short, detailed, size = 'sm' }: Props = $props();
 
-  let isOpen = $state(false);
-  let showDetails = $state(false);
-  let containerRef: HTMLElement | null = $state(null);
+  const tooltip = new InfoTooltipState();
 
-  function toggleTooltip(e: MouseEvent) {
-    e.stopPropagation();
-    isOpen = !isOpen;
-    if (!isOpen) {
-      showDetails = false;
-    }
-  }
-
-  function closeTooltip() {
-    isOpen = false;
-    showDetails = false;
-  }
-
-  function toggleDetails(e: MouseEvent) {
-    e.stopPropagation();
-    showDetails = !showDetails;
-  }
-
-  function handleKeyDown(e: KeyboardEvent) {
-    if (e.key === 'Escape' && isOpen) {
-      closeTooltip();
-    }
-  }
-
-  function handleGlobalClick(e: MouseEvent) {
-    if (containerRef && !containerRef.contains(e.target as Node)) {
-      closeTooltip();
-    }
-  }
-
-  // Manage global event listeners
-  $effect(() => {
-    if (isOpen) {
-      // Use capture phase for reliable outside click detection
-      document.addEventListener('click', handleGlobalClick, true);
-      document.addEventListener('keydown', handleKeyDown);
-    }
-    return () => {
-      document.removeEventListener('click', handleGlobalClick, true);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  });
+  $effect(() => tooltip.attach());
+  $effect(() => tooltip.measure());
 </script>
 
-<span class="info-tooltip-container relative inline-block" bind:this={containerRef}>
+<span class="info-tooltip-container relative inline-block" bind:this={tooltip.containerRef}>
   <button
     type="button"
-    onclick={toggleTooltip}
+    bind:this={tooltip.buttonRef}
+    onclick={(e) => tooltip.toggle(e)}
     class="info-button {size === 'sm' ? 'h-4 w-4 text-xs' : 'h-5 w-5 text-sm'}"
     aria-label="Info: {title}"
-    aria-expanded={isOpen}
+    aria-expanded={tooltip.isOpen}
     aria-haspopup="true"
   >
     i
   </button>
 
-  {#if isOpen}
-    <div class="tooltip-popup" role="tooltip" aria-live="polite">
+  {#if tooltip.isOpen}
+    <div
+      class="tooltip-popup"
+      class:is-positioned={tooltip.placement !== null}
+      role="tooltip"
+      aria-live="polite"
+      bind:this={tooltip.popupRef}
+      style:top={tooltip.placement ? `${tooltip.placement.top}px` : undefined}
+      style:left={tooltip.placement ? `${tooltip.placement.left}px` : undefined}
+    >
       <div class="tooltip-header">
         <span class="tooltip-title">{title}</span>
-        <button type="button" onclick={closeTooltip} class="tooltip-close" aria-label="Tooltip schließen">
+        <button type="button" onclick={() => tooltip.close()} class="tooltip-close" aria-label="Tooltip schließen">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3 w-3">
             <path
               d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
@@ -89,12 +58,17 @@
 
       {#if detailed}
         <div class="tooltip-details-section">
-          <button type="button" onclick={toggleDetails} class="tooltip-expand-btn" aria-expanded={showDetails}>
+          <button
+            type="button"
+            onclick={(e) => tooltip.toggleDetails(e)}
+            class="tooltip-expand-btn"
+            aria-expanded={tooltip.showDetails}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
-              class="expand-icon {showDetails ? 'rotate-180' : ''}"
+              class="expand-icon {tooltip.showDetails ? 'rotate-180' : ''}"
             >
               <path
                 fill-rule="evenodd"
@@ -102,10 +76,10 @@
                 clip-rule="evenodd"
               />
             </svg>
-            {showDetails ? 'Details ausblenden' : 'Mehr Details'}
+            {tooltip.showDetails ? 'Details ausblenden' : 'Mehr Details'}
           </button>
 
-          {#if showDetails}
+          {#if tooltip.showDetails}
             <div class="tooltip-detailed">
               <!-- Content from trusted source (explanations.ts) only -->
               {@html detailed}
@@ -146,13 +120,16 @@
   }
 
   .tooltip-popup {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: calc(100% + 8px);
+    /* Fixed im Viewport: entgeht `overflow: auto` der Sidebar und anderer Container;
+       Position wird per JS gemessen und in den Viewport geklemmt (tooltipPosition.ts). */
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 50;
-    min-width: 280px;
-    max-width: 360px;
+    min-width: min(280px, calc(100vw - 1rem));
+    max-width: min(360px, calc(100vw - 1rem));
+    /* Unsichtbar bis zur ersten Messung, sonst flackert es kurz oben links */
+    visibility: hidden;
     background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border-default);
     border-radius: 0.5rem;
@@ -161,6 +138,10 @@
       0 8px 10px -6px rgba(0, 0, 0, 0.1);
     padding: 0;
     overflow: hidden;
+  }
+
+  .tooltip-popup.is-positioned {
+    visibility: visible;
   }
 
   .tooltip-header {
@@ -268,15 +249,5 @@
 
   .tooltip-detailed :global(p:last-child) {
     margin-bottom: 0;
-  }
-
-  @media (max-width: 640px) {
-    .tooltip-popup {
-      min-width: 260px;
-      max-width: calc(100vw - 2rem);
-      left: auto;
-      right: 0;
-      transform: none;
-    }
   }
 </style>

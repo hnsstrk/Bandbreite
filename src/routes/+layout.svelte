@@ -30,7 +30,7 @@
     </div>
   {/if}
 
-  <main id="main-content" class="page-container main-content">
+  <main id="main-content" class="main-content">
     {@render children()}
   </main>
 
@@ -53,15 +53,15 @@
 
   .breadcrumb-bar {
     width: 100%;
-    max-width: 80rem;
-    margin: 0 auto;
-    padding: 0.75rem 1rem 0;
+    padding: 0.75rem var(--page-gutter) 0;
   }
 
+  /* Bewusst ohne max-width: das Spektrum und die Datenbanken nutzen die volle
+     Viewportbreite; Lesebreite regeln die Seiten selbst (ArticleLayout, .prose). */
   .main-content {
     flex-grow: 1;
     width: 100%;
-    padding: 1.5rem 0.5rem 2rem;
+    padding: 1.5rem var(--page-gutter) 2rem;
   }
 
   .skip-to-content {

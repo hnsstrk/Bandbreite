@@ -39,7 +39,7 @@
 
 {#if current}
   <nav class="path-bar" aria-label={`Lernpfad ${current.path.title}`}>
-    <div class="page-container path-bar__inner">
+    <div class="path-bar__inner">
       <div class="path-bar__text">
         <a class="path-bar__title" href={learningPathHref(current.path.id)}>
           <Icon name={current.path.icon} size={16} />
@@ -101,6 +101,8 @@
   }
 
   .path-bar__inner {
+    width: 100%;
+    padding-inline: var(--page-gutter);
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:

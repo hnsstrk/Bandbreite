@@ -150,7 +150,7 @@ Kategorie-Textfarben: `--color-cat-blue`, `--color-cat-green`,
 | `--shadow-card` | zweistufig | Karten |
 | `--shadow-popover` | – | Menüs, Overlays |
 | `--container-prose` | `68ch` | Lesebreite |
-| `--container-page` | `80rem` | Seitenbreite (= Headerbreite) |
+| `--container-page` | `80rem` | Breite des Header-Inhalts und optionaler `.page-container`-Blöcke (nicht des Seitenlayouts) |
 | `--container-wide` | `96rem` | Bühnen-Widgets |
 
 Die Skalen `--font-size-*`, `--spacing-*`, `--radius-sm|md|lg|xl|full`,
@@ -196,7 +196,7 @@ richtige Schema verwenden.
 
 | Klasse | Wirkung |
 | --- | --- |
-| `.page-container` | `max-width: 80rem`, zentriert, seitliches Padding (`--page-gutter`) |
+| `.page-container` | `max-width: 80rem`, zentriert, seitliches Padding (`--page-gutter`). **Nur für einzelne Blöcke** — das Seitenlayout (`main`) ist bewusst unbegrenzt, damit Spektrum und Datenbanken die volle Viewportbreite nutzen; Lesebreite regeln `ArticleLayout` und `.prose`. |
 | `.page-container--wide` | wie oben, aber `max-width: 96rem` |
 | `.prose` | Lesebreite `68ch` plus Typografie für `h2`–`h4`, `p`, Listen, Tabellen, `code`, `pre`, `blockquote` |
 | `.bleed` | Ausbruch aus der Lesebreite auf volle Breite (für Diagramme und Widgets) |
@@ -594,7 +594,7 @@ Die Kacheldaten stammen aus `portalContent.ts` (abgeleitet aus `NAV_GROUPS` und
 | Komponente | Zweck | Hinweise |
 | --- | --- | --- |
 | `LearningMeter.svelte` | Fortschrittsbalken | `role="progressbar"` mit `aria-valuenow`/`aria-valuetext` |
-| `LearningPathBar.svelte` | Leiste unter dem Header: „Schritt 3 von 7", Lernziel, Zurück/Weiter/Erledigt/Verlassen | `<nav aria-label="Lernpfad …">`, sticky ab 48 rem (`top: 3.5rem`, `z-index: 30`), Innenraum in `.page-container` |
+| `LearningPathBar.svelte` | Leiste unter dem Header: „Schritt 3 von 7", Lernziel, Zurück/Weiter/Erledigt/Verlassen | `<nav aria-label="Lernpfad …">`, sticky ab 48 rem (`top: 3.5rem`, `z-index: 30`), Innenraum in voller Breite mit `--page-gutter` |
 | `LearningPathCard.svelte` | Kachel je Pfad: Stufe (`Badge`-Ton aus `LEVEL_TONES`), Dauer, Balken, Starten/Fortsetzen | Dauer ist eine gekennzeichnete Annahme |
 | `LearningPathSteps.svelte` | nummerierte Schrittliste mit Status und Abhaken | optionale Schritte sind als solche ausgewiesen |
 

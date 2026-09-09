@@ -72,7 +72,9 @@ export {
 export { formatFrequencyLocal, formatWavelengthLocal, formatZoom } from './spectrumFormat';
 export { ROUNDED_SPEED_OF_LIGHT } from './spectrumCursor.svelte';
 
-export type ViewMode = 'rf' | 'visible' | 'full';
+import { IEEE_VIEW_MIN_HZ, IEEE_VIEW_MAX_HZ } from '$lib/data/bands';
+
+export type ViewMode = 'rf' | 'visible' | 'full' | 'ieee';
 
 export interface TooltipState {
   visible: boolean;
@@ -110,8 +112,13 @@ export function createSpectrumState() {
         return SPECTRUM_MAX_VISIBLE;
       case 'full':
         return SPECTRUM_MAX_GAMMA;
+      case 'ieee':
+        return IEEE_VIEW_MAX_HZ;
     }
   });
+
+  // Untere Grenze: nur die IEEE-Ansicht beginnt oberhalb von 3 Hz
+  let spectrumMin = $derived(viewMode === 'ieee' ? IEEE_VIEW_MIN_HZ : SPECTRUM_MIN);
 
   // Zoom state
   let zoomLevel = $state(1);
@@ -131,7 +138,7 @@ export function createSpectrumState() {
 
   let visibleRowCount = $derived(Object.values(visibleRows).filter(Boolean).length);
 
-  let zoomedDomain = $derived(computeZoomedDomain(SPECTRUM_MIN, spectrumMax, zoomLevel, panOffset));
+  let zoomedDomain = $derived(computeZoomedDomain(spectrumMin, spectrumMax, zoomLevel, panOffset));
 
   // Shared logarithmic scale
   let xScale = $derived(scaleLog().domain(zoomedDomain).range([0, innerWidth]));
@@ -171,7 +178,7 @@ export function createSpectrumState() {
   function zoomIn() {
     if (zoomLevel < MAX_ZOOM) {
       const newZoom = Math.min(zoomLevel * ZOOM_STEP_FACTOR, MAX_ZOOM);
-      panOffset = panOffsetKeepingCenter(SPECTRUM_MIN, spectrumMax, zoomLevel, panOffset, newZoom);
+      panOffset = panOffsetKeepingCenter(spectrumMin, spectrumMax, zoomLevel, panOffset, newZoom);
       zoomLevel = newZoom;
     }
   }
@@ -179,7 +186,7 @@ export function createSpectrumState() {
   function zoomOut() {
     if (zoomLevel > MIN_ZOOM) {
       const newZoom = Math.max(zoomLevel / ZOOM_STEP_FACTOR, MIN_ZOOM);
-      panOffset = panOffsetKeepingCenter(SPECTRUM_MIN, spectrumMax, zoomLevel, panOffset, newZoom);
+      panOffset = panOffsetKeepingCenter(spectrumMin, spectrumMax, zoomLevel, panOffset, newZoom);
       zoomLevel = newZoom;
     }
   }
@@ -190,17 +197,17 @@ export function createSpectrumState() {
   }
 
   function panLeft() {
-    panOffset = panOffsetStepped(SPECTRUM_MIN, spectrumMax, zoomLevel, panOffset, -1);
+    panOffset = panOffsetStepped(spectrumMin, spectrumMax, zoomLevel, panOffset, -1);
   }
 
   function panRight() {
-    panOffset = panOffsetStepped(SPECTRUM_MIN, spectrumMax, zoomLevel, panOffset, 1);
+    panOffset = panOffsetStepped(spectrumMin, spectrumMax, zoomLevel, panOffset, 1);
   }
 
   // Center view on a given frequency
   function centerOnFrequency(frequencyHz: number) {
-    if (!frequencyHz || frequencyHz < SPECTRUM_MIN || frequencyHz > spectrumMax) return;
-    panOffset = panOffsetCenteredOn(SPECTRUM_MIN, spectrumMax, zoomLevel, frequencyHz);
+    if (!frequencyHz || frequencyHz < spectrumMin || frequencyHz > spectrumMax) return;
+    panOffset = panOffsetCenteredOn(spectrumMin, spectrumMax, zoomLevel, frequencyHz);
   }
 
   // Jump to visible light spectrum
@@ -208,7 +215,7 @@ export function createSpectrumState() {
     viewMode = 'visible';
     zoomLevel = VISIBLE_LIGHT_ZOOM;
     const visibleCenterHz = Math.sqrt(VISIBLE_MIN_HZ * VISIBLE_MAX_HZ);
-    panOffset = panOffsetCenteredOn(SPECTRUM_MIN, SPECTRUM_MAX_VISIBLE, zoomLevel, visibleCenterHz);
+    panOffset = panOffsetCenteredOn(spectrumMin, SPECTRUM_MAX_VISIBLE, zoomLevel, visibleCenterHz);
   }
 
   // Set view mode and reset zoom
@@ -219,7 +226,7 @@ export function createSpectrumState() {
 
   // Calculate marker X position
   function getMarkerX(frequencyHz: number | undefined): number | null {
-    if (!frequencyHz || frequencyHz < SPECTRUM_MIN || frequencyHz > spectrumMax) {
+    if (!frequencyHz || frequencyHz < spectrumMin || frequencyHz > spectrumMax) {
       return null;
     }
     const [domainMin, domainMax] = zoomedDomain;
@@ -256,6 +263,9 @@ export function createSpectrumState() {
     },
     get viewMode() {
       return viewMode;
+    },
+    get spectrumMin() {
+      return spectrumMin;
     },
     get spectrumMax() {
       return spectrumMax;

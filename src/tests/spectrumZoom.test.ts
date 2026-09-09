@@ -143,3 +143,18 @@ describe('wavelengthTicks', () => {
     expect(labels).toContain('100 μm');
   });
 });
+
+describe('Ansicht „IEEE" (IEEE Std 521)', () => {
+  it('umfasst genau den Bereich der IEEE-Bänder von HF bis W', async () => {
+    const { SPECTRUM_MIN_HZ, SPECTRUM_MAX_RF_HZ } = await import('$lib/data/spectrum');
+    const { IEEE_BANDS, IEEE_VIEW_MIN_HZ, IEEE_VIEW_MAX_HZ } = await import('$lib/data/bands');
+    expect(IEEE_VIEW_MIN_HZ).toBe(3e6); // HF-Band beginnt bei 3 MHz
+    expect(IEEE_VIEW_MAX_HZ).toBe(110e9); // W-Band endet bei 110 GHz
+    expect(IEEE_VIEW_MIN_HZ).toBeGreaterThan(SPECTRUM_MIN_HZ);
+    expect(IEEE_VIEW_MAX_HZ).toBeLessThan(SPECTRUM_MAX_RF_HZ);
+    for (const band of IEEE_BANDS) {
+      expect(band.minHz).toBeGreaterThanOrEqual(IEEE_VIEW_MIN_HZ);
+      expect(band.maxHz).toBeLessThanOrEqual(IEEE_VIEW_MAX_HZ);
+    }
+  });
+});

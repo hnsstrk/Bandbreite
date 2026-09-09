@@ -483,6 +483,13 @@ export const IEEE_BANDS: FrequencyBand[] = [
 ];
 
 /**
+ * Ansicht „IEEE" im Spektrum: Frequenzbereich der IEEE-Radarbänder nach
+ * IEEE Std 521 (HF 3 MHz bis W-Band 110 GHz), aus den Banddaten abgeleitet.
+ */
+export const IEEE_VIEW_MIN_HZ = Math.min(...IEEE_BANDS.map((band) => band.minHz));
+export const IEEE_VIEW_MAX_HZ = Math.max(...IEEE_BANDS.map((band) => band.maxHz));
+
+/**
  * NATO Band designations (A through M)
  * Military frequency band classification system
  */

@@ -131,6 +131,15 @@
     >
       Gesamt (bis Gamma)
     </button>
+    <button
+      class="chip chip--view"
+      class:chip--on={viewMode === 'ieee'}
+      onclick={() => onSetViewMode('ieee')}
+      aria-pressed={viewMode === 'ieee'}
+      title="IEEE-Radarbänder nach IEEE Std 521, 3 MHz bis 110 GHz"
+    >
+      IEEE (3 MHz – 110 GHz)
+    </button>
   </div>
 
   <!-- Zoom and pan controls -->

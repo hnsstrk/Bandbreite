@@ -1,9 +1,19 @@
 <script lang="ts">
-  // Legend component for the EM spectrum regions
-  // No props needed - displays a static legend
+  /**
+   * Legende der EM-Bereiche. In schmalen Containern bleibt sie in einer
+   * Zeile und wird bei Bedarf waagerecht gescrollt: die EM-Reihe zeigt bei
+   * 340 px Zeichenbreite nur noch zwei bis drei Namen, die Farbzuordnung
+   * muss also lesbar bleiben.
+   */
+  interface Props {
+    /** true in schmalen Containern (< 640 px) */
+    compact?: boolean;
+  }
+
+  let { compact = false }: Props = $props();
 </script>
 
-<div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-400">
+<div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-400" class:legend--compact={compact}>
   <div class="flex items-center gap-1">
     <div class="h-3 w-3 rounded bg-blue-500"></div>
     <span>Radio</span>
@@ -36,3 +46,18 @@
     <span>Gamma</span>
   </div>
 </div>
+
+<style>
+  .legend--compact {
+    margin-top: 0.25rem;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    overflow-x: auto;
+    font-size: 0.65rem;
+    scrollbar-width: none;
+  }
+
+  .legend--compact::-webkit-scrollbar {
+    display: none;
+  }
+</style>

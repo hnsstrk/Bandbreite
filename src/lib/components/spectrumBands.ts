@@ -13,6 +13,7 @@ import {
 import { safeDivide } from '$lib/utils/handlers';
 import { VISIBLE_LIGHT } from '$lib/data/spectrum';
 import type { Domain } from './spectrumZoom';
+import { DESKTOP_METRICS, type SpectrumMetrics } from './spectrumLayout';
 
 // =============================================================================
 // Types
@@ -44,9 +45,9 @@ export interface RowConfig {
 // Layout constants
 // =============================================================================
 
-export const ROW_HEIGHT = 48;
-export const MARGIN = { top: 60, right: 20, bottom: 60, left: 80 };
-export const GAP = 8;
+export const ROW_HEIGHT = DESKTOP_METRICS.rowHeight;
+export const MARGIN = DESKTOP_METRICS.margin;
+export const GAP = DESKTOP_METRICS.gap;
 
 /** Reihenfolge der Bandreihen von oben nach unten. */
 export const ROW_ORDER: readonly RowKey[] = ['em', 'itu', 'ieee', 'nato', 'civilian'];
@@ -239,18 +240,28 @@ export function bandRects(
     .filter((b) => b.visible);
 }
 
-/** Y-Position einer Reihe: Summe der sichtbaren Reihen darüber. */
-export function rowY(rowIndex: number, visibleRows: VisibleRows): number {
-  let y = MARGIN.top;
+/**
+ * Y-Position einer Reihe: Summe der sichtbaren Reihen darüber. Ohne `metrics`
+ * gelten die Maße der vollen Darstellung (unveränderte Aufrufe).
+ */
+export function rowY(
+  rowIndex: number,
+  visibleRows: VisibleRows,
+  metrics: SpectrumMetrics = DESKTOP_METRICS
+): number {
+  let y = metrics.margin.top;
   for (let i = 0; i < rowIndex; i++) {
-    if (visibleRows[ROW_ORDER[i]]) y += ROW_HEIGHT + GAP;
+    if (visibleRows[ROW_ORDER[i]]) y += metrics.rowHeight + metrics.gap;
   }
   return y;
 }
 
 /** Höhe aller sichtbaren Reihen samt Zwischenräumen. */
-export function rowsHeight(visibleRowCount: number): number {
-  return visibleRowCount * ROW_HEIGHT + (visibleRowCount - 1) * GAP;
+export function rowsHeight(
+  visibleRowCount: number,
+  metrics: SpectrumMetrics = DESKTOP_METRICS
+): number {
+  return visibleRowCount * metrics.rowHeight + (visibleRowCount - 1) * metrics.gap;
 }
 
 // =============================================================================

@@ -158,3 +158,14 @@ describe('Ansicht „IEEE" (IEEE Std 521)', () => {
     }
   });
 });
+
+describe('tickDecadeStep in voller Darstellung (Zweitangaben)', () => {
+  it('lässt bei 1280 px Viewport alle Dekaden stehen, dünnt Tablets und Querformat aus', async () => {
+    const { tickDecadeStep, MIN_TICK_LABEL_SPACING_WIDE_PX } =
+      await import('$lib/components/spectrumZoom');
+    const decades = 14.5; // Ansicht „RF + Licht": 3 Hz bis 1 PHz
+    expect(tickDecadeStep(1100, decades, MIN_TICK_LABEL_SPACING_WIDE_PX)).toBe(1); // 1280 px Viewport
+    expect(tickDecadeStep(830, decades, MIN_TICK_LABEL_SPACING_WIDE_PX)).toBe(2); // Handy quer 932 px
+    expect(tickDecadeStep(560, decades, MIN_TICK_LABEL_SPACING_WIDE_PX)).toBe(2); // Tablet 700 px
+  });
+});

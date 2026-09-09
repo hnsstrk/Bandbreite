@@ -4,7 +4,8 @@
    * Reines Markup — Geometrie kommt aus `spectrumState`.
    */
   import { formatFrequencyRange, type FrequencyBand } from '$lib/data/bands';
-  import { ROW_HEIGHT, type RowConfig, type VisibleRows } from './spectrumBands';
+  import { type RowConfig, type VisibleRows } from './spectrumBands';
+  import { DESKTOP_METRICS, showBandLabel, type SpectrumMetrics } from './spectrumLayout';
 
   interface Props {
     rows: RowConfig[];
@@ -16,6 +17,8 @@
     onBandClick?: (band: FrequencyBand) => void;
     onShowTooltip: (event: MouseEvent, band: FrequencyBand) => void;
     onHideTooltip: () => void;
+    /** breitenabhängige Maße (Reihenhöhe, Beschriftung) */
+    metrics?: SpectrumMetrics;
   }
 
   let {
@@ -27,13 +30,14 @@
     getRowY,
     onBandClick,
     onShowTooltip,
-    onHideTooltip
+    onHideTooltip,
+    metrics = DESKTOP_METRICS
   }: Props = $props();
 
   /** Schmalste Darstellung eines Bands, damit es sichtbar bleibt. */
   const MIN_BAND_WIDTH = 2;
-  /** Ab dieser Breite passt der Bandname ins Rechteck. */
-  const LABEL_MIN_WIDTH = 25;
+  /** Luft zwischen Bandrechteck und Reihenrand (oben wie unten). */
+  const BAND_INSET = 2;
 </script>
 
 <!-- Band rows -->
@@ -43,12 +47,12 @@
     <g transform="translate(0, {rowY})">
       <!-- Row label -->
       <text
-        x="-10"
-        y={ROW_HEIGHT / 2}
+        x={-metrics.rowLabelOffset}
+        y={metrics.rowHeight / 2}
         text-anchor="end"
         dominant-baseline="middle"
-        style="fill: var(--color-text-tertiary)"
-        class="text-sm font-medium"
+        style="fill: var(--color-text-tertiary); font-size: {metrics.rowLabelFontSize};"
+        class="font-medium"
       >
         {row.label}
       </text>
@@ -58,7 +62,7 @@
         x="0"
         y="0"
         width={innerWidth}
-        height={ROW_HEIGHT}
+        height={metrics.rowHeight}
         style="fill: var(--color-bg-surface); stroke: var(--color-chart-grid)"
         stroke-width="1"
       />
@@ -81,23 +85,23 @@
         >
           <rect
             x={band.x}
-            y="2"
+            y={BAND_INSET}
             width={Math.max(band.width, MIN_BAND_WIDTH)}
-            height={ROW_HEIGHT - 4}
+            height={metrics.rowHeight - 2 * BAND_INSET}
             fill={band.color === 'visible' ? 'url(#visibleLightGradient)' : band.color}
             opacity={selectedBandId === band.id ? 1 : 0.9}
             stroke={selectedBandId === band.id ? '#fbbf24' : '#0f172a'}
             stroke-width={selectedBandId === band.id ? 2.5 : 0.5}
             class="transition-opacity hover:opacity-70"
           />
-          {#if showLabels && band.width > LABEL_MIN_WIDTH}
+          {#if showLabels && showBandLabel(band.width, band.name, metrics)}
             <text
               x={band.x + band.width / 2}
-              y={ROW_HEIGHT / 2}
+              y={metrics.rowHeight / 2}
               text-anchor="middle"
               dominant-baseline="middle"
               class="pointer-events-none fill-white text-xs font-medium"
-              style="text-shadow: 0 1px 2px rgba(0,0,0,0.9); font-size: 11px;"
+              style="text-shadow: 0 1px 2px rgba(0,0,0,0.9); font-size: {metrics.bandLabelFontSize}px;"
             >
               {band.name}
             </text>

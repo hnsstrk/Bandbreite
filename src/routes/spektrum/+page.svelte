@@ -9,6 +9,7 @@
   import RelatedTopics from '$lib/components/ui/RelatedTopics.svelte';
   import { getHubChildren } from '$lib/data/navigation';
   import { SPECTRUM_DEFAULT_FREQUENCY_HZ, SPECTRUM_MIN_HZ, SPECTRUM_MAX_GAMMA_HZ } from '$lib/data/spectrum';
+  import { shouldScrollToBandDetail, scrollBehaviorFor } from '$lib/components/spectrumScroll';
   import type { FrequencyBand } from '$lib/data/bands';
 
   /**
@@ -36,10 +37,25 @@
   let selectedSpectrumBand = $state<FrequencyBand | null>(null);
   let selectedBandId = $state<string | null>(null);
 
+  let bandDetailColumn = $state<HTMLDivElement | null>(null);
+
   function handleBandClick(band: FrequencyBand) {
     selectedSpectrumBand = band;
     selectedBandId = band.id;
     currentFrequencyHz = Math.sqrt(band.minHz * band.maxHz);
+    scrollToBandDetail();
+  }
+
+  /**
+   * Unter 1024 px liegt die Banddetail-Spalte unter den Werkzeugen; nach einem
+   * Tipp auf ein Band holt die Seite sie in den Blick (ohne Animation, wenn
+   * der Nutzer weniger Bewegung wünscht).
+   */
+  function scrollToBandDetail() {
+    if (!browser || !bandDetailColumn) return;
+    if (!shouldScrollToBandDetail(window.innerWidth)) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    bandDetailColumn.scrollIntoView({ behavior: scrollBehaviorFor(reduced), block: 'start' });
   }
 
   // Unterseiten stammen aus der Navigations-Registry (Single Source of Truth).
@@ -59,7 +75,7 @@
       <PowerConverter bind:powerWatt={currentPowerWatt} />
       <RangeCalculator frequencyHz={currentFrequencyHz} />
     </div>
-    <div class="sidebar-column">
+    <div class="sidebar-column" bind:this={bandDetailColumn} id="banddetail">
       <BandDetailSidebar frequencyHz={currentFrequencyHz} selectedBand={selectedSpectrumBand} />
     </div>
   </div>

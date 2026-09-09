@@ -5,7 +5,7 @@ Guidance for Claude Code in this repository.
 ## Project Overview
 
 **Bandbreite** — SvelteKit-Webanwendung zum elektromagnetischen Spektrum: Visualisierungen, HF-Rechner, Wissenskapitel zur Funktechnik, Frequenzdatenbanken.
-**Status**: Rework in acht Wellen abgeschlossen (`docs/REWORK-2026-09.md`); W7 Datenblatt-Stil, W8 Abschluss.
+**Status**: Rework in neun Wellen abgeschlossen (`docs/REWORK-2026-09.md`); W7 Datenblatt-Stil, W8 Abschluss.
 
 ## Task Management
 

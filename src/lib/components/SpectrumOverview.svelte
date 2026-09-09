@@ -8,7 +8,7 @@
   import SpectrumFrequencyAxis from './SpectrumFrequencyAxis.svelte';
   import SpectrumRows from './SpectrumRows.svelte';
   import SpectrumMarker from './SpectrumMarker.svelte';
-  import { createSpectrumState, MARGIN } from './spectrumState.svelte';
+  import { createSpectrumState } from './spectrumState.svelte';
 
   interface Props {
     frequencyHz?: number;
@@ -31,11 +31,15 @@
   // Derived marker position
   let markerX = $derived(spectrumState.getMarkerX(frequencyHz));
 
+  // Breitenabhängiger Maßsatz: schmale Container bekommen engere Reihen,
+  // eine schmale Beschriftungsspalte und Achsen ohne Zweitangabe.
+  let metrics = $derived(spectrumState.metrics);
+
   // Achsen- und Markerpositionen (Abstand zur obersten/untersten Reihe)
   const AXIS_OFFSET = 10;
   const MARKER_OFFSET = 5;
-  let topAxisY = $derived(MARGIN.top - AXIS_OFFSET);
-  let bottomAxisY = $derived(MARGIN.top + spectrumState.bandRowsHeight + AXIS_OFFSET);
+  let topAxisY = $derived(metrics.margin.top - AXIS_OFFSET);
+  let bottomAxisY = $derived(metrics.margin.top + spectrumState.bandRowsHeight + AXIS_OFFSET);
 
   // Safe wavelength display for control bar
   let wavelengthDisplay = $derived(frequencyHz ? spectrumState.safeFormatWavelength(frequencyHz) : '');
@@ -47,6 +51,9 @@
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         spectrumState.containerWidth = entry.contentRect.width;
+        // Außenmaß inklusive Polster: entscheidet über volle oder schmale Fassung
+        spectrumState.outerWidth =
+          entry.target instanceof HTMLElement ? entry.target.offsetWidth : entry.contentRect.width;
       }
     });
 
@@ -73,7 +80,7 @@
   function handleSvgMouseMove(event: MouseEvent) {
     if (!svgElement) return;
     const svgRect = svgElement.getBoundingClientRect();
-    const localX = event.clientX - svgRect.left - MARGIN.left;
+    const localX = event.clientX - svgRect.left - metrics.margin.left;
     spectrumState.handleCursorMove(localX);
   }
 
@@ -84,13 +91,16 @@
 
 <div
   bind:this={containerElement}
-  class="relative w-full rounded-lg p-4"
+  class="relative w-full rounded-lg"
+  class:p-4={!metrics.compact}
+  class:p-1={metrics.compact}
   style="background-color: var(--color-chart-bg)"
   role="img"
   aria-label="Elektromagnetisches Spektrum - von ELF bis Gammastrahlung"
 >
   <!-- Control bar -->
   <SpectrumControls
+    compact={metrics.compact}
     visibleRows={spectrumState.visibleRows}
     viewMode={spectrumState.viewMode}
     zoomLevel={spectrumState.zoomLevel}
@@ -124,13 +134,14 @@
       </linearGradient>
     </defs>
 
-    <g transform="translate({MARGIN.left}, 0)">
+    <g transform="translate({metrics.margin.left}, 0)">
       <SpectrumWavelengthAxis
         ticks={spectrumState.wavelengthTicks}
         xScale={spectrumState.xScale}
         innerWidth={spectrumState.innerWidth}
         axisY={topAxisY}
         gridBottomY={bottomAxisY}
+        {metrics}
       />
 
       <SpectrumRows
@@ -143,6 +154,7 @@
         {onBandClick}
         onShowTooltip={handleShowTooltip}
         onHideTooltip={spectrumState.hideTooltip}
+        {metrics}
       />
 
       <!-- Interactive cursor showing frequency ↔ wavelength -->
@@ -160,8 +172,8 @@
       {#if markerX !== null && spectrumState.visibleRowCount > 0}
         <SpectrumMarker
           {markerX}
-          topY={MARGIN.top - MARKER_OFFSET}
-          bottomY={MARGIN.top + spectrumState.bandRowsHeight + MARKER_OFFSET}
+          topY={metrics.margin.top - MARKER_OFFSET}
+          bottomY={metrics.margin.top + spectrumState.bandRowsHeight + MARKER_OFFSET}
         />
       {/if}
 
@@ -170,6 +182,7 @@
         xScale={spectrumState.xScale}
         innerWidth={spectrumState.innerWidth}
         axisY={bottomAxisY}
+        {metrics}
       />
     </g>
   </svg>
@@ -185,10 +198,10 @@
   />
 
   <!-- Legend -->
-  <SpectrumLegend />
+  <SpectrumLegend compact={metrics.compact} />
 
-  <!-- Zoom hint -->
-  {#if spectrumState.zoomLevel > 1}
+  <!-- Zoom hint: schmal überdeckte er die Legende, dort liegen die Schalter ohnehin direkt darüber -->
+  {#if spectrumState.zoomLevel > 1 && !metrics.compact}
     <div class="absolute bottom-2 left-2 text-xs text-slate-500">
       Nutzen Sie die Buttons oben zum Zoomen und Verschieben
     </div>

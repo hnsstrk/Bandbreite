@@ -30,10 +30,15 @@ import {
   panOffsetStepped,
   panOffsetCenteredOn,
   frequencyTicks as computeFrequencyTicks,
-  wavelengthTicks as computeWavelengthTicks
+  wavelengthTicks as computeWavelengthTicks,
+  tickDecadeStep,
+  MIN_TICK_LABEL_SPACING_PX,
+  MIN_TICK_LABEL_SPACING_WIDE_PX,
+  thinDecadeTicks,
+  decadeExponent
 } from './spectrumZoom';
+import { spectrumMetrics, type SpectrumMetrics } from './spectrumLayout';
 import {
-  MARGIN,
   ROW_ORDER,
   ROW_LABELS,
   ROW_SOURCES,
@@ -70,6 +75,13 @@ export {
   type RowConfig
 } from './spectrumBands';
 export { formatFrequencyLocal, formatWavelengthLocal, formatZoom } from './spectrumFormat';
+export {
+  COMPACT_MAX_WIDTH_PX,
+  DESKTOP_METRICS,
+  COMPACT_METRICS,
+  showBandLabel,
+  type SpectrumMetrics
+} from './spectrumLayout';
 export { ROUNDED_SPEED_OF_LIGHT } from './spectrumCursor.svelte';
 
 import { IEEE_VIEW_MIN_HZ, IEEE_VIEW_MAX_HZ } from '$lib/data/bands';
@@ -127,14 +139,23 @@ export function createSpectrumState() {
   // Row visibility state
   const visibleRows = $state<VisibleRows>({ ...DEFAULT_VISIBLE_ROWS });
 
-  // Container state
+  // Container state: Zeichenbreite (Innenmaß) und Außenmaß der Karte.
+  // Über die Darstellung entscheidet das Außenmaß, weil das Innenpolster
+  // selbst von der Darstellung abhängt — sonst könnten beide einander an der
+  // Umschaltgrenze wechselseitig auslösen.
   let containerWidth = $state(DEFAULT_CONTAINER_WIDTH);
+  let outerWidth = $state(DEFAULT_CONTAINER_WIDTH);
 
   // Tooltip state
   let tooltip = $state<TooltipState>({ visible: false, x: 0, y: 0, band: null });
 
+  // Breitenabhängiger Maßsatz (voll oder schmal) — eine Quelle für SVG und CSS
+  let metrics: SpectrumMetrics = $derived(spectrumMetrics(outerWidth));
+
   // Derived calculations
-  let innerWidth = $derived(Math.max(containerWidth - MARGIN.left - MARGIN.right, MIN_INNER_WIDTH));
+  let innerWidth = $derived(
+    Math.max(containerWidth - metrics.margin.left - metrics.margin.right, MIN_INNER_WIDTH)
+  );
 
   let visibleRowCount = $derived(Object.values(visibleRows).filter(Boolean).length);
 
@@ -156,18 +177,39 @@ export function createSpectrumState() {
 
   let visibleLightGradientStops = $derived(computeGradientStops(zoomedDomain, currentSpeedOfLight));
 
-  let frequencyTicks = $derived(computeFrequencyTicks(zoomedDomain, zoomLevel));
+  // Tick-Dichte nur in der schmalen Fassung; die volle Darstellung bleibt
+  // unverändert bei einem Tick je Dekade.
+  let visibleDecades = $derived(Math.log10(zoomedDomain[1] / zoomedDomain[0]));
+  // Tick-Ausdünnung gilt in jeder Breite; die volle Darstellung braucht wegen der
+  // Zweitangaben mehr Platz je Beschriftung (Tablets und Handys im Querformat).
+  let decadeStep = $derived(
+    tickDecadeStep(
+      innerWidth,
+      visibleDecades,
+      metrics.compact ? MIN_TICK_LABEL_SPACING_PX : MIN_TICK_LABEL_SPACING_WIDE_PX
+    )
+  );
 
-  let wavelengthTicks = $derived(computeWavelengthTicks(zoomedDomain, currentSpeedOfLight));
+  let frequencyTicks = $derived(
+    thinDecadeTicks(computeFrequencyTicks(zoomedDomain, zoomLevel), decadeStep, decadeExponent)
+  );
+
+  let wavelengthTicks = $derived(
+    thinDecadeTicks(
+      computeWavelengthTicks(zoomedDomain, currentSpeedOfLight),
+      decadeStep,
+      (tick) => tick.exponent
+    )
+  );
 
   // Total band rows height for marker line
-  let bandRowsHeight = $derived(rowsHeight(visibleRowCount));
+  let bandRowsHeight = $derived(rowsHeight(visibleRowCount, metrics));
 
   // Total SVG height
-  let totalHeight = $derived(MARGIN.top + bandRowsHeight + MARGIN.bottom);
+  let totalHeight = $derived(metrics.margin.top + bandRowsHeight + metrics.margin.bottom);
 
   function getRowY(rowIndex: number): number {
-    return rowY(rowIndex, visibleRows);
+    return rowY(rowIndex, visibleRows, metrics);
   }
 
   function toggleRow(row: RowKey) {
@@ -285,11 +327,20 @@ export function createSpectrumState() {
     set containerWidth(w: number) {
       containerWidth = w;
     },
+    get outerWidth() {
+      return outerWidth;
+    },
+    set outerWidth(w: number) {
+      outerWidth = w;
+    },
     get tooltip() {
       return tooltip;
     },
     get innerWidth() {
       return innerWidth;
+    },
+    get metrics() {
+      return metrics;
     },
     get visibleRowCount() {
       return visibleRowCount;

@@ -96,6 +96,8 @@ async function starteVorschau(port) {
     [
       join(rootDir, 'node_modules', 'vite', 'bin', 'vite.js'),
       'preview',
+      '--host',
+      '127.0.0.1', // explizit IPv4: auf GitHub-Runnern löst `localhost` zu ::1 auf
       '--port',
       String(port),
       '--strictPort'
